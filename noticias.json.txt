@@ -1,0 +1,18 @@
+{
+  "noticias": [
+    {
+      "titulo": "Nova tecnologia lançada",
+      "data": "25/01/2026",
+      "autor": "Redação",
+      "categoria": "Tecnologia",
+      "conteudo": "Uma nova tecnologia foi apresentada hoje..."
+    },
+    {
+      "titulo": "Economia em crescimento",
+      "data": "24/01/2026",
+      "autor": "João Silva",
+      "categoria": "Economia",
+      "conteudo": "Os indicadores económicos mostram sinais positivos..."
+    }
+  ]
+}
