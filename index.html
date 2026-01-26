@@ -1,85 +1,213 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VICIADO COMENTA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body{font-family:'Poppins',sans-serif;margin:0;padding:0;background:#007BFF;color:#fff;}
-    header{background:#0056b3;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
-    .foto-perfil{width:100px;height:100px;overflow:hidden;flex-shrink:0;}
-    .foto-perfil img{width:100%;height:100%;object-fit:cover;}
-    .redes-sociais{display:flex;gap:10px;}
-    .redes-sociais a img{width:32px;height:32px;transition:transform 0.2s;}
-    .redes-sociais a img:hover{transform:scale(1.2);}
-    header h1{margin:0;font-size:3em;text-align:center;flex-grow:1;}
-    nav{display:flex;justify-content:center;background:#004494;padding:15px 0;font-size:1.2em;}
-    nav a{color:#fff;text-decoration:none;margin:0 20px;font-weight:600;transition:color 0.2s;}
-    nav a:hover{color:#ffdd57;}
-    main{max-width:1000px;margin:20px auto;padding:20px;background:rgba(0,0,0,0.3);border-radius:10px;min-height:400px;}
-    .video-container{position:relative;padding-bottom:56.25%;padding-top:25px;height:0;margin-bottom:30px;}
-    .video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
-    .noticia{background:rgba(0,86,179,0.8);border-radius:8px;padding:20px;margin-bottom:20px;transition:transform 0.2s;}
-    .noticia:hover{transform:translateY(-3px);}
-    .noticia h2{margin-top:0;color:#fff;}
-    .meta{font-size:0.85em;color:#e0e0e0;margin-bottom:10px;}
-    .categoria{font-weight:bold;color:#ffdd57;}
-    footer{text-align:center;padding:20px;background:#004494;color:#fff;margin-top:40px;}
-    @media(max-width:600px){
-      nav{flex-direction:column;}nav a{margin:5px 0;}header{flex-direction:column;}header h1{margin-top:10px;text-align:center;}.redes-sociais{margin-top:10px;}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VICIADO COMENTA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: #007BFF;
+  color: #fff;
+}
+
+header {
+  background: #0056b3;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.foto-perfil {
+  width: 90px;
+  height: 90px;
+}
+.foto-perfil img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+header h1 {
+  font-size: 3em;
+  margin: 0;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.redes-sociais {
+  display: flex;
+  gap: 10px;
+}
+.redes-sociais img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+nav {
+  background: #004494;
+  padding: 15px;
+  text-align: center;
+}
+nav a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 600;
+}
+nav a:hover {
+  color: #ffdd57;
+}
+
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* 🔴 VÍDEO + NOTÍCIA */
+.destaque {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: rgba(0,0,0,0.3);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.video iframe {
+  width: 100%;
+  height: 315px;
+}
+
+.texto-video h2 {
+  margin-top: 0;
+  color: #ffdd57;
+}
+
+/* 📰 ÚLTIMAS NOTÍCIAS */
+.ultimas-noticias h2 {
+  margin-bottom: 20px;
+  color: #ffdd57;
+}
+
+.noticias-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.noticia {
+  background: rgba(0,0,0,0.35);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.noticia h3 {
+  margin-top: 0;
+  font-size: 1.1em;
+  color: #ffdd57;
+}
+
+footer {
+  background: #004494;
+  text-align: center;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+/* 📱 RESPONSIVO */
+@media (max-width: 900px) {
+  .destaque {
+    grid-template-columns: 1fr;
+  }
+  .noticias-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 500px) {
+  .noticias-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
+
 <body>
+
 <header>
   <div class="foto-perfil">
-    <img src="Made with insMind-Screenshot 2025-08-06 16-11-05.png" alt="Foto Perfil">
+    <img src="foto-perfil.png" alt="Foto Perfil">
   </div>
+
   <h1>VICIADO COMENTA</h1>
+
   <div class="redes-sociais">
-    <a href="https://www.youtube.com/@TheViciado" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube"></a>
-    <a href="https://www.instagram.com/theviciado13/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram"></a>
-    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+    <a href="https://www.youtube.com/@TheViciado" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"></a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"></a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank"><img src="91f17726-544a-4879-a24a-0b8f0923b13d.png"></a>
   </div>
 </header>
 
 <nav>
-  <a href="index.html">Ínicio</a>
+  <a href="index.html">Início</a>
   <a href="videos.html">Vídeos Recentes</a>
-  <a href="#">Mercado das Telecom</a>
-  <a href="#">Notícias Telecom</a>
-  <a href="#">DIGI</a>
   <a href="gaming.html">Gaming</a>
 </nav>
 
 <main>
-  <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
-  </div>
-  <div id="noticias"></div>
+
+  <!-- 🔴 VÍDEO EM DESTAQUE -->
+  <section class="destaque">
+    <div class="video">
+      <!-- TROCA AQUI O ID DO VÍDEO -->
+      <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="texto-video">
+      <h2>Vídeo em Destaque</h2>
+      <p>
+        Aqui escreves a tua análise, opinião ou explicação sobre o vídeo.
+        Esta zona é totalmente livre para texto editorial.
+      </p>
+    </div>
+  </section>
+
+  <!-- 📰 ÚLTIMAS NOTÍCIAS -->
+  <section class="ultimas-noticias">
+    <h2>Últimas Notícias</h2>
+    <div class="noticias-grid" id="ultimasNoticias"></div>
+  </section>
+
 </main>
 
-<footer>&copy; 2026 VICIADO COMENTA</footer>
+<footer>
+  &copy; 2026 VICIADO COMENTA
+</footer>
 
 <script>
-function mostrarNoticias(data){
-  const container=document.getElementById('noticias');
-  container.innerHTML='';
-  data.noticias.forEach(noticia=>{
-    const div=document.createElement('div');
-    div.className='noticia';
-    div.innerHTML=`<h2>${noticia.titulo}</h2>
-    <div class="meta"><span class="categoria">${noticia.categoria}</span> | ${noticia.data} | Autor: ${noticia.autor}</div>
-    <p>${noticia.conteudo}</p>`;
-    container.appendChild(div);
-  });
-}
 fetch('noticias.json')
-.then(r=>{if(!r.ok)throw new Error('Não foi possível carregar o JSON');return r.json();})
-.then(d=>mostrarNoticias(d))
-.catch(e=>{console.error(e);document.getElementById('noticias').innerHTML='<p>Não foi possível carregar as notícias.</p>';});
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('ultimasNoticias');
+    data.noticias.slice(0,4).forEach(n => {
+      container.innerHTML += `
+        <div class="noticia">
+          <h3>${n.titulo}</h3>
+          <p>${n.conteudo.substring(0,100)}...</p>
+        </div>
+      `;
+    });
+  });
 </script>
+
 </body>
 </html>
-
