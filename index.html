@@ -3,162 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VICIADO COMENTA</title>
+  <title>VICIADO COMENTA - Vídeos Recentes</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin:0; padding:0;
       background: #007BFF; /* Fundo azul */
-      color: #fff;
+      color:#fff;
     }
 
     header {
       background: #0056b3;
-      color: #fff;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
+      color:#fff;
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
     }
 
-    /* Foto tua no canto superior esquerdo */
     .foto-perfil {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-right: 15px;
-      flex-shrink: 0;
+      width:60px; height:60px; border-radius:50%; overflow:hidden; margin-right:15px; flex-shrink:0;
     }
-    .foto-perfil img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .foto-perfil img { width:100%; height:100%; object-fit:cover; }
 
-    /* Botões redes sociais no canto superior direito */
-    .redes-sociais {
-      display: flex;
-      gap: 10px;
-    }
-    .redes-sociais a img {
-      width: 32px;
-      height: 32px;
-      transition: transform 0.2s;
-    }
-    .redes-sociais a img:hover {
-      transform: scale(1.2);
-    }
+    .redes-sociais { display:flex; gap:10px; }
+    .redes-sociais a img { width:32px; height:32px; transition: transform 0.2s; }
+    .redes-sociais a img:hover { transform: scale(1.2); }
 
     header h1 {
-      margin: 0;
-      font-size: 2.5em; /* Título maior */
-      font-weight: bold;
-      flex-grow: 1;
-      text-align: center;
+      margin:0;
+      font-size:2.5em;
+      font-weight:bold;
+      flex-grow:1;
+      text-align:center;
     }
 
     nav {
-      display: flex;
-      justify-content: center;
-      background: #004494;
-      padding: 15px 0;
-      font-size: 1.1em; /* Letras maiores */
+      display:flex;
+      justify-content:center;
+      background:#004494;
+      padding:15px 0;
+      font-size:1.1em;
     }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 20px;
-      font-weight: bold;
-      transition: color 0.2s;
-    }
-    nav a:hover {
-      color: #ffdd57;
-    }
+    nav a { color:#fff; text-decoration:none; margin:0 20px; font-weight:bold; transition:color 0.2s; }
+    nav a:hover { color:#ffdd57; }
 
     main {
-      max-width: 1000px;
-      margin: 20px auto;
-      padding: 20px;
+      max-width:1200px;
+      margin:20px auto;
+      padding:20px;
       background: rgba(0,0,0,0.3);
-      border-radius: 10px;
+      border-radius:10px;
     }
 
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 ratio */
-      padding-top: 25px;
-      height: 0;
-      margin-bottom: 30px;
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
+    h3 { margin-top:30px; color:#ffdd57; }
 
-    .noticia {
-      background: rgba(0, 86, 179, 0.8);
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      padding: 20px;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
-    }
-    .noticia:hover {
-      transform: translateY(-3px);
-    }
-    .noticia img {
-      max-width: 100%;
-      border-radius: 5px;
-      margin-bottom: 15px;
-    }
-    .noticia h2 {
-      margin-top: 0;
-      color: #fff;
-    }
-    .meta {
-      font-size: 0.9em;
-      color: #e0e0e0;
-      margin-bottom: 10px;
-    }
-    .categoria {
-      font-weight: bold;
-      color: #ffdd57;
-    }
+    .video-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; margin-bottom:30px; }
+    .video-grid iframe { width:100%; height:200px; border:0; }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #004494;
-      color: #fff;
-      margin-top: 40px;
-    }
+    footer { text-align:center; padding:20px; background:#004494; color:#fff; margin-top:40px; }
 
-    @media (max-width: 600px) {
-      nav {
-        flex-direction: column;
-      }
-      nav a {
-        margin: 5px 0;
-      }
-      header {
-        flex-direction: column;
-      }
-      header h1 {
-        text-align: center;
-        margin-top: 10px;
-      }
-      .redes-sociais {
-        margin-top: 10px;
-      }
+    @media(max-width:1024px){ .video-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width:600px){
+      .video-grid { grid-template-columns:1fr; }
+      nav{ flex-direction:column; } nav a{ margin:5px 0; }
+      header{ flex-direction:column; }
+      header h1{ margin-top:10px; text-align:center; }
+      .redes-sociais{ margin-top:10px; }
     }
   </style>
 </head>
@@ -190,45 +101,34 @@
   </nav>
 
   <main>
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
+    <h2>Vídeos Recentes</h2>
+
+    <h3>DIGI</h3>
+    <div class="video-grid">
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID1" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID2" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID3" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID4" allowfullscreen></iframe>
     </div>
 
-    <div id="noticias"></div>
+    <h3>MERCADO TELECOMUNICAÇÕES PT</h3>
+    <div class="video-grid">
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID5" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID6" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID7" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID8" allowfullscreen></iframe>
+    </div>
+
+    <h3>NOTÍCIAS</h3>
+    <div class="video-grid">
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID9" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID10" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID11" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID12" allowfullscreen></iframe>
+    </div>
+
   </main>
 
-  <footer>
-    &copy; 2026 VICIADO COMENTA
-  </footer>
-
-  <script>
-    function mostrarNoticias(data) {
-      const container = document.getElementById('noticias');
-      container.innerHTML = '';
-      data.noticias.forEach(noticia => {
-        const div = document.createElement('div');
-        div.className = 'noticia';
-        div.innerHTML = `
-          <h2>${noticia.titulo}</h2>
-          <div class="meta">
-            <span class="categoria">${noticia.categoria}</span> | ${noticia.data} | Autor: ${noticia.autor}
-          </div>
-          <p>${noticia.conteudo}</p>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    fetch('noticias.json')
-      .then(response => {
-        if (!response.ok) throw new Error('Não foi possível carregar o JSON');
-        return response.json();
-      })
-      .then(data => mostrarNoticias(data))
-      .catch(error => {
-        console.error(error);
-        document.getElementById('noticias').innerHTML = '<p>Não foi possível carregar as notícias.</p>';
-      });
-  </script>
+  <footer>&copy; 2026 VICIADO COMENTA</footer>
 </body>
 </html>
