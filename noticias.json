@@ -1,12 +1,20 @@
 {
   "noticias": [
     {
-      "titulo": "Operação da DIGI na Roménia",
-      "data": "26/01/2026",
-      "autor": "Pedro Silva",
-      "categoria": "DIGI",
-      "conteudo": "Teste teste teste, texto texto."
+      "titulo": "Nova tecnologia lançada",
+      "data": "25/01/2026",
+      "autor": "Redação",
+      "categoria": "Tecnologia",
+      "resumo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado.",
+      "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado..."
     },
-      }
+    {
+      "titulo": "Jogos mais aguardados de 2026",
+      "data": "20/01/2026",
+      "autor": "Redação",
+      "categoria": "Gaming",
+      "resumo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos.",
+      "conteudo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos..."
+    }
   ]
 }
