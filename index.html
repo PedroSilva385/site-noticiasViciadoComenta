@@ -23,48 +23,53 @@ header {
   justify-content: space-between;
 }
 
-.foto-perfil {
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.foto-perfil img {
   width: 90px;
   height: 90px;
-}
-.foto-perfil img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 header h1 {
-  font-size: 3em;
+  font-size: 2.5em;
   margin: 0;
-  text-align: center;
-  flex-grow: 1;
 }
 
 .redes-sociais {
   display: flex;
   gap: 10px;
 }
+
 .redes-sociais img {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
 }
 
+/* Navegação */
 nav {
   background: #004494;
   padding: 15px;
   text-align: center;
 }
+
 nav a {
   color: #fff;
   margin: 0 15px;
   text-decoration: none;
   font-weight: 600;
 }
+
 nav a:hover {
   color: #ffdd57;
 }
 
+/* Main */
 main {
   max-width: 1100px;
   margin: 30px auto;
@@ -116,6 +121,7 @@ main {
   color: #ffdd57;
 }
 
+/* Footer */
 footer {
   background: #004494;
   text-align: center;
@@ -123,7 +129,7 @@ footer {
   margin-top: 50px;
 }
 
-/* 📱 RESPONSIVO */
+/* Responsivo */
 @media (max-width: 900px) {
   .destaque {
     grid-template-columns: 1fr;
@@ -143,24 +149,33 @@ footer {
 <body>
 
 <header>
-  <div class="foto-perfil">
-    <img src="foto-perfil.png" alt="Foto Perfil">
+  <div class="logo-area">
+    <div class="foto-perfil">
+      <img src="assets/img/foto-perfil.webp" alt="Foto Perfil">
+    </div>
+    <h1>VICIADO COMENTA</h1>
   </div>
 
-  <h1>VICIADO COMENTA</h1>
-
   <div class="redes-sociais">
-    <a href="https://www.youtube.com/@TheViciado" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"></a>
-    <a href="https://www.instagram.com/theviciado13/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></a>
-    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"></a>
-    <a href="https://www.twitch.tv/theviciado13" target="_blank"><img src="91f17726-544a-4879-a24a-0b8f0923b13d.png"></a>
+    <a href="https://www.youtube.com/@TheViciado" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube">
+    </a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram">
+    </a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+    </a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank">
+      <img src="assets/img/twitch.svg" alt="Twitch">
+    </a>
   </div>
 </header>
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="videos.html">Vídeos Recentes</a>
-  <a href="gaming.html">Gaming</a>
+  <a href="noticias.html">Notícias</a>
+  <a href="conteudos.html">Conteúdos</a>
 </nav>
 
 <main>
@@ -168,14 +183,13 @@ footer {
   <!-- 🔴 VÍDEO EM DESTAQUE -->
   <section class="destaque">
     <div class="video">
-      <!-- TROCA AQUI O ID DO VÍDEO -->
       <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
     </div>
 
     <div class="texto-video">
       <h2>Vídeo em Destaque</h2>
       <p>
-        Neste vídeo analisamos o mercado da roménia, especificamente a posição da DIGI. Como sabemos, esta é a casa mãe, e por isso vamos querer saber tudo o que a DIGI faz, no seu país de origem, e que tipo de coisas podem chegar a Portugal em breve!
+        Neste vídeo analisamos o mercado da Roménia, especificamente a posição da DIGI. Como sabemos, esta é a casa mãe, e por isso vamos querer saber tudo o que a DIGI faz, no seu país de origem, e que tipo de coisas podem chegar a Portugal em breve!
       </p>
     </div>
   </section>
@@ -189,23 +203,29 @@ footer {
 </main>
 
 <footer>
-  &copy; 2026 VICIADO COMENTA
+  © 2026 Viciado Comenta
 </footer>
 
+<!-- JSON Notícias -->
 <script>
-fetch('noticias.json')
+fetch("assets/data/noticias.json")
   .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById('ultimasNoticias');
-    data.noticias.slice(0,4).forEach(n => {
-      container.innerHTML += `
-        <div class="noticia">
-          <h3>${n.titulo}</h3>
-          <p>${n.conteudo.substring(0,100)}...</p>
-        </div>
+  .then(noticias => {
+    const container = document.getElementById("ultimasNoticias");
+    noticias.sort((a,b) => new Date(b.data) - new Date(a.data));
+    noticias.slice(0, 4).forEach(n => {
+      const article = document.createElement("div");
+      article.className = "noticia";
+      article.innerHTML = `
+        <h3>${n.titulo}</h3>
+        <p class="meta">${n.data} · ${n.categoria}</p>
+        <p>${n.resumo}</p>
+        <a href="${n.link}">Ler mais</a>
       `;
+      container.appendChild(article);
     });
-  });
+  })
+  .catch(err => console.error("Erro ao carregar notícias:", err));
 </script>
 
 </body>
