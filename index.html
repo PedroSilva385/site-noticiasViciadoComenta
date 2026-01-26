@@ -24,11 +24,29 @@ header {
   align-items: center;
 }
 
+header {
+  background: #0056b3;
+  height: 40vh; /* ocupa 100% da altura da janela */
+  display: flex;
+  flex-direction: column; /* empilha elementos verticalmente */
+  justify-content: center; /* centraliza verticalmente */
+  align-items: center;     /* centraliza horizontalmente */
+  position: relative;
+  padding: 0; /* podemos remover o padding para centralização */
+  gap: 20px; /* espaço entre foto e título */
+}
+
 .logo-area {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* centra foto e título horizontalmente */
   gap: 10px;
+}
+
+.logo-area h1 {
+  font-size: 3em; /* aumenta o tamanho do título */
+  margin: 0;
+  text-align: center;
 }
 
 /* Foto de perfil maior e quadrada */
@@ -68,6 +86,7 @@ nav a {
   margin: 0 15px;
   text-decoration: none;
   font-weight: 600;
+  font-size: 1.3em; /* aumenta o tamanho da letra */
 }
 
 nav a:hover {
@@ -95,15 +114,22 @@ main {
 }
 
 .video iframe {
-  width: 100%;
-  height: 315px;
+  width: 140%;           /* largura do vídeo reduzida para 80% do container */
+  max-width: 1280px;     /* largura máxima menor que antes */
+  aspect-ratio: 16/9;   /* mantém proporção */
+  height: auto;         /* altura ajusta automaticamente */
+  display: block;
+  position: relative;
+  left: -105px;  /* muda para + ou - conforme queres mover horizontalmente */
+  top: 0px;   /* muda verticalmente se necessário */
+  border-radius: 00px;  /* opcional: cantos arredondados */
 }
 
 .texto-video h2 {
   margin-top: 0;
   color: #ffdd57; /* título amarelo */
   text-align: center;
-}
+  }
 
 /* 📰 ÚLTIMAS NOTÍCIAS */
 .ultimas-noticias {
@@ -167,7 +193,7 @@ footer {
 <header>
   <div class="logo-area">
     <div class="foto-perfil">
-      <img src="assets/img/perfil.png" alt="Foto Perfil">
+      <img src="perfil.png" alt="Foto Perfil">
     </div>
     <h1>VICIADO COMENTA</h1>
   </div>
@@ -183,7 +209,7 @@ footer {
       <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
     </a>
     <a href="https://www.twitch.tv/theviciado13" target="_blank">
-      <img src="assets/img/twitch.svg" alt="Twitch">
+      <img src="twitch2.png" alt="Twitch">
     </a>
   </div>
 </header>
@@ -197,24 +223,44 @@ footer {
 <main>
 
   <!-- 🔴 VÍDEO EM DESTAQUE -->
-  <section class="destaque">
-    <div class="video">
-      <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
-    </div>
+<h2 class="titulo-amarelo">Vídeo em Destaque</h2>
+<section class="destaque">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div class="texto-video">
+    <p>
+      Neste vídeo analisamos o mercado da Roménia, especificamente a posição da DIGI. Como sabemos, esta é a casa mãe, e por isso vamos querer saber tudo o que a DIGI faz, no seu país de origem, e que tipo de coisas podem chegar a Portugal em breve!
+    </p>
+  </div>
+</section>
 
-    <div class="texto-video">
-      <h2>Vídeo em Destaque</h2>
-      <p>
-        Neste vídeo analisamos o mercado da Roménia, especificamente a posição da DIGI. Como sabemos, esta é a casa mãe, e por isso vamos querer saber tudo o que a DIGI faz, no seu país de origem, e que tipo de coisas podem chegar a Portugal em breve!
-      </p>
-    </div>
-  </section>
+<!-- 📰 ÚLTIMAS NOTÍCIAS -->
+<h2 class="titulo-amarelo">Últimas Notícias</h2>
+<section class="ultimas-noticias">
+  <div class="noticias-grid" id="ultimasNoticias"></div>
+</section>
 
-  <!-- 📰 ÚLTIMAS NOTÍCIAS -->
-  <section class="ultimas-noticias">
-    <h2>Últimas Notícias</h2>
-    <div class="noticias-grid" id="ultimasNoticias"></div>
-  </section>
+<!-- CSS para títulos -->
+<style>
+/* Container para centralizar os títulos */
+.titulo-container {
+  display: flex;
+  justify-content: center; /* centraliza horizontalmente */
+  margin: 20px 0 10px 0;   /* espaço acima e abaixo */
+}
+
+/* Títulos amarelos com fundo azul escuro */
+.titulo-amarelo {
+  color: #ffdd57;               /* texto amarelo */
+  background-color: #003366;    /* fundo azul escuro */
+  text-align: center;           /* centraliza o texto dentro da caixa */
+  font-size: 2em;
+  font-weight: 700;
+  padding: 10px 25px;           /* espaço interno */
+  border-radius: 8px;           /* cantos arredondados */
+}
+</style>
 
 </main>
 
