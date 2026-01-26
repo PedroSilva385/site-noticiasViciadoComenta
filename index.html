@@ -4,115 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Site de Notícias</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <meta name="description" content="Site de notícias com categorias e últimas atualizações.">
-  <meta name="keywords" content="notícias, tecnologia, economia, desporto">
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: linear-gradient(90deg, #1e3a8a, #3b59c3);
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    #filtros {
-      text-align: center;
-      margin: 1rem 0;
-    }
-    #filtros button {
-      background: #1e3a8a;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      margin: 0 0.3rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    #filtros button:hover {
-      background: #3b59c3;
-    }
-    main {
-      max-width: 900px;
-      margin: 0 auto 2rem;
-      padding: 0 1rem;
-    }
-    article {
-      background: white;
-      margin-bottom: 1.5rem;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    article h2 {
-      margin-top: 0;
-      color: #1e3a8a;
-    }
-    .meta {
-      font-size: 0.85rem;
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+    h1 { color: #333; }
+    .noticia { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px; background: #fff; }
+    .categoria { font-weight: bold; color: #555; }
+    .data { font-size: 0.9em; color: #888; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>📰 Meu Jornal Online</h1>
-  </header>
-
-  <div id="filtros">
-    <button onclick="filtrar('Todas')">Todas</button>
-    <button onclick="filtrar('Tecnologia')">Tecnologia</button>
-    <button onclick="filtrar('Economia')">Economia</button>
-  </div>
-
-  <main id="news"></main>
+  <h1>Últimas Notícias</h1>
+  <div id="noticias"></div>
 
   <script>
-    let todasNoticias = [];
-
-    fetch('noticias.json')
-      .then(response => response.json())
-      .then(data => {
-        todasNoticias = data.noticias;
-        document.title = `Meu Jornal Online (${todasNoticias.length} notícias)`;
-        mostrarNoticias(todasNoticias);
-      })
-      .catch(error => {
-        document.getElementById('news').innerHTML = '<p>Não foi possível carregar as notícias.</p>';
-        console.error(error);
-      });
-
-    function mostrarNoticias(lista) {
-      const container = document.getElementById('news');
+    // Função para exibir notícias
+    function mostrarNoticias(data) {
+      const container = document.getElementById('noticias');
       container.innerHTML = '';
-      lista.forEach(noticia => {
-        const article = document.createElement('article');
-        article.innerHTML = `
+      data.noticias.forEach(noticia => {
+        const div = document.createElement('div');
+        div.className = 'noticia';
+        div.innerHTML = `
           <h2>${noticia.titulo}</h2>
-          <div class="meta">${noticia.data} • ${noticia.autor} • ${noticia.categoria}</div>
+          <p class='categoria'>Categoria: ${noticia.categoria}</p>
+          <p class='data'>Data: ${noticia.data} | Autor: ${noticia.autor}</p>
           <p>${noticia.conteudo}</p>
         `;
-        container.appendChild(article);
+        container.appendChild(div);
       });
     }
 
-    function filtrar(categoria) {
-      if (categoria === 'Todas') {
-        mostrarNoticias(todasNoticias);
-      } else {
-        const filtradas = todasNoticias.filter(n => n.categoria === categoria);
-        mostrarNoticias(filtradas);
-      }
-    }
+    // Fetch do JSON
+    fetch('noticias.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Não foi possível carregar o JSON');
+        }
+        return response.json();
+      })
+      .then(data => mostrarNoticias(data))
+      .catch(error => {
+        console.error(error);
+        document.getElementById('noticias').innerHTML = '<p>Não foi possível carregar as notícias.</p>';
+      });
   </script>
 </body>
 </html>
