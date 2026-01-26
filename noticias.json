@@ -1,11 +1,11 @@
 {
   "noticias": [
     {
-      "titulo": "Nova tecnologia lançada",
-      "data": "25/01/2026",
-      "autor": "Redação",
-      "categoria": "Tecnologia",
-      "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado."
+      "titulo": "Operação da DIGI na Roménia",
+      "data": "26/01/2026",
+      "autor": "Pedro Silva",
+      "categoria": "DIGI",
+      "conteudo": "Teste teste teste, texto texto."
     },
       }
   ]
