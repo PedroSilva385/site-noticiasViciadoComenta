@@ -7,40 +7,6 @@
       "categoria": "Tecnologia",
       "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado."
     },
-    {
-      "titulo": "Economia em crescimento",
-      "data": "24/01/2026",
-      "autor": "João Silva",
-      "categoria": "Economia",
-      "conteudo": "Os indicadores económicos mostram sinais positivos para este trimestre."
-    },
-    {
-      "titulo": "Novo estádio inaugurado",
-      "data": "23/01/2026",
-      "autor": "Maria Costa",
-      "categoria": "Desporto",
-      "conteudo": "Um novo estádio moderno foi inaugurado com capacidade para 50 mil espectadores."
-    },
-    {
-      "titulo": "Avanços em inteligência artificial",
-      "data": "22/01/2026",
-      "autor": "Redação",
-      "categoria": "Tecnologia",
-      "conteudo": "Pesquisadores anunciaram novas descobertas em inteligência artificial aplicada à saúde."
-    },
-    {
-      "titulo": "Política ambiental reforçada",
-      "data": "21/01/2026",
-      "autor": "Carlos Mendes",
-      "categoria": "Economia",
-      "conteudo": "O governo aprovou novas medidas para reduzir a emissão de carbono nas indústrias."
-    },
-    {
-      "titulo": "Campeonato de futebol começa",
-      "data": "20/01/2026",
-      "autor": "Ana Oliveira",
-      "categoria": "Desporto",
-      "conteudo": "O campeonato nacional de futebol começa com grandes expectativas para os clubes."
-    }
+      }
   ]
 }
