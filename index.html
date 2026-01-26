@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VICIADO COMENTA</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%230066cc'>V</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -15,7 +16,7 @@
 
 body {
   font-family: 'Sora', sans-serif;
-  background: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   color: #1a1f3a;
   line-height: 1.6;
 }
@@ -147,6 +148,33 @@ main > h2 {
   background: #000;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.featured-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.featured-video-error {
+  text-align: center;
+  color: #ffffff;
+  padding: 40px 20px;
+}
+
+.featured-video-error h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.featured-video-error p {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .featured-video img {
@@ -170,6 +198,7 @@ main > h2 {
   font-size: 48px;
   color: rgba(255, 255, 255, 0.9);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none;
 }
 
 .featured-video:hover::after {
@@ -253,12 +282,13 @@ main > h2 {
   grid-template-columns: auto 1fr;
   gap: 25px;
   padding: 28px;
-  background: #ffffff;
+  background: #e3f2fd;
   border-radius: 12px;
   border: 1px solid #e0e8f5;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  align-items: center;
 }
 
 .noticia-item:hover {
@@ -272,6 +302,7 @@ main > h2 {
   flex-direction: column;
   gap: 12px;
   min-width: 120px;
+  margin: auto 0;
 }
 
 .noticia-categoria {
@@ -392,7 +423,7 @@ footer {
     <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
       <i class="fab fa-twitch"></i>
     </a>
-    <a href="https://open.spotify.com/" target="_blank" title="Spotify" rel="noopener noreferrer">
+    <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" title="Spotify" rel="noopener noreferrer">
       <i class="fab fa-spotify"></i>
     </a>
   </div>
@@ -423,27 +454,62 @@ fetch("noticias.json")
     // Mostrar notícia em destaque (mais recente - primeira do array)
     if (data.noticias.length > 0) {
       const featured = data.noticias[0];
-      const videoId = extrairVideoId(featured.video);
-      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+      const videoId = featured.video;
       
       const featuredSection = document.getElementById("featured");
-      featuredSection.innerHTML = `
-        <div class="featured-content">
-          <div class="featured-video">
-            <img src="${thumbnailUrl}" alt="${featured.titulo}">
-          </div>
-          <div class="featured-info">
-            <span class="featured-categoria">${featured.categoria}</span>
-            <h2>${featured.titulo}</h2>
-            <div class="featured-meta">
-              <span>📅 ${featured.data}</span>
-              <span>✍️ ${featured.autor}</span>
+      
+      if (videoId) {
+        // Tentar carregar o vídeo, com fallback para imagem
+        featuredSection.innerHTML = `
+          <div class="featured-content">
+            <div class="featured-video" id="videoContainer">
+              <iframe 
+                id="youtubeIframe"
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/${videoId}?modestbranding=1" 
+                title="${featured.titulo}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen
+                onerror="mostrarFallback()">
+              </iframe>
             </div>
-            <p>${featured.resumo}</p>
-            <a href="noticias.html?id=${featured.id}" class="featured-link">Ver mais →</a>
+            <div class="featured-info">
+              <span class="featured-categoria">${featured.categoria}</span>
+              <h2>${featured.titulo}</h2>
+              <div class="featured-meta">
+                <span>📅 ${featured.data}</span>
+                <span>✍️ ${featured.autor}</span>
+              </div>
+              <p>${featured.resumo}</p>
+              <a href="noticias.html?id=${featured.id}" class="featured-link">Ver mais →</a>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        // Se não houver vídeo, mostrar mensagem
+        featuredSection.innerHTML = `
+          <div class="featured-content">
+            <div class="featured-video">
+              <div class="featured-video-error">
+                <h3>Vídeo não disponível</h3>
+                <p>Verifique o link do vídeo no JSON</p>
+              </div>
+            </div>
+            <div class="featured-info">
+              <span class="featured-categoria">${featured.categoria}</span>
+              <h2>${featured.titulo}</h2>
+              <div class="featured-meta">
+                <span>📅 ${featured.data}</span>
+                <span>✍️ ${featured.autor}</span>
+              </div>
+              <p>${featured.resumo}</p>
+              <a href="noticias.html?id=${featured.id}" class="featured-link">Ver mais →</a>
+            </div>
+          </div>
+        `;
+      }
     }
     
     // Mostrar lista de notícias (todas)
