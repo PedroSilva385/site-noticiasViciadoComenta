@@ -1,76 +1,234 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VICIADO COMENTA</title>
-<style>
-body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-margin: 0;
-padding: 0;
-background: url('https://images.unsplash.com/photo-1581092795364-13f7a6c74b8d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dGVsZWNvbXVuJTIwbmV0d29ya3N8ZW58MHx8MHx8&ixlib=rb-4.0.3&q=80&w=1920') no-repeat center center fixed;
-background-size: cover;
-color: #fff;
-}
-header {
-background: rgba(0, 86, 179, 0.8);
-color: #fff;
-padding: 20px;
-text-align: center;
-}
-header h1 { margin:0; font-size:2em; font-weight:bold; }
-nav { display:flex; justify-content:center; background: rgba(0, 68, 148, 0.8); padding:10px 0; }
-nav a { color:#fff; text-decoration:none; margin:0 15px; font-weight:bold; transition:color 0.2s; }
-nav a:hover { color:#ffdd57; }
-main { max-width:1000px; margin:20px auto; padding:20px; background: rgba(0,0,0,0.4); border-radius:10px; }
-.video-container { position:relative; padding-bottom:56.25%; padding-top:25px; height:0; margin-bottom:30px; }
-.video-container iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
-.noticia { background: rgba(0, 86, 179, 0.8); border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.3); padding:20px; margin-bottom:20px; display:flex; flex-direction:column; transition: transform 0.2s; }
-.noticia:hover { transform: translateY(-3px); }
-.noticia img { max-width:100%; border-radius:5px; margin-bottom:15px; }
-.noticia h2 { margin-top:0; color:#fff; }
-.meta { font-size:0.85em; color:#e0e0e0; margin-bottom:10px; }
-.categoria { font-weight:bold; color:#ffdd57; }
-footer { text-align:center; padding:20px; background: rgba(0, 68, 148, 0.8); color:#fff; margin-top:40px; }
-@media (max-width:600px) { nav { flex-direction:column; } nav a { margin:5px 0; } }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VICIADO COMENTA</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #007BFF; /* Fundo azul */
+      color: #fff;
+    }
+
+    header {
+      background: #0056b3;
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Foto tua no canto superior esquerdo */
+    .foto-perfil {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    .foto-perfil img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Botões redes sociais no canto superior direito */
+    .redes-sociais {
+      display: flex;
+      gap: 10px;
+    }
+    .redes-sociais a img {
+      width: 32px;
+      height: 32px;
+      transition: transform 0.2s;
+    }
+    .redes-sociais a img:hover {
+      transform: scale(1.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em; /* Título maior */
+      font-weight: bold;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #004494;
+      padding: 15px 0;
+      font-size: 1.1em; /* Letras maiores */
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 20px;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: #ffdd57;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 ratio */
+      padding-top: 25px;
+      height: 0;
+      margin-bottom: 30px;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .noticia {
+      background: rgba(0, 86, 179, 0.8);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
+    .noticia:hover {
+      transform: translateY(-3px);
+    }
+    .noticia img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .noticia h2 {
+      margin-top: 0;
+      color: #fff;
+    }
+    .meta {
+      font-size: 0.9em;
+      color: #e0e0e0;
+      margin-bottom: 10px;
+    }
+    .categoria {
+      font-weight: bold;
+      color: #ffdd57;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #004494;
+      color: #fff;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+      }
+      nav a {
+        margin: 5px 0;
+      }
+      header {
+        flex-direction: column;
+      }
+      header h1 {
+        text-align: center;
+        margin-top: 10px;
+      }
+      .redes-sociais {
+        margin-top: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
-<header><h1>VICIADO COMENTA</h1></header>
+  <header>
+    <div class="foto-perfil">
+      <img src="sua-foto.jpg" alt="Foto Perfil"> <!-- Substitui pela tua foto -->
+    </div>
+    <h1>VICIADO COMENTA</h1>
+    <div class="redes-sociais">
+      <a href="https://www.youtube.com/" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube">
+      </a>
+      <a href="https://www.instagram.com/" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram">
+      </a>
+      <a href="https://www.facebook.com/" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+      </a>
+    </div>
+  </header>
 
+  <nav>
+    <a href="index.html">Ínicio</a>
+    <a href="videos.html">Vídeos Recentes</a>
+    <a href="#">Mercado das Telecom</a>
+    <a href="#">Notícias Telecom</a>
+    <a href="#">DIGI</a>
+  </nav>
 
-<nav>
-<a href="index.html">Ínicio</a>
-<a href="videos.html">Vídeos Recentes</a>
-<a href="#">Mercado das Telecom</a>
-<a href="#">Notícias Telecom</a>
-<a href="#">DIGI</a>
-</nav>
+  <main>
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
+    </div>
 
+    <div id="noticias"></div>
+  </main>
 
-<main>
-<div class="video-container">
-<iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
-</div>
+  <footer>
+    &copy; 2026 VICIADO COMENTA
+  </footer>
 
+  <script>
+    function mostrarNoticias(data) {
+      const container = document.getElementById('noticias');
+      container.innerHTML = '';
+      data.noticias.forEach(noticia => {
+        const div = document.createElement('div');
+        div.className = 'noticia';
+        div.innerHTML = `
+          <h2>${noticia.titulo}</h2>
+          <div class="meta">
+            <span class="categoria">${noticia.categoria}</span> | ${noticia.data} | Autor: ${noticia.autor}
+          </div>
+          <p>${noticia.conteudo}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
 
-<div id="noticias"></div>
-</main>
-
-
-<footer>&copy; 2026 VICIADO COMENTA</footer>
-
-
-<script>
-function mostrarNoticias(data) {
-const container = document.getElementById('noticias');
-container.innerHTML = '';
-data.noticias.forEach(noticia => {
-const div = document.createElement('div');
-div.className = 'noticia';
-div.innerHTML = `
-<h2>${noticia.titulo}</h2>
-<div class="meta">
-<span class="categoria">${noticia.categoria}</span> | ${noticia.data} | Autor: ${noticia.autor}
+    fetch('noticias.json')
+      .then(response => {
+        if (!response.ok) throw new Error('Não foi possível carregar o JSON');
+        return response.json();
+      })
+      .then(data => mostrarNoticias(data))
+      .catch(error => {
+        console.error(error);
+        document.getElementById('noticias').innerHTML = '<p>Não foi possível carregar as notícias.</p>';
+      });
+  </script>
+</body>
 </html>
