@@ -1,7 +1,7 @@
 {
   "noticias": [
     {
-      "titulo": "Nova tecnologia lançada",
+      "titulo": "Nova asdsadasdadlançada",
       "data": "25/01/2026",
       "autor": "Redação",
       "categoria": "Tecnologia",
@@ -9,12 +9,20 @@
       "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado..."
     },
     {
-      "titulo": "Jogos mais aguardados de 2026",
+      "titulo": "sadsadsadasda",
       "data": "20/01/2026",
       "autor": "Redação",
       "categoria": "Gaming",
-      "resumo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos.",
+      "resumo": "Apresentsadadsadasdsadsas os fãs estão ansiosos.",
       "conteudo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos..."
+    },
+	{
+      "titulo": "crics the brooks",
+      "data": "25/01/2026",
+      "autor": "Redação",
+      "categoria": "Tecnologia",
+      "resumo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado.",
+      "conteudo": "sajfhsndalçkfksançlksanºlkangsºkalgnsa"
     }
   ]
 }

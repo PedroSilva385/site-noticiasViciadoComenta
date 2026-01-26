@@ -164,6 +164,48 @@ main {
   color: #ffdd57;
 }
 
+.noticia a {
+  color: #ffdd57;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Modal */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 999; 
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background: #003366;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  color: #fff;
+  position: relative;
+}
+
+.modal-content h3 {
+  color: #ffdd57;
+}
+
+.close {
+  position: absolute;
+  top: 10px; right: 15px;
+  color: #ffdd57;
+  font-size: 1.5em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 /* Footer */
 footer {
   background: #004494;
@@ -271,31 +313,58 @@ footer {
   © 2026 Viciado Comenta
 </footer>
 
-<!-- JSON Notícias -->
+<!-- Modal -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="modalClose">&times;</span>
+    <h3 id="modalTitulo"></h3>
+    <p id="modalMeta"></p>
+    <p id="modalResumo"></p>
+    <p id="modalConteudo"></p>
+  </div>
+</div>
+
+<!-- Carregar Notícias do JSON -->
 <script>
-const noticiasJSON = {
-  "noticias": [
-    {
-      "titulo": "Nova tecnologia lançada",
-      "data": "25/01/2026",
-      "autor": "Redação",
-      "categoria": "Tecnologia",
-      "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado."
-    }
-  ]
+fetch("noticias.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("ultimasNoticias");
+    data.noticias.forEach((n, index) => {
+      const article = document.createElement("div");
+      article.className = "noticia";
+      article.innerHTML = `
+        <h3>${n.titulo}</h3>
+        <p class="meta">${n.data} · ${n.categoria}</p>
+        <p>${n.resumo}</p>
+        <a onclick="abrirModal(${index})">Ver mais</a>
+      `;
+      container.appendChild(article);
+    });
+
+    // Função para abrir modal
+    window.abrirModal = function(index) {
+      const noticia = data.noticias[index];
+      document.getElementById("modalTitulo").textContent = noticia.titulo;
+      document.getElementById("modalMeta").textContent = noticia.data + " · " + noticia.categoria + " · " + noticia.autor;
+      document.getElementById("modalResumo").textContent = noticia.resumo;
+      document.getElementById("modalConteudo").textContent = noticia.conteudo;
+      document.getElementById("modal").style.display = "block";
+    };
+  })
+  .catch(err => console.error("Erro ao carregar notícias:", err));
+
+// Fechar modal
+document.getElementById("modalClose").onclick = function() {
+  document.getElementById("modal").style.display = "none";
 };
 
-const container = document.getElementById("ultimasNoticias");
-noticiasJSON.noticias.forEach(n => {
-  const article = document.createElement("div");
-  article.className = "noticia";
-  article.innerHTML = `
-    <h3>${n.titulo}</h3>
-    <p class="meta">${n.data} · ${n.categoria}</p>
-    <p>${n.conteudo}</p>
-  `;
-  container.appendChild(article);
-});
+// Fechar modal ao clicar fora
+window.onclick = function(event) {
+  if (event.target == document.getElementById("modal")) {
+    document.getElementById("modal").style.display = "none";
+  }
+};
 </script>
 
 </body>
