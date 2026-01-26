@@ -470,6 +470,7 @@ fetch("noticias.json")
 
 // Função para extrair ID do YouTube
 function extrairVideoId(url) {
+  if (!url) return '';
   const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\\w-]+)/;
   const match = url.match(regex);
   return match ? match[1] : '';
