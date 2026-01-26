@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Notícias</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site de Notícias</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta name="description" content="Site de notícias com categorias e últimas atualizações.">
+  <meta name="keywords" content="notícias, tecnologia, economia, desporto">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
+      font-family: 'Arial', sans-serif;
       background: #f4f4f4;
+      margin: 0;
+      padding: 0;
     }
     header {
-      background: #1e3a8a;
+      background: linear-gradient(90deg, #1e3a8a, #3b59c3);
       color: white;
       padding: 1rem;
       text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    #filtros {
+      text-align: center;
+      margin: 1rem 0;
+    }
+    #filtros button {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      margin: 0 0.3rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #filtros button:hover {
+      background: #3b59c3;
     }
     main {
       max-width: 900px;
-      margin: 2rem auto;
+      margin: 0 auto 2rem;
       padding: 0 1rem;
     }
     article {
@@ -41,44 +65,54 @@
 </head>
 <body>
   <header>
-    <h1>📰 Site de Notícias</h1>
+    <h1>📰 Meu Jornal Online</h1>
   </header>
-<div id="filtros">
-  <button onclick="filtrar('Todas')">Todas</button>
-  <button onclick="filtrar('Tecnologia')">Tecnologia</button>
-  <button onclick="filtrar('Economia')">Economia</button>
-</div>
+
+  <div id="filtros">
+    <button onclick="filtrar('Todas')">Todas</button>
+    <button onclick="filtrar('Tecnologia')">Tecnologia</button>
+    <button onclick="filtrar('Economia')">Economia</button>
+  </div>
 
   <main id="news"></main>
 
   <script>
-    // Lê o ficheiro JSON com as notícias
+    let todasNoticias = [];
+
     fetch('noticias.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Erro ao carregar o ficheiro JSON');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        const container = document.getElementById('news');
-
-        data.noticias.forEach(noticia => {
-          const article = document.createElement('article');
-
-          article.innerHTML = `
-            <h2>${noticia.titulo}</h2>
-            <div class="meta">${noticia.data} • ${noticia.autor}</div>
-            <p>${noticia.conteudo}</p>
-          `;
-
-          container.appendChild(article);
-        });
+        todasNoticias = data.noticias;
+        document.title = `Meu Jornal Online (${todasNoticias.length} notícias)`;
+        mostrarNoticias(todasNoticias);
       })
       .catch(error => {
         document.getElementById('news').innerHTML = '<p>Não foi possível carregar as notícias.</p>';
         console.error(error);
       });
+
+    function mostrarNoticias(lista) {
+      const container = document.getElementById('news');
+      container.innerHTML = '';
+      lista.forEach(noticia => {
+        const article = document.createElement('article');
+        article.innerHTML = `
+          <h2>${noticia.titulo}</h2>
+          <div class="meta">${noticia.data} • ${noticia.autor} • ${noticia.categoria}</div>
+          <p>${noticia.conteudo}</p>
+        `;
+        container.appendChild(article);
+      });
+    }
+
+    function filtrar(categoria) {
+      if (categoria === 'Todas') {
+        mostrarNoticias(todasNoticias);
+      } else {
+        const filtradas = todasNoticias.filter(n => n.categoria === categoria);
+        mostrarNoticias(filtradas);
+      }
+    }
   </script>
 </body>
 </html>
