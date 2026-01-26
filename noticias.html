@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notícias - VICIADO COMENTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: #007BFF;
+  color: #fff;
+}
+
+/* HEADER */
+header {
+  background: #0056b3;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin: 0;
+  text-align: center;
+}
+
+/* NAV */
+nav {
+  background: #004494;
+  padding: 15px;
+  text-align: center;
+}
+nav a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+nav a:hover {
+  color: #ffdd57;
+}
+
+/* Main */
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* Lista de notícias */
+.lista-noticias {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Card da notícia */
+.noticia {
+  background: #003366;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.noticia h3 {
+  margin-top: 0;
+  color: #ffdd57;
+}
+
+.noticia p.meta {
+  font-size: 0.9em;
+  color: #ddd;
+  margin-bottom: 10px;
+}
+
+.noticia p.resumo {
+  margin-bottom: 10px;
+}
+
+.noticia a {
+  color: #ffdd57;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Modal */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 999; 
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background: #003366;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  color: #fff;
+  position: relative;
+}
+
+.modal-content h3 {
+  color: #ffdd57;
+}
+
+.close {
+  position: absolute;
+  top: 10px; right: 15px;
+  color: #ffdd57;
+  font-size: 1.5em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .lista-noticias { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>VICIADO COMENTA</h1>
+</header>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="noticias.html">Notícias</a>
+  <a href="conteudos.html">Conteúdos</a>
+</nav>
+
+<main>
+  <h2 class="titulo-amarelo" style="text-align:center; background:#003366; padding:10px 25px; border-radius:8px; color:#ffdd57;">
+    Todas as Notícias
+  </h2>
+  
+  <div class="lista-noticias" id="listaNoticias"></div>
+</main>
+
+<footer>
+  © 2026 Viciado Comenta
+</footer>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="modalClose">&times;</span>
+    <h3 id="modalTitulo"></h3>
+    <p id="modalMeta"></p>
+    <p id="modalConteudo"></p>
+  </div>
+</div>
+
+<script>
+// Carregar notícias do JSON
+fetch("assets/data/noticias.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("listaNoticias");
+    data.noticias.forEach((n, index) => {
+      const div = document.createElement("div");
+      div.className = "noticia";
+      div.innerHTML = `
+        <h3>${n.titulo}</h3>
+        <p class="meta">${n.data} · ${n.categoria}</p>
+        <p class="resumo">${n.resumo}</p>
+        <a onclick="abrirModal(${index})">Ler mais</a>
+      `;
+      container.appendChild(div);
+    });
+
+    // Função para abrir modal
+    window.abrirModal = function(index) {
+      const noticia = data.noticias[index];
+      document.getElementById("modalTitulo").textContent = noticia.titulo;
+      document.getElementById("modalMeta").textContent = noticia.data + " · " + noticia.categoria + " · " + noticia.autor;
+      document.getElementById("modalConteudo").textContent = noticia.conteudo;
+      document.getElementById("modal").style.display = "block";
+    };
+  })
+  .catch(err => console.error("Erro ao carregar notícias:", err));
+
+// Fechar modal
+document.getElementById("modalClose").onclick = function() {
+  document.getElementById("modal").style.display = "none";
+};
+
+// Fechar modal ao clicar fora
+window.onclick = function(event) {
+  if (event.target == document.getElementById("modal")) {
+    document.getElementById("modal").style.display = "none";
+  }
+};
+</script>
+
+</body>
+</html>
