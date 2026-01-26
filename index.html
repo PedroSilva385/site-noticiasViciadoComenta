@@ -15,40 +15,45 @@ body {
   color: #fff;
 }
 
+/* HEADER */
 header {
   background: #0056b3;
   padding: 20px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
 .logo-area {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
 }
 
+/* Foto de perfil maior e quadrada */
 .foto-perfil img {
-  width: 90px;
-  height: 90px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 0; /* quadrada */
 }
 
 header h1 {
   font-size: 2.5em;
   margin: 0;
+  text-align: center;
 }
 
+/* Redes sociais: 4 logos iguais no canto superior direito */
 .redes-sociais {
   display: flex;
   gap: 10px;
 }
 
 .redes-sociais img {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
 }
 
 /* Navegação */
@@ -76,15 +81,17 @@ main {
   padding: 20px;
 }
 
-/* 🔴 VÍDEO + NOTÍCIA */
+/* 🔴 VÍDEO EM DESTAQUE */
 .destaque {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  background: rgba(0,0,0,0.3);
+  background: #003366; /* retângulo azul escuro */
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 40px;
+  align-items: center;
+  justify-items: center;
 }
 
 .video iframe {
@@ -94,13 +101,22 @@ main {
 
 .texto-video h2 {
   margin-top: 0;
-  color: #ffdd57;
+  color: #ffdd57; /* título amarelo */
+  text-align: center;
 }
 
 /* 📰 ÚLTIMAS NOTÍCIAS */
+.ultimas-noticias {
+  background: #003366; /* retângulo azul escuro */
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
 .ultimas-noticias h2 {
   margin-bottom: 20px;
   color: #ffdd57;
+  text-align: center;
 }
 
 .noticias-grid {
@@ -151,7 +167,7 @@ footer {
 <header>
   <div class="logo-area">
     <div class="foto-perfil">
-      <img src="perfil.png" alt="Foto Perfil">
+      <img src="assets/img/perfil.png" alt="Foto Perfil">
     </div>
     <h1>VICIADO COMENTA</h1>
   </div>
@@ -167,7 +183,7 @@ footer {
       <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
     </a>
     <a href="https://www.twitch.tv/theviciado13" target="_blank">
-      <img src="twitch2.png" alt="Twitch">
+      <img src="assets/img/twitch.svg" alt="Twitch">
     </a>
   </div>
 </header>
@@ -208,24 +224,29 @@ footer {
 
 <!-- JSON Notícias -->
 <script>
-fetch("assets/data/noticias.json")
-  .then(res => res.json())
-  .then(noticias => {
-    const container = document.getElementById("ultimasNoticias");
-    noticias.sort((a,b) => new Date(b.data) - new Date(a.data));
-    noticias.slice(0, 4).forEach(n => {
-      const article = document.createElement("div");
-      article.className = "noticia";
-      article.innerHTML = `
-        <h3>${n.titulo}</h3>
-        <p class="meta">${n.data} · ${n.categoria}</p>
-        <p>${n.resumo}</p>
-        <a href="${n.link}">Ler mais</a>
-      `;
-      container.appendChild(article);
-    });
-  })
-  .catch(err => console.error("Erro ao carregar notícias:", err));
+const noticiasJSON = {
+  "noticias": [
+    {
+      "titulo": "Nova tecnologia lançada",
+      "data": "25/01/2026",
+      "autor": "Redação",
+      "categoria": "Tecnologia",
+      "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado."
+    }
+  ]
+};
+
+const container = document.getElementById("ultimasNoticias");
+noticiasJSON.noticias.forEach(n => {
+  const article = document.createElement("div");
+  article.className = "noticia";
+  article.innerHTML = `
+    <h3>${n.titulo}</h3>
+    <p class="meta">${n.data} · ${n.categoria}</p>
+    <p>${n.conteudo}</p>
+  `;
+  container.appendChild(article);
+});
 </script>
 
 </body>
