@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Site de Notícias</title>
+  <title>VICIADO COMENTA</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f5f5f5;
-      color: #333;
+      background: #007BFF; /* Fundo azul */
+      color: #fff;
     }
     header {
-      background: #1a1a1a;
+      background: #0056b3;
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -26,7 +26,7 @@
     nav {
       display: flex;
       justify-content: center;
-      background: #222;
+      background: #004494;
       padding: 10px 0;
     }
     nav a {
@@ -37,17 +37,32 @@
       transition: color 0.2s;
     }
     nav a:hover {
-      color: #1abc9c;
+      color: #ffdd57;
     }
     main {
       max-width: 1000px;
       margin: 20px auto;
       padding: 0 15px;
     }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 ratio */
+      padding-top: 25px;
+      height: 0;
+      margin-bottom: 30px;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
     .noticia {
-      background: #fff;
+      background: #0056b3;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       padding: 20px;
       margin-bottom: 20px;
       display: flex;
@@ -64,21 +79,21 @@
     }
     .noticia h2 {
       margin-top: 0;
-      color: #1a1a1a;
+      color: #fff;
     }
     .meta {
       font-size: 0.85em;
-      color: #777;
+      color: #e0e0e0;
       margin-bottom: 10px;
     }
     .categoria {
       font-weight: bold;
-      color: #1abc9c;
+      color: #ffdd57;
     }
     footer {
       text-align: center;
       padding: 20px;
-      background: #222;
+      background: #004494;
       color: #fff;
       margin-top: 40px;
     }
@@ -104,8 +119,15 @@
     <a href="#">DIGI</a>
   </nav>
 
-  <main id="noticias">
-    <!-- Notícias carregadas aqui -->
+  <main>
+    <!-- Vídeo do YouTube na primeira página -->
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/SEU_VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div id="noticias">
+      <!-- Notícias carregadas aqui -->
+    </div>
   </main>
 
   <footer>
