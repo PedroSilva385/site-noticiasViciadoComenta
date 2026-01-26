@@ -1,28 +1,34 @@
 {
   "noticias": [
     {
-      "titulo": "Nova asdsadasdadlançada",
-      "data": "25/01/2026",
-      "autor": "Redação",
-      "categoria": "Tecnologia",
-      "resumo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado.",
-      "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado..."
+      "id": "1",
+      "titulo": "Operação DIGI na Roménia",
+      "data": "26/01/2026",
+      "autor": "Pedro Silva",
+      "categoria": "DIGI",
+      "resumo": "Neste vídeo analisamos a operação da DIGI na casa mãe, Roménia",
+      "conteudo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado...dsalnçkjfsdajiºfjsaºfjalksjfdsklçsajkfç~sa",
+      "video": "https://www.youtube.com/watch?v=-yeg6jng_kY"
     },
     {
+      "id": "2",
       "titulo": "sadsadsadasda",
       "data": "20/01/2026",
       "autor": "Redação",
       "categoria": "Gaming",
       "resumo": "Apresentsadadsadasdsadsas os fãs estão ansiosos.",
-      "conteudo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos..."
+      "conteudo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos...",
+      "video": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     },
-	{
+    {
+      "id": "3",
       "titulo": "crics the brooks",
       "data": "25/01/2026",
       "autor": "Redação",
       "categoria": "Tecnologia",
       "resumo": "Uma nova tecnologia foi apresentada hoje com grande impacto no mercado.",
-      "conteudo": "sajfhsndalçkfksançlksanºlkangsºkalgnsa"
+      "conteudo": "sajfhsndalçkfksançlksanºlkangsºkalgnsa",
+      "video": "https://www.youtube.com/watch?v=9bZkp7q19f0"
     }
   ]
 }

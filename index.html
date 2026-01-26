@@ -4,228 +4,370 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VICIADO COMENTA</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
+* {
   margin: 0;
-  background: #007BFF;
-  color: #fff;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
 }
 
 /* HEADER */
 header {
-  background: #0056b3;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-header {
-  background: #0056b3;
-  height: 40vh; /* ocupa 100% da altura da janela */
-  display: flex;
-  flex-direction: column; /* empilha elementos verticalmente */
-  justify-content: center; /* centraliza verticalmente */
-  align-items: center;     /* centraliza horizontalmente */
-  position: relative;
-  padding: 0; /* podemos remover o padding para centralização */
-  gap: 20px; /* espaço entre foto e título */
-}
-
-.logo-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* centra foto e título horizontalmente */
-  gap: 10px;
-}
-
-.logo-area h1 {
-  font-size: 3em; /* aumenta o tamanho do título */
-  margin: 0;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
   text-align: center;
-}
-
-/* Foto de perfil maior e quadrada */
-.foto-perfil img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 0; /* quadrada */
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
 }
 
 header h1 {
-  font-size: 2.5em;
-  margin: 0;
-  text-align: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
 }
 
-/* Redes sociais: 4 logos iguais no canto superior direito */
-.redes-sociais {
+.header-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+/* REDES SOCIAIS */
+.social-media {
   display: flex;
-  gap: 10px;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.redes-sociais img {
+.social-media a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Navegação */
+.social-media a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.social-media i {
+  font-size: 1.2em;
+}
+
+/* NAVEGAÇÃO */
 nav {
-  background: #004494;
-  padding: 15px;
-  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 nav a {
-  color: #fff;
-  margin: 0 15px;
+  color: #1a1f3a;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.3em; /* aumenta o tamanho da letra */
+  font-size: 0.95em;
+  padding: 16px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 nav a:hover {
-  color: #ffdd57;
+  color: #0066cc;
+  border-bottom-color: #0066cc;
 }
 
-/* Main */
+/* MAIN */
 main {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 50px 20px;
 }
 
-/* 🔴 VÍDEO EM DESTAQUE */
-.destaque {
+main > h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2em;
+  margin-bottom: 40px;
+  color: #1a1f3a;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* NOTÍCIA EM DESTAQUE */
+.featured-section {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 60px;
+  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.2);
+}
+
+.featured-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  background: #003366; /* retângulo azul escuro */
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 40px;
-  align-items: center;
-  justify-items: center;
+  gap: 0;
 }
 
-.video iframe {
-  width: 140%;           /* largura do vídeo reduzida para 80% do container */
-  max-width: 1280px;     /* largura máxima menor que antes */
-  aspect-ratio: 16/9;   /* mantém proporção */
-  height: auto;         /* altura ajusta automaticamente */
-  display: block;
+.featured-video {
   position: relative;
-  left: -105px;  /* muda para + ou - conforme queres mover horizontalmente */
-  top: 0px;   /* muda verticalmente se necessário */
-  border-radius: 00px;  /* opcional: cantos arredondados */
+  background: #000;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
 }
 
-.texto-video {
-  position: relative;  /* permite mover pixel a pixel */
-  left: -30px;           /* horizontal */
-  top: 0px;            /* vertical */
-  max-width: 500px;    /* largura máxima do texto */
-}
-
-/* 📰 ÚLTIMAS NOTÍCIAS */
-.ultimas-noticias {
-  background: #003366; /* retângulo azul escuro */
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 40px;
-}
-
-.ultimas-noticias h2 {
-  margin-bottom: 20px;
-  color: #ffdd57;
-  text-align: center;
-}
-
-.noticias-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.noticia {
-  background: rgba(0,0,0,0.35);
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.noticia h3 {
-  margin-top: 0;
-  font-size: 1.1em;
-  color: #ffdd57;
-}
-
-.noticia a {
-  color: #ffdd57;
-  text-decoration: underline;
+.featured-video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   cursor: pointer;
-  display: inline-block;
-  margin-top: 10px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Modal */
-.modal {
-  display: none; 
-  position: fixed; 
-  z-index: 999; 
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.7);
+.featured-video:hover img {
+  transform: scale(1.05);
 }
 
-.modal-content {
-  background: #003366;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 700px;
-  color: #fff;
-  position: relative;
-}
-
-.modal-content h3 {
-  color: #ffdd57;
-}
-
-.close {
+.featured-video::after {
+  content: '▶';
   position: absolute;
-  top: 10px; right: 15px;
-  color: #ffdd57;
-  font-size: 1.5em;
-  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.featured-video:hover::after {
+  color: rgba(255, 255, 255, 1);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.featured-info {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.featured-info h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2em;
+  margin-bottom: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.featured-info .featured-meta {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.featured-info p {
+  font-size: 1em;
+  line-height: 1.7;
+  margin-bottom: 25px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.featured-link {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: fit-content;
+}
+
+.featured-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.featured-categoria {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+/* LISTA DE NOTÍCIAS */
+.noticias-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.noticia-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 25px;
+  padding: 28px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e8f5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
 }
 
-/* Footer */
+.noticia-item:hover {
+  border-color: #0066cc;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  transform: translateY(-2px);
+}
+
+.noticia-meta-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 120px;
+}
+
+.noticia-categoria {
+  display: inline-block;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #0066cc;
+  width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+.noticia-data {
+  font-size: 0.85em;
+  color: #5a6b7f;
+  font-weight: 500;
+}
+
+.noticia-conteudo h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5em;
+  margin-bottom: 12px;
+  color: #1a1f3a;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.noticia-conteudo p {
+  font-size: 0.95em;
+  color: #5a6b7f;
+  margin-bottom: 15px;
+  line-height: 1.7;
+}
+
+.noticia-link {
+  display: inline-block;
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s;
+  padding: 8px 0;
+}
+
+.noticia-link:hover {
+  color: #0052a3;
+  transform: translateX(4px);
+}
+
+/* FOOTER */
 footer {
-  background: #004494;
+  background: #1a1f3a;
+  border-top: 1px solid rgba(0, 102, 204, 0.2);
   text-align: center;
-  padding: 20px;
-  margin-top: 50px;
+  padding: 40px 20px;
+  margin-top: 80px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* Responsivo */
-@media (max-width: 900px) {
-  .destaque {
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2.2em;
+  }
+
+  nav {
+    gap: 20px;
+  }
+
+  .noticia-item {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .noticia-conteudo h3 {
+    font-size: 1.3em;
+  }
+
+  .featured-content {
     grid-template-columns: 1fr;
   }
-  .noticias-grid {
-    grid-template-columns: repeat(2, 1fr);
+
+  .featured-info {
+    padding: 30px;
   }
-}
-@media (max-width: 500px) {
-  .noticias-grid {
-    grid-template-columns: 1fr;
+
+  .featured-info h2 {
+    font-size: 1.6em;
+  }
+
+  .featured-info p {
+    font-size: 0.9em;
   }
 }
 </style>
@@ -234,137 +376,104 @@ footer {
 <body>
 
 <header>
-  <div class="logo-area">
-    <div class="foto-perfil">
-      <img src="perfil.png" alt="Foto Perfil">
-    </div>
-    <h1>VICIADO COMENTA</h1>
-  </div>
-
-  <div class="redes-sociais">
-    <a href="https://www.youtube.com/@TheViciado" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube">
+  <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Análise e crítica de notícias</p>
+  
+  <div class="social-media">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
+      <i class="fab fa-youtube"></i>
     </a>
-    <a href="https://www.instagram.com/theviciado13/" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram">
+    <a href="https://www.instagram.com/theviciado13/" target="_blank" title="Instagram" rel="noopener noreferrer">
+      <i class="fab fa-instagram"></i>
     </a>
-    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" title="Facebook" rel="noopener noreferrer">
+      <i class="fab fa-facebook"></i>
     </a>
-    <a href="https://www.twitch.tv/theviciado13" target="_blank">
-      <img src="twitch2.png" alt="Twitch">
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
+      <i class="fab fa-twitch"></i>
+    </a>
+    <a href="https://open.spotify.com/" target="_blank" title="Spotify" rel="noopener noreferrer">
+      <i class="fab fa-spotify"></i>
     </a>
   </div>
 </header>
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="noticias.html">Notícias</a>
+  <a href="#noticias">Notícias</a>
   <a href="conteudos.html">Conteúdos</a>
 </nav>
 
 <main>
-
-  <!-- 🔴 VÍDEO EM DESTAQUE -->
-<h2 class="titulo-amarelo">Vídeo em Destaque</h2>
-<section class="destaque">
-  <div class="video">
-    <iframe src="https://www.youtube.com/embed/-yeg6jng_kY" frameborder="0" allowfullscreen></iframe>
-  </div>
-  <div class="texto-video">
-    <p>
-      Neste vídeo analisamos o mercado da Roménia, especificamente a posição da DIGI. Como sabemos, esta é a casa mãe, e por isso vamos querer saber tudo o que a DIGI faz, no seu país de origem, e que tipo de coisas podem chegar a Portugal em breve!
-	  
-	  Link do Artigo Completo!
-    </p>
-  </div>
-</section>
-
-<!-- 📰 ÚLTIMAS NOTÍCIAS -->
-<h2 class="titulo-amarelo">Últimas Notícias</h2>
-<section class="ultimas-noticias">
-  <div class="noticias-grid" id="ultimasNoticias"></div>
-</section>
-
-<!-- CSS para títulos -->
-<style>
-/* Container para centralizar os títulos */
-.titulo-container {
-  display: flex;
-  justify-content: center; /* centraliza horizontalmente */
-  margin: 20px 0 10px 0;   /* espaço acima e abaixo */
-}
-
-/* Títulos amarelos com fundo azul escuro */
-.titulo-amarelo {
-  color: #ffdd57;               /* texto amarelo */
-  background-color: #003366;    /* fundo azul escuro */
-  text-align: center;           /* centraliza o texto dentro da caixa */
-  font-size: 2em;
-  font-weight: 700;
-  padding: 10px 25px;           /* espaço interno */
-  border-radius: 8px;           /* cantos arredondados */
-}
-</style>
-
+  <div class="featured-section" id="featured"></div>
+  
+  <h2>Últimas Notícias</h2>
+  
+  <section class="noticias-list" id="noticiasList"></section>
 </main>
 
 <footer>
-  © 2026 Viciado Comenta
+  © 2026 Viciado Comenta. Todos os direitos reservados.
 </footer>
 
-<!-- Modal -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="modalClose">&times;</span>
-    <h3 id="modalTitulo"></h3>
-    <p id="modalMeta"></p>
-    <p id="modalResumo"></p>
-    <p id="modalConteudo"></p>
-  </div>
-</div>
-
-<!-- Carregar Notícias do JSON -->
 <script>
 fetch("noticias.json")
   .then(res => res.json())
   .then(data => {
-    const container = document.getElementById("ultimasNoticias");
-    data.noticias.forEach((n, index) => {
-      const article = document.createElement("div");
-      article.className = "noticia";
+    // Mostrar notícia em destaque (mais recente - primeira do array)
+    if (data.noticias.length > 0) {
+      const featured = data.noticias[0];
+      const videoId = extrairVideoId(featured.video);
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+      
+      const featuredSection = document.getElementById("featured");
+      featuredSection.innerHTML = `
+        <div class="featured-content">
+          <div class="featured-video">
+            <img src="${thumbnailUrl}" alt="${featured.titulo}">
+          </div>
+          <div class="featured-info">
+            <span class="featured-categoria">${featured.categoria}</span>
+            <h2>${featured.titulo}</h2>
+            <div class="featured-meta">
+              <span>📅 ${featured.data}</span>
+              <span>✍️ ${featured.autor}</span>
+            </div>
+            <p>${featured.resumo}</p>
+            <a href="noticias.html?id=${featured.id}" class="featured-link">Ver mais →</a>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Mostrar lista de notícias (todas)
+    const container = document.getElementById("noticiasList");
+    
+    data.noticias.forEach((n) => {
+      const article = document.createElement("article");
+      article.className = "noticia-item";
       article.innerHTML = `
-        <h3>${n.titulo}</h3>
-        <p class="meta">${n.data} · ${n.categoria}</p>
-        <p>${n.resumo}</p>
-        <a onclick="abrirModal(${index})">Ver mais</a>
+        <div class="noticia-meta-badge">
+          <span class="noticia-categoria">${n.categoria}</span>
+          <span class="noticia-data">${n.data}</span>
+        </div>
+        <div class="noticia-conteudo">
+          <h3>${n.titulo}</h3>
+          <p>${n.resumo}</p>
+          <a href="noticias.html?id=${n.id}" class="noticia-link">Ver mais →</a>
+        </div>
       `;
       container.appendChild(article);
     });
-
-    // Função para abrir modal
-    window.abrirModal = function(index) {
-      const noticia = data.noticias[index];
-      document.getElementById("modalTitulo").textContent = noticia.titulo;
-      document.getElementById("modalMeta").textContent = noticia.data + " · " + noticia.categoria + " · " + noticia.autor;
-      document.getElementById("modalResumo").textContent = noticia.resumo;
-      document.getElementById("modalConteudo").textContent = noticia.conteudo;
-      document.getElementById("modal").style.display = "block";
-    };
   })
   .catch(err => console.error("Erro ao carregar notícias:", err));
 
-// Fechar modal
-document.getElementById("modalClose").onclick = function() {
-  document.getElementById("modal").style.display = "none";
-};
-
-// Fechar modal ao clicar fora
-window.onclick = function(event) {
-  if (event.target == document.getElementById("modal")) {
-    document.getElementById("modal").style.display = "none";
-  }
-};
+// Função para extrair ID do YouTube
+function extrairVideoId(url) {
+  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\\w-]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : '';
+}
 </script>
 
 </body>

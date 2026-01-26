@@ -3,204 +3,340 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notícias - VICIADO COMENTA</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Notícia - VICIADO COMENTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
+* {
   margin: 0;
-  background: #007BFF;
-  color: #fff;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
 }
 
 /* HEADER */
 header {
-  background: #0056b3;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
 }
 
 header h1 {
-  font-size: 2.5em;
-  margin: 0;
-  text-align: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
 }
 
-/* NAV */
-nav {
-  background: #004494;
-  padding: 15px;
-  text-align: center;
+.header-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  margin-bottom: 20px;
 }
-nav a {
-  color: #fff;
-  margin: 0 15px;
+
+/* REDES SOCIAIS */
+.social-media {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.social-media a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
   text-decoration: none;
-  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.social-media a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.social-media i {
   font-size: 1.2em;
 }
+
+/* NAVEGAÇÃO */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 16px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 nav a:hover {
-  color: #ffdd57;
+  color: #0066cc;
+  border-bottom-color: #0066cc;
 }
 
-/* Main */
+/* MAIN */
 main {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 20px;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 50px 20px;
 }
 
-/* Lista de notícias */
-.lista-noticias {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+/* ARTIGO */
+.artigo {
+  margin-bottom: 50px;
 }
 
-/* Card da notícia */
-.noticia {
-  background: #003366;
-  padding: 20px;
-  border-radius: 10px;
+.artigo-header {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid rgba(0, 102, 204, 0.1);
 }
 
-.noticia h3 {
-  margin-top: 0;
-  color: #ffdd57;
+.artigo-categoria {
+  display: inline-block;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #0066cc;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
 }
 
-.noticia p.meta {
+.artigo-titulo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.4em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.artigo-meta {
+  display: flex;
+  gap: 25px;
   font-size: 0.9em;
-  color: #ddd;
-  margin-bottom: 10px;
+  color: #5a6b7f;
+  flex-wrap: wrap;
 }
 
-.noticia p.resumo {
-  margin-bottom: 10px;
+.artigo-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.noticia a {
-  color: #ffdd57;
-  text-decoration: underline;
-  cursor: pointer;
+.artigo-conteudo {
+  font-size: 1.05em;
+  line-height: 1.8;
+  color: #3a3f5a;
 }
 
-/* Modal */
-.modal {
-  display: none; 
-  position: fixed; 
-  z-index: 999; 
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.7);
+.artigo-conteudo p {
+  margin-bottom: 24px;
 }
 
-.modal-content {
-  background: #003366;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 700px;
+.artigo-conteudo strong {
+  color: #1a1f3a;
+  font-weight: 600;
+}
+
+/* BOTÃO VOLTAR */
+.btn-voltar {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
   color: #fff;
-  position: relative;
-}
-
-.modal-content h3 {
-  color: #ffdd57;
-}
-
-.close {
-  position: absolute;
-  top: 10px; right: 15px;
-  color: #ffdd57;
-  font-size: 1.5em;
-  font-weight: bold;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 40px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
 }
 
-/* Responsivo */
-@media (max-width: 900px) {
-  .lista-noticias { grid-template-columns: 1fr; }
+.btn-voltar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+}
+
+/* NOTICIA NÃO ENCONTRADA */
+.noticia-nao-encontrada {
+  text-align: center;
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+.noticia-nao-encontrada h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2em;
+  margin-bottom: 16px;
+  color: #1a1f3a;
+}
+
+.noticia-nao-encontrada p {
+  color: #5a6b7f;
+  margin-bottom: 25px;
+}
+
+/* FOOTER */
+footer {
+  background: #1a1f3a;
+  border-top: 1px solid rgba(0, 102, 204, 0.2);
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 80px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2.2em;
+  }
+
+  nav {
+    gap: 20px;
+  }
+
+  .artigo-titulo {
+    font-size: 1.8em;
+  }
+
+  .artigo-conteudo {
+    font-size: 1em;
+  }
 }
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Análise e crítica de notícias</p>
+  
+  <div class="social-media">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank" title="Instagram" rel="noopener noreferrer">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" title="Facebook" rel="noopener noreferrer">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
+      <i class="fab fa-twitch"></i>
+    </a>
+    <a href="https://open.spotify.com/" target="_blank" title="Spotify" rel="noopener noreferrer">
+      <i class="fab fa-spotify"></i>
+    </a>
+  </div>
 </header>
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="noticias.html">Notícias</a>
+  <a href="index.html">Notícias</a>
   <a href="conteudos.html">Conteúdos</a>
 </nav>
 
 <main>
-  <h2 class="titulo-amarelo" style="text-align:center; background:#003366; padding:10px 25px; border-radius:8px; color:#ffdd57;">
-    Todas as Notícias
-  </h2>
-  
-  <div class="lista-noticias" id="listaNoticias"></div>
+  <article class="artigo" id="artigo">
+    <div class="noticia-nao-encontrada">
+      <h2>Notícia não encontrada</h2>
+      <p>A notícia que procura não existe.</p>
+      <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
+    </div>
+  </article>
 </main>
 
 <footer>
-  © 2026 Viciado Comenta
+  © 2026 Viciado Comenta. Todos os direitos reservados.
 </footer>
 
-<!-- Modal -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="modalClose">&times;</span>
-    <h3 id="modalTitulo"></h3>
-    <p id="modalMeta"></p>
-    <p id="modalConteudo"></p>
-  </div>
-</div>
-
 <script>
-// Carregar notícias do JSON
-fetch("noticias.json")
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("listaNoticias");
-    data.noticias.forEach((n, index) => {
-      const div = document.createElement("div");
-      div.className = "noticia";
-      div.innerHTML = `
-        <h3>${n.titulo}</h3>
-        <p class="meta">${n.data} · ${n.categoria}</p>
-        <p class="resumo">${n.resumo}</p>
-        <a onclick="abrirModal(${index})">Ler mais</a>
-      `;
-      container.appendChild(div);
+// Obter ID da URL
+const urlParams = new URLSearchParams(window.location.search);
+const noticiaId = urlParams.get('id');
+
+if (noticiaId) {
+  fetch("noticias.json")
+    .then(res => res.json())
+    .then(data => {
+      const noticia = data.noticias.find(n => n.id === noticiaId);
+      
+      if (noticia) {
+        document.title = noticia.titulo + " - VICIADO COMENTA";
+        
+        const container = document.getElementById("artigo");
+        container.innerHTML = `
+          <div class="artigo-header">
+            <span class="artigo-categoria">${noticia.categoria}</span>
+            <h1 class="artigo-titulo">${noticia.titulo}</h1>
+            <div class="artigo-meta">
+              <span>📅 ${noticia.data}</span>
+              <span>✍️ ${noticia.autor}</span>
+            </div>
+          </div>
+          <div class="artigo-conteudo">
+            <p><strong>${noticia.resumo}</strong></p>
+            <p>${noticia.conteudo}</p>
+          </div>
+          <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
+        `;
+      }
+    })
+    .catch(err => {
+      console.error("Erro ao carregar notícia:", err);
     });
-
-    // Função para abrir modal
-    window.abrirModal = function(index) {
-      const noticia = data.noticias[index];
-      document.getElementById("modalTitulo").textContent = noticia.titulo;
-      document.getElementById("modalMeta").textContent = noticia.data + " · " + noticia.categoria + " · " + noticia.autor;
-      document.getElementById("modalConteudo").textContent = noticia.conteudo;
-      document.getElementById("modal").style.display = "block";
-    };
-  })
-  .catch(err => console.error("Erro ao carregar notícias:", err));
-
-// Fechar modal
-document.getElementById("modalClose").onclick = function() {
-  document.getElementById("modal").style.display = "none";
-};
-
-// Fechar modal ao clicar fora
-window.onclick = function(event) {
-  if (event.target == document.getElementById("modal")) {
-    document.getElementById("modal").style.display = "none";
-  }
-};
+} else {
+  // Sem ID na URL, mostrar mensagem de erro
+  console.log("Nenhum ID fornecido");
+}
 </script>
 
 </body>
