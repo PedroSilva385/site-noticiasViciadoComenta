@@ -322,6 +322,78 @@ main {
   margin: 0;
 }
 
+/* CONTACTOS */
+.contactos-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f8fc 100%);
+  border-radius: 12px;
+  padding: 40px;
+  margin: 60px 0;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  border: 1px solid #e0e8f5;
+}
+
+.contactos-section h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.contactos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contacto-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e8f5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.contacto-item:hover {
+  transform: translateX(6px);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+  border-color: #0066cc;
+}
+
+.contacto-icon {
+  font-size: 1.8em;
+  color: #0066cc;
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.contacto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contacto-label {
+  font-size: 0.8em;
+  color: #5a6b7f;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contacto-valor {
+  font-size: 1em;
+  color: #1a1f3a;
+  font-weight: 500;
+}
+
 /* RODAPÉ */
 footer {
   background: #1a1f3a;
@@ -701,6 +773,30 @@ footer a:hover {
           <h3 class="theme-name">Just Chatting</h3>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="contactos-section">
+    <h3>📬 Contactos</h3>
+    <div class="contactos-list">
+      <a href="mailto:theviciado.contactos@gmail.com" class="contacto-item">
+        <div class="contacto-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="contacto-info">
+          <span class="contacto-label">Email</span>
+          <span class="contacto-valor">theviciado.contactos@gmail.com</span>
+        </div>
+      </a>
+      <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer" class="contacto-item">
+        <div class="contacto-icon">
+          <i class="fab fa-discord"></i>
+        </div>
+        <div class="contacto-info">
+          <span class="contacto-label">Discord</span>
+          <span class="contacto-valor">Junta-te ao servidor</span>
+        </div>
+      </a>
     </div>
   </div>
 </main>
