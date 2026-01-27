@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viciado Comenta - VICIADO COMENTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.header-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+/* REDES SOCIAIS */
+.social-media {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.social-media a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.social-media a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.social-media i {
+  font-size: 1.2em;
+}
+
+/* NAVEGAÇÃO */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 16px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+/* DROPDOWN MENU */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-dropdown > a::after {
+  content: '▼';
+  font-size: 0.65em;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  min-width: 160px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 200;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-bottom: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu a:hover {
+  background: #e3f2fd;
+  color: #0066cc;
+  padding-left: 24px;
+}
+
+/* MAIN */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.page-header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 15px;
+}
+
+.page-header p {
+  font-size: 1.1em;
+  color: #5a6b7f;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* PLAYLISTA */
+.playlist-container {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  margin-bottom: 60px;
+}
+
+.playlist-embed {
+  width: 100%;
+  height: 600px;
+  border: none;
+}
+
+/* MINIATURAS */
+.miniaturas-section {
+  margin-bottom: 60px;
+}
+
+.miniaturas-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.miniaturas-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.video-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e8f5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+.video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  border-color: #0066cc;
+}
+
+.video-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-thumbnail::after {
+  content: '▶';
+  position: absolute;
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.video-card:hover .video-thumbnail::after {
+  color: rgba(255, 255, 255, 1);
+  transform: scale(1.2);
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-card:hover .video-thumbnail img {
+  transform: scale(1.05);
+}
+
+.video-info {
+  display: none;
+}
+
+.video-title {
+  font-weight: 600;
+  color: #1a1f3a;
+  font-size: 0.95em;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.video-channel {
+  font-size: 0.85em;
+  color: #5a6b7f;
+}
+
+.loading {
+  text-align: center;
+  color: #5a6b7f;
+  font-size: 1.1em;
+  padding: 40px 20px;
+}
+
+/* RODAPÉ */
+footer {
+  background: #1a1f3a;
+  color: #ffffff;
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 80px;
+  font-size: 0.9em;
+}
+
+footer a {
+  color: #0066cc;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+footer a:hover {
+  color: #0052a3;
+  text-decoration: underline;
+}
+
+/* RESPONSIVO */
+@media (max-width: 1200px) {
+  .miniaturas-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .miniaturas-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .miniaturas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  header {
+    padding: 30px 15px;
+  }
+
+  header h1 {
+    font-size: 2.2em;
+    margin-bottom: 8px;
+  }
+
+  .header-subtitle {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+  }
+
+  .social-media {
+    gap: 10px;
+  }
+
+  .social-media a {
+    width: 38px;
+    height: 38px;
+  }
+
+  nav {
+    gap: 15px;
+    padding: 0 15px;
+  }
+
+  nav a {
+    padding: 12px 0;
+    font-size: 0.9em;
+  }
+
+  main {
+    padding: 30px 15px;
+    max-width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 2em;
+  }
+
+  .page-header p {
+    font-size: 1em;
+  }
+
+  .playlist-embed {
+    height: 400px;
+  }
+
+  footer {
+    padding: 30px 15px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  .miniaturas-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .video-card {
+    height: auto;
+    aspect-ratio: 16/9;
+  }
+
+  header {
+    padding: 20px 12px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+    margin-bottom: 6px;
+  }
+
+  .header-subtitle {
+    font-size: 0.85em;
+    margin-bottom: 12px;
+  }
+
+  .social-media {
+    gap: 8px;
+  }
+
+  .social-media a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9em;
+  }
+
+  nav {
+    gap: 10px;
+    padding: 0 12px;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    padding: 8px 0;
+    font-size: 0.8em;
+  }
+
+  main {
+    padding: 20px 12px;
+  }
+
+  .page-header h1 {
+    font-size: 1.5em;
+  }
+
+  .page-header p {
+    font-size: 0.9em;
+  }
+
+  footer {
+    padding: 20px 12px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  .miniaturas-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  header {
+    padding: 15px 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  .header-subtitle {
+    font-size: 0.8em;
+  }
+
+  .social-media a {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8em;
+  }
+
+  nav a {
+    font-size: 0.75em;
+  }
+
+  main {
+    padding: 15px 10px;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.7em;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Análise e crítica de notícias</p>
+  
+  <div class="social-media">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank" title="Instagram" rel="noopener noreferrer">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" title="Facebook" rel="noopener noreferrer">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
+      <i class="fab fa-twitch"></i>
+    </a>
+    <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" title="Spotify" rel="noopener noreferrer">
+      <i class="fab fa-spotify"></i>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="index.html">Notícias</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="#">Livestreams</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <h1>Viciado Comenta</h1>
+    <p>Todos os episódios em um só lugar. Assista os comentários e análises mais recentes sobre os temas do momento.</p>
+  </div>
+
+  <div class="miniaturas-section">
+    <h2 class="miniaturas-title">Últimos Vídeos</h2>
+    <div class="miniaturas-grid" id="miniaturas-grid">
+      <a href="https://www.youtube.com/watch?v=-yeg6jng_kY" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/-yeg6jng_kY/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=0A7LkRf_jHs" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/0A7LkRf_jHs/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=a2uMy1oAPA4" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/a2uMy1oAPA4/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=VD8qgzfdJuw" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/VD8qgzfdJuw/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=WYY4yw2nFlU" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/WYY4yw2nFlU/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=TBJe7C-5pEI" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/TBJe7C-5pEI/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=pyYAiuC2f4Y" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/pyYAiuC2f4Y/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=E5jXjkJd-DI" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/E5jXjkJd-DI/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=-FEudUy74mw" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/-FEudUy74mw/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=nX0S-TztHFE" target="_blank" rel="noopener noreferrer" class="video-card">
+        <div class="video-thumbnail">
+          <img src="https://img.youtube.com/vi/nX0S-TztHFE/hqdefault.jpg" alt="Vídeo">
+        </div>
+        <div class="video-info">
+          <div class="video-title">Viciado Comenta</div>
+          <div class="video-channel">TheViciado</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  © 2026 Viciado Comenta. Todos os direitos reservados.
+</footer>
+
+</body>
+</html>

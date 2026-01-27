@@ -27,6 +27,27 @@ header {
   padding: 40px 20px;
   text-align: center;
   box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-perfil {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  height: 200px;
+  border-radius: 0;
+  margin: 0;
+  border: none;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.header-perfil img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 header h1 {
@@ -108,6 +129,69 @@ nav a {
 nav a:hover {
   color: #0066cc;
   border-bottom-color: #0066cc;
+}
+
+/* DROPDOWN MENU */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-dropdown > a::after {
+  content: '▼';
+  font-size: 0.65em;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  min-width: 160px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 200;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-bottom: none;
+  padding: 12px 20px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu a:hover {
+  background: #e3f2fd;
+  color: #0066cc;
+  padding-left: 24px;
 }
 
 /* MAIN */
@@ -367,6 +451,39 @@ footer {
 }
 
 /* RESPONSIVO */
+@media (max-width: 1200px) {
+  main {
+    padding: 40px 20px;
+  }
+
+  .featured-info h2 {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 992px) {
+  main {
+    padding: 35px 20px;
+  }
+
+  .featured-content {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .featured-info {
+    padding: 30px;
+  }
+
+  .featured-info h2 {
+    font-size: 1.7em;
+    margin-bottom: 12px;
+  }
+}
+
 @media (max-width: 768px) {
   * {
     margin: 0;
@@ -375,6 +492,13 @@ footer {
 
   header {
     padding: 30px 15px;
+  }
+
+  .header-perfil {
+    width: 120px;
+    height: 120px;
+    top: 15px;
+    right: 15px;
   }
 
   header h1 {
@@ -409,6 +533,10 @@ footer {
   main {
     padding: 30px 15px;
     max-width: 100%;
+  }
+
+  main > h2 {
+    font-size: 1.8em;
   }
 
   .featured-section {
@@ -485,6 +613,179 @@ footer {
     font-size: 0.85em;
   }
 }
+
+@media (max-width: 480px) {
+  header {
+    padding: 20px 12px;
+  }
+
+  .header-perfil {
+    width: 100px;
+    height: 100px;
+    top: 12px;
+    right: 12px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+    margin-bottom: 6px;
+  }
+
+  .header-subtitle {
+    font-size: 0.85em;
+    margin-bottom: 12px;
+  }
+
+  .social-media {
+    gap: 8px;
+  }
+
+  .social-media a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9em;
+  }
+
+  nav {
+    gap: 10px;
+    padding: 0 12px;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    padding: 8px 0;
+    font-size: 0.8em;
+  }
+
+  main {
+    padding: 20px 12px;
+  }
+
+  main > h2 {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+  }
+
+  .featured-section {
+    margin-bottom: 30px;
+    border-radius: 8px;
+  }
+
+  .featured-info {
+    padding: 20px 16px;
+  }
+
+  .featured-info h2 {
+    font-size: 1.3em;
+    margin-bottom: 10px;
+  }
+
+  .featured-info .featured-meta {
+    gap: 12px;
+    margin-bottom: 15px;
+    font-size: 0.85em;
+  }
+
+  .featured-info p {
+    font-size: 0.85em;
+    margin-bottom: 15px;
+  }
+
+  .featured-categoria {
+    padding: 5px 10px;
+    font-size: 0.6em;
+  }
+
+  .featured-link {
+    padding: 10px 20px;
+    font-size: 0.85em;
+  }
+
+  .noticia-item {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .noticia-meta-badge {
+    display: flex;
+    gap: 10px;
+    min-width: auto;
+  }
+
+  .noticia-categoria {
+    padding: 4px 8px;
+    font-size: 0.6em;
+  }
+
+  .noticia-data {
+    font-size: 0.75em;
+  }
+
+  .noticia-conteudo h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+  }
+
+  .noticia-conteudo p {
+    font-size: 0.9em;
+  }
+
+  footer {
+    padding: 15px 12px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  .header-subtitle {
+    font-size: 0.8em;
+  }
+
+  .header-perfil {
+    width: 80px;
+    height: 80px;
+  }
+
+  .social-media a {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8em;
+  }
+
+  nav a {
+    font-size: 0.75em;
+    padding: 6px 0;
+  }
+
+  main {
+    padding: 15px 10px;
+  }
+
+  main > h2 {
+    font-size: 1.3em;
+  }
+
+  .featured-info h2 {
+    font-size: 1.2em;
+  }
+
+  .featured-info p {
+    font-size: 0.8em;
+  }
+
+  .noticia-conteudo h3 {
+    font-size: 1em;
+  }
+
+  footer {
+    padding: 12px 10px;
+    font-size: 0.7em;
+  }
+}
 </style>
 </head>
 
@@ -516,7 +817,13 @@ footer {
 <nav>
   <a href="index.html">Início</a>
   <a href="#noticias">Notícias</a>
-  <a href="conteudos.html">Conteúdos</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="livestreams.html">Livestreams</a>
+    </div>
+  </div>
 </nav>
 
 <main>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notícia - VICIADO COMENTA</title>
+<title>Livestreams - VICIADO COMENTA</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -28,25 +28,6 @@ header {
   box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
   position: relative;
   overflow: hidden;
-}
-
-.header-perfil {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 200px;
-  height: 200px;
-  border-radius: 0;
-  margin: 0;
-  border: none;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.header-perfil img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 header h1 {
@@ -183,7 +164,6 @@ nav a:hover {
   font-weight: 500;
   font-size: 0.9em;
   border-bottom: none;
-  padding: 12px 20px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -195,183 +175,210 @@ nav a:hover {
 
 /* MAIN */
 main {
-  max-width: 780px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 50px 20px;
 }
 
-/* ARTIGO */
-.artigo {
-  margin-bottom: 50px;
+.page-header {
+  text-align: center;
+  margin-bottom: 60px;
 }
 
-.artigo-header {
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 2px solid rgba(0, 102, 204, 0.1);
-}
-
-.artigo-categoria {
-  display: inline-block;
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 0.7em;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #0066cc;
-  margin-bottom: 18px;
-  letter-spacing: 0.5px;
-}
-
-.artigo-titulo {
+.page-header h1 {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.4em;
+  font-size: 2.8em;
   font-weight: 700;
   color: #1a1f3a;
-  margin-bottom: 18px;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
+  margin-bottom: 15px;
 }
 
-.artigo-meta {
-  display: flex;
-  gap: 25px;
-  font-size: 0.9em;
+.page-header p {
+  font-size: 1.1em;
   color: #5a6b7f;
-  flex-wrap: wrap;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.artigo-meta span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.artigo-conteudo {
-  font-size: 1.05em;
-  line-height: 1.8;
-  color: #3a3f5a;
-}
-
-.artigo-conteudo p {
-  margin-bottom: 24px;
-}
-
-.artigo-conteudo strong {
-  color: #1a1f3a;
-  font-weight: 600;
-}
-
-.artigo-video {
-  margin: 40px 0;
+/* TWITCH CONTAINER */
+.twitch-container {
+  background: linear-gradient(135deg, #6441a5 0%, #4a2577 100%);
   border-radius: 12px;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
-  background: #000;
-  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
-}
-
-.artigo-video iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* BOTÃO VOLTAR */
-.btn-voltar {
-  display: inline-block;
-  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  margin-top: 40px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
-}
-
-.btn-voltar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
-}
-
-/* NOTICIA NÃO ENCONTRADA */
-.noticia-nao-encontrada {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin-bottom: 60px;
+  padding: 80px 40px;
   text-align: center;
-  padding: 80px 20px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.noticia-nao-encontrada h2 {
+.twitch-icon {
+  font-size: 80px;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+.twitch-container h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5em;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.twitch-container p {
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 40px;
+  max-width: 500px;
+}
+
+.twitch-button {
+  display: inline-block;
+  background: #ffffff;
+  color: #6441a5;
+  padding: 18px 50px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.2em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.twitch-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  background: #f0f0f0;
+}
+
+.twitch-embed {
+  display: none;
+}
+
+/* TEMAS */
+.themes-section {
+  margin-bottom: 60px;
+}
+
+.themes-title {
   font-family: 'Outfit', sans-serif;
   font-size: 2em;
-  margin-bottom: 16px;
+  font-weight: 700;
   color: #1a1f3a;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.noticia-nao-encontrada p {
-  color: #5a6b7f;
-  margin-bottom: 25px;
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
 }
 
-/* FOOTER */
+.theme-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e0e8f5;
+}
+
+.theme-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  border-color: #0066cc;
+}
+
+.theme-image {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  background: #f0f4f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.theme-info {
+  padding: 25px;
+  text-align: center;
+}
+
+.theme-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin: 0;
+}
+
+/* RODAPÉ */
 footer {
   background: #1a1f3a;
-  border-top: 1px solid rgba(0, 102, 204, 0.2);
+  color: #ffffff;
   text-align: center;
   padding: 40px 20px;
   margin-top: 80px;
   font-size: 0.9em;
-  color: rgba(255, 255, 255, 0.7);
+}
+
+footer a {
+  color: #0066cc;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+footer a:hover {
+  color: #0052a3;
+  text-decoration: underline;
 }
 
 /* RESPONSIVO */
 @media (max-width: 1200px) {
   main {
     padding: 40px 20px;
-    max-width: 900px;
-    margin: 0 auto;
   }
 
-  .artigo-titulo {
-    font-size: 2.2em;
+  .twitch-embed {
+    height: 600px;
   }
 }
 
 @media (max-width: 992px) {
-  main {
-    padding: 35px 20px;
+  .twitch-container {
+    padding: 60px 30px;
   }
 
-  .artigo-titulo {
-    font-size: 2em;
+  .twitch-icon {
+    font-size: 70px;
   }
 
-  .artigo-meta {
-    gap: 20px;
+  .twitch-container h2 {
+    font-size: 2.2em;
   }
 
-  .artigo-conteudo {
-    font-size: 1.02em;
+  .themes-title {
+    font-size: 1.8em;
+  }
+
+  .theme-image {
+    height: 300px;
   }
 }
 
 @media (max-width: 768px) {
   header {
     padding: 30px 15px;
-  }
-
-  .header-perfil {
-    width: 120px;
-    height: 120px;
-    top: 15px;
-    right: 15px;
   }
 
   header h1 {
@@ -408,52 +415,56 @@ footer {
     max-width: 100%;
   }
 
-  .artigo {
+  .page-header h1 {
+    font-size: 2em;
+  }
+
+  .page-header p {
+    font-size: 1em;
+  }
+
+  .twitch-container {
+    padding: 40px 20px;
+    margin-bottom: 40px;
+  }
+
+  .twitch-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+  }
+
+  .twitch-container h2 {
+    font-size: 1.8em;
+  }
+
+  .twitch-container p {
+    font-size: 1em;
+  }
+
+  .twitch-button {
+    padding: 14px 30px;
+    font-size: 1em;
+  }
+
+  .themes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .themes-title {
+    font-size: 1.5em;
     margin-bottom: 30px;
   }
 
-  .artigo-header {
-    margin-bottom: 25px;
-    padding-bottom: 20px;
+  .theme-image {
+    height: 250px;
   }
 
-  .artigo-categoria {
-    padding: 6px 10px;
-    font-size: 0.65em;
-  }
-
-  .artigo-titulo {
-    font-size: 1.6em;
-    margin-bottom: 15px;
-  }
-
-  .artigo-meta {
-    gap: 15px;
-    font-size: 0.85em;
-  }
-
-  .artigo-video {
-    margin: 25px 0;
-    aspect-ratio: 16 / 9;
-  }
-
-  .artigo-conteudo {
-    font-size: 0.95em;
-    line-height: 1.7;
-  }
-
-  .artigo-conteudo p {
-    margin-bottom: 18px;
-  }
-
-  .btn-voltar {
-    padding: 10px 20px;
-    font-size: 0.9em;
-    margin-top: 30px;
+  .twitch-embed {
+    height: 400px;
   }
 
   footer {
-    padding: 20px 15px;
+    padding: 30px 15px;
     font-size: 0.85em;
   }
 }
@@ -461,13 +472,6 @@ footer {
 @media (max-width: 480px) {
   header {
     padding: 20px 12px;
-  }
-
-  .header-perfil {
-    width: 100px;
-    height: 100px;
-    top: 12px;
-    right: 12px;
   }
 
   header h1 {
@@ -505,53 +509,57 @@ footer {
     padding: 20px 12px;
   }
 
-  .artigo {
-    margin-bottom: 20px;
+  .page-header h1 {
+    font-size: 1.5em;
   }
 
-  .artigo-header {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-  }
-
-  .artigo-categoria {
-    padding: 5px 8px;
-    font-size: 0.6em;
-  }
-
-  .artigo-titulo {
-    font-size: 1.4em;
-    margin-bottom: 12px;
-    line-height: 1.3;
-  }
-
-  .artigo-meta {
-    flex-direction: column;
-    gap: 8px;
-    font-size: 0.8em;
-  }
-
-  .artigo-video {
-    margin: 20px 0;
-  }
-
-  .artigo-conteudo {
+  .page-header p {
     font-size: 0.9em;
-    line-height: 1.6;
   }
 
-  .artigo-conteudo p {
+  .twitch-container {
+    padding: 30px 16px;
+    margin-bottom: 30px;
+  }
+
+  .twitch-icon {
+    font-size: 50px;
     margin-bottom: 15px;
   }
 
-  .btn-voltar {
-    padding: 9px 18px;
-    font-size: 0.85em;
-    margin-top: 25px;
+  .twitch-container h2 {
+    font-size: 1.5em;
+  }
+
+  .twitch-container p {
+    font-size: 0.9em;
+    margin-bottom: 25px;
+  }
+
+  .twitch-button {
+    padding: 12px 24px;
+    font-size: 0.9em;
+  }
+
+  .themes-title {
+    font-size: 1.3em;
+    margin-bottom: 25px;
+  }
+
+  .theme-image {
+    height: 200px;
+  }
+
+  .theme-info {
+    padding: 15px;
+  }
+
+  .theme-name {
+    font-size: 1.2em;
   }
 
   footer {
-    padding: 15px 12px;
+    padding: 20px 12px;
     font-size: 0.75em;
   }
 }
@@ -563,11 +571,6 @@ footer {
 
   .header-subtitle {
     font-size: 0.8em;
-  }
-
-  .header-perfil {
-    width: 80px;
-    height: 80px;
   }
 
   .social-media a {
@@ -584,20 +587,41 @@ footer {
     padding: 15px 10px;
   }
 
-  .artigo-titulo {
+  .page-header h1 {
     font-size: 1.3em;
   }
 
-  .artigo-meta {
-    font-size: 0.75em;
+  .page-header p {
+    font-size: 0.8em;
   }
 
-  .artigo-conteudo {
+  .twitch-container {
+    padding: 20px 12px;
+  }
+
+  .twitch-icon {
+    font-size: 40px;
+  }
+
+  .twitch-container h2 {
+    font-size: 1.3em;
+  }
+
+  .twitch-button {
+    padding: 10px 20px;
     font-size: 0.85em;
   }
 
+  .themes-title {
+    font-size: 1.1em;
+  }
+
+  .theme-image {
+    height: 150px;
+  }
+
   footer {
-    padding: 12px 10px;
+    padding: 15px 10px;
     font-size: 0.7em;
   }
 }
@@ -623,7 +647,7 @@ footer {
     <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
       <i class="fab fa-twitch"></i>
     </a>
-    <a href="https://open.spotify.com/" target="_blank" title="Spotify" rel="noopener noreferrer">
+    <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" title="Spotify" rel="noopener noreferrer">
       <i class="fab fa-spotify"></i>
     </a>
   </div>
@@ -642,74 +666,48 @@ footer {
 </nav>
 
 <main>
-  <article class="artigo" id="artigo">
-    <div class="noticia-nao-encontrada">
-      <h2>Notícia não encontrada</h2>
-      <p>A notícia que procura não existe.</p>
-      <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
+  <div class="page-header">
+    <h1>Livestreams</h1>
+    <p>Acompanhe as transmissões ao vivo. Direto do canal da Twitch com análises, comentários e muito mais!</p>
+  </div>
+
+  <div class="twitch-container">
+    <div class="twitch-icon">
+      <i class="fab fa-twitch"></i>
     </div>
-  </article>
+    <h2>Junta-se ao Stream</h2>
+    <p>Acompanha as transmissões ao vivo no meu canal da Twitch. Análises, comentários, jogos e muito mais! Clica no botão abaixo para ir para o meu canal.</p>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" rel="noopener noreferrer" class="twitch-button">
+      <i class="fab fa-twitch"></i> Ver Canal da Twitch
+    </a>
+  </div>
+
+  <div class="themes-section">
+    <h2 class="themes-title">Temas da Live</h2>
+    <div class="themes-grid">
+      <div class="theme-card">
+        <div class="theme-image">
+          <img src="NOVA Thumb Metin2.png" alt="Metin2">
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Metin2</h3>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-image">
+          <img src="perfil.png" alt="Just Chatting">
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Just Chatting</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer>
   © 2026 Viciado Comenta. Todos os direitos reservados.
 </footer>
-
-<script>
-// Obter ID da URL
-const urlParams = new URLSearchParams(window.location.search);
-const noticiaId = urlParams.get('id');
-
-if (noticiaId) {
-  fetch("noticias.json")
-    .then(res => res.json())
-    .then(data => {
-      const noticia = data.noticias.find(n => n.id === noticiaId);
-      
-      if (noticia) {
-        document.title = noticia.titulo + " - VICIADO COMENTA";
-        
-        // Extrair ID do YouTube
-        function extrairVideoId(url) {
-          if (!url) return '';
-          const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\\w-]+)/;
-          const match = url.match(regex);
-          return match ? match[1] : '';
-        }
-        
-        const videoId = extrairVideoId(noticia.video);
-        let videoHTML = '';
-        if (videoId) {
-          videoHTML = `<div class="artigo-video"><iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-        }
-        
-        const container = document.getElementById("artigo");
-        container.innerHTML = `
-          <div class="artigo-header">
-            <span class="artigo-categoria">${noticia.categoria}</span>
-            <h1 class="artigo-titulo">${noticia.titulo}</h1>
-            <div class="artigo-meta">
-              <span>📅 ${noticia.data}</span>
-              <span>✍️ ${noticia.autor}</span>
-            </div>
-          </div>
-          ${videoHTML}
-          <div class="artigo-conteudo">
-            <p><strong>${noticia.resumo}</strong></p>
-            <p>${noticia.conteudo}</p>
-          </div>
-          <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
-        `;
-      }
-    })
-    .catch(err => {
-      console.error("Erro ao carregar notícia:", err);
-    });
-} else {
-  // Sem ID na URL, mostrar mensagem de erro
-  console.log("Nenhum ID fornecido");
-}
-</script>
 
 </body>
 </html>
