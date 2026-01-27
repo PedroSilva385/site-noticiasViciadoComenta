@@ -415,6 +415,25 @@ footer a:hover {
   text-decoration: underline;
 }
 
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.footer-contacts a {
+  color: #ffffff;
+  font-weight: 600;
+}
+.footer-contacts i {
+  margin-right: 8px;
+  color: #ffffff;
+}
+.footer-copy {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 /* RESPONSIVO */
 @media (max-width: 1200px) {
   main {
@@ -776,34 +795,17 @@ footer a:hover {
     </div>
   </div>
 
-  <div class="contactos-section">
-    <h3>📬 Contactos</h3>
-    <div class="contactos-list">
-      <a href="mailto:theviciado.contactos@gmail.com" class="contacto-item">
-        <div class="contacto-icon">
-          <i class="fas fa-envelope"></i>
-        </div>
-        <div class="contacto-info">
-          <span class="contacto-label">Email</span>
-          <span class="contacto-valor">theviciado.contactos@gmail.com</span>
-        </div>
-      </a>
-      <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer" class="contacto-item">
-        <div class="contacto-icon">
-          <i class="fab fa-discord"></i>
-        </div>
-        <div class="contacto-info">
-          <span class="contacto-label">Discord</span>
-          <span class="contacto-valor">Junta-te ao servidor</span>
-        </div>
-      </a>
-    </div>
-  </div>
-</main>
+    </main>
 
-<footer>
-  © 2026 Viciado Comenta. Todos os direitos reservados.
-</footer>
+    <footer>
+      <div class="footer-contacts">
+        <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+        <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+      </div>
+      <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+    </footer>
+
+ 
 
 </body>
 </html>

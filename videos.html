@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VICIADO COMENTA - Vídeos Recentes</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body{font-family:'Poppins',sans-serif;margin:0;padding:0;background:#007BFF;color:#fff;}
 header{background:#0056b3;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
@@ -23,7 +24,11 @@ main{max-width:1000px;margin:20px auto;padding:20px;background:rgba(0,0,0,0.3);b
 .video-item:hover{transform:translateY(-3px);}
 .video-item iframe{width:100%;height:180px;}
 .video-item p{margin:10px 0 0 0;font-weight:600;color:#ffdd57;}
-footer{text-align:center;padding:20px;background:#004494;color:#fff;margin-top:40px;}
+footer{text-align:center;padding:20px;background:#004494;color:#fff;margin-top:40px}
+.footer-contacts{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.footer-contacts a{color:#fff;text-decoration:none;font-weight:600}
+.footer-contacts a:hover{text-decoration:underline}
+.footer-contacts i{margin-right:8px;color:#fff}
 @media(max-width:1024px){.video-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:600px){nav{flex-direction:column;}nav a{margin:5px 0;}header{flex-direction:column;}header h1{margin-top:10px;text-align:center;}.redes-sociais{margin-top:10px;}.video-grid{grid-template-columns:1fr;}.video-item iframe{height:200px;}}
 </style>
@@ -64,6 +69,12 @@ footer{text-align:center;padding:20px;background:#004494;color:#fff;margin-top:4
     <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO12" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 4</p></div>
   </div>
 </main>
-<footer>&copy; 2026 VICIADO COMENTA</footer>
+<footer>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 VICIADO COMENTA</div>
+</footer>
 </body>
 </html>

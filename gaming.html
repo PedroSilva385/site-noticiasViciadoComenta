@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VICIADO COMENTA - Gaming</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body {
   font-family: 'Poppins', sans-serif;
@@ -95,6 +96,10 @@ footer {
   color: #fff;
   margin-top: 40px;
 }
+.footer-contacts{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.footer-contacts a{color:#fff;text-decoration:none;font-weight:600}
+.footer-contacts a:hover{text-decoration:underline}
+.footer-contacts i{margin-right:8px;color:#fff}
 @media(max-width:600px){
   nav {
     flex-direction: column;
@@ -165,7 +170,13 @@ footer {
   </div>
 </main>
 
-<footer>&copy; 2026 VICIADO COMENTA</footer>
+<footer>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 VICIADO COMENTA</div>
+</footer>
 </body>
 </html>
 

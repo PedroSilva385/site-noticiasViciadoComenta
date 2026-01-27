@@ -526,6 +526,29 @@ footer {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.footer-contacts a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.footer-contacts a:hover {
+  text-decoration: underline;
+}
+.footer-contacts i {
+  margin-right: 8px;
+  color: #ffffff;
+}
+.footer-copy {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 /* RESPONSIVO */
 @media (max-width: 1200px) {
   main {
@@ -908,44 +931,34 @@ footer {
   <h2>Últimas Notícias</h2>
   
   <section class="noticias-list" id="noticiasList"></section>
-
-  <div class="contactos-section">
-    <h3>📬 Contactos</h3>
-    <div class="contactos-list">
-      <a href="mailto:theviciado.contactos@gmail.com" class="contacto-item">
-        <div class="contacto-icon">
-          <i class="fas fa-envelope"></i>
-        </div>
-        <div class="contacto-info">
-          <span class="contacto-label">Email</span>
-          <span class="contacto-valor">theviciado.contactos@gmail.com</span>
-        </div>
-      </a>
-      <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer" class="contacto-item">
-        <div class="contacto-icon">
-          <i class="fab fa-discord"></i>
-        </div>
-        <div class="contacto-info">
-          <span class="contacto-label">Discord</span>
-          <span class="contacto-valor">Junta-te ao servidor</span>
-        </div>
-      </a>
-    </div>
-  </div>
 </main>
 
 <footer>
-  © 2026 Viciado Comenta. Todos os direitos reservados.
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
 
 <script>
 fetch("noticias.json")
   .then(res => res.json())
   .then(data => {
-    // Mostrar notícia em destaque (mais recente - primeira do array)
+    // Mostrar notícia em destaque: escolher a mais recente por data
     if (data.noticias.length > 0) {
-      const featured = data.noticias[0];
-      const videoId = featured.video;
+      const parseDate = (str) => {
+        if (!str) return 0;
+        const parts = str.split("/").map(Number);
+        if (parts.length !== 3) return 0;
+        const [dia, mes, ano] = parts;
+        return new Date(ano, mes - 1, dia).getTime();
+      };
+
+      const noticiasOrdenadas = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      const featured = noticiasOrdenadas[0];
+      const videoId = extrairVideoId(featured.video);
+      window.featuredVideoId = videoId;
       
       const featuredSection = document.getElementById("featured");
       
@@ -1031,6 +1044,17 @@ function extrairVideoId(url) {
   const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\\w-]+)/;
   const match = url.match(regex);
   return match ? match[1] : '';
+}
+
+// Fallback para miniatura do vídeo, caso o iframe falhe
+function mostrarFallback() {
+  try {
+    const videoContainer = document.getElementById('videoContainer');
+    if (!videoContainer || !window.featuredVideoId) return;
+    videoContainer.innerHTML = `<img src="https://img.youtube.com/vi/${window.featuredVideoId}/hqdefault.jpg" alt="Miniatura do vídeo" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`;
+  } catch (_) {
+    // silenciar quaisquer erros de fallback
+  }
 }
 </script>
 
