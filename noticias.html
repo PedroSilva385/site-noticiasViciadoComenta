@@ -451,6 +451,195 @@ main {
   font-weight: 500;
 }
 
+/* SECÇÃO DE COMENTÁRIOS */
+.comentarios-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f8fc 100%);
+  border-radius: 12px;
+  padding: 40px;
+  margin: 60px 0;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  border: 1px solid #e0e8f5;
+}
+
+.comentarios-section h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.comentario-form {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  border: 1px solid #e0e8f5;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #1a1f3a;
+  margin-bottom: 8px;
+  font-size: 0.9em;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 12px;
+  border: 1px solid #e0e8f5;
+  border-radius: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.95em;
+  color: #1a1f3a;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-enviar {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+  font-size: 0.95em;
+}
+
+.btn-enviar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+}
+
+.btn-enviar:active {
+  transform: translateY(0);
+}
+
+.comentarios-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comentario-item {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e0e8f5;
+  transition: all 0.3s;
+}
+
+.comentario-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
+  border-color: #0066cc;
+}
+
+.comentario-autor {
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 4px;
+}
+
+.comentario-data {
+  font-size: 0.8em;
+  color: #5a6b7f;
+  margin-bottom: 12px;
+}
+
+.comentario-texto {
+  color: #3a3f5a;
+  line-height: 1.6;
+}
+
+.comentarios-vazio {
+  text-align: center;
+  padding: 40px 20px;
+  color: #5a6b7f;
+}
+
+/* Dark mode para comentários */
+body.dark .comentarios-section {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: #1f2937;
+}
+
+body.dark .comentarios-section h3 {
+  color: #ffffff !important;
+}
+
+body.dark .comentario-form {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .form-group label {
+  color: #e5e7eb !important;
+}
+
+body.dark .form-group input,
+body.dark .form-group textarea {
+  background: #111827;
+  color: #e5e7eb;
+  border-color: #1f2937;
+}
+
+body.dark .form-group input:focus,
+body.dark .form-group textarea:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+body.dark .btn-enviar {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+}
+
+body.dark .comentario-item {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .comentario-item:hover {
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+  border-color: #0ea5e9;
+}
+
+body.dark .comentario-autor {
+  color: #ffffff !important;
+}
+
+body.dark .comentario-data {
+  color: #9ca3af !important;
+}
+
+body.dark .comentario-texto {
+  color: #cbd5e1 !important;
+}
+
+body.dark .comentarios-vazio {
+  color: #9ca3af !important;
+}
+
 /* NOTICIA NÃO ENCONTRADA */
 .noticia-nao-encontrada {
   text-align: center;
@@ -824,6 +1013,26 @@ footer {
       <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
     </div>
   </article>
+
+  <section class="comentarios-section" id="comentariosSection" style="display: none;">
+    <h3>💬 Comentários</h3>
+    
+    <div class="comentario-form">
+      <form id="comentarioForm">
+        <div class="form-group">
+          <label for="nomeComentario">Nome</label>
+          <input type="text" id="nomeComentario" placeholder="Digite seu nome" required>
+        </div>
+        <div class="form-group">
+          <label for="textoComentario">Comentário</label>
+          <textarea id="textoComentario" placeholder="Deixe seu comentário aqui..." required></textarea>
+        </div>
+        <button type="submit" class="btn-enviar">Enviar Comentário</button>
+      </form>
+    </div>
+
+    <div class="comentarios-lista" id="comentariosList"></div>
+  </section>
 </main>
 
 <footer>
@@ -912,6 +1121,10 @@ if (noticiaId) {
           <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
         `;
         
+        // Mostrar secção de comentários
+        document.getElementById('comentariosSection').style.display = 'block';
+        carregarComentarios(id);
+        
         // Ocultar miniatura quando o iframe carregar
         if (videoId) {
           setTimeout(() => {
@@ -966,6 +1179,77 @@ if (noticiaId) {
     })
     .catch(err => console.error('Erro ao listar notícias:', err));
 }
+
+// Funções para gerenciar comentários
+function carregarComentarios(noticiaId) {
+  const comentariosList = document.getElementById('comentariosList');
+  const comentarios = JSON.parse(localStorage.getItem(`comentarios_${noticiaId}`)) || [];
+  
+  comentariosList.innerHTML = '';
+  
+  if (comentarios.length === 0) {
+    comentariosList.innerHTML = '<div class="comentarios-vazio">Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
+    return;
+  }
+  
+  comentarios.forEach(comentario => {
+    const div = document.createElement('div');
+    div.className = 'comentario-item';
+    div.innerHTML = `
+      <div class="comentario-autor">${comentario.nome}</div>
+      <div class="comentario-data">${comentario.data}</div>
+      <div class="comentario-texto">${comentario.texto}</div>
+    `;
+    comentariosList.appendChild(div);
+  });
+}
+
+function adicionarComentario(noticiaId, nome, texto) {
+  const comentarios = JSON.parse(localStorage.getItem(`comentarios_${noticiaId}`)) || [];
+  
+  const agora = new Date();
+  const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+  
+  comentarios.push({
+    nome: nome,
+    texto: texto,
+    data: data
+  });
+  
+  localStorage.setItem(`comentarios_${noticiaId}`, JSON.stringify(comentarios));
+  carregarComentarios(noticiaId);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('comentarioForm');
+  
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const params = new URLSearchParams(window.location.search);
+      const noticiaId = params.get('id');
+      
+      if (noticiaId) {
+        const nome = document.getElementById('nomeComentario').value;
+        const texto = document.getElementById('textoComentario').value;
+        
+        adicionarComentario(noticiaId, nome, texto);
+        
+        // Limpar formulário
+        form.reset();
+        
+        // Mostrar mensagem de sucesso
+        const btn = form.querySelector('.btn-enviar');
+        const textoOriginal = btn.textContent;
+        btn.textContent = '✓ Comentário enviado!';
+        setTimeout(() => {
+          btn.textContent = textoOriginal;
+        }, 2000);
+      }
+    });
+  }
+});
 </script>
 
 </body>
