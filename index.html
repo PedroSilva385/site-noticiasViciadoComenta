@@ -163,7 +163,7 @@ nav a:hover {
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 200;
+  z-index: 1000;
 }
 
 .nav-dropdown:hover .dropdown-menu {
@@ -298,6 +298,35 @@ main > h2 {
   color: #ffffff;
 }
 
+/* Theme toggle */
+.theme-toggle { position:absolute; top:16px; right:16px; background:transparent; border:1px solid rgba(0,0,0,.1); color:#1a1f3a; padding:8px 10px; border-radius:8px; cursor:pointer; z-index: 150; }
+.theme-toggle i { pointer-events:none; }
+
+/* Dark mode base overrides */
+body.dark { background: linear-gradient(135deg, #0f172a 0%, #111827 100%); color:#e5e7eb !important; }
+body.dark * { color:#e5e7eb !important; }
+body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav a { color: #e5e7eb !important; }
+body.dark .featured-section { box-shadow: 0 8px 32px rgba(2,6,23,.6); }
+body.dark .featured-info { color:#e5e7eb !important; }
+body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color:#ffffff !important; }
+body.dark .featured-titulo { color: #ffffff !important; }
+body.dark .featured-link { color: #93c5fd !important; }
+body.dark .noticia-item { background:#0b1220; border-color:#1f2937; }
+body.dark .noticia-item:hover { box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25); }
+body.dark .noticia-conteudo h3 { color: #ffffff !important; }
+body.dark .noticia-conteudo p { color: #cbd5e1 !important; }
+body.dark .noticia-data { color: #9ca3af !important; }
+body.dark .noticia-link { color: #ffffff !important; background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark footer { background:#0b1220; color:#e5e7eb !important; }
+body.dark footer * { color:#e5e7eb !important; }
+body.dark .footer-contacts a { color:#e5e7eb !important; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !important; }
+body.dark p { color: #e5e7eb !important; }
+body.dark span { color: #e5e7eb !important; }
+
 .featured-info h2 {
   font-family: 'Outfit', sans-serif;
   font-size: 2em;
@@ -356,61 +385,65 @@ main > h2 {
 
 /* LISTA DE NOTÍCIAS */
 .noticias-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 60px;
 }
 
 .noticia-item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 25px;
-  padding: 28px;
-  background: #e3f2fd;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e0e8f5;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
-  align-items: center;
 }
 
 .noticia-item:hover {
   border-color: #0066cc;
   box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 .noticia-meta-badge {
   display: flex;
-  flex-direction: column;
   gap: 12px;
-  min-width: 120px;
-  margin: auto 0;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .noticia-categoria {
   display: inline-block;
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  padding: 8px 14px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
   font-size: 0.7em;
   font-weight: 700;
   text-transform: uppercase;
-  color: #0066cc;
   width: fit-content;
   letter-spacing: 0.5px;
 }
 
 .noticia-data {
-  font-size: 0.85em;
+  font-size: 0.8em;
   color: #5a6b7f;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+.noticia-conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .noticia-conteudo h3 {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.5em;
+  font-size: 1.2em;
   margin-bottom: 12px;
   color: #1a1f3a;
   line-height: 1.3;
@@ -418,25 +451,65 @@ main > h2 {
 }
 
 .noticia-conteudo p {
-  font-size: 0.95em;
+  font-size: 0.9em;
   color: #5a6b7f;
   margin-bottom: 15px;
-  line-height: 1.7;
+  line-height: 1.6;
+  flex: 1;
 }
 
 .noticia-link {
   display: inline-block;
-  color: #0066cc;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.9em;
+  font-size: 0.85em;
   transition: all 0.3s;
-  padding: 8px 0;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-align: center;
+  width: fit-content;
 }
 
 .noticia-link:hover {
-  color: #0052a3;
-  transform: translateX(4px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+/* Dark mode para lista de notícias */
+body.dark .noticias-list .noticia-item {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .noticias-list .noticia-item:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+}
+
+body.dark .noticia-conteudo h3 {
+  color: #ffffff !important;
+}
+
+body.dark .noticia-conteudo p {
+  color: #cbd5e1 !important;
+}
+
+body.dark .noticia-data {
+  color: #9ca3af !important;
+}
+
+/* Responsivo */
+@media (max-width: 992px) {
+  .noticias-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .noticias-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* CONTACTOS */
@@ -915,7 +988,7 @@ footer {
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="#noticias">Notícias</a>
+  <a href="todas-noticias.html">Todas as Notícias</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -942,6 +1015,36 @@ footer {
 </footer>
 
 <script>
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  // add toggle button in header (outside nav) to preserve centered tabs
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+});
+
 fetch("noticias.json")
   .then(res => res.json())
   .then(data => {
@@ -963,10 +1066,11 @@ fetch("noticias.json")
       const featuredSection = document.getElementById("featured");
       
       if (videoId) {
-        // Tentar carregar o vídeo, com fallback para imagem
+        // Mostrar miniatura do vídeo com iframe carregável
         featuredSection.innerHTML = `
           <div class="featured-content">
             <div class="featured-video" id="videoContainer">
+              <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;" id="thumbnail">
               <iframe 
                 id="youtubeIframe"
                 width="100%" 
@@ -976,7 +1080,7 @@ fetch("noticias.json")
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowfullscreen
-                onerror="mostrarFallback()">
+                style="position:absolute;top:0;left:0;border-radius:12px;display:block;">
               </iframe>
             </div>
             <div class="featured-info">
@@ -991,6 +1095,15 @@ fetch("noticias.json")
             </div>
           </div>
         `;
+        
+        // Ocultar a miniatura quando o iframe carregar
+        const iframe = document.getElementById('youtubeIframe');
+        const thumbnail = document.getElementById('thumbnail');
+        if (iframe && thumbnail) {
+          iframe.onload = () => {
+            thumbnail.style.display = 'none';
+          };
+        }
       } else {
         // Se não houver vídeo, mostrar mensagem
         featuredSection.innerHTML = `
@@ -1016,16 +1129,25 @@ fetch("noticias.json")
       }
     }
     
-    // Mostrar lista de notícias (todas)
+    // Mostrar lista de notícias (todas, ordenadas por data)
     const container = document.getElementById("noticiasList");
+    const parseDate = (str) => {
+      if (!str) return 0;
+      const parts = str.split("/").map(Number);
+      if (parts.length !== 3) return 0;
+      const [dia, mes, ano] = parts;
+      return new Date(ano, mes - 1, dia).getTime();
+    };
     
-    data.noticias.forEach((n) => {
+    const noticiasOrdenadas = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+    
+    noticiasOrdenadas.forEach((n) => {
       const article = document.createElement("article");
       article.className = "noticia-item";
       article.innerHTML = `
         <div class="noticia-meta-badge">
           <span class="noticia-categoria">${n.categoria}</span>
-          <span class="noticia-data">${n.data}</span>
+          <span class="noticia-data">📅 ${n.data}</span>
         </div>
         <div class="noticia-conteudo">
           <h3>${n.titulo}</h3>
@@ -1044,17 +1166,6 @@ function extrairVideoId(url) {
   const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\\w-]+)/;
   const match = url.match(regex);
   return match ? match[1] : '';
-}
-
-// Fallback para miniatura do vídeo, caso o iframe falhe
-function mostrarFallback() {
-  try {
-    const videoContainer = document.getElementById('videoContainer');
-    if (!videoContainer || !window.featuredVideoId) return;
-    videoContainer.innerHTML = `<img src="https://img.youtube.com/vi/${window.featuredVideoId}/hqdefault.jpg" alt="Miniatura do vídeo" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`;
-  } catch (_) {
-    // silenciar quaisquer erros de fallback
-  }
 }
 </script>
 

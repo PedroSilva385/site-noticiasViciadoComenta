@@ -14,6 +14,24 @@ body {
   background: #007BFF;
   color: #fff;
 }
+
+/* Dark mode */
+body.dark { background: #0f172a; color: #e5e7eb !important; }
+body.dark * { color: #e5e7eb !important; }
+body.dark header { background: #0369a1; }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark nav { background: #0b1220; color: #e5e7eb !important; }
+body.dark nav a { color: #e5e7eb !important; }
+body.dark main { background: rgba(15,23,42,.5); color: #e5e7eb !important; }
+body.dark h2 { color: #e5e7eb !important; }
+body.dark footer { background: #0b1220; color: #e5e7eb !important; }
+body.dark footer * { color: #e5e7eb !important; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color: #e5e7eb !important; }
+body.dark p { color: #e5e7eb !important; }
+body.dark span { color: #e5e7eb !important; }
+
+.theme-toggle { position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; padding: 8px 10px; border-radius: 8px; cursor: pointer; z-index: 150; }
+.theme-toggle i { pointer-events: none; }
 header {
   background: #0056b3;
   color: #fff;
@@ -121,6 +139,37 @@ footer {
 </style>
 </head>
 <body>
+
+<script>
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+});
+</script>
 <header>
   <div class="foto-perfil">
     <img src="foto-perfil.png" alt="Foto Perfil">

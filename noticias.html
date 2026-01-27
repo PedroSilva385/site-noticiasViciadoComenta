@@ -20,6 +20,76 @@ body {
   line-height: 1.6;
 }
 
+/* Dark mode base */
+body.dark {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+  color: #e5e7eb;
+}
+body.dark header {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+}
+body.dark nav {
+  background: rgba(17, 24, 39, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+body.dark .artigo-header .artigo-titulo,
+body.dark .artigo-meta,
+body.dark .artigo-conteudo {
+  color: #e5e7eb;
+}
+body.dark .btn-voltar { color: #93c5fd; }
+
+/* News list grid */
+.lista-header { margin-bottom: 20px; }
+.lista-title { font-family:'Outfit',sans-serif; font-size: 1.8em; font-weight:700; color:#1a1f3a; text-align:center; }
+.noticias-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:20px; }
+.noticia-card { display:block; background:#ffffff; border:1px solid #e0e8f5; border-radius:12px; padding:18px; text-decoration:none; color:inherit; transition:transform .2s, box-shadow .2s, border-color .2s; }
+.noticia-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,102,204,.15); border-color:#0066cc; }
+.card-meta { display:flex; justify-content:space-between; gap:8px; margin-bottom:10px; font-size:.85em; color:#5a6b7f; }
+.card-title { font-size:1.1em; font-weight:700; color:#1a1f3a; margin:8px 0; }
+.card-resumo { color:#5a6b7f; font-size:.95em; margin-bottom:12px; }
+.card-link { color:#0066cc; font-weight:600; }
+
+@media (max-width: 992px) { .noticias-grid { grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 600px) { .noticias-grid { grid-template-columns: 1fr;} }
+
+/* Dark mode for cards */
+body.dark .noticia-card { background:#0b1220; border-color:#1f2937; }
+body.dark .card-meta { color: #9ca3af !important; }
+body.dark .card-title { color:#ffffff !important; font-weight: 700; }
+body.dark .card-resumo { color:#cbd5e1 !important; }
+body.dark .card-link { color:#93c5fd !important; font-weight: 600; }
+body.dark .lista-title { color: #ffffff !important; }
+body.dark .artigo-titulo { color: #ffffff !important; }
+body.dark .artigo-categoria { color: #93c5fd !important; }
+body.dark .artigo-meta { color: #cbd5e1 !important; }
+body.dark .artigo-conteudo { color: #e5e7eb !important; }
+body.dark .artigo-header { color: #e5e7eb !important; }
+body.dark .btn-voltar { color: #93c5fd !important; }
+
+/* Theme toggle button */
+.theme-toggle { position:absolute; top:16px; right:16px; background:transparent; border:1px solid rgba(0,0,0,.1); color:#1a1f3a; padding:8px 10px; border-radius:8px; cursor:pointer; z-index: 150; }
+.theme-toggle i { pointer-events:none; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !important; }
+
+/* Dark mode base overrides */
+body.dark {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+  color: #e5e7eb !important;
+}
+body.dark * { color: #e5e7eb !important; }
+body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav a { color: #e5e7eb !important; }
+body.dark main { color: #e5e7eb !important; }
+body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color: #ffffff !important; }
+body.dark footer { background:#0b1220; color:#e5e7eb !important; }
+body.dark footer * { color:#e5e7eb !important; }
+body.dark .footer-contacts a { color:#e5e7eb !important; }
+body.dark p { color: #e5e7eb !important; }
+body.dark span { color: #e5e7eb !important; }
+
 /* HEADER */
 header {
   background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
@@ -162,7 +232,7 @@ nav a:hover {
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 200;
+  z-index: 1000;
 }
 
 .nav-dropdown:hover .dropdown-menu {
@@ -270,6 +340,16 @@ main {
   aspect-ratio: 16 / 9;
   background: #000;
   box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  position: relative;
+}
+
+.artigo-video img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .artigo-video iframe {
@@ -726,7 +806,7 @@ footer {
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="index.html">Notícias</a>
+  <a href="todas-noticias.html">Todas as Notícias</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -755,6 +835,35 @@ footer {
 </footer>
 
 <script>
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+});
+
 // Obter ID da URL
 const urlParams = new URLSearchParams(window.location.search);
 const noticiaId = urlParams.get('id');
@@ -779,7 +888,10 @@ if (noticiaId) {
         const videoId = extrairVideoId(noticia.video);
         let videoHTML = '';
         if (videoId) {
-          videoHTML = `<div class="artigo-video"><iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+          videoHTML = `<div class="artigo-video" id="videoContainer-article">
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-article" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
+            <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-article" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
+          </div>`;
         }
         
         const container = document.getElementById("artigo");
@@ -799,14 +911,60 @@ if (noticiaId) {
           </div>
           <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
         `;
+        
+        // Ocultar miniatura quando o iframe carregar
+        if (videoId) {
+          setTimeout(() => {
+            const iframe = document.getElementById('videoFrame-article');
+            const thumbnail = document.getElementById('thumbnail-article');
+            if (iframe && thumbnail) {
+              iframe.onload = () => {
+                thumbnail.style.display = 'none';
+              };
+            }
+          }, 100);
+        }
       }
     })
     .catch(err => {
       console.error("Erro ao carregar notícia:", err);
     });
 } else {
-  // Sem ID na URL, mostrar mensagem de erro
-  console.log("Nenhum ID fornecido");
+  // Sem ID: listar notícias em grelha
+  fetch('noticias.json')
+    .then(res => res.json())
+    .then(data => {
+      const parseDate = (str) => {
+        if (!str) return 0;
+        const [dia, mes, ano] = str.split('/').map(Number);
+        return new Date(ano, mes - 1, dia).getTime();
+      };
+      const noticiasOrdenadas = [...data.noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
+      const container = document.getElementById('artigo');
+      container.innerHTML = `
+        <div class="lista-header">
+          <h2 class="lista-title">Notícias</h2>
+        </div>
+        <div class="noticias-grid" id="noticiasGrid"></div>
+      `;
+      const grid = document.getElementById('noticiasGrid');
+      noticiasOrdenadas.forEach(n => {
+        const card = document.createElement('a');
+        card.className = 'noticia-card';
+        card.href = `noticias.html?id=${n.id}`;
+        card.innerHTML = `
+          <div class="card-meta">
+            <span class="card-categoria">${n.categoria}</span>
+            <span class="card-data">${n.data}</span>
+          </div>
+          <h3 class="card-title">${n.titulo}</h3>
+          <p class="card-resumo">${n.resumo}</p>
+          <span class="card-link">Ver mais →</span>
+        `;
+        grid.appendChild(card);
+      });
+    })
+    .catch(err => console.error('Erro ao listar notícias:', err));
 }
 </script>
 
