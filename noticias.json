@@ -12,7 +12,6 @@
     },
     {
       "id": "2",
-<<<<<<< HEAD
       "titulo": "MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...",
       "data": "26/01/2026",
       "autor": "Pedro Silva",
@@ -20,15 +19,6 @@
       "resumo": "Analisamos a operadora vencedora da categoria de tarifário móvel sem fidelização, no prémio escolha do consumidor de 2026!",
       "conteudo": "Uma das principais razões para o sucesso da DIGI, é a noção que os consumidores passam a ter sobre a necessidade de se mexer no mercado, para poupar. A LycaMobile, aparentemente está a aproveitar isso melhor que nunca!",
       "video": "https://youtu.be/E5jXjkJd-DI?si=cddRu_UWiw7bOp8P"
-=======
-      "titulo": "Lançamentos de Gaming 2026",
-      "data": "20/01/2026",
-      "autor": "Redação",
-      "categoria": "Gaming",
-      "resumo": "Apresentamos os principais lançamentos de jogos que todos os fãs estão ansiosos.",
-      "conteudo": "Principais lançamentos de jogos para este ano. Desde os maiores títulos AAA até aos indie games mais promissores. Confira os trailers e análises de cada um dos projetos mais esperados.",
-      "video": "https://www.youtube.com/watch?v=0A7LkRf_jHs"
->>>>>>> parent of a5af69c (Update noticias.json)
     },
     {
       "id": "3",
