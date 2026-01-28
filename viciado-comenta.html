@@ -463,6 +463,26 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
+  .nav-dropdown > a {
+    padding: 12px 0;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+
+  .dropdown-menu a {
+    padding: 8px 0;
+    font-size: 0.85em;
+  }
+
   .miniaturas-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
