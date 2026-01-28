@@ -190,7 +190,7 @@ nav a {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95em;
-  padding: 16px 0;
+  padding: 20px 0;
   border-bottom: 3px solid transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -320,12 +320,18 @@ main {
 
 .artigo-conteudo {
   font-size: 1.05em;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #3a3f5a;
 }
 
 .artigo-conteudo p {
-  margin-bottom: 24px;
+  margin-bottom: 12px;
+}
+
+.artigo-conteudo br {
+  display: block;
+  content: "";
+  margin-top: 8px;
 }
 
 .artigo-conteudo strong {
@@ -803,11 +809,11 @@ footer {
 
   .artigo-conteudo {
     font-size: 0.95em;
-    line-height: 1.7;
+    line-height: 1.6;
   }
 
   .artigo-conteudo p {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
   }
 
   .btn-voltar {
@@ -905,7 +911,7 @@ footer {
   }
 
   .artigo-conteudo p {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   .btn-voltar {
@@ -995,7 +1001,7 @@ footer {
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="todas-noticias.html">Todas as Notícias</a>
+  <a href="todas-noticias.html">Artigos</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -1116,7 +1122,7 @@ if (noticiaId) {
           ${videoHTML}
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
-            <p>${noticia.conteudo}</p>
+            ${noticia.conteudo.split('\n').map(p => p.trim() === '' ? '<br>' : `<p>${p}</p>`).join('')}
           </div>
           <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
         `;

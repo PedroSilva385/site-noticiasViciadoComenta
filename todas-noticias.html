@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Todas as Notícias - VICIADO COMENTA</title>
+<title>Artigos - VICIADO COMENTA</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -117,7 +117,7 @@ nav a {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95em;
-  padding: 16px 0;
+  padding: 20px 0;
   border-bottom: 3px solid transparent;
   transition: all 0.3s;
 }
@@ -141,7 +141,7 @@ nav a:hover {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95em;
-  padding: 16px 0;
+  padding: 20px 0;
   border-bottom: 3px solid transparent;
   transition: all 0.3s;
 }
@@ -377,8 +377,8 @@ main {
 /* FILTRO DE CATEGORIAS */
 .filter-section {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 40px;
   padding: 20px;
   background: #ffffff;
@@ -387,10 +387,16 @@ main {
   border: 1px solid #e0e8f5;
 }
 
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .filter-label {
   font-weight: 600;
   color: #1a1f3a;
-  align-self: center;
   margin-right: 8px;
 }
 
@@ -415,6 +421,28 @@ main {
   color: #ffffff;
 }
 
+.date-sort-select {
+  padding: 8px 16px;
+  border: 2px solid #0066cc;
+  background: #ffffff;
+  color: #0066cc;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  font-family: 'Sora', sans-serif;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.date-sort-select:hover {
+  background: #e3f2fd;
+}
+
+.date-sort-select:focus {
+  border-color: #0052a3;
+}
+
 body.dark .filter-section {
   background: #0b1220;
   border-color: #1f2937;
@@ -437,6 +465,21 @@ body.dark .filter-btn:hover {
 body.dark .filter-btn.active {
   background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
   color: #ffffff;
+}
+
+body.dark .date-sort-select {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+  background: transparent;
+}
+
+body.dark .date-sort-select:hover {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+body.dark .date-sort-select option {
+  background: #0b1220;
+  color: #e5e7eb;
 }
 
 /* FOOTER */
@@ -491,13 +534,22 @@ footer {
   }
 
   .filter-section {
+    padding: 15px;
+  }
+
+  .filter-row {
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
 
   .filter-label {
     width: 100%;
     margin-bottom: 8px;
+  }
+
+  .date-sort-select {
+    width: 100%;
   }
 
   nav {
@@ -605,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="todas-noticias.html">Todas as Notícias</a>
+  <a href="todas-noticias.html">Artigos</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -616,14 +668,23 @@ document.addEventListener('DOMContentLoaded', () => {
 </nav>
 
 <main>
-  <h2 class="page-title">Todas as Notícias</h2>
+  <h2 class="page-title">Artigos</h2>
   
   <div class="filter-section">
-    <span class="filter-label">Filtrar por categoria:</span>
-    <button class="filter-btn active" data-categoria="todas">Todas</button>
-    <button class="filter-btn" data-categoria="DIGI">DIGI</button>
-    <button class="filter-btn" data-categoria="Mercado Telecomunicações">Mercado Telecomunicações</button>
-    <button class="filter-btn" data-categoria="Tecnologia">Tecnologia</button>
+    <div class="filter-row">
+      <span class="filter-label">Filtrar por categoria:</span>
+      <button class="filter-btn active" data-categoria="todas">Todas</button>
+      <button class="filter-btn" data-categoria="DIGI">DIGI</button>
+      <button class="filter-btn" data-categoria="Mercado Telecomunicações">Mercado Telecomunicações</button>
+      <button class="filter-btn" data-categoria="Tecnologia">Tecnologia</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Ordenar por data:</span>
+      <select id="dateSort" class="date-sort-select">
+        <option value="desc">Mais recentes primeiro</option>
+        <option value="asc">Mais antigas primeiro</option>
+      </select>
+    </div>
   </div>
   
   <div class="noticias-container" id="noticiasContainer"></div>
@@ -664,18 +725,46 @@ fetch('noticias.json')
         // Adicionar classe active ao botão clicado
         btn.classList.add('active');
         
-        const categoria = btn.getAttribute('data-categoria');
-        let noticiasFiltrares = todasAsNoticias;
-        
-        if (categoria !== 'todas') {
-          noticiasFiltrares = todasAsNoticias.filter(n => n.categoria === categoria);
-        }
-        
-        renderizarNoticias(noticiasFiltrares);
+        aplicarFiltros();
       });
+    });
+    
+    // Adicionar event listener para ordenação por data
+    document.getElementById('dateSort').addEventListener('change', () => {
+      aplicarFiltros();
     });
   })
   .catch(err => console.error('Erro ao carregar notícias:', err));
+
+// Função para aplicar filtros de categoria e ordenação
+function aplicarFiltros() {
+  const categoriaAtiva = document.querySelector('.filter-btn.active').getAttribute('data-categoria');
+  const ordenacao = document.getElementById('dateSort').value;
+  
+  let noticiasFiltrares = todasAsNoticias;
+  
+  // Filtrar por categoria
+  if (categoriaAtiva !== 'todas') {
+    noticiasFiltrares = noticiasFiltrares.filter(n => n.categoria === categoriaAtiva);
+  }
+  
+  // Ordenar por data
+  const parseDate = (str) => {
+    if (!str) return 0;
+    const [dia, mes, ano] = str.split('/').map(Number);
+    return new Date(ano, mes - 1, dia).getTime();
+  };
+  
+  noticiasFiltrares = [...noticiasFiltrares].sort((a, b) => {
+    if (ordenacao === 'desc') {
+      return parseDate(b.data) - parseDate(a.data);
+    } else {
+      return parseDate(a.data) - parseDate(b.data);
+    }
+  });
+  
+  renderizarNoticias(noticiasFiltrares);
+}
 
 // Função para renderizar as notícias
 function renderizarNoticias(noticias) {
@@ -705,6 +794,12 @@ function renderizarNoticias(noticias) {
       </div>`;
     }
     
+    // Criar preview do conteúdo (primeiros 250 caracteres)
+    const conteudoTexto = typeof noticia.conteudo === 'string' ? noticia.conteudo : '';
+    const conteudoPreview = conteudoTexto.length > 250 
+      ? conteudoTexto.substring(0, 250) + '...' 
+      : conteudoTexto;
+    
     const noticiaEl = document.createElement('div');
     noticiaEl.className = 'noticia-completa';
     noticiaEl.innerHTML = `
@@ -717,7 +812,7 @@ function renderizarNoticias(noticias) {
       <div class="noticia-resumo">${noticia.resumo}</div>
       ${videoHTML}
       <div class="noticia-conteudo">
-        <p>${noticia.conteudo}</p>
+        <p>${conteudoPreview}</p>
         <a href="noticias.html?id=${noticia.id}" class="noticia-ver-mais">Ver Mais →</a>
       </div>
       ${index < noticias.length - 1 ? '<div class="noticia-divider"></div>' : ''}

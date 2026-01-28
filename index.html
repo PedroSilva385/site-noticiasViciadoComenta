@@ -99,6 +99,75 @@ header h1 {
   font-size: 1.2em;
 }
 
+/* STATS COUNTERS */
+.header-stats {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 10;
+}
+
+.stat-counter {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
+}
+
+.stat-counter:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 1.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon.youtube {
+  color: #FF0000;
+}
+
+.stat-icon.twitch {
+  color: #9146FF;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stat-number {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 0.7em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* NAVEGAÇÃO */
 nav {
   background: rgba(255, 255, 255, 0.95);
@@ -121,7 +190,7 @@ nav a {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95em;
-  padding: 16px 0;
+  padding: 20px 0;
   border-bottom: 3px solid transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -196,9 +265,130 @@ nav a:hover {
 
 /* MAIN */
 main {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 50px 20px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 10px;
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #0066cc;
+}
+
+.social-widget {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e0e8f5;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.social-widget:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  transform: translateY(-4px);
+}
+
+.social-widget-icon {
+  font-size: 3em;
+  margin-bottom: 16px;
+}
+
+.social-widget-icon.youtube {
+  color: #FF0000;
+}
+
+.social-widget-icon.twitch {
+  color: #9146FF;
+}
+
+.social-widget-icon.spotify {
+  color: #1DB954;
+}
+
+.social-widget h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+  color: #1a1f3a;
+  font-weight: 700;
+}
+
+.social-widget p {
+  font-size: 0.85em;
+  color: #5a6b7f;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.social-widget-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.social-widget-btn.youtube {
+  background: #FF0000;
+  color: #ffffff;
+}
+
+.social-widget-btn.youtube:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+.social-widget-btn.twitch {
+  background: #9146FF;
+  color: #ffffff;
+}
+
+.social-widget-btn.twitch:hover {
+  background: #7728cc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(145, 70, 255, 0.3);
+}
+
+.social-widget-btn.spotify {
+  background: #1DB954;
+  color: #ffffff;
+}
+
+.social-widget-btn.spotify:hover {
+  background: #169c46;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+/* MAIN CONTENT */
+.main-content {
+  min-width: 0;
 }
 
 main > h2 {
@@ -214,17 +404,15 @@ main > h2 {
 
 /* NOTÍCIA EM DESTAQUE */
 .featured-section {
-  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-  border-radius: 12px;
-  overflow: hidden;
   margin-bottom: 60px;
-  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.2);
 }
 
 .featured-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.2);
+  color: #ffffff;
 }
 
 .featured-video {
@@ -232,16 +420,23 @@ main > h2 {
   background: #000;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .featured-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border: none;
+  border-radius: 12px;
 }
 
 .featured-video-error {
@@ -262,38 +457,17 @@ main > h2 {
 }
 
 .featured-video img {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
 }
 
-.featured-video:hover img {
-  transform: scale(1.05);
-}
-
-.featured-video::after {
-  content: '▶';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 48px;
-  color: rgba(255, 255, 255, 0.9);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: none;
-}
-
-.featured-video:hover::after {
-  color: rgba(255, 255, 255, 1);
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.featured-info {
-  padding: 40px;
+.featured-info-box {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   color: #ffffff;
 }
 
@@ -306,10 +480,12 @@ body.dark { background: linear-gradient(135deg, #0f172a 0%, #111827 100%); color
 body.dark * { color:#e5e7eb !important; }
 body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
 body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark .stat-counter { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3); }
+body.dark .stat-counter:hover { background: rgba(255, 255, 255, 0.3); }
 body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
 body.dark nav a { color: #e5e7eb !important; }
 body.dark .featured-section { box-shadow: 0 8px 32px rgba(2,6,23,.6); }
-body.dark .featured-info { color:#e5e7eb !important; }
+body.dark .featured-content { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
 body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color:#ffffff !important; }
 body.dark .featured-titulo { color: #ffffff !important; }
 body.dark .featured-link { color: #93c5fd !important; }
@@ -326,7 +502,7 @@ body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !imp
 body.dark p { color: #e5e7eb !important; }
 body.dark span { color: #e5e7eb !important; }
 
-.featured-info h2 {
+.featured-info-box h2 {
   font-family: 'Outfit', sans-serif;
   font-size: 2em;
   margin-bottom: 15px;
@@ -335,7 +511,7 @@ body.dark span { color: #e5e7eb !important; }
   color: #ffffff;
 }
 
-.featured-info .featured-meta {
+.featured-info-box .featured-meta {
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
@@ -343,7 +519,7 @@ body.dark span { color: #e5e7eb !important; }
   color: rgba(255, 255, 255, 0.85);
 }
 
-.featured-info p {
+.featured-info-box p {
   font-size: 1em;
   line-height: 1.7;
   margin-bottom: 25px;
@@ -498,6 +674,28 @@ body.dark .noticia-data {
   color: #9ca3af !important;
 }
 
+body.dark .social-widget {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .social-widget:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+}
+
+body.dark .social-widget h3 {
+  color: #ffffff !important;
+}
+
+body.dark .social-widget p {
+  color: #cbd5e1 !important;
+}
+
+body.dark .sidebar-title {
+  color: #ffffff !important;
+  border-bottom-color: #0ea5e9;
+}
+
 /* Responsivo */
 @media (max-width: 992px) {
   .noticias-list {
@@ -635,21 +833,23 @@ footer {
 @media (max-width: 992px) {
   main {
     padding: 35px 20px;
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
   }
 
   .featured-content {
-    grid-template-columns: 1fr;
+    padding: 25px;
   }
 
   .featured-video {
     aspect-ratio: 16 / 9;
+    margin-bottom: 25px;
   }
 
-  .featured-info {
-    padding: 30px;
-  }
-
-  .featured-info h2 {
+  .featured-info-box h2 {
     font-size: 1.7em;
     margin-bottom: 12px;
   }
@@ -659,6 +859,33 @@ footer {
   * {
     margin: 0;
     padding: 0;
+  }
+
+  .header-stats {
+    position: relative;
+    left: 0;
+    top: 0;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  .stat-counter {
+    padding: 8px 14px;
+    min-width: 150px;
+  }
+
+  .stat-icon {
+    font-size: 1.4em;
+  }
+
+  .stat-number {
+    font-size: 1em;
+  }
+
+  .stat-label {
+    font-size: 0.65em;
   }
 
   header {
@@ -712,28 +939,23 @@ footer {
 
   .featured-section {
     margin-bottom: 40px;
-    border-radius: 8px;
   }
 
   .featured-content {
-    grid-template-columns: 1fr;
-    gap: 0;
+    padding: 20px;
   }
 
   .featured-video {
     aspect-ratio: 16 / 9;
+    margin-bottom: 20px;
   }
 
-  .featured-info {
-    padding: 25px 20px;
-  }
-
-  .featured-info h2 {
+  .featured-info-box h2 {
     font-size: 1.5em;
     margin-bottom: 12px;
   }
 
-  .featured-info p {
+  .featured-info-box p {
     font-size: 0.9em;
     line-height: 1.5;
   }
@@ -786,6 +1008,33 @@ footer {
 }
 
 @media (max-width: 480px) {
+  .header-stats {
+    position: relative;
+    left: 0;
+    top: 0;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    align-items: center;
+  }
+
+  .stat-counter {
+    padding: 8px 14px;
+    min-width: 140px;
+  }
+
+  .stat-icon {
+    font-size: 1.3em;
+  }
+
+  .stat-number {
+    font-size: 0.95em;
+  }
+
+  .stat-label {
+    font-size: 0.6em;
+  }
+
   header {
     padding: 20px 12px;
   }
@@ -839,25 +1088,28 @@ footer {
 
   .featured-section {
     margin-bottom: 30px;
-    border-radius: 8px;
   }
 
-  .featured-info {
-    padding: 20px 16px;
+  .featured-content {
+    padding: 16px;
   }
 
-  .featured-info h2 {
+  .featured-video {
+    margin-bottom: 20px;
+  }
+
+  .featured-info-box h2 {
     font-size: 1.3em;
     margin-bottom: 10px;
   }
 
-  .featured-info .featured-meta {
+  .featured-info-box .featured-meta {
     gap: 12px;
     margin-bottom: 15px;
     font-size: 0.85em;
   }
 
-  .featured-info p {
+  .featured-info-box p {
     font-size: 0.85em;
     margin-bottom: 15px;
   }
@@ -940,11 +1192,11 @@ footer {
     font-size: 1.3em;
   }
 
-  .featured-info h2 {
+  .featured-info-box h2 {
     font-size: 1.2em;
   }
 
-  .featured-info p {
+  .featured-info-box p {
     font-size: 0.8em;
   }
 
@@ -963,6 +1215,27 @@ footer {
 <body>
 
 <header>
+  <div class="header-stats">
+    <div class="stat-counter">
+      <div class="stat-icon youtube">
+        <i class="fab fa-youtube"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number" id="youtube-count">4,030</div>
+        <div class="stat-label">Subscribers</div>
+      </div>
+    </div>
+    <div class="stat-counter">
+      <div class="stat-icon twitch">
+        <i class="fab fa-twitch"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number" id="twitch-count">4,314</div>
+        <div class="stat-label">Followers</div>
+      </div>
+    </div>
+  </div>
+
   <h1>VICIADO COMENTA</h1>
   <p class="header-subtitle">Análise e crítica de notícias</p>
   
@@ -987,7 +1260,7 @@ footer {
 
 <nav>
   <a href="index.html">Início</a>
-  <a href="todas-noticias.html">Todas as Notícias</a>
+  <a href="todas-noticias.html">Artigos</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -998,11 +1271,49 @@ footer {
 </nav>
 
 <main>
-  <div class="featured-section" id="featured"></div>
-  
-  <h2>Últimas Notícias</h2>
-  
-  <section class="noticias-list" id="noticiasList"></section>
+  <aside class="sidebar">
+    <h3 class="sidebar-title">As minhas redes</h3>
+    <div class="social-widget">
+      <div class="social-widget-icon youtube">
+        <i class="fab fa-youtube"></i>
+      </div>
+      <h3>YouTube</h3>
+      <p>Subscreve ao canal para não perderes nenhum vídeo!</p>
+      <a href="https://www.youtube.com/@TheViciado?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="social-widget-btn youtube">
+        <i class="fas fa-bell"></i> Subscrever
+      </a>
+    </div>
+
+    <div class="social-widget">
+      <div class="social-widget-icon twitch">
+        <i class="fab fa-twitch"></i>
+      </div>
+      <h3>Twitch</h3>
+      <p>Segue-me na Twitch para livestreams ao vivo!</p>
+      <a href="https://www.twitch.tv/theviciado13" target="_blank" rel="noopener noreferrer" class="social-widget-btn twitch">
+        <i class="fas fa-heart"></i> Seguir
+      </a>
+    </div>
+
+    <div class="social-widget">
+      <div class="social-widget-icon spotify">
+        <i class="fab fa-spotify"></i>
+      </div>
+      <h3>Spotify</h3>
+      <p>Ouve o podcast no Spotify!</p>
+      <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" rel="noopener noreferrer" class="social-widget-btn spotify">
+        <i class="fas fa-play"></i> Ouvir
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="featured-section" id="featured"></div>
+    
+    <h2>Últimas Notícias</h2>
+    
+    <section class="noticias-list" id="noticiasList"></section>
+  </div>
 </main>
 
 <footer>
@@ -1014,6 +1325,57 @@ footer {
 </footer>
 
 <script>
+// Sistema de atualização de contadores a cada 24h
+// NOTA: Para atualizar manualmente, altere os valores abaixo:
+const SOCIAL_STATS = {
+  youtube: {
+    count: 4030,
+    lastUpdated: '2026-01-28' // Data da última atualização manual
+  },
+  twitch: {
+    count: 4314,
+    lastUpdated: '2026-01-28'
+  }
+};
+
+function formatNumber(num) {
+  return num.toLocaleString('pt-PT');
+}
+
+function checkAndUpdateStats() {
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+  
+  // Verificar se já atualizou hoje
+  const lastCheck = localStorage.getItem('stats_last_check');
+  
+  if (lastCheck !== today) {
+    // Atualizar com os valores do código
+    localStorage.setItem('youtube_count', SOCIAL_STATS.youtube.count);
+    localStorage.setItem('twitch_count', SOCIAL_STATS.twitch.count);
+    localStorage.setItem('stats_last_check', today);
+    
+    console.log('Stats atualizados:', today);
+    console.log('Para atualizar os números, edite SOCIAL_STATS no código');
+    console.log('YouTube: https://socialblade.com/youtube/channel/UCtFt1cSFpGbW7Eb2QAXCY3w');
+    console.log('Twitch: https://socialblade.com/twitch/user/theviciado13');
+  }
+  
+  // Carregar valores do localStorage
+  const youtubeCount = parseInt(localStorage.getItem('youtube_count')) || SOCIAL_STATS.youtube.count;
+  const twitchCount = parseInt(localStorage.getItem('twitch_count')) || SOCIAL_STATS.twitch.count;
+  
+  // Atualizar DOM
+  const youtubeEl = document.getElementById('youtube-count');
+  const twitchEl = document.getElementById('twitch-count');
+  
+  if (youtubeEl) youtubeEl.textContent = formatNumber(youtubeCount);
+  if (twitchEl) twitchEl.textContent = formatNumber(twitchCount);
+}
+
+// Executar ao carregar a página
+checkAndUpdateStats();
+
 // Dark mode toggle
 function applyTheme(theme) {
   const isDark = theme === 'dark';
@@ -1069,20 +1431,17 @@ fetch("noticias.json")
         featuredSection.innerHTML = `
           <div class="featured-content">
             <div class="featured-video" id="videoContainer">
-              <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" style="border-radius:12px;display:block;margin:0 auto;" id="thumbnail">
+              <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" alt="Miniatura do vídeo" id="thumbnail">
               <iframe 
                 id="youtubeIframe"
-                width="100%" 
-                height="100%" 
                 src="https://www.youtube.com/embed/${videoId}?modestbranding=1" 
                 title="${featured.titulo}" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen
-                style="position:absolute;top:0;left:0;border-radius:12px;display:block;">
+                allowfullscreen>
               </iframe>
             </div>
-            <div class="featured-info">
+            <div class="featured-info-box">
               <span class="featured-categoria">${featured.categoria}</span>
               <h2>${featured.titulo}</h2>
               <div class="featured-meta">
@@ -1113,7 +1472,7 @@ fetch("noticias.json")
                 <p>Verifique o link do vídeo no JSON</p>
               </div>
             </div>
-            <div class="featured-info">
+            <div class="featured-info-box">
               <span class="featured-categoria">${featured.categoria}</span>
               <h2>${featured.titulo}</h2>
               <div class="featured-meta">
