@@ -6,6 +6,9 @@
 <title>Notícia - VICIADO COMENTA</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -1099,17 +1102,21 @@ document.addEventListener('DOMContentLoaded', () => {
       dropdown.classList.toggle('active');
     });
   }
-});
 
-// Obter ID da URL
-const urlParams = new URLSearchParams(window.location.search);
-const noticiaId = urlParams.get('id');
+  // Obter ID da URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const noticiaId = urlParams.get('id');
 
-if (noticiaId) {
-  fetch("noticias.json")
-    .then(res => res.json())
-    .then(data => {
-      const noticia = data.noticias.find(n => n.id === noticiaId);
+  console.log('🔍 ID da URL:', noticiaId);
+
+  if (noticiaId) {
+    fetch("noticias.json")
+      .then(res => res.json())
+      .then(data => {
+        console.log('📄 Notícias carregadas:', data.noticias.length);
+        console.log('🆔 IDs disponíveis:', data.noticias.map(n => n.id));
+        
+        const noticia = data.noticias.find(n => String(n.id) === String(noticiaId));
       
       if (noticia) {
         document.title = noticia.titulo + " - VICIADO COMENTA";
@@ -1165,7 +1172,7 @@ if (noticiaId) {
         
         // Mostrar secção de comentários
         document.getElementById('comentariosSection').style.display = 'block';
-        carregarComentarios(id);
+        carregarComentarios(noticiaId);
         
         // Ocultar miniatura quando o iframe carregar
         if (videoId) {
@@ -1179,87 +1186,162 @@ if (noticiaId) {
             }
           }, 100);
         }
+      } else {
+        // Notícia não encontrada
+        document.getElementById('artigo').innerHTML = `
+          <div style="text-align: center; padding: 40px 20px;">
+            <h2>❌ Notícia não encontrada</h2>
+            <p>Desculpa, não conseguimos encontrar a notícia que procura.</p>
+            <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">← Voltar às notícias</a>
+          </div>
+        `;
+        document.getElementById('comentariosSection').style.display = 'none';
       }
     })
     .catch(err => {
       console.error("Erro ao carregar notícia:", err);
     });
-} else {
-  // Sem ID: listar notícias em grelha
-  fetch('noticias.json')
-    .then(res => res.json())
-    .then(data => {
-      const parseDate = (str) => {
-        if (!str) return 0;
-        const [dia, mes, ano] = str.split('/').map(Number);
-        return new Date(ano, mes - 1, dia).getTime();
-      };
-      const noticiasOrdenadas = [...data.noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
-      const container = document.getElementById('artigo');
-      container.innerHTML = `
-        <div class="lista-header">
-          <h2 class="lista-title">Notícias</h2>
-        </div>
-        <div class="noticias-grid" id="noticiasGrid"></div>
-      `;
-      const grid = document.getElementById('noticiasGrid');
-      noticiasOrdenadas.forEach(n => {
-        const card = document.createElement('a');
-        card.className = 'noticia-card';
-        card.href = `noticias.html?id=${n.id}`;
-        card.innerHTML = `
-          <div class="card-meta">
-            <span class="card-categoria">${n.categoria}</span>
-            <span class="card-data">${n.data}</span>
+  } else {
+    // Sem ID: listar notícias em grelha
+    fetch('noticias.json')
+      .then(res => res.json())
+      .then(data => {
+        const parseDate = (str) => {
+          if (!str) return 0;
+          const [dia, mes, ano] = str.split('/').map(Number);
+          return new Date(ano, mes - 1, dia).getTime();
+        };
+        const noticiasOrdenadas = [...data.noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
+        const container = document.getElementById('artigo');
+        container.innerHTML = `
+          <div class="lista-header">
+            <h2 class="lista-title">Notícias</h2>
           </div>
-          <h3 class="card-title">${n.titulo}</h3>
-          <p class="card-resumo">${n.resumo}</p>
-          <span class="card-link">Ver mais →</span>
+          <div class="noticias-grid" id="noticiasGrid"></div>
         `;
-        grid.appendChild(card);
-      });
-    })
-    .catch(err => console.error('Erro ao listar notícias:', err));
+        const grid = document.getElementById('noticiasGrid');
+        noticiasOrdenadas.forEach(n => {
+          const card = document.createElement('a');
+          card.className = 'noticia-card';
+          card.href = `noticias.html?id=${n.id}`;
+          card.innerHTML = `
+            <div class="card-meta">
+              <span class="card-categoria">${n.categoria}</span>
+              <span class="card-data">${n.data}</span>
+            </div>
+            <h3 class="card-title">${n.titulo}</h3>
+            <p class="card-resumo">${n.resumo}</p>
+            <span class="card-link">Ver mais →</span>
+          `;
+          grid.appendChild(card);
+        });
+      })
+      .catch(err => console.error('Erro ao listar notícias:', err));
+  }
+});
+
+// ========== FIREBASE CONFIGURAÇÃO ==========
+// INSTRUÇÕES: Vá a https://console.firebase.google.com
+// 1. Crie um projeto novo
+// 2. Ative "Realtime Database" (regras: começar em modo teste)
+// 3. Vá em Project Settings > General > Your apps > Adicionar app web
+// 4. Copie a configuração e cole abaixo substituindo os valores
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",
+  authDomain: "chat-viciadocomenta.firebaseapp.com",
+  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chat-viciadocomenta",
+  storageBucket: "chat-viciadocomenta.firebasestorage.app",
+  messagingSenderId: "183684670526",
+  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f",
+  measurementId: "G-XJ3P1K6694"
+};
+
+// Inicializar Firebase
+let database;
+try {
+  firebase.initializeApp(firebaseConfig);
+  database = firebase.database();
+  console.log('✓ Firebase conectado com sucesso');
+} catch (error) {
+  console.error('❌ Erro ao inicializar Firebase:', error);
+  console.log('⚠️ Comentários não estarão disponíveis até configurar Firebase');
 }
 
-// Funções para gerenciar comentários
+// Funções para gerenciar comentários com Firebase
 function carregarComentarios(noticiaId) {
   const comentariosList = document.getElementById('comentariosList');
-  const comentarios = JSON.parse(localStorage.getItem(`comentarios_${noticiaId}`)) || [];
   
-  comentariosList.innerHTML = '';
-  
-  if (comentarios.length === 0) {
-    comentariosList.innerHTML = '<div class="comentarios-vazio">Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
+  if (!database) {
+    comentariosList.innerHTML = '<div class="comentarios-vazio">⚠️ Sistema de comentários em configuração. Configure o Firebase para ativar.</div>';
     return;
   }
   
-  comentarios.forEach(comentario => {
-    const div = document.createElement('div');
-    div.className = 'comentario-item';
-    div.innerHTML = `
-      <div class="comentario-autor">${comentario.nome}</div>
-      <div class="comentario-data">${comentario.data}</div>
-      <div class="comentario-texto">${comentario.texto}</div>
-    `;
-    comentariosList.appendChild(div);
+  comentariosList.innerHTML = '<div class="comentarios-vazio">⏳ Carregando comentários...</div>';
+  
+  // Buscar comentários do Firebase em tempo real
+  const comentariosRef = database.ref(`comentarios/${noticiaId}`);
+  
+  comentariosRef.on('value', (snapshot) => {
+    const comentarios = [];
+    snapshot.forEach((childSnapshot) => {
+      comentarios.push({
+        id: childSnapshot.key,
+        ...childSnapshot.val()
+      });
+    });
+    
+    comentariosList.innerHTML = '';
+    
+    if (comentarios.length === 0) {
+      comentariosList.innerHTML = '<div class="comentarios-vazio">Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
+      return;
+    }
+    
+    // Ordenar por data (mais recentes primeiro)
+    comentarios.sort((a, b) => b.timestamp - a.timestamp);
+    
+    comentarios.forEach(comentario => {
+      const div = document.createElement('div');
+      div.className = 'comentario-item';
+      div.innerHTML = `
+        <div class="comentario-autor">${comentario.nome}</div>
+        <div class="comentario-data">${comentario.data}</div>
+        <div class="comentario-texto">${comentario.texto}</div>
+      `;
+      comentariosList.appendChild(div);
+    });
+  }, (error) => {
+    console.error('Erro ao carregar comentários:', error);
+    comentariosList.innerHTML = '<div class="comentarios-vazio">❌ Erro ao carregar comentários. Tente novamente.</div>';
   });
 }
 
 function adicionarComentario(noticiaId, nome, texto) {
-  const comentarios = JSON.parse(localStorage.getItem(`comentarios_${noticiaId}`)) || [];
+  if (!database) {
+    alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
+    return;
+  }
   
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
   
-  comentarios.push({
+  const comentariosRef = database.ref(`comentarios/${noticiaId}`);
+  
+  comentariosRef.push({
     nome: nome,
     texto: texto,
-    data: data
+    data: data,
+    timestamp: agora.getTime()
+  })
+  .then(() => {
+    console.log('✓ Comentário adicionado com sucesso');
+  })
+  .catch((error) => {
+    console.error('Erro ao adicionar comentário:', error);
+    alert('Erro ao enviar comentário. Tente novamente.');
   });
-  
-  localStorage.setItem(`comentarios_${noticiaId}`, JSON.stringify(comentarios));
-  carregarComentarios(noticiaId);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
