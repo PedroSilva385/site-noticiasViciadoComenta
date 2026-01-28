@@ -564,24 +564,40 @@ footer {
     font-size: 0.9em;
   }
 
+  .nav-dropdown {
+    width: 100%;
+    text-align: center;
+  }
+
   .nav-dropdown > a {
     padding: 12px 0;
+    display: block;
+    width: 100%;
   }
 
   .dropdown-menu {
-    position: relative;
+    position: static;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
     box-shadow: none;
     border: none;
-    padding: 0;
-    margin-top: 10px;
+    padding: 5px 0;
+    min-width: 100%;
+    background: transparent;
   }
 
   .dropdown-menu a {
-    padding: 8px 0;
+    padding: 10px 0;
     font-size: 0.85em;
+    background: rgba(0, 102, 204, 0.05);
+    margin: 2px 0;
+    border-radius: 4px;
+  }
+
+  .dropdown-menu a:hover {
+    background: rgba(0, 102, 204, 0.1);
+    padding-left: 0;
   }
 
   header {
