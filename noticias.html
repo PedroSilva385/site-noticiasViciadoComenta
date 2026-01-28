@@ -1112,6 +1112,20 @@ if (noticiaId) {
         }
         
         const container = document.getElementById("artigo");
+        
+        // Processar conteúdo: divide automaticamente por quebras de linha em parágrafos
+        let conteudoHTML = '';
+        if (noticia.conteudo) {
+          // Divide o texto em parágrafos usando quebras de linha
+          // Remove parágrafos vazios e aplica trim em cada um
+          conteudoHTML = noticia.conteudo
+            .split('\n')
+            .map(p => p.trim())
+            .filter(p => p !== '')
+            .map(p => `<p>${p}</p>`)
+            .join('');
+        }
+        
         container.innerHTML = `
           <div class="artigo-header">
             <span class="artigo-categoria">${noticia.categoria}</span>
@@ -1124,7 +1138,7 @@ if (noticiaId) {
           ${videoHTML}
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
-            ${noticia.conteudo.split('\n').map(p => p.trim() === '' ? '<br>' : `<p>${p}</p>`).join('')}
+            ${conteudoHTML}
           </div>
           <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
         `;
