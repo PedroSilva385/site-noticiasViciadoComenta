@@ -7,9 +7,6 @@
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
-<!-- Firebase SDK (Versão compatível) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -1926,58 +1923,6 @@ function extrairVideoId(url) {
   return match ? match[1] : '';
 }
 
-// ========== RASTREAMENTO DE ACESSOS ==========
-function registarAcesso() {
-  try {
-    // Configuração do Firebase (mesma do noticias.html)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",
-      authDomain: "chat-viciadocomenta.firebaseapp.com",
-      databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "chat-viciadocomenta",
-      storageBucket: "chat-viciadocomenta.firebasestorage.app",
-      messagingSenderId: "183684670526",
-      appId: "1:183684670526:web:64b1f62cf80e05d4781d6f",
-      measurementId: "G-XJ3P1K6694"
-    };
-    
-    // Inicializar Firebase se não estiver
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    
-    const database = firebase.database();
-    
-    // Obter data atual
-    const hoje = new Date().toISOString().split('T')[0];
-    
-    // Incrementar total de acessos
-    const totalRef = database.ref('site_stats/total_visits');
-    totalRef.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-    
-    // Incrementar acessos do dia
-    const dayRef = database.ref(`site_stats/daily/${hoje}`);
-    dayRef.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-    
-    // Guardar timestamp da última atualização
-    database.ref('site_stats/last_updated').set(new Date().toISOString());
-    
-    console.log('✓ Acesso registado com sucesso');
-    
-  } catch (error) {
-    console.error('Erro ao registar acesso:', error);
-  }
-}
-
-// Registar acesso quando a página carrega
-document.addEventListener('DOMContentLoaded', registarAcesso);
-
-// Também registar ao recarregar/navegar
-window.addEventListener('beforeunload', registarAcesso);
 </script>
 
 </body>

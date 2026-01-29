@@ -10,6 +10,7 @@
 <!-- Firebase SDK (Versão compatível) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <!-- Funções de Segurança -->
 <script src="assets/security.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -1485,6 +1486,16 @@ function toggleLike(noticiaId) {
     alert('Sistema de gostos em configuração. Recarregue a página.');
     return;
   }
+
+  if (!window.authReady || !window.currentUserId) {
+    if (window.authFailed) {
+      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      return;
+    }
+    console.log('Aguardando autenticação...');
+    setTimeout(() => toggleLike(noticiaId), 500);
+    return;
+  }
   
   // SEGURANÇA: Rate limiting (máximo 10 likes por minuto)
   const rateCheck = window.SecurityUtils.checkRateLimit('like', 10, 60000);
@@ -1493,12 +1504,8 @@ function toggleLike(noticiaId) {
     return;
   }
   
-  // Obter ID único do utilizador
-  let userId = localStorage.getItem('user_id');
-  if (!userId) {
-    userId = 'user_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('user_id', userId);
-  }
+  // Usar UID autenticado
+  const userId = window.currentUserId;
   
   console.log('userId:', userId);
   
@@ -1542,12 +1549,15 @@ function updateLikeCount(noticiaId) {
     return;
   }
   
-  // Obter ID único do utilizador
-  let userId = localStorage.getItem('user_id');
-  if (!userId) {
-    userId = 'user_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('user_id', userId);
+  if (!window.authReady || !window.currentUserId) {
+    if (window.authFailed) {
+      return;
+    }
+    setTimeout(() => updateLikeCount(noticiaId), 500);
+    return;
   }
+
+  const userId = window.currentUserId;
   
   const likesRef = window.database.ref(`likes/${noticiaId}`);
   
@@ -1668,6 +1678,9 @@ const firebaseConfig = {
 let database;
 window.database = null;
 window.firebaseReady = false;
+window.authReady = false;
+window.currentUserId = null;
+window.authFailed = false;
 
 try {
   console.log('Iniciando Firebase...');
@@ -1680,6 +1693,22 @@ try {
   database = firebase.database();
   window.database = database;
   window.firebaseReady = true;
+
+  // Autenticação anónima para proteger writes
+  if (firebase.auth) {
+    const auth = firebase.auth();
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.currentUserId = user.uid;
+        window.authReady = true;
+      }
+    });
+
+    auth.signInAnonymously().catch((authError) => {
+      console.error('❌ Erro ao autenticar anonimamente:', authError);
+      window.authFailed = true;
+    });
+  }
   
   console.log('✓ Firebase conectado com sucesso');
   console.log('Database disponível:', !!database);
@@ -1724,11 +1753,21 @@ function carregarComentarios(noticiaId) {
     comentarios.forEach(comentario => {
       const div = document.createElement('div');
       div.className = 'comentario-item';
-      div.innerHTML = `
-        <div class="comentario-autor">${comentario.nome}</div>
-        <div class="comentario-data">${comentario.data}</div>
-        <div class="comentario-texto">${comentario.texto}</div>
-      `;
+      const autor = document.createElement('div');
+      autor.className = 'comentario-autor';
+      autor.textContent = comentario.nome || '';
+
+      const data = document.createElement('div');
+      data.className = 'comentario-data';
+      data.textContent = comentario.data || '';
+
+      const texto = document.createElement('div');
+      texto.className = 'comentario-texto';
+      texto.textContent = comentario.texto || '';
+
+      div.appendChild(autor);
+      div.appendChild(data);
+      div.appendChild(texto);
       comentariosList.appendChild(div);
     });
   }, (error) => {
@@ -1753,6 +1792,15 @@ function adicionarComentario(noticiaId, nome, texto) {
   const rateCheck = window.SecurityUtils.checkRateLimit('comment', 3, 60000);
   if (!rateCheck.allowed) {
     alert(`Aguarde ${rateCheck.waitTime} segundos antes de comentar novamente.`);
+    return;
+  }
+
+  if (!window.authReady || !window.currentUserId) {
+    if (window.authFailed) {
+      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      return;
+    }
+    alert('Aguarde a autenticação para comentar. Tente novamente em alguns segundos.');
     return;
   }
   
@@ -1822,40 +1870,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ========== RASTREAMENTO DE ACESSOS ==========
-function registarAcesso() {
-  try {
-    // Obter data atual
-    const hoje = new Date().toISOString().split('T')[0];
-    
-    // Incrementar total de acessos
-    const totalRef = database.ref('site_stats/total_visits');
-    totalRef.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-    
-    // Incrementar acessos do dia
-    const dayRef = database.ref(`site_stats/daily/${hoje}`);
-    dayRef.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-    
-    // Guardar timestamp da última atualização
-    database.ref('site_stats/last_updated').set(new Date().toISOString());
-    
-    console.log('✓ Acesso registado com sucesso');
-    
-  } catch (error) {
-    console.error('Erro ao registar acesso:', error);
-  }
-}
-
-// Registar acesso quando a página carrega
-document.addEventListener('DOMContentLoaded', function() {
-  if (database) {
-    registarAcesso();
-  }
-});
 </script>
 
 </body>

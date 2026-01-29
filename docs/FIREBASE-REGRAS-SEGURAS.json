@@ -3,14 +3,14 @@
     "comentarios": {
       "$noticiaId": {
         ".read": true,
-        ".write": true,
         "$comentarioId": {
+          ".write": "auth != null && !root.child('comentarios').child($noticiaId).child($comentarioId).exists()",
           ".validate": "newData.hasChildren(['nome', 'texto', 'data', 'timestamp'])",
           "nome": {
-            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50"
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50 && newData.val().matches(/^[^<>]*$/)"
           },
           "texto": {
-            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000 && newData.val().matches(/^[^<>]*$/)"
           },
           "data": {
             ".validate": "newData.isString()"
@@ -28,27 +28,14 @@
       "$noticiaId": {
         ".read": true,
         "$userId": {
-          ".write": true,
+          ".write": "auth != null && auth.uid === $userId",
           ".validate": "newData.isBoolean() || !newData.exists()"
         }
       }
     },
     "site_stats": {
       ".read": true,
-      "total_visits": {
-        ".write": true,
-        ".validate": "newData.isNumber() && newData.val() >= 0"
-      },
-      "daily": {
-        "$date": {
-          ".write": true,
-          ".validate": "newData.isNumber() && newData.val() >= 0"
-        }
-      },
-      "last_updated": {
-        ".write": true,
-        ".validate": "newData.isString()"
-      }
+      ".write": false
     }
   }
 }

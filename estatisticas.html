@@ -300,20 +300,30 @@
         const daysArray = Object.entries(daily).sort((a, b) => b[0].localeCompare(a[0]));
         
         if (daysArray.length === 0) {
-          dailyList.innerHTML = '<p>Nenhum dado disponível ainda.</p>';
+          dailyList.textContent = 'Nenhum dado disponível ainda.';
           return;
         }
-        
-        dailyList.innerHTML = daysArray.map(([date, count]) => {
+
+        dailyList.textContent = '';
+        daysArray.forEach(([date, count]) => {
           const dateObj = new Date(date + 'T00:00:00');
           const dayName = dateObj.toLocaleDateString('pt-PT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-          return `
-            <div class="daily-item">
-              <span class="daily-date">${dayName}</span>
-              <span class="daily-count">${count} acesso${count !== 1 ? 's' : ''}</span>
-            </div>
-          `;
-        }).join('');
+
+          const item = document.createElement('div');
+          item.className = 'daily-item';
+
+          const dateEl = document.createElement('span');
+          dateEl.className = 'daily-date';
+          dateEl.textContent = dayName;
+
+          const countEl = document.createElement('span');
+          countEl.className = 'daily-count';
+          countEl.textContent = `${count} acesso${count !== 1 ? 's' : ''}`;
+
+          item.appendChild(dateEl);
+          item.appendChild(countEl);
+          dailyList.appendChild(item);
+        });
       });
     }
 
@@ -327,20 +337,6 @@
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
-
-    // Registar acesso desta página
-    const hoje = new Date().toISOString().split('T')[0];
-    const totalRef = database.ref('site_stats/total_visits');
-    totalRef.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-
-    const dayRef = database.ref(`site_stats/daily/${hoje}`);
-    dayRef.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-
-    database.ref('site_stats/last_updated').set(new Date().toISOString());
 
     // Carregar dados ao iniciar
     carregarEstatisticas();
