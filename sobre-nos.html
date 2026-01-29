@@ -288,6 +288,50 @@ main {
   box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
 }
 
+.author-profile {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 25px 0;
+  flex-wrap: wrap;
+}
+
+.author-image {
+  flex-shrink: 0;
+}
+
+.author-image img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.15);
+  transition: all 0.3s;
+}
+
+.author-image img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 102, 204, 0.25);
+}
+
+.author-bio {
+  flex: 1;
+  min-width: 250px;
+}
+
+@media (max-width: 768px) {
+  .author-profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .author-image img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
 /* FOOTER */
 footer {
   background: #1a1f3a;
@@ -449,9 +493,17 @@ footer {
 
     <div class="about-section">
       <h2>Quem Somos</h2>
-      <p><strong>Pedro Silva</strong> é o criador de conteúdo por trás do Viciado Comenta e do canal TheViciado. Com uma paixão por tecnologia e telecomunicações, dedica-se a informar e ajudar os consumidores portugueses a fazerem escolhas mais conscientes.</p>
       
-      <p>O projeto começou no YouTube e expandiu-se para outras plataformas, incluindo Twitch para livestreams, Spotify para podcasts e agora este site para artigos escritos mais detalhados.</p>
+      <div class="author-profile">
+        <div class="author-image">
+          <img src="perfil.png" alt="Pedro Silva - TheViciado">
+        </div>
+        <div class="author-bio">
+          <p><strong>Pedro Silva</strong> é o criador de conteúdo por trás do Viciado Comenta e do canal TheViciado. Com uma paixão por tecnologia e telecomunicações, dedica-se a informar e ajudar os consumidores portugueses a fazerem escolhas mais conscientes.</p>
+          
+          <p>O projeto começou no YouTube e expandiu-se para outras plataformas, incluindo Twitch para livestreams, Spotify para podcasts e agora este site para artigos escritos mais detalhados.</p>
+        </div>
+      </div>
     </div>
 
     <div class="about-section">
