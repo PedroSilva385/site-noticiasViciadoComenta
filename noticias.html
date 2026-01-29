@@ -1432,45 +1432,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== SISTEMA DE LIKES ==========
 function toggleLike(noticiaId) {
-  if (!database) {
-    alert('Sistema de gostos em configuração. Configure o Firebase primeiro.');
-    return;
-  }
-  
-  // Obter ID único do utilizador
-  let userId = localStorage.getItem('user_id');
-  if (!userId) {
-    userId = 'user_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('user_id', userId);
-  }
-  
-  const likesRef = database.ref(`likes/${noticiaId}/${userId}`);
-  
-  // Verificar se já deu like
-  likesRef.once('value', (snapshot) => {
-    const currentLike = snapshot.val();
-    
-    if (currentLike) {
-      // Remove o like
-      likesRef.remove();
-    } else {
-      // Adiciona o like
-      likesRef.set(true);
+  // Aguardar um pouco para ter a certeza que Firebase está pronto
+  setTimeout(function() {
+    if (!window.database) {
+      console.error('Firebase não está inicializado');
+      alert('Sistema de gostos em configuração. Atualize a página.');
+      return;
     }
     
-    // Atualizar contagem
-    updateLikeCount(noticiaId);
-  });
+    // Obter ID único do utilizador
+    let userId = localStorage.getItem('user_id');
+    if (!userId) {
+      userId = 'user_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('user_id', userId);
+    }
+    
+    const likesRef = window.database.ref(`likes/${noticiaId}/${userId}`);
+    
+    // Verificar se já deu like
+    likesRef.once('value', (snapshot) => {
+      const currentLike = snapshot.val();
+      
+      if (currentLike) {
+        // Remove o like
+        likesRef.remove();
+      } else {
+        // Adiciona o like
+        likesRef.set(true);
+      }
+      
+      // Atualizar contagem
+      updateLikeCount(noticiaId);
+    });
+  }, 100);
 }
 
 function updateLikeCount(noticiaId) {
-  if (!database) {
+  if (!window.database) {
     return;
   }
   
   const likeCount = document.getElementById('likeCount');
   const likeBtn = document.getElementById('likeBtn');
   
+  if (!likeCount || !likeBtn) {
+    return;
+  }
+  
   // Obter ID único do utilizador
   let userId = localStorage.getItem('user_id');
   if (!userId) {
@@ -1478,7 +1486,7 @@ function updateLikeCount(noticiaId) {
     localStorage.setItem('user_id', userId);
   }
   
-  const likesRef = database.ref(`likes/${noticiaId}`);
+  const likesRef = window.database.ref(`likes/${noticiaId}`);
   
   // Monitorar gostos em tempo real
   likesRef.on('value', (snapshot) => {
@@ -1598,6 +1606,7 @@ let database;
 try {
   firebase.initializeApp(firebaseConfig);
   database = firebase.database();
+  window.database = database; // Tornar global
   console.log('✓ Firebase conectado com sucesso');
 } catch (error) {
   console.error('❌ Erro ao inicializar Firebase:', error);
