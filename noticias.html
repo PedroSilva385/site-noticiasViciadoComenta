@@ -354,6 +354,123 @@ main {
   font-weight: 600;
 }
 
+.artigo-actions {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 25px 0;
+  margin: 30px 0;
+  border-top: 2px solid #e0e8f5;
+  border-bottom: 2px solid #e0e8f5;
+  flex-wrap: wrap;
+}
+
+body.dark .artigo-actions {
+  border-color: #1f2937;
+}
+
+.artigo-like-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+}
+
+.artigo-like-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 204, 0.3);
+}
+
+.artigo-like-btn.liked {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  box-shadow: 0 4px 12px rgba(0, 82, 163, 0.3);
+}
+
+body.dark .artigo-like-btn {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: white;
+}
+
+body.dark .artigo-like-btn.liked {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+}
+
+.artigo-share {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.artigo-share-label {
+  font-weight: 600;
+  color: #1a1f3a;
+  font-size: 1em;
+}
+
+body.dark .artigo-share-label {
+  color: #ffffff;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.share-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.share-facebook {
+  background: #1877f2;
+  color: white;
+}
+
+.share-twitter {
+  background: #1da1f2;
+  color: white;
+}
+
+.share-linkedin {
+  background: #0a66c2;
+  color: white;
+}
+
+.share-whatsapp {
+  background: #25d366;
+  color: white;
+}
+
+.share-telegram {
+  background: #0088cc;
+  color: white;
+}
+
+.share-copy {
+  background: #6b7280;
+  color: white;
+}
+
 .artigo-video {
   margin: 40px 0;
   border-radius: 12px;
@@ -1209,12 +1326,43 @@ document.addEventListener('DOMContentLoaded', () => {
             <p><strong>${noticia.resumo}</strong></p>
             ${conteudoHTML}
           </div>
-          <a href="index.html" class="btn-voltar">← Voltar às notícias</a>
+          
+          <div class="artigo-actions">
+            <button class="artigo-like-btn" id="likeBtn" onclick="toggleLike(${noticiaId})">
+              <i class="fas fa-heart"></i>
+              <span id="likeCount">0</span> Gosto
+            </button>
+            
+            <div class="artigo-share">
+              <span class="artigo-share-label">📤 Partilhar:</span>
+              <button class="share-btn share-facebook" onclick="partilharFacebook('${noticia.titulo}', '${noticiaId}')" title="Facebook">
+                <i class="fab fa-facebook-f"></i>
+              </button>
+              <button class="share-btn share-twitter" onclick="partilharTwitter('${noticia.titulo}', '${noticiaId}')" title="Twitter">
+                <i class="fab fa-twitter"></i>
+              </button>
+              <button class="share-btn share-whatsapp" onclick="partilharWhatsApp('${noticia.titulo}', '${noticiaId}')" title="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+              </button>
+              <button class="share-btn share-telegram" onclick="partilharTelegram('${noticia.titulo}', '${noticiaId}')" title="Telegram">
+                <i class="fab fa-telegram"></i>
+              </button>
+              <button class="share-btn share-linkedin" onclick="partilharLinkedIn('${noticia.titulo}', '${noticiaId}')" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+              </button>
+              <button class="share-btn share-copy" onclick="copiarLink(${noticiaId})" title="Copiar Link">
+                <i class="fas fa-link"></i>
+              </button>
+            </div>
+          </div>
         `;
         
         // Mostrar secção de comentários
         document.getElementById('comentariosSection').style.display = 'block';
         carregarComentarios(noticiaId);
+        
+        // Atualizar contador de likes
+        updateLikeCount(noticiaId);
         
         // Ocultar miniatura quando o iframe carregar
         if (videoId) {
@@ -1281,6 +1429,151 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => console.error('Erro ao listar notícias:', err));
   }
 });
+
+// ========== SISTEMA DE LIKES ==========
+function toggleLike(noticiaId) {
+  if (!database) {
+    alert('Sistema de gostos em configuração. Configure o Firebase primeiro.');
+    return;
+  }
+  
+  // Obter ID único do utilizador
+  let userId = localStorage.getItem('user_id');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('user_id', userId);
+  }
+  
+  const likesRef = database.ref(`likes/${noticiaId}/${userId}`);
+  
+  // Verificar se já deu like
+  likesRef.once('value', (snapshot) => {
+    const currentLike = snapshot.val();
+    
+    if (currentLike) {
+      // Remove o like
+      likesRef.remove();
+    } else {
+      // Adiciona o like
+      likesRef.set(true);
+    }
+    
+    // Atualizar contagem
+    updateLikeCount(noticiaId);
+  });
+}
+
+function updateLikeCount(noticiaId) {
+  if (!database) {
+    return;
+  }
+  
+  const likeCount = document.getElementById('likeCount');
+  const likeBtn = document.getElementById('likeBtn');
+  
+  // Obter ID único do utilizador
+  let userId = localStorage.getItem('user_id');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('user_id', userId);
+  }
+  
+  const likesRef = database.ref(`likes/${noticiaId}`);
+  
+  // Monitorar gostos em tempo real
+  likesRef.on('value', (snapshot) => {
+    const likes = snapshot.val() || {};
+    
+    // Contar total de gostos
+    const totalLikes = Object.keys(likes).length;
+    
+    // Verificar se este utilizador já deu like
+    const isLiked = likes[userId] === true;
+    
+    // Atualizar UI
+    if (isLiked) {
+      likeBtn.classList.add('liked');
+    } else {
+      likeBtn.classList.remove('liked');
+    }
+    
+    likeCount.textContent = totalLikes;
+  });
+}
+
+// ========== FUNÇÕES DE PARTILHA SOCIAL ==========
+function getArticleURL(noticiaId) {
+  return window.location.origin + window.location.pathname + '?id=' + noticiaId;
+}
+
+function partilharFacebook(titulo, noticiaId) {
+  const url = getArticleURL(noticiaId);
+  const facebookURL = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(titulo);
+  window.open(facebookURL, 'facebook-share', 'width=550,height=420');
+}
+
+function partilharTwitter(titulo, noticiaId) {
+  const url = getArticleURL(noticiaId);
+  const texto = titulo + ' - Leia mais em: ';
+  const twitterURL = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(texto) + '&url=' + encodeURIComponent(url) + '&via=TheViciado';
+  window.open(twitterURL, 'twitter-share', 'width=550,height=420');
+}
+
+function partilharLinkedIn(titulo, noticiaId) {
+  const url = getArticleURL(noticiaId);
+  const linkedinURL = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+  window.open(linkedinURL, 'linkedin-share', 'width=550,height=420');
+}
+
+function partilharWhatsApp(titulo, noticiaId) {
+  const url = getArticleURL(noticiaId);
+  const texto = titulo + ' ' + url;
+  const whatsappURL = 'https://wa.me/?text=' + encodeURIComponent(texto);
+  window.open(whatsappURL, 'whatsapp-share', 'width=550,height=420');
+}
+
+function partilharTelegram(titulo, noticiaId) {
+  const url = getArticleURL(noticiaId);
+  const telegramURL = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(titulo);
+  window.open(telegramURL, 'telegram-share', 'width=550,height=420');
+}
+
+function copiarLink(noticiaId) {
+  const url = getArticleURL(noticiaId);
+  
+  // Usar Clipboard API
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      // Mostrar notificação de sucesso
+      const shareBtn = event.target.closest('.share-copy');
+      const textoOriginal = shareBtn.innerHTML;
+      shareBtn.innerHTML = '<i class="fas fa-check"></i>';
+      shareBtn.style.background = '#10b981';
+      
+      setTimeout(() => {
+        shareBtn.innerHTML = textoOriginal;
+        shareBtn.style.background = '';
+      }, 2000);
+    }).catch(err => {
+      // Fallback para navegadores antigos
+      fallbackCopyLink(url);
+    });
+  } else {
+    // Fallback para navegadores que não suportam Clipboard API
+    fallbackCopyLink(url);
+  }
+}
+
+function fallbackCopyLink(url) {
+  const textarea = document.createElement('textarea');
+  textarea.value = url;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+  
+  alert('Link copiado para a área de transferência!');
+}
 
 // ========== FIREBASE CONFIGURAÇÃO ==========
 // INSTRUÇÕES: Vá a https://console.firebase.google.com
@@ -1414,6 +1707,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
       }
     });
+  }
+});
+
+// ========== RASTREAMENTO DE ACESSOS ==========
+function registarAcesso() {
+  try {
+    // Obter data atual
+    const hoje = new Date().toISOString().split('T')[0];
+    
+    // Incrementar total de acessos
+    const totalRef = database.ref('site_stats/total_visits');
+    totalRef.transaction(function(current) {
+      return (current || 0) + 1;
+    });
+    
+    // Incrementar acessos do dia
+    const dayRef = database.ref(`site_stats/daily/${hoje}`);
+    dayRef.transaction(function(current) {
+      return (current || 0) + 1;
+    });
+    
+    // Guardar timestamp da última atualização
+    database.ref('site_stats/last_updated').set(new Date().toISOString());
+    
+    console.log('✓ Acesso registado com sucesso');
+    
+  } catch (error) {
+    console.error('Erro ao registar acesso:', error);
+  }
+}
+
+// Registar acesso quando a página carrega
+document.addEventListener('DOMContentLoaded', function() {
+  if (database) {
+    registarAcesso();
   }
 });
 </script>
