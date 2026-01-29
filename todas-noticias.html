@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artigos - VICIADO COMENTA</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -295,7 +295,7 @@ main {
 
 .noticia-titulo {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.8em;
+  font-size: 2.4em;
   font-weight: 700;
   color: #1a1f3a;
   margin-bottom: 16px;
@@ -314,7 +314,7 @@ main {
 
 .noticia-conteudo {
   color: #1a1f3a;
-  font-size: 0.95em;
+  font-size: 1.05em;
   line-height: 1.8;
   margin-bottom: 20px;
   display: flex;
@@ -555,7 +555,7 @@ footer {
   }
 
   .noticia-titulo {
-    font-size: 1.4em;
+    font-size: 2.4em;
   }
 
   .filter-section {
@@ -625,7 +625,7 @@ footer {
   }
 
   .noticia-titulo {
-    font-size: 1.2em;
+    font-size: 2.4em;
   }
 
   .noticia-meta-header {
@@ -737,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class="filter-label">Filtrar por categoria:</span>
       <button class="filter-btn active" data-categoria="todas">Todas</button>
       <button class="filter-btn" data-categoria="DIGI">DIGI</button>
-      <button class="filter-btn" data-categoria="Mercado Telecomunicações">Mercado Telecomunicações</button>
+      <button class="filter-btn" data-categoria="Telecom">Telecom</button>
       <button class="filter-btn" data-categoria="Tecnologia">Tecnologia</button>
     </div>
     <div class="filter-row">
@@ -770,7 +770,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Carregar todas as notícias
 let todasAsNoticias = [];
 
-fetch('noticias.json')
+fetch('data/noticias.json')
   .then(res => res.json())
   .then(data => {
     // Ordenar por data descrescente

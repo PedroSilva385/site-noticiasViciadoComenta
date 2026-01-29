@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia - VICIADO COMENTA</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Firebase SDK (Versão compatível) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <!-- Funções de Segurança -->
-<script src="security.js"></script>
+<script src="assets/security.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -327,7 +327,7 @@ main {
 }
 
 .artigo-conteudo {
-  font-size: 1.05em;
+  font-size: 1.2em;
   line-height: 1.9;
   color: #3a3f5a;
 }
@@ -863,7 +863,7 @@ footer {
   }
 
   .artigo-titulo {
-    font-size: 2.2em;
+    font-size: 2.4em;
   }
 }
 
@@ -873,7 +873,7 @@ footer {
   }
 
   .artigo-titulo {
-    font-size: 2em;
+    font-size: 2.4em;
   }
 
   .artigo-meta {
@@ -881,7 +881,7 @@ footer {
   }
 
   .artigo-conteudo {
-    font-size: 1.02em;
+    font-size: 1.2em;
   }
 }
 
@@ -933,7 +933,7 @@ footer {
 
   nav a {
     padding: 12px 0;
-    font-size: 0.9em;
+    font-size: 0.95em;
   }
 
   main {
@@ -956,7 +956,7 @@ footer {
   }
 
   .artigo-titulo {
-    font-size: 1.6em;
+    font-size: 2.4em;
     margin-bottom: 15px;
   }
 
@@ -971,7 +971,7 @@ footer {
   }
 
   .artigo-conteudo {
-    font-size: 0.95em;
+    font-size: 1.2em;
     line-height: 1.6;
   }
 
@@ -1066,7 +1066,7 @@ footer {
 
   nav a {
     padding: 8px 0;
-    font-size: 0.8em;
+    font-size: 0.95em;
   }
 
   main {
@@ -1088,7 +1088,7 @@ footer {
   }
 
   .artigo-titulo {
-    font-size: 1.4em;
+    font-size: 2.4em;
     margin-bottom: 12px;
     line-height: 1.3;
   }
@@ -1104,7 +1104,7 @@ footer {
   }
 
   .artigo-conteudo {
-    font-size: 0.9em;
+    font-size: 1.2em;
     line-height: 1.6;
   }
 
@@ -1145,7 +1145,7 @@ footer {
   }
 
   nav a {
-    font-size: 0.75em;
+    font-size: 0.95em;
   }
 
   main {
@@ -1153,7 +1153,7 @@ footer {
   }
 
   .artigo-titulo {
-    font-size: 1.3em;
+    font-size: 2.4em;
   }
 
   .artigo-meta {
@@ -1161,7 +1161,7 @@ footer {
   }
 
   .artigo-conteudo {
-    font-size: 0.85em;
+    font-size: 1.2em;
   }
 
   footer {
@@ -1299,7 +1299,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('🔍 ID da URL:', noticiaId);
 
   if (noticiaId) {
-    fetch("noticias.json")
+    fetch("data/noticias.json")
       .then(res => res.json())
       .then(data => {
         console.log('📄 Notícias carregadas:', data.noticias.length);
@@ -1430,7 +1430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   } else {
     // Sem ID: listar notícias em grelha
-    fetch('noticias.json')
+    fetch('data/noticias.json')
       .then(res => res.json())
       .then(data => {
         const parseDate = (str) => {
