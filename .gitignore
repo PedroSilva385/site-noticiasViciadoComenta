@@ -6,6 +6,11 @@
 *.pem
 *.p12
 
+# Configuração Firebase privada
+firebase-config.js
+/docs/FIREBASE-SETUP.txt
+/docs/FIREBASE-REGRAS-SEGURAS.json
+
 # Backups e temporários
 *.backup
 *.tmp

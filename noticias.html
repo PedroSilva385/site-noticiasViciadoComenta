@@ -1657,11 +1657,9 @@ function fallbackCopyLink(url) {
 }
 
 // ========== FIREBASE CONFIGURAÇÃO ==========
-// INSTRUÇÕES: Vá a https://console.firebase.google.com
-// 1. Crie um projeto novo
-// 2. Ative "Realtime Database" (regras: começar em modo teste)
-// 3. Vá em Project Settings > General > Your apps > Adicionar app web
-// 4. Copie a configuração e cole abaixo substituindo os valores
+// NOTA: As chaves Firebase são PÚBLICAS por design - isto é normal e seguro!
+// A verdadeira segurança está nas Firebase Rules (Realtime Database Rules)
+// Documentação completa em: d:\site\private-config\README.md
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",
