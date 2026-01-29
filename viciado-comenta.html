@@ -253,7 +253,7 @@ main {
 
 .miniaturas-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
@@ -293,6 +293,58 @@ main {
   z-index: 10;
 }
 
+.video-card.watched {
+  opacity: 0.7;
+}
+
+.video-card.watched .video-thumbnail::before {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.video-watch-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  transition: all 0.3s;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.video-watch-btn:hover {
+  background: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.video-watch-btn.watched {
+  background: #22c55e;
+  color: white;
+}
 .video-card:hover .video-thumbnail::after {
   color: rgba(255, 255, 255, 1);
   transform: scale(1.2);
@@ -328,6 +380,42 @@ main {
 .video-channel {
   font-size: 0.85em;
   color: #5a6b7f;
+  margin-bottom: 8px;
+}
+
+.video-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.8em;
+  margin-top: 8px;
+}
+
+.video-category {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.video-date {
+  color: #7a8b9f;
+  font-size: 0.9em;
+}
+
+.video-duration-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
 }
 
 .loading {
@@ -726,96 +814,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="miniaturas-section">
     <h2 class="miniaturas-title">Últimos Vídeos</h2>
     <div class="miniaturas-grid" id="miniaturas-grid">
-      <a href="https://www.youtube.com/watch?v=-yeg6jng_kY" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/-yeg6jng_kY/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=0A7LkRf_jHs" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/0A7LkRf_jHs/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=a2uMy1oAPA4" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/a2uMy1oAPA4/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=VD8qgzfdJuw" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/VD8qgzfdJuw/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=WYY4yw2nFlU" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/WYY4yw2nFlU/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=TBJe7C-5pEI" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/TBJe7C-5pEI/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=pyYAiuC2f4Y" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/pyYAiuC2f4Y/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=E5jXjkJd-DI" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/E5jXjkJd-DI/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=-FEudUy74mw" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/-FEudUy74mw/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=nX0S-TztHFE" target="_blank" rel="noopener noreferrer" class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/nX0S-TztHFE/hqdefault.jpg" alt="Vídeo">
-        </div>
-        <div class="video-info">
-          <div class="video-title">Viciado Comenta</div>
-          <div class="video-channel">TheViciado</div>
-        </div>
-      </a>
+      <!-- Vídeos carregados dinamicamente do ficheiro JSON -->
     </div>
   </div>
 
@@ -828,6 +827,147 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
+
+<script>
+// Sistema de vídeos vistos
+class VideoWatchTracker {
+  constructor() {
+    this.storageKey = 'viciado_comenta_watched_videos';
+  }
+  
+  getWatchedVideos() {
+    const data = localStorage.getItem(this.storageKey);
+    return data ? JSON.parse(data) : [];
+  }
+  
+  saveWatchedVideos(videos) {
+    localStorage.setItem(this.storageKey, JSON.stringify(videos));
+  }
+  
+  toggleWatched(videoId) {
+    const watched = this.getWatchedVideos();
+    const index = watched.indexOf(videoId);
+    
+    if (index > -1) {
+      watched.splice(index, 1);
+    } else {
+      watched.push(videoId);
+    }
+    
+    this.saveWatchedVideos(watched);
+    return watched.includes(videoId);
+  }
+  
+  isWatched(videoId) {
+    return this.getWatchedVideos().includes(videoId);
+  }
+}
+
+const tracker = new VideoWatchTracker();
+
+// Carregar vídeos do ficheiro JSON
+async function carregarVideos() {
+  try {
+    const response = await fetch('viciado-comenta-videos.json');
+    let videos = await response.json();
+    
+    const grid = document.getElementById('miniaturas-grid');
+    
+    if (videos.length === 0) {
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento. Adiciona vídeos ao ficheiro viciado-comenta-videos.json</p>';
+      return;
+    }
+    
+    // Converter para formato consistente e ordenar por data (mais recentes primeiro)
+    videos = videos.map(video => {
+      if (typeof video === 'string') {
+        return { url: video, data: new Date().toISOString().split('T')[0] };
+      }
+      return video;
+    });
+    
+    // Ordenar por data descrescente (mais recentes primeiro)
+    videos.sort((a, b) => new Date(b.data) - new Date(a.data));
+    
+    grid.innerHTML = videos.map((video, index) => {
+      const url = video.url || video;
+      
+      // Extrair ID do vídeo do YouTube da URL
+      let videoId = '';
+      
+      // Suporta diferentes formatos de URL do YouTube
+      if (url.includes('watch?v=')) {
+        videoId = url.split('watch?v=')[1].split('&')[0];
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+      } else if (url.includes('embed/')) {
+        videoId = url.split('embed/')[1].split('?')[0];
+      }
+      
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const isWatched = tracker.isWatched(videoId);
+      
+      // Formatar data
+      const dataObj = new Date(video.data);
+      const dataFormatada = dataObj.toLocaleDateString('pt-PT', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+      
+      return `
+        <div class="video-card-wrapper">
+          <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" class="video-card ${isWatched ? 'watched' : ''}">
+            <div class="video-thumbnail">
+              <img src="${thumbnailUrl}" alt="Viciado Comenta #${index + 1}">
+              <div class="video-duration-overlay">
+                <i class="fab fa-youtube"></i>
+              </div>
+              <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
+                ✓
+              </button>
+            </div>
+            <div class="video-info">
+              <div class="video-title">Viciado Comenta</div>
+              <div class="video-channel">TheViciado</div>
+              <div style="font-size: 0.8em; color: #7a8b9f; margin-top: 5px;">${dataFormatada}</div>
+            </div>
+          </a>
+        </div>
+      `;
+    }).join('');
+    
+  } catch (error) {
+    console.error('Erro ao carregar vídeos:', error);
+    const grid = document.getElementById('miniaturas-grid');
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos. Verifica se o ficheiro viciado-comenta-videos.json existe e está correto.</p>';
+  }
+}
+
+// Função para marcar/desmarcar vídeo como visto
+function toggleWatched(event, videoId) {
+  event.preventDefault();
+  event.stopPropagation();
+  
+  const isNowWatched = tracker.toggleWatched(videoId);
+  
+  // Atualizar UI
+  const btn = event.target.closest('.video-watch-btn');
+  const card = event.target.closest('.video-card');
+  
+  if (isNowWatched) {
+    btn.classList.add('watched');
+    card.classList.add('watched');
+  } else {
+    btn.classList.remove('watched');
+    card.classList.remove('watched');
+  }
+}
+
+// Carregar vídeos quando a página carregar
+document.addEventListener('DOMContentLoaded', carregarVideos);
+</script>
 
 </body>
 </html>
