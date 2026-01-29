@@ -10,6 +10,8 @@
 <!-- Firebase SDK (Versão compatível) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<!-- Funções de Segurança -->
+<script src="security.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -1016,6 +1018,41 @@ footer {
   }
 
   .social-media a {
+    width: 36px;
+    height: 36px;
+  }
+  
+  /* OTIMIZAÇÕES MOBILE - Botões de Ação */
+  .artigo-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  
+  .artigo-like-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 1.1em;
+    min-height: 48px; /* Touch target mínimo */
+  }
+  
+  .artigo-share {
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .artigo-share-label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  
+  .share-btn {
+    width: 48px;  /* Aumentado para touch target */
+    height: 48px;
+    font-size: 1.3em;
+  }
     width: 32px;
     height: 32px;
     font-size: 0.9em;
@@ -1285,8 +1322,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let videoHTML = '';
         if (videoId) {
           videoHTML = `<div class="artigo-video" id="videoContainer-article">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-article" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
-            <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-article" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-article" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
+            <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-article" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
           </div>`;
         }
         
@@ -1446,6 +1483,13 @@ function toggleLike(noticiaId) {
   if (!window.database) {
     console.error('Firebase não está disponível');
     alert('Sistema de gostos em configuração. Recarregue a página.');
+    return;
+  }
+  
+  // SEGURANÇA: Rate limiting (máximo 10 likes por minuto)
+  const rateCheck = window.SecurityUtils.checkRateLimit('like', 10, 60000);
+  if (!rateCheck.allowed) {
+    alert(`Aguarde ${rateCheck.waitTime} segundos.`);
     return;
   }
   
@@ -1699,14 +1743,42 @@ function adicionarComentario(noticiaId, nome, texto) {
     return;
   }
   
+  // SEGURANÇA: Validar e sanitizar inputs
+  if (!nome || !texto) {
+    alert('Por favor preencha todos os campos.');
+    return;
+  }
+  
+  // Verificar rate limiting (máximo 3 comentários por minuto)
+  const rateCheck = window.SecurityUtils.checkRateLimit('comment', 3, 60000);
+  if (!rateCheck.allowed) {
+    alert(`Aguarde ${rateCheck.waitTime} segundos antes de comentar novamente.`);
+    return;
+  }
+  
+  // Sanitizar inputs
+  const nomeSanitizado = window.SecurityUtils.sanitizeName(nome);
+  const textoSanitizado = window.SecurityUtils.sanitizeComment(texto);
+  
+  // Verificar conteúdo malicioso
+  if (window.SecurityUtils.containsMaliciousCode(nome) || window.SecurityUtils.containsMaliciousCode(texto)) {
+    alert('Conteúdo inválido detectado.');
+    return;
+  }
+  
+  if (!nomeSanitizado || !textoSanitizado) {
+    alert('Nome ou comentário inválido.');
+    return;
+  }
+  
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
   
   const comentariosRef = database.ref(`comentarios/${noticiaId}`);
   
   comentariosRef.push({
-    nome: nome,
-    texto: texto,
+    nome: nomeSanitizado,
+    texto: textoSanitizado,
     data: data,
     timestamp: agora.getTime()
   })

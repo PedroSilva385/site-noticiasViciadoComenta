@@ -1,0 +1,54 @@
+{
+  "rules": {
+    "comentarios": {
+      "$noticiaId": {
+        ".read": true,
+        ".write": true,
+        "$comentarioId": {
+          ".validate": "newData.hasChildren(['nome', 'texto', 'data', 'timestamp'])",
+          "nome": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50"
+          },
+          "texto": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+          },
+          "data": {
+            ".validate": "newData.isString()"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "likes": {
+      "$noticiaId": {
+        ".read": true,
+        "$userId": {
+          ".write": true,
+          ".validate": "newData.isBoolean() || !newData.exists()"
+        }
+      }
+    },
+    "site_stats": {
+      ".read": true,
+      "total_visits": {
+        ".write": true,
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "daily": {
+        "$date": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "last_updated": {
+        ".write": true,
+        ".validate": "newData.isString()"
+      }
+    }
+  }
+}
