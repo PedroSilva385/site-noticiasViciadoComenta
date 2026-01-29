@@ -8,8 +8,8 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -1432,39 +1432,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== SISTEMA DE LIKES ==========
 function toggleLike(noticiaId) {
-  // Aguardar um pouco para ter a certeza que Firebase está pronto
-  setTimeout(function() {
-    if (!window.database) {
-      console.error('Firebase não está inicializado');
-      alert('Sistema de gostos em configuração. Atualize a página.');
-      return;
+  console.log('toggleLike chamado com ID:', noticiaId);
+  console.log('window.database existe:', !!window.database);
+  
+  if (!window.database) {
+    console.error('Firebase não está disponível');
+    alert('Sistema de gostos em configuração. Atualize a página.');
+    return;
+  }
+  
+  // Obter ID único do utilizador
+  let userId = localStorage.getItem('user_id');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('user_id', userId);
+  }
+  
+  console.log('userId:', userId);
+  
+  const likesRef = window.database.ref(`likes/${noticiaId}/${userId}`);
+  
+  // Verificar se já deu like
+  likesRef.once('value', (snapshot) => {
+    const currentLike = snapshot.val();
+    console.log('currentLike:', currentLike);
+    
+    if (currentLike) {
+      // Remove o like
+      console.log('Removendo like...');
+      likesRef.remove();
+    } else {
+      // Adiciona o like
+      console.log('Adicionando like...');
+      likesRef.set(true);
     }
     
-    // Obter ID único do utilizador
-    let userId = localStorage.getItem('user_id');
-    if (!userId) {
-      userId = 'user_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('user_id', userId);
-    }
-    
-    const likesRef = window.database.ref(`likes/${noticiaId}/${userId}`);
-    
-    // Verificar se já deu like
-    likesRef.once('value', (snapshot) => {
-      const currentLike = snapshot.val();
-      
-      if (currentLike) {
-        // Remove o like
-        likesRef.remove();
-      } else {
-        // Adiciona o like
-        likesRef.set(true);
-      }
-      
-      // Atualizar contagem
-      updateLikeCount(noticiaId);
-    });
-  }, 100);
+    // Atualizar contagem
+    updateLikeCount(noticiaId);
+  }).catch(err => {
+    console.error('Erro ao verificar like:', err);
+  });
 }
 
 function updateLikeCount(noticiaId) {
@@ -1604,13 +1611,15 @@ const firebaseConfig = {
 // Inicializar Firebase
 let database;
 try {
+  console.log('Iniciando Firebase...');
   firebase.initializeApp(firebaseConfig);
   database = firebase.database();
   window.database = database; // Tornar global
   console.log('✓ Firebase conectado com sucesso');
+  console.log('Database ref:', database);
 } catch (error) {
   console.error('❌ Erro ao inicializar Firebase:', error);
-  console.log('⚠️ Comentários não estarão disponíveis até configurar Firebase');
+  console.log('⚠️ Comentários e likes não estarão disponíveis até configurar Firebase');
 }
 
 // Funções para gerenciar comentários com Firebase
