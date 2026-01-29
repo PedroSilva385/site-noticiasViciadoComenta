@@ -518,6 +518,28 @@ footer {
   margin-right: 8px;
 }
 
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
 }
@@ -698,6 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <nav>
   <a href="index.html">Início</a>
   <a href="todas-noticias.html">Artigos</a>
+  <a href="sobre-nos.html">Sobre Nós</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -731,6 +754,12 @@ document.addEventListener('DOMContentLoaded', () => {
 </main>
 
 <footer>
+  <div class="footer-links">
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+  </div>
   <div class="footer-contacts">
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>

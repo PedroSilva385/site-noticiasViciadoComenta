@@ -326,18 +326,27 @@ main {
 
 .artigo-conteudo {
   font-size: 1.05em;
-  line-height: 1.7;
+  line-height: 1.9;
   color: #3a3f5a;
 }
 
 .artigo-conteudo p {
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  text-align: justify;
 }
 
 .artigo-conteudo br {
   display: block;
   content: "";
-  margin-top: 8px;
+  margin-top: 16px;
+}
+
+.tempo-leitura {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0066cc;
+  font-weight: 600;
 }
 
 .artigo-conteudo strong {
@@ -699,6 +708,25 @@ footer {
 .footer-contacts a:hover {
   text-decoration: underline;
 }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
 .footer-contacts i {
   margin-right: 8px;
   color: #ffffff;
@@ -1018,6 +1046,7 @@ footer {
 <nav>
   <a href="index.html">Início</a>
   <a href="todas-noticias.html">Artigos</a>
+  <a href="sobre-nos.html">Sobre Nós</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -1058,6 +1087,12 @@ footer {
 </main>
 
 <footer>
+  <div class="footer-links">
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+  </div>
   <div class="footer-contacts">
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
@@ -1154,6 +1189,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .join('');
         }
         
+        // Calcular tempo de leitura (baseado em 200 palavras por minuto)
+        const conteudoCompleto = (noticia.resumo || '') + ' ' + (noticia.conteudo || '');
+        const numeroPalavras = conteudoCompleto.trim().split(/\s+/).length;
+        const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
+        const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
+        
         container.innerHTML = `
           <div class="artigo-header">
             <span class="artigo-categoria">${noticia.categoria}</span>
@@ -1161,6 +1202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="artigo-meta">
               <span>📅 ${noticia.data}</span>
               <span>✍️ ${noticia.autor}</span>
+              <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
           </div>
           ${videoHTML}

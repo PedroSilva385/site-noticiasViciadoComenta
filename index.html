@@ -265,6 +265,189 @@ nav a:hover {
   padding-left: 24px;
 }
 
+/* CAMPO DE PESQUISA */
+.search-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px 0;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 50px 16px 20px;
+  border: 2px solid #e0e8f5;
+  border-radius: 12px;
+  font-size: 1em;
+  font-family: 'Sora', sans-serif;
+  background: #ffffff;
+  color: #1a1f3a;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
+}
+
+.search-input::placeholder {
+  color: #5a6b7f;
+}
+
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #0066cc;
+  font-size: 1.2em;
+  pointer-events: none;
+}
+
+.search-results {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.95em;
+  color: #5a6b7f;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 2px solid #e0e8f5;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  z-index: 1000;
+  display: none;
+}
+
+.search-dropdown.active {
+  display: block;
+}
+
+.search-result-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e8f5;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: #e3f2fd;
+}
+
+.search-result-title {
+  font-weight: 600;
+  color: #1a1f3a;
+  margin-bottom: 5px;
+  font-size: 0.95em;
+}
+
+.search-result-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.8em;
+  color: #5a6b7f;
+  margin-bottom: 5px;
+}
+
+.search-result-category {
+  background: #0066cc;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.search-result-excerpt {
+  font-size: 0.85em;
+  color: #5a6b7f;
+  line-height: 1.4;
+}
+
+.search-no-results {
+  padding: 20px;
+  text-align: center;
+  color: #5a6b7f;
+}
+
+body.dark .search-dropdown {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .search-result-item {
+  border-bottom-color: #1f2937;
+}
+
+body.dark .search-result-item:hover {
+  background: #1f2937;
+}
+
+body.dark .search-result-title {
+  color: #ffffff;
+}
+
+body.dark .search-result-meta {
+  color: #9ca3af;
+}
+
+body.dark .search-result-category {
+  background: #0ea5e9;
+}
+
+body.dark .search-result-excerpt {
+  color: #cbd5e1;
+}
+
+body.dark .search-no-results {
+  color: #9ca3af;
+}
+
+body.dark .search-input {
+  background: #0b1220;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark .search-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+}
+
+body.dark .search-input::placeholder {
+  color: #9ca3af;
+}
+
+body.dark .search-icon {
+  color: #0ea5e9;
+}
+
+body.dark .search-results {
+  color: #9ca3af;
+}
+
 /* MAIN */
 main {
   max-width: 1400px;
@@ -817,6 +1000,25 @@ footer {
   margin-right: 8px;
   color: #ffffff;
 }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
 }
@@ -1261,6 +1463,7 @@ footer {
 <nav>
   <a href="index.html">Início</a>
   <a href="todas-noticias.html">Artigos</a>
+  <a href="sobre-nos.html">Sobre Nós</a>
   <div class="nav-dropdown">
     <a href="#">Conteúdos</a>
     <div class="dropdown-menu">
@@ -1269,6 +1472,15 @@ footer {
     </div>
   </div>
 </nav>
+
+<div class="search-section">
+  <div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Pesquisar artigos por título, categoria ou conteúdo...">
+    <i class="fas fa-search search-icon"></i>
+    <div class="search-dropdown" id="searchDropdown"></div>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
 
 <main>
   <aside class="sidebar">
@@ -1317,6 +1529,12 @@ footer {
 </main>
 
 <footer>
+  <div class="footer-links">
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+  </div>
   <div class="footer-contacts">
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
@@ -1419,6 +1637,113 @@ document.addEventListener('DOMContentLoaded', () => {
 fetch("noticias.json")
   .then(res => res.json())
   .then(data => {
+    // Guardar notícias globalmente para pesquisa
+    window.todasNoticias = data.noticias;
+    
+    // Implementar funcionalidade de pesquisa
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const searchDropdown = document.getElementById('searchDropdown');
+    const noticiasList = document.getElementById('noticiasList');
+    
+    searchInput.addEventListener('input', (e) => {
+      const termo = e.target.value.toLowerCase().trim();
+      
+      if (termo.length === 0) {
+        // Esconder dropdown e mostrar todas as notícias
+        searchDropdown.classList.remove('active');
+        searchDropdown.innerHTML = '';
+        renderizarNoticias(window.todasNoticias);
+        searchResults.textContent = '';
+        return;
+      }
+      
+      // Filtrar notícias
+      const resultados = window.todasNoticias.filter(n => {
+        const tituloMatch = n.titulo.toLowerCase().includes(termo);
+        const categoriaMatch = n.categoria.toLowerCase().includes(termo);
+        const resumoMatch = n.resumo.toLowerCase().includes(termo);
+        const conteudoMatch = n.conteudo && n.conteudo.toLowerCase().includes(termo);
+        
+        return tituloMatch || categoriaMatch || resumoMatch || conteudoMatch;
+      });
+      
+      // Mostrar dropdown com resultados
+      if (resultados.length === 0) {
+        searchDropdown.innerHTML = '<div class="search-no-results">❌ Nenhum artigo encontrado</div>';
+        searchDropdown.classList.add('active');
+        searchResults.innerHTML = '<span style="color: #cc0000;">❌ Nenhum artigo encontrado</span>';
+        noticiasList.innerHTML = '<p style="text-align:center;padding:40px;color:#5a6b7f;">Nenhum artigo corresponde à sua pesquisa.</p>';
+      } else {
+        // Criar HTML da dropdown
+        const dropdownHTML = resultados.map(n => {
+          const excerto = n.resumo.length > 100 ? n.resumo.substring(0, 100) + '...' : n.resumo;
+          return `
+            <a href="noticias.html?id=${n.id}" class="search-result-item">
+              <div class="search-result-title">${n.titulo}</div>
+              <div class="search-result-meta">
+                <span class="search-result-category">${n.categoria}</span>
+                <span>📅 ${n.data}</span>
+              </div>
+              <div class="search-result-excerpt">${excerto}</div>
+            </a>
+          `;
+        }).join('');
+        
+        searchDropdown.innerHTML = dropdownHTML;
+        searchDropdown.classList.add('active');
+        
+        const plural = resultados.length === 1 ? 'artigo encontrado' : 'artigos encontrados';
+        searchResults.innerHTML = `<span style="color: #0066cc;">✓ ${resultados.length} ${plural}</span>`;
+        renderizarNoticias(resultados);
+      }
+    });
+    
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+        searchDropdown.classList.remove('active');
+      }
+    });
+    
+    // Reabrir dropdown ao focar no input se houver termo de pesquisa
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim().length > 0) {
+        searchDropdown.classList.add('active');
+      }
+    });
+    
+    // Função para renderizar notícias
+    function renderizarNoticias(noticias) {
+      const parseDate = (str) => {
+        if (!str) return 0;
+        const parts = str.split("/").map(Number);
+        if (parts.length !== 3) return 0;
+        const [dia, mes, ano] = parts;
+        return new Date(ano, mes - 1, dia).getTime();
+      };
+      
+      const noticiasOrdenadas = [...noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      noticiasList.innerHTML = '';
+      
+      noticiasOrdenadas.forEach((n) => {
+        const article = document.createElement("article");
+        article.className = "noticia-item";
+        article.innerHTML = `
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">${n.categoria}</span>
+            <span class="noticia-data">📅 ${n.data}</span>
+          </div>
+          <div class="noticia-conteudo">
+            <h3>${n.titulo}</h3>
+            <p>${n.resumo}</p>
+            <a href="noticias.html?id=${n.id}" class="noticia-link">Ver mais →</a>
+          </div>
+        `;
+        noticiasList.appendChild(article);
+      });
+    }
+    
     // Mostrar notícia em destaque: escolher a mais recente por data
     if (data.noticias.length > 0) {
       const parseDate = (str) => {
@@ -1497,34 +1822,8 @@ fetch("noticias.json")
       }
     }
     
-    // Mostrar lista de notícias (todas, ordenadas por data)
-    const container = document.getElementById("noticiasList");
-    const parseDate = (str) => {
-      if (!str) return 0;
-      const parts = str.split("/").map(Number);
-      if (parts.length !== 3) return 0;
-      const [dia, mes, ano] = parts;
-      return new Date(ano, mes - 1, dia).getTime();
-    };
-    
-    const noticiasOrdenadas = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
-    
-    noticiasOrdenadas.forEach((n) => {
-      const article = document.createElement("article");
-      article.className = "noticia-item";
-      article.innerHTML = `
-        <div class="noticia-meta-badge">
-          <span class="noticia-categoria">${n.categoria}</span>
-          <span class="noticia-data">📅 ${n.data}</span>
-        </div>
-        <div class="noticia-conteudo">
-          <h3>${n.titulo}</h3>
-          <p>${n.resumo}</p>
-          <a href="noticias.html?id=${n.id}" class="noticia-link">Ver mais →</a>
-        </div>
-      `;
-      container.appendChild(article);
-    });
+    // Mostrar lista de notícias inicial (todas, ordenadas por data)
+    renderizarNoticias(data.noticias);
   })
   .catch(err => console.error("Erro ao carregar notícias:", err));
 

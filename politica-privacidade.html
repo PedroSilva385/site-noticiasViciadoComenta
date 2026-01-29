@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade - VICIADO COMENTA</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
+}
+
+/* Dark mode */
+body.dark { background: linear-gradient(135deg, #0f172a 0%, #111827 100%); color: #e5e7eb !important; }
+body.dark * { color: #e5e7eb !important; }
+body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav a { color: #e5e7eb !important; }
+body.dark main { color: #e5e7eb !important; }
+body.dark .policy-content { background: rgba(15,23,42,.8); border-color: #1f2937; }
+body.dark h1, body.dark h2, body.dark h3 { color: #ffffff !important; }
+body.dark footer { background:#0b1220; color:#e5e7eb !important; }
+body.dark footer * { color:#e5e7eb !important; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !important; }
+body.dark p, body.dark li { color: #cbd5e1 !important; }
+body.dark strong { color: #ffffff !important; }
+body.dark a { color: #93c5fd !important; }
+
+.theme-toggle { position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid rgba(0,0,0,.1); color: #1a1f3a; padding: 8px 10px; border-radius: 8px; cursor: pointer; z-index: 150; }
+.theme-toggle i { pointer-events: none; }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
+  position: relative;
+}
+
+header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.header-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+}
+
+/* NAVEGAÇÃO */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 20px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+/* MAIN */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.policy-content {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  border: 1px solid #e0e8f5;
+}
+
+.policy-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #e0e8f5;
+}
+
+.policy-header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5em;
+  color: #1a1f3a;
+  margin-bottom: 10px;
+}
+
+.policy-date {
+  color: #5a6b7f;
+  font-size: 0.9em;
+}
+
+.policy-section {
+  margin-bottom: 35px;
+}
+
+.policy-section h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8em;
+  color: #0066cc;
+  margin-bottom: 15px;
+  margin-top: 30px;
+}
+
+.policy-section h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3em;
+  color: #1a1f3a;
+  margin-bottom: 12px;
+  margin-top: 20px;
+}
+
+.policy-section p {
+  margin-bottom: 15px;
+  color: #3a3f5a;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.policy-section ul, .policy-section ol {
+  margin-left: 30px;
+  margin-bottom: 15px;
+}
+
+.policy-section li {
+  margin-bottom: 10px;
+  color: #3a3f5a;
+  line-height: 1.7;
+}
+
+.policy-section strong {
+  color: #1a1f3a;
+  font-weight: 600;
+}
+
+.policy-section a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.policy-section a:hover {
+  color: #0052a3;
+}
+
+.highlight-box {
+  background: #e3f2fd;
+  border-left: 4px solid #0066cc;
+  padding: 20px;
+  margin: 25px 0;
+  border-radius: 8px;
+}
+
+.highlight-box p {
+  margin-bottom: 0;
+}
+
+.btn-voltar {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  margin-top: 30px;
+  transition: all 0.3s;
+}
+
+.btn-voltar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+}
+
+/* FOOTER */
+footer {
+  background: #1a1f3a;
+  border-top: 1px solid rgba(0, 102, 204, 0.2);
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 80px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.footer-contacts a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-contacts a:hover {
+  text-decoration: underline;
+}
+
+.footer-contacts i {
+  margin-right: 8px;
+}
+
+.footer-copy {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 768px) {
+  .policy-content {
+    padding: 25px;
+  }
+  
+  .policy-header h1 {
+    font-size: 2em;
+  }
+  
+  .policy-section h2 {
+    font-size: 1.5em;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Notícias, análises e opinião sobre tecnologia e telecomunicações</p>
+</header>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="todas-noticias.html">Artigos</a>
+  <a href="politica-privacidade.html">Política de Privacidade</a>
+</nav>
+
+<main>
+  <div class="policy-content">
+    <div class="policy-header">
+      <h1>Política de Privacidade</h1>
+      <p class="policy-date">Última atualização: 28 de janeiro de 2026</p>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>O Viciado Comenta</strong> respeita a sua privacidade e está comprometido em proteger os seus dados pessoais. Esta Política de Privacidade explica como recolhemos, usamos, armazenamos e protegemos as suas informações quando visita o nosso site.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>1. Identificação do Responsável</h2>
+      <p><strong>Nome do site:</strong> Viciado Comenta<br>
+      <strong>URL:</strong> <a href="https://viciadocomenta.pt">https://viciadocomenta.pt</a><br>
+      <strong>Email de contacto:</strong> <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a></p>
+      <p>Este site é gerido por Pedro Silva (Viciado Comenta) e está em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD) da União Europeia.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>2. Dados Recolhidos</h2>
+      <h3>2.1. Dados Fornecidos Diretamente por Si</h3>
+      <ul>
+        <li><strong>Comentários:</strong> Quando deixa um comentário nos nossos artigos, recolhemos o seu nome e o conteúdo do comentário.</li>
+        <li><strong>Formulários de contacto:</strong> Se nos contactar via email, recolhemos o seu endereço de email e a mensagem enviada.</li>
+      </ul>
+
+      <h3>2.2. Dados Recolhidos Automaticamente</h3>
+      <ul>
+        <li><strong>Cookies e tecnologias semelhantes:</strong> O nosso site utiliza cookies para melhorar a experiência do utilizador e para fins publicitários (Google AdSense).</li>
+        <li><strong>Dados de navegação:</strong> Informações sobre o dispositivo, navegador, endereço IP, páginas visitadas e tempo de permanência no site.</li>
+        <li><strong>Análise de tráfego:</strong> Utilizamos ferramentas de análise para compreender como os visitantes interagem com o nosso site.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2 id="cookies">3. Política de Cookies</h2>
+      <p>Este site utiliza cookies para garantir a melhor experiência possível e para exibir anúncios relevantes através do Google AdSense.</p>
+      
+      <h3>3.1. O que são Cookies?</h3>
+      <p>Cookies são pequenos ficheiros de texto armazenados no seu dispositivo quando visita um site. Eles ajudam o site a lembrar as suas preferências e a melhorar a sua experiência de navegação.</p>
+
+      <h3>3.2. Tipos de Cookies Utilizados</h3>
+      <ul>
+        <li><strong>Cookies Essenciais:</strong> Necessários para o funcionamento básico do site (exemplo: preferências de tema claro/escuro).</li>
+        <li><strong>Cookies de Funcionalidade:</strong> Melhoram a experiência do utilizador ao lembrar as suas preferências.</li>
+        <li><strong>Cookies de Análise:</strong> Ajudam-nos a compreender como os visitantes utilizam o site.</li>
+        <li><strong>Cookies de Publicidade (Google AdSense):</strong> Utilizados para exibir anúncios personalizados e relevantes com base nos seus interesses.</li>
+      </ul>
+
+      <h3>3.3. Gestão de Cookies</h3>
+      <p>Pode gerir ou desativar cookies através das configurações do seu navegador. No entanto, a desativação de cookies pode afetar a funcionalidade do site e a sua experiência de navegação.</p>
+      <p>Para mais informações sobre como o Google utiliza cookies para publicidade, visite: <a href="https://policies.google.com/technologies/ads" target="_blank">https://policies.google.com/technologies/ads</a></p>
+    </div>
+
+    <div class="policy-section">
+      <h2>4. Google AdSense e Publicidade</h2>
+      <p>Este site utiliza o <strong>Google AdSense</strong> para exibir anúncios. O Google AdSense pode recolher e utilizar informações sobre as suas visitas a este e outros sites para fornecer anúncios personalizados.</p>
+
+      <h3>4.1. Dados Recolhidos pelo Google AdSense</h3>
+      <ul>
+        <li>Cookies e identificadores de dispositivos</li>
+        <li>Endereço IP</li>
+        <li>Páginas visualizadas e interações com anúncios</li>
+        <li>Localização aproximada (país/região)</li>
+      </ul>
+
+      <h3>4.2. Personalização de Anúncios</h3>
+      <p>O Google utiliza cookies para exibir anúncios com base nos seus interesses. Pode optar por desativar a personalização de anúncios através das seguintes opções:</p>
+      <ul>
+        <li><a href="https://myadcenter.google.com/" target="_blank">Centro de Anúncios do Google</a> - Controle os anúncios que vê</li>
+        <li><a href="https://optout.aboutads.info/" target="_blank">Digital Advertising Alliance (DAA)</a> - Desativar anúncios personalizados</li>
+        <li><a href="https://www.youronlinechoices.com/" target="_blank">Your Online Choices (Europa)</a> - Gerir preferências de publicidade</li>
+      </ul>
+
+      <h3>4.3. Políticas do Google</h3>
+      <p>Para mais informações sobre como o Google recolhe e utiliza dados, consulte:</p>
+      <ul>
+        <li><a href="https://policies.google.com/privacy" target="_blank">Política de Privacidade do Google</a></li>
+        <li><a href="https://policies.google.com/technologies/partner-sites" target="_blank">Como o Google utiliza dados em sites parceiros</a></li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>5. Finalidade do Tratamento de Dados</h2>
+      <p>Os dados pessoais recolhidos são utilizados para as seguintes finalidades:</p>
+      <ul>
+        <li>Permitir a interação através de comentários nos artigos</li>
+        <li>Responder a questões e pedidos de contacto</li>
+        <li>Melhorar o conteúdo e a experiência do utilizador no site</li>
+        <li>Exibir anúncios relevantes através do Google AdSense</li>
+        <li>Analisar o tráfego e o comportamento dos utilizadores no site</li>
+        <li>Cumprir obrigações legais</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>6. Partilha de Dados com Terceiros</h2>
+      <p>O Viciado Comenta não vende, aluga ou partilha os seus dados pessoais com terceiros, exceto nas seguintes situações:</p>
+      <ul>
+        <li><strong>Google AdSense:</strong> Conforme descrito na secção 4, o Google pode recolher dados para fins publicitários.</li>
+        <li><strong>Firebase (comentários):</strong> Os comentários são armazenados no Firebase Realtime Database (Google), seguindo as políticas de privacidade do Google.</li>
+        <li><strong>Obrigações legais:</strong> Se formos obrigados por lei a divulgar informações às autoridades competentes.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>7. Armazenamento e Segurança dos Dados</h2>
+      <p>Tomamos medidas técnicas e organizacionais adequadas para proteger os seus dados pessoais contra acesso não autorizado, perda, alteração ou divulgação.</p>
+      <ul>
+        <li>Os dados de comentários são armazenados no Firebase (Google Cloud) com medidas de segurança adequadas.</li>
+        <li>Utilizamos HTTPS para garantir a encriptação dos dados transmitidos entre o seu navegador e o nosso site.</li>
+        <li>Os dados são mantidos apenas pelo tempo necessário para cumprir as finalidades descritas nesta política.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>8. Os Seus Direitos (RGPD)</h2>
+      <p>De acordo com o Regulamento Geral sobre a Proteção de Dados (RGPD), você tem os seguintes direitos:</p>
+      <ul>
+        <li><strong>Direito de acesso:</strong> Pode solicitar uma cópia dos dados pessoais que temos sobre si.</li>
+        <li><strong>Direito de retificação:</strong> Pode solicitar a correção de dados incorretos ou incompletos.</li>
+        <li><strong>Direito ao apagamento:</strong> Pode solicitar a eliminação dos seus dados pessoais ("direito a ser esquecido").</li>
+        <li><strong>Direito à limitação do tratamento:</strong> Pode solicitar a restrição do uso dos seus dados.</li>
+        <li><strong>Direito à portabilidade:</strong> Pode solicitar a transferência dos seus dados para outro responsável.</li>
+        <li><strong>Direito de oposição:</strong> Pode opor-se ao tratamento dos seus dados pessoais em determinadas circunstâncias.</li>
+        <li><strong>Direito de retirar o consentimento:</strong> Se o tratamento for baseado no consentimento, pode retirá-lo a qualquer momento.</li>
+      </ul>
+      <p>Para exercer qualquer um destes direitos, entre em contacto connosco através do email: <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a></p>
+    </div>
+
+    <div class="policy-section">
+      <h2>9. Links para Sites Externos</h2>
+      <p>O nosso site pode conter links para sites externos (YouTube, Twitch, Spotify, Discord, etc.). Não somos responsáveis pelas práticas de privacidade desses sites. Recomendamos que leia as políticas de privacidade de cada site que visitar.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>10. Menores de Idade</h2>
+      <p>Este site não se destina a menores de 16 anos. Não recolhemos intencionalmente dados pessoais de menores. Se for pai/mãe ou tutor e acreditar que o seu filho nos forneceu dados pessoais, entre em contacto connosco para que possamos eliminar essas informações.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>11. Alterações à Política de Privacidade</h2>
+      <p>Reservamo-nos o direito de atualizar ou modificar esta Política de Privacidade a qualquer momento. Quaisquer alterações serão publicadas nesta página com a data de atualização revista. Recomendamos que reveja periodicamente esta política para se manter informado sobre como protegemos os seus dados.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>12. Contacto</h2>
+      <p>Se tiver dúvidas, preocupações ou pedidos relacionados com esta Política de Privacidade ou com o tratamento dos seus dados pessoais, entre em contacto connosco:</p>
+      <p>
+        <strong>Email:</strong> <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a><br>
+        <strong>Discord:</strong> <a href="https://discord.gg/pGxzqCdrFJ" target="_blank">https://discord.gg/pGxzqCdrFJ</a>
+      </p>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>Nota importante:</strong> Ao utilizar este site, concorda com os termos desta Política de Privacidade e com o uso de cookies conforme descrito. Se não concordar com estes termos, por favor, não utilize o nosso site.</p>
+    </div>
+
+    <a href="index.html" class="btn-voltar">← Voltar à Página Inicial</a>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+  </div>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+});
+</script>
+
+</body>
+</html>
