@@ -240,15 +240,40 @@
       </div>
 
       <div class="stat-card">
+        <div class="stat-icon">📆</div>
+        <div class="stat-label">Acessos Este Mês</div>
+        <div class="stat-value" id="monthVisits">-</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🟢</div>
+        <div class="stat-label">Usuários Ativos</div>
+        <div class="stat-value" id="activeUsers">-</div>
+      </div>
+
+      <div class="stat-card">
         <div class="stat-icon">⏱️</div>
         <div class="stat-label">Última Atualização</div>
         <div class="stat-value" id="lastUpdate" style="font-size: 1.2em;">-</div>
       </div>
     </div>
 
+    <div style="text-align: center; margin: 20px 0;">
+      <button onclick="resetarEstatisticas()" style="background: #dc2626; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em; transition: all 0.3s;">
+        🔄 Resetar Estatísticas
+      </button>
+    </div>
+
     <div class="daily-stats">
       <h2>📈 Acessos por Dia</h2>
       <div id="dailyList" class="loading">
+        <p>Carregando dados...</p>
+      </div>
+    </div>
+
+    <div class="daily-stats">
+      <h2>📆 Acessos por Mês</h2>
+      <div id="monthlyList" class="loading">
         <p>Carregando dados...</p>
       </div>
     </div>
@@ -287,6 +312,11 @@
         const todayVisits = (stats.daily && stats.daily[hoje]) || 0;
         document.getElementById('todayVisits').textContent = todayVisits;
         
+        // Acessos do mês
+        const mesAtual = new Date().toISOString().substring(0, 7); // YYYY-MM
+        const monthVisits = (stats.monthly && stats.monthly[mesAtual]) || 0;
+        document.getElementById('monthVisits').textContent = monthVisits.toLocaleString('pt-PT');
+        
         // Última atualização
         if (stats.last_updated) {
           const date = new Date(stats.last_updated);
@@ -301,29 +331,65 @@
         
         if (daysArray.length === 0) {
           dailyList.textContent = 'Nenhum dado disponível ainda.';
-          return;
+        } else {
+          dailyList.textContent = '';
+          daysArray.forEach(([date, count]) => {
+            const dateObj = new Date(date + 'T00:00:00');
+            const dayName = dateObj.toLocaleDateString('pt-PT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const item = document.createElement('div');
+            item.className = 'daily-item';
+
+            const dateEl = document.createElement('span');
+            dateEl.className = 'daily-date';
+            dateEl.textContent = dayName;
+
+            const countEl = document.createElement('span');
+            countEl.className = 'daily-count';
+            countEl.textContent = `${count} acesso${count !== 1 ? 's' : ''}`;
+
+            item.appendChild(dateEl);
+            item.appendChild(countEl);
+            dailyList.appendChild(item);
+          });
         }
+        
+        // Lista de acessos por mês
+        const monthlyList = document.getElementById('monthlyList');
+        const monthly = stats.monthly || {};
+        const monthsArray = Object.entries(monthly).sort((a, b) => b[0].localeCompare(a[0]));
+        
+        if (monthsArray.length === 0) {
+          monthlyList.textContent = 'Nenhum dado disponível ainda.';
+        } else {
+          monthlyList.textContent = '';
+          monthsArray.forEach(([month, count]) => {
+            const [year, monthNum] = month.split('-');
+            const monthName = new Date(year, monthNum - 1).toLocaleDateString('pt-PT', { year: 'numeric', month: 'long' });
 
-        dailyList.textContent = '';
-        daysArray.forEach(([date, count]) => {
-          const dateObj = new Date(date + 'T00:00:00');
-          const dayName = dateObj.toLocaleDateString('pt-PT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const item = document.createElement('div');
+            item.className = 'daily-item';
 
-          const item = document.createElement('div');
-          item.className = 'daily-item';
+            const dateEl = document.createElement('span');
+            dateEl.className = 'daily-date';
+            dateEl.textContent = monthName;
 
-          const dateEl = document.createElement('span');
-          dateEl.className = 'daily-date';
-          dateEl.textContent = dayName;
+            const countEl = document.createElement('span');
+            countEl.className = 'daily-count';
+            countEl.textContent = `${count.toLocaleString('pt-PT')} acesso${count !== 1 ? 's' : ''}`;
 
-          const countEl = document.createElement('span');
-          countEl.className = 'daily-count';
-          countEl.textContent = `${count} acesso${count !== 1 ? 's' : ''}`;
-
-          item.appendChild(dateEl);
-          item.appendChild(countEl);
-          dailyList.appendChild(item);
-        });
+            item.appendChild(dateEl);
+            item.appendChild(countEl);
+            monthlyList.appendChild(item);
+          });
+        }
+      });
+      
+      // Monitorar usuários ativos
+      const activeUsersRef = database.ref('active_users');
+      activeUsersRef.on('value', (snapshot) => {
+        const activeUsers = snapshot.numChildren() || 0;
+        document.getElementById('activeUsers').textContent = activeUsers;
       });
     }
 
@@ -331,6 +397,23 @@
     function toggleTheme() {
       document.body.classList.toggle('dark');
       localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Resetar estatísticas
+    function resetarEstatisticas() {
+      if (confirm('⚠️ Tem a certeza que deseja resetar TODAS as estatísticas? Esta ação não pode ser desfeita!')) {
+        const statsRef = database.ref('site_stats');
+        statsRef.set({
+          total_visits: 0,
+          daily: {},
+          last_updated: new Date().toISOString()
+        }).then(() => {
+          alert('✅ Estatísticas resetadas com sucesso!');
+          location.reload();
+        }).catch((error) => {
+          alert('❌ Erro ao resetar estatísticas: ' + error.message);
+        });
+      }
     }
 
     // Carregar tema salvo
