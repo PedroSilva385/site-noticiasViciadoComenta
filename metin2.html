@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viciado Comenta - VICIADO COMENTA</title>
+<title>Metin 2 Tigerghost - VICIADO COMENTA</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
@@ -203,7 +203,7 @@ nav a:hover {
 
 /* MAIN */
 main {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 50px 20px;
 }
@@ -215,314 +215,164 @@ main {
 
 .page-header h1 {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.8em;
-  font-weight: 700;
-  color: #1a1f3a;
+  font-size: 2.5em;
   margin-bottom: 15px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .page-header p {
   font-size: 1.1em;
   color: #5a6b7f;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
-/* PLAYLISTA */
-.playlist-container {
-  background: #ffffff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+.playlist-section {
   margin-bottom: 60px;
 }
 
-.playlist-embed {
-  width: 100%;
-  height: 600px;
-  border: none;
+.playlist-button {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 40px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1em;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* MINIATURAS */
+.playlist-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255, 0, 0, 0.4);
+}
+
+.playlist-button i {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
 .miniaturas-section {
   margin-bottom: 60px;
 }
 
 .miniaturas-title {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.8em;
-  font-weight: 700;
-  color: #1a1f3a;
+  font-size: 2em;
   margin-bottom: 30px;
   text-align: center;
+  color: #1a1f3a;
 }
 
 .miniaturas-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.video-card-wrapper {
+  position: relative;
 }
 
 .video-card {
+  display: flex;
+  flex-direction: column;
   background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #e0e8f5;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  color: inherit;
 }
 
 .video-card:hover {
-  transform: translateY(-6px);
   box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
-}
-
-.video-thumbnail {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #000;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.video-thumbnail::after {
-  content: '▶';
-  position: absolute;
-  font-size: 48px;
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10;
+  transform: translateY(-4px);
 }
 
 .video-card.watched {
   opacity: 0.7;
 }
 
-.video-card.watched .video-thumbnail::before {
-  content: '✓';
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: rgba(34, 197, 94, 0.9);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.2em;
-  z-index: 20;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.video-watch-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2em;
-  transition: all 0.3s;
-  z-index: 20;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.video-watch-btn:hover {
-  background: #ffffff;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.video-watch-btn.watched {
-  background: #22c55e;
-  color: white;
-}
-.video-card:hover .video-thumbnail::after {
-  color: rgba(255, 255, 255, 1);
-  transform: scale(1.2);
+.video-thumbnail {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  background: #000;
 }
 
 .video-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.video-card:hover .video-thumbnail img {
-  transform: scale(1.05);
-}
-
-.video-info {
-  display: block;
-  padding: 12px;
-  background: #ffffff;
-}
-
-.video-title {
-  font-weight: 600;
-  color: #1a1f3a;
-  font-size: 0.95em;
-  margin-bottom: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.4;
-}
-
-.video-channel {
-  font-size: 0.85em;
-  color: #5a6b7f;
-  margin-bottom: 8px;
-}
-
-.video-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 0.8em;
-  margin-top: 8px;
-}
-
-.video-category {
-  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-  color: #ffffff;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.85em;
-}
-
-.video-date {
-  color: #7a8b9f;
-  font-size: 0.9em;
 }
 
 .video-duration-overlay {
   position: absolute;
-  top: 8px;
+  bottom: 8px;
   right: 8px;
   background: rgba(0, 0, 0, 0.8);
-  color: #ffffff;
+  color: #fff;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.85em;
   font-weight: 600;
 }
 
-.loading {
-  text-align: center;
-  color: #5a6b7f;
-  font-size: 1.1em;
-  padding: 40px 20px;
-}
-
-/* CONTACTOS */
-.contactos-section {
-  background: linear-gradient(135deg, #ffffff 0%, #f5f8fc 100%);
-  border-radius: 12px;
-  padding: 40px;
-  margin: 60px 0;
-  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
-  border: 1px solid #e0e8f5;
-}
-
-.contactos-section h3 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.8em;
-  font-weight: 700;
-  color: #1a1f3a;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.contactos-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.contacto-item {
+.video-watch-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1em;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #e0e8f5;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  color: inherit;
-}
-
-.contacto-item:hover {
-  transform: translateX(6px);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
-  border-color: #0066cc;
-}
-
-.contacto-icon {
-  font-size: 1.8em;
-  color: #0066cc;
-  min-width: 40px;
-  display: flex;
   justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
 }
 
-.contacto-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.video-watch-btn:hover {
+  background: #ffffff;
+  transform: scale(1.1);
 }
 
-.contacto-label {
-  font-size: 0.8em;
-  color: #5a6b7f;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.video-watch-btn.watched {
+  background: #2ecc71;
+  border-color: #27ae60;
+  color: #ffffff;
 }
 
-.contacto-valor {
-  font-size: 1em;
-  color: #1a1f3a;
-  font-weight: 500;
+.video-info {
+  padding: 15px;
 }
 
-/* RODAPÉ */
+/* FOOTER */
 footer {
   background: #1a1f3a;
-  color: #ffffff;
+  border-top: 1px solid rgba(0, 102, 204, 0.2);
   text-align: center;
   padding: 40px 20px;
   margin-top: 80px;
   font-size: 0.9em;
-}
-
-footer a {
-  color: #0066cc;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-footer a:hover {
-  color: #0052a3;
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .footer-contacts {
@@ -532,69 +382,39 @@ footer a:hover {
   flex-wrap: wrap;
   margin-bottom: 12px;
 }
+
 .footer-contacts a {
   color: #ffffff;
   font-weight: 600;
+  text-decoration: none;
 }
+
+.footer-contacts a:hover {
+  text-decoration: underline;
+}
+
 .footer-contacts i {
   margin-right: 8px;
   color: #ffffff;
 }
+
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
 }
 
 /* RESPONSIVO */
-@media (max-width: 1200px) {
-  .miniaturas-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 992px) {
-  .miniaturas-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-  }
-}
-
 @media (max-width: 768px) {
-  .nav-dropdown > a {
-    padding: 12px 0;
-  }
-
-  .nav-dropdown.active .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .miniaturas-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-
-  header {
-    padding: 30px 15px;
-  }
-
   header h1 {
     font-size: 2.2em;
-    margin-bottom: 8px;
   }
 
-  .header-subtitle {
-    font-size: 0.9em;
-    margin-bottom: 15px;
+  .page-header h1 {
+    font-size: 2em;
   }
 
-  .social-media {
-    gap: 10px;
-  }
-
-  .social-media a {
-    width: 38px;
-    height: 38px;
+  .miniaturas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
   }
 
   nav {
@@ -603,132 +423,33 @@ footer a:hover {
   }
 
   nav a {
-    padding: 12px 0;
+    padding: 12px 8px;
     font-size: 0.9em;
   }
 
-  main {
-    padding: 30px 15px;
-    max-width: 100%;
-  }
-
-  .page-header h1 {
-    font-size: 2em;
-  }
-
-  .page-header p {
-    font-size: 1em;
-  }
-
-  .playlist-embed {
-    height: 400px;
-  }
-
-  footer {
-    padding: 30px 15px;
-    font-size: 0.85em;
+  .nav-dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 }
 
 @media (max-width: 480px) {
-  .miniaturas-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .video-card {
-    height: auto;
-    aspect-ratio: 16/9;
-  }
-
-  header {
-    padding: 20px 12px;
-  }
-
   header h1 {
     font-size: 1.8em;
-    margin-bottom: 6px;
-  }
-
-  .header-subtitle {
-    font-size: 0.85em;
-    margin-bottom: 12px;
-  }
-
-  .social-media {
-    gap: 8px;
-  }
-
-  .social-media a {
-    width: 32px;
-    height: 32px;
-    font-size: 0.9em;
-  }
-
-  nav {
-    gap: 10px;
-    padding: 0 12px;
-    flex-wrap: wrap;
-  }
-
-  nav a {
-    padding: 8px 0;
-    font-size: 0.8em;
-  }
-
-  main {
-    padding: 20px 12px;
   }
 
   .page-header h1 {
-    font-size: 1.5em;
-  }
-
-  .page-header p {
-    font-size: 0.9em;
-  }
-
-  footer {
-    padding: 20px 12px;
-    font-size: 0.75em;
-  }
-}
-
-@media (max-width: 360px) {
-  .miniaturas-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  header {
-    padding: 15px 10px;
-  }
-
-  header h1 {
     font-size: 1.6em;
   }
 
-  .header-subtitle {
-    font-size: 0.8em;
-  }
-
-  .social-media a {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8em;
-  }
-
-  nav a {
-    font-size: 0.75em;
+  .miniaturas-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   main {
-    padding: 15px 10px;
-  }
-
-  footer {
-    padding: 15px 10px;
-    font-size: 0.7em;
+    padding: 30px 15px;
   }
 }
 </style>
@@ -736,48 +457,11 @@ footer a:hover {
 
 <body>
 
-<script>
-// Dark mode toggle
-function applyTheme(theme) {
-  const isDark = theme === 'dark';
-  document.body.classList.toggle('dark', isDark);
-  const btn = document.getElementById('themeToggle');
-  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-}
-
-function initTheme() {
-  const saved = localStorage.getItem('theme') || 'light';
-  applyTheme(saved);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  const btn = document.createElement('button');
-  btn.id = 'themeToggle';
-  btn.className = 'theme-toggle';
-  btn.title = 'Alternar tema';
-  btn.innerHTML = '<i class="fas fa-moon"></i>';
-  const headerEl = document.querySelector('header');
-  if (headerEl) headerEl.appendChild(btn);
-  btn.addEventListener('click', () => {
-    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
-    localStorage.setItem('theme', next);
-    applyTheme(next);
-  });
-
-  // Dropdown mobile: clique para abrir/fechar
-  const dropdown = document.querySelector('.nav-dropdown');
-  if (dropdown && window.innerWidth <= 768) {
-    const dropdownLink = dropdown.querySelector('a');
-    dropdownLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      dropdown.classList.toggle('active');
-    });
-  }
-});
-</script>
-
 <header>
+  <button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
   <h1>VICIADO COMENTA</h1>
   <p class="header-subtitle">Análise e crítica de notícias</p>
   
@@ -815,14 +499,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <main>
   <div class="page-header">
-    <h1>Viciado Comenta</h1>
-    <p>Todos os episódios em um só lugar. Assista os comentários e análises mais recentes sobre os temas do momento.</p>
+    <h1>Metin 2 Tigerghost - Série RL2</h1>
+    <p>Acompanha a série completa do Metin 2 Tigerghost. Todos os episódios da aventura épica no servidor RL2!</p>
+  </div>
+
+  <div class="playlist-section">
+    <a href="https://www.youtube.com/playlist?list=PL6kuAId83nkL--AvGu2iN7tX6r9bjyXI2" target="_blank" rel="noopener noreferrer" class="playlist-button">
+      <i class="fab fa-youtube"></i>
+      Ver Playlist Completa no YouTube
+    </a>
   </div>
 
   <div class="miniaturas-section">
-    <h2 class="miniaturas-title">Últimos Vídeos</h2>
+    <h2 class="miniaturas-title">Últimos Episódios</h2>
     <div class="miniaturas-grid" id="miniaturas-grid">
-      <!-- Vídeos carregados dinamicamente do ficheiro JSON -->
+      <!-- Vídeos carregados dinamicamente da playlist -->
+    </div>
+  </div>
+
+  <div class="page-header" style="margin-top: 80px;">
+    <h1>Metin2 em 2024/5/6</h1>
+    <p>Acompanha uma série de análise sobre o Metin2, que envolve entrevistas, abordagens específicas e muito mais!</p>
+  </div>
+
+  <div class="playlist-section">
+    <a href="https://www.youtube.com/playlist?list=PL6kuAId83nkIN_BBOgyyPCH4W8tO2hAoK" target="_blank" rel="noopener noreferrer" class="playlist-button">
+      <i class="fab fa-youtube"></i>
+      Ver Playlist Completa no YouTube
+    </a>
+  </div>
+
+  <div class="miniaturas-section">
+    <h2 class="miniaturas-title">Últimos Episódios</h2>
+    <div class="miniaturas-grid" id="miniaturas-grid-analise">
+      <!-- Vídeos carregados dinamicamente da playlist -->
     </div>
   </div>
 
@@ -837,10 +547,45 @@ document.addEventListener('DOMContentLoaded', () => {
 </footer>
 
 <script>
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  const btn = document.getElementById('themeToggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    });
+  }
+
+  // Dropdown mobile
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && window.innerWidth <= 768) {
+    const dropdownLink = dropdown.querySelector('a');
+    dropdownLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      dropdown.classList.toggle('active');
+    });
+  }
+});
+
 // Sistema de vídeos vistos
 class VideoWatchTracker {
   constructor() {
-    this.storageKey = 'viciado_comenta_watched_videos';
+    this.storageKey = 'metin2_watched_videos';
   }
   
   getWatchedVideos() {
@@ -876,79 +621,71 @@ const tracker = new VideoWatchTracker();
 // Carregar vídeos do ficheiro JSON
 async function carregarVideos() {
   try {
-    const response = await fetch('data/viciado-comenta-videos.json');
-    let videos = await response.json();
+    const response = await fetch('data/metin2-videos.json');
+    const data = await response.json();
     
-    const grid = document.getElementById('miniaturas-grid');
+    // Carregar Série RL2
+    const videosRL2 = data.serie_rl2 || [];
+    const gridRL2 = document.getElementById('miniaturas-grid');
     
-    if (videos.length === 0) {
-      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento. Adiciona vídeos ao ficheiro viciado-comenta-videos.json</p>';
-      return;
+    if (videosRL2.length === 0) {
+      gridRL2.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento.</p>';
+    } else {
+      gridRL2.innerHTML = videosRL2.map((url, index) => {
+        return criarCardVideo(url, index, 'RL2');
+      }).join('');
     }
     
-    // Converter para formato consistente e ordenar por data (mais recentes primeiro)
-    videos = videos.map(video => {
-      if (typeof video === 'string') {
-        return { url: video, data: new Date().toISOString().split('T')[0] };
-      }
-      return video;
-    });
+    // Carregar Análise 2024
+    const videosAnalise = data.analise_2024 || [];
+    const gridAnalise = document.getElementById('miniaturas-grid-analise');
     
-    // Ordenar por data descrescente (mais recentes primeiro)
-    videos.sort((a, b) => new Date(b.data) - new Date(a.data));
-    
-    grid.innerHTML = videos.map((video, index) => {
-      const url = video.url || video;
-      
-      // Extrair ID do vídeo do YouTube da URL
-      let videoId = '';
-      
-      // Suporta diferentes formatos de URL do YouTube
-      if (url.includes('watch?v=')) {
-        videoId = url.split('watch?v=')[1].split('&')[0];
-      } else if (url.includes('youtu.be/')) {
-        videoId = url.split('youtu.be/')[1].split('?')[0];
-      } else if (url.includes('embed/')) {
-        videoId = url.split('embed/')[1].split('?')[0];
-      }
-      
-      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-      const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
-      const isWatched = tracker.isWatched(videoId);
-      
-      // Formatar data
-      const dataObj = new Date(video.data);
-      const dataFormatada = dataObj.toLocaleDateString('pt-PT', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-      });
-      
-      return `
-        <div class="video-card-wrapper">
-          <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" class="video-card ${isWatched ? 'watched' : ''}">
-            <div class="video-thumbnail">
-              <img src="${thumbnailUrl}" alt="Viciado Comenta #${index + 1}">
-              <div class="video-duration-overlay">
-                <i class="fab fa-youtube"></i>
-              </div>
-              <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
-                ✓
-              </button>
-            </div>
-            <div class="video-info">
-              <div style="font-size: 0.9em; color: #1a1f3a; margin-top: 10px; font-weight: 600; text-align: center;">📅 ${dataFormatada}</div>
-            </div>
-          </a>
-        </div>
-      `;
-    }).join('');
+    if (videosAnalise.length === 0) {
+      gridAnalise.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento.</p>';
+    } else {
+      gridAnalise.innerHTML = videosAnalise.map((url, index) => {
+        return criarCardVideo(url, index, 'Análise');
+      }).join('');
+    }
     
   } catch (error) {
     console.error('Erro ao carregar vídeos:', error);
-    const grid = document.getElementById('miniaturas-grid');
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos. Verifica se o ficheiro viciado-comenta-videos.json existe e está correto.</p>';
+    document.getElementById('miniaturas-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos. Verifica se o ficheiro metin2-videos.json existe e está correto.</p>';
   }
+}
+
+// Função auxiliar para criar card de vídeo
+function criarCardVideo(url, index, tipo) {
+  // Extrair ID do vídeo do YouTube da URL
+  let videoId = '';
+  
+  if (url.includes('watch?v=')) {
+    videoId = url.split('watch?v=')[1].split('&')[0];
+  } else if (url.includes('youtu.be/')) {
+    videoId = url.split('youtu.be/')[1].split('?')[0];
+  } else if (url.includes('embed/')) {
+    videoId = url.split('embed/')[1].split('?')[0];
+  }
+  
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+  const isWatched = tracker.isWatched(videoId);
+  
+  return `
+    <div class="video-card-wrapper">
+      <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" class="video-card ${isWatched ? 'watched' : ''}">
+        <div class="video-thumbnail">
+          <img src="${thumbnailUrl}" alt="Metin 2 Tigerghost ${tipo} #${index + 1}">
+          <div class="video-duration-overlay">
+            <i class="fab fa-youtube"></i>
+          </div>
+          <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
+            ✓
+          </button>
+        </div>
+      </a>
+    </div>
+  `;
 }
 
 // Função para marcar/desmarcar vídeo como visto

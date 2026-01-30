@@ -1212,6 +1212,7 @@ footer {
     <div class="dropdown-menu">
       <a href="viciado-comenta.html">Viciado Comenta</a>
       <a href="livestreams.html">Livestreams</a>
+      <a href="metin2.html">Metin2</a>
     </div>
   </div>
 </nav>
@@ -1306,13 +1307,16 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('🔍 ID da URL:', noticiaId);
 
   if (noticiaId) {
+    console.log('🔍 ID da URL:', noticiaId);
     fetch("data/noticias.json")
       .then(res => res.json())
       .then(data => {
         console.log('📄 Notícias carregadas:', data.noticias.length);
-        console.log('🆔 IDs disponíveis:', data.noticias.map(n => n.id));
+        console.log('🆔 IDs disponíveis:', data.noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         
         const noticia = data.noticias.find(n => String(n.id) === String(noticiaId));
+        console.log('✅ Notícia encontrada:', noticia ? noticia.titulo : 'NENHUMA');
       
       if (noticia) {
         document.title = noticia.titulo + " - VICIADO COMENTA";
@@ -1663,22 +1667,8 @@ function fallbackCopyLink(url) {
 }
 
 // ========== FIREBASE CONFIGURAÇÃO ==========
-// NOTA: As chaves Firebase são PÚBLICAS por design - isto é normal e seguro!
-// A verdadeira segurança está nas Firebase Rules (Realtime Database Rules)
-// Documentação completa em: d:\site\private-config\README.md
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",
-  authDomain: "chat-viciadocomenta.firebaseapp.com",
-  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "chat-viciadocomenta",
-  storageBucket: "chat-viciadocomenta.firebasestorage.app",
-  messagingSenderId: "183684670526",
-  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f",
-  measurementId: "G-XJ3P1K6694"
-};
-
-// Inicializar Firebase
+// Firebase já foi inicializado no <head> da página
+// Reutilizando a instância existente
 let database;
 window.database = null;
 window.firebaseReady = false;
@@ -1687,13 +1677,9 @@ window.currentUserId = null;
 window.authFailed = false;
 
 try {
-  console.log('Iniciando Firebase...');
-  console.log('Firebase objeto:', typeof firebase);
+  console.log('Reutilizando Firebase já inicializado...');
   
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  
+  // Firebase já foi inicializado no head, apenas obter referência
   database = firebase.database();
   window.database = database;
   window.firebaseReady = true;
