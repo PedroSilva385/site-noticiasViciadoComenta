@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VICIADO COMENTA</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<!-- Firebase Analytics -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",authDomain:"chat-viciadocomenta.firebaseapp.com",databaseURL:"https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",projectId:"chat-viciadocomenta",storageBucket:"chat-viciadocomenta.firebasestorage.app",messagingSenderId:"183684670526",appId:"1:183684670526:web:64b1f62cf80e05d4781d6f"};firebase.initializeApp(firebaseConfig);const db=firebase.database();const today=new Date().toISOString().split('T')[0];const statsRef=db.ref('site_stats');statsRef.transaction(data=>{if(!data){data={total_visits:0,daily:{},last_updated:new Date().toISOString()};}data.total_visits=(data.total_visits||0)+1;if(!data.daily)data.daily={};data.daily[today]=(data.daily[today]||0)+1;data.last_updated=new Date().toISOString();return data;});
+</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -1490,7 +1496,7 @@ footer {
         <i class="fab fa-youtube"></i>
       </div>
       <div class="stat-info">
-        <div class="stat-number" id="youtube-count">4,030</div>
+        <div class="stat-number" id="youtube-count">4,050</div>
         <div class="stat-label">Subscribers</div>
       </div>
     </div>
@@ -1499,7 +1505,7 @@ footer {
         <i class="fab fa-twitch"></i>
       </div>
       <div class="stat-info">
-        <div class="stat-number" id="twitch-count">4,314</div>
+        <div class="stat-number" id="twitch-count">4,313</div>
         <div class="stat-label">Followers</div>
       </div>
     </div>
@@ -1617,12 +1623,12 @@ footer {
 // NOTA: Para atualizar manualmente, altere os valores abaixo:
 const SOCIAL_STATS = {
   youtube: {
-    count: 4030,
-    lastUpdated: '2026-01-28' // Data da última atualização manual
+    count: 4050,
+    lastUpdated: '2026-01-30' // Data da última atualização manual
   },
   twitch: {
-    count: 4314,
-    lastUpdated: '2026-01-28'
+    count: 4313,
+    lastUpdated: '2026-01-30'
   }
 };
 
@@ -1634,19 +1640,23 @@ function checkAndUpdateStats() {
   const now = new Date();
   const today = now.toISOString().split('T')[0];
   
-  // Verificar se já atualizou hoje
+  // Verificar se já atualizou hoje OU se os valores mudaram
   const lastCheck = localStorage.getItem('stats_last_check');
+  const lastYoutube = parseInt(localStorage.getItem('youtube_count')) || 0;
+  const lastTwitch = parseInt(localStorage.getItem('twitch_count')) || 0;
   
-  if (lastCheck !== today) {
+  const needsUpdate = (lastCheck !== today) || 
+                      (lastYoutube !== SOCIAL_STATS.youtube.count) || 
+                      (lastTwitch !== SOCIAL_STATS.twitch.count);
+  
+  if (needsUpdate) {
     // Atualizar com os valores do código
     localStorage.setItem('youtube_count', SOCIAL_STATS.youtube.count);
     localStorage.setItem('twitch_count', SOCIAL_STATS.twitch.count);
     localStorage.setItem('stats_last_check', today);
     
     console.log('Stats atualizados:', today);
-    console.log('Para atualizar os números, edite SOCIAL_STATS no código');
-    console.log('YouTube: https://socialblade.com/youtube/channel/UCtFt1cSFpGbW7Eb2QAXCY3w');
-    console.log('Twitch: https://socialblade.com/twitch/user/theviciado13');
+    console.log('YouTube:', SOCIAL_STATS.youtube.count, '| Twitch:', SOCIAL_STATS.twitch.count);
   }
   
   // Carregar valores do localStorage

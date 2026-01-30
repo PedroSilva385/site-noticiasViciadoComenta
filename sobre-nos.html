@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sobre Nós - VICIADO COMENTA</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<!-- Firebase Analytics -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",authDomain:"chat-viciadocomenta.firebaseapp.com",databaseURL:"https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",projectId:"chat-viciadocomenta",storageBucket:"chat-viciadocomenta.firebasestorage.app",messagingSenderId:"183684670526",appId:"1:183684670526:web:64b1f62cf80e05d4781d6f"};firebase.initializeApp(firebaseConfig);const db=firebase.database();const today=new Date().toISOString().split('T')[0];const statsRef=db.ref('site_stats');statsRef.transaction(data=>{if(!data){data={total_visits:0,daily:{},last_updated:new Date().toISOString()};}data.total_visits=(data.total_visits||0)+1;if(!data.daily)data.daily={};data.daily[today]=(data.daily[today]||0)+1;data.last_updated=new Date().toISOString();return data;});
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -465,14 +471,14 @@ footer {
         <div class="stat-icon youtube">
           <i class="fab fa-youtube"></i>
         </div>
-        <div class="stat-number">4K+</div>
+        <div class="stat-number">4.05K+</div>
         <div class="stat-label">Subscritores YouTube</div>
       </div>
       <div class="stat-box">
         <div class="stat-icon twitch">
           <i class="fab fa-twitch"></i>
         </div>
-        <div class="stat-number">4.3K+</div>
+        <div class="stat-number">4.31K+</div>
         <div class="stat-label">Seguidores Twitch</div>
       </div>
       <div class="stat-box">
