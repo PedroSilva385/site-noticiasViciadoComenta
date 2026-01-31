@@ -102,6 +102,85 @@ nav a:hover {
   border-bottom-color: #0066cc;
 }
 
+/* DROPDOWN MENU */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-dropdown > a::after {
+  content: '▼';
+  font-size: 0.65em;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  min-width: 160px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-bottom: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu a:hover {
+  background: #e3f2fd;
+  color: #0066cc;
+  padding-left: 24px;
+}
+
+/* Dark mode dropdown */
+body.dark .dropdown-menu {
+  background: #1a2332;
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .dropdown-menu a {
+  color: #d1d5db;
+}
+
+body.dark .dropdown-menu a:hover {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  padding-left: 24px;
+}
+
 /* MAIN */
 main {
   max-width: 900px;
@@ -313,6 +392,8 @@ footer {
 
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -419,7 +500,14 @@ footer {
 <nav>
   <a href="index.html">Início</a>
   <a href="todas-noticias.html">Artigos</a>
-  <a href="politica-privacidade.html">Política de Privacidade</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="livestreams.html">Livestreams</a>
+      <a href="metin2.html">Metin2</a>
+    </div>
+  </div>
 </nav>
 
 <main>

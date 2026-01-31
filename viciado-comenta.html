@@ -293,12 +293,21 @@ body.dark .playlist-container {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  outline: none;
 }
 
 body.dark .video-card {
   background: #1a2332;
-  border-color: #2d3748;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: none;
+  box-shadow: none;
+}
+
+body.dark .video-card:focus {
+  outline: none;
+}
+
+body.dark .video-card.watched .video-thumbnail::before {
+  color: #ffffff !important;
 }
 
 .video-card:hover {
@@ -368,6 +377,12 @@ body.dark .video-card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+body.dark .video-watch-btn {
+  background: rgba(15, 23, 42, 0.9);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .video-watch-btn:hover {
   background: #ffffff;
   transform: scale(1.1);
@@ -377,6 +392,10 @@ body.dark .video-card {
 .video-watch-btn.watched {
   background: #22c55e;
   color: white;
+}
+
+body.dark .video-watch-btn.watched {
+  color: #ffffff !important;
 }
 .video-card:hover .video-thumbnail::after {
   color: rgba(255, 255, 255, 1);
@@ -570,6 +589,8 @@ footer a:hover {
 }
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  width: 100%;
 }
 
 /* RESPONSIVO */
@@ -948,14 +969,6 @@ async function carregarVideos() {
       const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const isWatched = tracker.isWatched(videoId);
       
-      // Formatar data
-      const dataObj = new Date(video.data);
-      const dataFormatada = dataObj.toLocaleDateString('pt-PT', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-      });
-      
       return `
         <div class="video-card-wrapper">
           <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" class="video-card ${isWatched ? 'watched' : ''}">
@@ -967,9 +980,6 @@ async function carregarVideos() {
               <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
                 ✓
               </button>
-            </div>
-            <div class="video-info">
-              <div style="font-size: 0.9em; color: #1a1f3a; margin-top: 10px; font-weight: 600; text-align: center;">📅 ${dataFormatada}</div>
             </div>
           </a>
         </div>

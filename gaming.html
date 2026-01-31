@@ -20,8 +20,11 @@ body.dark { background: #0f172a; color: #e5e7eb !important; }
 body.dark * { color: #e5e7eb !important; }
 body.dark header { background: #0369a1; }
 body.dark header, body.dark header * { color: #ffffff !important; }
-body.dark nav { background: #0b1220; color: #e5e7eb !important; }
-body.dark nav a { color: #e5e7eb !important; }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); color: #e5e7eb !important; }
+body.dark nav a { color: #d1d5db !important; }
+body.dark .dropdown-menu { background: #1a2332; border-color: rgba(96,165,250,0.2); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+body.dark .dropdown-menu a { color: #d1d5db; }
+body.dark .dropdown-menu a:hover { background: rgba(96,165,250,0.2); color: #60a5fa; padding-left: 24px; }
 body.dark main { background: rgba(15,23,42,.5); color: #e5e7eb !important; }
 body.dark h2 { color: #e5e7eb !important; }
 body.dark footer { background: #0b1220; color: #e5e7eb !important; }
@@ -71,21 +74,93 @@ header h1 {
   flex-grow: 1;
 }
 nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
   display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
   justify-content: center;
-  background: #004494;
-  padding: 15px 0;
-  font-size: 1.2em;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 nav a {
-  color: #fff;
+  color: #1a1f3a;
   text-decoration: none;
-  margin: 0 20px;
   font-weight: 600;
-  transition: color 0.2s;
+  font-size: 0.95em;
+  padding: 20px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 nav a:hover {
-  color: #ffdd57;
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-dropdown > a::after {
+  content: '▼';
+  font-size: 0.65em;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  min-width: 160px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-bottom: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu a:hover {
+  background: #e3f2fd;
+  color: #0066cc;
+  padding-left: 24px;
 }
 main {
   max-width: 1000px;
@@ -113,6 +188,10 @@ footer {
   background: #004494;
   color: #fff;
   margin-top: 40px;
+}
+.footer-copy {
+  text-align: center;
+  width: 100%;
 }
 .footer-contacts{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
 .footer-contacts a{color:#fff;text-decoration:none;font-weight:600}
@@ -192,12 +271,16 @@ document.addEventListener('DOMContentLoaded', () => {
 </header>
 
 <nav>
-  <a href="index.html">Ínicio</a>
-  <a href="videos.html">Vídeos Recentes</a>
-  <a href="#">Mercado das Telecom</a>
-  <a href="#">Notícias Telecom</a>
-  <a href="#">DIGI</a>
-  <a href="gaming.html">Gaming</a>
+  <a href="index.html">Início</a>
+  <a href="todas-noticias.html">Artigos</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="livestreams.html">Livestreams</a>
+      <a href="metin2.html">Metin2</a>
+    </div>
+  </div>
 </nav>
 
 <main>
@@ -224,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
   </div>
-  <div class="footer-copy">&copy; 2026 VICIADO COMENTA</div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
 </body>
 </html>

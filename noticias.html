@@ -764,6 +764,96 @@ body.dark .contacto-item {
   line-height: 1.6;
 }
 
+.comentario-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.comentario-reply-btn {
+  background: transparent;
+  border: 1px solid #dbe6f3;
+  color: #0066cc;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.comentario-reply-btn:hover {
+  background: #e3f2fd;
+  border-color: #0066cc;
+}
+
+.resposta-form {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #f8fbff;
+  border: 1px solid #e0e8f5;
+  display: none;
+}
+
+.resposta-form.active {
+  display: block;
+}
+
+.resposta-form .form-group {
+  margin-bottom: 12px;
+}
+
+.resposta-form input,
+.resposta-form textarea {
+  width: 100%;
+}
+
+.btn-responder {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85em;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+}
+
+.respostas-lista {
+  margin-top: 12px;
+  padding-left: 18px;
+  border-left: 3px solid #e0e8f5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resposta-item {
+  background: #f8fbff;
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid #e0e8f5;
+}
+
+.resposta-autor {
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 2px;
+}
+
+.resposta-data {
+  font-size: 0.75em;
+  color: #5a6b7f;
+  margin-bottom: 8px;
+}
+
+.resposta-texto {
+  color: #3a3f5a;
+  line-height: 1.6;
+}
+
 .comentarios-vazio {
   text-align: center;
   padding: 40px 20px;
@@ -825,6 +915,46 @@ body.dark .comentario-data {
 }
 
 body.dark .comentario-texto {
+  color: #d1d5db !important;
+}
+
+body.dark .comentario-reply-btn {
+  border-color: #2d3748;
+  color: #60a5fa !important;
+}
+
+body.dark .comentario-reply-btn:hover {
+  background: rgba(96, 165, 250, 0.12);
+  border-color: #0ea5e9;
+}
+
+body.dark .resposta-form {
+  background: #1a2332;
+  border-color: #2d3748;
+}
+
+body.dark .btn-responder {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+}
+
+body.dark .respostas-lista {
+  border-left-color: #2d3748;
+}
+
+body.dark .resposta-item {
+  background: #1a2332;
+  border-color: #2d3748;
+}
+
+body.dark .resposta-autor {
+  color: #f3f4f6 !important;
+}
+
+body.dark .resposta-data {
+  color: #a0aec0 !important;
+}
+
+body.dark .resposta-texto {
   color: #d1d5db !important;
 }
 
@@ -917,6 +1047,8 @@ footer {
 }
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  width: 100%;
 }
 
 /* RESPONSIVO */
@@ -1905,25 +2037,88 @@ function carregarComentarios(noticiaId) {
       comentarios.sort((a, b) => b.timestamp - a.timestamp);
       
       comentarios.forEach(comentario => {
-      const div = document.createElement('div');
-      div.className = 'comentario-item';
-      const autor = document.createElement('div');
-      autor.className = 'comentario-autor';
-      autor.textContent = comentario.nome || '';
+        const div = document.createElement('div');
+        div.className = 'comentario-item';
 
-      const data = document.createElement('div');
-      data.className = 'comentario-data';
-      data.textContent = comentario.data || '';
+        const autor = document.createElement('div');
+        autor.className = 'comentario-autor';
+        autor.textContent = comentario.nome || '';
 
-      const texto = document.createElement('div');
-      texto.className = 'comentario-texto';
-      texto.textContent = comentario.texto || '';
+        const data = document.createElement('div');
+        data.className = 'comentario-data';
+        data.textContent = comentario.data || '';
 
-      div.appendChild(autor);
-      div.appendChild(data);
-      div.appendChild(texto);
-      comentariosList.appendChild(div);
-    });
+        const texto = document.createElement('div');
+        texto.className = 'comentario-texto';
+        texto.textContent = comentario.texto || '';
+
+        const actions = document.createElement('div');
+        actions.className = 'comentario-actions';
+        const replyBtn = document.createElement('button');
+        replyBtn.type = 'button';
+        replyBtn.className = 'comentario-reply-btn';
+        replyBtn.textContent = 'Responder';
+        replyBtn.dataset.commentId = comentario.id;
+        actions.appendChild(replyBtn);
+
+        const replyForm = document.createElement('div');
+        replyForm.className = 'resposta-form';
+        replyForm.dataset.commentId = comentario.id;
+        replyForm.innerHTML = `
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" class="resposta-nome" placeholder="Seu nome">
+          </div>
+          <div class="form-group">
+            <label>Resposta</label>
+            <textarea class="resposta-texto" placeholder="Escreva uma resposta..." rows="3"></textarea>
+          </div>
+          <button type="button" class="btn-responder" data-comment-id="${comentario.id}">Enviar resposta</button>
+        `;
+
+        const respostasList = document.createElement('div');
+        respostasList.className = 'respostas-lista';
+
+        const respostasObj = comentario.respostas || {};
+        const respostas = Object.keys(respostasObj).map((key) => ({
+          id: key,
+          ...respostasObj[key]
+        }));
+
+        respostas.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+        respostas.forEach((resposta) => {
+          const respostaItem = document.createElement('div');
+          respostaItem.className = 'resposta-item';
+
+          const respostaAutor = document.createElement('div');
+          respostaAutor.className = 'resposta-autor';
+          respostaAutor.textContent = resposta.nome || '';
+
+          const respostaData = document.createElement('div');
+          respostaData.className = 'resposta-data';
+          respostaData.textContent = resposta.data || '';
+
+          const respostaTexto = document.createElement('div');
+          respostaTexto.className = 'resposta-texto';
+          respostaTexto.textContent = resposta.texto || '';
+
+          respostaItem.appendChild(respostaAutor);
+          respostaItem.appendChild(respostaData);
+          respostaItem.appendChild(respostaTexto);
+          respostasList.appendChild(respostaItem);
+        });
+
+        div.appendChild(autor);
+        div.appendChild(data);
+        div.appendChild(texto);
+        div.appendChild(actions);
+        div.appendChild(replyForm);
+        if (respostas.length > 0) {
+          div.appendChild(respostasList);
+        }
+        comentariosList.appendChild(div);
+      });
   }, (error) => {
     console.error('Erro ao carregar comentários:', error);
     comentariosList.innerHTML = '<div class="comentarios-vazio">❌ Erro ao carregar comentários. Tente novamente.</div>';
@@ -1997,8 +2192,68 @@ function adicionarComentario(noticiaId, nome, texto) {
   });
 }
 
+function adicionarResposta(noticiaId, comentarioId, nome, texto) {
+  if (!database) {
+    alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
+    return;
+  }
+
+  if (!nome || !texto) {
+    alert('Por favor preencha todos os campos.');
+    return;
+  }
+
+  const rateCheck = window.SecurityUtils.checkRateLimit('comment', 3, 60000);
+  if (!rateCheck.allowed) {
+    alert(`Aguarde ${rateCheck.waitTime} segundos antes de responder novamente.`);
+    return;
+  }
+
+  if (!window.authReady || !window.currentUserId) {
+    if (window.authFailed) {
+      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      return;
+    }
+    alert('Aguarde a autenticação para responder. Tente novamente em alguns segundos.');
+    return;
+  }
+
+  const nomeSanitizado = window.SecurityUtils.sanitizeName(nome);
+  const textoSanitizado = window.SecurityUtils.sanitizeComment(texto);
+
+  if (window.SecurityUtils.containsMaliciousCode(nome) || window.SecurityUtils.containsMaliciousCode(texto)) {
+    alert('Conteúdo inválido detectado.');
+    return;
+  }
+
+  if (!nomeSanitizado || !textoSanitizado) {
+    alert('Nome ou resposta inválida.');
+    return;
+  }
+
+  const agora = new Date();
+  const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+  const respostasRef = database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas`);
+
+  respostasRef.push({
+    nome: nomeSanitizado,
+    texto: textoSanitizado,
+    data: data,
+    timestamp: agora.getTime()
+  })
+  .then(() => {
+    console.log('✓ Resposta adicionada com sucesso');
+  })
+  .catch((error) => {
+    console.error('Erro ao adicionar resposta:', error);
+    alert('Erro ao enviar resposta. Tente novamente.');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('comentarioForm');
+  const comentariosList = document.getElementById('comentariosList');
   
   if (form) {
     form.addEventListener('submit', (e) => {
@@ -2023,6 +2278,40 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           btn.textContent = textoOriginal;
         }, 2000);
+      }
+    });
+  }
+
+  if (comentariosList) {
+    comentariosList.addEventListener('click', (e) => {
+      const replyBtn = e.target.closest('.comentario-reply-btn');
+      if (replyBtn) {
+        const commentId = replyBtn.dataset.commentId;
+        const replyForm = comentariosList.querySelector(`.resposta-form[data-comment-id="${commentId}"]`);
+        if (replyForm) {
+          replyForm.classList.toggle('active');
+        }
+        return;
+      }
+
+      const sendBtn = e.target.closest('.btn-responder');
+      if (sendBtn) {
+        const params = new URLSearchParams(window.location.search);
+        const noticiaId = params.get('id');
+        const commentId = sendBtn.dataset.commentId;
+        const replyForm = comentariosList.querySelector(`.resposta-form[data-comment-id="${commentId}"]`);
+        if (!noticiaId || !commentId || !replyForm) return;
+
+        const nomeInput = replyForm.querySelector('.resposta-nome');
+        const textoInput = replyForm.querySelector('.resposta-texto');
+        const nome = nomeInput ? nomeInput.value : '';
+        const texto = textoInput ? textoInput.value : '';
+
+        adicionarResposta(noticiaId, commentId, nome, texto);
+
+        if (nomeInput) nomeInput.value = '';
+        if (textoInput) textoInput.value = '';
+        replyForm.classList.remove('active');
       }
     });
   }
