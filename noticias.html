@@ -10,7 +10,33 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script>
-const firebaseConfig={apiKey:"AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",authDomain:"chat-viciadocomenta.firebaseapp.com",databaseURL:"https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",projectId:"chat-viciadocomenta",storageBucket:"chat-viciadocomenta.firebasestorage.app",messagingSenderId:"183684670526",appId:"1:183684670526:web:64b1f62cf80e05d4781d6f"};firebase.initializeApp(firebaseConfig);const db=firebase.database();const today=new Date().toISOString().split('T')[0];const month=new Date().toISOString().substring(0,7);const statsRef=db.ref('site_stats');statsRef.transaction(data=>{if(!data)data={total_visits:0,daily:{},monthly:{},last_updated:new Date().toISOString()};data.total_visits=(data.total_visits||0)+1;if(!data.daily)data.daily={};data.daily[today]=(data.daily[today]||0)+1;if(!data.monthly)data.monthly={};data.monthly[month]=(data.monthly[month]||0)+1;data.last_updated=new Date().toISOString();return data;});const userId='user_'+Math.random().toString(36).substr(2,9);const activeUserRef=db.ref('active_users/'+userId);activeUserRef.set({timestamp:firebase.database.ServerValue.TIMESTAMP,page:window.location.pathname});activeUserRef.onDisconnect().remove();window.addEventListener('beforeunload',()=>activeUserRef.remove());
+try {
+  const firebaseConfig={apiKey:"AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",authDomain:"chat-viciadocomenta.firebaseapp.com",databaseURL:"https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",projectId:"chat-viciadocomenta",storageBucket:"chat-viciadocomenta.firebasestorage.app",messagingSenderId:"183684670526",appId:"1:183684670526:web:64b1f62cf80e05d4781d6f"};
+  
+  // Verificar se Firebase já foi inicializado
+  let app;
+  try {
+    app = firebase.app();
+    console.log('✓ Firebase já estava inicializado');
+  } catch (e) {
+    app = firebase.initializeApp(firebaseConfig);
+    console.log('✓ Firebase inicializado pela primeira vez');
+  }
+  
+  const db=firebase.database();
+  const today=new Date().toISOString().split('T')[0];
+  const month=new Date().toISOString().substring(0,7);
+  const statsRef=db.ref('site_stats');
+  statsRef.transaction(data=>{if(!data)data={total_visits:0,daily:{},monthly:{},last_updated:new Date().toISOString()};data.total_visits=(data.total_visits||0)+1;if(!data.daily)data.daily={};data.daily[today]=(data.daily[today]||0)+1;if(!data.monthly)data.monthly={};data.monthly[month]=(data.monthly[month]||0)+1;data.last_updated=new Date().toISOString();return data;});
+  const userId='user_'+Math.random().toString(36).substr(2,9);
+  const activeUserRef=db.ref('active_users/'+userId);
+  activeUserRef.set({timestamp:firebase.database.ServerValue.TIMESTAMP,page:window.location.pathname});
+  activeUserRef.onDisconnect().remove();
+  window.addEventListener('beforeunload',()=>activeUserRef.remove());
+  console.log('✓ Firebase configurado com sucesso no head');
+} catch (error) {
+  console.error('❌ Erro ao configurar Firebase no head:', error);
+}
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
@@ -1296,10 +1322,25 @@ function initFirebase() {
       return;
     }
     
+    // Obter o app já inicializado no head
+    let app;
+    try {
+      app = firebase.app();
+      console.log('✓ Firebase App encontrado');
+    } catch (e) {
+      console.warn('Firebase App não inicializado, tentando inicializar...');
+      return;
+    }
+    
     // Firebase já foi inicializado no head com db, reutilizar
-    window.database = firebase.database();
-    window.firebaseReady = true;
-    console.log('✓ Firebase Database conectado');
+    try {
+      window.database = firebase.database();
+      window.firebaseReady = true;
+      console.log('✓ Firebase Database conectado');
+    } catch (dbError) {
+      console.error('❌ Erro ao obter Database:', dbError);
+      throw dbError;
+    }
 
     // Autenticação anónima para proteger writes
     if (firebase.auth) {
