@@ -117,6 +117,12 @@ main {
   border: 1px solid #e0e8f5;
 }
 
+body.dark .policy-content {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
 .policy-header {
   text-align: center;
   margin-bottom: 40px;
@@ -131,9 +137,17 @@ main {
   margin-bottom: 10px;
 }
 
+body.dark .policy-header h1 {
+  color: #f3f4f6;
+}
+
 .policy-date {
   color: #5a6b7f;
   font-size: 0.9em;
+}
+
+body.dark .policy-date {
+  color: #a0aec0;
 }
 
 .policy-section {
@@ -148,6 +162,10 @@ main {
   margin-top: 30px;
 }
 
+body.dark .policy-section h2 {
+  color: #60a5fa;
+}
+
 .policy-section h3 {
   font-family: 'Outfit', sans-serif;
   font-size: 1.3em;
@@ -156,11 +174,19 @@ main {
   margin-top: 20px;
 }
 
+body.dark .policy-section h3 {
+  color: #d1d5db;
+}
+
 .policy-section p {
   margin-bottom: 15px;
   color: #3a3f5a;
   line-height: 1.8;
   text-align: justify;
+}
+
+body.dark .policy-section p {
+  color: #d1d5db;
 }
 
 .policy-section ul, .policy-section ol {
@@ -174,9 +200,17 @@ main {
   line-height: 1.7;
 }
 
+body.dark .policy-section li {
+  color: #d1d5db;
+}
+
 .policy-section strong {
   color: #1a1f3a;
   font-weight: 600;
+}
+
+body.dark .policy-section strong {
+  color: #f3f4f6;
 }
 
 .policy-section a {
@@ -194,6 +228,11 @@ main {
   padding: 20px;
   margin: 25px 0;
   border-radius: 8px;
+}
+
+body.dark .highlight-box {
+  background: rgba(14, 165, 233, 0.15);
+  border-left-color: #0ea5e9;
 }
 
 .highlight-box p {

@@ -211,17 +211,19 @@ nav a:hover {
 }
 
 body.dark .dropdown-menu {
-  background: rgba(17, 24, 39, 0.95);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: #1a2332;
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 body.dark .dropdown-menu a {
-  color: #e5e7eb;
+  color: #d1d5db;
 }
 
 body.dark .dropdown-menu a:hover {
-  background: rgba(0, 102, 204, 0.2);
-  color: #93c5fd;
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  padding-left: 24px;
 }
 
 body.dark .nav-dropdown > a {
@@ -396,6 +398,12 @@ main {
   border: 1px solid #e0e8f5;
 }
 
+body.dark .filter-section {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .filter-row {
   display: flex;
   gap: 12px;
@@ -407,6 +415,10 @@ main {
   font-weight: 600;
   color: #1a1f3a;
   margin-right: 8px;
+}
+
+body.dark .filter-label {
+  color: #d1d5db;
 }
 
 .filter-btn {
@@ -425,8 +437,17 @@ main {
   background: #e3f2fd;
 }
 
+body.dark .filter-btn:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
 .filter-btn.active {
   background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+}
+
+body.dark .filter-btn.active {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
   color: #ffffff;
 }
 
@@ -448,8 +469,22 @@ main {
   background: #e3f2fd;
 }
 
+body.dark .date-sort-select {
+  background: #1a2332;
+  color: #60a5fa;
+  border-color: #0ea5e9;
+}
+
+body.dark .date-sort-select:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
 .date-sort-select:focus {
   border-color: #0052a3;
+}
+
+body.dark .date-sort-select:focus {
+  border-color: #0369a1;
 }
 
 body.dark .filter-section {

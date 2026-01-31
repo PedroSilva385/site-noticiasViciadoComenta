@@ -201,6 +201,22 @@ nav a:hover {
   padding-left: 24px;
 }
 
+body.dark .dropdown-menu {
+  background: #1a2332;
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .dropdown-menu a {
+  color: #d1d5db;
+}
+
+body.dark .dropdown-menu a:hover {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  padding-left: 24px;
+}
+
 /* MAIN */
 main {
   max-width: 1400px;
@@ -293,9 +309,19 @@ main {
   color: inherit;
 }
 
+body.dark .video-card {
+  background: #1a2332;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2d3748;
+}
+
 .video-card:hover {
   box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
   transform: translateY(-4px);
+}
+
+body.dark .video-card:hover {
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
 }
 
 .video-card.watched {
