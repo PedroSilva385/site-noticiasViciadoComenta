@@ -326,6 +326,43 @@ main {
 }
 
 @media (max-width: 768px) {
+  main {
+    padding: 20px 15px;
+    max-width: 100%;
+  }
+  
+  .about-content {
+    padding: 20px;
+  }
+  
+  .about-header h1 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+  }
+  
+  .about-header .subtitle {
+    font-size: 0.95em;
+  }
+  
+  .about-section {
+    margin-bottom: 25px;
+  }
+  
+  .about-section h2 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+  }
+  
+  .about-section p, .about-section li {
+    font-size: 0.95em;
+    line-height: 1.6;
+  }
+  
+  .highlight-box {
+    padding: 15px;
+    margin-bottom: 25px;
+  }
+  
   .author-profile {
     flex-direction: column;
     align-items: center;
@@ -336,82 +373,50 @@ main {
     width: 150px;
     height: 150px;
   }
-}
-
-/* FOOTER */
-footer {
-  background: #1a1f3a;
-  border-top: 1px solid rgba(0, 102, 204, 0.2);
-  text-align: center;
-  padding: 40px 20px;
-  margin-top: 80px;
-  font-size: 0.9em;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-links a {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9em;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-links a:hover {
-  color: #ffffff;
-  text-decoration: underline;
-}
-
-.footer-contacts {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.footer-contacts a {
-  color: #ffffff;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.footer-contacts a:hover {
-  text-decoration: underline;
-}
-
-.footer-contacts i {
-  margin-right: 8px;
-}
-
-.footer-copy {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-@media (max-width: 768px) {
-  .about-content {
-    padding: 25px;
-  }
-  
-  .about-header h1 {
-    font-size: 2em;
-  }
-  
-  .about-section h2 {
-    font-size: 1.5em;
-  }
   
   .stats-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 15px 10px;
+  }
+  
+  .about-content {
+    padding: 15px;
+  }
+  
+  .about-header h1 {
+    font-size: 1.5em;
+  }
+  
+  .about-section h2 {
+    font-size: 1.2em;
+  }
+  
+  .about-section p, .about-section li {
+    font-size: 0.9em;
+  }
+  
+  ul {
+    margin-left: 20px;
+  }
+  
+  table {
+    font-size: 0.85em;
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .highlight-box {
+    padding: 12px;
   }
 }
 </style>

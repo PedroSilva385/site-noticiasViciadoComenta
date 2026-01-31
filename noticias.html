@@ -8,15 +8,12 @@
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script>
 const firebaseConfig={apiKey:"AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",authDomain:"chat-viciadocomenta.firebaseapp.com",databaseURL:"https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",projectId:"chat-viciadocomenta",storageBucket:"chat-viciadocomenta.firebasestorage.app",messagingSenderId:"183684670526",appId:"1:183684670526:web:64b1f62cf80e05d4781d6f"};firebase.initializeApp(firebaseConfig);const db=firebase.database();const today=new Date().toISOString().split('T')[0];const month=new Date().toISOString().substring(0,7);const statsRef=db.ref('site_stats');statsRef.transaction(data=>{if(!data)data={total_visits:0,daily:{},monthly:{},last_updated:new Date().toISOString()};data.total_visits=(data.total_visits||0)+1;if(!data.daily)data.daily={};data.daily[today]=(data.daily[today]||0)+1;if(!data.monthly)data.monthly={};data.monthly[month]=(data.monthly[month]||0)+1;data.last_updated=new Date().toISOString();return data;});const userId='user_'+Math.random().toString(36).substr(2,9);const activeUserRef=db.ref('active_users/'+userId);activeUserRef.set({timestamp:firebase.database.ServerValue.TIMESTAMP,page:window.location.pathname});activeUserRef.onDisconnect().remove();window.addEventListener('beforeunload',()=>activeUserRef.remove());
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
-<!-- Firebase SDK (Versão compatível) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <!-- Funções de Segurança -->
 <script src="assets/security.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -893,6 +890,10 @@ footer {
 }
 
 @media (max-width: 768px) {
+  nav a {
+    padding: 12px 0;
+  }
+
   .nav-dropdown > a {
     padding: 12px 0;
   }
@@ -1275,6 +1276,91 @@ function initTheme() {
   applyTheme(saved);
 }
 
+// ========== FIREBASE CONFIGURAÇÃO ==========
+// Inicializar Firebase ANTES do DOMContentLoaded
+window.database = null;
+window.firebaseReady = false;
+window.authReady = false;
+window.currentUserId = null;
+window.authFailed = false;
+
+console.log('🔥 Iniciando configuração Firebase...');
+
+// Esperar Firebase carregar
+function initFirebase() {
+  try {
+    // Verificar se Firebase está disponível
+    if (typeof firebase === 'undefined') {
+      console.warn('Firebase ainda não carregado, tentando novamente...');
+      setTimeout(initFirebase, 100);
+      return;
+    }
+    
+    // Firebase já foi inicializado no head com db, reutilizar
+    window.database = firebase.database();
+    window.firebaseReady = true;
+    console.log('✓ Firebase Database conectado');
+
+    // Autenticação anónima para proteger writes
+    if (firebase.auth) {
+      const auth = firebase.auth();
+      
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          console.log('✓ Usuário autenticado:', user.uid);
+          window.currentUserId = user.uid;
+          window.authReady = true;
+        } else {
+          console.log('👤 Sem usuário autenticado');
+        }
+      });
+
+      auth.signInAnonymously()
+        .then(() => {
+          console.log('✓ Autenticação anônima bem-sucedida');
+        })
+        .catch((authError) => {
+          console.error('❌ Erro ao autenticar anonimamente:', authError);
+          console.error('Código do erro:', authError.code);
+          console.error('Mensagem:', authError.message);
+          
+          // Mesmo sem auth, permitir leitura
+          window.authFailed = true;
+          window.authReady = true;
+          
+          // Gerar um ID temporário baseado em sessão
+          let sessionId = sessionStorage.getItem('tempUserId');
+          if (!sessionId) {
+            sessionId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem('tempUserId', sessionId);
+          }
+          window.currentUserId = sessionId;
+          console.log('⚠️ Usando ID temporário:', sessionId);
+        });
+    } else {
+      console.error('❌ Firebase Auth não disponível');
+      window.authFailed = true;
+      window.authReady = true;
+      
+      // Gerar ID temporário
+      let sessionId = sessionStorage.getItem('tempUserId');
+      if (!sessionId) {
+        sessionId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        sessionStorage.setItem('tempUserId', sessionId);
+      }
+      window.currentUserId = sessionId;
+    }
+    
+    console.log('✓ Firebase configurado com sucesso');
+  } catch (error) {
+    console.error('❌ Erro ao inicializar Firebase:', error);
+    console.log('⚠️ Sistema funcionará com funcionalidades limitadas');
+  }
+}
+
+// Iniciar Firebase imediatamente
+initFirebase();
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   const btn = document.createElement('button');
@@ -1309,9 +1395,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (noticiaId) {
     console.log('🔍 ID da URL:', noticiaId);
     fetch("data/noticias.json")
-      .then(res => res.json())
+      .then(res => {
+        console.log('📡 Resposta fetch:', res.status, res.ok);
+        if (!res.ok) throw new Error('Erro ao carregar JSON');
+        return res.json();
+      })
       .then(data => {
-        console.log('📄 Notícias carregadas:', data.noticias.length);
+        console.log('📄 JSON recebido:', data);
+        console.log('📄 Notícias carregadas:', data.noticias ? data.noticias.length : 'NENHUMA');
+        
+        if (!data.noticias || !Array.isArray(data.noticias)) {
+          throw new Error('Formato JSON inválido');
+        }
+        
         console.log('🆔 IDs disponíveis:', data.noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         
@@ -1437,7 +1533,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
     .catch(err => {
-      console.error("Erro ao carregar notícia:", err);
+      console.error("❌ Erro ao carregar notícia:", err);
+      document.getElementById('artigo').innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+          <h2>⚠️ Erro ao carregar</h2>
+          <p>Ocorreu um erro ao carregar a notícia: ${err.message}</p>
+          <p style="font-size: 0.9em; color: #666;">Verifique o console para mais detalhes</p>
+          <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">← Voltar às notícias</a>
+        </div>
+      `;
     });
   } else {
     // Sem ID: listar notícias em grelha
@@ -1480,31 +1584,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== SISTEMA DE LIKES ==========
 function toggleLike(noticiaId) {
-  console.log('toggleLike chamado com ID:', noticiaId);
-  console.log('window.database existe:', !!window.database);
-  console.log('firebase pronto:', window.firebaseReady);
+  console.log('🔥 toggleLike chamado com ID:', noticiaId);
   
-  // Se Firebase não está pronto, aguardar um bocado
-  if (!window.firebaseReady) {
-    console.log('Aguardando Firebase...');
-    setTimeout(() => toggleLike(noticiaId), 500);
+  // Verificar se Firebase existe
+  if (typeof firebase === 'undefined') {
+    console.error('❌ Firebase não carregado');
+    alert('Erro: Firebase não disponível. Recarregue a página.');
     return;
   }
   
+  // Tentar obter database diretamente se window.database não existir
   if (!window.database) {
-    console.error('Firebase não está disponível');
-    alert('Sistema de gostos em configuração. Recarregue a página.');
-    return;
-  }
-
-  if (!window.authReady || !window.currentUserId) {
-    if (window.authFailed) {
-      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+    try {
+      window.database = firebase.database();
+      window.firebaseReady = true;
+      console.log('✓ Database inicializado durante o like');
+    } catch (e) {
+      console.error('❌ Erro ao obter database:', e);
+      alert('Erro ao conectar ao Firebase. Recarregue a página.');
       return;
     }
-    console.log('Aguardando autenticação...');
-    setTimeout(() => toggleLike(noticiaId), 500);
-    return;
+  }
+  
+  console.log('📊 Status:', {
+    database: !!window.database,
+    firebaseReady: window.firebaseReady,
+    authReady: window.authReady,
+    currentUserId: window.currentUserId,
+    authFailed: window.authFailed
+  });
+
+  // Se não tem userId, tentar obter ou criar um temporário
+  if (!window.currentUserId) {
+    // Verificar se já tem usuário autenticado
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      window.currentUserId = currentUser.uid;
+      window.authReady = true;
+      console.log('✓ Usuário encontrado:', currentUser.uid);
+    } else {
+      // Criar ID temporário imediatamente
+      let sessionId = sessionStorage.getItem('tempUserId');
+      if (!sessionId) {
+        sessionId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        sessionStorage.setItem('tempUserId', sessionId);
+      }
+      window.currentUserId = sessionId;
+      window.authReady = true;
+      console.log('⚠️ Usando ID temporário:', sessionId);
+    }
   }
   
   // SEGURANÇA: Rate limiting (máximo 10 likes por minuto)
@@ -1666,81 +1794,41 @@ function fallbackCopyLink(url) {
   alert('Link copiado para a área de transferência!');
 }
 
-// ========== FIREBASE CONFIGURAÇÃO ==========
-// Firebase já foi inicializado no <head> da página
-// Reutilizando a instância existente
-let database;
-window.database = null;
-window.firebaseReady = false;
-window.authReady = false;
-window.currentUserId = null;
-window.authFailed = false;
-
-try {
-  console.log('Reutilizando Firebase já inicializado...');
-  
-  // Firebase já foi inicializado no head, apenas obter referência
-  database = firebase.database();
-  window.database = database;
-  window.firebaseReady = true;
-
-  // Autenticação anónima para proteger writes
-  if (firebase.auth) {
-    const auth = firebase.auth();
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        window.currentUserId = user.uid;
-        window.authReady = true;
-      }
-    });
-
-    auth.signInAnonymously().catch((authError) => {
-      console.error('❌ Erro ao autenticar anonimamente:', authError);
-      window.authFailed = true;
-    });
-  }
-  
-  console.log('✓ Firebase conectado com sucesso');
-  console.log('Database disponível:', !!database);
-} catch (error) {
-  console.error('❌ Erro ao inicializar Firebase:', error);
-  console.log('⚠️ Comentários e likes não estarão disponíveis');
-}
-
 // Funções para gerenciar comentários com Firebase
 function carregarComentarios(noticiaId) {
   const comentariosList = document.getElementById('comentariosList');
   
-  if (!database) {
-    comentariosList.innerHTML = '<div class="comentarios-vazio">⚠️ Sistema de comentários em configuração. Configure o Firebase para ativar.</div>';
+  if (!window.database) {
+    comentariosList.innerHTML = '<div class="comentarios-vazio">💬 Sistema de comentários em manutenção.</div>';
     return;
   }
   
   comentariosList.innerHTML = '<div class="comentarios-vazio">⏳ Carregando comentários...</div>';
   
-  // Buscar comentários do Firebase em tempo real
-  const comentariosRef = database.ref(`comentarios/${noticiaId}`);
-  
-  comentariosRef.on('value', (snapshot) => {
-    const comentarios = [];
-    snapshot.forEach((childSnapshot) => {
-      comentarios.push({
-        id: childSnapshot.key,
-        ...childSnapshot.val()
+  try {
+    // Buscar comentários do Firebase em tempo real
+    const comentariosRef = window.database.ref(`comentarios/${noticiaId}`);
+    
+    comentariosRef.on('value', (snapshot) => {
+      const comentarios = [];
+      snapshot.forEach((childSnapshot) => {
+        comentarios.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        });
       });
-    });
-    
-    comentariosList.innerHTML = '';
-    
-    if (comentarios.length === 0) {
-      comentariosList.innerHTML = '<div class="comentarios-vazio">Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
-      return;
-    }
-    
-    // Ordenar por data (mais recentes primeiro)
-    comentarios.sort((a, b) => b.timestamp - a.timestamp);
-    
-    comentarios.forEach(comentario => {
+      
+      comentariosList.innerHTML = '';
+      
+      if (comentarios.length === 0) {
+        comentariosList.innerHTML = '<div class="comentarios-vazio">💭 Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
+        return;
+      }
+      
+      // Ordenar por data (mais recentes primeiro)
+      comentarios.sort((a, b) => b.timestamp - a.timestamp);
+      
+      comentarios.forEach(comentario => {
       const div = document.createElement('div');
       div.className = 'comentario-item';
       const autor = document.createElement('div');
@@ -1764,6 +1852,10 @@ function carregarComentarios(noticiaId) {
     console.error('Erro ao carregar comentários:', error);
     comentariosList.innerHTML = '<div class="comentarios-vazio">❌ Erro ao carregar comentários. Tente novamente.</div>';
   });
+  } catch (error) {
+    console.error('Erro ao configurar listener de comentários:', error);
+    comentariosList.innerHTML = '<div class="comentarios-vazio">❌ Erro ao carregar comentários.</div>';
+  }
 }
 
 function adicionarComentario(noticiaId, nome, texto) {
