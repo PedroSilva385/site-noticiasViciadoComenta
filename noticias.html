@@ -787,6 +787,28 @@ body.dark .contacto-item {
   border-color: #0066cc;
 }
 
+.resposta-actions {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.resposta-reply-btn {
+  background: transparent;
+  color: #0066cc;
+  border: 1px solid #0066cc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resposta-reply-btn:hover {
+  background: #e3f2fd;
+  border-color: #0052a3;
+}
+
 .resposta-form {
   margin-top: 12px;
   padding: 16px;
@@ -798,6 +820,12 @@ body.dark .contacto-item {
 
 .resposta-form.active {
   display: block;
+}
+
+.resposta-reply-form {
+  margin-left: 12px;
+  background: #fafbfc;
+  padding: 12px;
 }
 
 .resposta-form .form-group {
@@ -819,6 +847,21 @@ body.dark .contacto-item {
   cursor: pointer;
   font-size: 0.85em;
   box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+}
+
+.btn-responder-reply {
+  background: #0066cc;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.btn-responder-reply:hover {
+  background: #0052a3;
 }
 
 .respostas-lista {
@@ -852,6 +895,23 @@ body.dark .contacto-item {
 .resposta-texto {
   color: #3a3f5a;
   line-height: 1.6;
+}
+
+.respostas-aninhadas {
+  margin-top: 12px;
+  padding-left: 16px;
+  border-left: 2px solid #d4dce9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resposta-aninhada-item {
+  background: #fafbfc;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #e8ecf3;
+  font-size: 0.95em;
 }
 
 .comentarios-vazio {
@@ -928,13 +988,42 @@ body.dark .comentario-reply-btn:hover {
   border-color: #0ea5e9;
 }
 
+body.dark .resposta-actions {
+  margin-top: 8px;
+}
+
+body.dark .resposta-reply-btn {
+  border-color: #2d3748;
+  color: #60a5fa !important;
+  background: transparent;
+}
+
+body.dark .resposta-reply-btn:hover {
+  background: rgba(96, 165, 250, 0.12);
+  border-color: #0ea5e9;
+}
+
 body.dark .resposta-form {
   background: #1a2332;
   border-color: #2d3748;
 }
 
+body.dark .resposta-reply-form {
+  background: #222b3a;
+  border-color: #2d3748;
+}
+
 body.dark .btn-responder {
   background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+}
+
+body.dark .btn-responder-reply {
+  background: #0ea5e9;
+  color: #fff;
+}
+
+body.dark .btn-responder-reply:hover {
+  background: #0369a1;
 }
 
 body.dark .respostas-lista {
@@ -955,6 +1044,27 @@ body.dark .resposta-data {
 }
 
 body.dark .resposta-texto {
+  color: #d1d5db !important;
+}
+
+body.dark .respostas-aninhadas {
+  border-left-color: #2d3748;
+}
+
+body.dark .resposta-aninhada-item {
+  background: #222b3a;
+  border-color: #2d3748;
+}
+
+body.dark .resposta-aninhada-item .resposta-autor {
+  color: #e5e7eb !important;
+}
+
+body.dark .resposta-aninhada-item .resposta-data {
+  color: #9ca3af !important;
+}
+
+body.dark .resposta-aninhada-item .resposta-texto {
   color: #d1d5db !important;
 }
 
@@ -1487,18 +1597,6 @@ footer {
   }
 
   .footer-contacts {
-    font-size: 0.7em;
-  }
-}
-    font-size: 0.75em;
-  }
-
-  .artigo-conteudo {
-    font-size: 1.2em;
-  }
-
-  footer {
-    padding: 12px 10px;
     font-size: 0.7em;
   }
 }
@@ -2235,9 +2333,75 @@ function carregarComentarios(noticiaId) {
           respostaTexto.className = 'resposta-texto';
           respostaTexto.textContent = resposta.texto || '';
 
+          // Adicionar botão de responder também nas respostas
+          const respostaActions = document.createElement('div');
+          respostaActions.className = 'resposta-actions';
+          const respostaReplyBtn = document.createElement('button');
+          respostaReplyBtn.type = 'button';
+          respostaReplyBtn.className = 'resposta-reply-btn';
+          respostaReplyBtn.textContent = 'Responder';
+          respostaReplyBtn.dataset.commentId = comentario.id;
+          respostaReplyBtn.dataset.replyId = resposta.id;
+          respostaActions.appendChild(respostaReplyBtn);
+
+          const respostaReplyForm = document.createElement('div');
+          respostaReplyForm.className = 'resposta-form resposta-reply-form';
+          respostaReplyForm.dataset.commentId = comentario.id;
+          respostaReplyForm.dataset.replyId = resposta.id;
+          respostaReplyForm.innerHTML = `
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" class="resposta-reply-nome" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+              <label>Resposta</label>
+              <textarea class="resposta-reply-texto" placeholder="Escreva uma resposta..." rows="2"></textarea>
+            </div>
+            <button type="button" class="btn-responder-reply" data-comment-id="${comentario.id}" data-reply-id="${resposta.id}">Enviar</button>
+          `;
+
+          // Renderizar respostas aninhadas (respostas às respostas)
+          const respostasAninhadasDiv = document.createElement('div');
+          respostasAninhadasDiv.className = 'respostas-aninhadas';
+
+          const respostasAninhadasObj = resposta.respostas || {};
+          const respostasAninhadas = Object.keys(respostasAninhadasObj).map((key) => ({
+            id: key,
+            ...respostasAninhadasObj[key]
+          }));
+
+          respostasAninhadas.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+          respostasAninhadas.forEach((respostaAninhada) => {
+            const respostaAninhadaItem = document.createElement('div');
+            respostaAninhadaItem.className = 'resposta-aninhada-item';
+
+            const respostaAninhadaAutor = document.createElement('div');
+            respostaAninhadaAutor.className = 'resposta-autor';
+            respostaAninhadaAutor.textContent = respostaAninhada.nome || '';
+
+            const respostaAninhadaData = document.createElement('div');
+            respostaAninhadaData.className = 'resposta-data';
+            respostaAninhadaData.textContent = respostaAninhada.data || '';
+
+            const respostaAninhadaTexto = document.createElement('div');
+            respostaAninhadaTexto.className = 'resposta-texto';
+            respostaAninhadaTexto.textContent = respostaAninhada.texto || '';
+
+            respostaAninhadaItem.appendChild(respostaAninhadaAutor);
+            respostaAninhadaItem.appendChild(respostaAninhadaData);
+            respostaAninhadaItem.appendChild(respostaAninhadaTexto);
+            respostasAninhadasDiv.appendChild(respostaAninhadaItem);
+          });
+
           respostaItem.appendChild(respostaAutor);
           respostaItem.appendChild(respostaData);
           respostaItem.appendChild(respostaTexto);
+          respostaItem.appendChild(respostaActions);
+          respostaItem.appendChild(respostaReplyForm);
+          if (respostasAninhadas.length > 0) {
+            respostaItem.appendChild(respostasAninhadasDiv);
+          }
           respostasList.appendChild(respostaItem);
         });
 
@@ -2325,7 +2489,7 @@ function adicionarComentario(noticiaId, nome, texto) {
 }
 
 function adicionarResposta(noticiaId, comentarioId, nome, texto) {
-  if (!database) {
+  if (!window.database) {
     alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
     return;
   }
@@ -2366,7 +2530,7 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
-  const respostasRef = database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas`);
+  const respostasRef = window.database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas`);
 
   respostasRef.push({
     nome: nomeSanitizado,
@@ -2379,6 +2543,65 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
   })
   .catch((error) => {
     console.error('Erro ao adicionar resposta:', error);
+    alert('Erro ao enviar resposta. Tente novamente.');
+  });
+}
+
+function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto) {
+  if (!window.database) {
+    alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
+    return;
+  }
+
+  if (!nome || !texto) {
+    alert('Por favor preencha todos os campos.');
+    return;
+  }
+
+  const rateCheck = window.SecurityUtils.checkRateLimit('comment', 3, 60000);
+  if (!rateCheck.allowed) {
+    alert(`Aguarde ${rateCheck.waitTime} segundos antes de responder novamente.`);
+    return;
+  }
+
+  if (!window.authReady || !window.currentUserId) {
+    if (window.authFailed) {
+      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      return;
+    }
+    alert('Aguarde a autenticação para responder. Tente novamente em alguns segundos.');
+    return;
+  }
+
+  const nomeSanitizado = window.SecurityUtils.sanitizeName(nome);
+  const textoSanitizado = window.SecurityUtils.sanitizeComment(texto);
+
+  if (window.SecurityUtils.containsMaliciousCode(nome) || window.SecurityUtils.containsMaliciousCode(texto)) {
+    alert('Conteúdo inválido detectado.');
+    return;
+  }
+
+  if (!nomeSanitizado || !textoSanitizado) {
+    alert('Nome ou resposta inválida.');
+    return;
+  }
+
+  const agora = new Date();
+  const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+  const respostasAninhadasRef = window.database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas/${replyId}/respostas`);
+
+  respostasAninhadasRef.push({
+    nome: nomeSanitizado,
+    texto: textoSanitizado,
+    data: data,
+    timestamp: agora.getTime()
+  })
+  .then(() => {
+    console.log('✓ Resposta aninhada adicionada com sucesso');
+  })
+  .catch((error) => {
+    console.error('Erro ao adicionar resposta aninhada:', error);
     alert('Erro ao enviar resposta. Tente novamente.');
   });
 }
@@ -2416,22 +2639,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (comentariosList) {
     comentariosList.addEventListener('click', (e) => {
+      // Botão responder para comentários principais
       const replyBtn = e.target.closest('.comentario-reply-btn');
       if (replyBtn) {
         const commentId = replyBtn.dataset.commentId;
-        const replyForm = comentariosList.querySelector(`.resposta-form[data-comment-id="${commentId}"]`);
+        const replyForm = comentariosList.querySelector(`.resposta-form[data-comment-id="${commentId}"]:not(.resposta-reply-form)`);
         if (replyForm) {
           replyForm.classList.toggle('active');
         }
         return;
       }
 
+      // Botão responder para respostas (nested)
+      const respostaReplyBtn = e.target.closest('.resposta-reply-btn');
+      if (respostaReplyBtn) {
+        const commentId = respostaReplyBtn.dataset.commentId;
+        const replyId = respostaReplyBtn.dataset.replyId;
+        const respostaReplyForm = comentariosList.querySelector(`.resposta-reply-form[data-comment-id="${commentId}"][data-reply-id="${replyId}"]`);
+        if (respostaReplyForm) {
+          respostaReplyForm.classList.toggle('active');
+        }
+        return;
+      }
+
+      // Enviar resposta ao comentário principal
       const sendBtn = e.target.closest('.btn-responder');
       if (sendBtn) {
         const params = new URLSearchParams(window.location.search);
         const noticiaId = params.get('id');
         const commentId = sendBtn.dataset.commentId;
-        const replyForm = comentariosList.querySelector(`.resposta-form[data-comment-id="${commentId}"]`);
+        const replyForm = comentariosList.querySelector(`.resposta-form[data-comment-id="${commentId}"]:not(.resposta-reply-form)`);
         if (!noticiaId || !commentId || !replyForm) return;
 
         const nomeInput = replyForm.querySelector('.resposta-nome');
@@ -2444,6 +2681,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nomeInput) nomeInput.value = '';
         if (textoInput) textoInput.value = '';
         replyForm.classList.remove('active');
+      }
+
+      // Enviar resposta à resposta (nested)
+      const sendReplyBtn = e.target.closest('.btn-responder-reply');
+      if (sendReplyBtn) {
+        const params = new URLSearchParams(window.location.search);
+        const noticiaId = params.get('id');
+        const commentId = sendReplyBtn.dataset.commentId;
+        const replyId = sendReplyBtn.dataset.replyId;
+        const respostaReplyForm = comentariosList.querySelector(`.resposta-reply-form[data-comment-id="${commentId}"][data-reply-id="${replyId}"]`);
+        if (!noticiaId || !commentId || !replyId || !respostaReplyForm) return;
+
+        const nomeInput = respostaReplyForm.querySelector('.resposta-reply-nome');
+        const textoInput = respostaReplyForm.querySelector('.resposta-reply-texto');
+        const nome = nomeInput ? nomeInput.value : '';
+        const texto = textoInput ? textoInput.value : '';
+
+        adicionarRespostaAninhada(noticiaId, commentId, replyId, nome, texto);
+
+        if (nomeInput) nomeInput.value = '';
+        if (textoInput) textoInput.value = '';
+        respostaReplyForm.classList.remove('active');
       }
     });
   }

@@ -1137,6 +1137,8 @@ footer {
   color: rgba(255, 255, 255, 0.85);
   text-align: center;
   width: 100%;
+}
+
 /* RESPONSIVO */
 @media (max-width: 1200px) {
   main {
@@ -1233,6 +1235,12 @@ footer {
   main {
     padding: 25px 12px;
     max-width: 100%;
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .sidebar {
+    display: none;
   }
 
   main > h2 {
@@ -1403,7 +1411,9 @@ footer {
   }
 
   main {
-    padding: 18px 10px;
+    padding: 16px 8px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   main > h2 {
@@ -1594,6 +1604,8 @@ footer {
 
   main {
     padding: 14px 8px;
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   main > h2 {
