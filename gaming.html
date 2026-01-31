@@ -197,22 +197,163 @@ footer {
 .footer-contacts a{color:#fff;text-decoration:none;font-weight:600}
 .footer-contacts a:hover{text-decoration:underline}
 .footer-contacts i{margin-right:8px;color:#fff}
-@media(max-width:600px){
-  nav {
-    flex-direction: column;
-  }
-  nav a {
-    margin: 5px 0;
-  }
+@media (max-width: 768px) {
   header {
     flex-direction: column;
+    gap: 15px;
+    padding: 20px 15px;
   }
+
   header h1 {
-    margin-top: 10px;
+    font-size: 2em;
+    margin: 0;
     text-align: center;
   }
+
+  .foto-perfil {
+    width: 80px;
+    height: 80px;
+  }
+
   .redes-sociais {
-    margin-top: 10px;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  nav {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  nav a {
+    padding: 12px 8px;
+    font-size: 0.9em;
+  }
+
+  main {
+    padding: 20px 12px;
+  }
+
+  main h2 {
+    font-size: 1.8em;
+  }
+
+  .twitch-embed {
+    height: 350px;
+  }
+
+  footer {
+    padding: 20px 12px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 15px 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  .foto-perfil {
+    width: 70px;
+    height: 70px;
+  }
+
+  .redes-sociais {
+    gap: 8px;
+  }
+
+  .redes-sociais a img {
+    width: 28px;
+    height: 28px;
+  }
+
+  nav {
+    gap: 8px;
+    padding: 0 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    padding: 10px 6px;
+    font-size: 0.8em;
+    flex: 0 0 auto;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-dropdown {
+    flex: 0 0 auto;
+  }
+
+  .nav-dropdown > a {
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
+  main {
+    padding: 15px 10px;
+  }
+
+  main h2 {
+    font-size: 1.4em;
+  }
+
+  .twitch-embed {
+    height: 250px;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header {
+    padding: 12px 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .foto-perfil {
+    width: 60px;
+    height: 60px;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    font-size: 0.75em;
+    min-height: 40px;
+  }
+
+  main {
+    padding: 12px 8px;
+  }
+
+  main h2 {
+    font-size: 1.2em;
+  }
+
+  .twitch-embed {
+    height: 200px;
+  }
+
+  footer {
+    padding: 12px 8px;
+    font-size: 0.7em;
   }
 }
 </style>

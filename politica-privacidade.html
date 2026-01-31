@@ -397,94 +397,230 @@ footer {
 }
 
 @media (max-width: 768px) {
+  header {
+    padding: 25px 15px;
+  }
+
+  header h1 {
+    font-size: 2em;
+    margin-bottom: 6px;
+  }
+
+  .header-subtitle {
+    font-size: 0.85em;
+    margin-bottom: 12px;
+  }
+
+  nav {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  nav a {
+    padding: 12px 8px;
+    font-size: 0.9em;
+  }
+
+  .nav-dropdown > a {
+    padding: 12px 8px;
+  }
+
+  .nav-dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
   main {
-    padding: 20px 15px;
+    padding: 25px 12px;
     max-width: 100%;
   }
-  
+
   .policy-content {
-    padding: 20px;
+    padding: 18px;
   }
-  
+
   .policy-header h1 {
     font-size: 1.8em;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
-  
+
   .policy-header .policy-date {
     font-size: 0.9em;
   }
-  
+
   .policy-section {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
-  
+
   .policy-section h2 {
     font-size: 1.4em;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
-  
+
   .policy-section h3 {
     font-size: 1.1em;
   }
-  
+
   .policy-section p, .policy-section li {
     font-size: 0.95em;
     line-height: 1.6;
   }
-  
+
   .highlight-box {
     padding: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
-  
+
   table {
     font-size: 0.85em;
     width: 100%;
   }
-  
+
   ul, ol {
-    margin-left: 20px;
+    margin-left: 18px;
+  }
+
+  footer {
+    padding: 20px 12px;
+    font-size: 0.85em;
   }
 }
 
 @media (max-width: 480px) {
+  header {
+    padding: 18px 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+    margin-bottom: 5px;
+  }
+
+  .header-subtitle {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    font-size: 0.9em;
+  }
+
+  nav {
+    gap: 8px;
+    padding: 0 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    padding: 10px 6px;
+    font-size: 0.8em;
+    flex: 0 0 auto;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-dropdown {
+    flex: 0 0 auto;
+  }
+
+  .nav-dropdown > a {
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
   main {
-    padding: 15px 10px;
+    padding: 18px 10px;
   }
-  
+
   .policy-content {
-    padding: 15px;
+    padding: 14px;
   }
-  
+
   .policy-header h1 {
-    font-size: 1.5em;
+    font-size: 1.4em;
   }
-  
+
   .policy-section h2 {
     font-size: 1.2em;
   }
-  
+
   .policy-section h3 {
     font-size: 1em;
   }
-  
+
   .policy-section p, .policy-section li {
-    font-size: 0.9em;
+    font-size: 0.85em;
   }
-  
+
   ul, ol {
-    margin-left: 15px;
-    padding-left: 5px;
+    margin-left: 14px;
+    padding-left: 4px;
   }
-  
+
   table {
-    font-size: 0.8em;
+    font-size: 0.75em;
     overflow-x: auto;
   }
-  
+
   .highlight-box {
     padding: 12px;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header {
+    padding: 14px 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .header-subtitle {
+    font-size: 0.75em;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    font-size: 0.75em;
+    min-height: 40px;
+  }
+
+  main {
+    padding: 12px 8px;
+  }
+
+  .policy-header h1 {
+    font-size: 1.2em;
+  }
+
+  .policy-section h2 {
+    font-size: 1.05em;
+  }
+
+  .policy-section p {
+    font-size: 0.8em;
+  }
+
+  footer {
+    padding: 12px 8px;
+    font-size: 0.7em;
   }
 }
 </style>

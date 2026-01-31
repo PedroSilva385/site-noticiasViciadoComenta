@@ -1176,51 +1176,29 @@ footer {
 }
 
 @media (max-width: 768px) {
-  * {
-    margin: 0;
-    padding: 0;
+  header {
+    padding: 25px 15px;
   }
 
   .header-stats {
     display: none;
   }
 
-  .stat-counter {
-    padding: 8px 14px;
-    min-width: 150px;
-  }
-
-  .stat-icon {
-    font-size: 1.4em;
-  }
-
-  .stat-number {
-    font-size: 1em;
-  }
-
-  .stat-label {
-    font-size: 0.65em;
-  }
-
-  header {
-    padding: 30px 15px;
-  }
-
   .header-perfil {
-    width: 120px;
-    height: 120px;
-    top: 15px;
-    right: 15px;
+    width: 100px;
+    height: 100px;
+    top: 12px;
+    right: 12px;
   }
 
   header h1 {
-    font-size: 2.2em;
-    margin-bottom: 8px;
+    font-size: 2em;
+    margin-bottom: 6px;
   }
 
   .header-subtitle {
-    font-size: 0.9em;
-    margin-bottom: 15px;
+    font-size: 0.85em;
+    margin-bottom: 12px;
   }
 
   .social-media {
@@ -1228,13 +1206,13 @@ footer {
   }
 
   .social-media a {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
   nav {
-    gap: 15px;
-    padding: 0 15px;
+    gap: 12px;
+    padding: 0 12px;
   }
 
   nav a {
@@ -1253,59 +1231,65 @@ footer {
   }
 
   main {
-    padding: 30px 15px;
+    padding: 25px 12px;
     max-width: 100%;
   }
 
   main > h2 {
-    font-size: 1.8em;
+    font-size: 1.6em;
   }
 
   .featured-section {
-    margin-bottom: 40px;
+    margin-bottom: 35px;
   }
 
   .featured-content {
-    padding: 20px;
+    padding: 18px;
+    gap: 15px;
   }
 
   .featured-video {
     aspect-ratio: 16 / 9;
-    margin-bottom: 20px;
+    margin-bottom: 0;
   }
 
   .featured-info-box h2 {
-    font-size: 1.5em;
-    margin-bottom: 12px;
+    font-size: 1.4em;
+    margin-bottom: 10px;
   }
 
   .featured-info-box p {
     font-size: 0.9em;
     line-height: 1.5;
+    margin-bottom: 12px;
   }
 
   .featured-categoria {
-    font-size: 0.65em;
+    font-size: 0.7em;
+    padding: 5px 10px;
   }
 
   .featured-link {
-    font-size: 0.95em;
+    font-size: 0.9em;
+    padding: 10px 20px;
   }
 
   .noticia-item {
     grid-template-columns: 1fr;
     gap: 12px;
-    padding: 20px;
+    padding: 15px;
   }
 
   .noticia-meta-badge {
-    min-width: 100px;
+    min-width: auto;
     margin: 0;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   .noticia-categoria {
-    padding: 6px 10px;
-    font-size: 0.65em;
+    padding: 5px 10px;
+    font-size: 0.7em;
   }
 
   .noticia-data {
@@ -1313,65 +1297,63 @@ footer {
   }
 
   .noticia-conteudo h3 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+    font-size: 1.15em;
+    margin-bottom: 8px;
   }
 
   .noticia-conteudo p {
-    font-size: 0.95em;
-  }
-
-  .noticia-link {
     font-size: 0.9em;
   }
 
+  .noticia-link {
+    font-size: 0.85em;
+  }
+
+  .contacto-item {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .contacto-icon {
+    font-size: 1.5em;
+    min-width: 32px;
+  }
+
   footer {
-    padding: 20px 15px;
+    padding: 20px 12px;
+    font-size: 0.85em;
+  }
+
+  .footer-links {
+    gap: 15px;
+  }
+
+  .footer-contacts {
+    gap: 12px;
     font-size: 0.85em;
   }
 }
 
 @media (max-width: 480px) {
-  .header-stats {
-    display: none;
-  }
-
-  .stat-counter {
-    padding: 8px 14px;
-    min-width: 140px;
-  }
-
-  .stat-icon {
-    font-size: 1.3em;
-  }
-
-  .stat-number {
-    font-size: 0.95em;
-  }
-
-  .stat-label {
-    font-size: 0.6em;
-  }
-
   header {
-    padding: 20px 12px;
+    padding: 18px 10px;
   }
 
   .header-perfil {
-    width: 100px;
-    height: 100px;
-    top: 12px;
-    right: 12px;
+    width: 80px;
+    height: 80px;
+    top: 10px;
+    right: 10px;
   }
 
   header h1 {
-    font-size: 1.8em;
-    margin-bottom: 6px;
+    font-size: 1.6em;
+    margin-bottom: 5px;
   }
 
   .header-subtitle {
-    font-size: 0.85em;
-    margin-bottom: 12px;
+    font-size: 0.8em;
+    margin-bottom: 10px;
   }
 
   .social-media {
@@ -1381,20 +1363,30 @@ footer {
   .social-media a {
     width: 32px;
     height: 32px;
+    font-size: 0.85em;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 6px 8px;
     font-size: 0.9em;
   }
 
   nav {
-    gap: 10px;
-    padding: 0 12px;
+    gap: 8px;
+    padding: 0 8px;
     flex-wrap: wrap;
     justify-content: center;
   }
 
   nav a {
-    padding: 12px 8px;
-    font-size: 0.85em;
+    padding: 10px 6px;
+    font-size: 0.8em;
     flex: 0 0 auto;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
   
   .nav-dropdown {
@@ -1402,70 +1394,83 @@ footer {
   }
   
   .nav-dropdown > a {
-    padding: 12px 8px;
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
+  .nav-dropdown .dropdown-menu {
+    min-width: 150px;
   }
 
   main {
-    padding: 20px 12px;
+    padding: 18px 10px;
   }
 
   main > h2 {
-    font-size: 1.5em;
-    margin-bottom: 30px;
-  }
-
-  .featured-section {
-    margin-bottom: 30px;
-  }
-
-  .featured-content {
-    padding: 16px;
-  }
-
-  .featured-video {
+    font-size: 1.4em;
     margin-bottom: 20px;
   }
 
+  .featured-section {
+    margin-bottom: 25px;
+  }
+
+  .featured-content {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .featured-video {
+    margin-bottom: 0;
+  }
+
   .featured-info-box h2 {
-    font-size: 1.3em;
-    margin-bottom: 10px;
+    font-size: 1.2em;
+    margin-bottom: 8px;
   }
 
   .featured-info-box .featured-meta {
-    gap: 12px;
-    margin-bottom: 15px;
-    font-size: 0.85em;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 0.8em;
   }
 
   .featured-info-box p {
-    font-size: 0.85em;
-    margin-bottom: 15px;
+    font-size: 0.8em;
+    margin-bottom: 12px;
+    line-height: 1.4;
   }
 
   .featured-categoria {
-    padding: 5px 10px;
-    font-size: 0.6em;
+    padding: 4px 8px;
+    font-size: 0.65em;
   }
 
   .featured-link {
-    padding: 10px 20px;
-    font-size: 0.85em;
+    padding: 8px 16px;
+    font-size: 0.8em;
+  }
+
+  .noticias-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .noticia-item {
-    padding: 15px;
-    gap: 10px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .noticia-meta-badge {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     min-width: auto;
+    flex-wrap: wrap;
   }
 
   .noticia-categoria {
-    padding: 4px 8px;
-    font-size: 0.6em;
+    padding: 3px 6px;
+    font-size: 0.65em;
   }
 
   .noticia-data {
@@ -1473,67 +1478,187 @@ footer {
   }
 
   .noticia-conteudo h3 {
-    font-size: 1.1em;
-    margin-bottom: 8px;
+    font-size: 1.05em;
+    margin-bottom: 6px;
   }
 
   .noticia-conteudo p {
-    font-size: 0.9em;
+    font-size: 0.85em;
+    line-height: 1.4;
+  }
+
+  .noticia-link {
+    font-size: 0.8em;
+    padding: 8px 14px;
+  }
+
+  .contactos-section {
+    padding: 20px 15px;
+    margin: 30px 0;
+  }
+
+  .contactos-section h3 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+  }
+
+  .contacto-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .contacto-icon {
+    font-size: 1.3em;
+    min-width: 28px;
   }
 
   footer {
-    padding: 15px 12px;
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+
+  .footer-links {
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  .footer-contacts {
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.75em;
+  }
+
+  .footer-copy {
     font-size: 0.75em;
   }
 }
 
 @media (max-width: 360px) {
-  header h1 {
-    font-size: 1.6em;
-  }
-
-  .header-subtitle {
-    font-size: 0.8em;
+  header {
+    padding: 14px 8px;
   }
 
   .header-perfil {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
+    top: 8px;
+    right: 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .header-subtitle {
+    font-size: 0.75em;
+  }
+
+  .social-media {
+    gap: 6px;
   }
 
   .social-media a {
     width: 28px;
     height: 28px;
-    font-size: 0.8em;
+    font-size: 0.75em;
+  }
+
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 5px 6px;
+    font-size: 0.85em;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
   }
 
   nav a {
+    padding: 8px 4px;
     font-size: 0.75em;
-    padding: 6px 0;
+    min-height: 40px;
+  }
+
+  .nav-dropdown > a {
+    padding: 8px 4px;
+    min-height: 40px;
+  }
+
+  .nav-dropdown .dropdown-menu {
+    min-width: 130px;
+    font-size: 0.75em;
   }
 
   main {
-    padding: 15px 10px;
+    padding: 14px 8px;
   }
 
   main > h2 {
-    font-size: 1.3em;
-  }
-
-  .featured-info-box h2 {
     font-size: 1.2em;
   }
 
+  .featured-content {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .featured-info-box h2 {
+    font-size: 1.1em;
+    margin-bottom: 6px;
+  }
+
   .featured-info-box p {
-    font-size: 0.8em;
+    font-size: 0.75em;
+    margin-bottom: 8px;
+  }
+
+  .featured-categoria {
+    font-size: 0.6em;
+  }
+
+  .featured-link {
+    font-size: 0.75em;
+    padding: 6px 12px;
+  }
+
+  .noticia-item {
+    padding: 10px;
   }
 
   .noticia-conteudo h3 {
-    font-size: 1em;
+    font-size: 0.95em;
+  }
+
+  .noticia-conteudo p {
+    font-size: 0.8em;
+  }
+
+  .contactos-section {
+    padding: 16px 10px;
+    margin: 20px 0;
+  }
+
+  .contactos-section h3 {
+    font-size: 1.2em;
+  }
+
+  .contacto-item {
+    padding: 8px 10px;
   }
 
   footer {
-    padding: 12px 10px;
+    padding: 12px 8px;
+    font-size: 0.7em;
+  }
+
+  .footer-links {
+    gap: 8px;
+  }
+
+  .footer-contacts {
     font-size: 0.7em;
   }
 }
