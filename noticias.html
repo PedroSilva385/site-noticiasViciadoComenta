@@ -2100,7 +2100,9 @@ function toggleLike(noticiaId) {
       } else {
         // Adiciona o like
         console.log('Adicionando like...');
-        likesRef.set(true);
+        likesRef.set({
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
       }
       
       // Atualizar contagem
@@ -2145,7 +2147,8 @@ function updateLikeCount(noticiaId) {
     const totalLikes = Object.keys(likes).length;
     
     // Verificar se este utilizador já deu like
-    const isLiked = likes[userId] === true;
+    const likeValue = likes[userId];
+    const isLiked = likeValue === true || (likeValue && typeof likeValue === 'object');
     
     // Atualizar UI
     if (isLiked) {

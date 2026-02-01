@@ -144,6 +144,54 @@
       color: #1a1f3a;
       font-size: 1.5em;
       font-family: 'Outfit', sans-serif;
+
+      .data-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .data-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: #f3f4f6;
+        color: #1a1f3a;
+      }
+
+      body.dark .data-item {
+        background: #111827;
+        color: #e5e7eb;
+      }
+
+      .data-item-title {
+        font-weight: 700;
+        color: #1a1f3a;
+      }
+
+      body.dark .data-item-title {
+        color: #ffffff;
+      }
+
+      .data-item-meta {
+        font-size: 0.9em;
+        color: #6b7280;
+      }
+
+      body.dark .data-item-meta {
+        color: #9ca3af;
+      }
+
+      .data-item-text {
+        font-size: 0.95em;
+        color: #111827;
+      }
+
+      body.dark .data-item-text {
+        color: #e5e7eb;
+      }
     }
 
     body.dark .daily-stats h2 {
@@ -267,6 +315,18 @@
       </div>
 
       <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div class="stat-label">Comentários</div>
+        <div class="stat-value" id="totalComments">-</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">❤️</div>
+        <div class="stat-label">Novos Likes (Hoje)</div>
+        <div class="stat-value" id="newLikes">-</div>
+      </div>
+
+      <div class="stat-card">
         <div class="stat-icon">⏱️</div>
         <div class="stat-label">Última Atualização</div>
         <div class="stat-value" id="lastUpdate" style="font-size: 1.2em;">-</div>
@@ -292,6 +352,20 @@
         <p>Carregando dados...</p>
       </div>
     </div>
+
+    <div class="daily-stats">
+      <h2>💬 Comentários Recentes</h2>
+      <div id="commentsListStats" class="data-list">
+        <div class="data-item">Carregando comentários...</div>
+      </div>
+    </div>
+
+    <div class="daily-stats">
+      <h2>❤️ Likes por Artigo</h2>
+      <div id="likesByArticleList" class="data-list">
+        <div class="data-item">Carregando likes...</div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -308,8 +382,35 @@
     };
 
     // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    let app;
+    if (firebase.apps && firebase.apps.length) {
+      app = firebase.app();
+    } else {
+      app = firebase.initializeApp(firebaseConfig);
+    }
+    const database = app.database();
+    let noticiasMap = {};
+
+    function carregarNoticiasMap() {
+      return fetch('data/noticias.json')
+        .then((res) => res.json())
+        .then((data) => {
+          const map = {};
+          if (data && Array.isArray(data.noticias)) {
+            data.noticias.forEach((item) => {
+              map[String(item.id)] = item.titulo || `Notícia ${item.id}`;
+            });
+          }
+          noticiasMap = map;
+        })
+        .catch(() => {
+          noticiasMap = {};
+        });
+    }
+
+    function getNoticiaTitle(noticiaId) {
+      return noticiasMap[String(noticiaId)] || `Notícia ${noticiaId}`;
+    }
 
     // Carregar estatísticas
     function carregarEstatisticas() {
@@ -317,26 +418,42 @@
       
       statsRef.on('value', (snapshot) => {
         const stats = snapshot.val() || {};
+
+        const totalVisitsEl = document.getElementById('totalVisits');
+        const todayVisitsEl = document.getElementById('todayVisits');
+        const monthVisitsEl = document.getElementById('monthVisits');
+        const lastUpdateEl = document.getElementById('lastUpdate');
+
+        if (!totalVisitsEl || !todayVisitsEl || !monthVisitsEl || !lastUpdateEl) {
+          return;
+        }
         
+        const toSafeNumber = (value) => {
+          const num = Number(value);
+          return Number.isFinite(num) ? num : 0;
+        };
+
         // Total de acessos
-        const totalVisits = stats.total_visits || 0;
-        document.getElementById('totalVisits').textContent = totalVisits.toLocaleString('pt-PT');
+        const totalVisits = toSafeNumber(stats.total_visits);
+        totalVisitsEl.textContent = totalVisits.toLocaleString('pt-PT');
         
         // Acessos de hoje
         const hoje = new Date().toISOString().split('T')[0];
-        const todayVisits = (stats.daily && stats.daily[hoje]) || 0;
-        document.getElementById('todayVisits').textContent = todayVisits;
+        const todayVisits = toSafeNumber(stats.daily && stats.daily[hoje]);
+        todayVisitsEl.textContent = todayVisits;
         
         // Acessos do mês
         const mesAtual = new Date().toISOString().substring(0, 7); // YYYY-MM
-        const monthVisits = (stats.monthly && stats.monthly[mesAtual]) || 0;
-        document.getElementById('monthVisits').textContent = monthVisits.toLocaleString('pt-PT');
+        const monthVisits = toSafeNumber(stats.monthly && stats.monthly[mesAtual]);
+        monthVisitsEl.textContent = monthVisits.toLocaleString('pt-PT');
         
         // Última atualização
         if (stats.last_updated) {
           const date = new Date(stats.last_updated);
           const formattedDate = date.toLocaleString('pt-PT');
-          document.getElementById('lastUpdate').textContent = formattedDate;
+          lastUpdateEl.textContent = formattedDate;
+        } else {
+          lastUpdateEl.textContent = '-';
         }
         
         // Lista de acessos por dia
@@ -398,13 +515,191 @@
             monthlyList.appendChild(item);
           });
         }
+      }, (error) => {
+        console.error('Erro ao carregar estatísticas:', error);
+        const totalVisitsEl = document.getElementById('totalVisits');
+        const todayVisitsEl = document.getElementById('todayVisits');
+        const monthVisitsEl = document.getElementById('monthVisits');
+        const lastUpdateEl = document.getElementById('lastUpdate');
+        if (totalVisitsEl) totalVisitsEl.textContent = '-';
+        if (todayVisitsEl) todayVisitsEl.textContent = '-';
+        if (monthVisitsEl) monthVisitsEl.textContent = '-';
+        if (lastUpdateEl) lastUpdateEl.textContent = '-';
       });
       
       // Monitorar usuários ativos
       const activeUsersRef = database.ref('active_users');
       activeUsersRef.on('value', (snapshot) => {
-        const activeUsers = snapshot.numChildren() || 0;
-        document.getElementById('activeUsers').textContent = activeUsers;
+        let activeUsers = 0;
+        snapshot.forEach((child) => {
+          const key = child.key || '';
+          if (key.startsWith('fake_')) {
+            return;
+          }
+          activeUsers += 1;
+        });
+        const activeUsersEl = document.getElementById('activeUsers');
+        if (activeUsersEl) activeUsersEl.textContent = activeUsers;
+      }, (error) => {
+        console.error('Erro ao carregar utilizadores ativos:', error);
+        const activeUsersEl = document.getElementById('activeUsers');
+        if (activeUsersEl) activeUsersEl.textContent = '-';
+      });
+
+      // Monitorar total de comentários (inclui respostas)
+      const commentsRef = database.ref('comentarios');
+      commentsRef.on('value', (snapshot) => {
+        let totalComments = 0;
+        const comentariosRecentes = [];
+
+        snapshot.forEach((noticiaSnap) => {
+          noticiaSnap.forEach((comentarioSnap) => {
+            const comentarioVal = comentarioSnap.val() || {};
+            const comentarioId = comentarioSnap.key;
+            const noticiaId = noticiaSnap.key;
+            totalComments += 1;
+
+            comentariosRecentes.push({
+              id: comentarioId,
+              noticiaId,
+              nome: comentarioVal.nome || 'Anónimo',
+              texto: comentarioVal.texto || '',
+              data: comentarioVal.data || '',
+              timestamp: comentarioVal.timestamp || 0
+            });
+
+            const respostasSnap = comentarioSnap.child('respostas');
+            if (respostasSnap.exists()) {
+              respostasSnap.forEach((respostaSnap) => {
+                totalComments += 1;
+
+                const aninhadasSnap = respostaSnap.child('respostas');
+                if (aninhadasSnap.exists()) {
+                  aninhadasSnap.forEach(() => {
+                    totalComments += 1;
+                  });
+                }
+              });
+            }
+          });
+        });
+
+        const totalCommentsEl = document.getElementById('totalComments');
+        if (totalCommentsEl) {
+          totalCommentsEl.textContent = totalComments.toLocaleString('pt-PT');
+        }
+
+        const commentsListEl = document.getElementById('commentsListStats');
+        if (commentsListEl) {
+          commentsListEl.textContent = '';
+          comentariosRecentes.sort((a, b) => b.timestamp - a.timestamp);
+          const slice = comentariosRecentes.slice(0, 25);
+          if (slice.length === 0) {
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.textContent = 'Sem comentários.';
+            commentsListEl.appendChild(item);
+          } else {
+            slice.forEach((comentario) => {
+              const item = document.createElement('div');
+              item.className = 'data-item';
+
+              const title = document.createElement('div');
+              title.className = 'data-item-title';
+              title.textContent = getNoticiaTitle(comentario.noticiaId);
+
+              const meta = document.createElement('div');
+              meta.className = 'data-item-meta';
+              meta.textContent = `${comentario.nome} • ${comentario.data || 'sem data'}`;
+
+              const text = document.createElement('div');
+              text.className = 'data-item-text';
+              text.textContent = comentario.texto;
+
+              item.appendChild(title);
+              item.appendChild(meta);
+              item.appendChild(text);
+              commentsListEl.appendChild(item);
+            });
+          }
+        }
+      }, (error) => {
+        console.error('Erro ao carregar comentários:', error);
+        const totalCommentsEl = document.getElementById('totalComments');
+        if (totalCommentsEl) totalCommentsEl.textContent = '-';
+        const commentsListEl = document.getElementById('commentsListStats');
+        if (commentsListEl) commentsListEl.textContent = 'Erro ao carregar comentários.';
+      });
+
+      // Monitorar novos likes (hoje)
+      const likesRef = database.ref('likes');
+      likesRef.on('value', (snapshot) => {
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        let newLikes = 0;
+        const likesByArticle = [];
+
+        snapshot.forEach((noticiaSnap) => {
+          const noticiaId = noticiaSnap.key;
+          let totalLikes = 0;
+          let todayLikes = 0;
+
+          noticiaSnap.forEach((likeSnap) => {
+            const value = likeSnap.val();
+            const timestamp = value && typeof value === 'object' ? value.timestamp : null;
+            totalLikes += 1;
+            if (typeof timestamp === 'number' && timestamp >= startOfDay) {
+              newLikes += 1;
+              todayLikes += 1;
+            }
+          });
+
+          likesByArticle.push({
+            noticiaId,
+            totalLikes,
+            todayLikes
+          });
+        });
+
+        const newLikesEl = document.getElementById('newLikes');
+        if (newLikesEl) {
+          newLikesEl.textContent = newLikes.toLocaleString('pt-PT');
+        }
+
+        const likesListEl = document.getElementById('likesByArticleList');
+        if (likesListEl) {
+          likesListEl.textContent = '';
+          likesByArticle.sort((a, b) => b.totalLikes - a.totalLikes);
+          if (likesByArticle.length === 0) {
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.textContent = 'Sem likes.';
+            likesListEl.appendChild(item);
+          } else {
+            likesByArticle.forEach((entry) => {
+              const item = document.createElement('div');
+              item.className = 'data-item';
+
+              const title = document.createElement('div');
+              title.className = 'data-item-title';
+              title.textContent = getNoticiaTitle(entry.noticiaId);
+
+              const meta = document.createElement('div');
+              meta.className = 'data-item-meta';
+              meta.textContent = `${entry.totalLikes} likes • ${entry.todayLikes} hoje`;
+
+              item.appendChild(title);
+              item.appendChild(meta);
+              likesListEl.appendChild(item);
+            });
+          }
+        }
+      }, (error) => {
+        console.error('Erro ao carregar likes:', error);
+        const newLikesEl = document.getElementById('newLikes');
+        if (newLikesEl) newLikesEl.textContent = '-';
+        const likesListEl = document.getElementById('likesByArticleList');
+        if (likesListEl) likesListEl.textContent = 'Erro ao carregar likes.';
       });
     }
 
@@ -437,7 +732,7 @@
     }
 
     // Carregar dados ao iniciar
-    carregarEstatisticas();
+    carregarNoticiasMap().finally(() => carregarEstatisticas());
   </script>
 
   <footer>
