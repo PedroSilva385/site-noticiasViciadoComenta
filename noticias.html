@@ -2470,7 +2470,7 @@ function adicionarComentario(noticiaId, nome, texto) {
   
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
-  
+
   const comentariosRef = database.ref(`comentarios/${noticiaId}`);
   
   comentariosRef.push({
