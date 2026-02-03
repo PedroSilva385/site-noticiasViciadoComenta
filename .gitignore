@@ -6,10 +6,16 @@
 *.pem
 *.p12
 
+# Pasta de configuração privada (FORA do repositório GitHub)
+../private-config/
+../private-config/**
+
 # Configuração Firebase privada
 firebase-config.js
 /docs/FIREBASE-SETUP.txt
 /docs/FIREBASE-REGRAS-SEGURAS.json
+/docs/CONFIG-PRIVADA.md
+/docs/SEGURANCA-API-KEY.md
 
 # Backups e temporários
 *.backup

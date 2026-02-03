@@ -8,6 +8,7 @@
   <!-- Firebase SDK (Versão compatível) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <script src="assets/firebase-config.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -369,26 +370,8 @@
   </div>
 
   <script>
-    // Configuração do Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",
-      authDomain: "chat-viciadocomenta.firebaseapp.com",
-      databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "chat-viciadocomenta",
-      storageBucket: "chat-viciadocomenta.firebasestorage.app",
-      messagingSenderId: "183684670526",
-      appId: "1:183684670526:web:64b1f62cf80e05d4781d6f",
-      measurementId: "G-XJ3P1K6694"
-    };
-
-    // Inicializar Firebase
-    let app;
-    if (firebase.apps && firebase.apps.length) {
-      app = firebase.app();
-    } else {
-      app = firebase.initializeApp(firebaseConfig);
-    }
-    const database = app.database();
+    // CHAVE REMOVIDA POR SEGURANÇA - Veja assets/firebase-config.js
+    const database = firebase.database();
     let noticiasMap = {};
 
     function carregarNoticiasMap() {

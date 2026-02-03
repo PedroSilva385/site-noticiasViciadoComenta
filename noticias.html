@@ -9,19 +9,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
 <script>
 try {
-  const firebaseConfig={apiKey:"AIzaSyDwVLeZFj89w0fJ0Ue1mpvPQpz1gJdUvBY",authDomain:"chat-viciadocomenta.firebaseapp.com",databaseURL:"https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",projectId:"chat-viciadocomenta",storageBucket:"chat-viciadocomenta.firebasestorage.app",messagingSenderId:"183684670526",appId:"1:183684670526:web:64b1f62cf80e05d4781d6f"};
-  
-  // Verificar se Firebase já foi inicializado
-  let app;
-  try {
-    app = firebase.app();
-    console.log('✓ Firebase já estava inicializado');
-  } catch (e) {
-    app = firebase.initializeApp(firebaseConfig);
-    console.log('✓ Firebase inicializado pela primeira vez');
-  }
+  // CHAVE REMOVIDA POR SEGURANÇA - Veja assets/firebase-config.js
   
   const db=firebase.database();
   const today=new Date().toISOString().split('T')[0];
