@@ -1,4 +1,4 @@
-# Ficheiros sensíveis - NÃO COMMITAR
+﻿# Ficheiros sensÃ­veis - NÃƒO COMMITAR
 .env
 .env.local
 .env.production
@@ -6,25 +6,25 @@
 *.pem
 *.p12
 
-# Pasta de configuração privada (FORA do repositório GitHub)
+# Pasta de configuraÃ§Ã£o privada (FORA do repositÃ³rio GitHub)
 ../private-config/
 ../private-config/**
 
-# Configuração Firebase privada
+# ConfiguraÃ§Ã£o Firebase privada
 firebase-config.js
 /docs/FIREBASE-SETUP.txt
 /docs/FIREBASE-REGRAS-SEGURAS.json
 /docs/CONFIG-PRIVADA.md
 /docs/SEGURANCA-API-KEY.md
 
-# Backups e temporários
+# Backups e temporÃ¡rios
 *.backup
 *.tmp
 *.log
 *.bak
 ~$*
 
-# Dados sensíveis do Firebase (se existirem)
+# Dados sensÃ­veis do Firebase (se existirem)
 firebase-adminsdk-*.json
 serviceAccountKey.json
 
@@ -41,7 +41,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Builds e distribuições
+# Builds e distribuiÃ§Ãµes
 dist/
 build/
 .cache/
@@ -54,6 +54,7 @@ desktop.ini
 site-stats.json
 *.local.json
 
-# Screenshots e ficheiros temporários de desenvolvimento
+# Screenshots e ficheiros temporÃ¡rios de desenvolvimento
 screenshots/
 temp/
+
