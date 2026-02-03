@@ -2470,7 +2470,7 @@ function adicionarComentario(noticiaId, nome, texto) {
     nome: nomeSanitizado,
     texto: textoSanitizado,
     data: data,
-    timestamp: agora.getTime()
+    timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
     console.log('✓ Comentário adicionado com sucesso');
@@ -2529,7 +2529,7 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
     nome: nomeSanitizado,
     texto: textoSanitizado,
     data: data,
-    timestamp: agora.getTime()
+    timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
     console.log('✓ Resposta adicionada com sucesso');
@@ -2588,7 +2588,7 @@ function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto
     nome: nomeSanitizado,
     texto: textoSanitizado,
     data: data,
-    timestamp: agora.getTime()
+    timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
     console.log('✓ Resposta aninhada adicionada com sucesso');
