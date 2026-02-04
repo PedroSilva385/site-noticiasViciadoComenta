@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js"></script>
+<script src="assets/news-scheduler.js"></script>
 <script>
 // CHAVE REMOVIDA POR SEGURANÇA - Veja assets/firebase-config.js
 const db=firebase.database();const today=new Date().toISOString().split('T')[0];const month=new Date().toISOString().substring(0,7);const statsRef=db.ref('site_stats');statsRef.transaction(data=>{if(!data)data={total_visits:0,daily:{},monthly:{},last_updated:new Date().toISOString()};data.total_visits=(data.total_visits||0)+1;if(!data.daily)data.daily={};data.daily[today]=(data.daily[today]||0)+1;if(!data.monthly)data.monthly={};data.monthly[month]=(data.monthly[month]||0)+1;data.last_updated=new Date().toISOString();return data;});const userId='user_'+Math.random().toString(36).substr(2,9);const activeUserRef=db.ref('active_users/'+userId);activeUserRef.set({timestamp:firebase.database.ServerValue.TIMESTAMP,page:window.location.pathname});activeUserRef.onDisconnect().remove();window.addEventListener('beforeunload',()=>activeUserRef.remove());
@@ -987,8 +988,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Carregar todas as notícias
 let todasAsNoticias = [];
 
-fetch('data/noticias.json')
-  .then(res => res.json())
+fetchNoticiasAgendadas('data/noticias.json')
   .then(data => {
     // Ordenar por data descrescente
     const parseDate = (str) => {

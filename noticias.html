@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="assets/firebase-config.js"></script>
+<script src="assets/news-scheduler.js"></script>
 <script>
 try {
   // CHAVE REMOVIDA POR SEGURANÇA - Veja assets/firebase-config.js
@@ -1822,12 +1823,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (noticiaId) {
     console.log('🔍 ID da URL:', noticiaId);
-    fetch("data/noticias.json")
-      .then(res => {
-        console.log('📡 Resposta fetch:', res.status, res.ok);
-        if (!res.ok) throw new Error('Erro ao carregar JSON');
-        return res.json();
-      })
+    fetchNoticiasAgendadas("data/noticias.json")
       .then(data => {
         console.log('📄 JSON recebido:', data);
         console.log('📄 Notícias carregadas:', data.noticias ? data.noticias.length : 'NENHUMA');
@@ -1973,8 +1969,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   } else {
     // Sem ID: listar notícias em grelha
-    fetch('data/noticias.json')
-      .then(res => res.json())
+    fetchNoticiasAgendadas('data/noticias.json')
       .then(data => {
         const parseDate = (str) => {
           if (!str) return 0;
