@@ -426,7 +426,7 @@
         todayVisitsEl.textContent = todayVisits;
         
         // Acessos do mês
-        const mesAtual = new Date().toISOString().substring(0, 7); // YYYY-MM
+        const mesAtual = new Date().toISOString().substring(0, 7);
         const monthVisits = toSafeNumber(stats.monthly && stats.monthly[mesAtual]);
         monthVisitsEl.textContent = monthVisits.toLocaleString('pt-PT');
         
