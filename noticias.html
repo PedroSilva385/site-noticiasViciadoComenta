@@ -2088,6 +2088,9 @@ function toggleLike(noticiaId) {
 
 function updateLikeCount(noticiaId) {
   if (!window.database) {
+    if (!window.firebaseReady) {
+      setTimeout(() => updateLikeCount(noticiaId), 300);
+    }
     return;
   }
   
