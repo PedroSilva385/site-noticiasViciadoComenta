@@ -2,9 +2,14 @@
 .env
 .env.local
 .env.production
+.env*.local
 *.key
 *.pem
 *.p12
+
+# Ficheiros de configuração (usar GitHub Secrets em vez disso)
+/firebase-config-secrets.js
+/assets/firebase-config-secrets.js
 
 # Pasta de configuraÃ§Ã£o privada (FORA do repositÃ³rio GitHub)
 ../private-config/
