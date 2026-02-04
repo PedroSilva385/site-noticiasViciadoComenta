@@ -1678,16 +1678,28 @@ window.firebaseReady = false;
 window.authReady = false;
 window.currentUserId = null;
 window.authFailed = false;
+window.firebaseInitAttempts = 0;
 
 console.log('🔥 Aguardando configuração Firebase...');
 
 // Esperar Firebase carregar (inicializado em firebase-config.js)
 function initFirebase() {
+  window.firebaseInitAttempts++;
+  
   try {
-    // Verificar se Firebase está disponível e inicializado
-    if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
-      console.warn('Firebase ainda não inicializado, tentando novamente...');
-      setTimeout(initFirebase, 100);
+    console.log(`Tentativa ${window.firebaseInitAttempts}:`, {
+      firebaseInitialized: window.firebaseInitialized,
+      firebaseExists: typeof firebase !== 'undefined',
+      hasApps: typeof firebase !== 'undefined' && firebase.apps ? firebase.apps.length : 0
+    });
+    
+    // Verificar se Firebase foi inicializado no firebase-config.js
+    if (!window.firebaseInitialized || typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
+      if (window.firebaseInitAttempts < 50) { // máximo 5 segundos
+        setTimeout(initFirebase, 100);
+      } else {
+        console.error('❌ Timeout: Firebase não inicializou após 5 segundos');
+      }
       return;
     }
     
@@ -1760,11 +1772,8 @@ function initFirebase() {
   }
 }
 
-// Iniciar Firebase quando o firebase-config.js estiver pronto
-window.addEventListener('firebaseReady', initFirebase);
-
-// Fallback: tentar iniciar após um pequeno delay se o evento não disparar
-setTimeout(initFirebase, 300);
+// Iniciar Firebase após um pequeno delay para garantir que firebase-config.js executou
+setTimeout(initFirebase, 100);
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
