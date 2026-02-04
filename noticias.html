@@ -2098,16 +2098,6 @@ function updateLikeCount(noticiaId) {
     return;
   }
   
-  if (!window.authReady || !window.currentUserId) {
-    if (window.authFailed) {
-      return;
-    }
-    setTimeout(() => updateLikeCount(noticiaId), 500);
-    return;
-  }
-
-  const userId = window.currentUserId;
-  
   const likesRef = window.database.ref(`likes/${noticiaId}`);
   
   // Monitorar gostos em tempo real
@@ -2117,18 +2107,20 @@ function updateLikeCount(noticiaId) {
     // Contar total de gostos
     const totalLikes = Object.keys(likes).length;
     
-    // Verificar se este utilizador já deu like
-    const likeValue = likes[userId];
-    const isLiked = likeValue === true || (likeValue && typeof likeValue === 'object');
-    
-    // Atualizar UI
-    if (isLiked) {
-      likeBtn.classList.add('liked');
-    } else {
-      likeBtn.classList.remove('liked');
-    }
-    
     likeCount.textContent = totalLikes;
+
+    // Atualizar estado do botão apenas quando auth estiver pronta
+    if (window.authReady && window.currentUserId) {
+      const userId = window.currentUserId;
+      const likeValue = likes[userId];
+      const isLiked = likeValue === true || (likeValue && typeof likeValue === 'object');
+
+      if (isLiked) {
+        likeBtn.classList.add('liked');
+      } else {
+        likeBtn.classList.remove('liked');
+      }
+    }
   });
 }
 
