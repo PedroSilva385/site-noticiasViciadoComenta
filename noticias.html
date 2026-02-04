@@ -1679,29 +1679,21 @@ window.authReady = false;
 window.currentUserId = null;
 window.authFailed = false;
 
-console.log('🔥 Iniciando configuração Firebase...');
+console.log('🔥 Aguardando configuração Firebase...');
 
-// Esperar Firebase carregar
+// Esperar Firebase carregar (inicializado em firebase-config.js)
 function initFirebase() {
   try {
-    // Verificar se Firebase está disponível
-    if (typeof firebase === 'undefined') {
-      console.warn('Firebase ainda não carregado, tentando novamente...');
+    // Verificar se Firebase está disponível e inicializado
+    if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
+      console.warn('Firebase ainda não inicializado, tentando novamente...');
       setTimeout(initFirebase, 100);
       return;
     }
     
-    // Obter o app já inicializado no head
-    let app;
-    try {
-      app = firebase.app();
-      console.log('✓ Firebase App encontrado');
-    } catch (e) {
-      console.warn('Firebase App não inicializado, tentando inicializar...');
-      return;
-    }
+    console.log('✓ Firebase App encontrado');
     
-    // Firebase já foi inicializado no head com db, reutilizar
+    // Firebase já foi inicializado no firebase-config.js
     try {
       window.database = firebase.database();
       window.firebaseReady = true;
@@ -1768,8 +1760,11 @@ function initFirebase() {
   }
 }
 
-// Iniciar Firebase imediatamente
-initFirebase();
+// Iniciar Firebase quando o firebase-config.js estiver pronto
+window.addEventListener('firebaseReady', initFirebase);
+
+// Fallback: tentar iniciar após um pequeno delay se o evento não disparar
+setTimeout(initFirebase, 300);
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
@@ -2205,9 +2200,16 @@ function fallbackCopyLink(url) {
 function carregarComentarios(noticiaId) {
   const comentariosList = document.getElementById('comentariosList');
   
+  // Aguardar database estar pronto
   if (!window.database) {
-    comentariosList.innerHTML = '<div class="comentarios-vazio">💬 Sistema de comentários em manutenção.</div>';
-    return;
+    if (!window.firebaseReady) {
+      comentariosList.innerHTML = '<div class="comentarios-vazio">⏳ Aguardando conexão...</div>';
+      setTimeout(() => carregarComentarios(noticiaId), 500);
+      return;
+    } else {
+      comentariosList.innerHTML = '<div class="comentarios-vazio">💬 Sistema de comentários em manutenção.</div>';
+      return;
+    }
   }
   
   comentariosList.innerHTML = '<div class="comentarios-vazio">⏳ Carregando comentários...</div>';
@@ -2395,7 +2397,7 @@ function carregarComentarios(noticiaId) {
 }
 
 function adicionarComentario(noticiaId, nome, texto) {
-  if (!database) {
+  if (!window.database) {
     alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
     return;
   }
@@ -2440,7 +2442,7 @@ function adicionarComentario(noticiaId, nome, texto) {
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
-  const comentariosRef = database.ref(`comentarios/${noticiaId}`);
+  const comentariosRef = window.database.ref(`comentarios/${noticiaId}`);
   
   comentariosRef.push({
     nome: nomeSanitizado,
