@@ -150,36 +150,62 @@
       .data-list {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
       }
 
       .data-item {
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        padding: 14px 16px;
-        border-radius: 10px;
-        background: #f3f4f6;
+        gap: 8px;
+        padding: 20px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+        border: 1px solid #e5e7eb;
         color: #1a1f3a;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .data-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+        border-color: #0066cc;
       }
 
       body.dark .data-item {
-        background: #111827;
+        background: linear-gradient(135deg, #1a222f 0%, #16192c 100%);
+        border-color: #2d3748;
         color: #e5e7eb;
+      }
+
+      body.dark .data-item:hover {
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+        border-color: #60a5fa;
       }
 
       .data-item-title {
         font-weight: 700;
-        color: #1a1f3a;
+        font-size: 1.1em;
+        color: #0066cc;
+        line-height: 1.4;
       }
 
       body.dark .data-item-title {
-        color: #ffffff;
+        color: #60a5fa;
       }
 
       .data-item-meta {
-        font-size: 0.9em;
+        font-size: 0.85em;
         color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .data-item-meta::before {
+        content: '📊';
+        font-size: 1em;
       }
 
       body.dark .data-item-meta {
@@ -188,11 +214,18 @@
 
       .data-item-text {
         font-size: 0.95em;
-        color: #111827;
+        color: #374151;
+        line-height: 1.6;
+        padding: 12px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border-left: 3px solid #0066cc;
       }
 
       body.dark .data-item-text {
-        color: #e5e7eb;
+        color: #d1d5db;
+        background: #0f1419;
+        border-left-color: #60a5fa;
       }
     }
 
@@ -356,16 +389,26 @@
     </div>
 
     <div class="daily-stats">
-      <h2>💬 Comentários Recentes</h2>
+      <h2 style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.4em;">💬</span>
+        <span>Comentários Recentes</span>
+      </h2>
       <div id="commentsListStats" class="data-list">
-        <div class="data-item">Carregando comentários...</div>
+        <div class="data-item" style="text-align: center; color: #6b7280;">
+          <div class="loading" style="padding: 20px;">Carregando comentários...</div>
+        </div>
       </div>
     </div>
 
     <div class="daily-stats">
-      <h2>❤️ Likes por Artigo</h2>
+      <h2 style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.4em;">❤️</span>
+        <span>Likes por Artigo</span>
+      </h2>
       <div id="likesByArticleList" class="data-list">
-        <div class="data-item">Carregando likes...</div>
+        <div class="data-item" style="text-align: center; color: #6b7280;">
+          <div class="loading" style="padding: 20px;">Carregando likes...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -580,7 +623,9 @@
           if (slice.length === 0) {
             const item = document.createElement('div');
             item.className = 'data-item';
-            item.textContent = 'Sem comentários.';
+            item.style.textAlign = 'center';
+            item.style.color = '#6b7280';
+            item.textContent = '📭 Sem comentários ainda.';
             commentsListEl.appendChild(item);
           } else {
             slice.forEach((comentario) => {
@@ -589,15 +634,18 @@
 
               const title = document.createElement('div');
               title.className = 'data-item-title';
-              title.textContent = getNoticiaTitle(comentario.noticiaId);
+              title.innerHTML = `📰 ${getNoticiaTitle(comentario.noticiaId)}`;
 
               const meta = document.createElement('div');
               meta.className = 'data-item-meta';
-              meta.textContent = `${comentario.nome} • ${comentario.data || 'sem data'}`;
+              meta.innerHTML = `<strong>👤 ${comentario.nome}</strong> • 🕒 ${comentario.data || 'sem data'}`;
 
               const text = document.createElement('div');
               text.className = 'data-item-text';
-              text.textContent = comentario.texto;
+              const textoLimitado = comentario.texto.length > 150 
+                ? comentario.texto.substring(0, 150) + '...' 
+                : comentario.texto;
+              text.textContent = textoLimitado;
 
               item.appendChild(title);
               item.appendChild(meta);
@@ -656,20 +704,29 @@
           if (likesByArticle.length === 0) {
             const item = document.createElement('div');
             item.className = 'data-item';
-            item.textContent = 'Sem likes.';
+            item.style.textAlign = 'center';
+            item.style.color = '#6b7280';
+            item.textContent = '💔 Sem likes ainda.';
             likesListEl.appendChild(item);
           } else {
-            likesByArticle.forEach((entry) => {
+            likesByArticle.forEach((entry, index) => {
               const item = document.createElement('div');
               item.className = 'data-item';
 
+              // Medal icons for top 3
+              let rankIcon = '';
+              if (index === 0) rankIcon = '🥇 ';
+              else if (index === 1) rankIcon = '🥈 ';
+              else if (index === 2) rankIcon = '🥉 ';
+              else rankIcon = `${index + 1}. `;
+
               const title = document.createElement('div');
               title.className = 'data-item-title';
-              title.textContent = getNoticiaTitle(entry.noticiaId);
+              title.innerHTML = `${rankIcon}${getNoticiaTitle(entry.noticiaId)}`;
 
               const meta = document.createElement('div');
               meta.className = 'data-item-meta';
-              meta.textContent = `${entry.totalLikes} likes • ${entry.todayLikes} hoje`;
+              meta.innerHTML = `<strong>❤️ ${entry.totalLikes} likes totais</strong> • ⭐ ${entry.todayLikes} hoje`;
 
               item.appendChild(title);
               item.appendChild(meta);
