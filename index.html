@@ -704,6 +704,143 @@ body.dark .artigo-mais-lido-meta {
   gap: 20px;
 }
 
+.highlight-video-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 40px;
+  box-shadow: 0 12px 30px rgba(0, 82, 163, 0.12);
+  border: 1px solid rgba(0, 102, 204, 0.08);
+}
+
+.highlight-video-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.highlight-video-header h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.7em;
+  font-weight: 700;
+  color: #1a1f3a;
+  flex: 1;
+  text-align: center;
+}
+
+.highlight-video-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0, 82, 163, 0.2);
+  text-align: center;
+  margin: 0 auto;
+}
+
+.highlight-video-badge {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  font-size: 0.75em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 14px rgba(0, 82, 163, 0.2);
+}
+
+.highlight-video-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.highlight-video-player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.highlight-video-player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.highlight-video-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+  text-align: center;
+  padding: 20px;
+}
+
+.highlight-video-empty i {
+  font-size: 2em;
+}
+
+.highlight-video-info h3 {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin-bottom: 0;
+  line-height: 1.3;
+  color: #1a1f3a;
+}
+
+.highlight-video-info p {
+  color: #5a6b7f;
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+.highlight-video-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.highlight-video-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.highlight-video-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 82, 163, 0.25);
+}
+
+.highlight-video-cta i {
+  color: #ffffff;
+}
+
 .featured-section {
   margin-bottom: 50px;
 }
@@ -791,6 +928,12 @@ body.dark .stat-counter { background: rgba(255, 255, 255, 0.2); border-color: rg
 body.dark .stat-counter:hover { background: rgba(255, 255, 255, 0.3); }
 body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
 body.dark nav a { color: #d1d5db !important; }
+body.dark .highlight-video-section { background: #0f172a; border-color: rgba(96, 165, 250, 0.2); box-shadow: 0 12px 28px rgba(2,6,23,.6); }
+body.dark .highlight-video-header h2 { color: #f3f4f6 !important; }
+body.dark .highlight-video-title { background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: #ffffff; }
+body.dark .highlight-video-badge { background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: #ffffff; }
+body.dark .highlight-video-info h3 { color: #f3f4f6 !important; }
+body.dark .highlight-video-info p { color: #cbd5e1 !important; }
 body.dark .featured-section { box-shadow: 0 8px 32px rgba(2,6,23,.6); }
 body.dark .featured-content { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
 body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color:#f3f4f6 !important; }
@@ -1159,6 +1302,14 @@ footer {
     display: none;
   }
 
+  .highlight-video-card {
+    grid-template-columns: 1fr;
+  }
+
+  .highlight-video-section {
+    padding: 22px;
+  }
+
   .featured-content {
     padding: 25px;
     grid-template-columns: 1fr;
@@ -1248,6 +1399,24 @@ footer {
 
   .featured-section {
     margin-bottom: 35px;
+  }
+
+  .highlight-video-section {
+    padding: 18px;
+    margin-bottom: 28px;
+  }
+
+  .highlight-video-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .highlight-video-header h2 {
+    font-size: 1.4em;
+  }
+
+  .highlight-video-info h3 {
+    font-size: 1.2em;
   }
 
   .featured-content {
@@ -1783,6 +1952,31 @@ footer {
   </aside>
 
   <div class="main-content">
+    <section class="highlight-video-section" id="videoDestaque">
+      <div class="highlight-video-header">
+        <h2><span class="highlight-video-title">Vídeo em Destaque</span></h2>
+      </div>
+      <div class="highlight-video-card">
+        <div class="highlight-video-player" id="videoDestaquePlayer">
+          <iframe
+            id="videoDestaqueIframe"
+            title="Vídeo em destaque"
+            src=""
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="highlight-video-info">
+          <h3 id="videoDestaqueTitulo">Título do vídeo</h3>
+          <p id="videoDestaqueDescricao">Atualiza o link no script para mostrar o vídeo que queres em destaque.</p>
+          <a id="videoDestaqueLink" class="highlight-video-cta" href="#" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-youtube"></i>
+            <span id="videoDestaqueLinkTexto">Ver no YouTube</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <div class="featured-section" id="featured"></div>
     
     <h2>Últimos Artigos</h2>
@@ -1822,6 +2016,9 @@ const SOCIAL_STATS = {
     lastUpdated: '2026-01-30'
   }
 };
+
+// Vídeo em destaque: carregado via JSON
+let HIGHLIGHT_VIDEO = null;
 
 function formatNumber(num) {
   return num.toLocaleString('pt-PT');
@@ -1903,6 +2100,17 @@ document.addEventListener('DOMContentLoaded', () => {
       dropdown.classList.toggle('active');
     });
   }
+
+  fetch('data/featured-video.json')
+    .then((res) => res.json())
+    .then((data) => {
+      HIGHLIGHT_VIDEO = data;
+      renderVideoDestaque();
+    })
+    .catch((err) => {
+      console.error('Erro ao carregar vídeo em destaque:', err);
+      renderVideoDestaque();
+    });
 });
 
 fetchNoticiasAgendadas("data/noticias.json")
@@ -2115,10 +2323,61 @@ fetchNoticiasAgendadas("data/noticias.json")
   })
   .catch(err => console.error("Erro ao carregar notícias:", err));
 
+function renderVideoDestaque() {
+  const section = document.getElementById('videoDestaque');
+  if (!section) return;
+
+  const player = document.getElementById('videoDestaquePlayer');
+  const iframe = document.getElementById('videoDestaqueIframe');
+  const titleEl = document.getElementById('videoDestaqueTitulo');
+  const descEl = document.getElementById('videoDestaqueDescricao');
+  const linkEl = document.getElementById('videoDestaqueLink');
+  const linkTextEl = document.getElementById('videoDestaqueLinkTexto');
+
+  const fallback = {
+    url: '',
+    titulo: 'Vídeo em destaque',
+    descricao: 'Atualiza o JSON para mostrar o vídeo escolhido na homepage.',
+    cta: 'Ver no YouTube'
+  };
+
+  const current = { ...fallback, ...(HIGHLIGHT_VIDEO || {}) };
+
+  if (titleEl) titleEl.textContent = current.titulo || fallback.titulo;
+  if (descEl) descEl.textContent = current.descricao || '';
+  if (linkTextEl) linkTextEl.textContent = current.cta || fallback.cta;
+
+  const videoId = extrairVideoId(current.url);
+
+  if (videoId && iframe) {
+    iframe.src = `https://www.youtube.com/embed/${videoId}?modestbranding=1`;
+    if (linkEl) {
+      linkEl.href = current.url;
+      linkEl.style.display = 'inline-flex';
+    }
+    return;
+  }
+
+  if (player) {
+    player.innerHTML = `
+      <div class="highlight-video-empty">
+        <i class="fas fa-video"></i>
+        <strong>Vídeo não definido</strong>
+        <span>Atualiza o link do vídeo em destaque no script.</span>
+      </div>
+    `;
+  }
+
+  if (linkEl) {
+    linkEl.removeAttribute('href');
+    linkEl.style.display = 'none';
+  }
+}
+
 // Função para extrair ID do YouTube
 function extrairVideoId(url) {
   if (!url) return '';
-  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/live\/)([a-zA-Z0-9_-]+)/;
   const match = url.match(regex);
   return match ? match[1] : '';
 }
