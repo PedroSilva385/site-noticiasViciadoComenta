@@ -2087,15 +2087,18 @@ function toggleLike(noticiaId) {
 }
 
 function updateLikeCount(noticiaId) {
+  const likeCount = document.getElementById('likeCount');
+  const likeBtn = document.getElementById('likeBtn');
+  
   if (!window.database) {
+    if (likeCount) {
+      likeCount.textContent = '…';
+    }
     if (!window.firebaseReady) {
       setTimeout(() => updateLikeCount(noticiaId), 300);
     }
     return;
   }
-  
-  const likeCount = document.getElementById('likeCount');
-  const likeBtn = document.getElementById('likeBtn');
   
   if (!likeCount || !likeBtn) {
     return;
