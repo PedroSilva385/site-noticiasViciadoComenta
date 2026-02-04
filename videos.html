@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VICIADO COMENTA - Vídeos Recentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body{font-family:'Poppins',sans-serif;margin:0;padding:0;background:#007BFF;color:#fff;}
+header{background:#0056b3;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
+.foto-perfil{width:100px;height:100px;overflow:hidden;flex-shrink:0;}
+.foto-perfil img{width:100%;height:100%;object-fit:cover;}
+.redes-sociais{display:flex;gap:10px;}
+.redes-sociais a img{width:32px;height:32px;transition:transform 0.2s;}
+.redes-sociais a img:hover{transform:scale(1.2);}
+header h1{margin:0;font-size:3em;text-align:center;flex-grow:1;}
+nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,102,204,0.1);padding:0 20px;display:flex;gap:40px;max-width:1200px;margin:0 auto;justify-content:center;flex-wrap:wrap;position:sticky;top:0;z-index:100;}
+nav a{color:#1a1f3a;text-decoration:none;font-weight:600;font-size:0.95em;padding:20px 0;border-bottom:3px solid transparent;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+nav a:hover{color:#0066cc;border-bottom-color:#0066cc;}
+.nav-dropdown{position:relative;display:inline-block;}
+.nav-dropdown>a{display:inline-flex;align-items:center;gap:6px;}
+.nav-dropdown>a::after{content:'▼';font-size:.65em;transition:transform .3s cubic-bezier(0.4,0,0.2,1);}
+.dropdown-menu{position:absolute;top:100%;left:0;background:#ffffff;border-radius:8px;border:1px solid rgba(0,102,204,0.15);box-shadow:0 8px 24px rgba(0,102,204,0.15);min-width:160px;padding:12px 0;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s cubic-bezier(0.4,0,0.2,1);z-index:1000;}
+.nav-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown:hover>a::after{transform:rotate(180deg);}
+.dropdown-menu a{display:block;padding:12px 20px;color:#1a1f3a;text-decoration:none;font-weight:500;font-size:.9em;border-bottom:none;transition:all .2s cubic-bezier(0.4,0,0.2,1);}
+.dropdown-menu a:hover{background:#e3f2fd;color:#0066cc;padding-left:24px;}
+main{max-width:1000px;margin:20px auto;padding:20px;background:rgba(0,0,0,0.3);border-radius:10px;min-height:400px;text-align:center;}
+.video-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.video-item{background:rgba(0,86,179,0.8);border-radius:8px;overflow:hidden;text-align:center;padding:10px;transition:transform 0.2s;}
+.video-item:hover{transform:translateY(-3px);}
+.video-item iframe{width:100%;height:180px;}
+.video-item p{margin:10px 0 0 0;font-weight:600;color:#ffdd57;}
+footer{text-align:center;padding:20px;background:#004494;color:#fff;margin-top:40px}
+.footer-copy{text-align:center;width:100%}
+.footer-contacts{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.footer-contacts a{color:#fff;text-decoration:none;font-weight:600}
+.footer-contacts a:hover{text-decoration:underline}
+.footer-contacts i{margin-right:8px;color:#fff}
+body.dark{background:#0f172a;color:#e5e7eb !important}
+body.dark *{color:#e5e7eb !important}
+body.dark header{background:#0369a1}
+body.dark header, body.dark header *{color:#ffffff !important}
+body.dark nav{background:rgba(17,24,39,.95);border-bottom-color:rgba(255,255,255,.08)}
+body.dark nav a{color:#d1d5db !important}
+body.dark .dropdown-menu{background:#1a2332;border-color:rgba(96,165,250,0.2);box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+body.dark .dropdown-menu a{color:#d1d5db}
+body.dark .dropdown-menu a:hover{background:rgba(96,165,250,0.2);color:#60a5fa;padding-left:24px}
+body.dark main{background:rgba(15,23,42,.5);color:#e5e7eb !important}
+body.dark h2{color:#e5e7eb !important}
+body.dark footer{background:#0b1220;color:#e5e7eb !important}
+body.dark footer *{color:#e5e7eb !important}
+body.dark .theme-toggle{border-color:rgba(255,255,255,.2);color:#e5e7eb !important}
+body.dark p{color:#e5e7eb !important}
+body.dark span{color:#e5e7eb !important}
+.theme-toggle{position:absolute;top:16px;right:16px;background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;z-index:150}
+.theme-toggle i{pointer-events:none}
+@media (max-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 15px;
+  }
+
+  header h1 {
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
+  }
+
+  .foto-perfil {
+    width: 80px;
+    height: 80px;
+  }
+
+  .redes-sociais {
+    margin-top: 0;
+    justify-content: center;
+  }
+
+  nav {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  nav a {
+    padding: 12px 8px;
+    font-size: 0.9em;
+  }
+
+  main {
+    padding: 20px 12px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .video-item iframe {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 15px 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  .foto-perfil {
+    width: 70px;
+    height: 70px;
+  }
+
+  .redes-sociais {
+    gap: 8px;
+  }
+
+  .redes-sociais a img {
+    width: 28px;
+    height: 28px;
+  }
+
+  nav {
+    gap: 8px;
+    padding: 0 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    padding: 10px 6px;
+    font-size: 0.8em;
+    flex: 0 0 auto;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-dropdown {
+    flex: 0 0 auto;
+  }
+
+  .nav-dropdown > a {
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
+  main {
+    padding: 15px 10px;
+  }
+
+  main h2 {
+    font-size: 1.4em;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .video-item {
+    padding: 8px;
+  }
+
+  .video-item iframe {
+    height: 180px;
+  }
+
+  .video-item p {
+    font-size: 0.9em;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header {
+    padding: 12px 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .foto-perfil {
+    width: 60px;
+    height: 60px;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    font-size: 0.75em;
+    min-height: 40px;
+  }
+
+  main {
+    padding: 12px 8px;
+  }
+
+  main h2 {
+    font-size: 1.2em;
+  }
+
+  .video-item iframe {
+    height: 150px;
+  }
+
+  footer {
+    padding: 12px 8px;
+    font-size: 0.7em;
+  }
+}
+</style>
+</head>
+<body>
+
+<script>
+function applyTheme(theme){const isDark=theme==='dark';document.body.classList.toggle('dark',isDark);const btn=document.getElementById('themeToggle');if(btn)btn.innerHTML=isDark?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>'}
+function initTheme(){const saved=localStorage.getItem('theme')||'light';applyTheme(saved)}
+document.addEventListener('DOMContentLoaded',()=>{initTheme();const btn=document.createElement('button');btn.id='themeToggle';btn.className='theme-toggle';btn.title='Alternar tema';btn.innerHTML='<i class="fas fa-moon"></i>';const headerEl=document.querySelector('header');if(headerEl)headerEl.appendChild(btn);btn.addEventListener('click',()=>{const next=document.body.classList.contains('dark')?'light':'dark';localStorage.setItem('theme',next);applyTheme(next)})});
+</script>
+<header>
+  <div class="foto-perfil"><img src="Made with insMind-Screenshot 2025-08-06 16-11-05.png" alt="Foto Perfil"></div>
+  <h1>VICIADO COMENTA</h1>
+  <div class="redes-sociais">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube"></a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram"></a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+  </div>
+</header>
+<nav>
+  <a href="index.html">Início</a>
+  <a href="todas-noticias.html">Artigos</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
+      <a href="metin2.html">Metin2</a>
+      <a href="livestreams.html">Livestreams</a>
+    </div>
+  </div>
+</nav>
+<main>
+  <h2 style="text-align:center; margin-bottom:20px;">Vídeos Recentes</h2>
+  <div class="video-grid">
+    <!-- Substituir VIDEO1..12 pelos links reais -->
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO1" frameborder="0" allowfullscreen></iframe><p>DIGI 1</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO2" frameborder="0" allowfullscreen></iframe><p>DIGI 2</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO3" frameborder="0" allowfullscreen></iframe><p>DIGI 3</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO4" frameborder="0" allowfullscreen></iframe><p>DIGI 4</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO5" frameborder="0" allowfullscreen></iframe><p>MERCADO 1</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO6" frameborder="0" allowfullscreen></iframe><p>MERCADO 2</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO7" frameborder="0" allowfullscreen></iframe><p>MERCADO 3</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO8" frameborder="0" allowfullscreen></iframe><p>MERCADO 4</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO9" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 1</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO10" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 2</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO11" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 3</p></div>
+    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO12" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 4</p></div>
+  </div>
+</main>
+<footer>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+</footer>
+</body>
+</html>

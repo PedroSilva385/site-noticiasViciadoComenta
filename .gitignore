@@ -1,0 +1,71 @@
+﻿# Ficheiros sensÃ­veis - NÃƒO COMMITAR
+.env
+.env.local
+.env.production
+.env*.local
+*.key
+*.pem
+*.p12
+
+# Ficheiros de configuração (usar GitHub Secrets em vez disso)
+/firebase-config-secrets.js
+/assets/firebase-config-secrets.js
+
+# Pasta de configuraÃ§Ã£o privada (FORA do repositÃ³rio GitHub)
+../private-config/
+../private-config/**
+
+# Configuração Firebase privada - firebase-config.js DEVE ser deployado em produção
+firebase-config.js
+assets/firebase-config.js
+/docs/FIREBASE-SETUP.txt
+/docs/FIREBASE-REGRAS-SEGURAS.json
+/docs/CONFIG-PRIVADA.md
+/docs/SEGURANCA-API-KEY.md
+FIREBASE-RULES-CORRIGIDAS.json
+CORRIGIR-FIREBASE-RULES.md
+
+# Backups e temporÃ¡rios
+*.backup
+*.tmp
+*.log
+*.bak
+~$*
+
+# Dados sensÃ­veis do Firebase (se existirem)
+firebase-adminsdk-*.json
+serviceAccountKey.json
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Node modules (se usar build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Builds e distribuiÃ§Ãµes
+dist/
+build/
+.cache/
+
+# Ficheiros de sistema
+desktop.ini
+.DS_Store
+
+# Dados locais de teste
+site-stats.json
+*.local.json
+
+# Screenshots e ficheiros temporÃ¡rios de desenvolvimento
+screenshots/
+temp/
+
+# Documentação interna (não versionar)
+docs/
+
