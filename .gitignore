@@ -59,3 +59,6 @@ site-stats.json
 screenshots/
 temp/
 
+# Documentação interna (não versionar)
+docs/
+
