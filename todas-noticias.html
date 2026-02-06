@@ -862,9 +862,39 @@ footer {
   }
 }
 </style>
+  <link rel="stylesheet" href="assets/consent-banner.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XJ3P1K6694"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 2000
+    });
+
+    gtag('config', 'G-XJ3P1K6694');
+  </script>
 </head>
 
 <body>
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
+    <div class="cookie-banner__content">
+      <div class="cookie-banner__text">
+        Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
+        <a href="politica-privacidade.html">Política de Privacidade</a>.
+      </div>
+      <div class="cookie-banner__actions">
+        <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
+        <button id="cookie-reject" class="cookie-banner__button cookie-banner__button--reject">Recusar</button>
+      </div>
+    </div>
+  </div>
+  <script src="assets/consent-banner.js" defer></script>
 
 <script>
 // Dark mode toggle
