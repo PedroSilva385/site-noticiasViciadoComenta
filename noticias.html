@@ -2022,13 +2022,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ========== SISTEMA DE LIKES ==========
-function toggleLike(noticiaId) {
+function toggleLike(noticiaId, hasRetried) {
   console.log('🔥 toggleLike chamado com ID:', noticiaId);
   
   // Verificar se Firebase existe
   if (typeof firebase === 'undefined') {
     console.error('❌ Firebase não carregado');
     alert('Erro: Firebase não disponível. Recarregue a página.');
+    return;
+  }
+
+  if ((!firebase.apps || !firebase.apps.length) && !hasRetried) {
+    if (window.ensureFirebaseInitialized) {
+      console.warn('⏳ Firebase ainda a inicializar. Aguardando...');
+      window.ensureFirebaseInitialized()
+        .then(() => toggleLike(noticiaId, true))
+        .catch((error) => {
+          console.error('❌ Firebase não inicializado:', error);
+          alert('Erro: Configuração do Firebase não disponível. Recarregue a página.');
+        });
+      return;
+    }
+  }
+
+  if (!firebase.apps || !firebase.apps.length) {
+    console.error('❌ Firebase App não inicializado');
+    alert('Erro: Firebase não inicializado. Recarregue a página.');
     return;
   }
   
