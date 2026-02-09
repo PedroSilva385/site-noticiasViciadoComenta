@@ -12,7 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@v4
+      continue-on-error: true
+
+    - name: Fallback clone
+      if: steps.checkout.outcome == 'failure'
+      run: |
+        echo "Checkout falhou, a tentar clone manual..."
+        rm -rf "$GITHUB_WORKSPACE"/*
+        git clone --depth 1 "https://github.com/${{ github.repository }}.git" "$GITHUB_WORKSPACE"
     
     # Criar arquivo firebase-config.js com secrets
     - name: Criar firebase-config.js
