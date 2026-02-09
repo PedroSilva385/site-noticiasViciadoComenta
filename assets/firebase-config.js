@@ -7,48 +7,16 @@
 // - API Key regenerada (chave antiga desativada)
 // - HTTP Referrers restritos a: viciadocomenta.pt
 // - APIs restritas a: Identity Toolkit, Token Service, Firebase Realtime Database
-// - Config carregada em runtime (firebase-config.json ou window.__FIREBASE_CONFIG__)
 
-let firebaseConfigPromise = null;
-let firebaseInitPromise = null;
-
-function getFirebaseConfig() {
-  if (window.__FIREBASE_CONFIG__) {
-    return Promise.resolve(window.__FIREBASE_CONFIG__);
-  }
-
-  if (!firebaseConfigPromise) {
-    firebaseConfigPromise = fetch('/firebase-config.json', { cache: 'no-store' })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Firebase config not found');
-        }
-        return response.json();
-      })
-      .catch((error) => {
-        console.error('Erro ao carregar config Firebase:', error);
-        return null;
-      });
-  }
-
-  return firebaseConfigPromise;
-}
-
-function isValidFirebaseConfig(config) {
-  if (!config || typeof config !== 'object') {
-    return false;
-  }
-
-  return Boolean(
-    config.apiKey &&
-    config.authDomain &&
-    config.databaseURL &&
-    config.projectId &&
-    config.storageBucket &&
-    config.messagingSenderId &&
-    config.appId
-  );
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+  authDomain: "chat-viciadocomenta.firebaseapp.com",
+  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chat-viciadocomenta",
+  storageBucket: "chat-viciadocomenta.firebasestorage.app",
+  messagingSenderId: "183684670526",
+  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+};
 
 function ensureFirebaseInitialized() {
   if (typeof firebase === 'undefined') {
@@ -59,25 +27,12 @@ function ensureFirebaseInitialized() {
     return Promise.resolve(true);
   }
 
-  if (!firebaseInitPromise) {
-    firebaseInitPromise = getFirebaseConfig().then((config) => {
-      if (!isValidFirebaseConfig(config)) {
-        throw new Error('Config Firebase invalida ou ausente.');
-      }
-
-      if (!firebase.apps.length) {
-        firebase.initializeApp(config);
-      }
-
-      window.firebaseInitialized = true;
-      return true;
-    }).catch((error) => {
-      firebaseInitPromise = null;
-      throw error;
-    });
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
   }
 
-  return firebaseInitPromise;
+  window.firebaseInitialized = true;
+  return Promise.resolve(true);
 }
 
 // Inicializar Firebase
@@ -154,7 +109,7 @@ function initializeFirebaseApp() {
       console.error('Erro ao inicializar Firebase:', error);
     }
   }).catch((error) => {
-    console.error('Config Firebase invalida ou ausente.', error);
+    console.error('Erro ao inicializar Firebase:', error);
   });
 }
 

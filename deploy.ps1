@@ -18,6 +18,27 @@ Write-Host "Você precisa enviá-lo manualmente para o servidor de produção:" 
 if (-not (Test-Path "firebase-config.json")) {
 	Write-Host "`n❌ firebase-config.json não encontrado. Crie o arquivo antes do deploy." -ForegroundColor Red
 }
+
+# 3. Verificar se o ficheiro esta acessivel no site publicado
+$siteUrl = "https://viciadocomenta.pt"
+if (-not $siteUrl.StartsWith("http")) {
+	$siteUrl = "https://$siteUrl"
+}
+
+$configUrl = "$siteUrl/firebase-config.json"
+Write-Host "`n🔎 Verificando acesso publico: $configUrl" -ForegroundColor Cyan
+
+try {
+	$response = Invoke-WebRequest -Uri $configUrl -Method Head -TimeoutSec 10 -UseBasicParsing
+	if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+		Write-Host "✅ firebase-config.json acessivel no site publicado." -ForegroundColor Green
+	} else {
+		Write-Host "❌ firebase-config.json retornou status $($response.StatusCode)." -ForegroundColor Red
+	}
+} catch {
+	Write-Host "❌ Nao foi possivel aceder a firebase-config.json no site publicado." -ForegroundColor Red
+	Write-Host "Detalhes: $($_.Exception.Message)" -ForegroundColor DarkGray
+}
 Write-Host "  1. Via FTP/cPanel" -ForegroundColor Cyan
 Write-Host "  2. Via Firebase Hosting: firebase deploy" -ForegroundColor Cyan
 Write-Host "  3. Via servidor web (SCP/SFTP)" -ForegroundColor Cyan
