@@ -230,14 +230,14 @@ function converter() {
   texto = texto.replace(/\r/g, '\n');
   
   // Converter URLs de imagem soltas em linhas para tags <img>
-  // Permite espaços em branco antes/depois
+  // Permite espaços em branco antes/depois E espaços nos nomes dos ficheiros
   
-  // URLs completas (https://...)
-  texto = texto.replace(/^\s*(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
+  // URLs completas (https://...) - aceita espaços no nome
+  texto = texto.replace(/^\s*(https?:\/\/[^\s\n]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
     '<img src="$1" alt="Imagem" class="img-center">');
   
-  // Caminhos relativos (assets/imagens/...)
-  texto = texto.replace(/^\s*(assets\/imagens\/[^\s]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
+  // Caminhos relativos (assets/imagens/...) - aceita espaços no nome
+  texto = texto.replace(/^\s*(assets\/imagens\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
     '<img src="$1" alt="Imagem" class="img-center">');
   
   // Substituir aspas duplas por aspas simples
