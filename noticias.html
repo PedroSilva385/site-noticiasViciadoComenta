@@ -1853,7 +1853,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const noticia = data.noticias.find(n => String(n.id) === String(noticiaId));
         console.log('✅ Notícia encontrada:', noticia ? noticia.titulo : 'NENHUMA');
-      
+
       if (noticia) {
         document.title = noticia.titulo + " - VICIADO COMENTA";
         
