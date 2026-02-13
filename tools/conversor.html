@@ -186,10 +186,12 @@ button:active {
     <ol>
       <li>Copia o texto completo do LibreOffice Writer (Ctrl+A, Ctrl+C)</li>
       <li>Cola na caixa da esquerda (Ctrl+V)</li>
+      <li><strong>Para imagens:</strong> Cola o URL da imagem numa linha sozinha (ex: assets/imagens/foto.jpg)</li>
       <li>Clica em "Converter para JSON"</li>
       <li>Copia o resultado da caixa da direita</li>
       <li>Cola no campo "conteudo" do ficheiro noticias.json</li>
     </ol>
+    <p style="margin-top: 10px; color: #555;"><strong>💡 Dica:</strong> URLs de imagem sozinhas numa linha são convertidas automaticamente em tags &lt;img&gt;</p>
   </div>
 
   <div class="grid">
@@ -221,18 +223,34 @@ function converter() {
     return;
   }
   
+  let texto = input;
+  
+  // Normalizar quebras de linha (Windows para Unix)
+  texto = texto.replace(/\r\n/g, '\n');
+  texto = texto.replace(/\r/g, '\n');
+  
+  // Converter URLs de imagem soltas em linhas para tags <img>
+  // Permite espaços em branco antes/depois
+  
+  // URLs completas (https://...)
+  texto = texto.replace(/^\s*(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
+    '<img src="$1" alt="Imagem" class="img-center">');
+  
+  // Caminhos relativos (assets/imagens/...)
+  texto = texto.replace(/^\s*(assets\/imagens\/[^\s]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
+    '<img src="$1" alt="Imagem" class="img-center">');
+  
   // Substituir aspas duplas por aspas simples
-  let texto = input.replace(/["'"]/g, "'");
+  texto = texto.replace(/["'"]/g, "'");
   
   // Escapar caracteres especiais do JSON
   texto = texto.replace(/\\/g, '\\\\');
   texto = texto.replace(/\n/g, '\\n');
-  texto = texto.replace(/\r/g, '');
   texto = texto.replace(/\t/g, ' ');
   
   // Mostrar resultado
   document.getElementById('output').value = texto;
-  mostrarAlerta('✅ Conversão concluída! Agora podes copiar o resultado.', 'success');
+  mostrarAlerta('✅ Conversão concluída! URLs de imagem convertidas automaticamente.', 'success');
 }
 
 function copiar() {
