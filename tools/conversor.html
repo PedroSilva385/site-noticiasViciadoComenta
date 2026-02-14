@@ -81,6 +81,69 @@ label {
   font-size: 1.1em;
 }
 
+.toolbar {
+  background: #f8f9fa;
+  border: 2px solid #ddd;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.toolbar button {
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: none;
+  min-width: 80px;
+}
+
+.toolbar button:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  transform: none;
+  box-shadow: none;
+}
+
+.toolbar button:active {
+  background: #5568d3;
+}
+
+.toolbar .separator {
+  width: 1px;
+  height: 24px;
+  background: #ddd;
+  margin: 0 4px;
+}
+
+#editor {
+  width: 100%;
+  min-height: 400px;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1em;
+  resize: vertical;
+  overflow-y: auto;
+  background: white;
+  line-height: 1.6;
+}
+
+#editor:focus {
+  outline: none;
+}
+
 textarea {
   width: 100%;
   min-height: 400px;
@@ -184,20 +247,32 @@ button:active {
   <div class="instructions">
     <h3>📋 Como usar:</h3>
     <ol>
-      <li>Copia o texto completo do LibreOffice Writer (Ctrl+A, Ctrl+C)</li>
-      <li>Cola na caixa da esquerda (Ctrl+V)</li>
+      <li>Escreve ou cola o texto no editor da esquerda</li>
+      <li><strong>Usa os botões:</strong> Seleciona texto e clica em "Negrito" ou "Itálico", ou usa Ctrl+B / Ctrl+I</li>
       <li><strong>Para imagens:</strong> Cola o URL da imagem numa linha sozinha (ex: assets/imagens/foto.jpg)</li>
+      <li><strong>Para legendas:</strong> Coloca a legenda entre parêntesis na linha seguinte: (Texto da legenda)</li>
       <li>Clica em "Converter para JSON"</li>
       <li>Copia o resultado da caixa da direita</li>
       <li>Cola no campo "conteudo" do ficheiro noticias.json</li>
     </ol>
-    <p style="margin-top: 10px; color: #555;"><strong>💡 Dica:</strong> URLs de imagem sozinhas numa linha são convertidas automaticamente em tags &lt;img&gt;</p>
+    <p style="margin-top: 10px; color: #555;"><strong>💡 Dicas:</strong></p>
+    <ul style="margin-left: 20px; color: #555;">
+      <li>Usa os botões ou Ctrl+B (negrito) e Ctrl+I (itálico) diretamente no editor</li>
+      <li>URLs de imagem sozinhas são convertidas em tags &lt;img&gt;</li>
+      <li>Imagem seguida de (legenda) gera automaticamente &lt;figure&gt; com &lt;figcaption&gt;</li>
+    </ul>
   </div>
 
   <div class="grid">
     <div class="section">
-      <label for="input">📝 Texto do LibreOffice Writer:</label>
-      <textarea id="input" placeholder="Cole aqui o texto do LibreOffice Writer..."></textarea>
+      <label for="editor">📝 Editor de Texto:</label>
+      <div class="toolbar">
+        <button onclick="formatText('bold')" title="Negrito (Ctrl+B)">✨ Negrito</button>
+        <button onclick="formatText('italic')" title="Itálico (Ctrl+I)">💫 Itálico</button>
+        <div class="separator"></div>
+        <button onclick="limparEditor()" title="Limpar tudo">🗑️ Limpar</button>
+      </div>
+      <div id="editor" contenteditable="true" spellcheck="false">Escreve ou cola aqui o teu texto...</div>
     </div>
     
     <div class="section">
@@ -215,42 +290,115 @@ button:active {
 </div>
 
 <script>
+// Função para formatar texto (negrito/itálico)
+function formatText(command) {
+  document.execCommand(command, false, null);
+  document.getElementById('editor').focus();
+}
+
+// Função para limpar o editor
+function limparEditor() {
+  const editor = document.getElementById('editor');
+  if (confirm('Tens a certeza que queres limpar todo o texto?')) {
+    editor.innerHTML = 'Escreve ou cola aqui o teu texto...';
+    editor.focus();
+  }
+}
+
+// Limpar placeholder quando o utilizador começar a escrever
+document.getElementById('editor').addEventListener('focus', function() {
+  if (this.innerHTML === 'Escreve ou cola aqui o teu texto...') {
+    this.innerHTML = '';
+  }
+});
+
+document.getElementById('editor').addEventListener('blur', function() {
+  if (this.innerHTML.trim() === '') {
+    this.innerHTML = 'Escreve ou cola aqui o teu texto...';
+  }
+});
+
 function converter() {
-  const input = document.getElementById('input').value;
+  const editor = document.getElementById('editor');
+  let html = editor.innerHTML;
   
-  if (!input.trim()) {
-    mostrarAlerta('Por favor, cola algum texto primeiro!', 'error');
+  if (!html.trim() || html === 'Escreve ou cola aqui o teu texto...') {
+    mostrarAlerta('Por favor, escreve ou cola algum texto primeiro!', 'error');
     return;
   }
   
-  let texto = input;
+  let texto = html;
+  
+  // Normalizar quebras de linha HTML para \n
+  texto = texto.replace(/<div>/gi, '\n');
+  texto = texto.replace(/<\/div>/gi, '');
+  texto = texto.replace(/<br\s*\/?>/gi, '\n');
+  texto = texto.replace(/<p>/gi, '');
+  texto = texto.replace(/<\/p>/gi, '\n');
+  
+  // Remover tags <p> do LibreOffice Writer com atributos (dir, style, etc)
+  texto = texto.replace(/<p\b[^>]*>/gi, '');
   
   // Normalizar quebras de linha (Windows para Unix)
   texto = texto.replace(/\r\n/g, '\n');
   texto = texto.replace(/\r/g, '\n');
   
-  // Converter URLs de imagem soltas em linhas para tags <img>
-  // Permite espaços em branco antes/depois E espaços nos nomes dos ficheiros
+  // Remover múltiplas quebras de linha consecutivas (deixar no máximo 2)
+  texto = texto.replace(/\n{3,}/g, '\n\n');
   
+  // Converter formatação HTML do LibreOffice Writer ou do contenteditable
+  // Negrito: <b> ou <strong> → manter <strong>
+  texto = texto.replace(/<b\b[^>]*>(.*?)<\/b>/gi, '<strong>$1</strong>');
+  texto = texto.replace(/<strong\b[^>]*>(.*?)<\/strong>/gi, '<strong>$1</strong>');
+  
+  // Itálico: <i> ou <em> → manter <em>
+  texto = texto.replace(/<i\b[^>]*>(.*?)<\/i>/gi, '<em>$1</em>');
+  texto = texto.replace(/<em\b[^>]*>(.*?)<\/em>/gi, '<em>$1</em>');
+  
+  // Remover outras tags HTML que possam vir do contenteditable (spans, etc)
+  texto = texto.replace(/<span[^>]*>/gi, '');
+  texto = texto.replace(/<\/span>/gi, '');
+  texto = texto.replace(/&nbsp;/gi, ' ');
+  
+  // PRIMEIRO: Converter imagens COM LEGENDA (imagem seguida de linha com parêntesis)
+  // Caminhos relativos com legenda
+  texto = texto.replace(/(^|\n)\s*(assets\/imagens\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*\n\s*\(([^)]+)\)\s*($|\n)/gim, 
+    '$1<figure><img src="$2" alt="Imagem" class="img-center"><figcaption>$3</figcaption></figure>$4');
+  
+  // URLs completas com legenda
+  texto = texto.replace(/(^|\n)\s*(https?:\/\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*\n\s*\(([^)]+)\)\s*($|\n)/gim, 
+    '$1<figure><img src="$2" alt="Imagem" class="img-center"><figcaption>$3</figcaption></figure>$4');
+  
+  // DEPOIS: Converter imagens SEM LEGENDA (apenas a URL sozinha)
   // URLs completas (https://...) - aceita espaços no nome
-  texto = texto.replace(/^\s*(https?:\/\/[^\s\n]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
-    '<img src="$1" alt="Imagem" class="img-center">');
+  texto = texto.replace(/(^|\n)\s*(https?:\/\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*($|\n)/gim, 
+    '$1<img src="$2" alt="Imagem" class="img-center">$3');
   
   // Caminhos relativos (assets/imagens/...) - aceita espaços no nome
-  texto = texto.replace(/^\s*(assets\/imagens\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*$/gim, 
-    '<img src="$1" alt="Imagem" class="img-center">');
+  texto = texto.replace(/(^|\n)\s*(assets\/imagens\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*($|\n)/gim, 
+    '$1<img src="$2" alt="Imagem" class="img-center">$3');
+  
+  // Converter formatação de texto (estilo Markdown)
+  // Negrito: **texto** → <strong>texto</strong>
+  texto = texto.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  
+  // Itálico: *texto* → <em>texto</em> (apenas se não for parte de **)
+  texto = texto.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>');
+  
+  // AGORA SIM: Converter quebras de linha para <br><br> (formato do site)
+  texto = texto.replace(/\n\n+/g, '<br><br>');
+  texto = texto.replace(/\n/g, '<br><br>');
   
   // Substituir aspas duplas por aspas simples
   texto = texto.replace(/["'"]/g, "'");
   
   // Escapar caracteres especiais do JSON
   texto = texto.replace(/\\/g, '\\\\');
-  texto = texto.replace(/\n/g, '\\n');
   texto = texto.replace(/\t/g, ' ');
   
   // Mostrar resultado
   document.getElementById('output').value = texto;
-  mostrarAlerta('✅ Conversão concluída! URLs de imagem convertidas automaticamente.', 'success');
+  mostrarAlerta('✅ Conversão concluída! Formatação, imagens e legendas convertidas automaticamente.', 'success');
 }
 
 function copiar() {
