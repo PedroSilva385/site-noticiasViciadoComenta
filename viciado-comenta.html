@@ -242,6 +242,35 @@ main {
   margin: 0 auto;
 }
 
+.playlist-section {
+  margin-bottom: 60px;
+}
+
+.playlist-button {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 40px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1em;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.playlist-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255, 0, 0, 0.4);
+}
+
+.playlist-button i {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
 /* PLAYLISTA */
 .playlist-container {
   background: #ffffff;
@@ -1007,7 +1036,14 @@ document.addEventListener('DOMContentLoaded', () => {
 <main>
   <div class="page-header">
     <h1>Viciado Comenta</h1>
-    <p>Todos os episódios em um só lugar. Assista os comentários e análises mais recentes sobre os temas do momento.</p>
+    <p>Todos os episódios num só lugar. Assite aos comentários e análises mais recentes sobre os temas do momento.</p>
+  </div>
+
+  <div class="playlist-section">
+    <a href="https://www.youtube.com/playlist?list=PL6kuAId83nkJllMUGSCHki6Z8B18cydqD" target="_blank" rel="noopener noreferrer" class="playlist-button">
+      <i class="fab fa-youtube"></i>
+      Ver Playlist Completa no YouTube
+    </a>
   </div>
 
   <div class="miniaturas-section">
