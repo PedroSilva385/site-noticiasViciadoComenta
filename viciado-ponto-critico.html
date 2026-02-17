@@ -230,6 +230,35 @@ main {
   color: #5a6b7f;
 }
 
+.playlist-section {
+  margin-bottom: 60px;
+}
+
+.playlist-button {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 40px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1em;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.playlist-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255, 0, 0, 0.4);
+}
+
+.playlist-button i {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
 /* MINIATURAS */
 .miniaturas-section {
   margin-top: 30px;
@@ -239,6 +268,7 @@ main {
   font-family: 'Outfit', sans-serif;
   font-size: 1.6em;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .miniaturas-grid {
@@ -422,6 +452,13 @@ footer {
   <div class="page-header">
     <h1>Viciado - Ponto Crítico</h1>
     <p>Episódios em destaque com análise crítica e opinião direta. Vê os vídeos mais recentes.</p>
+  </div>
+
+  <div class="playlist-section">
+    <a href="https://www.youtube.com/playlist?list=PL6kuAId83nkJ8jH6G8CK46lzu_oGDi9nf" target="_blank" rel="noopener noreferrer" class="playlist-button">
+      <i class="fab fa-youtube"></i>
+      Ver Playlist Completa no YouTube
+    </a>
   </div>
 
   <div class="miniaturas-section">
