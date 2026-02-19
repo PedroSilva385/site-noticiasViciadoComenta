@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artigos - VICIADO COMENTA</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<!-- Firebase Analytics -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/news-scheduler.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
+     crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
+}
+
+/* Dark mode */
+body.dark { background: linear-gradient(135deg, #0f172a 0%, #111827 100%); color: #e5e7eb !important; }
+body.dark * { color: #e5e7eb !important; }
+body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav a { color: #e5e7eb !important; }
+body.dark main { color: #e5e7eb !important; }
+body.dark h1, body.dark h2, body.dark h3 { color: #ffffff !important; }
+body.dark .noticia-completa { background: rgba(15,23,42,.8); border-color: #1f2937; }
+body.dark .noticia-titulo { color: #ffffff !important; }
+body.dark .noticia-meta { color: #cbd5e1 !important; }
+body.dark .noticia-conteudo { color: #e5e7eb !important; }
+body.dark .noticia-ver-mais { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); color: #ffffff; }
+body.dark footer { background:#0b1220; color:#e5e7eb !important; }
+body.dark footer * { color:#e5e7eb !important; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !important; }
+body.dark p { color: #e5e7eb !important; }
+body.dark span { color: #e5e7eb !important; }
+
+.theme-toggle { position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid rgba(0,0,0,.1); color: #1a1f3a; padding: 8px 10px; border-radius: 8px; cursor: pointer; z-index: 150; }
+.theme-toggle i { pointer-events: none; }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.header-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+/* SOCIAL MEDIA */
+.social-media {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.social-media a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.social-media a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+/* NAV */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 20px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+nav a:hover {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+/* DROPDOWN MENU */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 20px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.nav-dropdown > a::after {
+  content: '▼';
+  font-size: 0.65em;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  min-width: 160px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover > a {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+.nav-dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-bottom: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu a:hover {
+  background: #e3f2fd;
+  color: #0066cc;
+  padding-left: 24px;
+}
+
+body.dark .dropdown-menu {
+  background: #1a2332;
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .dropdown-menu a {
+  color: #d1d5db;
+}
+
+body.dark .dropdown-menu a:hover {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  padding-left: 24px;
+}
+
+body.dark .nav-dropdown > a {
+  color: #e5e7eb;
+}
+
+body.dark .nav-dropdown:hover > a {
+  color: #93c5fd;
+  border-bottom-color: #93c5fd;
+}
+
+/* MAIN */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.page-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5em;
+  font-weight: 700;
+  color: #1a1f3a;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.noticias-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.noticia-completa {
+  background: #ffffff;
+  border: 1px solid #e0e8f5;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  transition: all 0.3s;
+}
+
+.noticia-completa:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+}
+
+.noticia-meta-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.noticia-categoria {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.noticia-data {
+  color: #5a6b7f;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.noticia-autor {
+  color: #5a6b7f;
+  font-size: 0.9em;
+}
+
+.noticia-titulo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.4em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.noticia-resumo {
+  font-size: 1.05em;
+  color: #5a6b7f;
+  margin-bottom: 20px;
+  font-weight: 600;
+  padding: 12px;
+  border-left: 4px solid #0066cc;
+  background: rgba(0, 102, 204, 0.05);
+}
+
+.noticia-conteudo {
+  color: #1a1f3a;
+  font-size: 1.05em;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.noticia-conteudo p {
+  margin-bottom: 0;
+}
+
+.noticia-conteudo strong {
+  font-weight: 600;
+  color: #1a1f3a;
+}
+
+.noticia-conteudo em {
+  font-style: italic;
+  color: #2c3e50;
+}
+
+.noticia-conteudo img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+  display: block;
+}
+
+.noticia-conteudo img.img-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.noticia-conteudo figure {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.noticia-conteudo figure img {
+  margin: 0 auto;
+}
+
+.noticia-conteudo figcaption {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #5a6b7f;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+body.dark .noticia-conteudo figcaption {
+  color: #9ca3af;
+}
+
+.noticia-ver-mais {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9em;
+  padding: 12px 24px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: fit-content;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+}
+
+.noticia-ver-mais:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+}
+
+.noticia-video {
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+}
+
+.noticia-video img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.noticia-video iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+}
+
+.noticia-divider {
+  height: 2px;
+  background: linear-gradient(90deg, #0066cc, transparent);
+  margin: 30px 0;
+}
+
+/* FILTRO DE CATEGORIAS */
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  border: 1px solid #e0e8f5;
+}
+
+body.dark .filter-section {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #1a1f3a;
+  margin-right: 8px;
+}
+
+body.dark .filter-label {
+  color: #d1d5db;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 2px solid #0066cc;
+  background: #ffffff;
+  color: #0066cc;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s;
+}
+
+.filter-btn:hover {
+  background: #e3f2fd;
+}
+
+body.dark .filter-btn:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+}
+
+body.dark .filter-btn.active {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+  color: #ffffff;
+}
+
+.date-sort-select {
+  padding: 8px 16px;
+  border: 2px solid #0066cc;
+  background: #ffffff;
+  color: #0066cc;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  font-family: 'Sora', sans-serif;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.date-sort-select:hover {
+  background: #e3f2fd;
+}
+
+body.dark .date-sort-select {
+  background: #1a2332;
+  color: #60a5fa;
+  border-color: #0ea5e9;
+}
+
+body.dark .date-sort-select:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+.date-sort-select:focus {
+  border-color: #0052a3;
+}
+
+body.dark .date-sort-select:focus {
+  border-color: #0369a1;
+}
+
+body.dark .filter-section {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .filter-label {
+  color: #ffffff;
+}
+
+body.dark .filter-btn {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+  background: transparent;
+}
+
+body.dark .filter-btn:hover {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+body.dark .filter-btn.active {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+  color: #ffffff;
+}
+
+body.dark .date-sort-select {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+  background: transparent;
+}
+
+body.dark .date-sort-select:hover {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+body.dark .date-sort-select option {
+  background: #0b1220;
+  color: #e5e7eb;
+}
+
+/* FOOTER */
+footer {
+  background: #1a1f3a;
+  border-top: 1px solid rgba(0, 102, 204, 0.2);
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 80px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.footer-contacts a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-contacts a:hover {
+  text-decoration: underline;
+}
+
+.footer-contacts i {
+  margin-right: 8px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-copy {
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  width: 100%;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  header {
+    padding: 25px 15px;
+  }
+
+  header h1 {
+    font-size: 2em;
+    margin-bottom: 6px;
+  }
+
+  .header-subtitle {
+    font-size: 0.85em;
+    margin-bottom: 12px;
+  }
+
+  .social-media {
+    gap: 10px;
+  }
+
+  .social-media a {
+    width: 36px;
+    height: 36px;
+  }
+
+  nav {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  nav a {
+    padding: 12px 8px;
+    font-size: 0.9em;
+  }
+
+  .nav-dropdown > a {
+    padding: 12px 8px;
+  }
+
+  .nav-dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  main {
+    padding: 25px 12px;
+  }
+
+  .page-title {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+  }
+
+  .filter-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .filter-label {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .date-sort-select {
+    width: 100%;
+  }
+
+  .noticia-completa {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .noticia-titulo {
+    font-size: 1.6em;
+  }
+
+  .noticia-meta-header {
+    gap: 10px;
+    font-size: 0.9em;
+  }
+
+  footer {
+    padding: 20px 12px;
+    font-size: 0.85em;
+  }
+
+  .footer-links {
+    gap: 12px;
+  }
+
+  .footer-contacts {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 18px 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+    margin-bottom: 5px;
+  }
+
+  .header-subtitle {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+  }
+
+  .social-media {
+    gap: 8px;
+  }
+
+  .social-media a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85em;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    font-size: 0.9em;
+  }
+
+  nav {
+    gap: 8px;
+    padding: 0 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    padding: 10px 6px;
+    font-size: 0.8em;
+    flex: 0 0 auto;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-dropdown {
+    flex: 0 0 auto;
+  }
+
+  .nav-dropdown > a {
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
+  main {
+    padding: 18px 10px;
+  }
+
+  .page-title {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+  }
+
+  .filter-section {
+    padding: 12px 10px;
+    margin-bottom: 15px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 8px 14px;
+    font-size: 0.85em;
+    min-height: 40px;
+  }
+
+  .noticia-completa {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+
+  .noticia-titulo {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+
+  .noticia-meta-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.8em;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+
+  .footer-links {
+    gap: 8px;
+  }
+
+  .footer-contacts {
+    gap: 6px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header {
+    padding: 14px 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .header-subtitle {
+    font-size: 0.75em;
+  }
+
+  .social-media {
+    gap: 6px;
+  }
+
+  .social-media a {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75em;
+  }
+
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 5px 6px;
+    font-size: 0.85em;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    font-size: 0.75em;
+    min-height: 40px;
+  }
+
+  main {
+    padding: 12px 8px;
+  }
+
+  .page-title {
+    font-size: 1.2em;
+  }
+
+  footer {
+    padding: 12px 8px;
+    font-size: 0.7em;
+  }
+
+  .footer-links {
+    gap: 6px;
+  }
+
+  .footer-contacts {
+    font-size: 0.7em;
+  }
+}
+</style>
+  <link rel="stylesheet" href="assets/consent-banner.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XJ3P1K6694"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 2000
+    });
+
+    gtag('config', 'G-XJ3P1K6694');
+  </script>
+</head>
+
+<body>
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
+    <div class="cookie-banner__content">
+      <div class="cookie-banner__text">
+        Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
+        <a href="politica-privacidade.html">Política de Privacidade</a>.
+      </div>
+      <div class="cookie-banner__actions">
+        <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
+        <button id="cookie-reject" class="cookie-banner__button cookie-banner__button--reject">Recusar</button>
+      </div>
+    </div>
+  </div>
+  <script src="assets/consent-banner.js" defer></script>
+
+<script>
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+
+  // Dropdown mobile: clique para abrir/fechar
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && window.innerWidth <= 768) {
+    const dropdownLink = dropdown.querySelector('a');
+    dropdownLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      dropdown.classList.toggle('active');
+    });
+  }
+});
+</script>
+
+<header>
+  <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Análise e crítica de notícias</p>
+  
+  <div class="social-media">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank" title="Instagram" rel="noopener noreferrer">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" title="Facebook" rel="noopener noreferrer">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
+      <i class="fab fa-twitch"></i>
+    </a>
+    <a href="https://open.spotify.com/" target="_blank" title="Spotify" rel="noopener noreferrer">
+      <i class="fab fa-spotify"></i>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="todas-noticias.html">Artigos</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
+      <a href="metin2.html">Metin2</a>
+      <a href="livestreams.html">Livestreams</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <h2 class="page-title">Artigos</h2>
+  
+  <div class="filter-section">
+    <div class="filter-row">
+      <span class="filter-label">Filtrar por categoria:</span>
+      <button class="filter-btn active" data-categoria="todas">Todas</button>
+      <button class="filter-btn" data-categoria="DIGI">DIGI</button>
+      <button class="filter-btn" data-categoria="Telecom">Telecom</button>
+      <button class="filter-btn" data-categoria="Tecnologia">Tecnologia</button>
+      <button class="filter-btn" data-categoria="Gaming">Gaming</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Ordenar por data:</span>
+      <select id="dateSort" class="date-sort-select">
+        <option value="desc">Mais recentes primeiro</option>
+        <option value="asc">Mais antigas primeiro</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="noticias-container" id="noticiasContainer"></div>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+  </div>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+// Carregar todas as notícias
+let todasAsNoticias = [];
+
+function slugifyTitulo(titulo) {
+  if (!titulo || typeof titulo !== 'string') return '';
+  return titulo
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-');
+}
+
+function getArticleSlug(noticia) {
+  if (noticia && typeof noticia.slug === 'string' && noticia.slug.trim()) {
+    return slugifyTitulo(noticia.slug.trim());
+  }
+  return slugifyTitulo((noticia && noticia.titulo) || '');
+}
+
+function buildArticleUrl(noticia) {
+  const id = encodeURIComponent(noticia.id);
+  const slug = getArticleSlug(noticia);
+  return slug
+    ? `noticias.html?id=${id}&slug=${encodeURIComponent(slug)}`
+    : `noticias.html?id=${id}`;
+}
+
+fetchNoticiasAgendadas('data/noticias.json')
+  .then(data => {
+    // Ordenar por data descrescente
+    const parseDate = (str) => {
+      if (!str) return 0;
+      const [dia, mes, ano] = str.split('/').map(Number);
+      return new Date(ano, mes - 1, dia).getTime();
+    };
+    
+    todasAsNoticias = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+    
+    // Renderizar todas as notícias inicialmente
+    renderizarNoticias(todasAsNoticias);
+    
+    // Adicionar event listeners aos botões de filtro
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remover classe active de todos os botões
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        // Adicionar classe active ao botão clicado
+        btn.classList.add('active');
+        
+        aplicarFiltros();
+      });
+    });
+    
+    // Adicionar event listener para ordenação por data
+    document.getElementById('dateSort').addEventListener('change', () => {
+      aplicarFiltros();
+    });
+  })
+  .catch(err => console.error('Erro ao carregar notícias:', err));
+
+// Função para aplicar filtros de categoria e ordenação
+function aplicarFiltros() {
+  const categoriaAtiva = document.querySelector('.filter-btn.active').getAttribute('data-categoria');
+  const ordenacao = document.getElementById('dateSort').value;
+  
+  let noticiasFiltrares = todasAsNoticias;
+  
+  // Filtrar por categoria
+  if (categoriaAtiva !== 'todas') {
+    noticiasFiltrares = noticiasFiltrares.filter(n => n.categoria === categoriaAtiva);
+  }
+  
+  // Ordenar por data
+  const parseDate = (str) => {
+    if (!str) return 0;
+    const [dia, mes, ano] = str.split('/').map(Number);
+    return new Date(ano, mes - 1, dia).getTime();
+  };
+  
+  noticiasFiltrares = [...noticiasFiltrares].sort((a, b) => {
+    if (ordenacao === 'desc') {
+      return parseDate(b.data) - parseDate(a.data);
+    } else {
+      return parseDate(a.data) - parseDate(b.data);
+    }
+  });
+  
+  renderizarNoticias(noticiasFiltrares);
+}
+
+// Função para renderizar as notícias
+function renderizarNoticias(noticias) {
+  const container = document.getElementById('noticiasContainer');
+  container.innerHTML = '';
+  
+  // Função para extrair ID do YouTube
+  function extrairVideoId(url) {
+    if (!url) return '';
+    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+    const match = url.match(regex);
+    return match ? match[1] : '';
+  }
+  
+  if (noticias.length === 0) {
+    container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhuma notícia encontrada nesta categoria.</p>';
+    return;
+  }
+  
+  noticias.forEach((noticia, index) => {
+    const videoId = extrairVideoId(noticia.video);
+    let videoHTML = '';
+    if (videoId) {
+      videoHTML = `<div class="noticia-video" id="videoContainer-${noticia.id}">
+        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-${noticia.id}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
+        <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-${noticia.id}" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
+      </div>`;
+    }
+    
+    // Criar preview do conteúdo (primeiros 250 caracteres)
+    const conteudoTexto = typeof noticia.conteudo === 'string' ? noticia.conteudo : '';
+    const conteudoPreview = conteudoTexto.length > 250 
+      ? conteudoTexto.substring(0, 250) + '...' 
+      : conteudoTexto;
+    
+    const noticiaEl = document.createElement('div');
+    noticiaEl.className = 'noticia-completa';
+    noticiaEl.innerHTML = `
+      <div class="noticia-meta-header">
+        <span class="noticia-categoria">${noticia.categoria}</span>
+        <span class="noticia-data">📅 ${noticia.data}</span>
+        <span class="noticia-autor">✍️ ${noticia.autor}</span>
+      </div>
+      <h3 class="noticia-titulo">${noticia.titulo}</h3>
+      <div class="noticia-resumo">${noticia.resumo}</div>
+      ${videoHTML}
+      <div class="noticia-conteudo">
+        <p>${conteudoPreview}</p>
+        <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver Mais →</a>
+      </div>
+      ${index < noticias.length - 1 ? '<div class="noticia-divider"></div>' : ''}
+    `;
+    container.appendChild(noticiaEl);
+    
+    // Ocultar miniatura quando o iframe carregar
+    if (videoId) {
+      setTimeout(() => {
+        const iframe = document.getElementById(`videoFrame-${noticia.id}`);
+        const thumbnail = document.getElementById(`thumbnail-${noticia.id}`);
+        if (iframe && thumbnail) {
+          iframe.onload = () => {
+            thumbnail.style.display = 'none';
+          };
+        }
+      }, 100);
+    }
+  });
+}
+</script>
+
+</body>
+</html>

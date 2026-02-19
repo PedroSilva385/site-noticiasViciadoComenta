@@ -1,0 +1,6 @@
+Rollback point created: 20260219-160544
+Files:
+index.html
+todas-noticias.html
+noticias.html
+sitemap.xml
