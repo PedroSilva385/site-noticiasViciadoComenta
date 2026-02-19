@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VICIADO COMENTA</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="canonical" href="https://www.viciadocomenta.pt/">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
@@ -2146,6 +2147,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 fetchNoticiasAgendadas("data/noticias.json")
   .then(data => {
+    const slugifyTitulo = (titulo) => {
+      if (!titulo || typeof titulo !== 'string') return '';
+      return titulo
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .replace(/-{2,}/g, '-');
+    };
+
+    const getArticleSlug = (noticia) => {
+      if (noticia && typeof noticia.slug === 'string' && noticia.slug.trim()) {
+        return slugifyTitulo(noticia.slug.trim());
+      }
+      return slugifyTitulo((noticia && noticia.titulo) || '');
+    };
+
+    const buildArticleUrl = (noticia) => {
+      const id = encodeURIComponent(noticia.id);
+      const slug = getArticleSlug(noticia);
+      return slug
+        ? `artigos/${encodeURIComponent(slug)}.html`
+        : `noticias.html?id=${id}`;
+    };
+
     // Guardar notícias globalmente para pesquisa
     window.todasNoticias = data.noticias;
 
@@ -2188,7 +2215,7 @@ fetchNoticiasAgendadas("data/noticias.json")
         const dropdownHTML = resultados.map(n => {
           const excerto = n.resumo.length > 100 ? n.resumo.substring(0, 100) + '...' : n.resumo;
           return `
-            <a href="noticias.html?id=${n.id}" class="search-result-item">
+            <a href="${buildArticleUrl(n)}" class="search-result-item">
               <div class="search-result-title">${n.titulo}</div>
               <div class="search-result-meta">
                 <span class="search-result-category">${n.categoria}</span>
@@ -2246,7 +2273,7 @@ fetchNoticiasAgendadas("data/noticias.json")
           <div class="noticia-conteudo">
             <h3>${n.titulo}</h3>
             <p>${n.resumo}</p>
-            <a href="noticias.html?id=${n.id}" class="noticia-link">Ver mais →</a>
+            <a href="${buildArticleUrl(n)}" class="noticia-link">Ver mais →</a>
           </div>
         `;
         noticiasList.appendChild(article);
@@ -2293,7 +2320,7 @@ fetchNoticiasAgendadas("data/noticias.json")
                 <span>✍️ ${featured.autor}</span>
               </div>
               <p>${featured.resumo}</p>
-              <a href="noticias.html?id=${featured.id}" class="featured-link">Ver mais →</a>
+              <a href="${buildArticleUrl(featured)}" class="featured-link">Ver mais →</a>
             </div>
           </div>
         `;
@@ -2324,7 +2351,7 @@ fetchNoticiasAgendadas("data/noticias.json")
                 <span>✍️ ${featured.autor}</span>
               </div>
               <p>${featured.resumo}</p>
-              <a href="noticias.html?id=${featured.id}" class="featured-link">Ver mais →</a>
+              <a href="${buildArticleUrl(featured)}" class="featured-link">Ver mais →</a>
             </div>
           </div>
         `;
@@ -2340,7 +2367,7 @@ fetchNoticiasAgendadas("data/noticias.json")
     
     artigosMaisLidos.forEach((n) => {
       const link = document.createElement("a");
-      link.href = `noticias.html?id=${n.id}`;
+      link.href = buildArticleUrl(n);
       link.className = "artigo-mais-lido-item";
       link.innerHTML = `
         <div class="artigo-mais-lido-titulo">${n.titulo}</div>
