@@ -1965,6 +1965,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (noticia) {
         const noticiaIdResolvido = String(noticia.id);
         window.currentArticleId = noticiaIdResolvido;
+        incrementArticleReadCount(noticiaIdResolvido);
 
         const canonicalArticleUrl = buildArticleUrlByData(noticia);
         const canonicalSearch = canonicalArticleUrl.includes('?')
@@ -2302,6 +2303,47 @@ function updateLikeCount(noticiaId) {
       }
     }
   });
+}
+
+function incrementArticleReadCount(noticiaId, attempt = 0) {
+  if (!noticiaId) {
+    return;
+  }
+
+  const sessionKey = `vc_article_read_counted_${noticiaId}`;
+  if (sessionStorage.getItem(sessionKey) === '1') {
+    return;
+  }
+
+  try {
+    if (!window.database && typeof firebase !== 'undefined' && firebase.database) {
+      window.database = firebase.database();
+      window.firebaseReady = true;
+    }
+  } catch (error) {
+    console.warn('Nao foi possivel obter Firebase database para leituras:', error);
+  }
+
+  if (!window.database) {
+    if (attempt < 8) {
+      setTimeout(() => incrementArticleReadCount(noticiaId, attempt + 1), 350);
+    }
+    return;
+  }
+
+  const readsRef = window.database.ref(`article_reads/${noticiaId}`);
+  readsRef.transaction(
+    (currentValue) => (Number(currentValue) || 0) + 1,
+    (error, committed) => {
+      if (error) {
+        console.error('Erro ao atualizar leitura do artigo:', error);
+        return;
+      }
+      if (committed) {
+        sessionStorage.setItem(sessionKey, '1');
+      }
+    }
+  );
 }
 
 // ========== FUNÇÕES DE PARTILHA SOCIAL ==========
