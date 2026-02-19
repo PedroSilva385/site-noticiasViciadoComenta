@@ -669,6 +669,7 @@ body.dark .social-widget {
   line-height: 1.4;
 }
 
+
 .artigo-categoria-badge {
   background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
   color: #ffffff;
@@ -695,6 +696,7 @@ body.dark .artigo-mais-lido-titulo {
 body.dark .artigo-mais-lido-meta {
   color: #a0aec0;
 }
+
 
 /* SIDEBAR DIREITA */
 .sidebar-right {
@@ -1013,7 +1015,7 @@ body.dark span { color: #e5e7eb !important; }
 /* LISTA DE NOTÍCIAS */
 .noticias-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 25px;
   margin-bottom: 60px;
 }
@@ -1021,12 +1023,125 @@ body.dark span { color: #e5e7eb !important; }
 .noticia-item {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  gap: 12px;
+  padding: 16px;
+  padding-bottom: 56px;
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e0e8f5;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  align-items: stretch;
+  position: relative;
+}
+
+.noticia-thumb-link {
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  height: auto;
+}
+
+.noticia-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #e3f2fd;
+  position: relative;
+}
+
+.noticia-item.read {
+  opacity: 0.78;
+}
+
+.noticia-item.read .noticia-thumb::before {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(34, 197, 94, 0.92);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.noticia-read-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05em;
+  transition: all 0.3s;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  color: #0f172a;
+}
+
+.noticia-read-btn:hover {
+  transform: scale(1.08);
+  background: #ffffff;
+}
+
+.noticia-read-btn.read {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.noticia-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.noticia-thumb-play {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+}
+
+.noticia-thumb-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #5a6b7f;
+  gap: 6px;
+  font-size: 0.9em;
+}
+
+.noticia-thumb-fallback i {
+  font-size: 1.4em;
+  color: #0066cc;
 }
 
 body.dark .noticia-item {
@@ -1045,7 +1160,7 @@ body.dark .noticia-item {
   display: flex;
   gap: 12px;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
@@ -1069,26 +1184,27 @@ body.dark .noticia-item {
 }
 
 .noticia-conteudo {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  height: auto;
 }
 
 .noticia-conteudo h3 {
   font-family: 'Outfit', sans-serif;
   font-size: 1.2em;
-  margin-bottom: 12px;
+  margin: 0;
   color: #1a1f3a;
-  line-height: 1.3;
+  line-height: 1.35;
   font-weight: 700;
 }
 
 .noticia-conteudo p {
-  font-size: 0.9em;
+  font-size: 0.95em;
   color: #5a6b7f;
-  margin-bottom: 15px;
-  line-height: 1.6;
-  flex: 1;
+  margin: 0;
+  line-height: 1.65;
 }
 
 .noticia-link {
@@ -1103,11 +1219,42 @@ body.dark .noticia-item {
   border-radius: 6px;
   text-align: center;
   width: fit-content;
+  margin-top: 2px;
+  align-self: flex-start;
 }
 
 .noticia-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.noticias-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: -20px 0 40px;
+}
+
+.noticias-more-btn {
+  border: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9em;
+  transition: all 0.3s;
+  padding: 11px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+}
+
+.noticias-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+}
+
+body.dark .noticias-more-btn {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
 }
 
 /* Dark mode para lista de notícias */
@@ -1130,6 +1277,28 @@ body.dark .noticia-conteudo p {
 
 body.dark .noticia-data {
   color: #9ca3af !important;
+}
+
+body.dark .noticia-thumb {
+  background: #0f172a;
+}
+
+body.dark .noticia-read-btn {
+  background: rgba(15, 23, 42, 0.92);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+body.dark .noticia-read-btn.read {
+  color: #ffffff;
+}
+
+body.dark .noticia-thumb-fallback {
+  color: #cbd5e1;
+}
+
+body.dark .noticia-thumb-fallback i {
+  color: #60a5fa;
 }
 
 body.dark .social-widget {
@@ -1157,13 +1326,17 @@ body.dark .sidebar-title {
 /* Responsivo */
 @media (max-width: 992px) {
   .noticias-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 600px) {
   .noticias-list {
     grid-template-columns: 1fr;
+  }
+
+  .noticia-item {
+    padding: 12px;
   }
 }
 
@@ -2014,6 +2187,9 @@ footer {
     <h2>Últimos Artigos</h2>
     
     <section class="noticias-list" id="noticiasList"></section>
+    <div class="noticias-more-wrap">
+      <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
+    </div>
   </div>
 
   <aside class="sidebar-right">
@@ -2146,7 +2322,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 fetchNoticiasAgendadas("data/noticias.json")
-  .then(data => {
+  .then(async data => {
     const slugifyTitulo = (titulo) => {
       if (!titulo || typeof titulo !== 'string') return '';
       return titulo
@@ -2173,6 +2349,65 @@ fetchNoticiasAgendadas("data/noticias.json")
         : `noticias.html?id=${id}`;
     };
 
+    class ArticleReadTracker {
+      constructor() {
+        this.storageKey = 'homepage_read_articles';
+      }
+
+      getReadArticles() {
+        try {
+          const data = localStorage.getItem(this.storageKey);
+          const parsed = data ? JSON.parse(data) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      saveReadArticles(ids) {
+        localStorage.setItem(this.storageKey, JSON.stringify(ids));
+      }
+
+      toggleRead(articleId) {
+        const readIds = this.getReadArticles();
+        const safeId = String(articleId);
+        const index = readIds.indexOf(safeId);
+
+        if (index > -1) {
+          readIds.splice(index, 1);
+        } else {
+          readIds.push(safeId);
+        }
+
+        this.saveReadArticles(readIds);
+        return readIds.includes(safeId);
+      }
+
+      isRead(articleId) {
+        return this.getReadArticles().includes(String(articleId));
+      }
+    }
+
+    const articleReadTracker = new ArticleReadTracker();
+
+    window.toggleArticleRead = function(event, articleId) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const isReadNow = articleReadTracker.toggleRead(articleId);
+      const btn = event.target.closest('.noticia-read-btn');
+      const card = event.target.closest('.noticia-item');
+
+      if (btn) {
+        btn.classList.toggle('read', isReadNow);
+        btn.textContent = '✓';
+      }
+
+      if (card) {
+        card.classList.toggle('read', isReadNow);
+      }
+    };
+
     // Guardar notícias globalmente para pesquisa
     window.todasNoticias = data.noticias;
 
@@ -2181,6 +2416,73 @@ fetchNoticiasAgendadas("data/noticias.json")
     const searchResults = document.getElementById('searchResults');
     const searchDropdown = document.getElementById('searchDropdown');
     const noticiasList = document.getElementById('noticiasList');
+    const noticiasLoadMore = document.getElementById('noticiasLoadMore');
+    const NEWS_BATCH_SIZE = 6;
+    let noticiasVisiveis = NEWS_BATCH_SIZE;
+    let noticiasAtuais = [];
+
+    function atualizarBotaoVerMais() {
+      if (!noticiasLoadMore) return;
+      if (noticiasAtuais.length > noticiasVisiveis) {
+        noticiasLoadMore.style.display = 'inline-flex';
+      } else {
+        noticiasLoadMore.style.display = 'none';
+      }
+    }
+
+    if (noticiasLoadMore) {
+      noticiasLoadMore.addEventListener('click', () => {
+        noticiasVisiveis += NEWS_BATCH_SIZE;
+        renderizarNoticias(noticiasAtuais, false);
+      });
+    }
+
+    const normalizeText = (text) => (text || '')
+      .toString()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    function calcularRelevanciaPesquisa(noticia, termo) {
+      const titulo = normalizeText(noticia.titulo);
+      const categoria = normalizeText(noticia.categoria);
+      const resumo = normalizeText(noticia.resumo);
+      const conteudo = normalizeText(noticia.conteudo);
+      const termoNorm = normalizeText(termo);
+      const tokens = termoNorm.split(/\s+/).filter(Boolean);
+
+      const titleMatch = titulo.includes(termoNorm);
+      const categoriaExata = categoria === termoNorm;
+      const categoriaMatch = categoria.includes(termoNorm);
+      const resumoMatch = resumo.includes(termoNorm);
+      const conteudoMatch = conteudo.includes(termoNorm);
+
+      const allTokensInTitulo = tokens.length > 0 && tokens.every(t => titulo.includes(t));
+      const allTokensInResumo = tokens.length > 0 && tokens.every(t => resumo.includes(t));
+
+      const primaryMatch = categoriaMatch || titleMatch || resumoMatch || allTokensInTitulo;
+      const allowContentOnly = termoNorm.length >= 5;
+      const include = primaryMatch || (allowContentOnly && conteudoMatch);
+
+      if (!include) {
+        return { include: false, score: 0 };
+      }
+
+      let score = 0;
+
+      if (categoriaExata) score += 120;
+      else if (categoriaMatch) score += 90;
+
+      if (titleMatch) score += 80;
+      if (allTokensInTitulo) score += 45;
+
+      if (resumoMatch) score += 35;
+      if (allTokensInResumo) score += 18;
+
+      if (conteudoMatch) score += primaryMatch ? 8 : 3;
+
+      return { include: true, score };
+    }
     
     searchInput.addEventListener('input', (e) => {
       const termo = e.target.value.toLowerCase().trim();
@@ -2189,20 +2491,34 @@ fetchNoticiasAgendadas("data/noticias.json")
         // Esconder dropdown e mostrar todas as notícias
         searchDropdown.classList.remove('active');
         searchDropdown.innerHTML = '';
-        renderizarNoticias(window.todasNoticias);
+        renderizarNoticias(window.todasNoticias, true);
         searchResults.textContent = '';
         return;
       }
       
       // Filtrar notícias
-      const resultados = window.todasNoticias.filter(n => {
-        const tituloMatch = n.titulo.toLowerCase().includes(termo);
-        const categoriaMatch = n.categoria.toLowerCase().includes(termo);
-        const resumoMatch = n.resumo.toLowerCase().includes(termo);
-        const conteudoMatch = n.conteudo && n.conteudo.toLowerCase().includes(termo);
-        
-        return tituloMatch || categoriaMatch || resumoMatch || conteudoMatch;
-      });
+      const resultados = window.todasNoticias
+        .map(n => {
+          const relevancia = calcularRelevanciaPesquisa(n, termo);
+          return { noticia: n, relevancia };
+        })
+        .filter(item => item.relevancia.include)
+        .sort((a, b) => {
+          if (b.relevancia.score !== a.relevancia.score) {
+            return b.relevancia.score - a.relevancia.score;
+          }
+
+          const parseDate = (str) => {
+            if (!str) return 0;
+            const parts = str.split('/').map(Number);
+            if (parts.length !== 3) return 0;
+            const [dia, mes, ano] = parts;
+            return new Date(ano, mes - 1, dia).getTime();
+          };
+
+          return parseDate(b.noticia.data) - parseDate(a.noticia.data);
+        })
+        .map(item => item.noticia);
       
       // Mostrar dropdown com resultados
       if (resultados.length === 0) {
@@ -2210,6 +2526,9 @@ fetchNoticiasAgendadas("data/noticias.json")
         searchDropdown.classList.add('active');
         searchResults.innerHTML = '<span style="color: #cc0000;">❌ Nenhum artigo encontrado</span>';
         noticiasList.innerHTML = '<p style="text-align:center;padding:40px;color:#5a6b7f;">Nenhum artigo corresponde à sua pesquisa.</p>';
+        noticiasAtuais = [];
+        noticiasVisiveis = NEWS_BATCH_SIZE;
+        atualizarBotaoVerMais();
       } else {
         // Criar HTML da dropdown
         const dropdownHTML = resultados.map(n => {
@@ -2231,7 +2550,7 @@ fetchNoticiasAgendadas("data/noticias.json")
         
         const plural = resultados.length === 1 ? 'artigo encontrado' : 'artigos encontrados';
         searchResults.innerHTML = `<span style="color: #0066cc;">✓ ${resultados.length} ${plural}</span>`;
-        renderizarNoticias(resultados);
+        renderizarNoticias(resultados, true);
       }
     });
     
@@ -2250,7 +2569,7 @@ fetchNoticiasAgendadas("data/noticias.json")
     });
     
     // Função para renderizar notícias
-    function renderizarNoticias(noticias) {
+    function renderizarNoticias(noticias, resetVisiveis = true) {
       const parseDate = (str) => {
         if (!str) return 0;
         const parts = str.split("/").map(Number);
@@ -2259,25 +2578,59 @@ fetchNoticiasAgendadas("data/noticias.json")
         return new Date(ano, mes - 1, dia).getTime();
       };
       
+      if (resetVisiveis) {
+        noticiasVisiveis = NEWS_BATCH_SIZE;
+      }
+
       const noticiasOrdenadas = [...noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      noticiasAtuais = noticiasOrdenadas;
+
+      const noticiasParaMostrar = noticiasOrdenadas.slice(0, noticiasVisiveis);
       noticiasList.innerHTML = '';
       
-      noticiasOrdenadas.forEach((n) => {
+      noticiasParaMostrar.forEach((n) => {
+        const isRead = articleReadTracker.isRead(n.id);
+        const videoId = extrairVideoId(n.video);
+        const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
+        const thumbnailMarkup = thumbnailUrl
+          ? `
+            <a href="${buildArticleUrl(n)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${n.titulo}">
+              <div class="noticia-thumb">
+                <img src="${thumbnailUrl}" alt="Miniatura do vídeo ${n.titulo}" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}">
+                <span class="noticia-thumb-play"><i class="fas fa-play"></i></span>
+              </div>
+            </a>
+          `
+          : `
+            <a href="${buildArticleUrl(n)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${n.titulo}">
+              <div class="noticia-thumb">
+                <div class="noticia-thumb-fallback">
+                  <i class="fas fa-newspaper"></i>
+                  <span>Sem miniatura</span>
+                </div>
+              </div>
+            </a>
+          `;
+
         const article = document.createElement("article");
-        article.className = "noticia-item";
+        article.className = `noticia-item ${isRead ? 'read' : ''}`;
         article.innerHTML = `
-          <div class="noticia-meta-badge">
-            <span class="noticia-categoria">${n.categoria}</span>
-            <span class="noticia-data">📅 ${n.data}</span>
-          </div>
+          ${thumbnailMarkup}
           <div class="noticia-conteudo">
+            <div class="noticia-meta-badge">
+              <span class="noticia-categoria">${n.categoria}</span>
+              <span class="noticia-data">📅 ${n.data}</span>
+            </div>
             <h3>${n.titulo}</h3>
             <p>${n.resumo}</p>
             <a href="${buildArticleUrl(n)}" class="noticia-link">Ver mais →</a>
           </div>
+          <button class="noticia-read-btn ${isRead ? 'read' : ''}" data-article-id="${n.id}" onclick="toggleArticleRead(event, '${n.id}')">✓</button>
         `;
         noticiasList.appendChild(article);
       });
+
+      atualizarBotaoVerMais();
     }
     
     // Mostrar notícia em destaque: escolher a mais recente por data
@@ -2359,11 +2712,47 @@ fetchNoticiasAgendadas("data/noticias.json")
     }
     
     // Mostrar lista de notícias inicial (todas, ordenadas por data)
-    renderizarNoticias(data.noticias);
+    renderizarNoticias(data.noticias, true);
     
-    // Renderizar Artigos Mais Lidos (os 5 primeiros, ordenados por data)
+    async function carregarLeiturasArtigos() {
+      try {
+        if (typeof window.ensureFirebaseInitialized === 'function') {
+          await window.ensureFirebaseInitialized();
+        }
+
+        if (typeof firebase === 'undefined' || !firebase.database) {
+          return {};
+        }
+
+        const snapshot = await firebase.database().ref('article_reads').once('value');
+        return snapshot.val() || {};
+      } catch (error) {
+        console.warn('Nao foi possivel carregar contagem de leituras:', error);
+        return {};
+      }
+    }
+
+    // Renderizar Artigos Mais Lidos (top 5 por leituras)
     const artigosMaisLidosSection = document.getElementById('artigosMaisLidos');
-    const artigosMaisLidos = data.noticias.slice(0, 5);
+    const leiturasPorArtigo = await carregarLeiturasArtigos();
+    const parseDateMaisLidos = (str) => {
+      if (!str) return 0;
+      const parts = str.split('/').map(Number);
+      if (parts.length !== 3) return 0;
+      const [dia, mes, ano] = parts;
+      return new Date(ano, mes - 1, dia).getTime();
+    };
+
+    const artigosMaisLidos = [...data.noticias]
+      .sort((a, b) => {
+        const leiturasA = Number(leiturasPorArtigo[String(a.id)] || 0);
+        const leiturasB = Number(leiturasPorArtigo[String(b.id)] || 0);
+        if (leiturasB !== leiturasA) {
+          return leiturasB - leiturasA;
+        }
+        return parseDateMaisLidos(b.data) - parseDateMaisLidos(a.data);
+      })
+      .slice(0, 5);
     
     artigosMaisLidos.forEach((n) => {
       const link = document.createElement("a");
