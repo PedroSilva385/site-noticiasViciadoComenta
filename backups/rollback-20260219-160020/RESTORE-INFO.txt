@@ -1,0 +1,10 @@
+Rollback point created: 20260219-160020
+Files:
+index.html
+noticias.html
+todas-noticias.html
+gaming.html
+livestreams.html
+metin2.html
+viciado-comenta.html
+viciado-ponto-critico.html

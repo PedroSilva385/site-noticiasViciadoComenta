@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VICIADO COMENTA</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="canonical" href="https://www.viciadocomenta.pt/">
+<!-- Firebase Analytics -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/news-scheduler.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
+     crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-perfil {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  height: 200px;
+  border-radius: 0;
+  margin: 0;
+  border: none;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.header-perfil img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.header-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+/* REDES SOCIAIS */
+.social-media {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.social-media a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.social-media a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.social-media i {
+  font-size: 1.2em;
+}
+
+/* STATS COUNTERS */
+.header-stats {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 10;
+}
+
+.stat-counter {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
+}
+
+.stat-counter:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 1.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon.youtube {
+  color: #FF0000;
+}
+
+.stat-icon.twitch {
+  color: #9146FF;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stat-number {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 0.7em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* NAVEGAÇÃO */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 20px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+/* DROPDOWN MENU */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-dropdown > a::after {
+  content: '▼';
+  font-size: 0.65em;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  min-width: 160px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-bottom: none;
+  padding: 12px 20px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu a:hover {
+  background: #e3f2fd;
+  color: #0066cc;
+  padding-left: 24px;
+}
+
+/* Dark mode dropdown */
+body.dark .dropdown-menu {
+  background: #1a2332;
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .dropdown-menu a {
+  color: #d1d5db;
+}
+
+body.dark .dropdown-menu a:hover {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  padding-left: 24px;
+}
+
+/* CAMPO DE PESQUISA */
+.search-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px 0;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 50px 16px 20px;
+  border: 2px solid #e0e8f5;
+  border-radius: 12px;
+  font-size: 1em;
+  font-family: 'Sora', sans-serif;
+  background: #ffffff;
+  color: #1a1f3a;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+body.dark .search-input {
+  background: #1a2332;
+  color: #d1d5db;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
+}
+
+body.dark .search-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.2);
+}
+
+.search-input::placeholder {
+  color: #5a6b7f;
+}
+
+body.dark .search-input::placeholder {
+  color: #a0aec0;
+}
+
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #0066cc;
+  font-size: 1.2em;
+  pointer-events: none;
+}
+
+.search-results {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.95em;
+  color: #5a6b7f;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 2px solid #e0e8f5;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  z-index: 1000;
+  display: none;
+}
+
+body.dark .search-dropdown {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.search-dropdown.active {
+  display: block;
+}
+
+.search-result-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e8f5;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+body.dark .search-result-item {
+  color: #d1d5db;
+  border-bottom-color: #2d3748;
+}
+
+body.dark .search-result-item:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: #e3f2fd;
+}
+
+.search-result-title {
+  font-weight: 600;
+  color: #1a1f3a;
+  margin-bottom: 5px;
+  font-size: 0.95em;
+}
+
+.search-result-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.8em;
+  color: #5a6b7f;
+  margin-bottom: 5px;
+}
+
+.search-result-category {
+  background: #0066cc;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.search-result-excerpt {
+  font-size: 0.85em;
+  color: #5a6b7f;
+  line-height: 1.4;
+}
+
+.search-no-results {
+  padding: 20px;
+  text-align: center;
+  color: #5a6b7f;
+}
+
+body.dark .search-dropdown {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .search-result-item {
+  border-bottom-color: #1f2937;
+}
+
+body.dark .search-result-item:hover {
+  background: #1f2937;
+}
+
+body.dark .search-result-title {
+  color: #ffffff;
+}
+
+body.dark .search-result-meta {
+  color: #9ca3af;
+}
+
+body.dark .search-result-category {
+  background: #0ea5e9;
+}
+
+body.dark .search-result-excerpt {
+  color: #cbd5e1;
+}
+
+body.dark .search-no-results {
+  color: #9ca3af;
+}
+
+body.dark .search-input {
+  background: #0b1220;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark .search-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+}
+
+body.dark .search-input::placeholder {
+  color: #9ca3af;
+}
+
+body.dark .search-icon {
+  color: #0ea5e9;
+}
+
+body.dark .search-results {
+  color: #9ca3af;
+}
+
+/* MAIN */
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 50px 20px;
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 40px;
+  align-items: start;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 10px;
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #0066cc;
+}
+
+.social-widget {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e0e8f5;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+body.dark .social-widget {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.social-widget:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  transform: translateY(-4px);
+}
+
+.social-widget-icon {
+  font-size: 3em;
+  margin-bottom: 16px;
+}
+
+.social-widget-icon.youtube {
+  color: #FF0000;
+}
+
+.social-widget-icon.twitch {
+  color: #9146FF;
+}
+
+.social-widget-icon.spotify {
+  color: #1DB954;
+}
+
+.social-widget h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+  color: #1a1f3a;
+  font-weight: 700;
+}
+
+.social-widget p {
+  font-size: 0.85em;
+  color: #5a6b7f;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.social-widget-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.social-widget-btn.youtube {
+  background: #FF0000;
+  color: #ffffff;
+}
+
+.social-widget-btn.youtube:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+.social-widget-btn.twitch {
+  background: #9146FF;
+  color: #ffffff;
+}
+
+.social-widget-btn.twitch:hover {
+  background: #7728cc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(145, 70, 255, 0.3);
+}
+
+.social-widget-btn.spotify {
+  background: #1DB954;
+  color: #ffffff;
+}
+
+.social-widget-btn.spotify:hover {
+  background: #169c46;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+/* WIDGET ARTIGOS MAIS LIDOS */
+.artigos-mais-lidos-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.artigo-mais-lido-item {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e0e8f5;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+.artigo-mais-lido-item:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  transform: translateY(-4px);
+}
+
+.artigo-mais-lido-titulo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 8px;
+}
+
+.artigo-mais-lido-meta {
+  font-size: 0.85em;
+  color: #5a6b7f;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.artigo-categoria-badge {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+body.dark .artigo-mais-lido-item {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .artigo-mais-lido-item:hover {
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
+}
+
+body.dark .artigo-mais-lido-titulo {
+  color: #f3f4f6;
+}
+
+body.dark .artigo-mais-lido-meta {
+  color: #a0aec0;
+}
+
+/* SIDEBAR DIREITA */
+.sidebar-right {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.highlight-video-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 40px;
+  box-shadow: 0 12px 30px rgba(0, 82, 163, 0.12);
+  border: 1px solid rgba(0, 102, 204, 0.08);
+}
+
+.highlight-video-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.highlight-video-header h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.7em;
+  font-weight: 700;
+  color: #1a1f3a;
+  flex: 1;
+  text-align: center;
+}
+
+.highlight-video-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  font-size: 0.9em;
+  padding: 6px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0, 82, 163, 0.2);
+  text-align: center;
+  margin: 0 auto;
+}
+
+.highlight-video-badge {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  font-size: 0.75em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 14px rgba(0, 82, 163, 0.2);
+}
+
+.highlight-video-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.highlight-video-player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.highlight-video-player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.highlight-video-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+  text-align: center;
+  padding: 20px;
+}
+
+.highlight-video-empty i {
+  font-size: 2em;
+}
+
+.highlight-video-info h3 {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin-bottom: 0;
+  line-height: 1.3;
+  color: #1a1f3a;
+}
+
+.highlight-video-info p {
+  color: #5a6b7f;
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+.highlight-video-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.highlight-video-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.highlight-video-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 82, 163, 0.25);
+}
+
+.highlight-video-cta i {
+  color: #ffffff;
+}
+
+.featured-section {
+  margin-bottom: 50px;
+}
+
+.featured-content {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: 0 10px 28px rgba(0, 82, 163, 0.25);
+}
+
+.main-content > h2 {
+  margin-top: 18px;
+}
+
+.featured-video {
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto 28px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+}
+
+.featured-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+.featured-video-error {
+  text-align: center;
+  color: #ffffff;
+  padding: 40px 20px;
+}
+
+.featured-video-error h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.featured-video-error p {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.featured-video img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+}
+
+.featured-info-box {
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+}
+
+/* Theme toggle */
+.theme-toggle { position:absolute; top:16px; right:16px; background:transparent; border:1px solid rgba(0,0,0,.1); color:#1a1f3a; padding:8px 10px; border-radius:8px; cursor:pointer; z-index: 150; }
+.theme-toggle i { pointer-events:none; }
+
+/* Dark mode base overrides */
+body.dark { background: linear-gradient(135deg, #0f172a 0%, #111827 100%); color:#d1d5db !important; }
+body.dark * { color:#d1d5db !important; }
+body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark .stat-counter { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3); }
+body.dark .stat-counter:hover { background: rgba(255, 255, 255, 0.3); }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav a { color: #d1d5db !important; }
+body.dark .highlight-video-section { background: #0f172a; border-color: rgba(96, 165, 250, 0.2); box-shadow: 0 12px 28px rgba(2,6,23,.6); }
+body.dark .highlight-video-header h2 { color: #f3f4f6 !important; }
+body.dark .highlight-video-title { background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: #ffffff; }
+body.dark .highlight-video-badge { background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: #ffffff; }
+body.dark .highlight-video-info h3 { color: #f3f4f6 !important; }
+body.dark .highlight-video-info p { color: #cbd5e1 !important; }
+body.dark .featured-section { box-shadow: 0 8px 32px rgba(2,6,23,.6); }
+body.dark .featured-content { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color:#f3f4f6 !important; }
+body.dark .featured-titulo { color: #ffffff !important; }
+body.dark .featured-link { color: #60a5fa !important; }
+body.dark .noticia-item { background:#1a222f; border-color:#2d3748; }
+body.dark .noticia-item:hover { box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25); }
+body.dark .noticia-conteudo h3 { color: #ffffff !important; }
+body.dark .noticia-conteudo p { color: #cbd5e1 !important; }
+body.dark .noticia-data { color: #9ca3af !important; }
+body.dark .noticia-link { color: #ffffff !important; background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark footer { background:#0b1220; color:#e5e7eb !important; }
+body.dark footer * { color:#e5e7eb !important; }
+body.dark .footer-contacts a { color:#e5e7eb !important; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !important; }
+body.dark p { color: #e5e7eb !important; }
+body.dark span { color: #e5e7eb !important; }
+
+.featured-info-box h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2em;
+  margin-bottom: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.featured-info-box .featured-meta {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.featured-info-box p {
+  font-size: 1em;
+  line-height: 1.7;
+  margin-bottom: 25px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.featured-link {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: fit-content;
+}
+
+.featured-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.featured-categoria {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+/* LISTA DE NOTÍCIAS */
+.noticias-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 60px;
+}
+
+.noticia-item {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e8f5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+body.dark .noticia-item {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.noticia-item:hover {
+  border-color: #0066cc;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  transform: translateY(-4px);
+}
+
+.noticia-meta-badge {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.noticia-categoria {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.7em;
+  font-weight: 700;
+  text-transform: uppercase;
+  width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+.noticia-data {
+  font-size: 0.8em;
+  color: #5a6b7f;
+  font-weight: 600;
+}
+
+.noticia-conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.noticia-conteudo h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 12px;
+  color: #1a1f3a;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.noticia-conteudo p {
+  font-size: 0.9em;
+  color: #5a6b7f;
+  margin-bottom: 15px;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.noticia-link {
+  display: inline-block;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85em;
+  transition: all 0.3s;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-align: center;
+  width: fit-content;
+}
+
+.noticia-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+/* Dark mode para lista de notícias */
+body.dark .noticias-list .noticia-item {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .noticias-list .noticia-item:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+}
+
+body.dark .noticia-conteudo h3 {
+  color: #ffffff !important;
+}
+
+body.dark .noticia-conteudo p {
+  color: #cbd5e1 !important;
+}
+
+body.dark .noticia-data {
+  color: #9ca3af !important;
+}
+
+body.dark .social-widget {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .social-widget:hover {
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+}
+
+body.dark .social-widget h3 {
+  color: #ffffff !important;
+}
+
+body.dark .social-widget p {
+  color: #cbd5e1 !important;
+}
+
+body.dark .sidebar-title {
+  color: #ffffff !important;
+  border-bottom-color: #0ea5e9;
+}
+
+/* Responsivo */
+@media (max-width: 992px) {
+  .noticias-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .noticias-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CONTACTOS */
+.contactos-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f8fc 100%);
+  border-radius: 12px;
+  padding: 40px;
+  margin: 60px 0;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  border: 1px solid #e0e8f5;
+}
+
+.contactos-section h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.contactos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contacto-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e8f5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contacto-item:hover {
+  transform: translateX(6px);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+  border-color: #0066cc;
+}
+
+.contacto-icon {
+  font-size: 1.8em;
+  color: #0066cc;
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.contacto-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* FOOTER */
+footer {
+  background: #1a1f3a;
+  padding: 40px 20px;
+  margin-top: 80px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.footer-contacts a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-contacts a:hover {
+  text-decoration: underline;
+}
+
+.footer-contacts i {
+  margin-right: 8px;
+  color: #ffffff;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-copy {
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  width: 100%;
+}
+
+/* RESPONSIVO */
+@media (max-width: 1200px) {
+  main {
+    padding: 40px 20px;
+  }
+
+  .featured-info h2 {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 992px) {
+  main {
+    padding: 35px 20px;
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .highlight-video-card {
+    grid-template-columns: 1fr;
+  }
+
+  .highlight-video-section {
+    padding: 22px;
+  }
+
+  .featured-content {
+    padding: 25px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .featured-video {
+    aspect-ratio: 16 / 9;
+    margin-bottom: 25px;
+  }
+
+  .featured-info-box h2 {
+    font-size: 1.7em;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 25px 15px;
+  }
+
+  .header-stats {
+    display: none;
+  }
+
+  .header-perfil {
+    width: 100px;
+    height: 100px;
+    top: 12px;
+    right: 12px;
+  }
+
+  header h1 {
+    font-size: 2em;
+    margin-bottom: 6px;
+  }
+
+  .header-subtitle {
+    font-size: 0.85em;
+    margin-bottom: 12px;
+  }
+
+  .social-media {
+    gap: 10px;
+  }
+
+  .social-media a {
+    width: 36px;
+    height: 36px;
+  }
+
+  nav {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  nav a {
+    padding: 12px 8px;
+    font-size: 0.9em;
+  }
+
+  .nav-dropdown > a {
+    padding: 12px 8px;
+  }
+
+  .nav-dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  main {
+    padding: 25px 12px;
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  main > h2 {
+    font-size: 1.6em;
+  }
+
+  .featured-section {
+    margin-bottom: 35px;
+  }
+
+  .highlight-video-section {
+    padding: 18px;
+    margin-bottom: 28px;
+  }
+
+  .highlight-video-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .highlight-video-header h2 {
+    font-size: 1.4em;
+  }
+
+  .highlight-video-info h3 {
+    font-size: 1.2em;
+  }
+
+  .featured-content {
+    padding: 18px;
+    gap: 15px;
+  }
+
+  .featured-video {
+    aspect-ratio: 16 / 9;
+    margin-bottom: 0;
+  }
+
+  .featured-info-box h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+  }
+
+  .featured-info-box p {
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .featured-categoria {
+    font-size: 0.7em;
+    padding: 5px 10px;
+  }
+
+  .featured-link {
+    font-size: 0.9em;
+    padding: 10px 20px;
+  }
+
+  .noticia-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .noticia-meta-badge {
+    min-width: auto;
+    margin: 0;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .noticia-categoria {
+    padding: 5px 10px;
+    font-size: 0.7em;
+  }
+
+  .noticia-data {
+    font-size: 0.8em;
+  }
+
+  .noticia-conteudo h3 {
+    font-size: 1.15em;
+    margin-bottom: 8px;
+  }
+
+  .noticia-conteudo p {
+    font-size: 0.9em;
+  }
+
+  .noticia-link {
+    font-size: 0.85em;
+  }
+
+  .contacto-item {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .contacto-icon {
+    font-size: 1.5em;
+    min-width: 32px;
+  }
+
+  footer {
+    padding: 20px 12px;
+    font-size: 0.85em;
+  }
+
+  .footer-links {
+    gap: 15px;
+  }
+
+  .footer-contacts {
+    gap: 12px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 18px 10px;
+  }
+
+  .header-perfil {
+    width: 80px;
+    height: 80px;
+    top: 10px;
+    right: 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+    margin-bottom: 5px;
+  }
+
+  .header-subtitle {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+  }
+
+  .social-media {
+    gap: 8px;
+  }
+
+  .social-media a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85em;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    font-size: 0.9em;
+  }
+
+  nav {
+    gap: 8px;
+    padding: 0 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    padding: 10px 6px;
+    font-size: 0.8em;
+    flex: 0 0 auto;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-dropdown {
+    flex: 0 0 auto;
+  }
+  
+  .nav-dropdown > a {
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
+  .nav-dropdown .dropdown-menu {
+    min-width: 150px;
+  }
+
+  main {
+    padding: 16px 8px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  main > h2 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+  }
+
+  .featured-section {
+    margin-bottom: 25px;
+  }
+
+  .featured-content {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .featured-video {
+    margin-bottom: 0;
+  }
+
+  .featured-info-box h2 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+
+  .featured-info-box .featured-meta {
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 0.8em;
+  }
+
+  .featured-info-box p {
+    font-size: 0.8em;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .featured-categoria {
+    padding: 4px 8px;
+    font-size: 0.65em;
+  }
+
+  .featured-link {
+    padding: 8px 16px;
+    font-size: 0.8em;
+  }
+
+  .noticias-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .noticia-item {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .noticia-meta-badge {
+    display: flex;
+    gap: 6px;
+    min-width: auto;
+    flex-wrap: wrap;
+  }
+
+  .noticia-categoria {
+    padding: 3px 6px;
+    font-size: 0.65em;
+  }
+
+  .noticia-data {
+    font-size: 0.75em;
+  }
+
+  .noticia-conteudo h3 {
+    font-size: 1.05em;
+    margin-bottom: 6px;
+  }
+
+  .noticia-conteudo p {
+    font-size: 0.85em;
+    line-height: 1.4;
+  }
+
+  .noticia-link {
+    font-size: 0.8em;
+    padding: 8px 14px;
+  }
+
+  .contactos-section {
+    padding: 20px 15px;
+    margin: 30px 0;
+  }
+
+  .contactos-section h3 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+  }
+
+  .contacto-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .contacto-icon {
+    font-size: 1.3em;
+    min-width: 28px;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+
+  .footer-links {
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  .footer-contacts {
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.75em;
+  }
+
+  .footer-copy {
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header {
+    padding: 14px 8px;
+  }
+
+  .header-perfil {
+    width: 70px;
+    height: 70px;
+    top: 8px;
+    right: 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .header-subtitle {
+    font-size: 0.75em;
+  }
+
+  .social-media {
+    gap: 6px;
+  }
+
+  .social-media a {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75em;
+  }
+
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 5px 6px;
+    font-size: 0.85em;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    font-size: 0.75em;
+    min-height: 40px;
+  }
+
+  .nav-dropdown > a {
+    padding: 8px 4px;
+    min-height: 40px;
+  }
+
+  .nav-dropdown .dropdown-menu {
+    min-width: 130px;
+    font-size: 0.75em;
+  }
+
+  main {
+    padding: 14px 8px;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  main > h2 {
+    font-size: 1.2em;
+  }
+
+  .featured-content {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .featured-info-box h2 {
+    font-size: 1.1em;
+    margin-bottom: 6px;
+  }
+
+  .featured-info-box p {
+    font-size: 0.75em;
+    margin-bottom: 8px;
+  }
+
+  .featured-categoria {
+    font-size: 0.6em;
+  }
+
+  .featured-link {
+    font-size: 0.75em;
+    padding: 6px 12px;
+  }
+
+  .noticia-item {
+    padding: 10px;
+  }
+
+  .noticia-conteudo h3 {
+    font-size: 0.95em;
+  }
+
+  .noticia-conteudo p {
+    font-size: 0.8em;
+  }
+
+  .contactos-section {
+    padding: 16px 10px;
+    margin: 20px 0;
+  }
+
+  .contactos-section h3 {
+    font-size: 1.2em;
+  }
+
+  .contacto-item {
+    padding: 8px 10px;
+  }
+
+  footer {
+    padding: 12px 8px;
+    font-size: 0.7em;
+  }
+
+  .footer-links {
+    gap: 8px;
+  }
+
+  .footer-contacts {
+    font-size: 0.7em;
+  }
+}
+</style>
+  <link rel="stylesheet" href="assets/consent-banner.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XJ3P1K6694"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 2000
+    });
+
+    gtag('config', 'G-XJ3P1K6694');
+  </script>
+</head>
+
+<body>
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
+    <div class="cookie-banner__content">
+      <div class="cookie-banner__text">
+        Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
+        <a href="politica-privacidade.html">Política de Privacidade</a>.
+      </div>
+      <div class="cookie-banner__actions">
+        <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
+        <button id="cookie-reject" class="cookie-banner__button cookie-banner__button--reject">Recusar</button>
+      </div>
+    </div>
+  </div>
+  <script src="assets/consent-banner.js" defer></script>
+
+<header>
+  <div class="header-stats">
+    <div class="stat-counter">
+      <div class="stat-icon youtube">
+        <i class="fab fa-youtube"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number" id="youtube-count">4,050</div>
+        <div class="stat-label">Subscribers</div>
+      </div>
+    </div>
+    <div class="stat-counter">
+      <div class="stat-icon twitch">
+        <i class="fab fa-twitch"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number" id="twitch-count">4,313</div>
+        <div class="stat-label">Followers</div>
+      </div>
+    </div>
+  </div>
+
+  <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Análise e crítica de notícias</p>
+  
+  <div class="social-media">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank" title="Instagram" rel="noopener noreferrer">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" title="Facebook" rel="noopener noreferrer">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer">
+      <i class="fab fa-twitch"></i>
+    </a>
+    <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" title="Spotify" rel="noopener noreferrer">
+      <i class="fab fa-spotify"></i>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="todas-noticias.html">Artigos</a>
+  <div class="nav-dropdown">
+    <a href="#">Conteúdos</a>
+    <div class="dropdown-menu">
+      <a href="viciado-comenta.html">Viciado Comenta</a>
+      <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
+      <a href="metin2.html">Metin2</a>
+      <a href="livestreams.html">Livestreams</a>
+    </div>
+  </div>
+</nav>
+
+<div class="search-section">
+  <div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Pesquisar artigos por título, categoria ou conteúdo...">
+    <i class="fas fa-search search-icon"></i>
+    <div class="search-dropdown" id="searchDropdown"></div>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<main>
+  <aside class="sidebar">
+    <h3 class="sidebar-title">As minhas redes</h3>
+    <div class="social-widget">
+      <div class="social-widget-icon youtube">
+        <i class="fab fa-youtube"></i>
+      </div>
+      <h3>YouTube</h3>
+      <p>Subscreve ao canal para não perderes nenhum vídeo!</p>
+      <a href="https://www.youtube.com/@TheViciado?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="social-widget-btn youtube">
+        <i class="fas fa-bell"></i> Subscrever
+      </a>
+    </div>
+
+    <div class="social-widget">
+      <div class="social-widget-icon twitch">
+        <i class="fab fa-twitch"></i>
+      </div>
+      <h3>Twitch</h3>
+      <p>Segue-me na Twitch para livestreams ao vivo!</p>
+      <a href="https://www.twitch.tv/theviciado13" target="_blank" rel="noopener noreferrer" class="social-widget-btn twitch">
+        <i class="fas fa-heart"></i> Seguir
+      </a>
+    </div>
+
+    <div class="social-widget">
+      <div class="social-widget-icon spotify">
+        <i class="fab fa-spotify"></i>
+      </div>
+      <h3>Spotify</h3>
+      <p>Ouve o podcast no Spotify!</p>
+      <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" rel="noopener noreferrer" class="social-widget-btn spotify">
+        <i class="fas fa-play"></i> Ouvir
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <section class="highlight-video-section" id="videoDestaque">
+      <div class="highlight-video-header">
+        <h2><span class="highlight-video-title">Vídeo em Destaque</span></h2>
+      </div>
+      <div class="highlight-video-card">
+        <div class="highlight-video-player" id="videoDestaquePlayer">
+          <iframe
+            id="videoDestaqueIframe"
+            title="Vídeo em destaque"
+            src=""
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="highlight-video-info">
+          <h3 id="videoDestaqueTitulo">Título do vídeo</h3>
+          <p id="videoDestaqueDescricao">Atualiza o link no script para mostrar o vídeo que queres em destaque.</p>
+          <a id="videoDestaqueLink" class="highlight-video-cta" href="#" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-youtube"></i>
+            <span id="videoDestaqueLinkTexto">Ver no YouTube</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="featured-section" id="featured"></div>
+    
+    <h2>Últimos Artigos</h2>
+    
+    <section class="noticias-list" id="noticiasList"></section>
+  </div>
+
+  <aside class="sidebar-right">
+    <h3 class="sidebar-title">Artigos Mais Lidos</h3>
+    <div class="artigos-mais-lidos-widget" id="artigosMaisLidos"></div>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+  </div>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+// Sistema de atualização de contadores a cada 24h
+// NOTA: Para atualizar manualmente, altere os valores abaixo:
+const SOCIAL_STATS = {
+  youtube: {
+    count: 4050,
+    lastUpdated: '2026-01-30' // Data da última atualização manual
+  },
+  twitch: {
+    count: 4313,
+    lastUpdated: '2026-01-30'
+  }
+};
+
+// Vídeo em destaque: carregado via JSON
+let HIGHLIGHT_VIDEO = null;
+
+function formatNumber(num) {
+  return num.toLocaleString('pt-PT');
+}
+
+function checkAndUpdateStats() {
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+  
+  // Verificar se já atualizou hoje OU se os valores mudaram
+  const lastCheck = localStorage.getItem('stats_last_check');
+  const lastYoutube = parseInt(localStorage.getItem('youtube_count')) || 0;
+  const lastTwitch = parseInt(localStorage.getItem('twitch_count')) || 0;
+  
+  const needsUpdate = (lastCheck !== today) || 
+                      (lastYoutube !== SOCIAL_STATS.youtube.count) || 
+                      (lastTwitch !== SOCIAL_STATS.twitch.count);
+  
+  if (needsUpdate) {
+    // Atualizar com os valores do código
+    localStorage.setItem('youtube_count', SOCIAL_STATS.youtube.count);
+    localStorage.setItem('twitch_count', SOCIAL_STATS.twitch.count);
+    localStorage.setItem('stats_last_check', today);
+    
+    console.log('Stats atualizados:', today);
+    console.log('YouTube:', SOCIAL_STATS.youtube.count, '| Twitch:', SOCIAL_STATS.twitch.count);
+  }
+  
+  // Carregar valores do localStorage
+  const youtubeCount = parseInt(localStorage.getItem('youtube_count')) || SOCIAL_STATS.youtube.count;
+  const twitchCount = parseInt(localStorage.getItem('twitch_count')) || SOCIAL_STATS.twitch.count;
+  
+  // Atualizar DOM
+  const youtubeEl = document.getElementById('youtube-count');
+  const twitchEl = document.getElementById('twitch-count');
+  
+  if (youtubeEl) youtubeEl.textContent = formatNumber(youtubeCount);
+  if (twitchEl) twitchEl.textContent = formatNumber(twitchCount);
+}
+
+// Executar ao carregar a página
+checkAndUpdateStats();
+
+// Dark mode toggle
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  // add toggle button in header (outside nav) to preserve centered tabs
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+
+  // Dropdown mobile: clique para abrir/fechar
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && window.innerWidth <= 768) {
+    const dropdownLink = dropdown.querySelector('a');
+    dropdownLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      dropdown.classList.toggle('active');
+    });
+  }
+
+  fetch('data/featured-video.json')
+    .then((res) => res.json())
+    .then((data) => {
+      HIGHLIGHT_VIDEO = data;
+      renderVideoDestaque();
+    })
+    .catch((err) => {
+      console.error('Erro ao carregar vídeo em destaque:', err);
+      renderVideoDestaque();
+    });
+});
+
+fetchNoticiasAgendadas("data/noticias.json")
+  .then(data => {
+    const slugifyTitulo = (titulo) => {
+      if (!titulo || typeof titulo !== 'string') return '';
+      return titulo
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .replace(/-{2,}/g, '-');
+    };
+
+    const getArticleSlug = (noticia) => {
+      if (noticia && typeof noticia.slug === 'string' && noticia.slug.trim()) {
+        return slugifyTitulo(noticia.slug.trim());
+      }
+      return slugifyTitulo((noticia && noticia.titulo) || '');
+    };
+
+    const buildArticleUrl = (noticia) => {
+      const id = encodeURIComponent(noticia.id);
+      const slug = getArticleSlug(noticia);
+      return slug
+        ? `noticias.html?id=${id}&slug=${encodeURIComponent(slug)}`
+        : `noticias.html?id=${id}`;
+    };
+
+    // Guardar notícias globalmente para pesquisa
+    window.todasNoticias = data.noticias;
+
+    // Implementar funcionalidade de pesquisa
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const searchDropdown = document.getElementById('searchDropdown');
+    const noticiasList = document.getElementById('noticiasList');
+    
+    searchInput.addEventListener('input', (e) => {
+      const termo = e.target.value.toLowerCase().trim();
+      
+      if (termo.length === 0) {
+        // Esconder dropdown e mostrar todas as notícias
+        searchDropdown.classList.remove('active');
+        searchDropdown.innerHTML = '';
+        renderizarNoticias(window.todasNoticias);
+        searchResults.textContent = '';
+        return;
+      }
+      
+      // Filtrar notícias
+      const resultados = window.todasNoticias.filter(n => {
+        const tituloMatch = n.titulo.toLowerCase().includes(termo);
+        const categoriaMatch = n.categoria.toLowerCase().includes(termo);
+        const resumoMatch = n.resumo.toLowerCase().includes(termo);
+        const conteudoMatch = n.conteudo && n.conteudo.toLowerCase().includes(termo);
+        
+        return tituloMatch || categoriaMatch || resumoMatch || conteudoMatch;
+      });
+      
+      // Mostrar dropdown com resultados
+      if (resultados.length === 0) {
+        searchDropdown.innerHTML = '<div class="search-no-results">❌ Nenhum artigo encontrado</div>';
+        searchDropdown.classList.add('active');
+        searchResults.innerHTML = '<span style="color: #cc0000;">❌ Nenhum artigo encontrado</span>';
+        noticiasList.innerHTML = '<p style="text-align:center;padding:40px;color:#5a6b7f;">Nenhum artigo corresponde à sua pesquisa.</p>';
+      } else {
+        // Criar HTML da dropdown
+        const dropdownHTML = resultados.map(n => {
+          const excerto = n.resumo.length > 100 ? n.resumo.substring(0, 100) + '...' : n.resumo;
+          return `
+            <a href="${buildArticleUrl(n)}" class="search-result-item">
+              <div class="search-result-title">${n.titulo}</div>
+              <div class="search-result-meta">
+                <span class="search-result-category">${n.categoria}</span>
+                <span>📅 ${n.data}</span>
+              </div>
+              <div class="search-result-excerpt">${excerto}</div>
+            </a>
+          `;
+        }).join('');
+        
+        searchDropdown.innerHTML = dropdownHTML;
+        searchDropdown.classList.add('active');
+        
+        const plural = resultados.length === 1 ? 'artigo encontrado' : 'artigos encontrados';
+        searchResults.innerHTML = `<span style="color: #0066cc;">✓ ${resultados.length} ${plural}</span>`;
+        renderizarNoticias(resultados);
+      }
+    });
+    
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+        searchDropdown.classList.remove('active');
+      }
+    });
+    
+    // Reabrir dropdown ao focar no input se houver termo de pesquisa
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim().length > 0) {
+        searchDropdown.classList.add('active');
+      }
+    });
+    
+    // Função para renderizar notícias
+    function renderizarNoticias(noticias) {
+      const parseDate = (str) => {
+        if (!str) return 0;
+        const parts = str.split("/").map(Number);
+        if (parts.length !== 3) return 0;
+        const [dia, mes, ano] = parts;
+        return new Date(ano, mes - 1, dia).getTime();
+      };
+      
+      const noticiasOrdenadas = [...noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      noticiasList.innerHTML = '';
+      
+      noticiasOrdenadas.forEach((n) => {
+        const article = document.createElement("article");
+        article.className = "noticia-item";
+        article.innerHTML = `
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">${n.categoria}</span>
+            <span class="noticia-data">📅 ${n.data}</span>
+          </div>
+          <div class="noticia-conteudo">
+            <h3>${n.titulo}</h3>
+            <p>${n.resumo}</p>
+            <a href="${buildArticleUrl(n)}" class="noticia-link">Ver mais →</a>
+          </div>
+        `;
+        noticiasList.appendChild(article);
+      });
+    }
+    
+    // Mostrar notícia em destaque: escolher a mais recente por data
+    if (data.noticias.length > 0) {
+      const parseDate = (str) => {
+        if (!str) return 0;
+        const parts = str.split("/").map(Number);
+        if (parts.length !== 3) return 0;
+        const [dia, mes, ano] = parts;
+        return new Date(ano, mes - 1, dia).getTime();
+      };
+
+      const noticiasOrdenadas = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      const featured = noticiasOrdenadas[0];
+      const videoId = extrairVideoId(featured.video);
+      window.featuredVideoId = videoId;
+      
+      const featuredSection = document.getElementById("featured");
+      
+      if (videoId) {
+        // Mostrar miniatura do vídeo com iframe carregável
+        featuredSection.innerHTML = `
+          <div class="featured-content">
+            <div class="featured-video" id="videoContainer">
+              <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" alt="Miniatura do vídeo" id="thumbnail">
+              <iframe 
+                id="youtubeIframe"
+                src="https://www.youtube.com/embed/${videoId}?modestbranding=1" 
+                title="${featured.titulo}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="featured-info-box">
+              <span class="featured-categoria">${featured.categoria}</span>
+              <h2>${featured.titulo}</h2>
+              <div class="featured-meta">
+                <span>📅 ${featured.data}</span>
+                <span>✍️ ${featured.autor}</span>
+              </div>
+              <p>${featured.resumo}</p>
+              <a href="${buildArticleUrl(featured)}" class="featured-link">Ver mais →</a>
+            </div>
+          </div>
+        `;
+        
+        // Ocultar a miniatura quando o iframe carregar
+        const iframe = document.getElementById('youtubeIframe');
+        const thumbnail = document.getElementById('thumbnail');
+        if (iframe && thumbnail) {
+          iframe.onload = () => {
+            thumbnail.style.display = 'none';
+          };
+        }
+      } else {
+        // Se não houver vídeo, mostrar mensagem
+        featuredSection.innerHTML = `
+          <div class="featured-content">
+            <div class="featured-video">
+              <div class="featured-video-error">
+                <h3>Vídeo não disponível</h3>
+                <p>Verifique o link do vídeo no JSON</p>
+              </div>
+            </div>
+            <div class="featured-info-box">
+              <span class="featured-categoria">${featured.categoria}</span>
+              <h2>${featured.titulo}</h2>
+              <div class="featured-meta">
+                <span>📅 ${featured.data}</span>
+                <span>✍️ ${featured.autor}</span>
+              </div>
+              <p>${featured.resumo}</p>
+              <a href="${buildArticleUrl(featured)}" class="featured-link">Ver mais →</a>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    // Mostrar lista de notícias inicial (todas, ordenadas por data)
+    renderizarNoticias(data.noticias);
+    
+    // Renderizar Artigos Mais Lidos (os 5 primeiros, ordenados por data)
+    const artigosMaisLidosSection = document.getElementById('artigosMaisLidos');
+    const artigosMaisLidos = data.noticias.slice(0, 5);
+    
+    artigosMaisLidos.forEach((n) => {
+      const link = document.createElement("a");
+      link.href = buildArticleUrl(n);
+      link.className = "artigo-mais-lido-item";
+      link.innerHTML = `
+        <div class="artigo-mais-lido-titulo">${n.titulo}</div>
+        <div class="artigo-mais-lido-meta">
+          <span class="artigo-categoria-badge">${n.categoria}</span>
+          <span>📅 ${n.data}</span>
+        </div>
+      `;
+      artigosMaisLidosSection.appendChild(link);
+    });
+  })
+  .catch(err => console.error("Erro ao carregar notícias:", err));
+
+function renderVideoDestaque() {
+  const section = document.getElementById('videoDestaque');
+  if (!section) return;
+
+  const player = document.getElementById('videoDestaquePlayer');
+  const iframe = document.getElementById('videoDestaqueIframe');
+  const titleEl = document.getElementById('videoDestaqueTitulo');
+  const descEl = document.getElementById('videoDestaqueDescricao');
+  const linkEl = document.getElementById('videoDestaqueLink');
+  const linkTextEl = document.getElementById('videoDestaqueLinkTexto');
+
+  const fallback = {
+    url: '',
+    titulo: 'Vídeo em destaque',
+    descricao: 'Atualiza o JSON para mostrar o vídeo escolhido na homepage.',
+    cta: 'Ver no YouTube'
+  };
+
+  const current = { ...fallback, ...(HIGHLIGHT_VIDEO || {}) };
+
+  if (titleEl) titleEl.textContent = current.titulo || fallback.titulo;
+  if (descEl) descEl.textContent = current.descricao || '';
+  if (linkTextEl) linkTextEl.textContent = current.cta || fallback.cta;
+
+  const videoId = extrairVideoId(current.url);
+
+  if (videoId && iframe) {
+    iframe.src = `https://www.youtube.com/embed/${videoId}?modestbranding=1`;
+    if (linkEl) {
+      linkEl.href = current.url;
+      linkEl.style.display = 'inline-flex';
+    }
+    return;
+  }
+
+  if (player) {
+    player.innerHTML = `
+      <div class="highlight-video-empty">
+        <i class="fas fa-video"></i>
+        <strong>Vídeo não definido</strong>
+        <span>Atualiza o link do vídeo em destaque no script.</span>
+      </div>
+    `;
+  }
+
+  if (linkEl) {
+    linkEl.removeAttribute('href');
+    linkEl.style.display = 'none';
+  }
+}
+
+// Função para extrair ID do YouTube
+function extrairVideoId(url) {
+  if (!url) return '';
+  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/live\/)([a-zA-Z0-9_-]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : '';
+}
+
+</script>
+
+</body>
+</html>
