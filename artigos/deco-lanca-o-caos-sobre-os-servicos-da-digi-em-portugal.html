@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+<base href="../">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia - VICIADO COMENTA</title>
@@ -1631,6 +1632,18 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.get('id')) params.set('id', '2');
+  if (!params.get('slug')) params.set('slug', 'deco-lanca-o-caos-sobre-os-servicos-da-digi-em-portugal');
+  var qs = params.toString();
+  var next = window.location.pathname + (qs ? ('?' + qs) : '');
+  if (window.location.search !== ('?' + qs)) {
+    window.history.replaceState({}, '', next);
+  }
+})();
+</script>
 </head>
 
 <body>

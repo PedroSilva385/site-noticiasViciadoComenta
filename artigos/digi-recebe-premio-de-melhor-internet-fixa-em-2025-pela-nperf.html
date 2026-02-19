@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+<base href="../">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia - VICIADO COMENTA</title>
@@ -1631,6 +1632,18 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.get('id')) params.set('id', '3');
+  if (!params.get('slug')) params.set('slug', 'digi-recebe-premio-de-melhor-internet-fixa-em-2025-pela-nperf');
+  var qs = params.toString();
+  var next = window.location.pathname + (qs ? ('?' + qs) : '');
+  if (window.location.search !== ('?' + qs)) {
+    window.history.replaceState({}, '', next);
+  }
+})();
+</script>
 </head>
 
 <body>
