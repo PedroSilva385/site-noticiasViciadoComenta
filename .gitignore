@@ -18,7 +18,6 @@
 # Configuração Firebase privada - firebase-config.js DEVE ser deployado em produção
 firebase-config.js
 assets/firebase-config.js
-firebase-config.json
 /docs/FIREBASE-SETUP.txt
 /docs/FIREBASE-REGRAS-SEGURAS.json
 /docs/CONFIG-PRIVADA.md

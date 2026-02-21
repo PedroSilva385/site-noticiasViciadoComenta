@@ -35,6 +35,42 @@ function Get-Slug {
     return $slug
 }
 
+function Strip-Html {
+    param([string]$Text)
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return ''
+    }
+
+    $noTags = [regex]::Replace($Text, '<[^>]+>', ' ')
+    $decoded = [System.Net.WebUtility]::HtmlDecode($noTags)
+    return [regex]::Replace($decoded, '\s+', ' ').Trim()
+}
+
+function Get-MetaDescription {
+    param([object]$Noticia)
+
+    $baseText = if (-not [string]::IsNullOrWhiteSpace($Noticia.resumo)) {
+        [string]$Noticia.resumo
+    } else {
+        [string]$Noticia.conteudo
+    }
+
+    $plain = Strip-Html -Text $baseText
+    if ($plain.Length -le 180) {
+        return $plain
+    }
+
+    return ($plain.Substring(0, 177).Trim() + '...')
+}
+
+function Escape-Html {
+    param([string]$Text)
+
+    if ($null -eq $Text) { return '' }
+    return [System.Net.WebUtility]::HtmlEncode($Text)
+}
+
 function Parse-DataPublicacao {
     param([string]$DataStr)
 
@@ -101,6 +137,72 @@ foreach ($noticia in $noticias) {
 
     $content = $template
 
+    $articleUrl = "https://www.viciadocomenta.pt/artigos/$slug.html"
+    $rawTitle = [string]$noticia.titulo
+    $metaDescription = Get-MetaDescription -Noticia $noticia
+    $publishedDateIso = if ($publishDate) {
+        $publishDate.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    } else {
+        (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    }
+    $modifiedDateIso = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+
+    $safeTitle = Escape-Html -Text $rawTitle
+    $safeDescription = Escape-Html -Text $metaDescription
+    $safeUrl = Escape-Html -Text $articleUrl
+    $socialImageUrl = 'https://www.viciadocomenta.pt/assets/favicon.svg'
+    $safeSocialImageUrl = Escape-Html -Text $socialImageUrl
+
+    $jsonLdObject = [ordered]@{
+        '@context' = 'https://schema.org'
+        '@type' = 'NewsArticle'
+        mainEntityOfPage = [ordered]@{
+            '@type' = 'WebPage'
+            '@id' = $articleUrl
+        }
+        headline = $rawTitle
+        description = $metaDescription
+        datePublished = $publishedDateIso
+        dateModified = $modifiedDateIso
+        author = [ordered]@{
+            '@type' = 'Person'
+            name = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
+        }
+        publisher = [ordered]@{
+            '@type' = 'Organization'
+            name = 'VICIADO COMENTA'
+            logo = [ordered]@{
+                '@type' = 'ImageObject'
+                url = $socialImageUrl
+            }
+        }
+        inLanguage = 'pt-PT'
+    }
+
+    $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
+
+    $seoMeta = @"
+<meta name="description" content="$safeDescription">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="VICIADO COMENTA">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:title" content="$safeTitle">
+<meta property="og:description" content="$safeDescription">
+<meta property="og:url" content="$safeUrl">
+<meta property="og:image" content="$safeSocialImageUrl">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="$safeTitle">
+<meta name="twitter:description" content="$safeDescription">
+<meta name="twitter:image" content="$safeSocialImageUrl">
+<script type="application/ld+json">$jsonLd</script>
+"@
+
+    $content = [regex]::Replace($content, '<title>.*?</title>', "<title>$safeTitle - VICIADO COMENTA</title>", 1)
+
+    if ($content.Contains('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">')) {
+        $content = $content.Replace('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">', ('<link rel="canonical" id="canonicalLink" href="' + $safeUrl + '">'))
+    }
+
     if ($content -notmatch '<base\s+href="\.\./"\s*/?>') {
         $content = $content -replace '<head>', ('<head>' + "`n" + '<base href="../">')
     }
@@ -120,7 +222,7 @@ foreach ($noticia in $noticias) {
 </script>
 "@
 
-    $content = $content -replace '</head>', "$bootstrapScript`n</head>"
+    $content = $content -replace '</head>', "$seoMeta`n$bootstrapScript`n</head>"
 
     $outPath = Join-Path $artigosDir "$slug.html"
     [System.IO.File]::WriteAllText($outPath, $content, [System.Text.UTF8Encoding]::new($false))
