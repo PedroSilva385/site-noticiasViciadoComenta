@@ -63,6 +63,7 @@ desktop.ini
 # Dados locais de teste
 site-stats.json
 *.local.json
+estatisticas.html
 
 # Screenshots e ficheiros temporÃ¡rios de desenvolvimento
 screenshots/
