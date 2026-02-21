@@ -26,9 +26,6 @@ git add firebase.json
 git add sitemap.xml
 git add robots.txt
 git add data/noticias.json
-if (Test-Path "firebase-config.json") {
-    git add firebase-config.json
-}
 if (Test-Path "artigos") {
     git add artigos
 }
@@ -44,24 +41,24 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "Nao ha alteracoes para commitar." -ForegroundColor Cyan
 }
 
-# 4) Verificar se o ficheiro esta acessivel no site publicado
+# 4) Verificar se o ficheiro de configuracao usado pelo frontend esta acessivel no site publicado
 $siteUrl = "https://viciadocomenta.pt"
 if (-not $siteUrl.StartsWith("http")) {
     $siteUrl = "https://$siteUrl"
 }
 
-$configUrl = "$siteUrl/firebase-config.json"
+$configUrl = "$siteUrl/assets/firebase-config.js"
 Write-Host "`nVerificando acesso publico: $configUrl" -ForegroundColor Cyan
 
 try {
     $response = Invoke-WebRequest -Uri $configUrl -Method Head -TimeoutSec 10 -UseBasicParsing
     if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
-        Write-Host "firebase-config.json acessivel no site publicado." -ForegroundColor Green
+        Write-Host "assets/firebase-config.js acessivel no site publicado." -ForegroundColor Green
     } else {
-        Write-Host "firebase-config.json retornou status $($response.StatusCode)." -ForegroundColor Red
+        Write-Host "assets/firebase-config.js retornou status $($response.StatusCode)." -ForegroundColor Red
     }
 } catch {
-    Write-Host "Nao foi possivel aceder a firebase-config.json no site publicado." -ForegroundColor Red
+    Write-Host "Nao foi possivel aceder a assets/firebase-config.js no site publicado." -ForegroundColor Red
     Write-Host "Detalhes: $($_.Exception.Message)" -ForegroundColor DarkGray
 }
 Write-Host "`nDeploy concluido!" -ForegroundColor Green
