@@ -21,9 +21,14 @@ Write-Host "`nPreparando ficheiros para commit..." -ForegroundColor Yellow
 git add index.html
 git add todas-noticias.html
 git add noticias.html
+git add 404.html
+git add firebase.json
 git add sitemap.xml
 git add robots.txt
 git add data/noticias.json
+if (Test-Path "firebase-config.json") {
+    git add firebase-config.json
+}
 if (Test-Path "artigos") {
     git add artigos
 }
@@ -39,15 +44,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "Nao ha alteracoes para commitar." -ForegroundColor Cyan
 }
 
-# 4) Lembrete para ficheiro privado
-Write-Host "`nATENCAO: O arquivo firebase-config.json NAO esta no Git por seguranca!" -ForegroundColor Yellow
-Write-Host "Voce precisa envia-lo manualmente para o servidor de producao:" -ForegroundColor White
-
-if (-not (Test-Path "firebase-config.json")) {
-    Write-Host "`nfirebase-config.json nao encontrado. Crie o arquivo antes do deploy." -ForegroundColor Red
-}
-
-# 5) Verificar se o ficheiro esta acessivel no site publicado
+# 4) Verificar se o ficheiro esta acessivel no site publicado
 $siteUrl = "https://viciadocomenta.pt"
 if (-not $siteUrl.StartsWith("http")) {
     $siteUrl = "https://$siteUrl"
@@ -67,13 +64,4 @@ try {
     Write-Host "Nao foi possivel aceder a firebase-config.json no site publicado." -ForegroundColor Red
     Write-Host "Detalhes: $($_.Exception.Message)" -ForegroundColor DarkGray
 }
-
-Write-Host "  1. Via FTP/cPanel" -ForegroundColor Cyan
-Write-Host "  2. Via Firebase Hosting: firebase deploy" -ForegroundColor Cyan
-Write-Host "  3. Via servidor web (SCP/SFTP)" -ForegroundColor Cyan
-
-Write-Host "`nArquivo a enviar:" -ForegroundColor Yellow
-Write-Host "  firebase-config.json" -ForegroundColor White
-
-Write-Host "`nApos enviar, limpe o cache do navegador (Ctrl+Shift+R)" -ForegroundColor Magenta
 Write-Host "`nDeploy concluido!" -ForegroundColor Green
