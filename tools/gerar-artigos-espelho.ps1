@@ -144,9 +144,7 @@ $generatedArticles = @()
 
 foreach ($noticia in $noticias) {
     $publishDate = Parse-DataPublicacao -DataStr $noticia.dataPublicacao
-    if ($publishDate -and $publishDate -gt $now) {
-        continue
-    }
+    $isPublished = (-not $publishDate) -or ($publishDate -le $now)
 
     $id = [string]$noticia.id
 
@@ -281,9 +279,11 @@ foreach ($noticia in $noticias) {
         }
     }
 
-    $generatedArticles += [pscustomobject]@{
-        slug = $slug
-        lastmod = (Get-Date).ToString('yyyy-MM-dd')
+    if ($isPublished) {
+        $generatedArticles += [pscustomobject]@{
+            slug = $slug
+            lastmod = (Get-Date).ToString('yyyy-MM-dd')
+        }
     }
 }
 
