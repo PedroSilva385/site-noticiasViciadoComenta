@@ -1,6 +1,13 @@
 {
 	"hosting": {
 		"public": ".",
+		"redirects": [
+			{
+				"source": "/artigos/uzo-e-amigo-igualam-precos-da-digi.html",
+				"destination": "/artigos/polemica-com-os-tarifarios-da-uzo.html",
+				"type": 301
+			}
+		],
 		"ignore": [
 			"firebase.json",
 			"**/.*",
