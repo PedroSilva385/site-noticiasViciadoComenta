@@ -71,6 +71,35 @@ function Escape-Html {
     return [System.Net.WebUtility]::HtmlEncode($Text)
 }
 
+function Get-RedirectHtml {
+    param(
+        [string]$TargetUrl,
+        [string]$Title
+    )
+
+    $safeTarget = Escape-Html -Text $TargetUrl
+    $safeTitle = Escape-Html -Text $Title
+
+    return @"
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$safeTitle - VICIADO COMENTA</title>
+<link rel="canonical" href="$safeTarget">
+<meta http-equiv="refresh" content="0; url=$safeTarget">
+<script>
+window.location.replace('$TargetUrl');
+</script>
+</head>
+<body>
+<p>A redirecionar para <a href="$safeTarget">$safeTarget</a>...</p>
+</body>
+</html>
+"@
+}
+
 function Parse-DataPublicacao {
     param([string]$DataStr)
 
@@ -226,6 +255,31 @@ foreach ($noticia in $noticias) {
 
     $outPath = Join-Path $artigosDir "$slug.html"
     [System.IO.File]::WriteAllText($outPath, $content, [System.Text.UTF8Encoding]::new($false))
+
+    if ($noticia.PSObject.Properties.Name -contains 'aliases' -and $noticia.aliases) {
+        $aliases = @($noticia.aliases)
+
+        foreach ($aliasValue in $aliases) {
+            if ([string]::IsNullOrWhiteSpace([string]$aliasValue)) {
+                continue
+            }
+
+            $aliasSlug = Get-Slug -InputText ([string]$aliasValue)
+
+            if ($aliasSlug -eq $slug) {
+                continue
+            }
+
+            if ($usedSlugs.ContainsKey($aliasSlug)) {
+                continue
+            }
+
+            $aliasPath = Join-Path $artigosDir "$aliasSlug.html"
+            $redirectHtml = Get-RedirectHtml -TargetUrl $articleUrl -Title $rawTitle
+            [System.IO.File]::WriteAllText($aliasPath, $redirectHtml, [System.Text.UTF8Encoding]::new($false))
+            $usedSlugs[$aliasSlug] = $true
+        }
+    }
 
     $generatedArticles += [pscustomobject]@{
         slug = $slug
