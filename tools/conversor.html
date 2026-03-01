@@ -342,6 +342,8 @@ function converter() {
   // Normalizar quebras de linha (Windows para Unix)
   texto = texto.replace(/\r\n/g, '\n');
   texto = texto.replace(/\r/g, '\n');
+  texto = texto.replace(/[ \t]+\n/g, '\n');
+  texto = texto.replace(/\n[ \t]+/g, '\n');
   
   // Remover múltiplas quebras de linha consecutivas (deixar no máximo 2)
   texto = texto.replace(/\n{3,}/g, '\n\n');
@@ -358,7 +360,8 @@ function converter() {
   // Remover outras tags HTML que possam vir do contenteditable (spans, etc)
   texto = texto.replace(/<span[^>]*>/gi, '');
   texto = texto.replace(/<\/span>/gi, '');
-  texto = texto.replace(/&nbsp;/gi, ' ');
+  texto = texto.replace(/&nbsp;|\u00A0/gi, ' ');
+  texto = texto.replace(/<(strong|em)>\s*(<br\s*\/?>\s*)*<\/\1>/gi, '');
   
   // PRIMEIRO: Converter imagens COM LEGENDA (imagem seguida de linha com parêntesis)
   // Caminhos relativos com legenda
@@ -380,14 +383,22 @@ function converter() {
   
   // Converter formatação de texto (estilo Markdown)
   // Negrito: **texto** → <strong>texto</strong>
-  texto = texto.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  texto = texto.replace(/(^|[\s(>])\*\*([A-Za-zÀ-ÿ0-9][^*\n<>]*?)\*\*(?=[\s).,!?:;]|$)/g, '$1<strong>$2</strong>');
   
   // Itálico: *texto* → <em>texto</em> (apenas se não for parte de **)
-  texto = texto.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>');
+  texto = texto.replace(/(^|[\s(>])\*([A-Za-zÀ-ÿ0-9][^*\n<>]*?)\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
   
   // AGORA SIM: Converter quebras de linha para <br><br> (formato do site)
-  texto = texto.replace(/\n\n+/g, '<br><br>');
-  texto = texto.replace(/\n/g, '<br><br>');
+  // Mantém parágrafos e evita espaçamento exagerado quando o texto vem quebrado por linha
+  const PARAGRAFO_TOKEN = '__PARAGRAFO__';
+  texto = texto.replace(/\n{3,}/g, '\n\n');
+  texto = texto.replace(/\n\n+/g, PARAGRAFO_TOKEN);
+  texto = texto.replace(/\n+/g, ' ');
+  texto = texto.replace(/[ \t]{2,}/g, ' ');
+  texto = texto.split(PARAGRAFO_TOKEN).join('<br><br>');
+  texto = texto.replace(/(<br><br>\s*){2,}/g, '<br><br>');
+  texto = texto.replace(/^\s*<br><br>/, '');
+  texto = texto.replace(/<br><br>\s*$/, '');
   
   // Substituir aspas duplas por aspas simples
   texto = texto.replace(/["'"]/g, "'");
