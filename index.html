@@ -23,6 +23,7 @@
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/news-scheduler.js"></script>
 <script src="assets/new-article-notification.js?v=20260301"></script>
+<script src="assets/push-notifications.js?v=20260301"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -2728,6 +2729,13 @@ fetchNoticiasAgendadas("data/noticias.json")
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
       window.NewArticleNotification.init(data.noticias);
+    }
+
+    if (window.PushArticleAlerts && typeof window.PushArticleAlerts.init === 'function') {
+      window.PushArticleAlerts.init({
+        initialNoticias: data.noticias,
+        pollIntervalMs: 120000
+      });
     }
     
     async function carregarLeiturasArtigos() {
