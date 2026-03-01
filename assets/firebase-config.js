@@ -46,6 +46,17 @@ function getLocalMonthKey(date = new Date()) {
   return `${year}-${month}`;
 }
 
+function shouldRegisterVisitForSession() {
+  const visitCountedKey = 'vc_visit_metrics_recorded';
+
+  if (sessionStorage.getItem(visitCountedKey) === '1') {
+    return false;
+  }
+
+  sessionStorage.setItem(visitCountedKey, '1');
+  return true;
+}
+
 async function hashText(value) {
   const normalized = String(value || 'anonymous');
 
@@ -345,13 +356,17 @@ function initializeFirebaseApp() {
         const db = firebase.database();
         getVisitorFingerprint()
           .then((visitorHash) => {
-            registerVisitMetrics(db, visitorHash)
-              .then(() => {
-                console.log('✓ Métricas de visita registadas');
-              })
-              .catch((error) => {
-                console.error('❌ Erro ao registar métricas de visita:', error);
-              });
+            if (shouldRegisterVisitForSession()) {
+              registerVisitMetrics(db, visitorHash)
+                .then(() => {
+                  console.log('✓ Métricas de visita registadas (entrada na sessão)');
+                })
+                .catch((error) => {
+                  console.error('❌ Erro ao registar métricas de visita:', error);
+                });
+            } else {
+              console.log('ℹ️ Navegação interna: visita não recontada');
+            }
 
             setupClickTracking(db, visitorHash);
             console.log('✓ Tracking de cliques ativo');
