@@ -22,6 +22,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/news-scheduler.js"></script>
+<script src="assets/new-article-notification.js?v=20260301"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -2724,6 +2725,10 @@ fetchNoticiasAgendadas("data/noticias.json")
     
     // Mostrar lista de notícias inicial (todas, ordenadas por data)
     renderizarNoticias(data.noticias, true);
+
+    if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
+      window.NewArticleNotification.init(data.noticias);
+    }
     
     async function carregarLeiturasArtigos() {
       try {
