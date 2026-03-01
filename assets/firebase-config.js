@@ -33,6 +33,19 @@ function sanitizeFirebaseKey(rawValue) {
     .slice(0, 180) || 'unknown';
 }
 
+function getLocalDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getLocalMonthKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
 async function hashText(value) {
   const normalized = String(value || 'anonymous');
 
@@ -81,13 +94,49 @@ async function getVisitorFingerprint() {
   return hashText(localFingerprint);
 }
 
-async function registerUniqueVisit(db, visitorHash) {
+async function registerVisitMetrics(db, visitorHash) {
   const pagePath = window.location.pathname || '/';
   const pageKey = sanitizeFirebaseKey(pagePath);
   const now = new Date();
-  const today = now.toISOString().split('T')[0];
-  const month = now.toISOString().substring(0, 7);
+  const today = getLocalDateKey(now);
+  const month = getLocalMonthKey(now);
+  const hour = String(now.getHours()).padStart(2, '0');
   const statsRef = db.ref('site_stats');
+
+  await statsRef.transaction((data) => {
+    if (!data) {
+      data = {
+        total_visits: 0,
+        daily: {},
+        monthly: {},
+        hourly: {},
+        unique_total: 0,
+        unique_daily: {},
+        unique_monthly: {},
+        unique_hourly: {},
+        pages: {},
+        last_updated: new Date().toISOString()
+      };
+    }
+
+    data.total_visits = (data.total_visits || 0) + 1;
+
+    if (!data.daily) data.daily = {};
+    data.daily[today] = (data.daily[today] || 0) + 1;
+
+    if (!data.monthly) data.monthly = {};
+    data.monthly[month] = (data.monthly[month] || 0) + 1;
+
+    if (!data.hourly) data.hourly = {};
+    if (!data.hourly[today]) data.hourly[today] = {};
+    data.hourly[today][hour] = (data.hourly[today][hour] || 0) + 1;
+
+    if (!data.pages) data.pages = {};
+    data.pages[pageKey] = (data.pages[pageKey] || 0) + 1;
+
+    data.last_updated = new Date().toISOString();
+    return data;
+  });
 
   const uniqueVisitRef = db.ref(`site_unique_views/daily/${today}/${visitorHash}`);
   let isUniqueForDay = false;
@@ -104,7 +153,22 @@ async function registerUniqueVisit(db, visitorHash) {
     };
   });
 
-  if (!isUniqueForDay) {
+  const uniqueAllRef = db.ref(`site_unique_views/all/${visitorHash}`);
+  let isUniqueGlobal = false;
+
+  await uniqueAllRef.transaction((currentValue) => {
+    if (currentValue) {
+      return currentValue;
+    }
+
+    isUniqueGlobal = true;
+    return {
+      first_seen: firebase.database.ServerValue.TIMESTAMP,
+      last_page: pagePath
+    };
+  });
+
+  if (!isUniqueForDay && !isUniqueGlobal) {
     return;
   }
 
@@ -114,32 +178,35 @@ async function registerUniqueVisit(db, visitorHash) {
         total_visits: 0,
         daily: {},
         monthly: {},
+        hourly: {},
         unique_total: 0,
         unique_daily: {},
         unique_monthly: {},
+        unique_hourly: {},
         pages: {},
         last_updated: new Date().toISOString()
       };
     }
 
-    data.total_visits = (data.total_visits || 0) + 1;
-
-    if (!data.daily) data.daily = {};
-    data.daily[today] = (data.daily[today] || 0) + 1;
-
-    if (!data.monthly) data.monthly = {};
-    data.monthly[month] = (data.monthly[month] || 0) + 1;
-
-    data.unique_total = (data.unique_total || 0) + 1;
+    if (isUniqueGlobal) {
+      data.unique_total = (data.unique_total || 0) + 1;
+    }
 
     if (!data.unique_daily) data.unique_daily = {};
-    data.unique_daily[today] = (data.unique_daily[today] || 0) + 1;
+    if (isUniqueForDay) {
+      data.unique_daily[today] = (data.unique_daily[today] || 0) + 1;
+    }
 
     if (!data.unique_monthly) data.unique_monthly = {};
-    data.unique_monthly[month] = (data.unique_monthly[month] || 0) + 1;
+    if (isUniqueForDay) {
+      data.unique_monthly[month] = (data.unique_monthly[month] || 0) + 1;
+    }
 
-    if (!data.pages) data.pages = {};
-    data.pages[pageKey] = (data.pages[pageKey] || 0) + 1;
+    if (!data.unique_hourly) data.unique_hourly = {};
+    if (!data.unique_hourly[today]) data.unique_hourly[today] = {};
+    if (isUniqueForDay) {
+      data.unique_hourly[today][hour] = (data.unique_hourly[today][hour] || 0) + 1;
+    }
 
     data.last_updated = new Date().toISOString();
     return data;
@@ -210,7 +277,7 @@ function setupClickTracking(db, visitorHash) {
         return data;
       });
 
-      const today = new Date().toISOString().split('T')[0];
+      const today = getLocalDateKey(new Date());
       const dailyTargetRef = db.ref(`click_stats/daily/${today}/targets/${targetKey}`);
       dailyTargetRef.transaction((data) => {
         if (!data) {
@@ -278,12 +345,12 @@ function initializeFirebaseApp() {
         const db = firebase.database();
         getVisitorFingerprint()
           .then((visitorHash) => {
-            registerUniqueVisit(db, visitorHash)
+            registerVisitMetrics(db, visitorHash)
               .then(() => {
-                console.log('✓ Visita única (IP hash) registada');
+                console.log('✓ Métricas de visita registadas');
               })
               .catch((error) => {
-                console.error('❌ Erro ao registar visita única:', error);
+                console.error('❌ Erro ao registar métricas de visita:', error);
               });
 
             setupClickTracking(db, visitorHash);
