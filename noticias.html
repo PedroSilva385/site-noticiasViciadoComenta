@@ -23,6 +23,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/news-scheduler.js"></script>
+<script src="assets/new-article-notification.js?v=20260301"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
@@ -1931,6 +1932,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const noticiaSlug = urlParams.get('slug');
 
   const identificadorArtigo = noticiaId || noticiaSlug;
+  let newArticleNotificationTriggered = false;
+
+  function triggerNewArticleNotification(noticias) {
+    if (newArticleNotificationTriggered) {
+      return;
+    }
+
+    if (!window.NewArticleNotification || typeof window.NewArticleNotification.init !== 'function') {
+      return;
+    }
+
+    window.NewArticleNotification.init(noticias);
+    newArticleNotificationTriggered = true;
+  }
 
   console.log('🔍 Identificador da URL:', identificadorArtigo);
 
@@ -1944,6 +1959,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!data.noticias || !Array.isArray(data.noticias)) {
           throw new Error('Formato JSON inválido');
         }
+
+        triggerNewArticleNotification(data.noticias);
         
         data.noticias.forEach((item) => {
           window.articleSlugById[String(item.id)] = getArticleSlug(item);
@@ -2110,6 +2127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sem ID: listar notícias em grelha
     fetchNoticiasAgendadas('data/noticias.json')
       .then(data => {
+        triggerNewArticleNotification(data.noticias || []);
         const parseDate = (str) => {
           if (!str) return 0;
           const [dia, mes, ano] = str.split('/').map(Number);

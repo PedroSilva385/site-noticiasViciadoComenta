@@ -24,6 +24,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/news-scheduler.js"></script>
+<script src="assets/new-article-notification.js?v=20260301"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
@@ -1655,7 +1656,7 @@ footer {
 <meta name="twitter:title" content="POL&#201;MICA com os tarif&#225;rios da UZO!">
 <meta name="twitter:description" content="Comentamos a nova pol&#233;mica a envolver os tarif&#225;rios da UZO.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/polemica-com-os-tarifarios-da-uzo.html"},"headline":"POLÉMICA com os tarifários da UZO!","description":"Comentamos a nova polémica a envolver os tarifários da UZO.","datePublished":"2026-02-15T19:00:00Z","dateModified":"2026-03-01T23:13:15Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/polemica-com-os-tarifarios-da-uzo.html"},"headline":"POLÉMICA com os tarifários da UZO!","description":"Comentamos a nova polémica a envolver os tarifários da UZO.","datePublished":"2026-02-15T19:00:00Z","dateModified":"2026-03-01T23:18:13Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -1957,6 +1958,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const noticiaSlug = urlParams.get('slug');
 
   const identificadorArtigo = noticiaId || noticiaSlug;
+  let newArticleNotificationTriggered = false;
+
+  function triggerNewArticleNotification(noticias) {
+    if (newArticleNotificationTriggered) {
+      return;
+    }
+
+    if (!window.NewArticleNotification || typeof window.NewArticleNotification.init !== 'function') {
+      return;
+    }
+
+    window.NewArticleNotification.init(noticias);
+    newArticleNotificationTriggered = true;
+  }
 
   console.log('🔍 Identificador da URL:', identificadorArtigo);
 
@@ -1970,6 +1985,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!data.noticias || !Array.isArray(data.noticias)) {
           throw new Error('Formato JSON inválido');
         }
+
+        triggerNewArticleNotification(data.noticias);
         
         data.noticias.forEach((item) => {
           window.articleSlugById[String(item.id)] = getArticleSlug(item);
@@ -2136,6 +2153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sem ID: listar notícias em grelha
     fetchNoticiasAgendadas('data/noticias.json')
       .then(data => {
+        triggerNewArticleNotification(data.noticias || []);
         const parseDate = (str) => {
           if (!str) return 0;
           const [dia, mes, ano] = str.split('/').map(Number);
