@@ -25,6 +25,7 @@
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/news-scheduler.js"></script>
 <script src="assets/new-article-notification.js?v=20260301"></script>
+<script src="assets/push-notifications.js?v=20260301"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
@@ -1656,7 +1657,7 @@ footer {
 <meta name="twitter:title" content="EPITOME &#233; o novo METIN?">
 <meta name="twitter:description" content="Analisamos os trailers e a pr&#233;-alpha de Epitome, comparando pontos fortes, riscos e semelhan&#231;as com Metin2 sem cair em hype exagerado.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/epitome-e-o-novo-metin.html"},"headline":"EPITOME é o novo METIN?","description":"Analisamos os trailers e a pré-alpha de Epitome, comparando pontos fortes, riscos e semelhanças com Metin2 sem cair em hype exagerado.","datePublished":"2026-02-05T19:00:00Z","dateModified":"2026-03-01T23:22:11Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/epitome-e-o-novo-metin.html"},"headline":"EPITOME é o novo METIN?","description":"Analisamos os trailers e a pré-alpha de Epitome, comparando pontos fortes, riscos e semelhanças com Metin2 sem cair em hype exagerado.","datePublished":"2026-02-05T19:00:00Z","dateModified":"2026-03-01T23:28:36Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -1959,6 +1960,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const identificadorArtigo = noticiaId || noticiaSlug;
   let newArticleNotificationTriggered = false;
+  let pushAlertsTriggered = false;
 
   function triggerNewArticleNotification(noticias) {
     if (newArticleNotificationTriggered) {
@@ -1971,6 +1973,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.NewArticleNotification.init(noticias);
     newArticleNotificationTriggered = true;
+  }
+
+  function triggerPushAlerts(noticias) {
+    if (pushAlertsTriggered) {
+      return;
+    }
+
+    if (!window.PushArticleAlerts || typeof window.PushArticleAlerts.init !== 'function') {
+      return;
+    }
+
+    window.PushArticleAlerts.init({
+      initialNoticias: Array.isArray(noticias) ? noticias : [],
+      pollIntervalMs: 120000
+    });
+    pushAlertsTriggered = true;
   }
 
   console.log('🔍 Identificador da URL:', identificadorArtigo);
@@ -1987,6 +2005,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         triggerNewArticleNotification(data.noticias);
+        triggerPushAlerts(data.noticias);
         
         data.noticias.forEach((item) => {
           window.articleSlugById[String(item.id)] = getArticleSlug(item);
@@ -2154,6 +2173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchNoticiasAgendadas('data/noticias.json')
       .then(data => {
         triggerNewArticleNotification(data.noticias || []);
+        triggerPushAlerts(data.noticias || []);
         const parseDate = (str) => {
           if (!str) return 0;
           const [dia, mes, ano] = str.split('/').map(Number);
