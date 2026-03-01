@@ -29,8 +29,8 @@
       box-shadow: 0 8px 24px rgba(0, 102, 204, 0.18);
     }
     .header h1 { font-family: 'Outfit', sans-serif; font-size: 2.1em; margin-bottom: 8px; }
-    .header p { opacity: 0.95; }
-    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
     .btn {
       border: none;
       border-radius: 10px;
@@ -42,10 +42,41 @@
       align-items: center;
       justify-content: center;
     }
-    .btn-primary { background: #0066cc; color: #fff; }
     .btn-danger { background: #dc2626; color: #fff; }
     .btn-secondary { background: #fff; color: #0066cc; border: 2px solid #0066cc; }
     body.dark .btn-secondary { background: #1f2937; color: #60a5fa; border-color: #60a5fa; }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .tab-btn {
+      border: 2px solid #0066cc;
+      background: #ffffff;
+      color: #0066cc;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .tab-btn.active {
+      background: #0066cc;
+      color: #fff;
+    }
+    body.dark .tab-btn {
+      background: #1f2937;
+      border-color: #60a5fa;
+      color: #60a5fa;
+    }
+    body.dark .tab-btn.active {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
     .cards {
       display: grid;
@@ -83,16 +114,12 @@
     .panel h2 { font-family: 'Outfit', sans-serif; margin-bottom: 12px; font-size: 1.35em; }
 
     table { width: 100%; border-collapse: collapse; }
-    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #e5e7eb; }
+    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
     body.dark th, body.dark td { border-bottom-color: #374151; }
     th { font-size: .88em; color: #6b7280; text-transform: uppercase; letter-spacing: .6px; }
     body.dark th { color: #9ca3af; }
 
-    .status {
-      margin-top: 12px;
-      font-size: 0.92em;
-      color: #6b7280;
-    }
+    .status { margin-top: 12px; font-size: 0.92em; color: #6b7280; }
     body.dark .status { color: #9ca3af; }
 
     .empty {
@@ -102,6 +129,13 @@
       color: #6b7280;
     }
     body.dark .empty { background: #111827; color: #9ca3af; }
+
+    .meta {
+      font-size: .88em;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    body.dark .meta { color: #9ca3af; }
   </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
 </head>
@@ -123,7 +157,7 @@
   <div class="container">
     <div class="header">
       <h1>📊 Estatísticas do Site</h1>
-      <p>Controlo de acessos hora a hora e totais diários por IP único.</p>
+      <p>Controlo de acessos por sessão, hora a hora e atividade recente.</p>
     </div>
 
     <div class="toolbar">
@@ -132,79 +166,120 @@
       <button class="btn btn-danger" id="resetBtn">🔄 Resetar estatísticas</button>
     </div>
 
-    <div class="cards">
-      <div class="card">
-        <div class="card-label">Acessos hoje (total)</div>
-        <div class="card-value" id="todayTotal">-</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Acessos hoje (IPs únicos)</div>
-        <div class="card-value" id="todayUnique">-</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Acessos totais (histórico)</div>
-        <div class="card-value" id="allTotal">-</div>
-      </div>
-      <div class="card">
-        <div class="card-label">IPs únicos totais</div>
-        <div class="card-value" id="allUnique">-</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Hora atual (acessos)</div>
-        <div class="card-value" id="currentHourCount">-</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Última atualização</div>
-        <div class="card-value" id="lastUpdate" style="font-size:1.15em;">-</div>
-      </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="visitas">📈 Visitas</button>
+      <button class="tab-btn" data-tab="comentarios">💬 Comentários recentes</button>
+      <button class="tab-btn" data-tab="likes">❤️ Likes recentes</button>
     </div>
 
-    <div class="grid">
-      <section class="panel">
-        <h2>🕒 Acessos de Hoje por Hora</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Hora</th>
-              <th>Acessos totais</th>
-              <th>IPs únicos</th>
-            </tr>
-          </thead>
-          <tbody id="hourlyBody"></tbody>
-        </table>
-        <div class="status" id="hourlyStatus">A carregar...</div>
-      </section>
+    <section class="tab-panel active" id="tab-visitas">
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Acessos hoje (total)</div>
+          <div class="card-value" id="todayTotal">-</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Acessos hoje (IPs únicos)</div>
+          <div class="card-value" id="todayUnique">-</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Acessos totais (histórico)</div>
+          <div class="card-value" id="allTotal">-</div>
+        </div>
+        <div class="card">
+          <div class="card-label">IPs únicos totais</div>
+          <div class="card-value" id="allUnique">-</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Hora atual (acessos)</div>
+          <div class="card-value" id="currentHourCount">-</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Última atualização</div>
+          <div class="card-value" id="lastUpdate" style="font-size:1.15em;">-</div>
+        </div>
+      </div>
 
-      <section class="panel">
-        <h2>📅 Totais Diários (IPs Únicos)</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>IPs únicos</th>
-            </tr>
-          </thead>
-          <tbody id="dailyUniqueBody"></tbody>
-        </table>
-      </section>
+      <div class="grid">
+        <section class="panel">
+          <h2>🕒 Acessos de Hoje por Hora</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Acessos totais</th>
+                <th>IPs únicos</th>
+              </tr>
+            </thead>
+            <tbody id="hourlyBody"></tbody>
+          </table>
+          <div class="status" id="hourlyStatus">A carregar...</div>
+        </section>
 
+        <section class="panel">
+          <h2>📅 Totais Diários (IPs Únicos)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>IPs únicos</th>
+              </tr>
+            </thead>
+            <tbody id="dailyUniqueBody"></tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <h2>📈 Totais Diários (Acessos)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Acessos</th>
+              </tr>
+            </thead>
+            <tbody id="dailyTotalBody"></tbody>
+          </table>
+        </section>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-comentarios">
       <section class="panel">
-        <h2>📈 Totais Diários (Acessos)</h2>
+        <h2>💬 Comentários mais recentes</h2>
         <table>
           <thead>
             <tr>
-              <th>Data</th>
-              <th>Acessos</th>
+              <th>Quando</th>
+              <th>Notícia</th>
+              <th>Autor / Texto</th>
             </tr>
           </thead>
-          <tbody id="dailyTotalBody"></tbody>
+          <tbody id="commentsRecentBody"></tbody>
         </table>
       </section>
-    </div>
+    </section>
+
+    <section class="tab-panel" id="tab-likes">
+      <section class="panel">
+        <h2>❤️ Likes mais recentes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Quando</th>
+              <th>Notícia</th>
+              <th>Origem</th>
+            </tr>
+          </thead>
+          <tbody id="likesRecentBody"></tbody>
+        </table>
+      </section>
+    </section>
   </div>
 
   <script>
     const database = firebase.database();
+    const noticiasMap = {};
 
     function safeNumber(value) {
       const num = Number(value);
@@ -229,9 +304,39 @@
       });
     }
 
+    function formatDateTime(value) {
+      if (!value) return 'sem data';
+      if (typeof value === 'number') {
+        return new Date(value).toLocaleString('pt-PT');
+      }
+      const maybeDate = new Date(value);
+      if (!Number.isNaN(maybeDate.getTime())) {
+        return maybeDate.toLocaleString('pt-PT');
+      }
+      return String(value);
+    }
+
     function setText(id, value) {
       const el = document.getElementById(id);
       if (el) el.textContent = value;
+    }
+
+    function getNoticiaTitle(noticiaId) {
+      return noticiasMap[String(noticiaId)] || `Notícia ${noticiaId}`;
+    }
+
+    async function carregarNoticiasMap() {
+      try {
+        const response = await fetch('data/noticias.json', { cache: 'no-store' });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!data || !Array.isArray(data.noticias)) return;
+        data.noticias.forEach((item) => {
+          noticiasMap[String(item.id)] = item.titulo || `Notícia ${item.id}`;
+        });
+      } catch (error) {
+        console.warn('Não foi possível carregar mapa de notícias:', error);
+      }
     }
 
     function renderHourlyRows(hourlyTotals = {}, hourlyUnique = {}) {
@@ -249,9 +354,7 @@
         sum += total;
 
         const tr = document.createElement('tr');
-        if (hourKey === currentHour) {
-          tr.style.fontWeight = '700';
-        }
+        if (hourKey === currentHour) tr.style.fontWeight = '700';
 
         const hourCell = document.createElement('td');
         hourCell.textContent = `${hourKey}:00-${hourKey}:59`;
@@ -290,7 +393,6 @@
 
       entries.forEach(([dateKey, count]) => {
         const tr = document.createElement('tr');
-
         const dateCell = document.createElement('td');
         dateCell.textContent = formatDateLabel(dateKey);
 
@@ -303,9 +405,32 @@
       });
     }
 
+    function renderRecentTable(bodyId, rows, emptyText, createCells) {
+      const tbody = document.getElementById(bodyId);
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!rows.length) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 3;
+        td.className = 'empty';
+        td.textContent = emptyText;
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const cells = createCells(row);
+        cells.forEach((cell) => tr.appendChild(cell));
+        tbody.appendChild(tr);
+      });
+    }
+
     function carregarEstatisticas() {
-      const ref = database.ref('site_stats');
-      ref.on('value', (snapshot) => {
+      database.ref('site_stats').on('value', (snapshot) => {
         const stats = snapshot.val() || {};
         const todayKey = formatLocalDateKey(new Date());
 
@@ -316,30 +441,18 @@
 
         const sumFromHourly = renderHourlyRows(hourlyAllMap, hourlyUniqueMap);
         const todayTotal = safeNumber(dailyTotals[todayKey]) || sumFromHourly;
-        const todayUniqueTotal = safeNumber(dailyUnique[todayKey]);
 
         setText('todayTotal', todayTotal.toLocaleString('pt-PT'));
-        setText('todayUnique', todayUniqueTotal.toLocaleString('pt-PT'));
+        setText('todayUnique', safeNumber(dailyUnique[todayKey]).toLocaleString('pt-PT'));
         setText('allTotal', safeNumber(stats.total_visits).toLocaleString('pt-PT'));
         setText('allUnique', safeNumber(stats.unique_total).toLocaleString('pt-PT'));
+        setText('lastUpdate', stats.last_updated ? new Date(stats.last_updated).toLocaleString('pt-PT') : '-');
 
-        if (stats.last_updated) {
-          setText('lastUpdate', new Date(stats.last_updated).toLocaleString('pt-PT'));
-        } else {
-          setText('lastUpdate', '-');
-        }
-
-        const dailyUniqueEntries = Object.entries(dailyUnique)
-          .sort((a, b) => b[0].localeCompare(a[0]))
-          .slice(0, 45);
-
-        const dailyTotalEntries = Object.entries(dailyTotals)
-          .sort((a, b) => b[0].localeCompare(a[0]))
-          .slice(0, 45);
+        const dailyUniqueEntries = Object.entries(dailyUnique).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
+        const dailyTotalEntries = Object.entries(dailyTotals).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
 
         renderDailyTable('dailyUniqueBody', dailyUniqueEntries);
         renderDailyTable('dailyTotalBody', dailyTotalEntries);
-
         setText('hourlyStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
       }, (error) => {
         console.error('Erro ao carregar estatísticas:', error);
@@ -347,17 +460,119 @@
       });
     }
 
-    function resetarEstatisticas() {
-      if (!confirm('⚠️ Confirmar reset completo das estatísticas?')) {
-        return;
-      }
+    function carregarComentariosRecentes() {
+      database.ref('comentarios').on('value', (snapshot) => {
+        const rows = [];
 
-      const statsRef = database.ref('site_stats');
-      const uniqueRef = database.ref('site_unique_views');
-      const clickStatsRef = database.ref('click_stats');
+        snapshot.forEach((noticiaSnap) => {
+          const noticiaId = noticiaSnap.key;
+          noticiaSnap.forEach((comentarioSnap) => {
+            const comentario = comentarioSnap.val() || {};
+            rows.push({
+              noticiaId,
+              nome: comentario.nome || 'Anónimo',
+              texto: comentario.texto || '',
+              timestamp: safeNumber(comentario.timestamp),
+              data: comentario.data || '',
+              tipo: 'Comentário'
+            });
+
+            const respostas = comentario.respostas || {};
+            Object.keys(respostas).forEach((replyId) => {
+              const resposta = respostas[replyId] || {};
+              rows.push({
+                noticiaId,
+                nome: resposta.nome || 'Anónimo',
+                texto: resposta.texto || '',
+                timestamp: safeNumber(resposta.timestamp),
+                data: resposta.data || '',
+                tipo: 'Resposta'
+              });
+
+              const nested = resposta.respostas || {};
+              Object.keys(nested).forEach((nestedId) => {
+                const nestedReply = nested[nestedId] || {};
+                rows.push({
+                  noticiaId,
+                  nome: nestedReply.nome || 'Anónimo',
+                  texto: nestedReply.texto || '',
+                  timestamp: safeNumber(nestedReply.timestamp),
+                  data: nestedReply.data || '',
+                  tipo: 'Resposta aninhada'
+                });
+              });
+            });
+          });
+        });
+
+        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        const limited = rows.slice(0, 80);
+
+        renderRecentTable('commentsRecentBody', limited, 'Sem comentários recentes.', (item) => {
+          const when = document.createElement('td');
+          when.textContent = item.timestamp ? formatDateTime(item.timestamp) : formatDateTime(item.data);
+
+          const news = document.createElement('td');
+          news.textContent = getNoticiaTitle(item.noticiaId);
+
+          const content = document.createElement('td');
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = `${item.tipo} • ${item.nome}`;
+          const text = document.createElement('div');
+          text.textContent = item.texto;
+          content.appendChild(meta);
+          content.appendChild(text);
+
+          return [when, news, content];
+        });
+      }, (error) => {
+        console.error('Erro ao carregar comentários recentes:', error);
+      });
+    }
+
+    function carregarLikesRecentes() {
+      database.ref('likes').on('value', (snapshot) => {
+        const rows = [];
+
+        snapshot.forEach((noticiaSnap) => {
+          const noticiaId = noticiaSnap.key;
+          noticiaSnap.forEach((likeSnap) => {
+            const likeVal = likeSnap.val();
+            const timestamp = likeVal && typeof likeVal === 'object' ? safeNumber(likeVal.timestamp) : 0;
+            rows.push({
+              noticiaId,
+              source: likeSnap.key || 'utilizador',
+              timestamp
+            });
+          });
+        });
+
+        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        const limited = rows.slice(0, 80);
+
+        renderRecentTable('likesRecentBody', limited, 'Sem likes recentes.', (item) => {
+          const when = document.createElement('td');
+          when.textContent = item.timestamp ? formatDateTime(item.timestamp) : 'sem timestamp';
+
+          const news = document.createElement('td');
+          news.textContent = getNoticiaTitle(item.noticiaId);
+
+          const source = document.createElement('td');
+          source.textContent = item.source;
+
+          return [when, news, source];
+        });
+      }, (error) => {
+        console.error('Erro ao carregar likes recentes:', error);
+      });
+    }
+
+    function resetarEstatisticas() {
+      if (!confirm('⚠️ Confirmar reset completo das estatísticas?')) return;
 
       Promise.all([
-        statsRef.set({
+        database.ref('site_stats').set({
           total_visits: 0,
           daily: {},
           monthly: {},
@@ -369,8 +584,8 @@
           pages: {},
           last_updated: new Date().toISOString()
         }),
-        uniqueRef.remove(),
-        clickStatsRef.remove()
+        database.ref('site_unique_views').remove(),
+        database.ref('click_stats').remove()
       ]).then(() => {
         alert('✅ Estatísticas resetadas.');
       }).catch((error) => {
@@ -380,9 +595,7 @@
 
     function initTheme() {
       const body = document.body;
-      if (localStorage.getItem('theme') === 'dark') {
-        body.classList.add('dark');
-      }
+      if (localStorage.getItem('theme') === 'dark') body.classList.add('dark');
 
       const btn = document.getElementById('themeBtn');
       if (btn) {
@@ -393,9 +606,30 @@
       }
     }
 
+    function initTabs() {
+      const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+      const panels = Array.from(document.querySelectorAll('.tab-panel'));
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const tab = button.dataset.tab;
+          buttons.forEach((item) => item.classList.remove('active'));
+          panels.forEach((panel) => panel.classList.remove('active'));
+          button.classList.add('active');
+          const target = document.getElementById(`tab-${tab}`);
+          if (target) target.classList.add('active');
+        });
+      });
+    }
+
     document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
     initTheme();
-    carregarEstatisticas();
+    initTabs();
+    carregarNoticiasMap().finally(() => {
+      carregarEstatisticas();
+      carregarComentariosRecentes();
+      carregarLikesRecentes();
+    });
   </script>
 </body>
 </html>
