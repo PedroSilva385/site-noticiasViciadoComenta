@@ -9,11 +9,14 @@ if (-not (Test-Path $deployScript)) {
     throw "deploy.ps1 nao encontrado em: $deployScript"
 }
 
-$debounceSeconds = 8
+$debounceSeconds = 75
 
 $state = [hashtable]::Synchronized(@{
     lastRun = [datetime]::MinValue
+    lastChange = [datetime]::MinValue
     running = $false
+    scheduled = $false
+    pending = $false
     deployScript = $deployScript
     debounceSeconds = $debounceSeconds
 })
@@ -25,23 +28,11 @@ $watcher.IncludeSubdirectories = $false
 $watcher.NotifyFilter = [IO.NotifyFilters]'LastWrite, FileName, CreationTime, Size'
 $watcher.EnableRaisingEvents = $true
 
-$action = {
-    param($sender, $eventArgs)
-
-    $sharedState = $event.MessageData
-    $now = Get-Date
-
-    if ($sharedState.running) {
-        return
-    }
-
-    $elapsed = ($now - $sharedState.lastRun).TotalSeconds
-    if ($elapsed -lt $sharedState.debounceSeconds) {
-        return
-    }
+$invokeDeploy = {
+    param($sharedState)
 
     $sharedState.running = $true
-    $sharedState.lastRun = $now
+    $sharedState.lastRun = Get-Date
 
     try {
         Write-Host "`n[WATCHER] Alteracao detectada em data/noticias.json. A executar deploy..." -ForegroundColor Cyan
@@ -64,12 +55,55 @@ $action = {
     }
 }
 
+$state.invokeDeploy = $invokeDeploy
+
+$action = {
+    param($sender, $eventArgs)
+
+    $sharedState = $event.MessageData
+    $sharedState.lastChange = Get-Date
+
+    if ($sharedState.running) {
+        $sharedState.pending = $true
+        return
+    }
+
+    if ($sharedState.scheduled) {
+        return
+    }
+
+    $sharedState.scheduled = $true
+
+    try {
+        while ($true) {
+            while (((Get-Date) - $sharedState.lastChange).TotalSeconds -lt $sharedState.debounceSeconds) {
+                Start-Sleep -Seconds 1
+            }
+
+            if ($sharedState.running) {
+                $sharedState.pending = $true
+                return
+            }
+
+            & $sharedState.invokeDeploy $sharedState
+
+            if (-not $sharedState.pending) {
+                break
+            }
+
+            $sharedState.pending = $false
+        }
+    } finally {
+        $sharedState.scheduled = $false
+    }
+}
+
 $eventChanged = Register-ObjectEvent -InputObject $watcher -EventName Changed -Action $action -MessageData $state
 $eventCreated = Register-ObjectEvent -InputObject $watcher -EventName Created -Action $action -MessageData $state
 $eventRenamed = Register-ObjectEvent -InputObject $watcher -EventName Renamed -Action $action -MessageData $state
 
 Write-Host "Watcher ativo para data/noticias.json" -ForegroundColor Yellow
-Write-Host "Sempre que guardar noticias.json, deploy.ps1 sera executado automaticamente." -ForegroundColor Yellow
+Write-Host "Deploy automatico com debounce de $debounceSeconds segundos apos a ultima alteracao." -ForegroundColor Yellow
 Write-Host "Para parar: Ctrl+C neste terminal." -ForegroundColor Yellow
 
 try {
