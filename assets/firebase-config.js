@@ -22,8 +22,39 @@ const ANALYTICS_CONFIG = {
   ipEndpoints: [
     'https://api64.ipify.org?format=json',
     'https://api.ipify.org?format=json'
-  ]
+  ],
+  optOutStorageKey: 'vc_analytics_opt_out'
 };
+
+function readAnalyticsPreferenceFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search || '');
+
+    if (params.has('naoContarAcessos')) {
+      const raw = (params.get('naoContarAcessos') || '').toLowerCase();
+      const shouldDisable = raw === '1' || raw === 'true' || raw === 'sim' || raw === 'on';
+      localStorage.setItem(ANALYTICS_CONFIG.optOutStorageKey, shouldDisable ? '1' : '0');
+    }
+  } catch (error) {
+    console.warn('⚠️ Não foi possível ler preferência de analytics da URL:', error);
+  }
+}
+
+function shouldSkipAnalyticsTracking() {
+  readAnalyticsPreferenceFromUrl();
+
+  const hostname = (window.location.hostname || '').toLowerCase();
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return true;
+  }
+
+  const path = (window.location.pathname || '').toLowerCase();
+  if (path.endsWith('/estatisticas.html') || path.endsWith('estatisticas.html')) {
+    return true;
+  }
+
+  return localStorage.getItem(ANALYTICS_CONFIG.optOutStorageKey) === '1';
+}
 
 function sanitizeFirebaseKey(rawValue) {
   if (!rawValue) return 'unknown';
@@ -353,6 +384,11 @@ function initializeFirebaseApp() {
 
       // Analytics de visitas após inicialização
       try {
+        if (shouldSkipAnalyticsTracking()) {
+          console.log('ℹ️ Tracking de analytics desativado para este navegador/dispositivo');
+          return;
+        }
+
         const db = firebase.database();
         getVisitorFingerprint()
           .then((visitorHash) => {

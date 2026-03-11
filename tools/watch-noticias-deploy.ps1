@@ -9,7 +9,7 @@ if (-not (Test-Path $deployScript)) {
     throw "deploy.ps1 nao encontrado em: $deployScript"
 }
 
-$debounceSeconds = 75
+$debounceSeconds = 10
 
 $state = [hashtable]::Synchronized(@{
     lastRun = [datetime]::MinValue
@@ -73,6 +73,7 @@ $action = {
     }
 
     $sharedState.scheduled = $true
+    Write-Host "[WATCHER] Alteracao detectada em data/noticias.json. A aguardar $($sharedState.debounceSeconds)s sem novas alteracoes..." -ForegroundColor DarkCyan
 
     try {
         while ($true) {
