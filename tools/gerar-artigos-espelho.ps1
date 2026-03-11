@@ -141,6 +141,7 @@ $noticias = @($data.noticias)
 $now = Get-Date
 $usedSlugs = @{}
 $generatedArticles = @()
+$jsonUpdated = $false
 
 foreach ($noticia in $noticias) {
     $publishDate = Parse-DataPublicacao -DataStr $noticia.dataPublicacao
@@ -165,6 +166,27 @@ foreach ($noticia in $noticias) {
     $content = $template
 
     $articleUrl = "https://www.viciadocomenta.pt/artigos/$slug.html"
+
+    $currentSlug = if ($noticia.PSObject.Properties.Name -contains 'slug') { [string]$noticia.slug } else { '' }
+    if ($currentSlug -ne $slug) {
+        if ($noticia.PSObject.Properties.Name -contains 'slug') {
+            $noticia.slug = $slug
+        } else {
+            Add-Member -InputObject $noticia -NotePropertyName 'slug' -NotePropertyValue $slug
+        }
+        $jsonUpdated = $true
+    }
+
+    $currentLink = if ($noticia.PSObject.Properties.Name -contains 'link') { [string]$noticia.link } else { '' }
+    if ($currentLink -ne $articleUrl) {
+        if ($noticia.PSObject.Properties.Name -contains 'link') {
+            $noticia.link = $articleUrl
+        } else {
+            Add-Member -InputObject $noticia -NotePropertyName 'link' -NotePropertyValue $articleUrl
+        }
+        $jsonUpdated = $true
+    }
+
     $rawTitle = [string]$noticia.titulo
     $metaDescription = Get-MetaDescription -Noticia $noticia
     $publishedDateIso = if ($publishDate) {
@@ -321,6 +343,14 @@ foreach ($article in $generatedArticles) {
 $sitemapLines += '</urlset>'
 [System.IO.File]::WriteAllText($sitemapPath, ($sitemapLines -join "`n"), [System.Text.UTF8Encoding]::new($false))
 
+if ($jsonUpdated) {
+    $updatedJson = $data | ConvertTo-Json -Depth 100
+    [System.IO.File]::WriteAllText($jsonPath, $updatedJson, [System.Text.UTF8Encoding]::new($false))
+}
+
 Write-Output "Artigos espelho gerados: $($generatedArticles.Count)"
 Write-Output "Diretório: $artigosDir"
 Write-Output "Sitemap atualizado: $sitemapPath"
+if ($jsonUpdated) {
+    Write-Output "noticias.json sincronizado com slug/link"
+}

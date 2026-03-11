@@ -25,6 +25,55 @@ function filtrarNoticiasPublicadas(noticias) {
   });
 }
 
+function normalizarSlug(valor) {
+  if (!valor || typeof valor !== 'string') return '';
+
+  return valor
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+function getArticleSlug(noticia) {
+  if (!noticia || typeof noticia !== 'object') return '';
+
+  if (typeof noticia.slug === 'string' && noticia.slug.trim()) {
+    return normalizarSlug(noticia.slug.trim());
+  }
+
+  return normalizarSlug(noticia.titulo || '');
+}
+
+function obterNoticiaSolicitadaDaURL(noticias) {
+  if (!Array.isArray(noticias) || typeof window === 'undefined') return null;
+
+  const pathname = window.location && typeof window.location.pathname === 'string'
+    ? window.location.pathname
+    : '';
+
+  if (!/\/artigos\/[^/]+\.html$/i.test(pathname)) {
+    return null;
+  }
+
+  const searchParams = new URLSearchParams(window.location.search || '');
+  const id = searchParams.get('id');
+  const slug = normalizarSlug(searchParams.get('slug') || '');
+
+  if (!id && !slug) {
+    return null;
+  }
+
+  return noticias.find((noticia) => {
+    const idMatch = id && String(noticia.id) === String(id);
+    const slugMatch = slug && getArticleSlug(noticia) === slug;
+    return idMatch || slugMatch;
+  }) || null;
+}
+
 /**
  * Converte string de data para objeto Date
  * Formatos aceites: "DD/MM/YYYY HH:MM" ou "DD/MM/YYYY"
@@ -90,7 +139,13 @@ async function fetchNoticiasAgendadas(url) {
   const data = await response.json();
   
   if (data.noticias && Array.isArray(data.noticias)) {
+    const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
     data.noticias = filtrarNoticiasPublicadas(data.noticias);
+
+    if (noticiaSolicitada && !data.noticias.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
+      data.noticias.unshift(noticiaSolicitada);
+    }
+
     data.noticias = ordenarNoticiasPorData(data.noticias);
   }
   
