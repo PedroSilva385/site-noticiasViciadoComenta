@@ -267,6 +267,18 @@
                          "video":  "teste2",
                          "slug":  "teste2",
                          "link":  "https://www.viciadocomenta.pt/artigos/teste2.html"
+                     },
+                     {
+                         "id":  "22",
+                         "titulo":  "teste3",
+                         "data":  "11/03/2026",
+                         "autor":  "Pedro Silva",
+                         "categoria":  "DIGI",
+                         "resumo":  "teste3",
+                         "conteudo":  "teste3",
+                         "video":  "teste3",
+                         "slug":  "teste3",
+                         "link":  "https://www.viciadocomenta.pt/artigos/teste3.html"
                      }
                  ]
 }
