@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vídeos Studio</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1f3b73 0%, #4b2a7b 100%); color: #1f2937; min-height: 100vh; padding: 20px; }
+.container { max-width: 1280px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 25px 60px rgba(0,0,0,.28); padding: 24px; }
+h1 { font-size: 1.9rem; margin-bottom: 6px; color: #111827; }
+.subtitle { color: #4b5563; margin-bottom: 18px; }
+.notice { background: #eef2ff; border-left: 4px solid #4f46e5; border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; color: #1f2937; }
+.grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 14px; }
+.panel { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; background: #fff; }
+.panel h2 { font-size: 1.05rem; margin-bottom: 10px; color: #111827; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+label { font-size: .86rem; color: #374151; font-weight: 600; margin-bottom: 5px; display: block; }
+input, select, textarea { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 9px 10px; font-family: inherit; font-size: .92rem; }
+textarea { min-height: 110px; resize: vertical; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+button { border: none; border-radius: 8px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+.btn-primary { background: #4f46e5; color: #fff; }
+.btn-secondary { background: #1f2937; color: #fff; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-warning { background: #d97706; color: #fff; }
+.btn-danger { background: #dc2626; color: #fff; }
+button:hover { filter: brightness(.95); }
+.status { margin-top: 10px; border-radius: 8px; padding: 10px 12px; font-weight: 600; display: none; }
+.status.ok { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.status.err { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.status.info { display: block; background: #e0f2fe; color: #0c4a6e; border: 1px solid #bae6fd; }
+.list-wrap { max-height: 540px; overflow: auto; border: 1px solid #e5e7eb; border-radius: 10px; padding: 8px; background: #f9fafb; }
+.video-item { border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; padding: 10px; margin-bottom: 8px; }
+.video-url { font-size: .86rem; word-break: break-all; color: #374151; margin-bottom: 6px; }
+.video-meta { font-size: .82rem; color: #6b7280; margin-bottom: 8px; }
+.log { min-height: 120px; background: #f9fafb; }
+@media (max-width: 980px) {
+  .grid { grid-template-columns: 1fr; }
+  .row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎬 Vídeos Studio</h1>
+  <p class="subtitle">Adicionar e gerir vídeos das várias páginas no mesmo painel.</p>
+
+  <div class="notice">
+    Abre por <strong>http://localhost:8787/tools/videos-studio.html</strong>.<br>
+    Para iniciar o servidor: <strong>iniciar-noticias-studio.cmd</strong>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>1) Seleção e novo vídeo</h2>
+
+      <div>
+        <label for="targetSelect">Destino</label>
+        <select id="targetSelect">
+          <option value="viciado-comenta">Viciado Comenta (lista por data)</option>
+          <option value="viciado-ponto-critico">Viciado Ponto Crítico (lista por data)</option>
+          <option value="metin2">Metin2 (séries)</option>
+          <option value="featured">Vídeo em destaque (único)</option>
+        </select>
+      </div>
+
+      <div id="serieWrap" style="margin-top:10px; display:none;">
+        <label for="serieSelect">Série (apenas Metin2)</label>
+        <select id="serieSelect"></select>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <div>
+          <label for="videoUrl">URL do vídeo</label>
+          <input id="videoUrl" type="text" placeholder="https://youtu.be/...">
+        </div>
+        <div>
+          <label for="videoData">Data (AAAA-MM-DD)</label>
+          <input id="videoData" type="date">
+        </div>
+      </div>
+
+      <div id="videoRows"></div>
+
+      <div class="actions" style="margin-top:8px;">
+        <button class="btn-warning" id="btnNovaOpcao" type="button">➕ Nova opção URL + Data</button>
+      </div>
+
+      <div id="featuredFields" style="display:none; margin-top:10px;">
+        <div class="row">
+          <div>
+            <label for="featuredTitulo">Título</label>
+            <input id="featuredTitulo" type="text" placeholder="Título do destaque">
+          </div>
+          <div>
+            <label for="featuredCta">CTA</label>
+            <input id="featuredCta" type="text" placeholder="Ver no YouTube">
+          </div>
+        </div>
+        <div>
+          <label for="featuredDescricao">Descrição</label>
+          <textarea id="featuredDescricao" placeholder="Descrição opcional"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-secondary" id="btnVerificar">🟢 Verificar servidor</button>
+        <button class="btn-primary" id="btnRecarregar">🔃 Recarregar destino</button>
+        <button class="btn-success" id="btnAdicionar">➕ Adicionar vídeo</button>
+      </div>
+
+      <hr style="margin:14px 0; border:none; border-top:1px solid #e5e7eb;">
+
+      <div class="actions">
+        <button class="btn-primary" id="btnGuardar">💾 Guardar JSON de vídeos</button>
+        <button class="btn-success" id="btnPublicar">🚀 Publicar (deploy)</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label for="logSaida">Saída / log</label>
+        <textarea id="logSaida" class="log" readonly></textarea>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>2) Lista atual</h2>
+      <div class="list-wrap" id="listaVideos"></div>
+    </section>
+  </div>
+
+  <div id="status" class="status info">A iniciar...</div>
+</div>
+
+<script>
+const API_BASE = 'http://localhost:8787';
+let currentTarget = 'viciado-comenta';
+let videosData = null;
+
+function createVideoOptionRow(url = '', data = '') {
+  const row = document.createElement('div');
+  row.className = 'row video-option-row';
+  row.style.marginTop = '8px';
+
+  const uniqueId = `opt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
+  row.innerHTML = `
+    <div>
+      <label for="videoUrl_${uniqueId}">URL do vídeo (opção)</label>
+      <input id="videoUrl_${uniqueId}" class="video-url-extra" type="text" placeholder="https://youtu.be/..." value="${url}">
+    </div>
+    <div>
+      <label for="videoData_${uniqueId}">Data (AAAA-MM-DD)</label>
+      <input id="videoData_${uniqueId}" class="video-data-extra" type="date" value="${data}">
+      <div class="actions" style="margin-top:6px;">
+        <button class="btn-danger btn-remover-opcao" type="button">Remover opção</button>
+      </div>
+    </div>
+  `;
+
+  const removeBtn = row.querySelector('.btn-remover-opcao');
+  removeBtn.addEventListener('click', () => {
+    row.remove();
+  });
+
+  return row;
+}
+
+function getVideoEntriesFromForm() {
+  const entries = [];
+
+  const baseUrl = document.getElementById('videoUrl').value.trim();
+  const baseData = document.getElementById('videoData').value.trim();
+  if (baseUrl) {
+    entries.push({ url: baseUrl, data: baseData });
+  }
+
+  document.querySelectorAll('.video-option-row').forEach((row) => {
+    const urlInput = row.querySelector('.video-url-extra');
+    const dataInput = row.querySelector('.video-data-extra');
+    const rowUrl = (urlInput && urlInput.value ? urlInput.value : '').trim();
+    const rowData = (dataInput && dataInput.value ? dataInput.value : '').trim();
+    if (rowUrl) {
+      entries.push({ url: rowUrl, data: rowData });
+    }
+  });
+
+  return entries;
+}
+
+function limparFormularioVideo() {
+  const urlInput = document.getElementById('videoUrl');
+  const dataInput = document.getElementById('videoData');
+  if (urlInput) urlInput.value = '';
+  if (dataInput) dataInput.value = '';
+
+  const featuredTitulo = document.getElementById('featuredTitulo');
+  const featuredDescricao = document.getElementById('featuredDescricao');
+  const featuredCta = document.getElementById('featuredCta');
+  if (featuredTitulo) featuredTitulo.value = '';
+  if (featuredDescricao) featuredDescricao.value = '';
+  if (featuredCta) featuredCta.value = '';
+
+  const rowsWrap = document.getElementById('videoRows');
+  if (rowsWrap) rowsWrap.innerHTML = '';
+}
+
+function setStatus(message, type = 'info') {
+  const el = document.getElementById('status');
+  el.className = `status ${type}`;
+  el.textContent = message;
+}
+
+function safeJsonParse(text, endpointLabel) {
+  try { return JSON.parse(text); }
+  catch (error) { throw new Error(`JSON inválido em ${endpointLabel}: ${error.message}`); }
+}
+
+async function apiRequest(path, options = {}) {
+  const urls = [path];
+  if (!/^https?:\/\//i.test(path)) urls.push(`${API_BASE}${path}`);
+
+  let lastError = null;
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, options);
+      const text = await response.text();
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.includes('application/json')) {
+        throw new Error('Resposta não-JSON da API.');
+      }
+      return { payload: safeJsonParse(text, url), url };
+    } catch (error) {
+      const msg = String(error.message || '');
+      if (/failed to fetch|networkerror|load failed|cors/i.test(msg)) {
+        lastError = new Error('Servidor offline. Executa iniciar-noticias-studio.cmd e volta a tentar.');
+      } else {
+        lastError = error;
+      }
+    }
+  }
+  throw lastError || new Error('Falha ao comunicar com API.');
+}
+
+function normalizeByTarget(target, raw) {
+  if (target === 'featured') {
+    return (raw && typeof raw === 'object') ? raw : { url: '', titulo: '', descricao: '', cta: 'Ver no YouTube' };
+  }
+  if (target === 'metin2') {
+    return (raw && typeof raw === 'object') ? raw : { serie_rl2: [], analise_2024: [] };
+  }
+  if (raw && typeof raw === 'object' && Array.isArray(raw.value)) {
+    return raw.value;
+  }
+  return Array.isArray(raw) ? raw : [];
+}
+
+function updateTargetUI() {
+  const target = document.getElementById('targetSelect').value;
+  const isFeatured = target === 'featured';
+  const isMetin2 = target === 'metin2';
+
+  document.getElementById('featuredFields').style.display = isFeatured ? 'block' : 'none';
+  document.getElementById('serieWrap').style.display = isMetin2 ? 'block' : 'none';
+
+  document.getElementById('videoData').disabled = isFeatured || isMetin2;
+  document.getElementById('videoData').value = '';
+
+  document.querySelectorAll('.video-data-extra').forEach((el) => {
+    el.disabled = isFeatured || isMetin2;
+    if (isFeatured || isMetin2) {
+      el.value = '';
+    }
+  });
+
+  if (isMetin2) {
+    refreshSerieSelect();
+  }
+}
+
+function refreshSerieSelect() {
+  const select = document.getElementById('serieSelect');
+  const obj = (videosData && typeof videosData === 'object') ? videosData : {};
+  const keys = Object.keys(obj);
+
+  select.innerHTML = '';
+  if (!keys.length) {
+    ['serie_rl2'].forEach((key) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = key;
+      select.appendChild(option);
+    });
+    return;
+  }
+
+  keys.forEach((key) => {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = key;
+    select.appendChild(option);
+  });
+}
+
+function renderList() {
+  const wrap = document.getElementById('listaVideos');
+  wrap.innerHTML = '';
+
+  if (currentTarget === 'featured') {
+    const item = document.createElement('div');
+    item.className = 'video-item';
+    item.innerHTML = `
+      <div class="video-url">${videosData.url || '(sem URL)'}</div>
+      <div class="video-meta">Título: ${videosData.titulo || '(vazio)'}</div>
+      <div class="video-meta">CTA: ${videosData.cta || '(vazio)'}</div>
+    `;
+    wrap.appendChild(item);
+    return;
+  }
+
+  if (currentTarget === 'metin2') {
+    const keys = Object.keys(videosData || {});
+    if (!keys.length) {
+      wrap.innerHTML = '<div class="video-item">Sem dados.</div>';
+      return;
+    }
+
+    keys.forEach((serie) => {
+      const title = document.createElement('div');
+      title.className = 'video-item';
+      title.innerHTML = `<div class="video-meta"><strong>${serie}</strong> (${(videosData[serie] || []).length})</div>`;
+      wrap.appendChild(title);
+
+      (videosData[serie] || []).forEach((url, index) => {
+        const item = document.createElement('div');
+        item.className = 'video-item';
+        item.innerHTML = `<div class="video-url">${url}</div>`;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'btn-danger';
+        removeBtn.textContent = 'Remover';
+        removeBtn.onclick = () => {
+          videosData[serie].splice(index, 1);
+          renderList();
+        };
+        item.appendChild(removeBtn);
+        wrap.appendChild(item);
+      });
+    });
+    return;
+  }
+
+  if (!Array.isArray(videosData) || !videosData.length) {
+    wrap.innerHTML = '<div class="video-item">Sem vídeos neste destino.</div>';
+    return;
+  }
+
+  videosData.forEach((video, index) => {
+    const item = document.createElement('div');
+    item.className = 'video-item';
+    item.innerHTML = `
+      <div class="video-url">${video.url || '(sem URL)'}</div>
+      <div class="video-meta">Data: ${video.data || '(sem data)'}</div>
+    `;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn-danger';
+    removeBtn.textContent = 'Remover';
+    removeBtn.onclick = () => {
+      videosData.splice(index, 1);
+      renderList();
+    };
+    item.appendChild(removeBtn);
+    wrap.appendChild(item);
+  });
+}
+
+async function carregarDestino() {
+  currentTarget = document.getElementById('targetSelect').value;
+  setStatus('A carregar dados de vídeos...', 'info');
+
+  const { payload } = await apiRequest(`/api/videos/load?target=${encodeURIComponent(currentTarget)}`);
+  if (!payload.ok) {
+    throw new Error(payload.error || 'Falha ao carregar dados.');
+  }
+
+  videosData = normalizeByTarget(currentTarget, payload.data);
+  updateTargetUI();
+  renderList();
+  setStatus(`Dados carregados: ${currentTarget}.`, 'ok');
+}
+
+function adicionarVideo() {
+  if (!videosData) {
+    setStatus('Carrega primeiro o destino de vídeos.', 'err');
+    return false;
+  }
+
+  const entries = getVideoEntriesFromForm();
+  if (!entries.length) {
+    setStatus('Indica a URL do vídeo.', 'err');
+    return false;
+  }
+
+  if (currentTarget === 'featured') {
+    const featuredUrl = entries[0].url;
+    if (!featuredUrl) {
+      setStatus('No destaque, indica uma URL válida.', 'err');
+      return false;
+    }
+
+    videosData.url = featuredUrl;
+    videosData.titulo = document.getElementById('featuredTitulo').value.trim();
+    videosData.descricao = document.getElementById('featuredDescricao').value.trim();
+    videosData.cta = document.getElementById('featuredCta').value.trim() || 'Ver no YouTube';
+    renderList();
+    setStatus(entries.length > 1 ? 'Destaque atualizado (apenas a 1.ª opção foi usada).' : 'Vídeo em destaque atualizado em memória.', 'ok');
+    limparFormularioVideo();
+    return true;
+  }
+
+  if (currentTarget === 'metin2') {
+    const serie = document.getElementById('serieSelect').value || 'serie_rl2';
+    if (!Array.isArray(videosData[serie])) videosData[serie] = [];
+
+    const urls = entries.map((item) => item.url).filter(Boolean);
+    videosData[serie].unshift(...urls);
+    renderList();
+    setStatus(`${urls.length} vídeo(s) adicionados à série ${serie}.`, 'ok');
+    limparFormularioVideo();
+    return true;
+  }
+
+  const semData = entries.some((item) => !item.data);
+  if (semData) {
+    setStatus('Indica a data (AAAA-MM-DD) em cada opção de vídeo.', 'err');
+    return false;
+  }
+
+  videosData.unshift(...entries.map((item) => ({ url: item.url, data: item.data })));
+  renderList();
+  setStatus(`${entries.length} vídeo(s) adicionados em memória.`, 'ok');
+  limparFormularioVideo();
+  return true;
+}
+
+async function guardarDestino() {
+  if (!videosData) {
+    setStatus('Nada para guardar. Carrega primeiro.', 'err');
+    return;
+  }
+
+  const entriesPendentes = getVideoEntriesFromForm();
+  if (entriesPendentes.length > 0) {
+    const added = adicionarVideo();
+    if (!added) {
+      throw new Error('Não foi possível adicionar os dados preenchidos antes de guardar.');
+    }
+  }
+
+  const selectedTarget = document.getElementById('targetSelect').value;
+  if (selectedTarget !== currentTarget) {
+    currentTarget = selectedTarget;
+  }
+
+  setStatus('A guardar ficheiro de vídeos...', 'info');
+  const { payload } = await apiRequest(`/api/videos/save?target=${encodeURIComponent(selectedTarget)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(videosData)
+  });
+
+  if (!payload.ok) {
+    throw new Error(payload.error || 'Falha ao guardar vídeos.');
+  }
+
+  const savedFile = payload.file || '(ficheiro não identificado)';
+  document.getElementById('logSaida').value = `${payload.message || 'Ficheiro guardado.'}\nDestino: ${payload.target || selectedTarget}\nFicheiro: ${savedFile}`;
+  setStatus('Ficheiro de vídeos guardado com sucesso.', 'ok');
+}
+
+async function publicar() {
+  await guardarDestino();
+
+  setStatus('A executar deploy...', 'info');
+  const { payload } = await apiRequest('/api/publish', { method: 'POST' });
+
+  document.getElementById('logSaida').value = payload.output || payload.message || '';
+  if (!payload.ok) throw new Error(payload.error || 'Deploy falhou.');
+
+  setStatus('Deploy concluído com sucesso.', 'ok');
+}
+
+async function verificarServidor() {
+  try {
+    await apiRequest('/api/noticias', { method: 'GET' });
+    setStatus('Servidor online.', 'ok');
+  } catch (error) {
+    setStatus('Servidor offline. Executa iniciar-noticias-studio.cmd.', 'err');
+  }
+}
+
+function bindEvents() {
+  document.getElementById('btnNovaOpcao').addEventListener('click', () => {
+    const rowsWrap = document.getElementById('videoRows');
+    rowsWrap.appendChild(createVideoOptionRow());
+    updateTargetUI();
+  });
+
+  document.getElementById('targetSelect').addEventListener('change', async () => {
+    try { await carregarDestino(); }
+    catch (error) { setStatus(error.message, 'err'); }
+  });
+
+  document.getElementById('btnVerificar').addEventListener('click', verificarServidor);
+  document.getElementById('btnRecarregar').addEventListener('click', async () => {
+    try { await carregarDestino(); }
+    catch (error) { setStatus(error.message, 'err'); }
+  });
+
+  document.getElementById('btnAdicionar').addEventListener('click', adicionarVideo);
+  document.getElementById('btnGuardar').addEventListener('click', async () => {
+    try { await guardarDestino(); }
+    catch (error) { setStatus(error.message, 'err'); }
+  });
+
+  document.getElementById('btnPublicar').addEventListener('click', async () => {
+    try { await publicar(); }
+    catch (error) { setStatus(error.message, 'err'); }
+  });
+}
+
+(async function init() {
+  bindEvents();
+
+  if (!(window.location.origin || '').includes('localhost:8787')) {
+    setStatus('Abre esta tool por http://localhost:8787/tools/videos-studio.html', 'info');
+  }
+
+  try {
+    await carregarDestino();
+  } catch (error) {
+    setStatus(error.message, 'err');
+  }
+})();
+</script>
+</body>
+</html>

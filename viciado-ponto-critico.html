@@ -537,10 +537,38 @@ class VideoWatchTracker {
 
 const tracker = new VideoWatchTracker();
 
+function extrairYouTubeId(url) {
+  if (!url || typeof url !== 'string') return '';
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+
+    if (host === 'youtu.be') {
+      return (parsed.pathname.split('/').filter(Boolean)[0] || '').trim();
+    }
+
+    if (host.endsWith('youtube.com')) {
+      const v = parsed.searchParams.get('v');
+      if (v) return v.trim();
+
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      const markerIndex = parts.findIndex((part) => ['embed', 'live', 'shorts'].includes(part));
+      if (markerIndex >= 0 && parts[markerIndex + 1]) {
+        return parts[markerIndex + 1].trim();
+      }
+    }
+  } catch (e) {
+  }
+
+  const fallback = String(url).match(/(?:v=|youtu\.be\/|embed\/|live\/|shorts\/)([A-Za-z0-9_-]{6,})/i);
+  return fallback ? fallback[1] : '';
+}
+
 // Carregar vídeos do ficheiro JSON
 async function carregarVideos() {
   try {
-    const response = await fetch('data/viciado-ponto-critico-videos.json');
+    const response = await fetch('data/viciado-ponto-critico-videos.json', { cache: 'no-store' });
     let videos = await response.json();
     
     const grid = document.getElementById('miniaturas-grid');
@@ -561,21 +589,11 @@ async function carregarVideos() {
     // Ordenar por data descrescente (mais recentes primeiro)
     videos.sort((a, b) => new Date(b.data) - new Date(a.data));
     
-    grid.innerHTML = videos.map((video, index) => {
+    const cards = videos.map((video, index) => {
       const url = video.url || video;
-      
-      // Extrair ID do vídeo do YouTube da URL
-      let videoId = '';
-      
-      // Suporta diferentes formatos de URL do YouTube
-      if (url.includes('watch?v=')) {
-        videoId = url.split('watch?v=')[1].split('&')[0];
-      } else if (url.includes('youtu.be/')) {
-        videoId = url.split('youtu.be/')[1].split('?')[0];
-      } else if (url.includes('embed/')) {
-        videoId = url.split('embed/')[1].split('?')[0];
-      } else if (url.includes('/live/')) {
-        videoId = url.split('/live/')[1].split('?')[0];
+      const videoId = extrairYouTubeId(url);
+      if (!videoId) {
+        return '';
       }
       
       const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
@@ -597,7 +615,14 @@ async function carregarVideos() {
           </a>
         </div>
       `;
-    }).join('');
+    }).filter(Boolean);
+
+    if (!cards.length) {
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Sem vídeos válidos para mostrar. Confirma se as URLs são do YouTube.</p>';
+      return;
+    }
+
+    grid.innerHTML = cards.join('');
     
   } catch (error) {
     console.error('Erro ao carregar vídeos:', error);
