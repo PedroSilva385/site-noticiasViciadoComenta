@@ -2011,7 +2011,11 @@ function formatArticleContent(rawContent) {
 }
 
 function canUseLiveEditor() {
-  return true;
+  const params = new URLSearchParams(window.location.search);
+  const editEnabled = params.get('edit') === '1';
+  const host = (window.location.hostname || '').toLowerCase();
+  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  return editEnabled && isLocalHost;
 }
 
 let studioApiBaseCache = null;
