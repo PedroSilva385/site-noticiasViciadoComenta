@@ -540,6 +540,94 @@ body.dark .artigo-share-label {
   color: white;
 }
 
+.artigos-relacionados {
+  margin: 40px 0 10px;
+}
+
+.relacionados-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 18px;
+}
+
+.relacionados-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.relacionado-card {
+  display: block;
+  text-decoration: none;
+  background: #ffffff;
+  border: 1px solid #e0e8f5;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.25s ease;
+}
+
+.relacionado-card:hover {
+  transform: translateY(-3px);
+  border-color: #0066cc;
+  box-shadow: 0 8px 18px rgba(0, 102, 204, 0.12);
+}
+
+.relacionado-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 0.78em;
+  color: #5a6b7f;
+}
+
+.relacionado-categoria {
+  color: #0066cc;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.relacionado-titulo {
+  font-size: 1.02em;
+  line-height: 1.35;
+  color: #1a1f3a;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.relacionado-link {
+  font-size: 0.88em;
+  color: #0066cc;
+  font-weight: 600;
+}
+
+body.dark .relacionados-title,
+body.dark .relacionado-titulo {
+  color: #f3f4f6;
+}
+
+body.dark .relacionado-card {
+  background: #1a2332;
+  border-color: #2d3748;
+}
+
+body.dark .relacionado-card:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 8px 18px rgba(14, 165, 233, 0.16);
+}
+
+body.dark .relacionado-meta {
+  color: #9ca3af;
+}
+
+body.dark .relacionado-categoria,
+body.dark .relacionado-link {
+  color: #60a5fa;
+}
+
 .live-edit-tools {
   display: flex;
   gap: 10px;
@@ -1971,6 +2059,59 @@ function buildArticleUrlByData(noticia) {
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
 
+function parseNoticiaDateForSort(data) {
+  if (!data || typeof data !== 'string') return 0;
+  const [dia, mes, ano] = data.split('/').map(Number);
+  if (!dia || !mes || !ano) return 0;
+  return new Date(ano, mes - 1, dia).getTime() || 0;
+}
+
+function getRelatedNoticias(currentNoticia, noticias, limit = 3) {
+  if (!currentNoticia || !Array.isArray(noticias)) return [];
+
+  const currentId = String(currentNoticia.id || '');
+  const currentCategoria = String(currentNoticia.categoria || '').toLowerCase();
+
+  const others = noticias.filter((item) => String(item.id) !== currentId);
+
+  const sortedByDate = others
+    .slice()
+    .sort((a, b) => parseNoticiaDateForSort(b.data) - parseNoticiaDateForSort(a.data));
+
+  const sameCategory = sortedByDate.filter((item) => String(item.categoria || '').toLowerCase() === currentCategoria);
+  const otherCategories = sortedByDate.filter((item) => String(item.categoria || '').toLowerCase() !== currentCategoria);
+
+  return [...sameCategory, ...otherCategories].slice(0, limit);
+}
+
+function renderRelatedArticles(currentNoticia, noticias) {
+  const container = document.getElementById('artigosRelacionados');
+  if (!container) return;
+
+  const relacionados = getRelatedNoticias(currentNoticia, noticias, 3);
+  if (!relacionados.length) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = '';
+  container.innerHTML = `
+    <h3 class="relacionados-title">Artigos relacionados</h3>
+    <div class="relacionados-grid">
+      ${relacionados.map((item) => `
+        <a class="relacionado-card" href="${buildArticleUrlByData(item)}">
+          <div class="relacionado-meta">
+            <span class="relacionado-categoria">${item.categoria || ''}</span>
+            <span>${item.data || ''}</span>
+          </div>
+          <div class="relacionado-titulo">${item.titulo || ''}</div>
+          <span class="relacionado-link">Ler artigo →</span>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
+
 function normalizeBrokenLineWraps(html) {
   const content = String(html || '');
   const allBreaks = (content.match(/<br\s*\/?>/gi) || []).length;
@@ -2014,8 +2155,8 @@ function canUseLiveEditor() {
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
   const host = (window.location.hostname || '').toLowerCase();
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  return editEnabled && isLocalHost;
+  const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
+  return editEnabled && !isPublicHost;
 }
 
 let studioApiBaseCache = null;
@@ -2354,11 +2495,19 @@ document.addEventListener('DOMContentLoaded', () => {
         incrementArticleReadCount(noticiaIdResolvido);
 
         const canonicalArticleUrl = buildArticleUrlByData(noticia);
-        const canonicalSearch = canonicalArticleUrl.includes('?')
-          ? `?${canonicalArticleUrl.split('?')[1]}`
-          : '';
-        if (window.location.search !== canonicalSearch) {
-          window.history.replaceState({}, '', canonicalArticleUrl);
+        const articleUrl = new URL(canonicalArticleUrl, window.location.origin);
+        const editParam = urlParams.get('edit');
+        const host = (window.location.hostname || '').toLowerCase();
+        const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
+
+        if (editParam === '1' && !isPublicHost) {
+          articleUrl.searchParams.set('edit', '1');
+        }
+
+        const nextPathWithSearch = `${articleUrl.pathname}${articleUrl.search}`;
+        const currentPathWithSearch = `${window.location.pathname}${window.location.search}`;
+        if (currentPathWithSearch !== nextPathWithSearch) {
+          window.history.replaceState({}, '', nextPathWithSearch);
         }
 
         const canonicalEl = document.getElementById('canonicalLink');
@@ -2457,6 +2606,8 @@ document.addEventListener('DOMContentLoaded', () => {
               </button>
             </div>
           </div>
+
+          <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
         
         // Mostrar secção de comentários
@@ -2465,6 +2616,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
+
+        // Secção de artigos relacionados
+        renderRelatedArticles(noticia, data.noticias || []);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
