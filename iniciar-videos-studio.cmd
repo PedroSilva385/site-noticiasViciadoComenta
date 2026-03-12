@@ -1,0 +1,28 @@
+@echo off
+setlocal
+cd /d "%~dp0"
+
+set "VIDEOS_STUDIO_URL=http://localhost:8787/tools/videos-studio.html"
+
+echo Verificando servidor local do Videos Studio...
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+"$up = $false; try { Invoke-WebRequest -Uri 'http://localhost:8787/api/noticias' -UseBasicParsing -TimeoutSec 2 ^| Out-Null; $up = $true } catch {}; if (-not $up) { Start-Process -FilePath powershell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File .\tools\noticias-studio-server.ps1' -WindowStyle Normal ^| Out-Null; for ($i=0; $i -lt 20; $i++) { Start-Sleep -Milliseconds 300; try { Invoke-WebRequest -Uri 'http://localhost:8787/api/noticias' -UseBasicParsing -TimeoutSec 2 ^| Out-Null; $up = $true; break } catch {} } }; if (-not $up) { Write-Host 'Não foi possível iniciar o servidor do Vídeos Studio.' -ForegroundColor Red; exit 1 }"
+
+if errorlevel 1 (
+  echo Falha ao iniciar o servidor local.
+  pause
+  exit /b 1
+)
+
+start "" "%VIDEOS_STUDIO_URL%"
+if errorlevel 1 (
+  echo Falha ao abrir automaticamente no navegador.
+  echo Tenta abrir manualmente: %VIDEOS_STUDIO_URL%
+  pause
+  exit /b 1
+)
+
+echo Videos Studio pronto: %VIDEOS_STUDIO_URL%
+echo.
+echo Esta janela vai ficar aberta para veres o estado.
+pause

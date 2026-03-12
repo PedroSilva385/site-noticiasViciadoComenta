@@ -842,10 +842,38 @@ class VideoWatchTracker {
 
 const tracker = new VideoWatchTracker();
 
+function extrairYouTubeId(url) {
+  if (!url || typeof url !== 'string') return '';
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+
+    if (host === 'youtu.be') {
+      return (parsed.pathname.split('/').filter(Boolean)[0] || '').trim();
+    }
+
+    if (host.endsWith('youtube.com')) {
+      const v = parsed.searchParams.get('v');
+      if (v) return v.trim();
+
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      const markerIndex = parts.findIndex((part) => ['embed', 'live', 'shorts'].includes(part));
+      if (markerIndex >= 0 && parts[markerIndex + 1]) {
+        return parts[markerIndex + 1].trim();
+      }
+    }
+  } catch (e) {
+  }
+
+  const fallback = String(url).match(/(?:v=|youtu\.be\/|embed\/|live\/|shorts\/)([A-Za-z0-9_-]{6,})/i);
+  return fallback ? fallback[1] : '';
+}
+
 // Carregar vídeos do ficheiro JSON
 async function carregarVideos() {
   try {
-    const response = await fetch('data/metin2-videos.json');
+    const response = await fetch('data/metin2-videos.json', { cache: 'no-store' });
     const data = await response.json();
     
     // Carregar Série RL2
@@ -880,15 +908,9 @@ async function carregarVideos() {
 
 // Função auxiliar para criar card de vídeo
 function criarCardVideo(url, index, tipo) {
-  // Extrair ID do vídeo do YouTube da URL
-  let videoId = '';
-  
-  if (url.includes('watch?v=')) {
-    videoId = url.split('watch?v=')[1].split('&')[0];
-  } else if (url.includes('youtu.be/')) {
-    videoId = url.split('youtu.be/')[1].split('?')[0];
-  } else if (url.includes('embed/')) {
-    videoId = url.split('embed/')[1].split('?')[0];
+  const videoId = extrairYouTubeId(url);
+  if (!videoId) {
+    return '';
   }
   
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;

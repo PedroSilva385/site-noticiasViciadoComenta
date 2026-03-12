@@ -3,3 +3,4 @@
 .gitattributes text eol=lf
 *.xml text eol=lf
 *.html text eol=lf
+robots.txt text eol=lf

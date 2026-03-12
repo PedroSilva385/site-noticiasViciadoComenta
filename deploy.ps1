@@ -3,6 +3,20 @@
 
 $ErrorActionPreference = 'Stop'
 
+function Convert-FileToLf {
+    param([Parameter(Mandatory = $true)] [string] $Path)
+
+    if (-not (Test-Path $Path)) {
+        return
+    }
+
+    $content = [System.IO.File]::ReadAllText($Path)
+    $normalized = $content -replace "`r`n", "`n"
+    if ($normalized -ne $content) {
+        [System.IO.File]::WriteAllText($Path, $normalized, [System.Text.UTF8Encoding]::new($false))
+    }
+}
+
 Write-Host "Iniciando deploy..." -ForegroundColor Cyan
 
 # 1) Gerar paginas /artigos com template espelho e atualizar sitemap
@@ -18,6 +32,33 @@ if (Test-Path $mirrorScript) {
 
 # 2) Stage dos ficheiros relevantes (inclui noticias.json)
 Write-Host "`nPreparando ficheiros para commit..." -ForegroundColor Yellow
+
+# Normalizar para LF e evitar warnings CRLF->LF no git add
+$filesToNormalize = @(
+    'index.html',
+    'todas-noticias.html',
+    'noticias.html',
+    '404.html',
+    'firebase.json',
+    'sitemap.xml',
+    'robots.txt',
+    'data/noticias.json',
+    'data/viciado-comenta-videos.json',
+    'data/viciado-ponto-critico-videos.json',
+    'data/metin2-videos.json',
+    'data/featured-video.json'
+)
+
+foreach ($file in $filesToNormalize) {
+    Convert-FileToLf -Path $file
+}
+
+if (Test-Path 'artigos') {
+    Get-ChildItem -Path 'artigos' -Filter '*.html' -File -Recurse | ForEach-Object {
+        Convert-FileToLf -Path $_.FullName
+    }
+}
+
 git add index.html
 git add todas-noticias.html
 git add noticias.html
@@ -26,6 +67,10 @@ git add firebase.json
 git add sitemap.xml
 git add robots.txt
 git add data/noticias.json
+git add data/viciado-comenta-videos.json
+git add data/viciado-ponto-critico-videos.json
+git add data/metin2-videos.json
+git add data/featured-video.json
 if (Test-Path "artigos") {
     git add artigos
 }
