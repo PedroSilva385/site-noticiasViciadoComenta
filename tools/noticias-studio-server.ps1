@@ -3,12 +3,39 @@ $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $toolsDir = Join-Path $root 'tools'
 $jsonPath = Join-Path $root 'data/noticias.json'
+$gerarArtigosScript = Join-Path $toolsDir 'gerar-artigos-espelho.ps1'
 $videosDataDir = Join-Path $root 'data'
 $deployScript = Join-Path $root 'deploy.ps1'
 
-$prefix = 'http://localhost:8787/'
-$listener = [System.Net.HttpListener]::new()
-$listener.Prefixes.Add($prefix)
+$preferredPorts = @(8787, 8788)
+$prefix = $null
+$listener = $null
+
+foreach ($port in $preferredPorts) {
+    $candidatePrefix = "http://localhost:$port/"
+    $candidateListener = $null
+    try {
+        $candidateListener = [System.Net.HttpListener]::new()
+        $candidateListener.Prefixes.Add($candidatePrefix)
+        $candidateListener.Start()
+        $listener = $candidateListener
+        $prefix = $candidatePrefix
+        break
+    }
+    catch {
+        if ($candidateListener) {
+            try { $candidateListener.Close() } catch { }
+        }
+
+        if ($port -eq $preferredPorts[-1]) {
+            throw
+        }
+    }
+}
+
+if (-not $listener -or -not $prefix) {
+    throw 'Não foi possível iniciar o servidor Noticias Studio em nenhuma porta disponível.'
+}
 
 function Add-CorsHeaders {
     param([Parameter(Mandatory = $true)] $Response)
@@ -97,7 +124,6 @@ function Resolve-VideoTargetFileName {
 }
 
 try {
-    $listener.Start()
     Write-Host "Noticias Studio ativo em $prefix" -ForegroundColor Green
     Write-Host "Abrir no browser: ${prefix}tools/noticias-studio.html" -ForegroundColor Yellow
     Write-Host "Para terminar: Ctrl+C" -ForegroundColor Yellow
@@ -186,6 +212,23 @@ try {
                 [System.IO.File]::WriteAllText($jsonPath, $jsonOut, [System.Text.UTF8Encoding]::new($false))
 
                 Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; message = 'noticias.json guardado com sucesso.' }
+                continue
+            }
+
+            if ($method -eq 'POST' -and $path -eq 'api/noticias/rebuild') {
+                if (-not (Test-Path $gerarArtigosScript)) {
+                    Write-JsonResponse -Response $response -StatusCode 500 -Payload @{ ok = $false; error = 'gerar-artigos-espelho.ps1 não encontrado.' }
+                    continue
+                }
+
+                $output = & powershell -NoProfile -ExecutionPolicy Bypass -File $gerarArtigosScript 2>&1
+                $exitCode = $LASTEXITCODE
+
+                if ($exitCode -eq 0) {
+                    Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; message = 'Artigos espelho regenerados com sucesso.'; output = ($output -join "`n") }
+                } else {
+                    Write-JsonResponse -Response $response -StatusCode 500 -Payload @{ ok = $false; error = 'Falha ao regenerar artigos espelho.'; output = ($output -join "`n") }
+                }
                 continue
             }
 

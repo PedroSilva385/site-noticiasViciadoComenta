@@ -400,9 +400,6 @@ function converter() {
   texto = texto.replace(/^\s*<br><br>/, '');
   texto = texto.replace(/<br><br>\s*$/, '');
   
-  // Substituir aspas duplas por aspas simples
-  texto = texto.replace(/["'"]/g, "'");
-  
   // Escapar caracteres especiais do JSON
   texto = texto.replace(/\\/g, '\\\\');
   texto = texto.replace(/\t/g, ' ');
