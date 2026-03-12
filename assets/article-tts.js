@@ -12,7 +12,8 @@
     voice: null,
     rate: 1,
     speaking: false,
-    paused: false
+    paused: false,
+    voicesPromise: null
   };
 
   function getArticleContentNode() {
@@ -30,6 +31,13 @@
 
     const clone = contentNode.cloneNode(true);
     clone.querySelectorAll('script, style, noscript').forEach((node) => node.remove());
+    clone.querySelectorAll('.live-edit-tools, #liveEditTools, .artigo-actions, .artigo-video, button').forEach((node) => node.remove());
+
+    clone.querySelectorAll('a').forEach((link) => {
+      const text = (link.textContent || '').trim();
+      const replacement = document.createTextNode(text || 'link');
+      link.replaceWith(replacement);
+    });
 
     const contentText = (clone.innerText || clone.textContent || '')
       .replace(/\s+/g, ' ')
@@ -37,7 +45,25 @@
 
     const titleText = getArticleTitleText();
     const combined = [titleText, contentText].filter(Boolean).join('. ');
-    return combined.trim();
+    return normalizeSpeakableText(combined);
+  }
+
+  function normalizeSpeakableText(text) {
+    if (!text) return '';
+
+    return String(text)
+      .replace(/https?:\/\/\S+/gi, ' link disponível no artigo ')
+      .replace(/\bwww\.\S+/gi, ' link disponível no artigo ')
+      .replace(/&nbsp;|\u00A0/gi, ' ')
+      .replace(/\b(\d+)\s*%/g, '$1 por cento')
+      .replace(/\b(\d+)\s*€/g, '$1 euros')
+      .replace(/\b(\d+)\s*gbps\b/gi, '$1 giga')
+      .replace(/\b(\d+)\s*mbps\b/gi, '$1 mega')
+      .replace(/[•·▪◦]/g, '. ')
+      .replace(/\s*([,;:])\s*/g, '$1 ')
+      .replace(/\s*([.!?])\s*/g, '$1 ')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   function createButton(label, iconClass) {
@@ -77,9 +103,7 @@
 
     if (lang === 'pt-pt') score += 120;
     else if (lang.startsWith('pt-pt')) score += 110;
-    else if (lang === 'pt-br') score += 95;
-    else if (lang.startsWith('pt-br')) score += 90;
-    else if (lang.startsWith('pt')) score += 75;
+    else return -9999;
 
     if (/natural|neural|online|enhanced|premium/.test(name)) score += 45;
     if (/microsoft/.test(name)) score += 30;
@@ -93,8 +117,43 @@
     return score;
   }
 
+  function waitForVoices(timeoutMs = 2500) {
+    if (state.voicesPromise) return state.voicesPromise;
+
+    state.voicesPromise = new Promise((resolve) => {
+      const initialVoices = getVoices();
+      if (initialVoices.length) {
+        resolve(initialVoices);
+        state.voicesPromise = null;
+        return;
+      }
+
+      let resolved = false;
+      const finish = function () {
+        if (resolved) return;
+        resolved = true;
+        speech.removeEventListener('voiceschanged', onVoicesChanged);
+        clearTimeout(timer);
+        state.voicesPromise = null;
+        resolve(getVoices());
+      };
+
+      const onVoicesChanged = function () {
+        const voices = getVoices();
+        if (voices.length) finish();
+      };
+
+      const timer = setTimeout(finish, timeoutMs);
+      speech.addEventListener('voiceschanged', onVoicesChanged);
+    });
+
+    return state.voicesPromise;
+  }
+
   function pickVoice() {
-    const voices = getVoices();
+    const voices = getVoices()
+      .filter((voice) => String(voice.lang || '').toLowerCase().startsWith('pt-pt'));
+
     if (!voices || !voices.length) return null;
 
     const ranked = voices
@@ -103,6 +162,15 @@
 
     const best = ranked[0];
     return best && best.score > 0 ? best.voice : null;
+  }
+
+  async function resolvePtPtVoice() {
+    let voice = pickVoice();
+    if (voice) return voice;
+
+    await waitForVoices(3000);
+    voice = pickVoice();
+    return voice;
   }
 
   function splitTextForSpeech(text) {
@@ -176,10 +244,10 @@
   state.currentChunkText = chunk;
   state.currentBoundaryChar = 0;
 
-    utterance.lang = voice ? voice.lang : 'pt-PT';
+    utterance.lang = 'pt-PT';
     if (voice) utterance.voice = voice;
 
-    utterance.rate = state.rate <= 1 ? 0.92 : 1.5;
+    utterance.rate = state.rate <= 1 ? 0.96 : 1.12;
     utterance.pitch = 1;
     utterance.volume = 1;
 
@@ -245,7 +313,7 @@
     speakCurrentChunk(statusNode, controls);
   }
 
-  function startSpeaking(text, statusNode, controls) {
+  async function startSpeaking(text, statusNode, controls) {
     if (!text) {
       setStatus(statusNode, 'Sem texto para leitura.');
       refreshControls(controls, statusNode);
@@ -253,7 +321,14 @@
     }
 
     stopSpeaking();
-    const voice = pickVoice();
+    const voice = await resolvePtPtVoice();
+
+    if (!voice) {
+      setStatus(statusNode, 'Sem voz pt-PT disponível neste dispositivo. Instale uma voz Portuguesa (Portugal) e volte a tentar.');
+      refreshControls(controls);
+      return;
+    }
+
     const chunks = splitTextForSpeech(text);
 
     if (!chunks.length) {
@@ -268,7 +343,7 @@
     state.speaking = true;
     state.paused = false;
 
-    setStatus(statusNode, `Voz: ${getVoiceDisplayName(voice)}`);
+    setStatus(statusNode, `Voz ativa: ${getVoiceDisplayName(voice)}`);
     refreshControls(controls);
 
     speakCurrentChunk(statusNode, controls);
@@ -397,7 +472,7 @@
 
     const controls = { playBtn, pauseBtn, stopBtn, restartBtn, speed1Btn, speed15Btn };
 
-    playBtn.addEventListener('click', function () {
+    playBtn.addEventListener('click', async function () {
       if (state.speaking && state.paused) {
         speech.resume();
         state.paused = false;
@@ -407,7 +482,7 @@
       }
 
       const text = getSpeakableText();
-      startSpeaking(text, status, controls);
+      await startSpeaking(text, status, controls);
     });
 
     pauseBtn.addEventListener('click', function () {
@@ -433,7 +508,7 @@
       refreshControls(controls);
     });
 
-    restartBtn.addEventListener('click', function () {
+    restartBtn.addEventListener('click', async function () {
       const text = getSpeakableText();
       if (!text) {
         setStatus(status, 'Sem texto para leitura.');
@@ -442,7 +517,7 @@
       }
 
       setStatus(status, 'A reiniciar leitura desde o início...');
-      startSpeaking(text, status, controls);
+      await startSpeaking(text, status, controls);
     });
 
     speed1Btn.addEventListener('click', function () {
