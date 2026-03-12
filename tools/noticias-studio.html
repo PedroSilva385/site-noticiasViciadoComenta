@@ -366,12 +366,16 @@ function converterTexto(rawInput) {
   texto = texto.replace(/(^|[\s(>])\*\*([A-Za-zÀ-ÿ0-9][^*\n<>]*?)\*\*(?=[\s).,!?:;]|$)/g, '$1<strong>$2</strong>');
   texto = texto.replace(/(^|[\s(>])\*([A-Za-zÀ-ÿ0-9][^*\n<>]*?)\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
 
-  texto = texto
-    .split('\n')
-    .map((line) => line.replace(/ {2,}/g, (spaces) => '&nbsp;'.repeat(spaces.length)))
-    .join('<br>');
+  const PARAGRAFO_TOKEN = '__PARAGRAFO__';
+  texto = texto.replace(/\n{3,}/g, '\n\n');
+  texto = texto.replace(/\n\n+/g, PARAGRAFO_TOKEN);
+  texto = texto.replace(/\n+/g, ' ');
+  texto = texto.replace(/[ \t]{2,}/g, ' ');
+  texto = texto.split(PARAGRAFO_TOKEN).join('<br><br>');
+  texto = texto.replace(/(<br><br>\s*){2,}/g, '<br><br>');
+  texto = texto.replace(/^\s*<br><br>/, '');
+  texto = texto.replace(/<br><br>\s*$/, '');
 
-  texto = texto.replace(/["'“”]/g, "'");
   return escapeForJson(texto);
 }
 

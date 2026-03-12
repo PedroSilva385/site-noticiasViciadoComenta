@@ -541,6 +541,74 @@ body.dark .artigo-share-label {
   color: white;
 }
 
+.live-edit-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0 0;
+}
+
+.live-edit-btn {
+  border: 1px solid #dbe6f3;
+  background: #ffffff;
+  color: #1a1f3a;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.live-edit-btn:hover {
+  border-color: #0066cc;
+  color: #0066cc;
+}
+
+.live-edit-btn.primary {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  border-color: #0052a3;
+  color: #ffffff;
+}
+
+.live-edit-note {
+  width: 100%;
+  font-size: 0.8em;
+  color: #5a6b7f;
+}
+
+.artigo-conteudo.is-editing #artigoConteudoBody {
+  border: 1px dashed #9ca3af;
+  border-radius: 10px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+body.dark .live-edit-btn {
+  background: #1a2332;
+  border-color: #2d3748;
+  color: #d1d5db;
+}
+
+body.dark .live-edit-btn:hover {
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+body.dark .live-edit-btn.primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+  border-color: #0369a1;
+  color: #ffffff;
+}
+
+body.dark .live-edit-note {
+  color: #9ca3af;
+}
+
+body.dark .artigo-conteudo.is-editing #artigoConteudoBody {
+  background: #1a2332;
+  border-color: #334155;
+}
+
 .artigo-video {
   margin: 40px 0;
   border-radius: 12px;
@@ -1658,7 +1726,7 @@ footer {
 <meta name="twitter:title" content="OPERADORAS atacam MARCELO sem PIEDADE!">
 <meta name="twitter:description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-03-12T00:33:40Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-03-12T17:13:46Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -1929,6 +1997,285 @@ function buildArticleUrlByData(noticia) {
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
 
+function normalizeBrokenLineWraps(html) {
+  const content = String(html || '');
+  const allBreaks = (content.match(/<br\s*\/?>/gi) || []).length;
+  const doubleBreaks = (content.match(/<br\s*\/?>\s*<br\s*\/?>/gi) || []).length;
+  const singleBreaks = Math.max(0, allBreaks - (doubleBreaks * 2));
+
+  if (singleBreaks < 8 || doubleBreaks === 0) {
+    return content;
+  }
+
+  const paragraphToken = '__PARAGRAPH_BREAK__';
+  return content
+    .replace(/<br\s*\/?>\s*<br\s*\/?>/gi, paragraphToken)
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
+}
+
+function formatArticleContent(rawContent) {
+  if (!rawContent) return '';
+
+  let content = String(rawContent).replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+
+  if (!/<[^>]+>/.test(content)) {
+    const paragraphToken = '__PARAGRAPH_BREAK__';
+    content = content
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/\n\n+/g, paragraphToken)
+      .replace(/\n+/g, ' ')
+      .replace(/\s{2,}/g, ' ')
+      .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
+  }
+
+  content = normalizeBrokenLineWraps(content);
+  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+  return content.trim();
+}
+
+function canUseLiveEditor() {
+  return true;
+}
+
+let studioApiBaseCache = null;
+
+function fetchWithTimeout(url, options = {}, timeoutMs = 6000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(timeoutId));
+}
+
+async function resolveStudioApiBase() {
+  if (studioApiBaseCache) {
+    return studioApiBaseCache;
+  }
+
+  const candidates = [window.location.origin, 'http://localhost:8788', 'http://localhost:8787']
+    .filter((value, index, list) => value && list.indexOf(value) === index);
+
+  for (const base of candidates) {
+    try {
+      const response = await fetchWithTimeout(`${base}/api/noticias`, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      }, 2500);
+
+      if (response.ok) {
+        studioApiBaseCache = base;
+        return base;
+      }
+    } catch (error) {
+      // tenta próximo candidato
+    }
+  }
+
+  throw new Error('Servidor de edição não encontrado. Inicie o Noticias Studio Server.');
+}
+
+async function triggerRebuildOnAvailableApi(preferredBase) {
+  const candidates = [preferredBase, 'http://localhost:8788', 'http://localhost:8787', window.location.origin]
+    .filter((value, index, list) => value && list.indexOf(value) === index);
+
+  let lastErrorMessage = 'Não foi possível regenerar os artigos espelho automaticamente.';
+
+  for (const base of candidates) {
+    try {
+      const rebuildResponse = await fetchWithTimeout(`${base}/api/noticias/rebuild`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        }
+      }, 15000);
+
+      let rebuildPayload = null;
+      try {
+        rebuildPayload = await rebuildResponse.json();
+      } catch (error) {
+        rebuildPayload = null;
+      }
+
+      const ok = rebuildResponse.ok && (!rebuildPayload || rebuildPayload.ok !== false);
+      const message = (rebuildPayload && (rebuildPayload.message || rebuildPayload.error)) || '';
+
+      if (ok) {
+        studioApiBaseCache = base;
+        return { ok: true, base, message };
+      }
+
+      lastErrorMessage = message || `Falha na regeneração em ${base}.`;
+    } catch (error) {
+      lastErrorMessage = (error && error.message) ? error.message : lastErrorMessage;
+    }
+  }
+
+  return { ok: false, base: preferredBase, message: lastErrorMessage };
+}
+
+async function saveArticleContentToJson(noticiaId, html) {
+  const apiBase = await resolveStudioApiBase();
+
+  const loadResponse = await fetchWithTimeout(`${apiBase}/api/noticias`, {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+  }, 7000);
+
+  if (!loadResponse.ok) {
+    throw new Error('Falha ao carregar noticias.json.');
+  }
+
+  const loadPayload = await loadResponse.json();
+  if (!loadPayload || !loadPayload.ok || !loadPayload.data || !Array.isArray(loadPayload.data.noticias)) {
+    throw new Error('Resposta inválida ao carregar notícias.');
+  }
+
+  const noticias = loadPayload.data.noticias;
+  const articleIndex = noticias.findIndex((item) => String(item.id) === String(noticiaId));
+
+  if (articleIndex === -1) {
+    throw new Error(`Artigo ${noticiaId} não encontrado no JSON.`);
+  }
+
+  noticias[articleIndex].conteudo = String(html || '').trim();
+
+  const saveResponse = await fetchWithTimeout(`${apiBase}/api/noticias/save`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(loadPayload.data)
+  }, 10000);
+
+  let savePayload = null;
+  try {
+    savePayload = await saveResponse.json();
+  } catch (error) {
+    savePayload = null;
+  }
+
+  if (!saveResponse.ok || (savePayload && savePayload.ok === false)) {
+    throw new Error((savePayload && savePayload.error) || 'Falha ao guardar noticias.json.');
+  }
+
+  const rebuildResult = await triggerRebuildOnAvailableApi(apiBase);
+
+  return {
+    apiBase,
+    message: (savePayload && savePayload.message) || 'Conteúdo guardado no JSON.',
+    rebuildOk: rebuildResult.ok,
+    rebuildMessage: rebuildResult.message
+  };
+}
+
+function getLiveEditStorageKey(noticiaId) {
+  return `vc_live_article_edit_${String(noticiaId || '')}`;
+}
+
+function getLiveEditedContent(noticiaId) {
+  try {
+    return localStorage.getItem(getLiveEditStorageKey(noticiaId));
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveLiveEditedContent(noticiaId, html) {
+  try {
+    localStorage.setItem(getLiveEditStorageKey(noticiaId), String(html || ''));
+  } catch (error) {
+    console.warn('Não foi possível guardar edição local:', error);
+  }
+}
+
+function clearLiveEditedContent(noticiaId) {
+  try {
+    localStorage.removeItem(getLiveEditStorageKey(noticiaId));
+  } catch (error) {
+    console.warn('Não foi possível limpar edição local:', error);
+  }
+}
+
+function setupLiveArticleEditor(noticiaId, originalRawContent) {
+  if (!canUseLiveEditor()) return;
+
+  const contentWrapper = document.querySelector('.artigo-conteudo');
+  const contentBody = document.getElementById('artigoConteudoBody');
+  const btnEdit = document.getElementById('btnLiveEdit');
+  const btnSave = document.getElementById('btnLiveSave');
+  const btnCancel = document.getElementById('btnLiveCancel');
+  const btnReset = document.getElementById('btnLiveReset');
+  const editNote = document.querySelector('.live-edit-note');
+
+  if (!contentWrapper || !contentBody || !btnEdit || !btnSave || !btnCancel || !btnReset) return;
+
+  let baselineHtml = contentBody.innerHTML;
+
+  function setEditState(isEditing) {
+    contentWrapper.classList.toggle('is-editing', isEditing);
+    contentBody.contentEditable = isEditing ? 'true' : 'false';
+    btnEdit.style.display = isEditing ? 'none' : 'inline-flex';
+    btnSave.style.display = isEditing ? 'inline-flex' : 'none';
+    btnCancel.style.display = isEditing ? 'inline-flex' : 'none';
+  }
+
+  btnEdit.addEventListener('click', () => {
+    baselineHtml = contentBody.innerHTML;
+    setEditState(true);
+    contentBody.focus();
+  });
+
+  btnSave.addEventListener('click', async () => {
+    const editedHtml = String(contentBody.innerHTML || '').trim();
+    if (!editedHtml) {
+      alert('O texto não pode ficar vazio.');
+      return;
+    }
+
+    btnSave.disabled = true;
+    btnSave.textContent = '⏳ A guardar...';
+
+    try {
+      const result = await saveArticleContentToJson(noticiaId, editedHtml);
+      saveLiveEditedContent(noticiaId, editedHtml);
+      baselineHtml = editedHtml;
+      setEditState(false);
+      if (editNote) {
+        editNote.textContent = result.rebuildOk
+          ? `Guardado no JSON e artigos espelho atualizados (${result.apiBase}).`
+          : `Guardado no JSON (${result.apiBase}). ${result.rebuildMessage || 'Regen automática não disponível.'}`;
+      }
+    } catch (error) {
+      const mensagemErro = (error && error.message) ? error.message : 'Erro ao guardar no JSON.';
+      alert(`${mensagemErro}\n\nInicie a tarefa "Start Noticias Studio Server" e tente novamente.`);
+      if (editNote) {
+        editNote.textContent = 'Falha ao guardar no JSON. Verifique se o servidor local está ativo.';
+      }
+    } finally {
+      btnSave.disabled = false;
+      btnSave.textContent = '💾 Guardar edição';
+    }
+  });
+
+  btnCancel.addEventListener('click', () => {
+    contentBody.innerHTML = baselineHtml;
+    setEditState(false);
+  });
+
+  btnReset.addEventListener('click', () => {
+    clearLiveEditedContent(noticiaId);
+    const originalHtml = formatArticleContent(originalRawContent || '');
+    contentBody.innerHTML = originalHtml;
+    baselineHtml = originalHtml;
+    setEditState(false);
+  });
+
+  setEditState(false);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   const btn = document.createElement('button');
@@ -2062,17 +2409,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const container = document.getElementById("artigo");
         
-        // Processar conteúdo: divide automaticamente por quebras de linha em parágrafos
+        // Processar conteúdo preservando HTML e corrigindo quebras artificiais de linha
         let conteudoHTML = '';
         if (noticia.conteudo) {
-          // Divide o texto em parágrafos usando quebras de linha
-          // Remove parágrafos vazios e aplica trim em cada um
-          conteudoHTML = noticia.conteudo
-            .split('\n')
-            .map(p => p.trim())
-            .filter(p => p !== '')
-            .map(p => `<p>${p}</p>`)
-            .join('');
+          conteudoHTML = formatArticleContent(noticia.conteudo);
+        }
+
+        const savedLiveContent = getLiveEditedContent(noticiaIdResolvido);
+        if (savedLiveContent) {
+          conteudoHTML = savedLiveContent;
         }
         
         // Calcular tempo de leitura (baseado em 200 palavras por minuto)
@@ -2094,7 +2439,16 @@ document.addEventListener('DOMContentLoaded', () => {
           ${videoHTML}
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
-            ${conteudoHTML}
+            <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${canUseLiveEditor() ? `
+            <div class="live-edit-tools" id="liveEditTools">
+              <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
+              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">💾 Guardar edição</button>
+              <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">↩️ Cancelar</button>
+              <button class="live-edit-btn" id="btnLiveReset" type="button">🧹 Repor original</button>
+              <div class="live-edit-note">Modo de edição ativo (guardar escreve no noticias.json via servidor local).</div>
+            </div>
+            ` : ''}
           </div>
           
           <div class="artigo-actions">
@@ -2133,6 +2487,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
+
+        // Modo de edição em live (?edit=1)
+        setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
         
         // Ocultar miniatura quando o iframe carregar
         if (videoId) {
