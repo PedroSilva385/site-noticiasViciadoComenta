@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notícias Studio</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1f3b73 0%, #4b2a7b 100%);
+  color: #1f2937;
+  min-height: 100vh;
+  padding: 20px;
+}
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 25px 60px rgba(0,0,0,.28);
+  padding: 24px;
+}
+h1 { font-size: 1.9rem; margin-bottom: 6px; color: #111827; }
+.subtitle { color: #4b5563; margin-bottom: 18px; }
+.notice {
+  background: #eef2ff;
+  border-left: 4px solid #4f46e5;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  color: #1f2937;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 14px;
+}
+.panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+  background: #fff;
+}
+.panel h2 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  color: #111827;
+}
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+label { font-size: .86rem; color: #374151; font-weight: 600; margin-bottom: 5px; display: block; }
+input, select, textarea {
+  width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 9px 10px;
+  font-family: inherit; font-size: .92rem;
+}
+textarea { min-height: 180px; resize: vertical; }
+.big-area { min-height: 320px; }
+.rich-editor {
+  width: 100%;
+  min-height: 320px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: .92rem;
+  line-height: 1.45;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+.rich-editor:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
+}
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.text-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+.text-toolbar button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #1f2937;
+  font-weight: 600;
+}
+.text-toolbar button:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary { background: #4f46e5; color: #fff; }
+.btn-secondary { background: #1f2937; color: #fff; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-warning { background: #d97706; color: #fff; }
+.btn-danger { background: #dc2626; color: #fff; }
+button:hover { filter: brightness(.95); }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.badge {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: .8rem;
+  color: #374151;
+}
+.status {
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-weight: 600;
+  display: none;
+}
+.status.ok { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.status.err { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.status.info { display: block; background: #e0f2fe; color: #0c4a6e; border: 1px solid #bae6fd; }
+.output { min-height: 140px; background: #f9fafb; }
+@media (max-width: 980px) {
+  .grid { grid-template-columns: 1fr; }
+  .row, .row-3, .row-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📰 Notícias Studio</h1>
+  <p class="subtitle">Colar artigo, converter texto, gerir categorias e publicar o site no mesmo painel.</p>
+
+  <div class="notice">
+    Abre esta página através do servidor local: <strong>http://localhost:8787/tools/noticias-studio.html</strong><br>
+    Botão <strong>Publicar</strong> executa o <strong>deploy.ps1</strong> automaticamente.
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>1) Novo artigo</h2>
+
+      <div class="row">
+        <div>
+          <label for="titulo">Título</label>
+          <input id="titulo" type="text" placeholder="Ex: Mercado das telecom em Portugal (2025)">
+        </div>
+        <div>
+          <label for="autor">Autor</label>
+          <input id="autor" type="text" value="Pedro Silva">
+        </div>
+      </div>
+
+      <div class="row-4">
+        <div>
+          <label for="data">Data (DD/MM/AAAA)</label>
+          <input id="data" type="text" placeholder="11/03/2026">
+        </div>
+        <div>
+          <label for="dataPublicacaoData">Agendar: Data (opcional)</label>
+          <input id="dataPublicacaoData" type="date">
+        </div>
+        <div>
+          <label for="dataPublicacaoHora">Agendar: Hora (opcional)</label>
+          <input id="dataPublicacaoHora" type="time" step="60">
+        </div>
+        <div>
+          <label for="video">Vídeo (URL)</label>
+          <input id="video" type="text" placeholder="https://youtu.be/...">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="categoria">Categoria</label>
+          <select id="categoria"></select>
+        </div>
+        <div>
+          <label for="novaCategoria">Ou nova categoria</label>
+          <input id="novaCategoria" type="text" placeholder="Ex: Atualidade">
+        </div>
+      </div>
+
+      <div>
+        <label for="resumo">Resumo</label>
+        <textarea id="resumo" placeholder="Resumo curto da notícia..."></textarea>
+        <div class="actions" style="margin-top:8px;">
+          <button class="btn-warning" id="btnGerarResumo">✨ Gerar resumo automático (IA)</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label for="textoBruto">Texto do artigo (cola aqui)</label>
+        <div class="text-toolbar">
+          <button type="button" id="btnBold">B Negrito</button>
+          <button type="button" id="btnItalic">I Itálico</button>
+          <button type="button" id="btnLink">🔗 Link</button>
+        </div>
+        <div id="textoBrutoEditor" class="rich-editor" contenteditable="true" spellcheck="true" aria-label="Texto do artigo"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" id="btnConverter">🔄 Converter texto</button>
+        <button class="btn-success" id="btnAdicionar">➕ Adicionar ao JSON</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label for="conteudoConvertido">Conteúdo convertido (JSON-safe)</label>
+        <textarea id="conteudoConvertido" class="output" readonly></textarea>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>2) Categorias e publicação</h2>
+
+      <div class="row">
+        <div>
+          <label for="catOrigem">Categoria atual</label>
+          <select id="catOrigem"></select>
+        </div>
+        <div>
+          <label for="catDestino">Novo nome da categoria</label>
+          <input id="catDestino" type="text" placeholder="Ex: Telecomunicações">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-warning" id="btnRenomearCat">✏️ Renomear categoria</button>
+      </div>
+
+      <div style="margin-top:12px;">
+        <label>Categorias existentes</label>
+        <div id="categoriasBadges" class="badges"></div>
+      </div>
+
+      <hr style="margin:14px 0; border:none; border-top:1px solid #e5e7eb;">
+
+      <div class="row">
+        <div>
+          <label>Total de notícias</label>
+          <input id="totalNoticias" type="text" readonly>
+        </div>
+        <div>
+          <label>Próximo ID</label>
+          <input id="proximoId" type="text" readonly>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-warning" id="btnServidor">🟢 Verificar/Ligar servidor</button>
+        <button class="btn-secondary" id="btnRecarregar">🔃 Recarregar JSON</button>
+        <button class="btn-primary" id="btnGuardar">💾 Guardar noticias.json</button>
+        <button class="btn-success" id="btnPublicar">🚀 Publicar (deploy)</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label for="logSaida">Saída / log</label>
+        <textarea id="logSaida" class="output" readonly></textarea>
+      </div>
+    </section>
+  </div>
+
+  <div id="status" class="status info">A iniciar...</div>
+</div>
+
+<script>
+let noticiasData = null;
+const CATEGORIAS_FALLBACK = ['Telecom', 'DIGI', 'Gaming'];
+const STUDIO_API_BASE = 'http://localhost:8787';
+
+function setStatus(message, type = 'info') {
+  const el = document.getElementById('status');
+  el.className = `status ${type}`;
+  el.textContent = message;
+}
+
+async function parseJsonResponseOrThrow(response, endpointLabel) {
+  const contentType = (response.headers.get('content-type') || '').toLowerCase();
+  const rawText = await response.text();
+
+  if (!contentType.includes('application/json')) {
+    const preview = rawText.slice(0, 80).replace(/\s+/g, ' ').trim();
+    throw new Error(`Resposta inválida em ${endpointLabel}: esperado JSON, recebido outro conteúdo (${preview || 'vazio'}).`);
+  }
+
+  try {
+    return JSON.parse(rawText);
+  } catch (error) {
+    throw new Error(`JSON inválido em ${endpointLabel}: ${error.message}`);
+  }
+}
+
+async function apiRequest(path, options = {}) {
+  const tryUrls = [path];
+  if (!/^https?:\/\//i.test(path)) {
+    tryUrls.push(`${STUDIO_API_BASE}${path}`);
+  }
+
+  let lastError = null;
+
+  for (const url of tryUrls) {
+    try {
+      const response = await fetch(url, options);
+      const payload = await parseJsonResponseOrThrow(response, url);
+      return { response, payload, url };
+    } catch (error) {
+      const isNetworkError = error && (
+        error.name === 'TypeError' ||
+        /failed to fetch|networkerror|load failed|cors/i.test(String(error.message || ''))
+      );
+
+      if (isNetworkError) {
+        lastError = new Error('Falha de ligação ao servidor do Notícias Studio. Inicia o servidor e abre por http://localhost:8787/tools/noticias-studio.html');
+      } else {
+        lastError = error;
+      }
+    }
+  }
+
+  throw lastError || new Error('Falha ao comunicar com a API do Notícias Studio.');
+}
+
+function escapeForJson(value) {
+  if (!value) return '';
+  return String(value)
+    .replace(/\\/g, '\\\\')
+    .replace(/\t/g, ' ')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n');
+}
+
+function converterTexto(rawInput) {
+  let texto = String(rawInput || '');
+
+  texto = texto.replace(/<div><br\s*\/?>\s*<\/div>/gi, '\n');
+  texto = texto.replace(/<div>/gi, '\n');
+  texto = texto.replace(/<\/div>/gi, '');
+  texto = texto.replace(/<p\b[^>]*>/gi, '\n');
+  texto = texto.replace(/<\/p>/gi, '');
+  texto = texto.replace(/<br\s*\/?>/gi, '\n');
+
+  texto = texto.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  texto = texto.replace(/\t/g, '    ');
+
+  texto = texto.replace(/<b\b[^>]*>(.*?)<\/b>/gi, '<strong>$1</strong>');
+  texto = texto.replace(/<i\b[^>]*>(.*?)<\/i>/gi, '<em>$1</em>');
+
+  texto = texto.replace(/(^|\n)\s*(assets\/imagens\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*\n\s*\(([^)]+)\)\s*($|\n)/gim,
+    '$1<figure><img src="$2" alt="Imagem" class="img-center"><figcaption>$3</figcaption></figure>$4');
+
+  texto = texto.replace(/(^|\n)\s*(https?:\/\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*\n\s*\(([^)]+)\)\s*($|\n)/gim,
+    '$1<figure><img src="$2" alt="Imagem" class="img-center"><figcaption>$3</figcaption></figure>$4');
+
+  texto = texto.replace(/(^|\n)\s*(https?:\/\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*($|\n)/gim,
+    '$1<img src="$2" alt="Imagem" class="img-center">$3');
+
+  texto = texto.replace(/(^|\n)\s*(assets\/imagens\/[^\n]+\.(?:jpg|jpeg|png|gif|webp))\s*($|\n)/gim,
+    '$1<img src="$2" alt="Imagem" class="img-center">$3');
+
+  texto = texto.replace(/(^|[\s(>])\*\*([A-Za-zÀ-ÿ0-9][^*\n<>]*?)\*\*(?=[\s).,!?:;]|$)/g, '$1<strong>$2</strong>');
+  texto = texto.replace(/(^|[\s(>])\*([A-Za-zÀ-ÿ0-9][^*\n<>]*?)\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
+
+  texto = texto
+    .split('\n')
+    .map((line) => line.replace(/ {2,}/g, (spaces) => '&nbsp;'.repeat(spaces.length)))
+    .join('<br>');
+
+  texto = texto.replace(/["'“”]/g, "'");
+  return escapeForJson(texto);
+}
+
+function getTextoBrutoHtml() {
+  const editor = document.getElementById('textoBrutoEditor');
+  return editor ? editor.innerHTML : '';
+}
+
+function focusEditor() {
+  const editor = document.getElementById('textoBrutoEditor');
+  if (editor) editor.focus();
+}
+
+function applyRichFormat(command) {
+  focusEditor();
+  document.execCommand(command, false, null);
+}
+
+function selectionInsideEditor() {
+  const editor = document.getElementById('textoBrutoEditor');
+  const sel = window.getSelection();
+  if (!editor || !sel || sel.rangeCount === 0) return false;
+  const range = sel.getRangeAt(0);
+  return editor.contains(range.commonAncestorContainer);
+}
+
+function addLinkInEditor() {
+  const editor = document.getElementById('textoBrutoEditor');
+  if (!editor) return;
+
+  const rawUrl = window.prompt('URL do link (ex: https://exemplo.com):');
+  if (!rawUrl) return;
+
+  const url = rawUrl.trim();
+  if (!url) return;
+
+  const safeUrl = url.replace(/'/g, '%27');
+  focusEditor();
+
+  let selectedText = '';
+  if (selectionInsideEditor()) {
+    const sel = window.getSelection();
+    selectedText = (sel && sel.toString()) ? sel.toString().trim() : '';
+  }
+
+  const defaultLabel = selectedText || 'texto do link';
+  const rawLabel = window.prompt('Nome do link (texto visível):', defaultLabel);
+  if (rawLabel === null) return;
+  const label = rawLabel.trim() || defaultLabel;
+  const safeLabel = label
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  if (selectionInsideEditor()) {
+    const sel = window.getSelection();
+    const selectedTextNow = sel.toString();
+
+    if (selectedTextNow && selectedTextNow.trim()) {
+      document.execCommand('insertHTML', false, `<a href='${safeUrl}' target='_blank' rel='noopener noreferrer'>${safeLabel}</a>`);
+      return;
+    }
+  }
+
+  document.execCommand('insertHTML', false, `<a href='${safeUrl}' target='_blank' rel='noopener noreferrer'>${safeLabel}</a>`);
+}
+
+function stripHtmlToText(input) {
+  if (!input) return '';
+  return String(input)
+    .replace(/<\s*br\s*\/?\s*>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function splitSentences(text) {
+  if (!text) return [];
+  return text
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 30);
+}
+
+function normalizeToken(text) {
+  return String(text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getTopWords(text, maxWords = 12) {
+  const stopwords = new Set([
+    'a','à','ao','aos','as','às','de','da','do','dos','das','e','é','o','os','um','uma','uns','umas','em','no','na','nos','nas',
+    'para','por','com','sem','que','se','como','mais','mas','ou','não','nao','já','ja','sua','seu','suas','seus','são','sao',
+    'ser','foi','foram','tem','têm','também','tambem','sobre','entre','quando','onde','este','esta','isso','isto','ainda'
+  ]);
+
+  const counts = new Map();
+  normalizeToken(text)
+    .split(/\s+/)
+    .filter((w) => w.length >= 4 && !stopwords.has(w))
+    .forEach((w) => counts.set(w, (counts.get(w) || 0) + 1));
+
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, maxWords)
+    .map(([w]) => w);
+}
+
+function scoreSentence(sentence, topWords) {
+  const raw = normalizeToken(sentence);
+  let score = 0;
+
+  topWords.forEach((word) => {
+    if (raw.includes(word)) score += 2.4;
+  });
+
+  if (/analis|explica|mostra|revela|impact|mercado|dados|resultado|cresc|redu|lanca|anacom|operador/.test(raw)) score += 2.2;
+  if (/\d/.test(sentence)) score += 1.1;
+  if (sentence.length >= 70 && sentence.length <= 175) score += 1.8;
+  if (sentence.length < 45 || sentence.length > 220) score -= 2;
+  if (/^e tu[,!?]/i.test(sentence)) score -= 5;
+  if (/\?$/.test(sentence)) score -= 1.8;
+
+  return score;
+}
+
+function sanitizeSummarySentence(sentence) {
+  if (!sentence) return '';
+
+  let s = String(sentence)
+    .replace(/\s+/g, ' ')
+    .replace(/^[-•\s]+/, '')
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!s) return '';
+
+  const cutBy = [' E tu,', ' Fontes consultadas', ' Conclusão:', ' Em resumo:'];
+  for (const token of cutBy) {
+    const idx = s.indexOf(token);
+    if (idx > 45) {
+      s = s.slice(0, idx).trim();
+      break;
+    }
+  }
+
+  if (!/[.!?]$/.test(s)) {
+    s += '.';
+  }
+
+  return s;
+}
+
+function buildFallbackSummary(titulo, keywords) {
+  const title = String(titulo || '').trim();
+  const k = (keywords || []).slice(0, 3);
+
+  if (title && k.length >= 2) {
+    return `Análise de ${title}, com foco em ${k[0]}, ${k[1]} e ${k[2] || 'impacto no mercado'}.`;
+  }
+
+  if (title) {
+    return `Análise de ${title}, com os principais pontos e impacto no mercado.`;
+  }
+
+  if (k.length) {
+    return `Resumo dos principais pontos sobre ${k.slice(0, 2).join(' e ')}.`;
+  }
+
+  return 'Resumo dos principais pontos do artigo.';
+}
+
+function truncateSummary(text, maxLen = 130) {
+  if (text.length <= maxLen) return text;
+  const truncated = text.slice(0, maxLen);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return (lastSpace > 70 ? truncated.slice(0, lastSpace) : truncated).trim() + '...';
+}
+
+function gerarResumoIA(rawArticleText, titulo = '') {
+  const cleaned = stripHtmlToText(rawArticleText);
+  const sentences = splitSentences(cleaned);
+  const keywords = getTopWords(`${titulo} ${cleaned}`);
+
+  if (!sentences.length) {
+    return truncateSummary(buildFallbackSummary(titulo, keywords), 130);
+  }
+
+  const ranked = sentences
+    .map((s, i) => {
+      let score = scoreSentence(s, keywords);
+      if (i < 3) score += 1.1;
+      if (i > 10) score -= 0.6;
+      return { sentence: s, index: i, score };
+    })
+    .sort((a, b) => b.score - a.score || a.index - b.index);
+
+  const first = ranked[0] ? ranked[0].sentence : sentences[0];
+  const sanitized = sanitizeSummarySentence(first);
+
+  if (!sanitized || sanitized.length < 35) {
+    return truncateSummary(buildFallbackSummary(titulo, keywords), 130);
+  }
+
+  return truncateSummary(sanitized, 130);
+}
+
+function getCategoriasComContagem() {
+  if (!noticiasData || !Array.isArray(noticiasData.noticias)) return [];
+  const countMap = new Map();
+  noticiasData.noticias.forEach((n) => {
+    const cat = String(n.categoria || 'Sem categoria').trim() || 'Sem categoria';
+    countMap.set(cat, (countMap.get(cat) || 0) + 1);
+  });
+  return Array.from(countMap.entries())
+    .map(([nome, count]) => ({ nome, count }))
+    .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-PT'));
+}
+
+function normalizeNoticiasArray(data) {
+  if (!data || typeof data !== 'object') return [];
+
+  if (Array.isArray(data.noticias)) {
+    return data.noticias;
+  }
+
+  if (data.noticias && typeof data.noticias === 'object') {
+    return Object.values(data.noticias).filter(Boolean);
+  }
+
+  return [];
+}
+
+function refreshCategoriasUI() {
+  const categorias = getCategoriasComContagem();
+  const categoriasFinal = categorias.length
+    ? categorias
+    : CATEGORIAS_FALLBACK.map((nome) => ({ nome, count: 0 }));
+
+  const categoriaSelect = document.getElementById('categoria');
+  const catOrigem = document.getElementById('catOrigem');
+  categoriaSelect.innerHTML = '';
+  catOrigem.innerHTML = '';
+
+  categoriasFinal.forEach((cat) => {
+    const option1 = document.createElement('option');
+    option1.value = cat.nome;
+    option1.textContent = cat.nome;
+    categoriaSelect.appendChild(option1);
+
+    const option2 = document.createElement('option');
+    option2.value = cat.nome;
+    option2.textContent = `${cat.nome} (${cat.count})`;
+    catOrigem.appendChild(option2);
+  });
+
+  const badges = document.getElementById('categoriasBadges');
+  badges.innerHTML = '';
+  categoriasFinal.forEach((cat) => {
+    const span = document.createElement('span');
+    span.className = 'badge';
+    span.textContent = `${cat.nome}: ${cat.count}`;
+    badges.appendChild(span);
+  });
+}
+
+function bootstrapCategoriasFallback() {
+  const categoriaSelect = document.getElementById('categoria');
+  const catOrigem = document.getElementById('catOrigem');
+  const badges = document.getElementById('categoriasBadges');
+
+  if (!categoriaSelect || !catOrigem || !badges) return;
+  if (categoriaSelect.options.length > 0 || catOrigem.options.length > 0) return;
+
+  CATEGORIAS_FALLBACK.forEach((nome) => {
+    const option1 = document.createElement('option');
+    option1.value = nome;
+    option1.textContent = nome;
+    categoriaSelect.appendChild(option1);
+
+    const option2 = document.createElement('option');
+    option2.value = nome;
+    option2.textContent = `${nome} (0)`;
+    catOrigem.appendChild(option2);
+  });
+
+  badges.innerHTML = CATEGORIAS_FALLBACK
+    .map((nome) => `<span class="badge">${nome}: 0</span>`)
+    .join('');
+}
+
+function refreshResumoJSON() {
+  const total = (noticiasData && Array.isArray(noticiasData.noticias)) ? noticiasData.noticias.length : 0;
+  const maxId = total
+    ? Math.max(...noticiasData.noticias.map((n) => Number(n.id) || 0))
+    : 0;
+
+  document.getElementById('totalNoticias').value = String(total);
+  document.getElementById('proximoId').value = String(maxId + 1);
+}
+
+async function carregarNoticias() {
+  setStatus('A carregar noticias.json...', 'info');
+  const { payload } = await apiRequest('/api/noticias');
+
+  if (!payload.ok) {
+    throw new Error(payload.error || 'Falha ao carregar notícias.');
+  }
+
+  noticiasData = payload.data || {};
+  noticiasData.noticias = normalizeNoticiasArray(noticiasData);
+
+  if (!noticiasData || !Array.isArray(noticiasData.noticias)) {
+    throw new Error('Estrutura inválida de noticias.json.');
+  }
+
+  refreshCategoriasUI();
+  refreshResumoJSON();
+  setStatus('noticias.json carregado.', 'ok');
+}
+
+function obterCategoriaSelecionada() {
+  const nova = document.getElementById('novaCategoria').value.trim();
+  if (nova) return nova;
+  return document.getElementById('categoria').value.trim();
+}
+
+function formatDateForJson(dateValue) {
+  if (!dateValue || !/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) return '';
+  const [year, month, day] = dateValue.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+function adicionarNoticia() {
+  if (!noticiasData || !Array.isArray(noticiasData.noticias)) {
+    setStatus('Carrega primeiro o JSON.', 'err');
+    return;
+  }
+
+  const titulo = document.getElementById('titulo').value.trim();
+  const data = document.getElementById('data').value.trim();
+  const dataPublicacaoData = document.getElementById('dataPublicacaoData').value.trim();
+  const dataPublicacaoHora = document.getElementById('dataPublicacaoHora').value.trim();
+  const autor = document.getElementById('autor').value.trim() || 'Pedro Silva';
+  const categoria = obterCategoriaSelecionada();
+  const resumo = document.getElementById('resumo').value.trim();
+  const video = document.getElementById('video').value.trim();
+  const conteudoConvertido = document.getElementById('conteudoConvertido').value.trim();
+
+  if ((dataPublicacaoData && !dataPublicacaoHora) || (!dataPublicacaoData && dataPublicacaoHora)) {
+    setStatus('Para agendar, preenche data e hora.', 'err');
+    return;
+  }
+
+  const dataPublicacao = dataPublicacaoData && dataPublicacaoHora
+    ? `${formatDateForJson(dataPublicacaoData)} ${dataPublicacaoHora}`
+    : '';
+
+  if (!titulo || !data || !categoria || !resumo || !conteudoConvertido) {
+    setStatus('Preenche título, data, categoria, resumo e conteúdo convertido.', 'err');
+    return;
+  }
+
+  const maxId = noticiasData.noticias.length
+    ? Math.max(...noticiasData.noticias.map((n) => Number(n.id) || 0))
+    : 0;
+
+  const nextId = String(maxId + 1);
+
+  const noticia = {
+    id: nextId,
+    titulo,
+    data,
+    autor,
+    categoria,
+    resumo,
+    conteudo: conteudoConvertido,
+    video
+  };
+
+  if (dataPublicacao) {
+    noticia.dataPublicacao = dataPublicacao;
+  }
+
+  noticiasData.noticias.push(noticia);
+
+  refreshCategoriasUI();
+  refreshResumoJSON();
+
+  document.getElementById('logSaida').value = `Notícia ${nextId} adicionada em memória.\nGuarda o JSON para persistir.`;
+  setStatus(`Notícia ${nextId} adicionada. Agora clica em Guardar.`, 'ok');
+}
+
+function renomearCategoria() {
+  if (!noticiasData || !Array.isArray(noticiasData.noticias)) {
+    setStatus('Carrega primeiro o JSON.', 'err');
+    return;
+  }
+
+  const origem = document.getElementById('catOrigem').value.trim();
+  const destino = document.getElementById('catDestino').value.trim();
+
+  if (!origem || !destino) {
+    setStatus('Indica categoria atual e novo nome.', 'err');
+    return;
+  }
+
+  let count = 0;
+  noticiasData.noticias.forEach((n) => {
+    if (String(n.categoria || '').trim() === origem) {
+      n.categoria = destino;
+      count += 1;
+    }
+  });
+
+  refreshCategoriasUI();
+  document.getElementById('catDestino').value = '';
+  document.getElementById('logSaida').value = `Categoria "${origem}" renomeada para "${destino}" em ${count} notícia(s).\nGuarda o JSON para persistir.`;
+  setStatus(`Categoria atualizada em ${count} notícia(s).`, 'ok');
+}
+
+async function guardarJSON() {
+  if (!noticiasData) {
+    setStatus('Nada para guardar. Carrega o JSON primeiro.', 'err');
+    return;
+  }
+
+  setStatus('A guardar noticias.json...', 'info');
+
+  const { payload } = await apiRequest('/api/noticias/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(noticiasData)
+  });
+
+  if (!payload.ok) {
+    throw new Error(payload.error || 'Falha ao guardar JSON.');
+  }
+
+  document.getElementById('logSaida').value = payload.message || 'noticias.json guardado.';
+  setStatus('noticias.json guardado com sucesso.', 'ok');
+}
+
+async function publicar() {
+  setStatus('A executar deploy...', 'info');
+
+  const { payload } = await apiRequest('/api/publish', { method: 'POST' });
+
+  document.getElementById('logSaida').value = payload.output || payload.message || '';
+
+  if (!payload.ok) {
+    throw new Error(payload.error || 'Deploy falhou.');
+  }
+
+  setStatus('Deploy concluído com sucesso.', 'ok');
+}
+
+async function verificarOuLigarServidor() {
+  setStatus('A verificar servidor local do Notícias Studio...', 'info');
+
+  try {
+    const { payload, url } = await apiRequest('/api/noticias', { method: 'GET' });
+    if (!payload || !payload.ok) {
+      throw new Error('API respondeu sem estado OK.');
+    }
+
+    document.getElementById('logSaida').value = `Servidor ONLINE e API acessível em: ${url}`;
+    setStatus('Servidor online. Podes guardar e publicar normalmente.', 'ok');
+    return;
+  } catch (error) {
+    setStatus('Servidor offline. Executa iniciar-noticias-studio.cmd e depois volta a clicar em Verificar.', 'err');
+    document.getElementById('logSaida').value = 'Servidor offline. Para ligar, executa o ficheiro iniciar-noticias-studio.cmd na raiz do projeto.';
+  }
+}
+
+function bindEvents() {
+  document.getElementById('btnServidor').addEventListener('click', async () => {
+    await verificarOuLigarServidor();
+  });
+
+  document.getElementById('btnBold').addEventListener('click', () => {
+    applyRichFormat('bold');
+  });
+
+  document.getElementById('btnItalic').addEventListener('click', () => {
+    applyRichFormat('italic');
+  });
+
+  document.getElementById('btnLink').addEventListener('click', addLinkInEditor);
+
+  document.getElementById('btnConverter').addEventListener('click', () => {
+    const raw = getTextoBrutoHtml();
+    const converted = converterTexto(raw);
+    document.getElementById('conteudoConvertido').value = converted;
+    setStatus('Texto convertido.', 'ok');
+  });
+
+  document.getElementById('btnAdicionar').addEventListener('click', adicionarNoticia);
+  document.getElementById('btnGerarResumo').addEventListener('click', () => {
+    const textoBruto = getTextoBrutoHtml();
+    const titulo = document.getElementById('titulo').value;
+
+    if (!stripHtmlToText(textoBruto).trim()) {
+      setStatus('Cola primeiro o artigo completo para gerar o resumo.', 'err');
+      return;
+    }
+
+    const resumoGerado = gerarResumoIA(textoBruto, titulo);
+    if (!resumoGerado) {
+      setStatus('Não foi possível gerar resumo automático para este texto.', 'err');
+      return;
+    }
+
+    document.getElementById('resumo').value = resumoGerado;
+    setStatus('Resumo curto gerado automaticamente.', 'ok');
+  });
+  document.getElementById('btnRenomearCat').addEventListener('click', renomearCategoria);
+
+  document.getElementById('btnRecarregar').addEventListener('click', async () => {
+    try {
+      await carregarNoticias();
+      document.getElementById('logSaida').value = 'JSON recarregado do disco.';
+    } catch (error) {
+      setStatus(error.message, 'err');
+    }
+  });
+
+  document.getElementById('btnGuardar').addEventListener('click', async () => {
+    try {
+      await guardarJSON();
+    } catch (error) {
+      setStatus(error.message, 'err');
+    }
+  });
+
+  document.getElementById('btnPublicar').addEventListener('click', async () => {
+    try {
+      await publicar();
+    } catch (error) {
+      setStatus(error.message, 'err');
+    }
+  });
+}
+
+(async function init() {
+  bindEvents();
+  bootstrapCategoriasFallback();
+
+  if (!(window.location.origin || '').includes('localhost:8787')) {
+    setStatus('Abre esta tool por http://localhost:8787/tools/noticias-studio.html para guardar/publicar sem erros.', 'info');
+  }
+
+  try {
+    await carregarNoticias();
+  } catch (error) {
+    bootstrapCategoriasFallback();
+    setStatus(error.message + ' (Abre por http://localhost:8787/tools/noticias-studio.html)', 'err');
+  }
+})();
+</script>
+</body>
+</html>
