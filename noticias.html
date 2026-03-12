@@ -2135,16 +2135,19 @@ function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
   let content = String(rawContent).replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  const hasHtml = /<[^>]+>/.test(content);
 
-  if (!/<[^>]+>/.test(content)) {
-    const paragraphToken = '__PARAGRAPH_BREAK__';
-    content = content
-      .replace(/\n{3,}/g, '\n\n')
-      .replace(/\n\n+/g, paragraphToken)
-      .replace(/\n+/g, ' ')
-      .replace(/\s{2,}/g, ' ')
-      .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
+  if (hasHtml) {
+    return content;
   }
+
+  const paragraphToken = '__PARAGRAPH_BREAK__';
+  content = content
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\n\n+/g, paragraphToken)
+    .replace(/\n+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
 
   content = normalizeBrokenLineWraps(content);
   content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
