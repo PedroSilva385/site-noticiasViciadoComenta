@@ -338,6 +338,11 @@ function escapeForJson(value) {
 function converterTexto(rawInput) {
   let texto = String(rawInput || '');
 
+  texto = texto.replace(/<\/?font\b[^>]*>/gi, '');
+  texto = texto.replace(/<span\b[^>]*>/gi, '');
+  texto = texto.replace(/<\/span>/gi, '');
+  texto = texto.replace(/\sstyle=("[^"]*"|'[^']*')/gi, '');
+
   texto = texto.replace(/<div><br\s*\/?>\s*<\/div>/gi, '\n');
   texto = texto.replace(/<div>/gi, '\n');
   texto = texto.replace(/<\/div>/gi, '');

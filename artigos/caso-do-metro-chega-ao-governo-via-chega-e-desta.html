@@ -1865,7 +1865,7 @@ footer {
 <meta name="twitter:title" content="CASO do METRO chega ao GOVERNO via CHEGA! &#201; desta?!">
 <meta name="twitter:description" content="O caso do Metro de Lisboa que evolve a DIGI">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/caso-do-metro-chega-ao-governo-via-chega-e-desta.html"},"headline":"CASO do METRO chega ao GOVERNO via CHEGA! É desta?!","description":"O caso do Metro de Lisboa que evolve a DIGI","datePublished":"2026-03-05T19:00:00Z","dateModified":"2026-03-13T10:37:27Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/caso-do-metro-chega-ao-governo-via-chega-e-desta.html"},"headline":"CASO do METRO chega ao GOVERNO via CHEGA! É desta?!","description":"O caso do Metro de Lisboa que evolve a DIGI","datePublished":"2026-03-05T19:00:00Z","dateModified":"2026-03-13T10:46:18Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2435,12 +2435,14 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   const contentWrapper = document.querySelector('.artigo-conteudo');
   const contentBody = document.getElementById('artigoConteudoBody');
   const btnEdit = document.getElementById('btnLiveEdit');
+  const btnBold = document.getElementById('btnLiveBold');
+  const btnLink = document.getElementById('btnLiveLink');
   const btnSave = document.getElementById('btnLiveSave');
   const btnCancel = document.getElementById('btnLiveCancel');
   const btnReset = document.getElementById('btnLiveReset');
   const editNote = document.querySelector('.live-edit-note');
 
-  if (!contentWrapper || !contentBody || !btnEdit || !btnSave || !btnCancel || !btnReset) return;
+  if (!contentWrapper || !contentBody || !btnEdit || !btnBold || !btnLink || !btnSave || !btnCancel || !btnReset) return;
 
   let baselineHtml = contentBody.innerHTML;
 
@@ -2448,6 +2450,8 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
     contentWrapper.classList.toggle('is-editing', isEditing);
     contentBody.contentEditable = isEditing ? 'true' : 'false';
     btnEdit.style.display = isEditing ? 'none' : 'inline-flex';
+    btnBold.style.display = isEditing ? 'inline-flex' : 'none';
+    btnLink.style.display = isEditing ? 'inline-flex' : 'none';
     btnSave.style.display = isEditing ? 'inline-flex' : 'none';
     btnCancel.style.display = isEditing ? 'inline-flex' : 'none';
   }
@@ -2456,6 +2460,33 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
     baselineHtml = contentBody.innerHTML;
     setEditState(true);
     contentBody.focus();
+  });
+
+  btnBold.addEventListener('click', () => {
+    contentBody.focus();
+    document.execCommand('bold', false, null);
+  });
+
+  btnLink.addEventListener('click', () => {
+    contentBody.focus();
+    const selection = window.getSelection();
+    const selectedText = selection ? String(selection.toString() || '').trim() : '';
+
+    if (!selectedText) {
+      alert('Seleciona primeiro o texto onde queres aplicar a hiperligação.');
+      return;
+    }
+
+    const rawUrl = window.prompt('URL da hiperligação (ex: https://exemplo.com):', 'https://');
+    if (!rawUrl) return;
+
+    const url = rawUrl.trim();
+    if (!/^https?:\/\//i.test(url)) {
+      alert('Indica um link válido começado por http:// ou https://');
+      return;
+    }
+
+    document.execCommand('createLink', false, url);
   });
 
   btnSave.addEventListener('click', async () => {
@@ -2681,6 +2712,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">
               <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
+              <button class="live-edit-btn" id="btnLiveBold" type="button" style="display:none;">𝐁 Negrito</button>
+              <button class="live-edit-btn" id="btnLiveLink" type="button" style="display:none;">🔗 Hiperligação</button>
               <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">💾 Guardar edição</button>
               <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">↩️ Cancelar</button>
               <button class="live-edit-btn" id="btnLiveReset" type="button">🧹 Repor original</button>
