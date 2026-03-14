@@ -197,6 +197,11 @@
       <button class="tab-btn active" data-tab="visitas">📈 Visitas</button>
       <button class="tab-btn" data-tab="comentarios">💬 Comentários recentes</button>
       <button class="tab-btn" data-tab="likes">❤️ Likes recentes</button>
+      <button class="tab-btn" data-tab="online">🔴 Online Agora</button>
+      <button class="tab-btn" data-tab="paginas">📄 Páginas</button>
+      <button class="tab-btn" data-tab="artigos">📰 Artigos</button>
+      <button class="tab-btn" data-tab="cliques">🖱️ Cliques</button>
+      <button class="tab-btn" data-tab="fontes">🌐 Fontes</button>
     </div>
 
     <section class="tab-panel active" id="tab-visitas">
@@ -224,6 +229,10 @@
         <div class="card">
           <div class="card-label">Última atualização</div>
           <div class="card-value" id="lastUpdate" style="font-size:1.15em;">-</div>
+        </div>
+        <div class="card" style="border-top:3px solid #22c55e;">
+          <div class="card-label">🟢 Online agora</div>
+          <div class="card-value" id="onlineNow">-</div>
         </div>
       </div>
 
@@ -318,6 +327,74 @@
             </tr>
           </thead>
           <tbody id="likesRecentBody"></tbody>
+        </table>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="tab-online">
+      <div class="cards">
+        <div class="card" style="border-top:3px solid #22c55e;">
+          <div class="card-label">🟢 Sessões ativas agora</div>
+          <div class="card-value" id="onlineNowDetail">-</div>
+        </div>
+      </div>
+      <section class="panel">
+        <h2>🔴 Utilizadores Online em Tempo Real</h2>
+        <table>
+          <thead>
+            <tr><th>Sessão</th><th>Página</th><th>Desde</th></tr>
+          </thead>
+          <tbody id="onlineBody"></tbody>
+        </table>
+        <div class="status" id="onlineStatus">A carregar...</div>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="tab-paginas">
+      <section class="panel">
+        <h2>📄 Páginas Mais Visitadas</h2>
+        <table>
+          <thead>
+            <tr><th>Página</th><th>Visitas</th></tr>
+          </thead>
+          <tbody id="paginasBody"></tbody>
+        </table>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="tab-artigos">
+      <section class="panel">
+        <h2>📰 Artigos Mais Lidos</h2>
+        <table>
+          <thead>
+            <tr><th>Artigo</th><th>Leituras</th></tr>
+          </thead>
+          <tbody id="artigosBody"></tbody>
+        </table>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="tab-cliques">
+      <section class="panel">
+        <h2>🖱️ Elementos Mais Clicados</h2>
+        <table>
+          <thead>
+            <tr><th>Elemento / Destino</th><th>Cliques</th></tr>
+          </thead>
+          <tbody id="cliquesBody"></tbody>
+        </table>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="tab-fontes">
+      <section class="panel">
+        <h2>🌐 Fontes de Tráfego</h2>
+        <p class="meta" style="margin-bottom:10px;">Os dados acumulam a partir do momento desta atualização.</p>
+        <table>
+          <thead>
+            <tr><th>Origem</th><th>Visitas</th></tr>
+          </thead>
+          <tbody id="fontesBody"></tbody>
         </table>
       </section>
     </section>
@@ -767,14 +844,234 @@
       });
     }
 
+    function carregarOnlineAgora() {
+      database.ref('active_users').on('value', (snapshot) => {
+        const users = [];
+        snapshot.forEach((snap) => {
+          const val = snap.val() || {};
+          users.push({ key: snap.key, page: val.page || '/', timestamp: val.timestamp || 0 });
+        });
+
+        const count = users.length;
+        setText('onlineNow', count.toString());
+        setText('onlineNowDetail', count.toString());
+
+        const tbody = document.getElementById('onlineBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!count) {
+          renderEmptyRow('onlineBody', 'Nenhuma sessão ativa neste momento.', 3);
+          setText('onlineStatus', 'Nenhum utilizador online.');
+          return;
+        }
+
+        users.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        users.forEach((user) => {
+          const tr = document.createElement('tr');
+
+          const keyCell = document.createElement('td');
+          keyCell.textContent = user.key.slice(0, 20);
+
+          const pageCell = document.createElement('td');
+          pageCell.textContent = user.page;
+
+          const timeCell = document.createElement('td');
+          timeCell.textContent = user.timestamp ? formatDateTime(user.timestamp) : '-';
+
+          tr.appendChild(keyCell);
+          tr.appendChild(pageCell);
+          tr.appendChild(timeCell);
+          tbody.appendChild(tr);
+        });
+
+        setText('onlineStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
+      }, (error) => {
+        console.error('Erro ao carregar utilizadores online:', error);
+        setText('onlineStatus', 'Erro ao carregar dados.');
+      });
+    }
+
+    function renderTopPaginas(pagesObj) {
+      const tbody = document.getElementById('paginasBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const entries = Object.entries(pagesObj || {})
+        .map(([key, count]) => [key.replace(/__/g, '/').replace(/_/g, '/'), Number(count) || 0])
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 30);
+
+      if (!entries.length) {
+        renderEmptyRow('paginasBody', 'Sem dados de páginas.', 2);
+        return;
+      }
+
+      entries.forEach(([page, count]) => {
+        const tr = document.createElement('tr');
+        const pageCell = document.createElement('td');
+        pageCell.textContent = page;
+        const countCell = document.createElement('td');
+        countCell.textContent = count.toLocaleString('pt-PT');
+        tr.appendChild(pageCell);
+        tr.appendChild(countCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function carregarTopArtigos() {
+      database.ref('article_reads').on('value', (snapshot) => {
+        const tbody = document.getElementById('artigosBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        const data = snapshot.val() || {};
+        const entries = Object.entries(data)
+          .map(([id, count]) => [id, Number(count) || 0])
+          .sort((a, b) => b[1] - a[1]);
+
+        if (!entries.length) {
+          renderEmptyRow('artigosBody', 'Sem dados de leituras ainda.', 2);
+          return;
+        }
+
+        entries.forEach(([id, count]) => {
+          const tr = document.createElement('tr');
+          const titleCell = document.createElement('td');
+          titleCell.textContent = getNoticiaTitle(id);
+          const countCell = document.createElement('td');
+          countCell.textContent = count.toLocaleString('pt-PT');
+          tr.appendChild(titleCell);
+          tr.appendChild(countCell);
+          tbody.appendChild(tr);
+        });
+      }, (error) => {
+        console.error('Erro ao carregar artigos:', error);
+      });
+    }
+
+    function carregarTopCliques() {
+      database.ref('click_stats/targets').on('value', (snapshot) => {
+        const tbody = document.getElementById('cliquesBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        const data = snapshot.val() || {};
+        const entries = Object.values(data)
+          .map((item) => ({
+            label: (item.label || item.href || 'desconhecido').slice(0, 120),
+            count: Number(item.count) || 0
+          }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 50);
+
+        if (!entries.length) {
+          renderEmptyRow('cliquesBody', 'Sem dados de cliques ainda.', 2);
+          return;
+        }
+
+        entries.forEach((item) => {
+          const tr = document.createElement('tr');
+          const labelCell = document.createElement('td');
+          labelCell.textContent = item.label;
+          const countCell = document.createElement('td');
+          countCell.textContent = item.count.toLocaleString('pt-PT');
+          tr.appendChild(labelCell);
+          tr.appendChild(countCell);
+          tbody.appendChild(tr);
+        });
+      }, (error) => {
+        console.error('Erro ao carregar cliques:', error);
+      });
+    }
+
+    function renderFontes(referrersObj) {
+      const tbody = document.getElementById('fontesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const entries = Object.entries(referrersObj || {})
+        .map(([key, count]) => [key === 'direct' ? '🔗 Acesso direto' : key, Number(count) || 0])
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 30);
+
+      if (!entries.length) {
+        renderEmptyRow('fontesBody', 'Sem dados de fontes ainda. A acumular nas próximas visitas.', 2);
+        return;
+      }
+
+      entries.forEach(([source, count]) => {
+        const tr = document.createElement('tr');
+        const sourceCell = document.createElement('td');
+        sourceCell.textContent = source;
+        const countCell = document.createElement('td');
+        countCell.textContent = count.toLocaleString('pt-PT');
+        tr.appendChild(sourceCell);
+        tr.appendChild(countCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Extensão de carregarEstatisticas para também alimentar as tabs de páginas e fontes
+    function carregarEstatisticasCompleto() {
+      database.ref('site_stats').on('value', (snapshot) => {
+        const stats = snapshot.val() || {};
+        const todayKey = formatLocalDateKey(new Date());
+
+        const dailyTotals = stats.daily || {};
+        const dailyUnique = stats.unique_daily || {};
+        hourlyTotalsByDate = stats.hourly || {};
+        hourlyUniqueByDate = stats.unique_hourly || {};
+
+        const hourlyAllMap = hourlyTotalsByDate[todayKey] || {};
+        const hourlyUniqueMap = hourlyUniqueByDate[todayKey] || {};
+
+        const sumFromHourly = renderHourlyRows(hourlyAllMap, hourlyUniqueMap);
+        const todayTotal = safeNumber(dailyTotals[todayKey]) || sumFromHourly;
+
+        setText('todayTotal', todayTotal.toLocaleString('pt-PT'));
+        setText('todayUnique', safeNumber(dailyUnique[todayKey]).toLocaleString('pt-PT'));
+        setText('allTotal', safeNumber(stats.total_visits).toLocaleString('pt-PT'));
+        setText('allUnique', safeNumber(stats.unique_total).toLocaleString('pt-PT'));
+        setText('lastUpdate', stats.last_updated ? new Date(stats.last_updated).toLocaleString('pt-PT') : '-');
+
+        const dailyUniqueEntries = Object.entries(dailyUnique).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
+        const dailyTotalEntries = Object.entries(dailyTotals).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
+        const pastDayKeys = getPastDateKeys(todayKey, 5);
+        const selectedDay = updatePastDayOptions(pastDayKeys);
+
+        if (!selectedDay) {
+          renderEmptyRow('pastHourlyBody', 'Sem dados horários para dias anteriores.', 3);
+          setText('pastHourlyStatus', 'Sem dados disponíveis.');
+        } else {
+          renderPastHourlySelectedDay();
+        }
+
+        renderDailyTable('dailyUniqueBody', dailyUniqueEntries);
+        renderDailyTable('dailyTotalBody', dailyTotalEntries);
+        setText('hourlyStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
+
+        // Alimentar tabs adicionais
+        renderTopPaginas(stats.pages || {});
+        renderFontes(stats.referrers || {});
+      }, (error) => {
+        console.error('Erro ao carregar estatísticas:', error);
+        setText('hourlyStatus', 'Erro ao carregar dados do Firebase.');
+        setText('pastHourlyStatus', 'Erro ao carregar dados do Firebase.');
+      });
+    }
+
     document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
     initTheme();
     initTabs();
     initPastHourlySelector();
     carregarNoticiasMap().finally(() => {
-      carregarEstatisticas();
+      carregarEstatisticasCompleto();
       carregarComentariosRecentes();
       carregarLikesRecentes();
+      carregarOnlineAgora();
+      carregarTopArtigos();
+      carregarTopCliques();
     });
   </script>
 </body>

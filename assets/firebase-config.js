@@ -145,6 +145,18 @@ async function registerVisitMetrics(db, visitorHash) {
   const hour = String(now.getHours()).padStart(2, '0');
   const statsRef = db.ref('site_stats');
 
+  // Referrer / fonte de tráfego
+  const rawReferrer = document.referrer || '';
+  let referrerKey = 'direct';
+  if (rawReferrer) {
+    try {
+      const refHost = new URL(rawReferrer).hostname || rawReferrer.slice(0, 60);
+      referrerKey = sanitizeFirebaseKey(refHost);
+    } catch (_) {
+      referrerKey = sanitizeFirebaseKey(rawReferrer.slice(0, 60));
+    }
+  }
+
   await statsRef.transaction((data) => {
     if (!data) {
       data = {
@@ -157,6 +169,7 @@ async function registerVisitMetrics(db, visitorHash) {
         unique_monthly: {},
         unique_hourly: {},
         pages: {},
+        referrers: {},
         last_updated: new Date().toISOString()
       };
     }
@@ -175,6 +188,9 @@ async function registerVisitMetrics(db, visitorHash) {
 
     if (!data.pages) data.pages = {};
     data.pages[pageKey] = (data.pages[pageKey] || 0) + 1;
+
+    if (!data.referrers) data.referrers = {};
+    data.referrers[referrerKey] = (data.referrers[referrerKey] || 0) + 1;
 
     data.last_updated = new Date().toISOString();
     return data;
