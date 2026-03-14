@@ -1007,13 +1007,12 @@
     }
 
     function carregarTopCliques() {
-      database.ref('click_stats/targets').on('value', (snapshot) => {
+      const renderClickEntries = (data) => {
         const tbody = document.getElementById('cliquesBody');
         if (!tbody) return;
         tbody.innerHTML = '';
 
-        const data = snapshot.val() || {};
-        const entries = Object.values(data)
+        const entries = Object.values(data || {})
           .map((item) => ({
             label: (item.label || item.href || 'desconhecido').slice(0, 120),
             count: Number(item.count) || 0
@@ -1035,6 +1034,20 @@
           tr.appendChild(labelCell);
           tr.appendChild(countCell);
           tbody.appendChild(tr);
+        });
+      };
+
+      database.ref('site_stats/click_targets').on('value', (snapshot) => {
+        const primaryData = snapshot.val() || {};
+        if (Object.keys(primaryData).length > 0) {
+          renderClickEntries(primaryData);
+          return;
+        }
+
+        database.ref('click_stats/targets').on('value', (legacySnapshot) => {
+          renderClickEntries(legacySnapshot.val() || {});
+        }, (legacyError) => {
+          console.error('Erro ao carregar cliques (legacy):', legacyError);
         });
       }, (error) => {
         console.error('Erro ao carregar cliques:', error);
