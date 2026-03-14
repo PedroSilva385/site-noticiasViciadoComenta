@@ -436,24 +436,19 @@ function initializeFirebaseApp() {
         activeUserRef.onDisconnect().remove();
         window.addEventListener('beforeunload', () => activeUserRef.remove());
 
-        // Histórico de sessões ativas (um registo por sessão)
+        // Histórico persistente — regista cada página visitada
         const sessionKey = 'vc_active_session_id';
-        const historyWrittenKey = 'vc_active_history_written';
         let sessionId = sessionStorage.getItem(sessionKey);
         if (!sessionId) {
           sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
           sessionStorage.setItem(sessionKey, sessionId);
         }
 
-        if (!sessionStorage.getItem(historyWrittenKey)) {
-          const historyRef = db.ref('active_users_history/' + sessionId);
-          historyRef.set({
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            page: window.location.pathname
-          }).then(() => {
-            sessionStorage.setItem(historyWrittenKey, '1');
-          }).catch((err) => console.error('❌ Erro no histórico de ativos:', err));
-        }
+        db.ref('visitors_history').push({
+          sessionId,
+          page: window.location.pathname,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
 
         console.log('✓ Analytics configurado');
       } catch (analyticsError) {

@@ -202,6 +202,7 @@
       <button class="tab-btn" data-tab="artigos">📰 Artigos</button>
       <button class="tab-btn" data-tab="cliques">🖱️ Cliques</button>
       <button class="tab-btn" data-tab="fontes">🌐 Fontes</button>
+      <button class="tab-btn" data-tab="historico">📋 Histórico</button>
     </div>
 
     <section class="tab-panel active" id="tab-visitas">
@@ -396,6 +397,34 @@
           </thead>
           <tbody id="fontesBody"></tbody>
         </table>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="tab-historico">
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Entradas registadas</div>
+          <div class="card-value" id="historicoTotal">-</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Sessões únicas</div>
+          <div class="card-value" id="historicoSessoes">-</div>
+        </div>
+      </div>
+      <section class="panel">
+        <h2>📋 Histórico de Atividade (últimas 300 entradas)</h2>
+        <div class="inline-controls">
+          <label for="historicoFiltro">Filtrar sessão:</label>
+          <input id="historicoFiltro" type="text" placeholder="sess_xxx" style="border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-family:inherit;background:#fff;color:#1a1f3a;" />
+          <button class="btn btn-secondary" id="historicoClear" style="padding:7px 12px;font-size:.9em;">Limpar filtro</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Quando</th><th>Sessão</th><th>Página visitada</th></tr>
+          </thead>
+          <tbody id="historicoBody"></tbody>
+        </table>
+        <div class="status" id="historicoStatus">A carregar...</div>
       </section>
     </section>
   </div>
@@ -1061,6 +1090,96 @@
       });
     }
 
+    let _historicoRows = [];
+
+    function renderHistoricoRows(filtro) {
+      const tbody = document.getElementById('historicoBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const rows = filtro
+        ? _historicoRows.filter((r) => r.sessionId && r.sessionId.includes(filtro))
+        : _historicoRows;
+
+      if (!rows.length) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 3;
+        td.className = 'empty';
+        td.textContent = filtro ? 'Nenhuma entrada para esta sessão.' : 'Sem histórico ainda.';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      rows.forEach((item) => {
+        const tr = document.createElement('tr');
+
+        const whenCell = document.createElement('td');
+        whenCell.textContent = item.timestamp ? formatDateTime(item.timestamp) : '-';
+
+        const sessCell = document.createElement('td');
+        sessCell.textContent = item.sessionId || '-';
+        sessCell.style.fontFamily = 'monospace';
+        sessCell.style.fontSize = '0.85em';
+        sessCell.style.cursor = 'pointer';
+        sessCell.title = 'Clica para filtrar por esta sessão';
+        sessCell.addEventListener('click', () => {
+          const input = document.getElementById('historicoFiltro');
+          if (input) { input.value = item.sessionId || ''; renderHistoricoRows(input.value); }
+        });
+
+        const pageCell = document.createElement('td');
+        pageCell.textContent = item.page || '/';
+
+        tr.appendChild(whenCell);
+        tr.appendChild(sessCell);
+        tr.appendChild(pageCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function carregarHistorico() {
+      database.ref('visitors_history').orderByKey().limitToLast(300).on('value', (snapshot) => {
+        const rows = [];
+        snapshot.forEach((snap) => {
+          const val = snap.val() || {};
+          rows.push({
+            sessionId: val.sessionId || '',
+            page: val.page || '/',
+            timestamp: typeof val.timestamp === 'number' ? val.timestamp : 0
+          });
+        });
+
+        // mais recente primeiro
+        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        _historicoRows = rows;
+
+        const sessoes = new Set(rows.map((r) => r.sessionId).filter(Boolean));
+        setText('historicoTotal', rows.length.toLocaleString('pt-PT'));
+        setText('historicoSessoes', sessoes.size.toLocaleString('pt-PT'));
+
+        const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
+        renderHistoricoRows(filtro);
+        setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${rows.length} entradas`);
+      }, (error) => {
+        console.error('Erro ao carregar histórico:', error);
+        setText('historicoStatus', 'Erro ao carregar dados.');
+      });
+
+      const filtroInput = document.getElementById('historicoFiltro');
+      if (filtroInput) {
+        filtroInput.addEventListener('input', () => renderHistoricoRows(filtroInput.value));
+      }
+      const clearBtn = document.getElementById('historicoClear');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (filtroInput) filtroInput.value = '';
+          renderHistoricoRows('');
+        });
+      }
+    }
+
     document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
     initTheme();
     initTabs();
@@ -1072,6 +1191,7 @@
       carregarOnlineAgora();
       carregarTopArtigos();
       carregarTopCliques();
+      carregarHistorico();
     });
   </script>
 </body>
