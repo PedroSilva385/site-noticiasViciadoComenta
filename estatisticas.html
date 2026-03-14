@@ -1143,22 +1143,24 @@
       database.ref('active_users_history').on('value', (snapshot) => {
         const rows = [];
         snapshot.forEach((sessionSnap) => {
-          const sessionId = sessionSnap.key || '';
+          const sessionKey = sessionSnap.key || '';
           const sessionVal = sessionSnap.val() || {};
 
-          if (sessionVal.page || sessionVal.timestamp) {
+          // Formato novo: chave única por visita + campo sessionId
+          if (sessionVal.sessionId || sessionVal.page || sessionVal.timestamp) {
             rows.push({
-              sessionId,
+              sessionId: sessionVal.sessionId || sessionKey.replace(/_\d+$/, ''),
               page: sessionVal.page || '/',
               timestamp: typeof sessionVal.timestamp === 'number' ? sessionVal.timestamp : 0
             });
           }
 
+          // Compatibilidade com formato intermédio (events por sessão)
           const events = sessionVal.events || {};
           Object.keys(events).forEach((eventId) => {
             const eventVal = events[eventId] || {};
             rows.push({
-              sessionId,
+              sessionId: sessionVal.sessionId || sessionKey,
               page: eventVal.page || '/',
               timestamp: typeof eventVal.timestamp === 'number' ? eventVal.timestamp : 0
             });

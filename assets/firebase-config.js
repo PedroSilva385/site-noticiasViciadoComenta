@@ -444,13 +444,9 @@ function initializeFirebaseApp() {
           sessionStorage.setItem(sessionKey, sessionId);
         }
 
-        const sessionHistoryRef = db.ref('active_users_history/' + sessionId);
-        sessionHistoryRef.update({
-          page: window.location.pathname,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        }).catch((err) => console.error('❌ Erro no histórico de sessão:', err));
-
-        sessionHistoryRef.child('events').push({
+        const historyEntryId = sessionId + '_' + Date.now();
+        db.ref('active_users_history/' + historyEntryId).set({
+          sessionId,
           page: window.location.pathname,
           timestamp: firebase.database.ServerValue.TIMESTAMP
         }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
