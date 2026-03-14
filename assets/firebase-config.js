@@ -136,7 +136,7 @@ async function getVisitorFingerprint() {
   return hashText(localFingerprint);
 }
 
-async function registerVisitMetrics(db, visitorHash) {
+async function registerVisitMetrics(db, visitorHash, countSessionVisit = true) {
   const pagePath = window.location.pathname || '/';
   const pageKey = sanitizeFirebaseKey(pagePath);
   const now = new Date();
@@ -174,17 +174,19 @@ async function registerVisitMetrics(db, visitorHash) {
       };
     }
 
-    data.total_visits = (data.total_visits || 0) + 1;
+    if (countSessionVisit) {
+      data.total_visits = (data.total_visits || 0) + 1;
 
-    if (!data.daily) data.daily = {};
-    data.daily[today] = (data.daily[today] || 0) + 1;
+      if (!data.daily) data.daily = {};
+      data.daily[today] = (data.daily[today] || 0) + 1;
 
-    if (!data.monthly) data.monthly = {};
-    data.monthly[month] = (data.monthly[month] || 0) + 1;
+      if (!data.monthly) data.monthly = {};
+      data.monthly[month] = (data.monthly[month] || 0) + 1;
 
-    if (!data.hourly) data.hourly = {};
-    if (!data.hourly[today]) data.hourly[today] = {};
-    data.hourly[today][hour] = (data.hourly[today][hour] || 0) + 1;
+      if (!data.hourly) data.hourly = {};
+      if (!data.hourly[today]) data.hourly[today] = {};
+      data.hourly[today][hour] = (data.hourly[today][hour] || 0) + 1;
+    }
 
     if (!data.pages) data.pages = {};
     data.pages[pageKey] = (data.pages[pageKey] || 0) + 1;
@@ -195,6 +197,10 @@ async function registerVisitMetrics(db, visitorHash) {
     data.last_updated = new Date().toISOString();
     return data;
   });
+
+  if (!countSessionVisit) {
+    return;
+  }
 
   const uniqueVisitRef = db.ref(`site_unique_views/daily/${today}/${visitorHash}`);
   let isUniqueForDay = false;
@@ -322,7 +328,7 @@ function setupClickTracking(db, visitorHash) {
         data.page = pagePath;
         data.last_clicked = new Date().toISOString();
         return data;
-      });
+      }).catch(() => {});
 
       const pageRef = db.ref(`click_stats/pages/${pageKey}`);
       pageRef.transaction((data) => {
@@ -333,7 +339,7 @@ function setupClickTracking(db, visitorHash) {
         data.path = pagePath;
         data.last_clicked = new Date().toISOString();
         return data;
-      });
+      }).catch(() => {});
 
       const today = getLocalDateKey(new Date());
       const dailyTargetRef = db.ref(`click_stats/daily/${today}/targets/${targetKey}`);
@@ -345,7 +351,7 @@ function setupClickTracking(db, visitorHash) {
         data.label = label;
         data.href = href;
         return data;
-      });
+      }).catch(() => {});
 
       const visitorClickRef = db.ref(`click_stats/visitors/${today}/${visitorHash}`);
       visitorClickRef.transaction((data) => {
@@ -354,6 +360,22 @@ function setupClickTracking(db, visitorHash) {
         }
         data.total_clicks = (data.total_clicks || 0) + 1;
         return data;
+      }).catch(() => {});
+
+      // Fallback compatível com regras atuais
+      const siteStatsTargetRef = db.ref(`site_stats/click_targets/${targetKey}`);
+      siteStatsTargetRef.transaction((data) => {
+        if (!data) {
+          data = { count: 0, label, href, page: pagePath, last_clicked: null };
+        }
+        data.count = (data.count || 0) + 1;
+        data.label = label;
+        data.href = href;
+        data.page = pagePath;
+        data.last_clicked = new Date().toISOString();
+        return data;
+      }).catch((error) => {
+        console.error('❌ Erro fallback click_targets em site_stats:', error);
       });
     } catch (error) {
       console.error('❌ Erro ao registar clique:', error);
@@ -408,17 +430,18 @@ function initializeFirebaseApp() {
         const db = firebase.database();
         getVisitorFingerprint()
           .then((visitorHash) => {
-            if (shouldRegisterVisitForSession()) {
-              registerVisitMetrics(db, visitorHash)
-                .then(() => {
+            const shouldCountSessionVisit = shouldRegisterVisitForSession();
+            registerVisitMetrics(db, visitorHash, shouldCountSessionVisit)
+              .then(() => {
+                if (shouldCountSessionVisit) {
                   console.log('✓ Métricas de visita registadas (entrada na sessão)');
-                })
-                .catch((error) => {
-                  console.error('❌ Erro ao registar métricas de visita:', error);
-                });
-            } else {
-              console.log('ℹ️ Navegação interna: visita não recontada');
-            }
+                } else {
+                  console.log('ℹ️ Navegação interna: sessão não recontada, página registada');
+                }
+              })
+              .catch((error) => {
+                console.error('❌ Erro ao registar métricas de visita:', error);
+              });
 
             setupClickTracking(db, visitorHash);
             console.log('✓ Tracking de cliques ativo');
