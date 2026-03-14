@@ -133,7 +133,11 @@ function ordenarNoticiasPorData(noticias) {
  * @returns {Promise} - Promise com as notícias filtradas
  */
 async function fetchNoticiasAgendadas(url) {
-  const response = await fetch(url);
+  const cacheBust = `_ts=${Date.now()}`;
+  const separator = url.includes('?') ? '&' : '?';
+  const requestUrl = `${url}${separator}${cacheBust}`;
+
+  const response = await fetch(requestUrl, { cache: 'no-store' });
   if (!response.ok) throw new Error('Erro ao carregar notícias');
   
   const data = await response.json();
