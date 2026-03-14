@@ -415,7 +415,7 @@
         <h2>📋 Histórico de Atividade (últimas 300 entradas)</h2>
         <div class="inline-controls">
           <label for="historicoFiltro">Filtrar sessão:</label>
-          <input id="historicoFiltro" type="text" placeholder="sess_xxx" style="border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-family:inherit;background:#fff;color:#1a1f3a;" />
+          <input id="historicoFiltro" type="text" placeholder="número da sessão ou sess_xxx" style="border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-family:inherit;background:#fff;color:#1a1f3a;" />
           <button class="btn btn-secondary" id="historicoClear" style="padding:7px 12px;font-size:.9em;">Limpar filtro</button>
         </div>
         <table>
@@ -434,6 +434,32 @@
     const noticiasMap = {};
     let hourlyTotalsByDate = {};
     let hourlyUniqueByDate = {};
+    let _sessionNumberMap = new Map();
+    let _nextSessionNumber = 1;
+
+    function getSessionNumber(sessionId) {
+      const key = String(sessionId || '').trim();
+      if (!key) return null;
+      if (!_sessionNumberMap.has(key)) {
+        _sessionNumberMap.set(key, _nextSessionNumber);
+        _nextSessionNumber += 1;
+      }
+      return _sessionNumberMap.get(key);
+    }
+
+    function getSessionLabel(sessionId) {
+      const num = getSessionNumber(sessionId);
+      return num ? `Sessão ${num}` : 'Sessão -';
+    }
+
+    function rebuildSessionNumbering(rows) {
+      const ordered = (rows || []).slice().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+      _sessionNumberMap = new Map();
+      _nextSessionNumber = 1;
+      ordered.forEach((row) => {
+        if (row && row.sessionId) getSessionNumber(row.sessionId);
+      });
+    }
 
     function safeNumber(value) {
       const num = Number(value);
@@ -900,7 +926,8 @@
           const tr = document.createElement('tr');
 
           const keyCell = document.createElement('td');
-          keyCell.textContent = user.key.slice(0, 20);
+          keyCell.textContent = getSessionLabel(user.key);
+          keyCell.title = user.key;
 
           const pageCell = document.createElement('td');
           pageCell.textContent = user.page;
@@ -1097,8 +1124,16 @@
       if (!tbody) return;
       tbody.innerHTML = '';
 
-      const rows = filtro
-        ? _historicoRows.filter((r) => r.sessionId && r.sessionId.includes(filtro))
+      const rawFilter = String(filtro || '').trim();
+      const numberFilter = /^\d+$/.test(rawFilter) ? Number(rawFilter) : null;
+      const rows = rawFilter
+        ? _historicoRows.filter((r) => {
+          if (!r.sessionId) return false;
+          if (numberFilter !== null) {
+            return getSessionNumber(r.sessionId) === numberFilter;
+          }
+          return r.sessionId.toLowerCase().includes(rawFilter.toLowerCase());
+        })
         : _historicoRows;
 
       if (!rows.length) {
@@ -1119,14 +1154,16 @@
         whenCell.textContent = item.timestamp ? formatDateTime(item.timestamp) : '-';
 
         const sessCell = document.createElement('td');
-        sessCell.textContent = item.sessionId || '-';
-        sessCell.style.fontFamily = 'monospace';
-        sessCell.style.fontSize = '0.85em';
+        sessCell.textContent = getSessionLabel(item.sessionId);
         sessCell.style.cursor = 'pointer';
-        sessCell.title = 'Clica para filtrar por esta sessão';
+        sessCell.title = `ID real: ${item.sessionId || '-'} • Clica para filtrar por número`;
         sessCell.addEventListener('click', () => {
           const input = document.getElementById('historicoFiltro');
-          if (input) { input.value = item.sessionId || ''; renderHistoricoRows(input.value); }
+          if (input) {
+            const number = getSessionNumber(item.sessionId);
+            input.value = number ? String(number) : '';
+            renderHistoricoRows(input.value);
+          }
         });
 
         const pageCell = document.createElement('td');
@@ -1169,6 +1206,7 @@
 
         // mais recente primeiro
         rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        rebuildSessionNumbering(rows);
         _historicoRows = rows.slice(0, 300);
 
         const sessoes = new Set(_historicoRows.map((r) => r.sessionId).filter(Boolean));
