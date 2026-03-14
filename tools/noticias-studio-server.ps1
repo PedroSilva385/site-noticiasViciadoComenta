@@ -123,6 +123,56 @@ function Resolve-VideoTargetFileName {
     return [System.IO.Path]::GetFileName($targetPath)
 }
 
+function Sync-NoticiasLinks {
+    param([Parameter(Mandatory = $true)] $Payload)
+
+    if (-not $Payload -or -not $Payload.noticias) {
+        return
+    }
+
+    foreach ($noticia in @($Payload.noticias)) {
+        if (-not $noticia) {
+            continue
+        }
+
+        $id = [string]$noticia.id
+        if ([string]::IsNullOrWhiteSpace($id)) {
+            continue
+        }
+
+        $slug = ''
+        if ($noticia.PSObject.Properties.Name -contains 'slug' -and -not [string]::IsNullOrWhiteSpace([string]$noticia.slug)) {
+            $slug = [string]$noticia.slug
+        }
+
+        $normalLink = if (-not [string]::IsNullOrWhiteSpace($slug)) {
+            "https://www.viciadocomenta.pt/artigos/$slug.html"
+        } else {
+            "https://www.viciadocomenta.pt/noticias.html?id=$id"
+        }
+
+        $editableLink = if (-not [string]::IsNullOrWhiteSpace($slug)) {
+            "https://www.viciadocomenta.pt/noticias.html?id=$id&slug=$slug&edit=1"
+        } else {
+            "https://www.viciadocomenta.pt/noticias.html?id=$id&edit=1"
+        }
+
+        if ($noticia.PSObject.Properties.Name -contains 'link') {
+            $noticia.link = $normalLink
+        }
+        else {
+            Add-Member -InputObject $noticia -NotePropertyName 'link' -NotePropertyValue $normalLink
+        }
+
+        if ($noticia.PSObject.Properties.Name -contains 'linkEditavel') {
+            $noticia.linkEditavel = $editableLink
+        }
+        else {
+            Add-Member -InputObject $noticia -NotePropertyName 'linkEditavel' -NotePropertyValue $editableLink
+        }
+    }
+}
+
 try {
     Write-Host "Noticias Studio ativo em $prefix" -ForegroundColor Green
     Write-Host "Abrir no browser: ${prefix}tools/noticias-studio.html" -ForegroundColor Yellow
@@ -207,6 +257,8 @@ try {
                     Write-JsonResponse -Response $response -StatusCode 400 -Payload @{ ok = $false; error = 'Payload inválido. Esperado objeto com noticias.' }
                     continue
                 }
+
+                Sync-NoticiasLinks -Payload $payload
 
                 $jsonOut = $payload | ConvertTo-Json -Depth 100
                 [System.IO.File]::WriteAllText($jsonPath, $jsonOut, [System.Text.UTF8Encoding]::new($false))

@@ -166,6 +166,7 @@ foreach ($noticia in $noticias) {
     $content = $template
 
     $articleUrl = "https://www.viciadocomenta.pt/artigos/$slug.html"
+    $editableLiveUrl = "https://www.viciadocomenta.pt/noticias.html?id=$id&slug=$slug&edit=1"
 
     $currentSlug = if ($noticia.PSObject.Properties.Name -contains 'slug') { [string]$noticia.slug } else { '' }
     if ($currentSlug -ne $slug) {
@@ -183,6 +184,16 @@ foreach ($noticia in $noticias) {
             $noticia.link = $articleUrl
         } else {
             Add-Member -InputObject $noticia -NotePropertyName 'link' -NotePropertyValue $articleUrl
+        }
+        $jsonUpdated = $true
+    }
+
+    $currentEditableLink = if ($noticia.PSObject.Properties.Name -contains 'linkEditavel') { [string]$noticia.linkEditavel } else { '' }
+    if ($currentEditableLink -ne $editableLiveUrl) {
+        if ($noticia.PSObject.Properties.Name -contains 'linkEditavel') {
+            $noticia.linkEditavel = $editableLiveUrl
+        } else {
+            Add-Member -InputObject $noticia -NotePropertyName 'linkEditavel' -NotePropertyValue $editableLiveUrl
         }
         $jsonUpdated = $true
     }
@@ -352,5 +363,5 @@ Write-Output "Artigos espelho gerados: $($generatedArticles.Count)"
 Write-Output "Diretório: $artigosDir"
 Write-Output "Sitemap atualizado: $sitemapPath"
 if ($jsonUpdated) {
-    Write-Output "noticias.json sincronizado com slug/link"
+    Write-Output "noticias.json sincronizado com slug/link editável"
 }
