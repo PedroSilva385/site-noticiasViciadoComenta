@@ -1140,28 +1140,42 @@
     }
 
     function carregarHistorico() {
-      database.ref('visitors_history').orderByKey().limitToLast(300).on('value', (snapshot) => {
+      database.ref('active_users_history').on('value', (snapshot) => {
         const rows = [];
-        snapshot.forEach((snap) => {
-          const val = snap.val() || {};
-          rows.push({
-            sessionId: val.sessionId || '',
-            page: val.page || '/',
-            timestamp: typeof val.timestamp === 'number' ? val.timestamp : 0
+        snapshot.forEach((sessionSnap) => {
+          const sessionId = sessionSnap.key || '';
+          const sessionVal = sessionSnap.val() || {};
+
+          if (sessionVal.page || sessionVal.timestamp) {
+            rows.push({
+              sessionId,
+              page: sessionVal.page || '/',
+              timestamp: typeof sessionVal.timestamp === 'number' ? sessionVal.timestamp : 0
+            });
+          }
+
+          const events = sessionVal.events || {};
+          Object.keys(events).forEach((eventId) => {
+            const eventVal = events[eventId] || {};
+            rows.push({
+              sessionId,
+              page: eventVal.page || '/',
+              timestamp: typeof eventVal.timestamp === 'number' ? eventVal.timestamp : 0
+            });
           });
         });
 
         // mais recente primeiro
         rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        _historicoRows = rows;
+        _historicoRows = rows.slice(0, 300);
 
-        const sessoes = new Set(rows.map((r) => r.sessionId).filter(Boolean));
-        setText('historicoTotal', rows.length.toLocaleString('pt-PT'));
+        const sessoes = new Set(_historicoRows.map((r) => r.sessionId).filter(Boolean));
+        setText('historicoTotal', _historicoRows.length.toLocaleString('pt-PT'));
         setText('historicoSessoes', sessoes.size.toLocaleString('pt-PT'));
 
         const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
         renderHistoricoRows(filtro);
-        setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${rows.length} entradas`);
+        setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${_historicoRows.length} entradas`);
       }, (error) => {
         console.error('Erro ao carregar histórico:', error);
         setText('historicoStatus', 'Erro ao carregar dados.');
