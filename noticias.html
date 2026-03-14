@@ -2239,9 +2239,7 @@ function formatArticleContent(rawContent) {
 function canUseLiveEditor() {
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
-  const host = (window.location.hostname || '').toLowerCase();
-  const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
-  return editEnabled && !isPublicHost;
+  return editEnabled;
 }
 
 let studioApiBaseCache = null;
@@ -2616,14 +2614,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const host = (window.location.hostname || '').toLowerCase();
         const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
 
-        if (editParam === '1' && !isPublicHost) {
+        if (editParam === '1') {
           articleUrl.searchParams.set('edit', '1');
         }
 
-        const nextPathWithSearch = `${articleUrl.pathname}${articleUrl.search}`;
-        const currentPathWithSearch = `${window.location.pathname}${window.location.search}`;
-        if (currentPathWithSearch !== nextPathWithSearch) {
-          window.history.replaceState({}, '', nextPathWithSearch);
+        const shouldStayOnEditablePage = editParam === '1';
+        if (!shouldStayOnEditablePage) {
+          const nextPathWithSearch = `${articleUrl.pathname}${articleUrl.search}`;
+          const currentPathWithSearch = `${window.location.pathname}${window.location.search}`;
+          if (currentPathWithSearch !== nextPathWithSearch) {
+            window.history.replaceState({}, '', nextPathWithSearch);
+          }
         }
 
         const canonicalEl = document.getElementById('canonicalLink');
