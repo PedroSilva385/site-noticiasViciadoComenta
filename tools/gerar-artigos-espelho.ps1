@@ -259,6 +259,31 @@ foreach ($noticia in $noticias) {
 
     $content = [regex]::Replace($content, '<title>.*?</title>', "<title>$safeTitle - VICIADO COMENTA</title>", 1)
 
+    $genericMetaLines = @(
+        '<meta name="description" content="Leia notícias e artigos completos no VICIADO COMENTA, com foco em telecomunicações, tecnologia, gaming e temas de atualidade.">',
+        '<meta property="og:type" content="article">',
+        '<meta property="og:site_name" content="VICIADO COMENTA">',
+        '<meta property="og:title" content="Notícia - VICIADO COMENTA">',
+        '<meta property="og:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">',
+        '<meta property="og:url" content="https://www.viciadocomenta.pt/noticias.html">',
+        '<meta property="og:locale" content="pt_PT">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        '<meta name="twitter:title" content="Notícia - VICIADO COMENTA">',
+        '<meta name="twitter:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">'
+    )
+
+    foreach ($line in $genericMetaLines) {
+        $content = $content.Replace($line + "`r`n", '')
+        $content = $content.Replace($line + "`n", '')
+        $content = $content.Replace($line, '')
+    }
+
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="description" content="Leia .*?VICIADO COMENTA.*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:description" content="Not.*?gaming\.">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:description" content="Not.*?gaming\.">\s*\r?\n?', '')
+
     if ($content.Contains('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">')) {
         $content = $content.Replace('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">', ('<link rel="canonical" id="canonicalLink" href="' + $safeUrl + '">'))
     }
