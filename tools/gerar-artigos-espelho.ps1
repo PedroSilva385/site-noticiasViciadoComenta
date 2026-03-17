@@ -323,12 +323,10 @@ foreach ($noticia in $noticias) {
 $baseUrls = @(
     'https://www.viciadocomenta.pt/',
     'https://www.viciadocomenta.pt/todas-noticias.html',
-    'https://www.viciadocomenta.pt/noticias.html',
     'https://www.viciadocomenta.pt/viciado-comenta.html',
     'https://www.viciadocomenta.pt/viciado-ponto-critico.html',
     'https://www.viciadocomenta.pt/metin2.html',
     'https://www.viciadocomenta.pt/livestreams.html',
-    'https://www.viciadocomenta.pt/gaming.html',
     'https://www.viciadocomenta.pt/videos.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
     'https://www.viciadocomenta.pt/politica-privacidade.html'
