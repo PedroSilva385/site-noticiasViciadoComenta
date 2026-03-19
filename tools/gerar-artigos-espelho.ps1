@@ -258,6 +258,12 @@ foreach ($noticia in $noticias) {
 "@
 
     $content = [regex]::Replace($content, '<title>.*?</title>', "<title>$safeTitle - VICIADO COMENTA</title>", 1)
+    $content = [regex]::Replace(
+        $content,
+        '<meta name="robots" content="[^"]*">',
+        '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">',
+        1
+    )
 
     $genericMetaLines = @(
         '<meta name="description" content="Leia notícias e artigos completos no VICIADO COMENTA, com foco em telecomunicações, tecnologia, gaming e temas de atualidade.">',

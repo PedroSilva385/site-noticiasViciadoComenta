@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor de Artigos — Lançador</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f1f5f9;
+  min-height: 100vh;
+  padding: 28px 20px;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 6px;
+}
+.subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+/* === BOOKMARKLET === */
+.bookmarklet-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+.bookmarklet-card h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+.bookmarklet-card p {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.bookmarklet-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: grab;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+  transition: box-shadow 0.2s;
+  user-select: none;
+}
+.bookmarklet-btn:hover {
+  box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+}
+.bookmarklet-hint {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 10px;
+}
+
+/* === FILTRO === */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.search-input::placeholder { color: #475569; }
+.search-input:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+.filter-select {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+.filter-select:focus { outline: none; border-color: #6366f1; }
+.count-badge {
+  background: #334155;
+  color: #94a3b8;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* === LISTA DE ARTIGOS === */
+.artigos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.artigo-row {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.artigo-row:hover {
+  border-color: #6366f1;
+  background: #1a2540;
+}
+.artigo-info {
+  flex: 1;
+  min-width: 0;
+}
+.artigo-titulo {
+  font-weight: 700;
+  font-size: 0.97rem;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.artigo-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+.artigo-cat {
+  color: #818cf8;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+.artigo-id {
+  font-size: 0.75rem;
+  color: #475569;
+  font-family: monospace;
+}
+.btn-edit {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 3px 10px rgba(14,165,233,0.25);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.btn-edit:hover {
+  box-shadow: 0 5px 16px rgba(14,165,233,0.4);
+  transform: translateY(-1px);
+}
+.btn-preview {
+  background: #334155;
+  color: #e2e8f0;
+  border: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s;
+}
+.btn-preview:hover { background: #475569; }
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: #475569;
+}
+.empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+.loading {
+  text-align: center;
+  padding: 48px 20px;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* === BASE URL === */
+.base-url-card {
+  background: #0f172a;
+  border: 1px solid #1e3a5f;
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.base-url-label { font-size: 0.82rem; color: #64748b; white-space: nowrap; }
+.base-url-input {
+  flex: 1;
+  min-width: 240px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #93c5fd;
+  font-size: 0.88rem;
+  font-family: monospace;
+}
+.base-url-input:focus { outline: none; border-color: #6366f1; }
+.btn-apply-base {
+  background: #334155;
+  color: #e2e8f0;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-apply-base:hover { background: #475569; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>✏️ Editor de Artigos</h1>
+  <p class="subtitle">Abre qualquer artigo em modo de edição com um clique.</p>
+
+  <!-- BOOKMARKLET -->
+  <div class="bookmarklet-card">
+    <h2>🔖 Bookmarklet — Ativar edição na página atual</h2>
+    <p>Arrasta este botão para a barra de favoritos do browser. A partir daí, clica nele em qualquer artigo para ativar o modo de edição sem teres de alterar o URL manualmente.</p>
+    <a class="bookmarklet-btn" id="bookmarkletLink" href="javascript:(function(){var u=new URL(window.location.href);u.searchParams.set('edit','1');window.location.href=u.toString();})();">✏️ Modo Edição</a>
+    <p class="bookmarklet-hint">↑ Arrasta para a barra de favoritos. Funciona em qualquer artigo do site.</p>
+  </div>
+
+  <!-- BASE URL -->
+  <div class="base-url-card">
+    <span class="base-url-label">Base URL do site:</span>
+    <input class="base-url-input" id="baseUrlInput" type="text" placeholder="http://127.0.0.1:5500">
+    <button class="btn-apply-base" onclick="applyBaseUrl()">Aplicar</button>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input class="search-input" id="searchInput" type="text" placeholder="🔍 Pesquisar artigo..." oninput="renderList()">
+    <select class="filter-select" id="catFilter" onchange="renderList()">
+      <option value="">Todas as categorias</option>
+    </select>
+    <span class="count-badge" id="countBadge">— artigos</span>
+  </div>
+
+  <!-- LISTA -->
+  <div class="artigos-list" id="artigosList">
+    <div class="loading">A carregar artigos...</div>
+  </div>
+</div>
+
+<script>
+let allNoticias = [];
+let baseUrl = '';
+
+function slugify(titulo) {
+  if (!titulo || typeof titulo !== 'string') return '';
+  return titulo
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-');
+}
+
+function getSlug(noticia) {
+  if (noticia.slug && noticia.slug.trim()) return slugify(noticia.slug.trim());
+  return slugify(noticia.titulo || '');
+}
+
+function getBaseUrl() {
+  const input = document.getElementById('baseUrlInput').value.trim().replace(/\/$/, '');
+  if (input) return input;
+  // Derivar a base: tools/ está uma pasta abaixo da raiz do site
+  return window.location.origin + window.location.pathname.replace(/\/tools\/.*$/, '');
+}
+
+function buildEditUrl(noticia) {
+  const slug = getSlug(noticia);
+  const base = getBaseUrl();
+  return `${base}/artigos/${encodeURIComponent(slug)}.html?id=${noticia.id}&slug=${encodeURIComponent(slug)}&edit=1`;
+}
+
+function buildPreviewUrl(noticia) {
+  const slug = getSlug(noticia);
+  const base = getBaseUrl();
+  return `${base}/artigos/${encodeURIComponent(slug)}.html?id=${noticia.id}&slug=${encodeURIComponent(slug)}`;
+}
+
+function applyBaseUrl() {
+  renderList();
+}
+
+function parseDate(str) {
+  if (!str) return 0;
+  const [d, m, y] = str.split('/').map(Number);
+  return new Date(y, m - 1, d).getTime() || 0;
+}
+
+function renderList() {
+  const query = (document.getElementById('searchInput').value || '').toLowerCase();
+  const catFilter = document.getElementById('catFilter').value;
+  const list = document.getElementById('artigosList');
+
+  let filtered = allNoticias.filter(n => {
+    const matchCat = !catFilter || (n.categoria || '') === catFilter;
+    const matchQ = !query ||
+      (n.titulo || '').toLowerCase().includes(query) ||
+      (n.resumo || '').toLowerCase().includes(query) ||
+      (n.categoria || '').toLowerCase().includes(query);
+    return matchCat && matchQ;
+  });
+
+  document.getElementById('countBadge').textContent = `${filtered.length} artigo${filtered.length !== 1 ? 's' : ''}`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>Nenhum artigo encontrado.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(n => `
+    <div class="artigo-row">
+      <div class="artigo-info">
+        <div class="artigo-titulo" title="${(n.titulo || '').replace(/"/g, '&quot;')}">${n.titulo || '(sem título)'}</div>
+        <div class="artigo-meta">
+          <span class="artigo-cat">${n.categoria || ''}</span>
+          <span>${n.data || ''}</span>
+          <span>✍️ ${n.autor || ''}</span>
+          <span class="artigo-id">id:${n.id}</span>
+        </div>
+      </div>
+      <a class="btn-preview" href="${buildPreviewUrl(n)}" target="_blank" title="Ver artigo">👁</a>
+      <a class="btn-edit" href="${buildEditUrl(n)}" target="_blank">✏️ Editar</a>
+    </div>
+  `).join('');
+}
+
+function populateCategoryFilter(noticias) {
+  const cats = [...new Set(noticias.map(n => n.categoria || '').filter(Boolean))].sort();
+  const sel = document.getElementById('catFilter');
+  cats.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    sel.appendChild(opt);
+  });
+}
+
+// Detetar base URL automaticamente
+(function detectBaseUrl() {
+  const path = window.location.pathname; // e.g. /tools/editor-launcher.html
+  const origin = window.location.origin; // e.g. http://127.0.0.1:5500
+  const base = origin + path.replace(/\/tools\/[^/]*$/, '');
+  document.getElementById('baseUrlInput').value = base;
+})();
+
+// Carregar noticias.json
+(function loadNoticias() {
+  // Caminho relativo a partir de tools/
+  const jsonPath = '../data/noticias.json';
+  fetch(jsonPath)
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(data => {
+      const raw = Array.isArray(data) ? data : (data.noticias || []);
+      allNoticias = raw
+        .filter(n => n && (n.titulo || n.id))
+        .sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      populateCategoryFilter(allNoticias);
+      renderList();
+    })
+    .catch(err => {
+      document.getElementById('artigosList').innerHTML =
+        `<div class="empty-state"><div class="icon">⚠️</div><p>Erro ao carregar noticias.json:<br><code>${err.message}</code></p></div>`;
+    });
+})();
+</script>
+</body>
+</html>
