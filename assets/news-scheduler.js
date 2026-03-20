@@ -128,32 +128,68 @@ function ordenarNoticiasPorData(noticias) {
 }
 
 /**
- * Wrapper do fetch que aplica filtro de agendamento automaticamente
- * @param {string} url - URL do JSON de notícias
+ * Tenta carregar notícias do Firebase Realtime Database.
+ * Retorna null se Firebase não estiver disponível ou sem dados.
+ */
+async function fetchNoticiasDoFirebase() {
+  try {
+    if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) return null;
+    const db = firebase.database();
+    if (!db) return null;
+
+    const snapshot = await db.ref('noticias').once('value');
+    const val = snapshot.val();
+    if (!val) return null;
+
+    const noticias = Array.isArray(val) ? val : Object.values(val);
+    if (!noticias || noticias.length === 0) return null;
+
+    return { noticias };
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Aplica filtros de agendamento ao objeto de dados e devolve-o pronto.
+ */
+function aplicarFiltros(data) {
+  if (data.noticias && Array.isArray(data.noticias)) {
+    const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
+    data.noticias = filtrarNoticiasPublicadas(data.noticias);
+
+    if (noticiaSolicitada && !data.noticias.some((n) => String(n.id) === String(noticiaSolicitada.id))) {
+      data.noticias.unshift(noticiaSolicitada);
+    }
+
+    data.noticias = ordenarNoticiasPorData(data.noticias);
+  }
+  return data;
+}
+
+/**
+ * Wrapper do fetch que aplica filtro de agendamento automaticamente.
+ * Tenta Firebase primeiro; se falhar usa o JSON local como fallback.
+ * @param {string} url - URL do JSON de notícias (fallback)
  * @returns {Promise} - Promise com as notícias filtradas
  */
 async function fetchNoticiasAgendadas(url) {
+  // 1. Tentar Firebase
+  const dadosFirebase = await fetchNoticiasDoFirebase();
+  if (dadosFirebase) {
+    return aplicarFiltros(dadosFirebase);
+  }
+
+  // 2. Fallback: JSON local
   const cacheBust = `_ts=${Date.now()}`;
   const separator = url.includes('?') ? '&' : '?';
   const requestUrl = `${url}${separator}${cacheBust}`;
 
   const response = await fetch(requestUrl, { cache: 'no-store' });
   if (!response.ok) throw new Error('Erro ao carregar notícias');
-  
+
   const data = await response.json();
-  
-  if (data.noticias && Array.isArray(data.noticias)) {
-    const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
-    data.noticias = filtrarNoticiasPublicadas(data.noticias);
-
-    if (noticiaSolicitada && !data.noticias.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
-      data.noticias.unshift(noticiaSolicitada);
-    }
-
-    data.noticias = ordenarNoticiasPorData(data.noticias);
-  }
-  
-  return data;
+  return aplicarFiltros(data);
 }
 
 // Exporta para uso global
