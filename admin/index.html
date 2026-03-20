@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Admin - Viciado Comenta</title>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -536,13 +540,15 @@ button {
   </div>
 </div>
 
-<!-- Firebase SDK (Compat version for compatibility) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
 <script>
-// Firebase Config (do seu arquivo)
+document.addEventListener('DOMContentLoaded', function() {
+
+if (typeof firebase === 'undefined') {
+  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#1f3b73;color:white;font-family:sans-serif;text-align:center;padding:20px"><div><h2>Erro ao carregar Firebase</h2><p style="margin-top:10px">Verifique a sua ligação à internet e recarregue a página.</p><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#4f46e5;color:white;border:none;border-radius:8px;cursor:pointer;font-size:1rem">Recarregar</button></div></div>';
+  return;
+}
+
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
   authDomain: "chat-viciadocomenta.firebaseapp.com",
@@ -876,6 +882,8 @@ function showStatus(msg, type) {
   status.className = 'status show ' + type;
   setTimeout(() => status.classList.remove('show'), 4000);
 }
+
+}); // fim DOMContentLoaded
 </script>
 
 </body>
