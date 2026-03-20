@@ -133,26 +133,40 @@ function ordenarNoticiasPorData(noticias) {
  * @returns {Promise} - Promise com as notícias filtradas
  */
 async function fetchNoticiasAgendadas(url) {
-  if (typeof window.ensureFirebaseInitialized === 'function') {
-    await window.ensureFirebaseInitialized();
+  let data = null;
+
+  try {
+    if (typeof window.ensureFirebaseInitialized === 'function') {
+      await window.ensureFirebaseInitialized();
+    }
+
+    if (typeof firebase === 'undefined' || !firebase.database) {
+      throw new Error('Firebase indisponível para carregar notícias.');
+    }
+
+    const snapshot = await firebase.database().ref('noticias').once('value');
+    const rawNoticias = snapshot.val();
+
+    data = {
+      noticias: Array.isArray(rawNoticias)
+        ? rawNoticias
+        : Object.values(rawNoticias || {})
+    };
+  } catch (error) {
+    console.warn('Falha ao carregar notícias do Firebase, usando fallback JSON:', error);
+
+    const cacheBust = `_ts=${Date.now()}`;
+    const safeUrl = typeof url === 'string' && url.trim() ? url : 'data/noticias.json';
+    const separator = safeUrl.includes('?') ? '&' : '?';
+    const requestUrl = `${safeUrl}${separator}${cacheBust}`;
+    const response = await fetch(requestUrl, { cache: 'no-store' });
+
+    if (!response.ok) {
+      throw new Error('Erro ao carregar notícias no Firebase e no fallback JSON.');
+    }
+
+    data = await response.json();
   }
-
-  if (typeof firebase === 'undefined' || !firebase.database) {
-    throw new Error('Firebase indisponível para carregar notícias.');
-  }
-
-  const snapshot = await firebase.database().ref('noticias').once('value');
-  const rawNoticias = snapshot.val();
-
-  if (!rawNoticias) {
-    return { noticias: [] };
-  }
-
-  const data = {
-    noticias: Array.isArray(rawNoticias)
-      ? rawNoticias
-      : Object.values(rawNoticias)
-  };
   
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
