@@ -135,17 +135,28 @@ async function garantirAcessoNoticiasFirebase() {
   if (typeof firebase === 'undefined' || !firebase.database) {
     throw new Error('Firebase indisponível para carregar notícias.');
   }
+}
 
+async function lerNoticiasDoFirebase() {
+  const snapshot = await firebase.database().ref('noticias').once('value');
+  const rawNoticias = snapshot.val();
+
+  return {
+    noticias: Array.isArray(rawNoticias)
+      ? rawNoticias
+      : Object.values(rawNoticias || {})
+  };
+}
+
+async function autenticarAnonimoSeDisponivel() {
   if (!firebase.auth) {
-    throw new Error('Firebase Auth indisponível: inclua firebase-auth-compat.js nas páginas.');
+    throw new Error('Permissão negada e Firebase Auth indisponível para autenticação anónima.');
   }
 
   const auth = firebase.auth();
-  if (auth.currentUser) {
-    return;
+  if (!auth.currentUser) {
+    await auth.signInAnonymously();
   }
-
-  await auth.signInAnonymously();
 }
 
 /**
@@ -155,15 +166,24 @@ async function garantirAcessoNoticiasFirebase() {
  */
 async function fetchNoticiasAgendadas(url) {
   await garantirAcessoNoticiasFirebase();
+  let data;
 
-  const snapshot = await firebase.database().ref('noticias').once('value');
-  const rawNoticias = snapshot.val();
+  try {
+    data = await lerNoticiasDoFirebase();
+  } catch (error) {
+    const isPermissionDenied = error && (
+      error.code === 'PERMISSION_DENIED' ||
+      error.code === 'permission_denied' ||
+      /permission_denied/i.test(String(error.message || ''))
+    );
 
-  const data = {
-    noticias: Array.isArray(rawNoticias)
-      ? rawNoticias
-      : Object.values(rawNoticias || {})
-  };
+    if (!isPermissionDenied) {
+      throw error;
+    }
+
+    await autenticarAnonimoSeDisponivel();
+    data = await lerNoticiasDoFirebase();
+  }
   
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
