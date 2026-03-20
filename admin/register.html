@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Criar Conta - Painel Admin</title>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -219,9 +216,11 @@ button:disabled {
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+<!-- Firebase SDK (Compat version for compatibility) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
+<script>
 // Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
@@ -298,8 +297,6 @@ function showStatus(msg, type) {
   status.textContent = msg;
   status.className = 'status show ' + type;
 }
-
-}); // fim DOMContentLoaded
 </script>
 
 </body>
