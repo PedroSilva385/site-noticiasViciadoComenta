@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar Conta - Painel Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1f3b73 0%, #4b2a7b 100%);
+  color: #1f2937;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.warning {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.status {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  display: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.status.show {
+  display: block;
+}
+
+.status.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.status.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.info {
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #0c4a6e;
+}
+
+.steps {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.steps h3 {
+  font-size: 0.95rem;
+  color: #111827;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.steps ol {
+  margin-left: 20px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.steps li {
+  margin-bottom: 8px;
+}
+
+.back-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-link a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Criar Conta Admin</h1>
+  <p class="subtitle">Crie sua primeira conta para aceder ao painel de administração</p>
+
+  <div class="warning">
+    ⚠️ <strong>Importante:</strong> Guarde bem seu email e senha. Será usada para entrar no painel admin.
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <form id="registerForm">
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input type="email" id="email" placeholder="seu@email.com" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Senha *</label>
+      <input type="password" id="password" placeholder="••••••••" minlength="6" required>
+    </div>
+
+    <div class="form-group">
+      <label for="passwordConfirm">Confirme a senha *</label>
+      <input type="password" id="passwordConfirm" placeholder="••••••••" minlength="6" required>
+    </div>
+
+    <button type="submit" id="btnRegister">Criar Conta</button>
+  </form>
+
+  <div class="back-link">
+    <a href="./index.html">← Voltar ao painel</a>
+  </div>
+
+  <div class="steps">
+    <h3>Depois de criar:</h3>
+    <ol>
+      <li>Aceda ao <strong>/admin/</strong> normalmente</li>
+      <li>Use seu email e a senha que acabou de criar</li>
+      <li>Pronto! Já pode gerir suas notícias</li>
+    </ol>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+
+<script>
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+  authDomain: "chat-viciadocomenta.firebaseapp.com",
+  projectId: "chat-viciadocomenta",
+  messagingSenderId: "183684670526",
+  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+const registerForm = document.getElementById('registerForm');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const passwordConfirmInput = document.getElementById('passwordConfirm');
+const btnRegister = document.getElementById('btnRegister');
+const status = document.getElementById('status');
+
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  const passwordConfirm = passwordConfirmInput.value;
+
+  if (!email || !password) {
+    showStatus('Email e senha são obrigatórios', 'error');
+    return;
+  }
+
+  if (password !== passwordConfirm) {
+    showStatus('As senhas não coincidem', 'error');
+    return;
+  }
+
+  if (password.length < 6) {
+    showStatus('Senha muito curta (mínimo 6 caracteres)', 'error');
+    return;
+  }
+
+  try {
+    btnRegister.disabled = true;
+    btnRegister.textContent = 'A criar conta...';
+
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    
+    showStatus('✅ Conta criada com sucesso! Redirecionando...', 'success info');
+    
+    setTimeout(() => {
+      window.location.href = './index.html';
+    }, 2000);
+
+  } catch (error) {
+    let msg = 'Erro ao criar conta';
+    
+    if (error.code === 'auth/email-already-in-use') {
+      msg = 'Este email já está registado. Tente fazer login.';
+    } else if (error.code === 'auth/invalid-email') {
+      msg = 'Email inválido';
+    } else if (error.code === 'auth/weak-password') {
+      msg = 'Senha muito fraca';
+    } else if (error.code === 'auth/operation-not-allowed') {
+      msg = 'Criação de contas desativada. Contacte o administrador.';
+    }
+    
+    showStatus(msg, 'error');
+    btnRegister.disabled = false;
+    btnRegister.textContent = 'Criar Conta';
+  }
+});
+
+function showStatus(msg, type) {
+  status.textContent = msg;
+  status.className = 'status show ' + type;
+}
+</script>
+
+</body>
+</html>

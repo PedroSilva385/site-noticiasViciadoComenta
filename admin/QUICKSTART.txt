@@ -1,0 +1,96 @@
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  🎯 PAINEL ADMIN - CHECKLIST RÁPIDO                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📍 LOCALIZAÇÃO DO PAINEL:
+   Local:   http://localhost/admin/
+   Online:  https://seu-username.github.io/admin/
+
+───────────────────────────────────────────────────────────────────────────────
+
+✅ SETUP INICIAL (faça UMA VEZ):
+
+  1. [ ] Ativar autenticação Firebase
+      └─ Leia: admin/FIREBASE-SETUP.md (5 minutos)
+      └─ Resume: Firebase Console → Authentication → Email/Password → Enable
+
+  2. [ ] Criar conta de acesso
+      └─ Opção A: Firebase Console → Users → Add User (manual)
+      └─ Opção B: Abrir /admin/register.html (automático)
+
+  3. [ ] Fazer deploy (git push)
+      └─ git add admin/
+      └─ git commit -m "Painel admin"
+      └─ git push origin main
+
+───────────────────────────────────────────────────────────────────────────────
+
+📝 USO DIÁRIO:
+
+  → Aceder:  /admin/ → Email + Senha
+
+  → Criar notícia:      "+ Nova Notícia" → Preencher → "Guardar"
+  → Editar notícia:     Clique na lista → Alterar → "Guardar"
+  → Eliminar notícia:   Selecione → "Eliminar" (vermelho) → Confirmar
+
+  → Sair:               Botão "Sair" (canto superior direito)
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔑 DADOS PARA LEMBRAR (GUARDE ESTES):
+
+  📧 Email:    ___________________________
+  🔐 Senha:    ___________________________
+
+───────────────────────────────────────────────────────────────────────────────
+
+🆘 PROBLEMAS COMUNS:
+
+  ❌ "Email não encontrado" ao entrar
+     → Crie a conta no Firebase Console (Step 1, Opção A)
+
+  ❌ "Erro ao fazer login"
+     → Verifique que autenticou o Firebase (admin/FIREBASE-SETUP.md)
+
+  ❌ "Erro ao guardar notícia"
+     → Verifique conexão à internet
+     → Aguarde 30 segundos (Firebase sincroniza)
+
+  ❌ Não consigo aceder a /admin/ remotamente
+     → Fez git push? Aguarde 2 minutos para deploy completar.
+
+───────────────────────────────────────────────────────────────────────────────
+
+📱 DICAS ÚTEIS:
+
+  • Pode usar /admin/ de QUALQUER computador (mobile inclusivamente)
+  • As notícias sincronizam em TEMPO REAL
+  • O slug gera-se AUTOMATICAMENTE do título
+  • Pode ter MÚLTIPLOS utilizadores (um email = uma conta)
+  • Saia sempre (botão "Sair") para segurança
+
+───────────────────────────────────────────────────────────────────────────────
+
+🚀 PRÓXIMOS PASSOS:
+
+  1. Leia: admin/FIREBASE-SETUP.md
+  2. Ative autenticação no Firebase
+  3. Crie sua conta
+  4. Faça git push
+  5. Aceda a /admin/ e comece a usar!
+
+───────────────────────────────────────────────────────────────────────────────
+
+📚 LEIA TAMBÉM:
+   • admin/README.md        → Guia completo
+   • admin/SETUP.md         → Setup detalhado
+   • admin/FIREBASE-SETUP.md → Como configurar Firebase
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Criado: 2026-03-20
+Versão: 1.0
+Status: ✅ Pronto para usar
+
+═══════════════════════════════════════════════════════════════════════════════
