@@ -1097,7 +1097,7 @@ function buildArticleUrl(noticia) {
   const id = encodeURIComponent(noticia.id);
   const slug = getArticleSlug(noticia);
   return slug
-    ? `noticias.html/${encodeURIComponent(slug)}/${id}`
+    ? `noticias.html#/${encodeURIComponent(slug)}/${id}`
     : `noticias.html?id=${id}`;
 }
 

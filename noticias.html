@@ -2095,6 +2095,16 @@ function getArticleIdentifierFromLocation() {
   const queryId = params.get('id');
   const querySlug = params.get('slug');
 
+  let hashId = null;
+  let hashSlug = null;
+  const hash = String(window.location.hash || '');
+  const hashClean = hash.replace(/^#/, '');
+  const hashMatch = hashClean.match(/^\/([^/]+)\/([^/]+)$/);
+  if (hashMatch) {
+    hashSlug = decodeURIComponent(hashMatch[1] || '');
+    hashId = decodeURIComponent(hashMatch[2] || '');
+  }
+
   let pathId = null;
   let pathSlug = null;
   const pathname = String(window.location.pathname || '');
@@ -2107,8 +2117,8 @@ function getArticleIdentifierFromLocation() {
   }
 
   return {
-    id: queryId || pathId || null,
-    slug: querySlug || pathSlug || null,
+    id: queryId || hashId || pathId || null,
+    slug: querySlug || hashSlug || pathSlug || null,
     urlParams: params
   };
 }
@@ -2117,7 +2127,7 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `noticias.html/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
+    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2129,7 +2139,7 @@ function buildArticleUrlByData(noticia) {
   const id = String(noticia.id);
   const slug = getArticleSlug(noticia);
   if (slug) {
-    return `noticias.html/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
+    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2645,10 +2655,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const shouldStayOnEditablePage = editParam === '1';
         if (!shouldStayOnEditablePage) {
-          const nextPathWithSearch = `${articleUrl.pathname}${articleUrl.search}`;
-          const currentPathWithSearch = `${window.location.pathname}${window.location.search}`;
-          if (currentPathWithSearch !== nextPathWithSearch) {
-            window.history.replaceState({}, '', nextPathWithSearch);
+          const nextPathWithSearchHash = `${articleUrl.pathname}${articleUrl.search}${articleUrl.hash}`;
+          const currentPathWithSearchHash = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+          if (currentPathWithSearchHash !== nextPathWithSearchHash) {
+            window.history.replaceState({}, '', nextPathWithSearchHash);
           }
         }
 
