@@ -2257,6 +2257,22 @@ function formatArticleContent(rawContent) {
     return sanitizeArticleInlineTypography(content);
   }
 
+  const hasExplicitBreaks = /\n/.test(content);
+  if (!hasExplicitBreaks && content.length > 500) {
+    const sentences = content
+      .split(/(?<=[.!?])\s+/)
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    if (sentences.length >= 6) {
+      const grouped = [];
+      for (let i = 0; i < sentences.length; i += 2) {
+        grouped.push(sentences.slice(i, i + 2).join(' '));
+      }
+      content = grouped.join('\n\n');
+    }
+  }
+
   const paragraphToken = '__PARAGRAPH_BREAK__';
   content = content
     .replace(/\n{3,}/g, '\n\n')
