@@ -2094,7 +2094,7 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    return `noticias.html?id=${encodeURIComponent(id)}&slug=${encodeURIComponent(slug)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2106,7 +2106,7 @@ function buildArticleUrlByData(noticia) {
   const id = String(noticia.id);
   const slug = getArticleSlug(noticia);
   if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    return `noticias.html?id=${encodeURIComponent(id)}&slug=${encodeURIComponent(slug)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
