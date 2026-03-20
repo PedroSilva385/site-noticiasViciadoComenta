@@ -129,18 +129,30 @@ function ordenarNoticiasPorData(noticias) {
 
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente
- * @param {string} url - URL do JSON de notícias
+ * @param {string} url - Mantido por compatibilidade (ignorado)
  * @returns {Promise} - Promise com as notícias filtradas
  */
 async function fetchNoticiasAgendadas(url) {
-  const cacheBust = `_ts=${Date.now()}`;
-  const separator = url.includes('?') ? '&' : '?';
-  const requestUrl = `${url}${separator}${cacheBust}`;
+  if (typeof window.ensureFirebaseInitialized === 'function') {
+    await window.ensureFirebaseInitialized();
+  }
 
-  const response = await fetch(requestUrl, { cache: 'no-store' });
-  if (!response.ok) throw new Error('Erro ao carregar notícias');
-  
-  const data = await response.json();
+  if (typeof firebase === 'undefined' || !firebase.database) {
+    throw new Error('Firebase indisponível para carregar notícias.');
+  }
+
+  const snapshot = await firebase.database().ref('noticias').once('value');
+  const rawNoticias = snapshot.val();
+
+  if (!rawNoticias) {
+    return { noticias: [] };
+  }
+
+  const data = {
+    noticias: Array.isArray(rawNoticias)
+      ? rawNoticias
+      : Object.values(rawNoticias)
+  };
   
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
