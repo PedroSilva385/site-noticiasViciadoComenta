@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin - Viciado Comenta</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0f172a;
+  color: #1f2937;
+  min-height: 100vh;
+}
+
+/* ========== AUTH SCREEN ========== */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1f3b73 0%, #4b2a7b 100%);
+}
+
+.auth-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-box h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.auth-box .subtitle {
+  color: #6b7280;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: 18px;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 12px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+.auth-form button:hover {
+  background: #4338ca;
+}
+
+.auth-error {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  display: none;
+  font-size: 0.9rem;
+}
+
+#authError.show {
+  display: block;
+}
+
+/* ========== MAIN DASHBOARD ========== */
+.dashboard {
+  display: none;
+}
+
+.dashboard.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.header {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.user-info {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.btn-logout {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.btn-logout:hover {
+  background: #b91c1c;
+}
+
+.container {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  gap: 24px;
+}
+
+.sidebar {
+  width: 280px;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  height: fit-content;
+}
+
+.sidebar h2 {
+  font-size: 0.95rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sidebar .btn-new {
+  width: 100%;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.sidebar .btn-new:hover {
+  background: #15803d;
+}
+
+.noticias-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.noticia-item {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: all 0.2s;
+}
+
+.noticia-item:hover {
+  background: #f3f4f6;
+  border-color: #4f46e5;
+}
+
+.noticia-item.active {
+  background: #eef2ff;
+  border-color: #4f46e5;
+}
+
+.noticia-item .title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noticia-item .date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.main-panel {
+  flex: 1;
+  background: white;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-section h3 {
+  font-size: 1rem;
+  color: #111827;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #4338ca;
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.status {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: none;
+  font-weight: 600;
+}
+
+.status.show {
+  display: block;
+}
+
+.status.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.status.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+}
+
+.empty-state h3 {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+  }
+
+  .form-row, .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.loading {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="auth-container">
+  <div class="auth-box">
+    <h1>Painel Admin</h1>
+    <p class="subtitle">Gerencie as notícias do site</p>
+    <div id="authError" class="auth-error"></div>
+    <form class="auth-form" id="authForm">
+      <div class="form-group">
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" placeholder="seu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="authPassword">Senha</label>
+        <input type="password" id="authPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit">Entrar</button>
+      <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
+        Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+  <div class="header">
+    <h1>📰 Painel Admin - Notícias</h1>
+    <div class="header-right">
+      <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
+      <button class="btn-logout" id="btnLogout">Sair</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h2>Notícias</h2>
+      <button class="btn-new" id="btnNewNoticia">+ Nova Notícia</button>
+      <div class="noticias-list" id="noticiasList"></div>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <div class="main-panel">
+      <div id="status" class="status"></div>
+      <div id="emptyState" class="empty-state">
+        <h3>Selecione uma notícia para editar</h3>
+        <p>Ou crie uma nova notícia</p>
+      </div>
+
+      <div id="editorPanel" style="display: none;">
+        <!-- Informações básicas -->
+        <div class="form-section">
+          <h3>Informações Básicas</h3>
+          <div class="form-group">
+            <label for="noticiaId">ID (automático)</label>
+            <input type="text" id="noticiaId" readonly>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noticiaTitulo">Título *</label>
+              <input type="text" id="noticiaTitulo" required>
+            </div>
+            <div class="form-group">
+              <label for="noticiaAutor">Autor</label>
+              <input type="text" id="noticiaAutor">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noticiaData">Data (DD/MM/AAAA) *</label>
+              <input type="text" id="noticiaData" placeholder="20/03/2026" required>
+            </div>
+            <div class="form-group">
+              <label for="noticiaCategoria">Categoria *</label>
+              <input type="text" id="noticiaCategoria" placeholder="Ex: Telecom, DIGI, Gaming">
+            </div>
+          </div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="form-section">
+          <h3>Conteúdo</h3>
+          <div class="form-group">
+            <label for="noticiaResumo">Resumo (breve descrição)</label>
+            <textarea id="noticiaResumo" placeholder="Resumo da notícia em 2-3 linhas..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="noticiaConteudo">Conteúdo principal *</label>
+            <textarea id="noticiaConteudo" required placeholder="Cole aqui o corpo completo da notícia..."></textarea>
+          </div>
+        </div>
+
+        <!-- Multimédia e links -->
+        <div class="form-section">
+          <h3>Multimédia e Links</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noticiaVideo">Vídeo (URL do YouTube)</label>
+              <input type="url" id="noticiaVideo" placeholder="https://youtu.be/...">
+            </div>
+            <div class="form-group">
+              <label for="noticiaSlug">Slug (automático)</label>
+              <input type="text" id="noticiaSlug" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="form-actions">
+          <button class="btn-primary" id="btnSave">💾 Guardar</button>
+          <button class="btn-secondary" id="btnCancel">Cancelar</button>
+          <button class="btn-danger" id="btnDelete" style="margin-left: auto;">🗑️ Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+
+<script>
+// Firebase Config (do seu arquivo)
+const firebaseConfig = {
+  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+  authDomain: "chat-viciadocomenta.firebaseapp.com",
+  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chat-viciadocomenta",
+  storageBucket: "chat-viciadocomenta.firebasestorage.app",
+  messagingSenderId: "183684670526",
+  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+// ===== STATE =====
+let currentUser = null;
+let allNoticias = [];
+let selectedNoticiaId = null;
+
+// ===== DOM ELEMENTS =====
+const authScreen = document.getElementById('authScreen');
+const dashboard = document.getElementById('dashboard');
+const authForm = document.getElementById('authForm');
+const authEmail = document.getElementById('authEmail');
+const authPassword = document.getElementById('authPassword');
+const authError = document.getElementById('authError');
+const userEmail = document.getElementById('userEmail');
+const btnLogout = document.getElementById('btnLogout');
+const noticiasList = document.getElementById('noticiasList');
+const btnNewNoticia = document.getElementById('btnNewNoticia');
+const status = document.getElementById('status');
+const emptyState = document.getElementById('emptyState');
+const editorPanel = document.getElementById('editorPanel');
+
+// Form fields
+const noticiaId = document.getElementById('noticiaId');
+const noticiaTitulo = document.getElementById('noticiaTitulo');
+const noticiaAutor = document.getElementById('noticiaAutor');
+const noticiaData = document.getElementById('noticiaData');
+const noticiaCategoria = document.getElementById('noticiaCategoria');
+const noticiaResumo = document.getElementById('noticiaResumo');
+const noticiaConteudo = document.getElementById('noticiaConteudo');
+const noticiaVideo = document.getElementById('noticiaVideo');
+const noticiaSlug = document.getElementById('noticiaSlug');
+const btnSave = document.getElementById('btnSave');
+const btnCancel = document.getElementById('btnCancel');
+const btnDelete = document.getElementById('btnDelete');
+
+// ===== AUTH FUNCTIONS =====
+authForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if (!email || !password) {
+    showAuthError('Email e senha são obrigatórios');
+    return;
+  }
+
+  try {
+    authEmail.disabled = true;
+    authPassword.disabled = true;
+    authForm.querySelector('button').disabled = true;
+
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    currentUser = result.user;
+    
+  } catch (error) {
+    let msg = 'Erro ao entrar';
+    if (error.code === 'auth/user-not-found') msg = 'Email não encontrado';
+    if (error.code === 'auth/wrong-password') msg = 'Senha incorreta';
+    if (error.code === 'auth/invalid-email') msg = 'Email inválido';
+    showAuthError(msg);
+    authEmail.disabled = false;
+    authPassword.disabled = false;
+    authForm.querySelector('button').disabled = false;
+  }
+});
+
+function showAuthError(msg) {
+  authError.textContent = msg;
+  authError.classList.add('show');
+  setTimeout(() => authError.classList.remove('show'), 5000);
+}
+
+btnLogout.addEventListener('click', () => {
+  auth.signOut().then(() => {
+    currentUser = null;
+  });
+});
+
+// Check auth state
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    currentUser = user;
+    userEmail.textContent = user.email;
+    authScreen.style.display = 'none';
+    dashboard.classList.add('active');
+    loadNoticias();
+  } else {
+    currentUser = null;
+    authScreen.style.display = 'flex';
+    dashboard.classList.remove('active');
+    authEmail.value = '';
+    authPassword.value = '';
+    allNoticias = [];
+    selectedNoticiaId = null;
+  }
+});
+
+// ===== NOTÍCIAS FUNCTIONS =====
+async function loadNoticias() {
+  try {
+    // Tentar carregar do Firebase
+    const snapshot = await db.ref('noticias').once('value');
+    const data = snapshot.val();
+    
+    if (data) {
+      // Firebase Realtime Database
+      allNoticias = Array.isArray(data) ? data : Object.values(data);
+    } else {
+      // Fallback: carregar do JSON local via API
+      const response = await fetch('../data/noticias.json');
+      const jsonData = await response.json();
+      allNoticias = jsonData.noticias || [];
+    }
+    
+    renderNoticiasList();
+  } catch (error) {
+    console.error('Erro ao carregar notícias:', error);
+    showStatus('Erro ao carregar notícias', 'error');
+  }
+}
+
+function renderNoticiasList() {
+  noticiasList.innerHTML = '';
+  
+  if (allNoticias.length === 0) {
+    noticiasList.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">Nenhuma notícia</p>';
+    return;
+  }
+
+  allNoticias.forEach((noticia) => {
+    const item = document.createElement('div');
+    item.className = 'noticia-item' + (noticia.id === selectedNoticiaId ? ' active' : '');
+    item.innerHTML = `
+      <div class="title">${noticia.titulo || 'Sem título'}</div>
+      <div class="date">${noticia.data || 'Sem data'}</div>
+    `;
+    item.addEventListener('click', () => selectNoticia(noticia.id));
+    noticiasList.appendChild(item);
+  });
+}
+
+function selectNoticia(id) {
+  selectedNoticiaId = id;
+  const noticia = allNoticias.find(n => n.id == id);
+  
+  if (noticia) {
+    noticiaId.value = noticia.id || '';
+    noticiaTitulo.value = noticia.titulo || '';
+    noticiaAutor.value = noticia.autor || '';
+    noticiaData.value = noticia.data || '';
+    noticiaCategoria.value = noticia.categoria || '';
+    noticiaResumo.value = noticia.resumo || '';
+    noticiaConteudo.value = noticia.conteudo || '';
+    noticiaVideo.value = noticia.video || '';
+    noticiaSlug.value = noticia.slug || '';
+    
+    emptyState.style.display = 'none';
+    editorPanel.style.display = 'block';
+    btnDelete.style.display = 'inline-block';
+  }
+  
+  renderNoticiasList();
+}
+
+btnNewNoticia.addEventListener('click', () => {
+  selectedNoticiaId = null;
+  const newId = String(Math.max(...allNoticias.map(n => parseInt(n.id) || 0), 0) + 1);
+  
+  noticiaId.value = newId;
+  noticiaTitulo.value = '';
+  noticiaAutor.value = 'Pedro Silva';
+  noticiaData.value = new Date().toLocaleDateString('pt-PT');
+  noticiaCategoria.value = '';
+  noticiaResumo.value = '';
+  noticiaConteudo.value = '';
+  noticiaVideo.value = '';
+  noticiaSlug.value = '';
+  
+  emptyState.style.display = 'none';
+  editorPanel.style.display = 'block';
+  btnDelete.style.display = 'none';
+  
+  noticiaTitulo.focus();
+});
+
+noticiaTitulo.addEventListener('change', updateSlug);
+function updateSlug() {
+  if (selectedNoticiaId === null) {
+    const slug = noticiaTitulo.value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    noticiaSlug.value = slug;
+  }
+}
+
+btnSave.addEventListener('click', saveNoticia);
+
+async function saveNoticia() {
+  if (!noticiaTitulo.value.trim()) {
+    showStatus('Título é obrigatório', 'error');
+    return;
+  }
+  if (!noticiaData.value.trim()) {
+    showStatus('Data é obrigatória', 'error');
+    return;
+  }
+  if (!noticiaConteudo.value.trim()) {
+    showStatus('Conteúdo é obrigatório', 'error');
+    return;
+  }
+
+  const isNew = selectedNoticiaId === null;
+  const id = noticiaId.value;
+  
+  const noticiaObj = {
+    id: id,
+    titulo: noticiaTitulo.value.trim(),
+    autor: noticiaAutor.value.trim(),
+    data: noticiaData.value.trim(),
+    categoria: noticiaCategoria.value.trim(),
+    resumo: noticiaResumo.value.trim(),
+    conteudo: noticiaConteudo.value.trim(),
+    video: noticiaVideo.value.trim(),
+    slug: noticiaSlug.value.trim() || generateSlug(noticiaTitulo.value)
+  };
+
+  try {
+    btnSave.disabled = true;
+    
+    if (isNew) {
+      allNoticias.push(noticiaObj);
+    } else {
+      const idx = allNoticias.findIndex(n => n.id == id);
+      if (idx >= 0) allNoticias[idx] = noticiaObj;
+    }
+
+    // Guardar no Firebase
+    await db.ref('noticias').set(allNoticias);
+    
+    // Também tentar sincronizar com servidor local (se disponível)
+    try {
+      await fetch('../data/noticias.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ noticias: allNoticias })
+      });
+    } catch (e) {
+      console.log('Nota: ficheiro JSON local não atualizado (servidor não disponível)');
+    }
+
+    showStatus(
+      isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!',
+      'success'
+    );
+    
+    selectedNoticiaId = id;
+    renderNoticiasList();
+    
+  } catch (error) {
+    console.error('Erro ao guardar:', error);
+    showStatus('Erro ao guardar notícia', 'error');
+  } finally {
+    btnSave.disabled = false;
+  }
+}
+
+btnDelete.addEventListener('click', async () => {
+  if (!selectedNoticiaId) return;
+  
+  if (!confirm('Tem certeza que quer eliminar esta notícia?')) return;
+
+  try {
+    btnDelete.disabled = true;
+    
+    const idx = allNoticias.findIndex(n => n.id == selectedNoticiaId);
+    if (idx >= 0) {
+      allNoticias.splice(idx, 1);
+    }
+
+    await db.ref('noticias').set(allNoticias);
+    
+    showStatus('Notícia eliminada com sucesso!', 'success');
+    
+    selectedNoticiaId = null;
+    renderNoticiasList();
+    emptyState.style.display = 'block';
+    editorPanel.style.display = 'none';
+    
+  } catch (error) {
+    console.error('Erro ao eliminar:', error);
+    showStatus('Erro ao eliminar notícia', 'error');
+  } finally {
+    btnDelete.disabled = false;
+  }
+});
+
+btnCancel.addEventListener('click', () => {
+  selectedNoticiaId = null;
+  emptyState.style.display = 'block';
+  editorPanel.style.display = 'none';
+});
+
+function generateSlug(texto) {
+  return texto
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function showStatus(msg, type) {
+  status.textContent = msg;
+  status.className = 'status show ' + type;
+  setTimeout(() => status.classList.remove('show'), 4000);
+}
+</script>
+
+</body>
+</html>
