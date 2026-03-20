@@ -612,10 +612,25 @@ authForm.addEventListener('submit', async (e) => {
     currentUser = result.user;
     
   } catch (error) {
+    console.error('Erro de autenticação Firebase:', error);
     let msg = 'Erro ao entrar';
-    if (error.code === 'auth/user-not-found') msg = 'Email não encontrado';
-    if (error.code === 'auth/wrong-password') msg = 'Senha incorreta';
-    if (error.code === 'auth/invalid-email') msg = 'Email inválido';
+
+    if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') {
+      msg = 'Email ou senha inválidos';
+    } else if (error.code === 'auth/user-not-found') {
+      msg = 'Email não encontrado';
+    } else if (error.code === 'auth/wrong-password') {
+      msg = 'Senha incorreta';
+    } else if (error.code === 'auth/invalid-email') {
+      msg = 'Email inválido';
+    } else if (error.code === 'auth/operation-not-allowed') {
+      msg = 'Login por Email/Senha está desativado no Firebase';
+    } else if (error.code === 'auth/too-many-requests') {
+      msg = 'Muitas tentativas. Aguarde alguns minutos e tente novamente';
+    } else if (error.code === 'auth/network-request-failed') {
+      msg = 'Falha de rede. Verifique a internet e tente novamente';
+    }
+
     showAuthError(msg);
     authEmail.disabled = false;
     authPassword.disabled = false;
