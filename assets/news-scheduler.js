@@ -148,17 +148,6 @@ async function lerNoticiasDoFirebase() {
   };
 }
 
-async function autenticarAnonimoSeDisponivel() {
-  if (!firebase.auth) {
-    throw new Error('Permissão negada e Firebase Auth indisponível para autenticação anónima.');
-  }
-
-  const auth = firebase.auth();
-  if (!auth.currentUser) {
-    await auth.signInAnonymously();
-  }
-}
-
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente
  * @param {string} url - Mantido por compatibilidade (ignorado)
@@ -166,24 +155,7 @@ async function autenticarAnonimoSeDisponivel() {
  */
 async function fetchNoticiasAgendadas(url) {
   await garantirAcessoNoticiasFirebase();
-  let data;
-
-  try {
-    data = await lerNoticiasDoFirebase();
-  } catch (error) {
-    const isPermissionDenied = error && (
-      error.code === 'PERMISSION_DENIED' ||
-      error.code === 'permission_denied' ||
-      /permission_denied/i.test(String(error.message || ''))
-    );
-
-    if (!isPermissionDenied) {
-      throw error;
-    }
-
-    await autenticarAnonimoSeDisponivel();
-    data = await lerNoticiasDoFirebase();
-  }
+  const data = await lerNoticiasDoFirebase();
   
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
