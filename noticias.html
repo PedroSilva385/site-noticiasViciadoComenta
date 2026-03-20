@@ -2090,11 +2090,34 @@ function getArticleSlug(noticia) {
   return slugifyTitulo((noticia && noticia.titulo) || '');
 }
 
+function getArticleIdentifierFromLocation() {
+  const params = new URLSearchParams(window.location.search || '');
+  const queryId = params.get('id');
+  const querySlug = params.get('slug');
+
+  let pathId = null;
+  let pathSlug = null;
+  const pathname = String(window.location.pathname || '');
+  const cleanPath = pathname.replace(/\/+$/, '');
+  const match = cleanPath.match(/\/noticias\.html\/([^/]+)\/([^/]+)$/i);
+
+  if (match) {
+    pathSlug = decodeURIComponent(match[1] || '');
+    pathId = decodeURIComponent(match[2] || '');
+  }
+
+  return {
+    id: queryId || pathId || null,
+    slug: querySlug || pathSlug || null,
+    urlParams: params
+  };
+}
+
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `noticias.html?id=${encodeURIComponent(id)}&slug=${encodeURIComponent(slug)}`;
+    return `noticias.html/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2106,7 +2129,7 @@ function buildArticleUrlByData(noticia) {
   const id = String(noticia.id);
   const slug = getArticleSlug(noticia);
   if (slug) {
-    return `noticias.html?id=${encodeURIComponent(id)}&slug=${encodeURIComponent(slug)}`;
+    return `noticias.html/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2536,9 +2559,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Obter ID/slug da URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const noticiaId = urlParams.get('id');
-  const noticiaSlug = urlParams.get('slug');
+  const routeInfo = getArticleIdentifierFromLocation();
+  const urlParams = routeInfo.urlParams;
+  const noticiaId = routeInfo.id;
+  const noticiaSlug = routeInfo.slug;
 
   const identificadorArtigo = noticiaId || noticiaSlug;
   let newArticleNotificationTriggered = false;
