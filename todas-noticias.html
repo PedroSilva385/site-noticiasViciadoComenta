@@ -1097,8 +1097,8 @@ function buildArticleUrl(noticia) {
   const id = encodeURIComponent(noticia.id);
   const slug = getArticleSlug(noticia);
   return slug
-    ? `noticias.html#/${encodeURIComponent(slug)}/${id}`
-    : `noticias.html?id=${id}`;
+    ? `artigos.html#/${encodeURIComponent(slug)}/${id}`
+    : `artigos.html?id=${id}`;
 }
 
 fetchNoticiasAgendadas('data/noticias.json')
