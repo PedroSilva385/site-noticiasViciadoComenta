@@ -2262,6 +2262,8 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/<span\b[^>]*>/gi, '')
     .replace(/<\/span>/gi, '')
     .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
+    .replace(/<(strong|b|em|i|u)\b[^>]*>\s*<br\s*\/?>\s*<\/(strong|b|em|i|u)>/gi, '<br>')
+    .replace(/<(strong|b|em|i|u)\b[^>]*>\s*<\/(strong|b|em|i|u)>/gi, '')
     .replace(/<\s*b\b[^>]*>/gi, '<strong>')
     .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
     .replace(/<\s*i\b[^>]*>/gi, '<em>')
