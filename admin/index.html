@@ -297,6 +297,54 @@ body {
   font-family: 'Courier New', monospace;
 }
 
+/* ========== EDITOR WYSIWYG ========== */
+#contentEditor {
+  min-height: 250px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  overflow-y: auto;
+  resize: vertical;
+  outline: none;
+}
+
+#contentEditor:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+#contentEditor strong {
+  font-weight: 600;
+}
+
+#contentEditor em {
+  font-style: italic;
+}
+
+#contentEditor a {
+  color: #4f46e5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#contentEditor code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.editor-counter {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
 /* ========== TOOLBAR ========== */
 .editor-toolbar {
   display: flex;
@@ -606,12 +654,12 @@ button {
             <textarea id="noticiaResumo" placeholder="Resumo da notícia em 2-3 linhas..."></textarea>
           </div>
           <div class="form-group">
-            <label for="noticiaConteudo">Conteúdo principal *</label>
+            <label for="contentEditor">Conteúdo principal *</label>
             <div class="editor-toolbar">
-              <button type="button" id="btnBold" title="Bold (Ctrl+B)">
+              <button type="button" id="btnBold" title="Bold">
                 <strong>B</strong>
               </button>
-              <button type="button" id="btnItalic" title="Itálico (Ctrl+I)">
+              <button type="button" id="btnItalic" title="Itálico">
                 <em>I</em>
               </button>
               <div class="toolbar-separator"></div>
@@ -629,7 +677,8 @@ button {
                 &lt;/&gt;
               </button>
             </div>
-            <textarea id="noticiaConteudo" required placeholder="Cole aqui o corpo completo da notícia. O espaçamento será preservado exactamente..."></textarea>
+            <div id="contentEditor" contenteditable="true" role="textbox" aria-label="Editor de conteúdo"></div>
+            <div class="editor-counter"><span id="charCount">0</span> caracteres</div>
           </div>
         </div>
 
@@ -708,7 +757,7 @@ const noticiaAutor = document.getElementById('noticiaAutor');
 const noticiaData = document.getElementById('noticiaData');
 const noticiaCategoria = document.getElementById('noticiaCategoria');
 const noticiaResumo = document.getElementById('noticiaResumo');
-const noticiaConteudo = document.getElementById('noticiaConteudo');
+const contentEditor = document.getElementById('contentEditor');
 const noticiaVideo = document.getElementById('noticiaVideo');
 const noticiaSlug = document.getElementById('noticiaSlug');
 const btnSave = document.getElementById('btnSave');
@@ -731,56 +780,47 @@ const btnCode = document.getElementById('btnCode');
 
 // ===== EDITOR TOOLBAR FUNCTIONS =====
 function insertTextFormatting(prefix, suffix = '') {
-  const textarea = noticiaConteudo;
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-  const selectedText = textarea.value.substring(start, end);
-  const beforeText = textarea.value.substring(0, start);
-  const afterText = textarea.value.substring(end);
-  
-  if (selectedText.length === 0) {
-    textarea.value = beforeText + prefix + 'texto' + suffix + afterText;
-    textarea.selectionStart = start + prefix.length;
-    textarea.selectionEnd = start + prefix.length + 5;
-  } else {
-    textarea.value = beforeText + prefix + selectedText + suffix + afterText;
-    textarea.selectionStart = start;
-    textarea.selectionEnd = end + prefix.length + suffix.length;
-  }
-  
-  textarea.focus();
+  contentEditor.focus();
+  document.execCommand('formatBlock', false, '<' + prefix + '>');
 }
 
 // Delegação de eventos para toolbar
 document.addEventListener('click', (e) => {
   if (e.target.id === 'btnBold') {
     e.preventDefault();
-    insertTextFormatting('**', '**');
+    contentEditor.focus();
+    document.execCommand('bold', false, null);
   } else if (e.target.id === 'btnItalic') {
     e.preventDefault();
-    insertTextFormatting('*', '*');
+    contentEditor.focus();
+    document.execCommand('italic', false, null);
   } else if (e.target.id === 'btnHeading') {
     e.preventDefault();
-    insertTextFormatting('# ', '');
+    contentEditor.focus();
+    document.execCommand('formatBlock', false, '<h2>');
   } else if (e.target.id === 'btnCode') {
     e.preventDefault();
-    insertTextFormatting('`', '`');
+    contentEditor.focus();
+    document.execCommand('createLink', false, '#');
+    document.execCommand('unlink', false, null);
   } else if (e.target.id === 'btnLink') {
     e.preventDefault();
     const url = prompt('URL do link:');
     if (url) {
-      insertTextFormatting(`[`, `](${url})`);
+      contentEditor.focus();
+      document.execCommand('createLink', false, url);
     }
   } else if (e.target.id === 'btnImage') {
+});
+
     e.preventDefault();
     const url = prompt('URL da imagem:');
     if (url) {
       const alt = prompt('Descrição da imagem (alt text):');
-      insertTextFormatting(`![${alt || 'imagem'}](${url})`, '');
+      contentEditor.focus();
+      document.execCommand('insertImage', false, url);
     }
   }
-});
-
 // ===== SCHEDULING =====
 schedulingRadios.forEach(radio => {
   radio.addEventListener('change', () => {
@@ -792,6 +832,12 @@ schedulingRadios.forEach(radio => {
   });
 });
 
+// ===== EDITOR CHAR COUNTER =====
+contentEditor.addEventListener('input', () => {
+  const charCount = contentEditor.innerText.length;
+  const counter = document.getElementById('charCount');
+  if (counter) counter.textContent = charCount;
+});
 // ===== CATEGORIES FUNCTION =====
 function updateCategoriesList() {
   const categories = new Set();
@@ -944,7 +990,7 @@ function selectNoticia(id) {
     noticiaData.value = noticia.data || '';
     noticiaCategoria.value = noticia.categoria || '';
     noticiaResumo.value = noticia.resumo || '';
-    noticiaConteudo.value = noticia.conteudo || '';
+    contentEditor.innerHTML = (noticia.conteudo || '').replace(/\n/g, '<br>');
     noticiaVideo.value = noticia.video || '';
     noticiaSlug.value = noticia.slug || '';
     
@@ -979,7 +1025,7 @@ btnNewNoticia.addEventListener('click', () => {
   noticiaData.value = new Date().toLocaleDateString('pt-PT');
   noticiaCategoria.value = '';
   noticiaResumo.value = '';
-  noticiaConteudo.value = '';
+  contentEditor.innerHTML = '';
   noticiaVideo.value = '';
   noticiaSlug.value = '';
   
@@ -1020,13 +1066,32 @@ async function saveNoticia() {
     showStatus('Data é obrigatória', 'error');
     return;
   }
-  if (!noticiaConteudo.value.trim()) {
+  if (!contentEditor.innerText.trim()) {
     showStatus('Conteúdo é obrigatório', 'error');
     return;
   }
 
   const isNew = selectedNoticiaId === null;
   const id = noticiaId.value;
+    // Converter HTML do editor para texto limpo
+    const editorHtml = contentEditor.innerHTML;
+    // Substituir <br> por \n
+    const editorText = editorHtml
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]*>/g, (tag) => {
+        if (tag === '<strong>' || tag === '<b>') return '**';
+        if (tag === '</strong>' || tag === '</b>') return '**';
+        if (tag === '<em>' || tag === '<i>') return '*';
+        if (tag === '</em>' || tag === '</i>') return '*';
+        if (tag === '<u>') return '__';
+        if (tag === '</u>') return '__';
+        return '';
+      })
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .trim();
+  
   
   const noticiaObj = {
     id: id,
@@ -1035,7 +1100,7 @@ async function saveNoticia() {
     data: noticiaData.value.trim(),
     categoria: noticiaCategoria.value.trim(),
     resumo: noticiaResumo.value.trim(),
-    conteudo: noticiaConteudo.value.trim(), // Preserva espaçamento interno devido a white-space: pre-wrap
+    conteudo: editorText,
     video: noticiaVideo.value.trim(),
     slug: noticiaSlug.value.trim() || generateSlug(noticiaTitulo.value)
   };
