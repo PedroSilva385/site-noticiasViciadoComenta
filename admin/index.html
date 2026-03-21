@@ -614,9 +614,11 @@ button {
               <input type="text" id="noticiaData" placeholder="20/03/2026" required>
             </div>
             <div class="form-group">
-              <label for="noticiaCategoria">Categoria *</label>
-              <input type="text" id="noticiaCategoria" list="categoriasList" placeholder="Ex: Telecom, DIGI, Gaming">
-              <datalist id="categoriasList"></datalist>
+              <label for="categoriasSelect">Categoria *</label>
+              <select id="categoriasSelect">
+                <option value="">-- Selecionar categoria --</option>
+              </select>
+              <input type="text" id="noticiaCategoria" placeholder="Ou escreve uma nova categoria..." style="margin-top:8px;">
             </div>
           </div>
 
@@ -839,21 +841,52 @@ contentEditor.addEventListener('input', () => {
   if (counter) counter.textContent = charCount;
 });
 // ===== CATEGORIES FUNCTION =====
+const categoriasSelect = document.getElementById('categoriasSelect');
+
 function updateCategoriesList() {
   const categories = new Set();
   allNoticias.forEach(noticia => {
-    if (noticia.categoria) {
-      categories.add(noticia.categoria);
+    if (noticia.categoria && noticia.categoria.trim()) {
+      categories.add(noticia.categoria.trim());
     }
   });
   
-  const datalist = document.getElementById('categoriasList');
-  datalist.innerHTML = '';
-  categories.forEach(cat => {
+  const currentVal = noticiaCategoria.value;
+  
+  // Reconstruir select
+  categoriasSelect.innerHTML = '<option value="">-- Selecionar categoria --</option>';
+  [...categories].sort().forEach(cat => {
     const option = document.createElement('option');
     option.value = cat;
-    datalist.appendChild(option);
+    option.textContent = cat;
+    if (cat === currentVal) option.selected = true;
+    categoriasSelect.appendChild(option);
   });
+  
+  // Sincronizar select → input
+  if (currentVal && categories.has(currentVal)) {
+    categoriasSelect.value = currentVal;
+    noticiaCategoria.value = '';
+    noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
+  }
+}
+
+// Quando seleciona do dropdown, preenche o input oculto e limpa o texto livre
+categoriasSelect.addEventListener('change', () => {
+  const val = categoriasSelect.value;
+  if (val) {
+    noticiaCategoria.value = '';
+    noticiaCategoria.placeholder = `Selecionado: ${val} (escreve para substituir)`;
+  } else {
+    noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
+  }
+});
+
+function getCategoriaValue() {
+  // Prioridade: texto livre > select
+  const textVal = noticiaCategoria.value.trim();
+  const selectVal = categoriasSelect.value;
+  return textVal || selectVal || '';
 }
 
 // ===== AUTH FUNCTIONS =====
@@ -988,7 +1021,17 @@ function selectNoticia(id) {
     noticiaTitulo.value = noticia.titulo || '';
     noticiaAutor.value = noticia.autor || '';
     noticiaData.value = noticia.data || '';
-    noticiaCategoria.value = noticia.categoria || '';
+    // Preencher categoria: tentar select primeiro, senão input livre
+    const cat = noticia.categoria || '';
+    const selectOpt = categoriasSelect.querySelector(`option[value="${CSS.escape(cat)}"]`);
+    if (selectOpt) {
+      categoriasSelect.value = cat;
+      noticiaCategoria.value = '';
+      noticiaCategoria.placeholder = `Selecionado: ${cat} (escreve para substituir)`;
+    } else {
+      categoriasSelect.value = '';
+      noticiaCategoria.value = cat;
+    }
     noticiaResumo.value = noticia.resumo || '';
     contentEditor.innerHTML = (noticia.conteudo || '').replace(/\n/g, '<br>');
     noticiaVideo.value = noticia.video || '';
@@ -1024,6 +1067,8 @@ btnNewNoticia.addEventListener('click', () => {
   noticiaAutor.value = 'Pedro Silva';
   noticiaData.value = new Date().toLocaleDateString('pt-PT');
   noticiaCategoria.value = '';
+  noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
+  categoriasSelect.value = '';
   noticiaResumo.value = '';
   contentEditor.innerHTML = '';
   noticiaVideo.value = '';
@@ -1098,7 +1143,7 @@ async function saveNoticia() {
     titulo: noticiaTitulo.value.trim(),
     autor: noticiaAutor.value.trim(),
     data: noticiaData.value.trim(),
-    categoria: noticiaCategoria.value.trim(),
+    categoria: getCategoriaValue(),
     resumo: noticiaResumo.value.trim(),
     conteudo: editorText,
     video: noticiaVideo.value.trim(),
