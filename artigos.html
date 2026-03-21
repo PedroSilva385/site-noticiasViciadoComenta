@@ -2524,6 +2524,7 @@ function getLiveEditStorageKey(noticiaId) {
 }
 
 function getLiveEditedContent(noticiaId) {
+  if (!canUseLiveEditor()) return null;
   try {
     return localStorage.getItem(getLiveEditStorageKey(noticiaId));
   } catch (error) {
