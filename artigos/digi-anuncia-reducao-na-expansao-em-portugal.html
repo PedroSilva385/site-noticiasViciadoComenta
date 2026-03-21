@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="DIGI anuncia redu&#231;&#227;o na EXPANS&#195;O em PORTUGAL">
 <meta name="twitter:description" content="O an&#250;ncio da redu&#231;&#227;o dos custos de investimento em PORTUGAL">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-anuncia-reducao-na-expansao-em-portugal.html"},"headline":"DIGI anuncia redução na EXPANSÃO em PORTUGAL","description":"O anúncio da redução dos custos de investimento em PORTUGAL","datePublished":"2026-03-09T19:00:00Z","dateModified":"2026-03-21T01:34:08Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-anuncia-reducao-na-expansao-em-portugal.html"},"headline":"DIGI anuncia redução na EXPANSÃO em PORTUGAL","description":"O anúncio da redução dos custos de investimento em PORTUGAL","datePublished":"2026-03-09T19:00:00Z","dateModified":"2026-03-21T01:37:02Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2291,6 +2291,32 @@ function sanitizeArticleInlineTypography(html) {
     .trim();
 }
 
+function applyInlineMarkdownTypography(content) {
+  if (!content) return '';
+
+  const hasInlineMarkdown = /\*\*[^*]+\*\*|__[^_]+__|\*[^*\n]+\*|_[^_\n]+_/.test(content);
+  if (!hasInlineMarkdown) {
+    return content;
+  }
+
+  try {
+    if (typeof marked !== 'undefined' && typeof marked.parseInline === 'function') {
+      return marked.parseInline(content, {
+        gfm: true,
+        breaks: true
+      });
+    }
+  } catch (e) {
+    console.error('Erro ao processar markdown inline:', e);
+  }
+
+  return content
+    .replace(/\*\*\s*([^*][\s\S]*?)\s*\*\*/g, '<strong>$1</strong>')
+    .replace(/__\s*([^_][\s\S]*?)\s*__/g, '<strong>$1</strong>')
+    .replace(/\*\s*([^*\n][^*\n]*?)\s*\*/g, '<em>$1</em>')
+    .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2298,7 +2324,19 @@ function formatArticleContent(rawContent) {
   const hasHtml = /<[^>]+>/.test(content);
 
   if (hasHtml) {
-    return sanitizeArticleInlineTypography(content);
+    let htmlContent = sanitizeArticleInlineTypography(content);
+    htmlContent = applyInlineMarkdownTypography(htmlContent);
+
+    const paragraphToken = '__PARAGRAPH_BREAK__';
+    htmlContent = htmlContent
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/\n\n+/g, paragraphToken)
+      .replace(/\n+/g, ' ')
+      .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
+
+    htmlContent = normalizeBrokenLineWraps(htmlContent);
+    htmlContent = htmlContent.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+    return htmlContent.trim();
   }
 
   // Detecta se tem Markdown
