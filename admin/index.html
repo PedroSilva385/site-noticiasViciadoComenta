@@ -1188,10 +1188,51 @@ async function saveNoticia() {
   const isNew = selectedNoticiaId === null;
   const id = noticiaId.value;
 
-  // Guardar o HTML do editor directamente (preserva bold, italic, links, imagens)
-  const conteudoHtml = contentEditor.innerHTML
-    .replace(/&nbsp;/g, ' ')
-    .trim();
+  // Normalizar HTML do editor antes de guardar
+  function normalizeEditorHtml(html) {
+    if (!html) return '';
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+
+    // <b> → <strong>
+    tmp.querySelectorAll('b').forEach(el => {
+      const strong = document.createElement('strong');
+      strong.innerHTML = el.innerHTML;
+      el.replaceWith(strong);
+    });
+
+    // <i> → <em>
+    tmp.querySelectorAll('i').forEach(el => {
+      const em = document.createElement('em');
+      em.innerHTML = el.innerHTML;
+      el.replaceWith(em);
+    });
+
+    // Remover <span> mas manter o conteúdo
+    tmp.querySelectorAll('span').forEach(el => {
+      while (el.firstChild) el.before(el.firstChild);
+      el.remove();
+    });
+
+    // <div> → quebra de linha (Chrome usa divs para Enter no contenteditable)
+    tmp.querySelectorAll('div').forEach(el => {
+      const br = document.createElement('br');
+      el.before(br);
+      while (el.firstChild) el.before(el.firstChild);
+      el.remove();
+    });
+
+    // Normalizar múltiplos <br> e limpar início/fim
+    let result = tmp.innerHTML
+      .replace(/(<br\s*\/?>){3,}/gi, '<br><br>')
+      .replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, '')
+      .replace(/&nbsp;/g, ' ')
+      .trim();
+
+    return result;
+  }
+
+  const conteudoHtml = normalizeEditorHtml(contentEditor.innerHTML);
   
   const noticiaObj = {
     id: id,
