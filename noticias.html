@@ -2261,7 +2261,18 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/<\/?font\b[^>]*>/gi, '')
     .replace(/<span\b[^>]*>/gi, '')
     .replace(/<\/span>/gi, '')
-    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '');
+    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
+    .replace(/<\s*b\b[^>]*>/gi, '<strong>')
+    .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
+    .replace(/<\s*i\b[^>]*>/gi, '<em>')
+    .replace(/<\s*\/\s*i\s*>/gi, '</em>')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<div\b[^>]*>\s*<br\s*\/?>\s*<\/div>/gi, '<br><br>')
+    .replace(/<div\b[^>]*>/gi, '')
+    .replace(/<\/div>/gi, '<br>')
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
+    .replace(/^(\s*<br\s*\/?>\s*)+|(\s*<br\s*\/?>\s*)+$/gi, '')
+    .trim();
 }
 
 function formatArticleContent(rawContent) {
