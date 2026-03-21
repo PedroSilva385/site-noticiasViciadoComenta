@@ -811,8 +811,6 @@ document.addEventListener('click', (e) => {
       document.execCommand('createLink', false, url);
     }
   } else if (e.target.id === 'btnImage') {
-});
-
     e.preventDefault();
     const url = prompt('URL da imagem:');
     if (url) {
@@ -821,6 +819,8 @@ document.addEventListener('click', (e) => {
       document.execCommand('insertImage', false, url);
     }
   }
+});
+
 // ===== SCHEDULING =====
 schedulingRadios.forEach(radio => {
   radio.addEventListener('change', () => {
