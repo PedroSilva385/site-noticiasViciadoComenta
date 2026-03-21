@@ -807,62 +807,89 @@ const btnHeading = document.getElementById('btnHeading');
 const btnCode = document.getElementById('btnCode');
 
 // ===== EDITOR TOOLBAR FUNCTIONS =====
-let savedSelection = null;
+let savedRange = null;
 
-// Guardar a selecção antes do botão roubar o foco
+// Guarda o Range sempre que o utilizador seleciona texto ou move o cursor no editor
+function saveEditorRange() {
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0);
+    if (contentEditor.contains(range.commonAncestorContainer)) {
+      savedRange = range.cloneRange();
+    }
+  }
+}
+
+// Restaura o Range guardado e foca o editor
+function restoreEditorRange() {
+  contentEditor.focus();
+  if (savedRange) {
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+}
+
+contentEditor.addEventListener('mouseup', saveEditorRange);
+contentEditor.addEventListener('keyup', saveEditorRange);
+contentEditor.addEventListener('selectionchange', saveEditorRange);
+document.addEventListener('selectionchange', () => {
+  if (document.activeElement === contentEditor) saveEditorRange();
+});
+
+// Impede que o clique nos botões da toolbar tire o foco do editor
 document.querySelector('.editor-toolbar').addEventListener('mousedown', (e) => {
   if (e.target.closest('button')) {
-    e.preventDefault(); // impede que o clique no botão tire o foco do editor
+    e.preventDefault();
   }
 });
 
-// Delegação de eventos para toolbar
-document.addEventListener('click', (e) => {
+// Handlers dos botões da toolbar
+const TOOLBAR_BUTTONS = ['btnBold','btnItalic','btnUnderline','btnHeading','btnCode','btnLink','btnImage'];
+
+document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
   const id = btn.id;
+  if (!TOOLBAR_BUTTONS.includes(id)) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  restoreEditorRange();
 
   if (id === 'btnBold') {
-    e.preventDefault();
     document.execCommand('bold', false, null);
   } else if (id === 'btnItalic') {
-    e.preventDefault();
     document.execCommand('italic', false, null);
   } else if (id === 'btnUnderline') {
-    e.preventDefault();
     document.execCommand('underline', false, null);
   } else if (id === 'btnHeading') {
-    e.preventDefault();
     document.execCommand('formatBlock', false, 'h2');
   } else if (id === 'btnCode') {
-    e.preventDefault();
-    // Envolver texto seleccionado em <code>
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
       const range = sel.getRangeAt(0);
       const code = document.createElement('code');
-      range.surroundContents(code);
+      try { range.surroundContents(code); } catch(e) {
+        document.execCommand('insertHTML', false, `<code>${sel.toString()}</code>`);
+      }
     }
   } else if (id === 'btnLink') {
-    e.preventDefault();
     const url = prompt('URL do link:');
     if (url) {
       document.execCommand('createLink', false, url);
-      // Abrir em nova janela
-      const sel = window.getSelection();
-      if (sel && sel.anchorNode) {
-        const a = sel.anchorNode.parentElement && sel.anchorNode.parentElement.closest('a');
-        if (a) a.target = '_blank';
-      }
+      contentEditor.querySelectorAll('a:not([target])').forEach(a => a.target = '_blank');
     }
   } else if (id === 'btnImage') {
-    e.preventDefault();
     const url = prompt('URL da imagem:');
     if (url) {
       const alt = prompt('Descrição da imagem (alt text):') || '';
       document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt}" style="max-width:100%;height:auto;">`);
     }
   }
+
+  saveEditorRange();
 });
 
 // ===== SCHEDULING =====
