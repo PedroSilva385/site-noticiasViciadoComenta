@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="UZO nega TUDO e ESTALA POL&#201;MICA">
 <meta name="twitter:description" content="UZO nega todas as acusa&#231;&#245;es e estala a pol&#233;mica contra a sub-marca da MEO!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-nega-tudo-e-estala-polemica.html"},"headline":"UZO nega TUDO e ESTALA POLÉMICA","description":"UZO nega todas as acusações e estala a polémica contra a sub-marca da MEO!","datePublished":"2026-03-21T01:40:34Z","dateModified":"2026-03-21T01:40:34Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-nega-tudo-e-estala-polemica.html"},"headline":"UZO nega TUDO e ESTALA POLÉMICA","description":"UZO nega todas as acusações e estala a polémica contra a sub-marca da MEO!","datePublished":"2026-03-21T01:42:37Z","dateModified":"2026-03-21T01:42:37Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2522,6 +2522,7 @@ function getLiveEditStorageKey(noticiaId) {
 }
 
 function getLiveEditedContent(noticiaId) {
+  if (!canUseLiveEditor()) return null;
   try {
     return localStorage.getItem(getLiveEditStorageKey(noticiaId));
   } catch (error) {
