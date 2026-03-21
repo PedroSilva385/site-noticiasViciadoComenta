@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="UZO e AMIGO igualam pre&#231;os da DIGI!">
 <meta name="twitter:description" content="UZO e Amigo igualaram temporariamente os pre&#231;os da DIGI. Explicamos o impacto comercial desta decis&#227;o e o que deves comparar antes de mudar.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-e-amigo-igualam-precos-da-digi.html"},"headline":"UZO e AMIGO igualam preços da DIGI!","description":"UZO e Amigo igualaram temporariamente os preços da DIGI. Explicamos o impacto comercial desta decisão e o que deves comparar antes de mudar.","datePublished":"2026-02-22T19:00:00Z","dateModified":"2026-03-21T01:42:36Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-e-amigo-igualam-precos-da-digi.html"},"headline":"UZO e AMIGO igualam preços da DIGI!","description":"UZO e Amigo igualaram temporariamente os preços da DIGI. Explicamos o impacto comercial desta decisão e o que deves comparar antes de mudar.","datePublished":"2026-02-22T19:00:00Z","dateModified":"2026-03-21T01:52:17Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2278,6 +2278,8 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/<span\b[^>]*>/gi, '')
     .replace(/<\/span>/gi, '')
     .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
+    .replace(/<(strong|b|em|i|u)\b[^>]*>\s*<br\s*\/?>\s*<\/(strong|b|em|i|u)>/gi, '<br>')
+    .replace(/<(strong|b|em|i|u)\b[^>]*>\s*<\/(strong|b|em|i|u)>/gi, '')
     .replace(/<\s*b\b[^>]*>/gi, '<strong>')
     .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
     .replace(/<\s*i\b[^>]*>/gi, '<em>')
