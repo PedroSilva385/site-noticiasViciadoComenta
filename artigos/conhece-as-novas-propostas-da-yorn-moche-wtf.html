@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="CONHECE as NOVAS propostas da YORN - MOCHE - WTF">
 <meta name="twitter:description" content="Marcas jovens WTF, MOCHE e YORN entram na guerra dos pacotes de servi&#231;os!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/conhece-as-novas-propostas-da-yorn-moche-wtf.html"},"headline":"CONHECE as NOVAS propostas da YORN - MOCHE - WTF","description":"Marcas jovens WTF, MOCHE e YORN entram na guerra dos pacotes de serviços!","datePublished":"2026-03-21T01:27:24Z","dateModified":"2026-03-21T01:27:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/conhece-as-novas-propostas-da-yorn-moche-wtf.html"},"headline":"CONHECE as NOVAS propostas da YORN - MOCHE - WTF","description":"Marcas jovens WTF, MOCHE e YORN entram na guerra dos pacotes de serviços!","datePublished":"2026-03-21T01:34:08Z","dateModified":"2026-03-21T01:34:08Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2277,7 +2277,18 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/<\/?font\b[^>]*>/gi, '')
     .replace(/<span\b[^>]*>/gi, '')
     .replace(/<\/span>/gi, '')
-    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '');
+    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
+    .replace(/<\s*b\b[^>]*>/gi, '<strong>')
+    .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
+    .replace(/<\s*i\b[^>]*>/gi, '<em>')
+    .replace(/<\s*\/\s*i\s*>/gi, '</em>')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<div\b[^>]*>\s*<br\s*\/?>\s*<\/div>/gi, '<br><br>')
+    .replace(/<div\b[^>]*>/gi, '')
+    .replace(/<\/div>/gi, '<br>')
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
+    .replace(/^(\s*<br\s*\/?>\s*)+|(\s*<br\s*\/?>\s*)+$/gi, '')
+    .trim();
 }
 
 function formatArticleContent(rawContent) {

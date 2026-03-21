@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="DIGI anuncia redu&#231;&#227;o na EXPANS&#195;O em PORTUGAL">
 <meta name="twitter:description" content="O an&#250;ncio da redu&#231;&#227;o dos custos de investimento em PORTUGAL">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-anuncia-reducao-na-expansao-em-portugal.html"},"headline":"DIGI anuncia redução na EXPANSÃO em PORTUGAL","description":"O anúncio da redução dos custos de investimento em PORTUGAL","datePublished":"2026-03-09T19:00:00Z","dateModified":"2026-03-21T01:27:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-anuncia-reducao-na-expansao-em-portugal.html"},"headline":"DIGI anuncia redução na EXPANSÃO em PORTUGAL","description":"O anúncio da redução dos custos de investimento em PORTUGAL","datePublished":"2026-03-09T19:00:00Z","dateModified":"2026-03-21T01:34:08Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2277,7 +2277,18 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/<\/?font\b[^>]*>/gi, '')
     .replace(/<span\b[^>]*>/gi, '')
     .replace(/<\/span>/gi, '')
-    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '');
+    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
+    .replace(/<\s*b\b[^>]*>/gi, '<strong>')
+    .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
+    .replace(/<\s*i\b[^>]*>/gi, '<em>')
+    .replace(/<\s*\/\s*i\s*>/gi, '</em>')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<div\b[^>]*>\s*<br\s*\/?>\s*<\/div>/gi, '<br><br>')
+    .replace(/<div\b[^>]*>/gi, '')
+    .replace(/<\/div>/gi, '<br>')
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
+    .replace(/^(\s*<br\s*\/?>\s*)+|(\s*<br\s*\/?>\s*)+$/gi, '')
+    .trim();
 }
 
 function formatArticleContent(rawContent) {

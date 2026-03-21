@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="UZO e AMIGO igualam pre&#231;os da DIGI!">
 <meta name="twitter:description" content="UZO e Amigo igualaram temporariamente os pre&#231;os da DIGI. Explicamos o impacto comercial desta decis&#227;o e o que deves comparar antes de mudar.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-e-amigo-igualam-precos-da-digi.html"},"headline":"UZO e AMIGO igualam preços da DIGI!","description":"UZO e Amigo igualaram temporariamente os preços da DIGI. Explicamos o impacto comercial desta decisão e o que deves comparar antes de mudar.","datePublished":"2026-02-22T19:00:00Z","dateModified":"2026-03-21T01:27:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-e-amigo-igualam-precos-da-digi.html"},"headline":"UZO e AMIGO igualam preços da DIGI!","description":"UZO e Amigo igualaram temporariamente os preços da DIGI. Explicamos o impacto comercial desta decisão e o que deves comparar antes de mudar.","datePublished":"2026-02-22T19:00:00Z","dateModified":"2026-03-21T01:34:08Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2277,7 +2277,18 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/<\/?font\b[^>]*>/gi, '')
     .replace(/<span\b[^>]*>/gi, '')
     .replace(/<\/span>/gi, '')
-    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '');
+    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
+    .replace(/<\s*b\b[^>]*>/gi, '<strong>')
+    .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
+    .replace(/<\s*i\b[^>]*>/gi, '<em>')
+    .replace(/<\s*\/\s*i\s*>/gi, '</em>')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<div\b[^>]*>\s*<br\s*\/?>\s*<\/div>/gi, '<br><br>')
+    .replace(/<div\b[^>]*>/gi, '')
+    .replace(/<\/div>/gi, '<br>')
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
+    .replace(/^(\s*<br\s*\/?>\s*)+|(\s*<br\s*\/?>\s*)+$/gi, '')
+    .trim();
 }
 
 function formatArticleContent(rawContent) {
