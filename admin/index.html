@@ -317,12 +317,28 @@ body {
   box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
 }
 
-#contentEditor strong {
-  font-weight: 600;
+#contentEditor:empty:before {
+  content: attr(placeholder);
+  color: #9ca3af;
+  pointer-events: none;
 }
 
-#contentEditor em {
+#contentEditor strong, #contentEditor b {
+  font-weight: 700;
+}
+
+#contentEditor em, #contentEditor i {
   font-style: italic;
+}
+
+#contentEditor u {
+  text-decoration: underline;
+}
+
+#contentEditor h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 10px 0 4px;
 }
 
 #contentEditor a {
@@ -337,6 +353,13 @@ body {
   border-radius: 4px;
   font-family: 'Courier New', monospace;
   font-size: 0.9em;
+}
+
+#contentEditor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 8px 0;
 }
 
 .editor-counter {
@@ -658,28 +681,31 @@ button {
           <div class="form-group">
             <label for="contentEditor">Conteúdo principal *</label>
             <div class="editor-toolbar">
-              <button type="button" id="btnBold" title="Bold">
-                <strong>B</strong>
+              <button type="button" id="btnBold" title="Negrito (seleciona texto e carrega)" style="font-weight:700;">
+                B
               </button>
-              <button type="button" id="btnItalic" title="Itálico">
-                <em>I</em>
+              <button type="button" id="btnItalic" title="Itálico (seleciona texto e carrega)" style="font-style:italic;">
+                I
               </button>
-              <div class="toolbar-separator"></div>
-              <button type="button" id="btnLink" title="Adicionar link">
-                🔗 Link
-              </button>
-              <button type="button" id="btnImage" title="Adicionar imagem">
-                🖼️ Imagem
+              <button type="button" id="btnUnderline" title="Sublinhado (seleciona texto e carrega)" style="text-decoration:underline;">
+                U
               </button>
               <div class="toolbar-separator"></div>
-              <button type="button" id="btnHeading" title="Título">
-                H1
+              <button type="button" id="btnHeading" title="Título H2">
+                H2
               </button>
-              <button type="button" id="btnCode" title="Código">
+              <button type="button" id="btnCode" title="Código inline">
                 &lt;/&gt;
               </button>
+              <div class="toolbar-separator"></div>
+              <button type="button" id="btnLink" title="Inserir link">
+                🔗 Link
+              </button>
+              <button type="button" id="btnImage" title="Inserir imagem">
+                🖼️ Imagem
+              </button>
             </div>
-            <div id="contentEditor" contenteditable="true" role="textbox" aria-label="Editor de conteúdo"></div>
+            <div id="contentEditor" contenteditable="true" role="textbox" aria-label="Editor de conteúdo" placeholder="Cole ou escreve o conteúdo aqui. Seleciona texto e usa os botões acima para formatar."></div>
             <div class="editor-counter"><span id="charCount">0</span> caracteres</div>
           </div>
         </div>
@@ -781,44 +807,60 @@ const btnHeading = document.getElementById('btnHeading');
 const btnCode = document.getElementById('btnCode');
 
 // ===== EDITOR TOOLBAR FUNCTIONS =====
-function insertTextFormatting(prefix, suffix = '') {
-  contentEditor.focus();
-  document.execCommand('formatBlock', false, '<' + prefix + '>');
-}
+let savedSelection = null;
+
+// Guardar a selecção antes do botão roubar o foco
+document.querySelector('.editor-toolbar').addEventListener('mousedown', (e) => {
+  if (e.target.closest('button')) {
+    e.preventDefault(); // impede que o clique no botão tire o foco do editor
+  }
+});
 
 // Delegação de eventos para toolbar
 document.addEventListener('click', (e) => {
-  if (e.target.id === 'btnBold') {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const id = btn.id;
+
+  if (id === 'btnBold') {
     e.preventDefault();
-    contentEditor.focus();
     document.execCommand('bold', false, null);
-  } else if (e.target.id === 'btnItalic') {
+  } else if (id === 'btnItalic') {
     e.preventDefault();
-    contentEditor.focus();
     document.execCommand('italic', false, null);
-  } else if (e.target.id === 'btnHeading') {
+  } else if (id === 'btnUnderline') {
     e.preventDefault();
-    contentEditor.focus();
-    document.execCommand('formatBlock', false, '<h2>');
-  } else if (e.target.id === 'btnCode') {
+    document.execCommand('underline', false, null);
+  } else if (id === 'btnHeading') {
     e.preventDefault();
-    contentEditor.focus();
-    document.execCommand('createLink', false, '#');
-    document.execCommand('unlink', false, null);
-  } else if (e.target.id === 'btnLink') {
+    document.execCommand('formatBlock', false, 'h2');
+  } else if (id === 'btnCode') {
+    e.preventDefault();
+    // Envolver texto seleccionado em <code>
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+      const range = sel.getRangeAt(0);
+      const code = document.createElement('code');
+      range.surroundContents(code);
+    }
+  } else if (id === 'btnLink') {
     e.preventDefault();
     const url = prompt('URL do link:');
     if (url) {
-      contentEditor.focus();
       document.execCommand('createLink', false, url);
+      // Abrir em nova janela
+      const sel = window.getSelection();
+      if (sel && sel.anchorNode) {
+        const a = sel.anchorNode.parentElement && sel.anchorNode.parentElement.closest('a');
+        if (a) a.target = '_blank';
+      }
     }
-  } else if (e.target.id === 'btnImage') {
+  } else if (id === 'btnImage') {
     e.preventDefault();
     const url = prompt('URL da imagem:');
     if (url) {
-      const alt = prompt('Descrição da imagem (alt text):');
-      contentEditor.focus();
-      document.execCommand('insertImage', false, url);
+      const alt = prompt('Descrição da imagem (alt text):') || '';
+      document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt}" style="max-width:100%;height:auto;">`);
     }
   }
 });
@@ -1118,25 +1160,11 @@ async function saveNoticia() {
 
   const isNew = selectedNoticiaId === null;
   const id = noticiaId.value;
-    // Converter HTML do editor para texto limpo
-    const editorHtml = contentEditor.innerHTML;
-    // Substituir <br> por \n
-    const editorText = editorHtml
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<[^>]*>/g, (tag) => {
-        if (tag === '<strong>' || tag === '<b>') return '**';
-        if (tag === '</strong>' || tag === '</b>') return '**';
-        if (tag === '<em>' || tag === '<i>') return '*';
-        if (tag === '</em>' || tag === '</i>') return '*';
-        if (tag === '<u>') return '__';
-        if (tag === '</u>') return '__';
-        return '';
-      })
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .trim();
-  
+
+  // Guardar o HTML do editor directamente (preserva bold, italic, links, imagens)
+  const conteudoHtml = contentEditor.innerHTML
+    .replace(/&nbsp;/g, ' ')
+    .trim();
   
   const noticiaObj = {
     id: id,
@@ -1145,7 +1173,7 @@ async function saveNoticia() {
     data: noticiaData.value.trim(),
     categoria: getCategoriaValue(),
     resumo: noticiaResumo.value.trim(),
-    conteudo: editorText,
+    conteudo: conteudoHtml,
     video: noticiaVideo.value.trim(),
     slug: noticiaSlug.value.trim() || generateSlug(noticiaTitulo.value)
   };
