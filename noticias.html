@@ -25,6 +25,9 @@
 <script src="assets/news-scheduler.js"></script>
 <script src="assets/new-article-notification.js?v=20260301"></script>
 <script src="assets/push-notifications.js?v=20260301"></script>
+
+<!-- Markdown Parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
@@ -2255,6 +2258,34 @@ function formatArticleContent(rawContent) {
 
   if (hasHtml) {
     return sanitizeArticleInlineTypography(content);
+  }
+
+  // Detecta se tem Markdown
+  const hasMarkdown = /\*\*|\*(?!\s)|__(?!\s)|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)|^#+\s|^-\s|^\d+\./m.test(content);
+
+  if (hasMarkdown) {
+    try {
+      // Configurar marked com opções seguras
+      marked.setOptions({
+        breaks: true,
+        gfm: true,
+        pedantic: false
+      });
+      
+      let htmlContent = marked(content);
+      
+      // Remove <p> tags extra deixando apenas br para compatibilidade
+      htmlContent = htmlContent
+        .replace(/<p>(.*?)<\/p>/g, '$1<br>')
+        .replace(/<br>\n/g, '<br>')
+        .replace(/<br><br><br>/g, '<br><br>')
+        .trim();
+      
+      return htmlContent;
+    } catch (e) {
+      console.error('Erro ao processar Markdown:', e);
+      // Fallback para processamento sem Markdown
+    }
   }
 
   const paragraphToken = '__PARAGRAPH_BREAK__';
