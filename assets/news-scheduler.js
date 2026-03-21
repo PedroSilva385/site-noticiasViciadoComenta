@@ -127,6 +127,34 @@ function ordenarNoticiasPorData(noticias) {
   });
 }
 
+function deduplicarNoticias(noticias) {
+  if (!Array.isArray(noticias)) return [];
+
+  const vistos = new Set();
+  const resultado = [];
+
+  for (const noticia of noticias) {
+    if (!noticia || typeof noticia !== 'object') continue;
+
+    const slug = getArticleSlug(noticia);
+    const id = String(noticia.id || '').trim();
+    const titulo = String(noticia.titulo || '').trim().toLowerCase();
+    const data = String(noticia.data || '').trim();
+
+    const chave = slug
+      ? `slug:${slug}`
+      : (id
+        ? `id:${id}`
+        : `title:${titulo}|date:${data}`);
+
+    if (vistos.has(chave)) continue;
+    vistos.add(chave);
+    resultado.push(noticia);
+  }
+
+  return resultado;
+}
+
 async function garantirAcessoNoticiasFirebase() {
   if (typeof window.ensureFirebaseInitialized === 'function') {
     await window.ensureFirebaseInitialized();
@@ -159,13 +187,13 @@ async function fetchNoticiasAgendadas(url) {
   
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
-    data.noticias = filtrarNoticiasPublicadas(data.noticias);
+    data.noticias = deduplicarNoticias(filtrarNoticiasPublicadas(data.noticias));
 
     if (noticiaSolicitada && !data.noticias.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
       data.noticias.unshift(noticiaSolicitada);
     }
 
-    data.noticias = ordenarNoticiasPorData(data.noticias);
+    data.noticias = ordenarNoticiasPorData(deduplicarNoticias(data.noticias));
   }
   
   return data;
