@@ -1036,6 +1036,45 @@ auth.onAuthStateChanged((user) => {
 });
 
 // ===== NOTÍCIAS FUNCTIONS =====
+function slugifyAdminTitle(text) {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-');
+}
+
+function deduplicateNoticiasList(noticias) {
+  if (!Array.isArray(noticias)) return [];
+
+  const seen = new Set();
+  const result = [];
+
+  noticias.forEach((noticia) => {
+    if (!noticia || typeof noticia !== 'object') return;
+
+    const id = String(noticia.id || '').trim();
+    const slug = slugifyAdminTitle(noticia.slug || noticia.titulo || '');
+    const title = String(noticia.titulo || '').trim().toLowerCase();
+    const date = String(noticia.data || '').trim();
+
+    const key = slug
+      ? `slug:${slug}`
+      : (id
+        ? `id:${id}`
+        : `title:${title}|date:${date}`);
+
+    if (seen.has(key)) return;
+    seen.add(key);
+    result.push(noticia);
+  });
+
+  return result;
+}
+
 async function loadNoticias() {
   try {
     // Tentar carregar do Firebase
@@ -1051,6 +1090,8 @@ async function loadNoticias() {
       const jsonData = await response.json();
       allNoticias = jsonData.noticias || [];
     }
+
+    allNoticias = deduplicateNoticiasList(allNoticias);
     
     renderNoticiasList();
   } catch (error) {
