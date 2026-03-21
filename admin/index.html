@@ -751,40 +751,33 @@ function insertTextFormatting(prefix, suffix = '') {
   textarea.focus();
 }
 
-btnBold.addEventListener('click', (e) => {
-  e.preventDefault();
-  insertTextFormatting('**', '**');
-});
-
-btnItalic.addEventListener('click', (e) => {
-  e.preventDefault();
-  insertTextFormatting('*', '*');
-});
-
-btnHeading.addEventListener('click', (e) => {
-  e.preventDefault();
-  insertTextFormatting('# ', '');
-});
-
-btnCode.addEventListener('click', (e) => {
-  e.preventDefault();
-  insertTextFormatting('`', '`');
-});
-
-btnLink.addEventListener('click', (e) => {
-  e.preventDefault();
-  const url = prompt('URL do link:');
-  if (url) {
-    insertTextFormatting(`[`, `](${url})`);
-  }
-});
-
-btnImage.addEventListener('click', (e) => {
-  e.preventDefault();
-  const url = prompt('URL da imagem:');
-  if (url) {
-    const alt = prompt('Descrição da imagem (alt text):');
-    insertTextFormatting(`![${alt || 'imagem'}](${url})`, '');
+// Delegação de eventos para toolbar
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'btnBold') {
+    e.preventDefault();
+    insertTextFormatting('**', '**');
+  } else if (e.target.id === 'btnItalic') {
+    e.preventDefault();
+    insertTextFormatting('*', '*');
+  } else if (e.target.id === 'btnHeading') {
+    e.preventDefault();
+    insertTextFormatting('# ', '');
+  } else if (e.target.id === 'btnCode') {
+    e.preventDefault();
+    insertTextFormatting('`', '`');
+  } else if (e.target.id === 'btnLink') {
+    e.preventDefault();
+    const url = prompt('URL do link:');
+    if (url) {
+      insertTextFormatting(`[`, `](${url})`);
+    }
+  } else if (e.target.id === 'btnImage') {
+    e.preventDefault();
+    const url = prompt('URL da imagem:');
+    if (url) {
+      const alt = prompt('Descrição da imagem (alt text):');
+      insertTextFormatting(`![${alt || 'imagem'}](${url})`, '');
+    }
   }
 });
 
