@@ -1066,6 +1066,7 @@ async function saveNoticia() {
 
     // Guardar no Firebase
     await db.ref('noticias').set(allNoticias);
+    console.log('✅ Notícia guardada no Firebase com sucesso!');
     
     // Também tentar sincronizar com servidor local (se disponível)
     try {
@@ -1088,7 +1089,18 @@ async function saveNoticia() {
     
   } catch (error) {
     console.error('Erro ao guardar:', error);
-    showStatus('Erro ao guardar notícia', 'error');
+    
+    let errorMsg = 'Erro ao guardar notícia';
+    
+    if (error.code === 'PERMISSION_DENIED') {
+      errorMsg = 'Erro de permissão: Não tem permissão para guardar. Verifique se está logado.';
+    } else if (error.message && error.message.includes('permission')) {
+      errorMsg = 'Erro de permissão no Firebase. Contacte o administrador.';
+    } else if (error.message) {
+      errorMsg = `Erro: ${error.message}`;
+    }
+    
+    showStatus(errorMsg, 'error');
   } finally {
     btnSave.disabled = false;
   }
