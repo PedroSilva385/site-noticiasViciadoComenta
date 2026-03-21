@@ -1061,10 +1061,10 @@ function deduplicateNoticiasList(noticias) {
     const title = String(noticia.titulo || '').trim().toLowerCase();
     const date = String(noticia.data || '').trim();
 
-    const key = slug
-      ? `slug:${slug}`
-      : (id
-        ? `id:${id}`
+    const key = id
+      ? `id:${id}`
+      : (slug
+        ? `slug:${slug}`
         : `title:${title}|date:${date}`);
 
     if (seen.has(key)) return;

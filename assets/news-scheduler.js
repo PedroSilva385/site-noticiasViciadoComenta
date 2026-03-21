@@ -141,10 +141,10 @@ function deduplicarNoticias(noticias) {
     const titulo = String(noticia.titulo || '').trim().toLowerCase();
     const data = String(noticia.data || '').trim();
 
-    const chave = slug
-      ? `slug:${slug}`
-      : (id
-        ? `id:${id}`
+    const chave = id
+      ? `id:${id}`
+      : (slug
+        ? `slug:${slug}`
         : `title:${titulo}|date:${data}`);
 
     if (vistos.has(chave)) continue;
