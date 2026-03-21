@@ -16,6 +16,9 @@
 <script src="assets/news-scheduler.js"></script>
 <script src="assets/new-article-notification.js?v=20260301"></script>
 <script src="assets/push-notifications.js?v=20260301"></script>
+
+<!-- Markdown Parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
@@ -1855,7 +1858,7 @@ footer {
 <meta name="twitter:title" content="UZO nega TUDO e ESTALA POL&#201;MICA">
 <meta name="twitter:description" content="UZO nega todas as acusa&#231;&#245;es e estala a pol&#233;mica contra a sub-marca da MEO!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-nega-tudo-e-estala-polemica.html"},"headline":"UZO nega TUDO e ESTALA POLÉMICA","description":"UZO nega todas as acusações e estala a polémica contra a sub-marca da MEO!","datePublished":"2026-03-20T22:58:59Z","dateModified":"2026-03-20T22:58:59Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/uzo-nega-tudo-e-estala-polemica.html"},"headline":"UZO nega TUDO e ESTALA POLÉMICA","description":"UZO nega todas as acusações e estala a polémica contra a sub-marca da MEO!","datePublished":"2026-03-21T00:35:49Z","dateModified":"2026-03-21T00:35:49Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2106,11 +2109,44 @@ function getArticleSlug(noticia) {
   return slugifyTitulo((noticia && noticia.titulo) || '');
 }
 
+function getArticleIdentifierFromLocation() {
+  const params = new URLSearchParams(window.location.search || '');
+  const queryId = params.get('id');
+  const querySlug = params.get('slug');
+
+  let hashId = null;
+  let hashSlug = null;
+  const hash = String(window.location.hash || '');
+  const hashClean = hash.replace(/^#/, '');
+  const hashMatch = hashClean.match(/^\/([^/]+)\/([^/]+)$/);
+  if (hashMatch) {
+    hashSlug = decodeURIComponent(hashMatch[1] || '');
+    hashId = decodeURIComponent(hashMatch[2] || '');
+  }
+
+  let pathId = null;
+  let pathSlug = null;
+  const pathname = String(window.location.pathname || '');
+  const cleanPath = pathname.replace(/\/+$/, '');
+  const match = cleanPath.match(/\/noticias\.html\/([^/]+)\/([^/]+)$/i);
+
+  if (match) {
+    pathSlug = decodeURIComponent(match[1] || '');
+    pathId = decodeURIComponent(match[2] || '');
+  }
+
+  return {
+    id: queryId || hashId || pathId || null,
+    slug: querySlug || hashSlug || pathSlug || null,
+    urlParams: params
+  };
+}
+
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2122,7 +2158,7 @@ function buildArticleUrlByData(noticia) {
   const id = String(noticia.id);
   const slug = getArticleSlug(noticia);
   if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2238,6 +2274,34 @@ function formatArticleContent(rawContent) {
 
   if (hasHtml) {
     return sanitizeArticleInlineTypography(content);
+  }
+
+  // Detecta se tem Markdown
+  const hasMarkdown = /\*\*|\*(?!\s)|__(?!\s)|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)|^#+\s|^-\s|^\d+\./m.test(content);
+
+  if (hasMarkdown) {
+    try {
+      // Configurar marked com opções seguras
+      marked.setOptions({
+        breaks: true,
+        gfm: true,
+        pedantic: false
+      });
+      
+      let htmlContent = marked(content);
+      
+      // Remove <p> tags extra deixando apenas br para compatibilidade
+      htmlContent = htmlContent
+        .replace(/<p>(.*?)<\/p>/g, '$1<br>')
+        .replace(/<br>\n/g, '<br>')
+        .replace(/<br><br><br>/g, '<br><br>')
+        .trim();
+      
+      return htmlContent;
+    } catch (e) {
+      console.error('Erro ao processar Markdown:', e);
+      // Fallback para processamento sem Markdown
+    }
   }
 
   const paragraphToken = '__PARAGRAPH_BREAK__';
@@ -2552,9 +2616,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Obter ID/slug da URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const noticiaId = urlParams.get('id');
-  const noticiaSlug = urlParams.get('slug');
+  const routeInfo = getArticleIdentifierFromLocation();
+  const urlParams = routeInfo.urlParams;
+  const noticiaId = routeInfo.id;
+  const noticiaSlug = routeInfo.slug;
 
   const identificadorArtigo = noticiaId || noticiaSlug;
   let newArticleNotificationTriggered = false;
@@ -2637,10 +2702,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const shouldStayOnEditablePage = editParam === '1';
         if (!shouldStayOnEditablePage) {
-          const nextPathWithSearch = `${articleUrl.pathname}${articleUrl.search}`;
-          const currentPathWithSearch = `${window.location.pathname}${window.location.search}`;
-          if (currentPathWithSearch !== nextPathWithSearch) {
-            window.history.replaceState({}, '', nextPathWithSearch);
+          const nextPathWithSearchHash = `${articleUrl.pathname}${articleUrl.search}${articleUrl.hash}`;
+          const currentPathWithSearchHash = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+          if (currentPathWithSearchHash !== nextPathWithSearchHash) {
+            window.history.replaceState({}, '', nextPathWithSearchHash);
           }
         }
 
