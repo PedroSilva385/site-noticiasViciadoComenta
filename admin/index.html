@@ -292,6 +292,81 @@ body {
 .form-group textarea {
   min-height: 150px;
   resize: vertical;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Courier New', monospace;
+}
+
+/* ========== TOOLBAR ========== */
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.editor-toolbar button {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editor-toolbar button:hover {
+  background: #f9fafb;
+  border-color: #4f46e5;
+  color: #4f46e5;
+}
+
+.editor-toolbar button.active {
+  background: #4f46e5;
+  color: white;
+  border-color: #4f46e5;
+}
+
+.toolbar-separator {
+  width: 1px;
+  background: #d1d5db;
+  margin: 0 4px;
+}
+
+/* ========== SCHEDULING ========== */
+.scheduling-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.scheduling-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scheduling-option input[type="radio"] {
+  width: auto;
+  margin: 0;
+}
+
+.scheduling-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+
+.scheduling-fields.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .form-row {
@@ -492,7 +567,33 @@ button {
             </div>
             <div class="form-group">
               <label for="noticiaCategoria">Categoria *</label>
-              <input type="text" id="noticiaCategoria" placeholder="Ex: Telecom, DIGI, Gaming">
+              <input type="text" id="noticiaCategoria" list="categoriasList" placeholder="Ex: Telecom, DIGI, Gaming">
+              <datalist id="categoriasList"></datalist>
+            </div>
+          </div>
+
+          <!-- Agendamento -->
+          <div class="form-section" style="border-top: 1px solid #e5e7eb; padding-top: 16px; margin-top: 12px;">
+            <h4 style="font-size: 0.95rem; margin-bottom: 12px;">Publicação</h4>
+            <div class="scheduling-group">
+              <label class="scheduling-option">
+                <input type="radio" name="scheduling" value="immediate" checked>
+                <span>Publicar imediatamente</span>
+              </label>
+              <label class="scheduling-option">
+                <input type="radio" name="scheduling" value="scheduled">
+                <span>Agendar para data/hora</span>
+              </label>
+            </div>
+            <div class="scheduling-fields" id="schedulingFields">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="noticiaScheduleDate">Data</label>
+                <input type="date" id="noticiaScheduleDate">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="noticiaScheduleTime">Hora</label>
+                <input type="time" id="noticiaScheduleTime" value="18:00">
+              </div>
             </div>
           </div>
         </div>
@@ -506,7 +607,29 @@ button {
           </div>
           <div class="form-group">
             <label for="noticiaConteudo">Conteúdo principal *</label>
-            <textarea id="noticiaConteudo" required placeholder="Cole aqui o corpo completo da notícia..."></textarea>
+            <div class="editor-toolbar">
+              <button type="button" id="btnBold" title="Bold (Ctrl+B)">
+                <strong>B</strong>
+              </button>
+              <button type="button" id="btnItalic" title="Itálico (Ctrl+I)">
+                <em>I</em>
+              </button>
+              <div class="toolbar-separator"></div>
+              <button type="button" id="btnLink" title="Adicionar link">
+                🔗 Link
+              </button>
+              <button type="button" id="btnImage" title="Adicionar imagem">
+                🖼️ Imagem
+              </button>
+              <div class="toolbar-separator"></div>
+              <button type="button" id="btnHeading" title="Título">
+                H1
+              </button>
+              <button type="button" id="btnCode" title="Código">
+                &lt;/&gt;
+              </button>
+            </div>
+            <textarea id="noticiaConteudo" required placeholder="Cole aqui o corpo completo da notícia. O espaçamento será preservado exactamente..."></textarea>
           </div>
         </div>
 
@@ -591,6 +714,108 @@ const noticiaSlug = document.getElementById('noticiaSlug');
 const btnSave = document.getElementById('btnSave');
 const btnCancel = document.getElementById('btnCancel');
 const btnDelete = document.getElementById('btnDelete');
+
+// Scheduling fields
+const schedulingRadios = document.querySelectorAll('input[name="scheduling"]');
+const schedulingFields = document.getElementById('schedulingFields');
+const noticiaScheduleDate = document.getElementById('noticiaScheduleDate');
+const noticiaScheduleTime = document.getElementById('noticiaScheduleTime');
+
+// Editor toolbar buttons
+const btnBold = document.getElementById('btnBold');
+const btnItalic = document.getElementById('btnItalic');
+const btnLink = document.getElementById('btnLink');
+const btnImage = document.getElementById('btnImage');
+const btnHeading = document.getElementById('btnHeading');
+const btnCode = document.getElementById('btnCode');
+
+// ===== EDITOR TOOLBAR FUNCTIONS =====
+function insertTextFormatting(prefix, suffix = '') {
+  const textarea = noticiaConteudo;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const selectedText = textarea.value.substring(start, end);
+  const beforeText = textarea.value.substring(0, start);
+  const afterText = textarea.value.substring(end);
+  
+  if (selectedText.length === 0) {
+    textarea.value = beforeText + prefix + 'texto' + suffix + afterText;
+    textarea.selectionStart = start + prefix.length;
+    textarea.selectionEnd = start + prefix.length + 5;
+  } else {
+    textarea.value = beforeText + prefix + selectedText + suffix + afterText;
+    textarea.selectionStart = start;
+    textarea.selectionEnd = end + prefix.length + suffix.length;
+  }
+  
+  textarea.focus();
+}
+
+btnBold.addEventListener('click', (e) => {
+  e.preventDefault();
+  insertTextFormatting('**', '**');
+});
+
+btnItalic.addEventListener('click', (e) => {
+  e.preventDefault();
+  insertTextFormatting('*', '*');
+});
+
+btnHeading.addEventListener('click', (e) => {
+  e.preventDefault();
+  insertTextFormatting('# ', '');
+});
+
+btnCode.addEventListener('click', (e) => {
+  e.preventDefault();
+  insertTextFormatting('`', '`');
+});
+
+btnLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  const url = prompt('URL do link:');
+  if (url) {
+    insertTextFormatting(`[`, `](${url})`);
+  }
+});
+
+btnImage.addEventListener('click', (e) => {
+  e.preventDefault();
+  const url = prompt('URL da imagem:');
+  if (url) {
+    const alt = prompt('Descrição da imagem (alt text):');
+    insertTextFormatting(`![${alt || 'imagem'}](${url})`, '');
+  }
+});
+
+// ===== SCHEDULING =====
+schedulingRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (document.querySelector('input[name="scheduling"]:checked').value === 'scheduled') {
+      schedulingFields.classList.add('active');
+    } else {
+      schedulingFields.classList.remove('active');
+    }
+  });
+});
+
+// ===== CATEGORIES FUNCTION =====
+function updateCategoriesList() {
+  const categories = new Set();
+  allNoticias.forEach(noticia => {
+    if (noticia.categoria) {
+      categories.add(noticia.categoria);
+    }
+  });
+  
+  const datalist = document.getElementById('categoriasList');
+  datalist.innerHTML = '';
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    datalist.appendChild(option);
+  });
+}
 
 // ===== AUTH FUNCTIONS =====
 authForm.addEventListener('submit', async (e) => {
@@ -711,6 +936,8 @@ function renderNoticiasList() {
     item.addEventListener('click', () => selectNoticia(noticia.id));
     noticiasList.appendChild(item);
   });
+  
+  updateCategoriesList();
 }
 
 function selectNoticia(id) {
@@ -727,6 +954,19 @@ function selectNoticia(id) {
     noticiaConteudo.value = noticia.conteudo || '';
     noticiaVideo.value = noticia.video || '';
     noticiaSlug.value = noticia.slug || '';
+    
+    // Load scheduling info if exists
+    if (noticia.scheduleDate && noticia.scheduleTime) {
+      document.querySelector('input[name="scheduling"][value="scheduled"]').checked = true;
+      schedulingFields.classList.add('active');
+      noticiaScheduleDate.value = noticia.scheduleDate;
+      noticiaScheduleTime.value = noticia.scheduleTime;
+    } else {
+      document.querySelector('input[name="scheduling"][value="immediate"]').checked = true;
+      schedulingFields.classList.remove('active');
+      noticiaScheduleDate.value = '';
+      noticiaScheduleTime.value = '18:00';
+    }
     
     emptyState.style.display = 'none';
     editorPanel.style.display = 'block';
@@ -749,6 +989,12 @@ btnNewNoticia.addEventListener('click', () => {
   noticiaConteudo.value = '';
   noticiaVideo.value = '';
   noticiaSlug.value = '';
+  
+  // Reset scheduling to immediate
+  document.querySelector('input[name="scheduling"][value="immediate"]').checked = true;
+  schedulingFields.classList.remove('active');
+  noticiaScheduleDate.value = '';
+  noticiaScheduleTime.value = '18:00';
   
   emptyState.style.display = 'none';
   editorPanel.style.display = 'block';
@@ -796,10 +1042,17 @@ async function saveNoticia() {
     data: noticiaData.value.trim(),
     categoria: noticiaCategoria.value.trim(),
     resumo: noticiaResumo.value.trim(),
-    conteudo: noticiaConteudo.value.trim(),
+    conteudo: noticiaConteudo.value.trim(), // Preserva espaçamento interno devido a white-space: pre-wrap
     video: noticiaVideo.value.trim(),
     slug: noticiaSlug.value.trim() || generateSlug(noticiaTitulo.value)
   };
+
+  // Add scheduling info if scheduled
+  const schedulingMode = document.querySelector('input[name="scheduling"]:checked').value;
+  if (schedulingMode === 'scheduled' && noticiaScheduleDate.value && noticiaScheduleTime.value) {
+    noticiaObj.scheduleDate = noticiaScheduleDate.value;
+    noticiaObj.scheduleTime = noticiaScheduleTime.value;
+  }
 
   try {
     btnSave.disabled = true;
