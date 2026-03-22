@@ -2303,6 +2303,35 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function normalizeInlineImageReferences(content) {
+  if (!content) return '';
+
+  let normalized = String(content);
+
+  normalized = normalized.replace(
+    /!\[([^\]]*)\]\((assets\/imagens\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg))\)/gi,
+    (_, altText, src) => `<img src='${src}' alt='${altText || 'Imagem'}' class='img-center'>`
+  );
+
+  normalized = normalized.replace(
+    /<a\b[^>]*href=(['"])(assets\/imagens\/[^'"]+\.(?:png|jpe?g|gif|webp|svg))\1[^>]*>([\s\S]*?)<\/a>/gi,
+    (match, _quote, src, linkText) => {
+      const textOnly = String(linkText || '').replace(/<[^>]*>/g, '').trim();
+      if (!textOnly || textOnly === src || /^imagem\s*\d*$/i.test(textOnly)) {
+        return `<img src='${src}' alt='Imagem' class='img-center'>`;
+      }
+      return match;
+    }
+  );
+
+  normalized = normalized.replace(
+    /(^|<br\s*\/?>|\n)\s*(assets\/imagens\/[^\s<]+\.(?:png|jpe?g|gif|webp|svg))\s*(?=$|<br\s*\/?>|\n)/gi,
+    "$1<img src='$2' alt='Imagem' class='img-center'>"
+  );
+
+  return normalized;
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2312,6 +2341,7 @@ function formatArticleContent(rawContent) {
   if (hasHtml) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
+    htmlContent = normalizeInlineImageReferences(htmlContent);
 
     const paragraphToken = '__PARAGRAPH_BREAK__';
     htmlContent = htmlContent
@@ -2345,6 +2375,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = normalizeInlineImageReferences(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -2367,6 +2399,7 @@ function formatArticleContent(rawContent) {
 }
 
 function canUseLiveEditor() {
+  content = normalizeInlineImageReferences(content);
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
   return editEnabled;

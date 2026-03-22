@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="DIGI &#233; a &#250;nica a CRESCER em 2025 nos PACOTES de SERVI&#199;OS!">
 <meta name="twitter:description" content="Analisamos o relat&#243;rio da ANACOM, referente ao 4T2025, sobre a evolu&#231;&#227;o dos pacotes de servi&#231;os">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-e-a-unica-a-crescer-em-2025-nos-pacotes-de-servicos.html"},"headline":"DIGI é a única a CRESCER em 2025 nos PACOTES de SERVIÇOS!","description":"Analisamos o relatório da ANACOM, referente ao 4T2025, sobre a evolução dos pacotes de serviços","datePublished":"2026-02-27T19:00:00Z","dateModified":"2026-03-21T01:52:17Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-e-a-unica-a-crescer-em-2025-nos-pacotes-de-servicos.html"},"headline":"DIGI é a única a CRESCER em 2025 nos PACOTES de SERVIÇOS!","description":"Analisamos o relatório da ANACOM, referente ao 4T2025, sobre a evolução dos pacotes de serviços","datePublished":"2026-02-27T19:00:00Z","dateModified":"2026-03-22T02:13:36Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2319,6 +2319,35 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function normalizeInlineImageReferences(content) {
+  if (!content) return '';
+
+  let normalized = String(content);
+
+  normalized = normalized.replace(
+    /!\[([^\]]*)\]\((assets\/imagens\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg))\)/gi,
+    (_, altText, src) => `<img src='${src}' alt='${altText || 'Imagem'}' class='img-center'>`
+  );
+
+  normalized = normalized.replace(
+    /<a\b[^>]*href=(['"])(assets\/imagens\/[^'"]+\.(?:png|jpe?g|gif|webp|svg))\1[^>]*>([\s\S]*?)<\/a>/gi,
+    (match, _quote, src, linkText) => {
+      const textOnly = String(linkText || '').replace(/<[^>]*>/g, '').trim();
+      if (!textOnly || textOnly === src || /^imagem\s*\d*$/i.test(textOnly)) {
+        return `<img src='${src}' alt='Imagem' class='img-center'>`;
+      }
+      return match;
+    }
+  );
+
+  normalized = normalized.replace(
+    /(^|<br\s*\/?>|\n)\s*(assets\/imagens\/[^\s<]+\.(?:png|jpe?g|gif|webp|svg))\s*(?=$|<br\s*\/?>|\n)/gi,
+    "$1<img src='$2' alt='Imagem' class='img-center'>"
+  );
+
+  return normalized;
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2328,6 +2357,7 @@ function formatArticleContent(rawContent) {
   if (hasHtml) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
+    htmlContent = normalizeInlineImageReferences(htmlContent);
 
     const paragraphToken = '__PARAGRAPH_BREAK__';
     htmlContent = htmlContent
@@ -2361,6 +2391,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = normalizeInlineImageReferences(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -2383,6 +2415,7 @@ function formatArticleContent(rawContent) {
 }
 
 function canUseLiveEditor() {
+  content = normalizeInlineImageReferences(content);
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
   return editEnabled;

@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="DIGI IT&#193;LIA uma DESILUS&#195;O ap&#243;s 16 ANOS">
 <meta name="twitter:description" content="Anteriormente tivemos oportunidade de analisar a opera&#231;&#227;o da DIGI na casa m&#227;e, a Rom&#233;nia. Hoje vamos olhar para a subsidi&#225;ria da digi em it&#225;lia, onde ap&#243;s 16 anos, n&#227;o convence.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-italia-uma-desilusao-apos-16-anos.html"},"headline":"DIGI ITÁLIA uma DESILUSÃO após 16 ANOS","description":"Anteriormente tivemos oportunidade de analisar a operação da DIGI na casa mãe, a Roménia. Hoje vamos olhar para a subsidiária da digi em itália, onde após 16 anos, não convence.","datePublished":"2026-03-21T01:52:17Z","dateModified":"2026-03-21T01:52:17Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-italia-uma-desilusao-apos-16-anos.html"},"headline":"DIGI ITÁLIA uma DESILUSÃO após 16 ANOS","description":"Anteriormente tivemos oportunidade de analisar a operação da DIGI na casa mãe, a Roménia. Hoje vamos olhar para a subsidiária da digi em itália, onde após 16 anos, não convence.","datePublished":"2026-03-22T02:13:35Z","dateModified":"2026-03-22T02:13:35Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2319,6 +2319,35 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function normalizeInlineImageReferences(content) {
+  if (!content) return '';
+
+  let normalized = String(content);
+
+  normalized = normalized.replace(
+    /!\[([^\]]*)\]\((assets\/imagens\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg))\)/gi,
+    (_, altText, src) => `<img src='${src}' alt='${altText || 'Imagem'}' class='img-center'>`
+  );
+
+  normalized = normalized.replace(
+    /<a\b[^>]*href=(['"])(assets\/imagens\/[^'"]+\.(?:png|jpe?g|gif|webp|svg))\1[^>]*>([\s\S]*?)<\/a>/gi,
+    (match, _quote, src, linkText) => {
+      const textOnly = String(linkText || '').replace(/<[^>]*>/g, '').trim();
+      if (!textOnly || textOnly === src || /^imagem\s*\d*$/i.test(textOnly)) {
+        return `<img src='${src}' alt='Imagem' class='img-center'>`;
+      }
+      return match;
+    }
+  );
+
+  normalized = normalized.replace(
+    /(^|<br\s*\/?>|\n)\s*(assets\/imagens\/[^\s<]+\.(?:png|jpe?g|gif|webp|svg))\s*(?=$|<br\s*\/?>|\n)/gi,
+    "$1<img src='$2' alt='Imagem' class='img-center'>"
+  );
+
+  return normalized;
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2328,6 +2357,7 @@ function formatArticleContent(rawContent) {
   if (hasHtml) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
+    htmlContent = normalizeInlineImageReferences(htmlContent);
 
     const paragraphToken = '__PARAGRAPH_BREAK__';
     htmlContent = htmlContent
@@ -2361,6 +2391,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = normalizeInlineImageReferences(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -2383,6 +2415,7 @@ function formatArticleContent(rawContent) {
 }
 
 function canUseLiveEditor() {
+  content = normalizeInlineImageReferences(content);
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
   return editEnabled;
