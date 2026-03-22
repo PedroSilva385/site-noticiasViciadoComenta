@@ -2338,6 +2338,40 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function normalizeBrokenExternalLinks(content) {
+  if (!content) return '';
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = String(content);
+
+  wrapper.querySelectorAll('a[href]').forEach((anchor) => {
+    const rawHref = String(anchor.getAttribute('href') || '').trim();
+    const anchorText = String(anchor.textContent || '').trim();
+
+    const isBrokenHttp = /^https?:\/?\/?$/i.test(rawHref);
+    if (!isBrokenHttp) return;
+
+    const textUrlMatch = anchorText.match(/https?:\/\/[^\s<]+/i);
+    if (!textUrlMatch) return;
+
+    const safeUrl = textUrlMatch[0].trim();
+    anchor.setAttribute('href', safeUrl);
+
+    try {
+      const parsed = new URL(safeUrl);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        if (!anchor.hasAttribute('target')) {
+          anchor.setAttribute('target', '_blank');
+        }
+        anchor.setAttribute('rel', 'noopener noreferrer');
+      }
+    } catch (_error) {
+    }
+  });
+
+  return wrapper.innerHTML;
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2348,6 +2382,7 @@ function formatArticleContent(rawContent) {
   if (hasHtml) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
+    htmlContent = normalizeBrokenExternalLinks(htmlContent);
 
     const paragraphToken = '__PARAGRAPH_BREAK__';
     htmlContent = htmlContent
@@ -2381,6 +2416,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = normalizeBrokenExternalLinks(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -2416,6 +2453,7 @@ function formatArticleContent(rawContent) {
 
   content = normalizeBrokenLineWraps(content);
   content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+  content = normalizeBrokenExternalLinks(content);
   return content.trim();
 }
 
@@ -2798,6 +2836,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const editParam = urlParams.get('edit');
         const host = (window.location.hostname || '').toLowerCase();
         const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
+        const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+        if (isLocalHost && editParam !== '1') {
+          const publicArticleUrl = new URL(canonicalArticleUrl, 'https://www.viciadocomenta.pt/').toString();
+          window.location.replace(publicArticleUrl);
+          return;
+        }
 
         if (editParam === '1') {
           articleUrl.searchParams.set('edit', '1');
@@ -3194,6 +3239,16 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
     (currentValue) => (Number(currentValue) || 0) + 1,
     (error, committed) => {
       if (error) {
+        const errorCode = String(error.code || error.message || '').toLowerCase();
+        if (errorCode.includes('permission_denied')) {
+          if (!window.__articleReadPermissionDeniedWarned) {
+            console.warn('Sem permissões para atualizar leituras em article_reads. A página continuará a funcionar sem este contador.');
+            window.__articleReadPermissionDeniedWarned = true;
+          }
+          sessionStorage.setItem(sessionKey, '1');
+          return;
+        }
+
         console.error('Erro ao atualizar leitura do artigo:', error);
         return;
       }
