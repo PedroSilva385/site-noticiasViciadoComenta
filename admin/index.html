@@ -1140,6 +1140,26 @@ function countArticleReads(articleReadsData) {
   return Object.values(articleReadsData).reduce((sum, item) => sum + toNumber(item), 0);
 }
 
+function isPermissionDeniedError(error) {
+  if (!error) return false;
+  const code = String(error.code || '').toLowerCase();
+  const message = String(error.message || '').toLowerCase();
+  return code.includes('permission_denied') || message.includes('permission_denied');
+}
+
+async function readStatsPath(path, fallbackValue, deniedList) {
+  try {
+    const snapshot = await db.ref(path).once('value');
+    return snapshot.val() ?? fallbackValue;
+  } catch (error) {
+    if (isPermissionDeniedError(error)) {
+      deniedList.push(path);
+      return fallbackValue;
+    }
+    throw error;
+  }
+}
+
 async function loadSiteStats() {
   if (!currentUser) return;
 
@@ -1148,19 +1168,15 @@ async function loadSiteStats() {
   try {
     updateLocalNewsStats();
 
-    const [siteStatsSnap, activeUsersSnap, comentariosSnap, likesSnap, articleReadsSnap] = await Promise.all([
-      db.ref('site_stats').once('value'),
-      db.ref('active_users').once('value'),
-      db.ref('comentarios').once('value'),
-      db.ref('likes').once('value'),
-      db.ref('article_reads').once('value')
-    ]);
+    const deniedPaths = [];
 
-    const siteStats = siteStatsSnap.val() || {};
-    const activeUsers = activeUsersSnap.val() || {};
-    const comentarios = comentariosSnap.val() || {};
-    const likes = likesSnap.val() || {};
-    const articleReads = articleReadsSnap.val() || {};
+    const [siteStats, activeUsers, comentarios, likes, articleReads] = await Promise.all([
+      readStatsPath('site_stats', {}, deniedPaths),
+      readStatsPath('active_users', {}, deniedPaths),
+      readStatsPath('comentarios', {}, deniedPaths),
+      readStatsPath('likes', {}, deniedPaths),
+      readStatsPath('article_reads', {}, deniedPaths)
+    ]);
 
     if (statVisitas) statVisitas.textContent = formatStatNumber(siteStats.total_visits);
     if (statUnicos) statUnicos.textContent = formatStatNumber(siteStats.unique_total);
@@ -1170,7 +1186,16 @@ async function loadSiteStats() {
     if (statLeituras) statLeituras.textContent = formatStatNumber(countArticleReads(articleReads));
 
     if (statsLastUpdate) {
-      statsLastUpdate.textContent = `Atualizado às ${new Date().toLocaleTimeString('pt-PT')}`;
+      const timeText = `Atualizado às ${new Date().toLocaleTimeString('pt-PT')}`;
+      if (deniedPaths.length > 0) {
+        statsLastUpdate.textContent = `${timeText} (dados parciais)`;
+      } else {
+        statsLastUpdate.textContent = timeText;
+      }
+    }
+
+    if (deniedPaths.length > 0) {
+      console.warn('Permissões insuficientes para estatísticas:', deniedPaths.join(', '));
     }
   } catch (error) {
     console.error('Erro ao carregar estatísticas do painel:', error);
