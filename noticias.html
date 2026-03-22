@@ -2307,14 +2307,15 @@ function normalizeInlineImageReferences(content) {
   if (!content) return '';
 
   let normalized = String(content);
+  const imagePathPattern = "((?:https?:\\/\\/(?:www\\.)?viciadocomenta\\.pt\\/)?assets\\/imagens\\/[^\\s)]+\\.(?:png|jpe?g|gif|webp|svg))";
 
   normalized = normalized.replace(
-    /!\[([^\]]*)\]\((assets\/imagens\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg))\)/gi,
+    new RegExp(`!\\[([^\\]]*)\\]\\(${imagePathPattern}\\)`, 'gi'),
     (_, altText, src) => `<img src='${src}' alt='${altText || 'Imagem'}' class='img-center'>`
   );
 
   normalized = normalized.replace(
-    /<a\b[^>]*href=(['"])(assets\/imagens\/[^'"]+\.(?:png|jpe?g|gif|webp|svg))\1[^>]*>([\s\S]*?)<\/a>/gi,
+    new RegExp(`<a\\b[^>]*href=(['\"])${imagePathPattern}\\1[^>]*>([\\s\\S]*?)<\\/a>`, 'gi'),
     (match, _quote, src, linkText) => {
       const textOnly = String(linkText || '').replace(/<[^>]*>/g, '').trim();
       if (!textOnly || textOnly === src || /^imagem\s*\d*$/i.test(textOnly)) {
@@ -2325,7 +2326,7 @@ function normalizeInlineImageReferences(content) {
   );
 
   normalized = normalized.replace(
-    /(^|<br\s*\/?>|\n)\s*(assets\/imagens\/[^\s<]+\.(?:png|jpe?g|gif|webp|svg))\s*(?=$|<br\s*\/?>|\n)/gi,
+    new RegExp(`(^|<br\\s*\\/?>|\\n)\\s*${imagePathPattern}\\s*(?=$|<br\\s*\\/?>|\\n)`, 'gi'),
     "$1<img src='$2' alt='Imagem' class='img-center'>"
   );
 

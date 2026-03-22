@@ -1872,7 +1872,7 @@ footer {
 <meta name="twitter:title" content="DIGI B&#201;LGICA com uma GRANDE surpresa!">
 <meta name="twitter:description" content="Analisamos a opera&#231;&#227;o da DIGI no mercado belga!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-belgica-com-uma-grande-surpresa.html"},"headline":"DIGI BÉLGICA com uma GRANDE surpresa!","description":"Analisamos a operação da DIGI no mercado belga!","datePublished":"2026-02-21T19:00:00Z","dateModified":"2026-03-22T02:13:36Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-belgica-com-uma-grande-surpresa.html"},"headline":"DIGI BÉLGICA com uma GRANDE surpresa!","description":"Analisamos a operação da DIGI no mercado belga!","datePublished":"2026-02-21T19:00:00Z","dateModified":"2026-03-22T02:16:51Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2323,14 +2323,15 @@ function normalizeInlineImageReferences(content) {
   if (!content) return '';
 
   let normalized = String(content);
+  const imagePathPattern = "((?:https?:\\/\\/(?:www\\.)?viciadocomenta\\.pt\\/)?assets\\/imagens\\/[^\\s)]+\\.(?:png|jpe?g|gif|webp|svg))";
 
   normalized = normalized.replace(
-    /!\[([^\]]*)\]\((assets\/imagens\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg))\)/gi,
+    new RegExp(`!\\[([^\\]]*)\\]\\(${imagePathPattern}\\)`, 'gi'),
     (_, altText, src) => `<img src='${src}' alt='${altText || 'Imagem'}' class='img-center'>`
   );
 
   normalized = normalized.replace(
-    /<a\b[^>]*href=(['"])(assets\/imagens\/[^'"]+\.(?:png|jpe?g|gif|webp|svg))\1[^>]*>([\s\S]*?)<\/a>/gi,
+    new RegExp(`<a\\b[^>]*href=(['\"])${imagePathPattern}\\1[^>]*>([\\s\\S]*?)<\\/a>`, 'gi'),
     (match, _quote, src, linkText) => {
       const textOnly = String(linkText || '').replace(/<[^>]*>/g, '').trim();
       if (!textOnly || textOnly === src || /^imagem\s*\d*$/i.test(textOnly)) {
@@ -2341,7 +2342,7 @@ function normalizeInlineImageReferences(content) {
   );
 
   normalized = normalized.replace(
-    /(^|<br\s*\/?>|\n)\s*(assets\/imagens\/[^\s<]+\.(?:png|jpe?g|gif|webp|svg))\s*(?=$|<br\s*\/?>|\n)/gi,
+    new RegExp(`(^|<br\\s*\\/?>|\\n)\\s*${imagePathPattern}\\s*(?=$|<br\\s*\\/?>|\\n)`, 'gi'),
     "$1<img src='$2' alt='Imagem' class='img-center'>"
   );
 
