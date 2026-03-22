@@ -153,12 +153,19 @@
 		const firstArticle = newArticles[0];
 		const toast = document.createElement('div');
 		toast.className = 'vc-new-toast';
+		const titleStrong = document.createElement('strong');
+		const detailsSpan = document.createElement('span');
 
 		if (newArticles.length === 1) {
-			toast.innerHTML = `<strong>📰 Novo artigo publicado</strong>${firstArticle.titulo}`;
+			titleStrong.textContent = '📰 Novo artigo publicado';
+			detailsSpan.textContent = String(firstArticle && firstArticle.titulo ? firstArticle.titulo : '');
 		} else {
-			toast.innerHTML = `<strong>📰 ${newArticles.length} novos artigos publicados</strong>Clique para ver os artigos mais recentes.`;
+			titleStrong.textContent = `📰 ${newArticles.length} novos artigos publicados`;
+			detailsSpan.textContent = 'Clique para ver os artigos mais recentes.';
 		}
+
+		toast.appendChild(titleStrong);
+		toast.appendChild(detailsSpan);
 
 		toast.addEventListener('click', () => {
 			const destination = newArticles.length === 1

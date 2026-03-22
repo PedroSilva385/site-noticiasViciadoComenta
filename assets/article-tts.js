@@ -70,7 +70,12 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'vc-tts-btn';
-    button.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i> ${label}`;
+    const safeIconClass = /^[a-z0-9\-\s]+$/i.test(String(iconClass || '')) ? String(iconClass) : 'fas fa-volume-up';
+    const icon = document.createElement('i');
+    icon.className = safeIconClass;
+    icon.setAttribute('aria-hidden', 'true');
+    button.appendChild(icon);
+    button.appendChild(document.createTextNode(` ${String(label || '')}`));
     return button;
   }
 

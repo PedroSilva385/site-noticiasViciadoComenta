@@ -8,6 +8,8 @@
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html">
+<meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
+<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
@@ -1867,24 +1869,12 @@ footer {
 <meta property="og:title" content="OPERADORAS atacam MARCELO sem PIEDADE!">
 <meta property="og:description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html">
-<meta property="og:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
+<meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="OPERADORAS atacam MARCELO sem PIEDADE!">
 <meta name="twitter:description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
-<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-03-22T02:16:51Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
-<script>
-(function () {
-  var params = new URLSearchParams(window.location.search);
-  if (!params.get('id')) params.set('id', '7');
-  if (!params.get('slug')) params.set('slug', 'operadoras-atacam-marcelo-sem-piedade');
-  var qs = params.toString();
-  var next = window.location.pathname + (qs ? ('?' + qs) : '');
-  if (window.location.search !== ('?' + qs)) {
-    window.history.replaceState({}, '', next);
-  }
-})();
-</script>
+<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-03-22T23:19:08Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/perfil.png"}},"inLanguage":"pt-PT"}</script>
 </head>
 
 <body>
@@ -2142,11 +2132,18 @@ function getArticleIdentifierFromLocation() {
   let pathSlug = null;
   const pathname = String(window.location.pathname || '');
   const cleanPath = pathname.replace(/\/+$/, '');
-  const match = cleanPath.match(/\/noticias\.html\/([^/]+)\/([^/]+)$/i);
+  const match = cleanPath.match(/\/(?:noticias|artigos)\.html\/([^/]+)\/([^/]+)$/i);
 
   if (match) {
     pathSlug = decodeURIComponent(match[1] || '');
     pathId = decodeURIComponent(match[2] || '');
+  }
+
+  if (!pathSlug) {
+    const staticArticleMatch = cleanPath.match(/\/artigos\/([^/.?#]+)\.html$/i);
+    if (staticArticleMatch) {
+      pathSlug = decodeURIComponent(staticArticleMatch[1] || '');
+    }
   }
 
   return {
@@ -2160,21 +2157,47 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  return `noticias.html?id=${encodeURIComponent(id)}`;
+  return 'artigos.html';
 }
 
 function buildArticleUrlByData(noticia) {
   if (!noticia || typeof noticia.id === 'undefined' || noticia.id === null) {
-    return 'noticias.html';
+    return 'artigos.html';
   }
-  const id = String(noticia.id);
   const slug = getArticleSlug(noticia);
   if (slug) {
-    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  return `noticias.html?id=${encodeURIComponent(id)}`;
+  return 'artigos.html';
+}
+
+function bindArticleActionButtons(noticiaTitulo, noticiaId) {
+  const likeBtn = document.getElementById('likeBtn');
+  if (likeBtn) {
+    likeBtn.onclick = () => toggleLike(noticiaId);
+  }
+
+  const shareContainer = document.querySelector('.artigo-share');
+  if (!shareContainer) return;
+
+  const shareMap = {
+    facebook: () => partilharFacebook(noticiaTitulo, noticiaId),
+    twitter: () => partilharTwitter(noticiaTitulo, noticiaId),
+    whatsapp: () => partilharWhatsApp(noticiaTitulo, noticiaId),
+    telegram: () => partilharTelegram(noticiaTitulo, noticiaId),
+    linkedin: () => partilharLinkedIn(noticiaTitulo, noticiaId),
+    copy: () => copiarLink(noticiaId)
+  };
+
+  shareContainer.querySelectorAll('.share-btn[data-share]').forEach((button) => {
+    const key = button.getAttribute('data-share');
+    const action = shareMap[key];
+    if (action) {
+      button.onclick = action;
+    }
+  });
 }
 
 function parseNoticiaDateForSort(data) {
@@ -2416,7 +2439,6 @@ function formatArticleContent(rawContent) {
 }
 
 function canUseLiveEditor() {
-  content = normalizeInlineImageReferences(content);
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
   return editEnabled;
@@ -2880,29 +2902,29 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           
           <div class="artigo-actions">
-            <button class="artigo-like-btn" id="likeBtn" onclick="toggleLike('${noticiaIdResolvido}')">
+            <button class="artigo-like-btn" id="likeBtn">
               <i class="fas fa-heart"></i>
               <span id="likeCount">0</span> Gosto
             </button>
             
             <div class="artigo-share">
               <span class="artigo-share-label">📤 Partilhar:</span>
-              <button class="share-btn share-facebook" onclick="partilharFacebook('${noticia.titulo}', '${noticiaIdResolvido}')" title="Facebook">
+              <button class="share-btn share-facebook" data-share="facebook" title="Facebook" type="button">
                 <i class="fab fa-facebook-f"></i>
               </button>
-              <button class="share-btn share-twitter" onclick="partilharTwitter('${noticia.titulo}', '${noticiaIdResolvido}')" title="Twitter">
+              <button class="share-btn share-twitter" data-share="twitter" title="Twitter" type="button">
                 <i class="fab fa-twitter"></i>
               </button>
-              <button class="share-btn share-whatsapp" onclick="partilharWhatsApp('${noticia.titulo}', '${noticiaIdResolvido}')" title="WhatsApp">
+              <button class="share-btn share-whatsapp" data-share="whatsapp" title="WhatsApp" type="button">
                 <i class="fab fa-whatsapp"></i>
               </button>
-              <button class="share-btn share-telegram" onclick="partilharTelegram('${noticia.titulo}', '${noticiaIdResolvido}')" title="Telegram">
+              <button class="share-btn share-telegram" data-share="telegram" title="Telegram" type="button">
                 <i class="fab fa-telegram"></i>
               </button>
-              <button class="share-btn share-linkedin" onclick="partilharLinkedIn('${noticia.titulo}', '${noticiaIdResolvido}')" title="LinkedIn">
+              <button class="share-btn share-linkedin" data-share="linkedin" title="LinkedIn" type="button">
                 <i class="fab fa-linkedin-in"></i>
               </button>
-              <button class="share-btn share-copy" onclick="copiarLink('${noticiaIdResolvido}')" title="Copiar Link">
+              <button class="share-btn share-copy" data-share="copy" title="Copiar Link" type="button">
                 <i class="fas fa-link"></i>
               </button>
             </div>
@@ -2917,6 +2939,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
+
+        bindArticleActionButtons(noticia.titulo || '', noticiaIdResolvido);
 
         // Secção de artigos relacionados
         renderRelatedArticles(noticia, data.noticias || []);

@@ -13,10 +13,12 @@
 <meta property="og:title" content="VICIADO COMENTA - Vídeos Recentes">
 <meta property="og:description" content="Vídeos recentes com opinião e análise sobre telecom, tecnologia e gaming.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/videos.html">
+<meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta property="og:locale" content="pt_PT">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VICIADO COMENTA - Vídeos Recentes">
 <meta name="twitter:description" content="Vídeos recentes com opinião e análise sobre telecom, tecnologia e gaming.">
+<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -284,7 +286,7 @@ function initTheme(){const saved=localStorage.getItem('theme')||'light';applyThe
 document.addEventListener('DOMContentLoaded',()=>{initTheme();const btn=document.createElement('button');btn.id='themeToggle';btn.className='theme-toggle';btn.title='Alternar tema';btn.innerHTML='<i class="fas fa-moon"></i>';const headerEl=document.querySelector('header');if(headerEl)headerEl.appendChild(btn);btn.addEventListener('click',()=>{const next=document.body.classList.contains('dark')?'light':'dark';localStorage.setItem('theme',next);applyTheme(next)})});
 </script>
 <header>
-  <div class="foto-perfil"><img src="Made with insMind-Screenshot 2025-08-06 16-11-05.png" alt="Foto Perfil"></div>
+  <div class="foto-perfil"><img src="assets/perfil.png" alt="Foto Perfil"></div>
   <h1>VICIADO COMENTA</h1>
   <div class="redes-sociais">
     <a href="https://www.youtube.com/@TheViciado" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube"></a>

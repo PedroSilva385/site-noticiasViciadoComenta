@@ -13,10 +13,12 @@
 <meta property="og:title" content="VICIADO COMENTA">
 <meta property="og:description" content="Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade em Portugal.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/">
+<meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta property="og:locale" content="pt_PT">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VICIADO COMENTA">
 <meta name="twitter:description" content="Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade em Portugal.">
+<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
@@ -2360,8 +2362,8 @@ fetchNoticiasAgendadas("data/noticias.json")
       const id = encodeURIComponent(noticia.id);
       const slug = getArticleSlug(noticia);
       return slug
-        ? `artigos.html#/${encodeURIComponent(slug)}/${id}`
-        : `artigos.html?id=${id}`;
+        ? `artigos/${encodeURIComponent(slug)}.html`
+        : 'artigos.html';
     };
 
     class ArticleReadTracker {
@@ -2564,7 +2566,7 @@ fetchNoticiasAgendadas("data/noticias.json")
         searchDropdown.classList.add('active');
         
         const plural = resultados.length === 1 ? 'artigo encontrado' : 'artigos encontrados';
-        searchResults.innerHTML = `<span style="color: #0066cc;">✓ ${resultados.length} ${plural}</span>`;
+        searchResults.textContent = `✓ ${resultados.length} ${plural}`;
         renderizarNoticias(resultados, true);
       }
     });
