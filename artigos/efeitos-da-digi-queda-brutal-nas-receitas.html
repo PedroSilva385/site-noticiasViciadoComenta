@@ -1862,19 +1862,19 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-<meta name="description" content="Efeito DIGI faz-se sentir em v&#225;rios pa&#237;ses?">
+<meta name="description" content="Efeito DIGI faz-se sentir em v&#195;&#161;rios pa&#195;&#173;ses?">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="VICIADO COMENTA">
 <meta property="og:locale" content="pt_PT">
 <meta property="og:title" content="EFEITOS da DIGI: Queda BRUTAL nas receitas!">
-<meta property="og:description" content="Efeito DIGI faz-se sentir em v&#225;rios pa&#237;ses?">
+<meta property="og:description" content="Efeito DIGI faz-se sentir em v&#195;&#161;rios pa&#195;&#173;ses?">
 <meta property="og:url" content="https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html">
 <meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="EFEITOS da DIGI: Queda BRUTAL nas receitas!">
-<meta name="twitter:description" content="Efeito DIGI faz-se sentir em v&#225;rios pa&#237;ses?">
+<meta name="twitter:description" content="Efeito DIGI faz-se sentir em v&#195;&#161;rios pa&#195;&#173;ses?">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html"},"headline":"EFEITOS da DIGI: Queda BRUTAL nas receitas!","description":"Efeito DIGI faz-se sentir em vários países?","datePublished":"2026-03-22T23:19:09Z","dateModified":"2026-03-22T23:19:09Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/perfil.png"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html"},"headline":"EFEITOS da DIGI: Queda BRUTAL nas receitas!","description":"Efeito DIGI faz-se sentir em vÃ¡rios paÃ­ses?","datePublished":"2026-03-22T23:34:34Z","dateModified":"2026-03-22T23:34:34Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/perfil.png"}},"inLanguage":"pt-PT"}</script>
 </head>
 
 <body>
@@ -2372,6 +2372,40 @@ function normalizeInlineImageReferences(content) {
   return normalized;
 }
 
+function normalizeBrokenExternalLinks(content) {
+  if (!content) return '';
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = String(content);
+
+  wrapper.querySelectorAll('a[href]').forEach((anchor) => {
+    const rawHref = String(anchor.getAttribute('href') || '').trim();
+    const anchorText = String(anchor.textContent || '').trim();
+
+    const isBrokenHttp = /^https?:\/?\/?$/i.test(rawHref);
+    if (!isBrokenHttp) return;
+
+    const textUrlMatch = anchorText.match(/https?:\/\/[^\s<]+/i);
+    if (!textUrlMatch) return;
+
+    const safeUrl = textUrlMatch[0].trim();
+    anchor.setAttribute('href', safeUrl);
+
+    try {
+      const parsed = new URL(safeUrl);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        if (!anchor.hasAttribute('target')) {
+          anchor.setAttribute('target', '_blank');
+        }
+        anchor.setAttribute('rel', 'noopener noreferrer');
+      }
+    } catch (_error) {
+    }
+  });
+
+  return wrapper.innerHTML;
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2382,6 +2416,7 @@ function formatArticleContent(rawContent) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
     htmlContent = normalizeInlineImageReferences(htmlContent);
+    htmlContent = normalizeBrokenExternalLinks(htmlContent);
 
     const paragraphToken = '__PARAGRAPH_BREAK__';
     htmlContent = htmlContent
@@ -2417,6 +2452,7 @@ function formatArticleContent(rawContent) {
         .trim();
 
       htmlContent = normalizeInlineImageReferences(htmlContent);
+      htmlContent = normalizeBrokenExternalLinks(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -2435,6 +2471,7 @@ function formatArticleContent(rawContent) {
 
   content = normalizeBrokenLineWraps(content);
   content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+  content = normalizeBrokenExternalLinks(content);
   return content.trim();
 }
 
@@ -2817,6 +2854,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const editParam = urlParams.get('edit');
         const host = (window.location.hostname || '').toLowerCase();
         const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
+        const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+        if (isLocalHost && editParam !== '1') {
+          const publicArticleUrl = new URL(canonicalArticleUrl, 'https://www.viciadocomenta.pt/').toString();
+          window.location.replace(publicArticleUrl);
+          return;
+        }
 
         if (editParam === '1') {
           articleUrl.searchParams.set('edit', '1');
@@ -3213,6 +3257,16 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
     (currentValue) => (Number(currentValue) || 0) + 1,
     (error, committed) => {
       if (error) {
+        const errorCode = String(error.code || error.message || '').toLowerCase();
+        if (errorCode.includes('permission_denied')) {
+          if (!window.__articleReadPermissionDeniedWarned) {
+            console.warn('Sem permissões para atualizar leituras em article_reads. A página continuará a funcionar sem este contador.');
+            window.__articleReadPermissionDeniedWarned = true;
+          }
+          sessionStorage.setItem(sessionKey, '1');
+          return;
+        }
+
         console.error('Erro ao atualizar leitura do artigo:', error);
         return;
       }

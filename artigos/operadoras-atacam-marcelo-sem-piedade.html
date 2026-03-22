@@ -1862,19 +1862,19 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-<meta name="description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
+<meta name="description" content="Analisamos as rea&#195;&#167;&#195;&#181;es de MEO, NOS e APRITEL &#195; s declara&#195;&#167;&#195;&#181;es do Presidente da Rep&#195;&#186;blica sobre a resposta das operadoras durante a depress&#195;&#163;o Kristin.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="VICIADO COMENTA">
 <meta property="og:locale" content="pt_PT">
 <meta property="og:title" content="OPERADORAS atacam MARCELO sem PIEDADE!">
-<meta property="og:description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
+<meta property="og:description" content="Analisamos as rea&#195;&#167;&#195;&#181;es de MEO, NOS e APRITEL &#195; s declara&#195;&#167;&#195;&#181;es do Presidente da Rep&#195;&#186;blica sobre a resposta das operadoras durante a depress&#195;&#163;o Kristin.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html">
 <meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="OPERADORAS atacam MARCELO sem PIEDADE!">
-<meta name="twitter:description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
+<meta name="twitter:description" content="Analisamos as rea&#195;&#167;&#195;&#181;es de MEO, NOS e APRITEL &#195; s declara&#195;&#167;&#195;&#181;es do Presidente da Rep&#195;&#186;blica sobre a resposta das operadoras durante a depress&#195;&#163;o Kristin.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-03-22T23:19:08Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/perfil.png"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reaÃ§Ãµes de MEO, NOS e APRITEL Ã s declaraÃ§Ãµes do Presidente da RepÃºblica sobre a resposta das operadoras durante a depressÃ£o Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-03-22T23:34:33Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/perfil.png"}},"inLanguage":"pt-PT"}</script>
 </head>
 
 <body>
@@ -2372,6 +2372,40 @@ function normalizeInlineImageReferences(content) {
   return normalized;
 }
 
+function normalizeBrokenExternalLinks(content) {
+  if (!content) return '';
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = String(content);
+
+  wrapper.querySelectorAll('a[href]').forEach((anchor) => {
+    const rawHref = String(anchor.getAttribute('href') || '').trim();
+    const anchorText = String(anchor.textContent || '').trim();
+
+    const isBrokenHttp = /^https?:\/?\/?$/i.test(rawHref);
+    if (!isBrokenHttp) return;
+
+    const textUrlMatch = anchorText.match(/https?:\/\/[^\s<]+/i);
+    if (!textUrlMatch) return;
+
+    const safeUrl = textUrlMatch[0].trim();
+    anchor.setAttribute('href', safeUrl);
+
+    try {
+      const parsed = new URL(safeUrl);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        if (!anchor.hasAttribute('target')) {
+          anchor.setAttribute('target', '_blank');
+        }
+        anchor.setAttribute('rel', 'noopener noreferrer');
+      }
+    } catch (_error) {
+    }
+  });
+
+  return wrapper.innerHTML;
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -2382,6 +2416,7 @@ function formatArticleContent(rawContent) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
     htmlContent = normalizeInlineImageReferences(htmlContent);
+    htmlContent = normalizeBrokenExternalLinks(htmlContent);
 
     const paragraphToken = '__PARAGRAPH_BREAK__';
     htmlContent = htmlContent
@@ -2417,6 +2452,7 @@ function formatArticleContent(rawContent) {
         .trim();
 
       htmlContent = normalizeInlineImageReferences(htmlContent);
+      htmlContent = normalizeBrokenExternalLinks(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -2435,6 +2471,7 @@ function formatArticleContent(rawContent) {
 
   content = normalizeBrokenLineWraps(content);
   content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+  content = normalizeBrokenExternalLinks(content);
   return content.trim();
 }
 
@@ -2817,6 +2854,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const editParam = urlParams.get('edit');
         const host = (window.location.hostname || '').toLowerCase();
         const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
+        const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+        if (isLocalHost && editParam !== '1') {
+          const publicArticleUrl = new URL(canonicalArticleUrl, 'https://www.viciadocomenta.pt/').toString();
+          window.location.replace(publicArticleUrl);
+          return;
+        }
 
         if (editParam === '1') {
           articleUrl.searchParams.set('edit', '1');
@@ -3213,6 +3257,16 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
     (currentValue) => (Number(currentValue) || 0) + 1,
     (error, committed) => {
       if (error) {
+        const errorCode = String(error.code || error.message || '').toLowerCase();
+        if (errorCode.includes('permission_denied')) {
+          if (!window.__articleReadPermissionDeniedWarned) {
+            console.warn('Sem permissões para atualizar leituras em article_reads. A página continuará a funcionar sem este contador.');
+            window.__articleReadPermissionDeniedWarned = true;
+          }
+          sessionStorage.setItem(sessionKey, '1');
+          return;
+        }
+
         console.error('Erro ao atualizar leitura do artigo:', error);
         return;
       }
