@@ -204,6 +204,65 @@ body {
   overflow-y: auto;
 }
 
+.stats-panel {
+  margin-top: 18px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 14px;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stats-refresh {
+  background: #eef2ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stats-refresh:hover {
+  background: #e0e7ff;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stats-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  background: #f9fafb;
+}
+
+.stats-label {
+  font-size: 0.72rem;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.stats-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.stats-meta {
+  margin-top: 8px;
+  font-size: 0.73rem;
+  color: #9ca3af;
+}
+
 .noticia-item {
   padding: 10px;
   border: 1px solid #d1d5db;
@@ -603,6 +662,50 @@ button {
       <h2>Notícias</h2>
       <button class="btn-new" id="btnNewNoticia">+ Nova Notícia</button>
       <div class="noticias-list" id="noticiasList"></div>
+
+      <div class="stats-panel">
+        <div class="stats-header">
+          <h2 style="margin-bottom: 0;">Estatísticas</h2>
+          <button id="btnRefreshStats" class="stats-refresh" type="button">Atualizar</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stats-card">
+            <div class="stats-label">Notícias</div>
+            <div id="statNoticias" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">Categorias</div>
+            <div id="statCategorias" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">Visitas totais</div>
+            <div id="statVisitas" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">IPs únicos</div>
+            <div id="statUnicos" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">Online agora</div>
+            <div id="statOnline" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">Leituras artigos</div>
+            <div id="statLeituras" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">Comentários</div>
+            <div id="statComentarios" class="stats-value">-</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-label">Likes</div>
+            <div id="statLikes" class="stats-value">-</div>
+          </div>
+        </div>
+
+        <div id="statsLastUpdate" class="stats-meta">Sem atualização</div>
+      </div>
     </div>
 
     <!-- MAIN PANEL -->
@@ -774,9 +877,20 @@ const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
 const noticiasList = document.getElementById('noticiasList');
 const btnNewNoticia = document.getElementById('btnNewNoticia');
+const btnRefreshStats = document.getElementById('btnRefreshStats');
 const status = document.getElementById('status');
 const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
+
+const statNoticias = document.getElementById('statNoticias');
+const statCategorias = document.getElementById('statCategorias');
+const statVisitas = document.getElementById('statVisitas');
+const statUnicos = document.getElementById('statUnicos');
+const statOnline = document.getElementById('statOnline');
+const statLeituras = document.getElementById('statLeituras');
+const statComentarios = document.getElementById('statComentarios');
+const statLikes = document.getElementById('statLikes');
+const statsLastUpdate = document.getElementById('statsLastUpdate');
 
 // Form fields
 const noticiaId = document.getElementById('noticiaId');
@@ -958,6 +1072,112 @@ function getCategoriaValue() {
   return textVal || selectVal || '';
 }
 
+function toNumber(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+}
+
+function formatStatNumber(value) {
+  return toNumber(value).toLocaleString('pt-PT');
+}
+
+function updateLocalNewsStats() {
+  if (statNoticias) statNoticias.textContent = formatStatNumber(allNoticias.length);
+
+  const categories = new Set();
+  allNoticias.forEach((item) => {
+    const cat = String(item && item.categoria ? item.categoria : '').trim();
+    if (cat) categories.add(cat.toLowerCase());
+  });
+
+  if (statCategorias) statCategorias.textContent = formatStatNumber(categories.size);
+}
+
+function countCommentThread(commentNode) {
+  if (!commentNode || typeof commentNode !== 'object') return 0;
+
+  let total = 1;
+  const replies = commentNode.respostas;
+
+  if (replies && typeof replies === 'object') {
+    Object.values(replies).forEach((reply) => {
+      total += countCommentThread(reply);
+    });
+  }
+
+  return total;
+}
+
+function countAllComments(comentariosData) {
+  if (!comentariosData || typeof comentariosData !== 'object') return 0;
+
+  let total = 0;
+  Object.values(comentariosData).forEach((articleComments) => {
+    if (!articleComments || typeof articleComments !== 'object') return;
+    Object.values(articleComments).forEach((commentNode) => {
+      total += countCommentThread(commentNode);
+    });
+  });
+
+  return total;
+}
+
+function countAllLikes(likesData) {
+  if (!likesData || typeof likesData !== 'object') return 0;
+
+  let total = 0;
+  Object.values(likesData).forEach((articleLikes) => {
+    if (!articleLikes || typeof articleLikes !== 'object') return;
+    total += Object.keys(articleLikes).length;
+  });
+
+  return total;
+}
+
+function countArticleReads(articleReadsData) {
+  if (!articleReadsData || typeof articleReadsData !== 'object') return 0;
+
+  return Object.values(articleReadsData).reduce((sum, item) => sum + toNumber(item), 0);
+}
+
+async function loadSiteStats() {
+  if (!currentUser) return;
+
+  if (statsLastUpdate) statsLastUpdate.textContent = 'A atualizar...';
+
+  try {
+    updateLocalNewsStats();
+
+    const [siteStatsSnap, activeUsersSnap, comentariosSnap, likesSnap, articleReadsSnap] = await Promise.all([
+      db.ref('site_stats').once('value'),
+      db.ref('active_users').once('value'),
+      db.ref('comentarios').once('value'),
+      db.ref('likes').once('value'),
+      db.ref('article_reads').once('value')
+    ]);
+
+    const siteStats = siteStatsSnap.val() || {};
+    const activeUsers = activeUsersSnap.val() || {};
+    const comentarios = comentariosSnap.val() || {};
+    const likes = likesSnap.val() || {};
+    const articleReads = articleReadsSnap.val() || {};
+
+    if (statVisitas) statVisitas.textContent = formatStatNumber(siteStats.total_visits);
+    if (statUnicos) statUnicos.textContent = formatStatNumber(siteStats.unique_total);
+    if (statOnline) statOnline.textContent = formatStatNumber(Object.keys(activeUsers).length);
+    if (statComentarios) statComentarios.textContent = formatStatNumber(countAllComments(comentarios));
+    if (statLikes) statLikes.textContent = formatStatNumber(countAllLikes(likes));
+    if (statLeituras) statLeituras.textContent = formatStatNumber(countArticleReads(articleReads));
+
+    if (statsLastUpdate) {
+      statsLastUpdate.textContent = `Atualizado às ${new Date().toLocaleTimeString('pt-PT')}`;
+    }
+  } catch (error) {
+    console.error('Erro ao carregar estatísticas do painel:', error);
+    if (statsLastUpdate) statsLastUpdate.textContent = 'Erro ao carregar estatísticas';
+  }
+}
+
 // ===== AUTH FUNCTIONS =====
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1032,8 +1252,11 @@ auth.onAuthStateChanged((user) => {
     authPassword.value = '';
     allNoticias = [];
     selectedNoticiaId = null;
+    updateLocalNewsStats();
   }
 });
+
+btnRefreshStats.addEventListener('click', loadSiteStats);
 
 // ===== NOTÍCIAS FUNCTIONS =====
 function slugifyAdminTitle(text) {
@@ -1075,6 +1298,40 @@ function deduplicateNoticiasList(noticias) {
   return result;
 }
 
+function normalizeNoticiaId(value) {
+  return String(value ?? '').trim();
+}
+
+function slugifyNoticiaIdentity(value) {
+  return slugifyAdminTitle(value || '');
+}
+
+function findNoticiaIndexForUpdate({ selectedId, id, slug }) {
+  const selectedIdNorm = normalizeNoticiaId(selectedId);
+  const idNorm = normalizeNoticiaId(id);
+  const slugNorm = slugifyNoticiaIdentity(slug);
+
+  if (selectedIdNorm) {
+    const bySelected = allNoticias.findIndex((n) => normalizeNoticiaId(n.id) === selectedIdNorm);
+    if (bySelected >= 0) return bySelected;
+  }
+
+  if (idNorm) {
+    const byId = allNoticias.findIndex((n) => normalizeNoticiaId(n.id) === idNorm);
+    if (byId >= 0) return byId;
+  }
+
+  if (slugNorm) {
+    const bySlug = allNoticias.findIndex((n) => {
+      const noticiaSlug = slugifyNoticiaIdentity(n.slug || n.titulo || '');
+      return noticiaSlug === slugNorm;
+    });
+    if (bySlug >= 0) return bySlug;
+  }
+
+  return -1;
+}
+
 async function loadNoticias() {
   try {
     // Tentar carregar do Firebase
@@ -1094,6 +1351,7 @@ async function loadNoticias() {
     allNoticias = deduplicateNoticiasList(allNoticias);
     
     renderNoticiasList();
+    loadSiteStats();
   } catch (error) {
     console.error('Erro ao carregar notícias:', error);
     showStatus('Erro ao carregar notícias', 'error');
@@ -1105,12 +1363,15 @@ function renderNoticiasList() {
   
   if (allNoticias.length === 0) {
     noticiasList.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">Nenhuma notícia</p>';
+    updateLocalNewsStats();
     return;
   }
 
   allNoticias.forEach((noticia) => {
+    const noticiaId = normalizeNoticiaId(noticia.id);
+    const selectedId = normalizeNoticiaId(selectedNoticiaId);
     const item = document.createElement('div');
-    item.className = 'noticia-item' + (noticia.id === selectedNoticiaId ? ' active' : '');
+    item.className = 'noticia-item' + (noticiaId && noticiaId === selectedId ? ' active' : '');
     item.innerHTML = `
       <div class="title">${noticia.titulo || 'Sem título'}</div>
       <div class="date">${noticia.data || 'Sem data'}</div>
@@ -1120,14 +1381,15 @@ function renderNoticiasList() {
   });
   
   updateCategoriesList();
+  updateLocalNewsStats();
 }
 
 function selectNoticia(id) {
-  selectedNoticiaId = id;
-  const noticia = allNoticias.find(n => n.id == id);
+  selectedNoticiaId = normalizeNoticiaId(id);
+  const noticia = allNoticias.find(n => normalizeNoticiaId(n.id) === selectedNoticiaId);
   
   if (noticia) {
-    noticiaId.value = noticia.id || '';
+    noticiaId.value = normalizeNoticiaId(noticia.id);
     noticiaTitulo.value = noticia.titulo || '';
     noticiaAutor.value = noticia.autor || '';
     noticiaData.value = noticia.data || '';
@@ -1226,8 +1488,7 @@ async function saveNoticia() {
     return;
   }
 
-  const isNew = selectedNoticiaId === null;
-  const id = noticiaId.value;
+  const currentId = normalizeNoticiaId(noticiaId.value);
 
   // Normalizar HTML do editor antes de guardar
   function normalizeEditorHtml(html) {
@@ -1276,7 +1537,7 @@ async function saveNoticia() {
   const conteudoHtml = normalizeEditorHtml(contentEditor.innerHTML);
   
   const noticiaObj = {
-    id: id,
+    id: currentId,
     titulo: noticiaTitulo.value.trim(),
     autor: noticiaAutor.value.trim(),
     data: noticiaData.value.trim(),
@@ -1296,13 +1557,31 @@ async function saveNoticia() {
 
   try {
     btnSave.disabled = true;
-    
-    if (isNew) {
-      allNoticias.push(noticiaObj);
+
+    const idx = findNoticiaIndexForUpdate({
+      selectedId: selectedNoticiaId,
+      id: currentId,
+      slug: noticiaObj.slug
+    });
+
+    const isUpdate = idx >= 0;
+
+    if (isUpdate) {
+      const existing = allNoticias[idx] || {};
+      const stableId = normalizeNoticiaId(existing.id) || currentId;
+      noticiaObj.id = stableId;
+      noticiaId.value = stableId;
+      allNoticias[idx] = noticiaObj;
     } else {
-      const idx = allNoticias.findIndex(n => n.id == id);
-      if (idx >= 0) allNoticias[idx] = noticiaObj;
+      if (!noticiaObj.id) {
+        const nextId = String(Math.max(...allNoticias.map((n) => parseInt(n.id) || 0), 0) + 1);
+        noticiaObj.id = nextId;
+        noticiaId.value = nextId;
+      }
+      allNoticias.push(noticiaObj);
     }
+
+    allNoticias = deduplicateNoticiasList(allNoticias);
 
     // Guardar no Firebase
     await db.ref('noticias').set(allNoticias);
@@ -1320,11 +1599,11 @@ async function saveNoticia() {
     }
 
     showStatus(
-      isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!',
+      isUpdate ? 'Notícia atualizada com sucesso!' : 'Notícia criada com sucesso!',
       'success'
     );
     
-    selectedNoticiaId = id;
+    selectedNoticiaId = normalizeNoticiaId(noticiaObj.id);
     renderNoticiasList();
     
   } catch (error) {
