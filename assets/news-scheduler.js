@@ -177,49 +177,51 @@ async function lerNoticiasDoFirebase() {
 }
 
 /**
- * Wrapper do fetch que aplica filtro de agendamento automaticamente
- * @param {string} url - URL para fallback JSON (data/noticias.json)
- * @returns {Promise} - Promise com as notícias filtradas
+ * Wrapper do fetch que aplica filtro de agendamento automaticamente.
+ * Usa JSON como fonte primária garantida (GitHub Pages) e Firebase como suplemento.
+ * @param {string} url - URL do ficheiro JSON (data/noticias.json)
+ * @returns {Promise} - Promise com as notícias filtradas e ordenadas
  */
 async function fetchNoticiasAgendadas(url) {
-  let data = null;
+  const safeUrl = typeof url === 'string' && url.trim() ? url : 'data/noticias.json';
 
+  // 1) Carregar sempre o JSON (fonte fiável no GitHub Pages)
+  let jsonNoticias = [];
+  try {
+    const cacheBust = `_ts=${Date.now()}`;
+    const separator = safeUrl.includes('?') ? '&' : '?';
+    const response = await fetch(`${safeUrl}${separator}${cacheBust}`, { cache: 'no-store' });
+    if (response.ok) {
+      const jsonData = await response.json();
+      jsonNoticias = Array.isArray(jsonData.noticias) ? jsonData.noticias : [];
+    }
+  } catch (e) {
+    console.warn('Erro ao carregar JSON local:', e);
+  }
+
+  // 2) Tentar Firebase como suplemento (pode ter artigos mais recentes criados via admin)
+  let firebaseNoticias = [];
   try {
     if (typeof window.ensureFirebaseInitialized === 'function') {
       await window.ensureFirebaseInitialized();
     }
-
-    if (typeof firebase === 'undefined' || !firebase.database) {
-      throw new Error('Firebase indisponível para carregar notícias.');
+    if (typeof firebase !== 'undefined' && firebase.database) {
+      const snapshot = await firebase.database().ref('noticias').once('value');
+      const rawNoticias = snapshot.val();
+      firebaseNoticias = Array.isArray(rawNoticias)
+        ? rawNoticias
+        : Object.values(rawNoticias || {});
     }
-
-    const snapshot = await firebase.database().ref('noticias').once('value');
-    const rawNoticias = snapshot.val();
-
-    const noticias = Array.isArray(rawNoticias)
-      ? rawNoticias
-      : Object.values(rawNoticias || {});
-
-    if (noticias.length === 0) {
-      throw new Error('Firebase sem notícias, usando fallback JSON.');
-    }
-
-    data = { noticias };
-  } catch (error) {
-    console.warn('Falha ao carregar notícias do Firebase, usando fallback JSON:', error);
-
-    const cacheBust = `_ts=${Date.now()}`;
-    const safeUrl = typeof url === 'string' && url.trim() ? url : 'data/noticias.json';
-    const separator = safeUrl.includes('?') ? '&' : '?';
-    const requestUrl = `${safeUrl}${separator}${cacheBust}`;
-    const response = await fetch(requestUrl, { cache: 'no-store' });
-
-    if (!response.ok) {
-      throw new Error('Erro ao carregar notícias no Firebase e no fallback JSON.');
-    }
-
-    data = await response.json();
+  } catch (e) {
+    console.warn('Firebase indisponível, a usar apenas JSON:', e);
   }
+
+  // 3) Fundir: JSON como base, adicionar do Firebase os que não existem no JSON
+  const jsonIds = new Set(jsonNoticias.map((n) => String(n.id)));
+  const extras = firebaseNoticias.filter((n) => n && !jsonIds.has(String(n.id)));
+  const merged = [...jsonNoticias, ...extras];
+
+  const data = { noticias: merged };
 
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
