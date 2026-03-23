@@ -210,7 +210,7 @@ foreach ($noticia in $noticias) {
     $safeTitle = Escape-Html -Text $rawTitle
     $safeDescription = Escape-Html -Text $metaDescription
     $safeUrl = Escape-Html -Text $articleUrl
-    $socialImageUrl = 'https://www.viciadocomenta.pt/assets/perfil.png'
+    $socialImageUrl = 'https://www.viciadocomenta.pt/assets/favicon.svg'
     $safeSocialImageUrl = Escape-Html -Text $socialImageUrl
 
     $jsonLdObject = [ordered]@{
@@ -298,7 +298,22 @@ foreach ($noticia in $noticias) {
         $content = $content -replace '<head>', ('<head>' + "`n" + '<base href="../">')
     }
 
-        $content = $content -replace '</head>', "$seoMeta`n</head>"
+    $bootstrapScript = @"
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.get('id')) params.set('id', '$id');
+  if (!params.get('slug')) params.set('slug', '$slug');
+  var qs = params.toString();
+  var next = window.location.pathname + (qs ? ('?' + qs) : '');
+  if (window.location.search !== ('?' + qs)) {
+    window.history.replaceState({}, '', next);
+  }
+})();
+</script>
+"@
+
+    $content = $content -replace '</head>', "$seoMeta`n$bootstrapScript`n</head>"
 
     $outPath = Join-Path $artigosDir "$slug.html"
     [System.IO.File]::WriteAllText($outPath, $content, [System.Text.UTF8Encoding]::new($false))
