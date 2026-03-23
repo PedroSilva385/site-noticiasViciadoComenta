@@ -178,13 +178,49 @@ async function lerNoticiasDoFirebase() {
 
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente
- * @param {string} url - Mantido por compatibilidade (ignorado)
+ * @param {string} url - URL para fallback JSON (data/noticias.json)
  * @returns {Promise} - Promise com as notícias filtradas
  */
 async function fetchNoticiasAgendadas(url) {
-  await garantirAcessoNoticiasFirebase();
-  const data = await lerNoticiasDoFirebase();
-  
+  let data = null;
+
+  try {
+    if (typeof window.ensureFirebaseInitialized === 'function') {
+      await window.ensureFirebaseInitialized();
+    }
+
+    if (typeof firebase === 'undefined' || !firebase.database) {
+      throw new Error('Firebase indisponível para carregar notícias.');
+    }
+
+    const snapshot = await firebase.database().ref('noticias').once('value');
+    const rawNoticias = snapshot.val();
+
+    const noticias = Array.isArray(rawNoticias)
+      ? rawNoticias
+      : Object.values(rawNoticias || {});
+
+    if (noticias.length === 0) {
+      throw new Error('Firebase sem notícias, usando fallback JSON.');
+    }
+
+    data = { noticias };
+  } catch (error) {
+    console.warn('Falha ao carregar notícias do Firebase, usando fallback JSON:', error);
+
+    const cacheBust = `_ts=${Date.now()}`;
+    const safeUrl = typeof url === 'string' && url.trim() ? url : 'data/noticias.json';
+    const separator = safeUrl.includes('?') ? '&' : '?';
+    const requestUrl = `${safeUrl}${separator}${cacheBust}`;
+    const response = await fetch(requestUrl, { cache: 'no-store' });
+
+    if (!response.ok) {
+      throw new Error('Erro ao carregar notícias no Firebase e no fallback JSON.');
+    }
+
+    data = await response.json();
+  }
+
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
     data.noticias = deduplicarNoticias(filtrarNoticiasPublicadas(data.noticias));
@@ -195,7 +231,7 @@ async function fetchNoticiasAgendadas(url) {
 
     data.noticias = ordenarNoticiasPorData(deduplicarNoticias(data.noticias));
   }
-  
+
   return data;
 }
 
