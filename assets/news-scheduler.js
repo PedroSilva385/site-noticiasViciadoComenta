@@ -178,56 +178,33 @@ async function lerNoticiasDoFirebase() {
 
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
- * Usa JSON como fonte primária garantida (GitHub Pages) e Firebase como suplemento.
- * @param {string} url - URL do ficheiro JSON (data/noticias.json)
+ * Carrega notícias exclusivamente do Firebase.
+ * @param {string} url - Ignorado (mantido por compatibilidade)
  * @returns {Promise} - Promise com as notícias filtradas e ordenadas
  */
 async function fetchNoticiasAgendadas(url) {
-  const safeUrl = typeof url === 'string' && url.trim() ? url : 'data/noticias.json';
-
-  // 1) Carregar sempre o JSON (fonte fiável no GitHub Pages)
-  let jsonNoticias = [];
-  try {
-    const cacheBust = `_ts=${Date.now()}`;
-    const separator = safeUrl.includes('?') ? '&' : '?';
-    const response = await fetch(`${safeUrl}${separator}${cacheBust}`, { cache: 'no-store' });
-    if (response.ok) {
-      const jsonData = await response.json();
-      jsonNoticias = Array.isArray(jsonData.noticias) ? jsonData.noticias : [];
-    }
-  } catch (e) {
-    console.warn('Erro ao carregar JSON local:', e);
+  if (typeof window.ensureFirebaseInitialized === 'function') {
+    await window.ensureFirebaseInitialized();
   }
 
-  // 2) Tentar Firebase como suplemento (pode ter artigos mais recentes criados via admin)
-  let firebaseNoticias = [];
-  try {
-    if (typeof window.ensureFirebaseInitialized === 'function') {
-      await window.ensureFirebaseInitialized();
-    }
-    if (typeof firebase !== 'undefined' && firebase.database) {
-      const snapshot = await firebase.database().ref('noticias').once('value');
-      const rawNoticias = snapshot.val();
-      firebaseNoticias = Array.isArray(rawNoticias)
-        ? rawNoticias
-        : Object.values(rawNoticias || {});
-    }
-  } catch (e) {
-    console.warn('Firebase indisponível, a usar apenas JSON:', e);
+  if (typeof firebase === 'undefined' || !firebase.database) {
+    throw new Error('Firebase indisponível para carregar notícias.');
   }
 
-  // 3) Fundir: JSON como base, adicionar do Firebase os que não existem no JSON
-  const jsonIds = new Set(jsonNoticias.map((n) => String(n.id)));
-  const extras = firebaseNoticias.filter((n) => n && !jsonIds.has(String(n.id)));
-  const merged = [...jsonNoticias, ...extras];
+  const snapshot = await firebase.database().ref('noticias').once('value');
+  const rawNoticias = snapshot.val();
 
-  const data = { noticias: merged };
+  const noticias = Array.isArray(rawNoticias)
+    ? rawNoticias
+    : Object.values(rawNoticias || {});
+
+  const data = { noticias };
 
   if (data.noticias && Array.isArray(data.noticias)) {
     const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
     data.noticias = deduplicarNoticias(filtrarNoticiasPublicadas(data.noticias));
 
-    if (noticiaSolicitada && !data.noticias.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
+    if (noticiaSolicitada && !data.noticias.some((n) => String(n.id) === String(noticiaSolicitada.id))) {
       data.noticias.unshift(noticiaSolicitada);
     }
 
