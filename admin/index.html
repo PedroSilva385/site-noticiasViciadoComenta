@@ -1013,6 +1013,7 @@ const db = firebase.database();
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
 let persistenceReady = false;
+let authStateNullTimer = null;
 
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
   console.warn('Não foi possível configurar persistência LOCAL:', error);
@@ -1057,6 +1058,23 @@ function stopAuthKeepAlive() {
   if (!authKeepAliveTimer) return;
   clearInterval(authKeepAliveTimer);
   authKeepAliveTimer = null;
+}
+
+function applySignedOutUiState() {
+  currentUser = null;
+  stopAuthKeepAlive();
+  authScreen.style.display = 'flex';
+  dashboard.classList.remove('active');
+  try {
+    const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY) || '';
+    authEmail.value = rememberedEmail;
+  } catch (_) {
+    authEmail.value = '';
+  }
+  authPassword.value = '';
+  allNoticias = [];
+  selectedNoticiaId = null;
+  setDirty(false);
 }
 
 // ===== STATE =====
@@ -1891,6 +1909,10 @@ btnLogout.addEventListener('click', () => {
 // Check auth state
 auth.onAuthStateChanged((user) => {
   if (user) {
+    if (authStateNullTimer) {
+      clearTimeout(authStateNullTimer);
+      authStateNullTimer = null;
+    }
     currentUser = user;
     try {
       localStorage.setItem(AUTH_LAST_EMAIL_KEY, user.email || authEmail.value || '');
@@ -1905,20 +1927,18 @@ auth.onAuthStateChanged((user) => {
       updatePreviewContent();
     }, 50);
   } else {
-    currentUser = null;
-    stopAuthKeepAlive();
-    authScreen.style.display = 'flex';
-    dashboard.classList.remove('active');
-    try {
-      const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY) || '';
-      authEmail.value = rememberedEmail;
-    } catch (_) {
-      authEmail.value = '';
+    // Evita logout imediato em flutuações curtas do estado de auth após operações de escrita.
+    if (authStateNullTimer) {
+      clearTimeout(authStateNullTimer);
     }
-    authPassword.value = '';
-    allNoticias = [];
-    selectedNoticiaId = null;
-    setDirty(false);
+
+    authStateNullTimer = setTimeout(() => {
+      authStateNullTimer = null;
+      if (auth.currentUser) {
+        return;
+      }
+      applySignedOutUiState();
+    }, 2500);
   }
 });
 
@@ -2137,6 +2157,8 @@ function isFirebasePermissionError(error) {
 }
 
 async function saveNoticiasWithAuthRetry(payload) {
+  await ensureAuthPersistence();
+
   const user = auth.currentUser;
   if (!user) {
     const authError = new Error('AUTH_REQUIRED');
