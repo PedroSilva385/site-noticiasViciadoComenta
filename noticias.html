@@ -2340,6 +2340,28 @@ function sanitizeArticleInlineTypography(html) {
       const val = rawVal.trim();
       if (!allowedStyles.has(prop)) return;
       if (/expression\s*\(|url\s*\(|javascript:/i.test(val)) return;
+
+      if (prop === 'font-size') {
+        const sizeMatch = val.match(/^(\d+(?:\.\d+)?)(px|em|rem|%)$/i);
+        if (!sizeMatch) return;
+        const sizeValue = parseFloat(sizeMatch[1]);
+        const sizeUnit = sizeMatch[2].toLowerCase();
+
+        const tooLarge =
+          (sizeUnit === 'px' && sizeValue > 24) ||
+          (sizeUnit === 'em' && sizeValue > 1.35) ||
+          (sizeUnit === 'rem' && sizeValue > 1.35) ||
+          (sizeUnit === '%' && sizeValue > 135);
+
+        if (tooLarge) return;
+      }
+
+      if (prop === 'font-weight') {
+        const normalized = val.toLowerCase();
+        if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
+        if (/^[1-9]00$/.test(normalized) && parseInt(normalized, 10) > 700) return;
+      }
+
       safeRules.push(`${prop}:${val}`);
     });
     return safeRules.join(';');
@@ -2456,6 +2478,21 @@ function sanitizeArticleInlineTypography(html) {
     em.innerHTML = el.innerHTML;
     if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
     el.replaceWith(em);
+  });
+
+  // Corrige heading wrappers mal formados (ex.: <h2><p>...</p></h2>) que inflacionam tipografia.
+  root.querySelectorAll('h2, h3').forEach((heading) => {
+    const hasBlockChildren = heading.querySelector('p,div,ul,ol,blockquote,pre,h1,h2,h3,h4,h5,h6');
+    const textLength = (heading.textContent || '').trim().length;
+    if (hasBlockChildren || textLength > 140) {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = heading.innerHTML;
+      if (heading.getAttribute('style')) {
+        const cleanedStyle = sanitizeStyle(heading.getAttribute('style'));
+        if (cleanedStyle) paragraph.setAttribute('style', cleanedStyle);
+      }
+      heading.replaceWith(paragraph);
+    }
   });
 
   return root.innerHTML

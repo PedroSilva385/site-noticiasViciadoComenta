@@ -367,6 +367,52 @@ main {
   text-align: justify;
 }
 
+.artigo-conteudo h2,
+.artigo-conteudo h3 {
+  margin: 28px 0 14px;
+  line-height: 1.35;
+  color: #1a1f3a;
+}
+
+.artigo-conteudo ul,
+.artigo-conteudo ol {
+  margin: 0 0 24px;
+  padding-left: 30px;
+}
+
+.artigo-conteudo li {
+  margin-bottom: 8px;
+}
+
+.artigo-conteudo blockquote {
+  margin: 22px 0;
+  padding: 10px 16px;
+  border-left: 4px solid #93c5fd;
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.artigo-conteudo pre {
+  margin: 22px 0;
+  padding: 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.artigo-conteudo pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.artigo-conteudo code {
+  background: #e2e8f0;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 0.92em;
+}
+
 .artigo-conteudo br {
   display: block;
   content: "";
@@ -438,6 +484,17 @@ main {
 
 body.dark .artigo-conteudo figcaption {
   color: #9ca3af;
+}
+
+body.dark .artigo-conteudo blockquote {
+  background: #0f172a;
+  color: #bfdbfe;
+  border-left-color: #60a5fa;
+}
+
+body.dark .artigo-conteudo code {
+  background: #1f2937;
+  color: #e2e8f0;
 }
 
 .artigo-actions {
@@ -2257,23 +2314,190 @@ function normalizeBrokenLineWraps(html) {
 function sanitizeArticleInlineTypography(html) {
   if (!html) return '';
 
-  return String(html)
-    .replace(/<\/?font\b[^>]*>/gi, '')
-    .replace(/<span\b[^>]*>/gi, '')
-    .replace(/<\/span>/gi, '')
-    .replace(/\sstyle=("[^"]*"|'[^']*')/gi, '')
-    .replace(/<(strong|b|em|i|u)\b[^>]*>\s*<br\s*\/?>\s*<\/(strong|b|em|i|u)>/gi, '<br>')
-    .replace(/<(strong|b|em|i|u)\b[^>]*>\s*<\/(strong|b|em|i|u)>/gi, '')
-    .replace(/<\s*b\b[^>]*>/gi, '<strong>')
-    .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
-    .replace(/<\s*i\b[^>]*>/gi, '<em>')
-    .replace(/<\s*\/\s*i\s*>/gi, '</em>')
+  const root = document.createElement('div');
+  root.innerHTML = String(html);
+
+  root.querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,option').forEach((node) => node.remove());
+
+  const allowedTags = new Set([
+    'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'a', 'img', 'h2', 'h3',
+    'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'span', 'div', 'figure', 'figcaption'
+  ]);
+
+  const allowedStyles = new Set([
+    'font-size', 'line-height', 'text-align', 'font-weight', 'font-style',
+    'text-decoration', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+    'letter-spacing', 'color', 'font-family'
+  ]);
+
+  const sanitizeStyle = (styleText) => {
+    if (!styleText) return '';
+    const safeRules = [];
+    String(styleText).split(';').forEach((rule) => {
+      const [rawProp, rawVal] = rule.split(':');
+      if (!rawProp || !rawVal) return;
+      const prop = rawProp.trim().toLowerCase();
+      const val = rawVal.trim();
+      if (!allowedStyles.has(prop)) return;
+      if (/expression\s*\(|url\s*\(|javascript:/i.test(val)) return;
+
+      if (prop === 'font-size') {
+        const sizeMatch = val.match(/^(\d+(?:\.\d+)?)(px|em|rem|%)$/i);
+        if (!sizeMatch) return;
+        const sizeValue = parseFloat(sizeMatch[1]);
+        const sizeUnit = sizeMatch[2].toLowerCase();
+
+        const tooLarge =
+          (sizeUnit === 'px' && sizeValue > 24) ||
+          (sizeUnit === 'em' && sizeValue > 1.35) ||
+          (sizeUnit === 'rem' && sizeValue > 1.35) ||
+          (sizeUnit === '%' && sizeValue > 135);
+
+        if (tooLarge) return;
+      }
+
+      if (prop === 'font-weight') {
+        const normalized = val.toLowerCase();
+        if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
+        if (/^[1-9]00$/.test(normalized) && parseInt(normalized, 10) > 700) return;
+      }
+
+      safeRules.push(`${prop}:${val}`);
+    });
+    return safeRules.join(';');
+  };
+
+  Array.from(root.querySelectorAll('*')).forEach((el) => {
+    let tag = el.tagName.toLowerCase();
+
+    if (tag === 'font') {
+      const span = document.createElement('span');
+      const inlineStyles = [];
+      const size = el.getAttribute('size');
+      const color = el.getAttribute('color');
+
+      if (size && /^\d+$/.test(size)) {
+        const px = Math.max(10, Math.min(36, parseInt(size, 10) * 3 + 8));
+        inlineStyles.push(`font-size:${px}px`);
+      }
+      if (color) {
+        inlineStyles.push(`color:${color}`);
+      }
+      const face = el.getAttribute('face');
+      if (face) {
+        inlineStyles.push(`font-family:${face}`);
+      }
+      if (el.getAttribute('style')) {
+        inlineStyles.push(el.getAttribute('style'));
+      }
+
+      if (inlineStyles.length) {
+        const safe = sanitizeStyle(inlineStyles.join(';'));
+        if (safe) span.setAttribute('style', safe);
+      }
+
+      span.innerHTML = el.innerHTML;
+      el.replaceWith(span);
+      tag = 'span';
+      el = span;
+    }
+
+    if (!allowedTags.has(tag)) {
+      while (el.firstChild) {
+        el.parentNode.insertBefore(el.firstChild, el);
+      }
+      el.remove();
+      return;
+    }
+
+    [...el.attributes].forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      const value = attr.value;
+
+      if (name.startsWith('on')) {
+        el.removeAttribute(attr.name);
+        return;
+      }
+
+      if (name === 'style') {
+        const safe = sanitizeStyle(value);
+        if (safe) el.setAttribute('style', safe);
+        else el.removeAttribute('style');
+        return;
+      }
+
+      if (name === 'class') {
+        return;
+      }
+
+      if (tag === 'a' && ['href', 'target', 'rel', 'title'].includes(name)) {
+        if (name === 'href' && /^javascript:/i.test(value)) {
+          el.removeAttribute('href');
+        }
+        return;
+      }
+
+      if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height'].includes(name)) {
+        if (name === 'src' && !/^(https?:|data:image\/)/i.test(value)) {
+          el.removeAttribute('src');
+        }
+        return;
+      }
+
+      el.removeAttribute(attr.name);
+    });
+
+    if (tag === 'a') {
+      if (!el.getAttribute('target')) el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener noreferrer');
+    }
+
+    if (tag === 'img') {
+      const style = el.getAttribute('style') || '';
+      const safeStyle = sanitizeStyle(`${style};max-width:100%;height:auto`);
+      el.setAttribute('style', safeStyle || 'max-width:100%;height:auto');
+    }
+
+    if (tag === 'div') {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = el.innerHTML;
+      if (el.getAttribute('style')) paragraph.setAttribute('style', el.getAttribute('style'));
+      el.replaceWith(paragraph);
+    }
+  });
+
+  root.querySelectorAll('b').forEach((el) => {
+    const strong = document.createElement('strong');
+    strong.innerHTML = el.innerHTML;
+    if (el.getAttribute('style')) strong.setAttribute('style', el.getAttribute('style'));
+    el.replaceWith(strong);
+  });
+
+  root.querySelectorAll('i').forEach((el) => {
+    const em = document.createElement('em');
+    em.innerHTML = el.innerHTML;
+    if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
+    el.replaceWith(em);
+  });
+
+  // Corrige heading wrappers mal formados (ex.: <h2><p>...</p></h2>) que inflacionam tipografia.
+  root.querySelectorAll('h2, h3').forEach((heading) => {
+    const hasBlockChildren = heading.querySelector('p,div,ul,ol,blockquote,pre,h1,h2,h3,h4,h5,h6');
+    const textLength = (heading.textContent || '').trim().length;
+    if (hasBlockChildren || textLength > 140) {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = heading.innerHTML;
+      if (heading.getAttribute('style')) {
+        const cleanedStyle = sanitizeStyle(heading.getAttribute('style'));
+        if (cleanedStyle) paragraph.setAttribute('style', cleanedStyle);
+      }
+      heading.replaceWith(paragraph);
+    }
+  });
+
+  return root.innerHTML
     .replace(/&nbsp;/gi, ' ')
-    .replace(/<div\b[^>]*>\s*<br\s*\/?>\s*<\/div>/gi, '<br><br>')
-    .replace(/<div\b[^>]*>/gi, '')
-    .replace(/<\/div>/gi, '<br>')
     .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
-    .replace(/^(\s*<br\s*\/?>\s*)+|(\s*<br\s*\/?>\s*)+$/gi, '')
     .trim();
 }
 
