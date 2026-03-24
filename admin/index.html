@@ -1235,6 +1235,7 @@ function queueDraftAutosave() {
   autosaveTimer = setTimeout(() => {
     const payload = {
       selectedNoticiaId,
+      isNewDraft: selectedNoticiaId === null,
       noticiaId: noticiaId.value,
       titulo: noticiaTitulo.value,
       autor: noticiaAutor.value,
@@ -1274,6 +1275,24 @@ function restoreDraftIfAvailable() {
 
     if (selectedNoticiaId !== null) return;
 
+    // Evita restaurar rascunhos de edição de notícias já existentes.
+    if (draft.isNewDraft !== true) {
+      return;
+    }
+
+    const hasContent = [draft.titulo, draft.resumo, draft.conteudo].some((value) =>
+      String(value || '').trim().length > 0
+    );
+    if (!hasContent) {
+      return;
+    }
+
+    const shouldRestore = confirm('Foi encontrado um rascunho local de notícia nova. Deseja restaurar?');
+    if (!shouldRestore) {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      return;
+    }
+
     noticiaId.value = draft.noticiaId || noticiaId.value;
     noticiaTitulo.value = draft.titulo || '';
     noticiaAutor.value = draft.autor || 'Pedro Silva';
@@ -1302,6 +1321,10 @@ function restoreDraftIfAvailable() {
 }
 
 function clearDraftAutosave() {
+  if (autosaveTimer) {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = null;
+  }
   try {
     localStorage.removeItem(DRAFT_STORAGE_KEY);
   } catch (_) {}
