@@ -2480,6 +2480,25 @@ function sanitizeArticleInlineTypography(html) {
     el.replaceWith(em);
   });
 
+  root.querySelectorAll('[style]').forEach((el) => {
+    const tag = el.tagName.toLowerCase();
+    if (tag === 'strong' || tag === 'b') return;
+
+    const currentStyle = String(el.getAttribute('style') || '');
+    if (!/font-weight\s*:\s*(bold|[6-9]00)/i.test(currentStyle)) return;
+
+    const styleWithoutWeight = currentStyle.replace(/font-weight\s*:\s*(bold|[1-9]00)\s*;?/gi, '');
+    const cleanedStyle = sanitizeStyle(styleWithoutWeight);
+
+    const strong = document.createElement('strong');
+    strong.innerHTML = el.innerHTML;
+    if (cleanedStyle) {
+      strong.setAttribute('style', cleanedStyle);
+    }
+
+    el.replaceWith(strong);
+  });
+
   // Corrige heading wrappers mal formados (ex.: <h2><p>...</p></h2>) que inflacionam tipografia.
   root.querySelectorAll('h2, h3').forEach((heading) => {
     const hasBlockChildren = heading.querySelector('p,div,ul,ol,blockquote,pre,h1,h2,h3,h4,h5,h6');
