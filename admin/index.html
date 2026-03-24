@@ -1742,52 +1742,25 @@ contentEditor.addEventListener('input', () => {
   queueDraftAutosave();
 });
 
-contentEditor.addEventListener('paste', (event) => {
-  const clipboard = event.clipboardData || window.clipboardData;
-  if (!clipboard) {
-    // Sem acesso à clipboard, deixa o browser executar a colagem padrão.
-    return;
-  }
+contentEditor.addEventListener('paste', () => {
+  // Compatibilidade máxima: deixa o browser colar normalmente (incluindo Google Docs)
+  // e normaliza no tick seguinte para manter o padrão visual do site.
+  setTimeout(() => {
+    const currentHtml = contentEditor.innerHTML || '';
+    const normalized = normalizeEditorHtml(currentHtml);
 
-  const html = clipboard.getData('text/html') || '';
-  const text = clipboard.getData('text/plain') || '';
-
-  if (!html.trim() && !text.trim()) {
-    // Sem conteúdo legível, não bloquear o comportamento nativo.
-    return;
-  }
-
-  event.preventDefault();
-
-  let sanitizedHtml = '';
-  if (html && html.trim()) {
-    sanitizedHtml = normalizeDocsHtmlForEditor(html);
-  } else {
-    sanitizedHtml = normalizePlainTextToHtml(text);
-  }
-
-  if (!sanitizedHtml && html.trim()) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    const extractedText = (tmp.innerText || tmp.textContent || '').trim();
-    if (extractedText) {
-      sanitizedHtml = normalizePlainTextToHtml(extractedText);
+    if (normalized && normalized !== currentHtml) {
+      const prevScroll = contentEditor.scrollTop;
+      contentEditor.innerHTML = normalized;
+      contentEditor.scrollTop = prevScroll;
     }
-  }
 
-  if (!sanitizedHtml && text.trim()) {
-    sanitizedHtml = normalizePlainTextToHtml(text);
-  }
-
-  if (!sanitizedHtml) return;
-
-  insertHtmlIntoEditor(sanitizedHtml);
-
-  saveEditorRange();
-  updateQualityHints();
-  updatePreviewContent();
-  setDirty(true);
-  queueDraftAutosave();
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+  }, 0);
 });
 
 [noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaSlug].forEach((field) => {
