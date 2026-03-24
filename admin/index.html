@@ -1009,9 +1009,54 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
+const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
+let authKeepAliveTimer = null;
+let persistenceReady = false;
+
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
   console.warn('Não foi possível configurar persistência LOCAL:', error);
 });
+
+async function ensureAuthPersistence() {
+  if (persistenceReady) return;
+
+  try {
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    persistenceReady = true;
+    return;
+  } catch (error) {
+    console.warn('Persistência LOCAL falhou, a tentar SESSION...', error);
+  }
+
+  try {
+    await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    persistenceReady = true;
+  } catch (error) {
+    console.warn('Persistência SESSION também falhou.', error);
+  }
+}
+
+function startAuthKeepAlive() {
+  if (authKeepAliveTimer) {
+    clearInterval(authKeepAliveTimer);
+  }
+
+  authKeepAliveTimer = setInterval(async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      await user.getIdToken(true);
+    } catch (error) {
+      console.warn('Falha no refresh periódico de token:', error);
+    }
+  }, 20 * 60 * 1000);
+}
+
+function stopAuthKeepAlive() {
+  if (!authKeepAliveTimer) return;
+  clearInterval(authKeepAliveTimer);
+  authKeepAliveTimer = null;
+}
 
 // ===== STATE =====
 let currentUser = null;
@@ -1032,6 +1077,13 @@ const btnNewNoticia = document.getElementById('btnNewNoticia');
 const status = document.getElementById('status');
 const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
+
+try {
+  const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY);
+  if (rememberedEmail) {
+    authEmail.value = rememberedEmail;
+  }
+} catch (_) {}
 
 // Form fields
 const noticiaId = document.getElementById('noticiaId');
@@ -1641,12 +1693,17 @@ authForm.addEventListener('submit', async (e) => {
   }
 
   try {
+    await ensureAuthPersistence();
+
     authEmail.disabled = true;
     authPassword.disabled = true;
     authForm.querySelector('button').disabled = true;
 
     const result = await auth.signInWithEmailAndPassword(email, password);
     currentUser = result.user;
+    try {
+      localStorage.setItem(AUTH_LAST_EMAIL_KEY, email);
+    } catch (_) {}
     
   } catch (error) {
     console.error('Erro de autenticação Firebase:', error);
@@ -1694,9 +1751,13 @@ btnLogout.addEventListener('click', () => {
 auth.onAuthStateChanged((user) => {
   if (user) {
     currentUser = user;
+    try {
+      localStorage.setItem(AUTH_LAST_EMAIL_KEY, user.email || authEmail.value || '');
+    } catch (_) {}
     userEmail.textContent = user.email;
     authScreen.style.display = 'none';
     dashboard.classList.add('active');
+    startAuthKeepAlive();
     loadNoticias();
     setTimeout(() => {
       restoreDraftIfAvailable();
@@ -1705,9 +1766,15 @@ auth.onAuthStateChanged((user) => {
     }, 50);
   } else {
     currentUser = null;
+    stopAuthKeepAlive();
     authScreen.style.display = 'flex';
     dashboard.classList.remove('active');
-    authEmail.value = '';
+    try {
+      const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY) || '';
+      authEmail.value = rememberedEmail;
+    } catch (_) {
+      authEmail.value = '';
+    }
     authPassword.value = '';
     allNoticias = [];
     selectedNoticiaId = null;
