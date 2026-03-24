@@ -2140,6 +2140,32 @@ function isFirebasePermissionError(error) {
   );
 }
 
+function buildNoticiasWritePayloadVariants(payload) {
+  if (!Array.isArray(payload)) {
+    return [payload];
+  }
+
+  const mapPayload = {};
+  let mappedCount = 0;
+
+  payload.forEach((item) => {
+    if (!item || typeof item !== 'object') return;
+    const rawId = item.id;
+    if (typeof rawId === 'undefined' || rawId === null) return;
+    const id = String(rawId).trim();
+    if (!id) return;
+    mapPayload[id] = item;
+    mappedCount += 1;
+  });
+
+  // Alguns projetos usam /noticias como mapa por id em vez de array.
+  if (mappedCount > 0) {
+    return [mapPayload, payload];
+  }
+
+  return [payload];
+}
+
 async function saveNoticiasWithAuthRetry(payload) {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const resolveActiveUser = async () => {
@@ -2169,25 +2195,48 @@ async function saveNoticiasWithAuthRetry(payload) {
     console.warn('Falha ao obter token atual, a tentar renovar...', tokenError);
   }
 
-  try {
-    await db.ref('noticias').set(payload);
-  } catch (error) {
-    if (!isFirebasePermissionError(error)) {
-      throw error;
-    }
+  const payloadVariants = buildNoticiasWritePayloadVariants(payload);
+  let lastError = null;
 
-    let currentUser = auth.currentUser;
-    if (!currentUser) {
-      currentUser = await resolveActiveUser();
+  for (let i = 0; i < payloadVariants.length; i++) {
+    const variant = payloadVariants[i];
+    try {
+      await db.ref('noticias').set(variant);
+      return;
+    } catch (error) {
+      lastError = error;
+
+      if (!isFirebasePermissionError(error)) {
+        throw error;
+      }
+
+      let currentUser = auth.currentUser;
       if (!currentUser) {
-        const authError = new Error('AUTH_REQUIRED');
-        authError.code = 'AUTH_REQUIRED';
-        throw authError;
+        currentUser = await resolveActiveUser();
+        if (!currentUser) {
+          const authError = new Error('AUTH_REQUIRED');
+          authError.code = 'AUTH_REQUIRED';
+          throw authError;
+        }
+      }
+
+      await currentUser.getIdToken(true);
+
+      try {
+        await db.ref('noticias').set(variant);
+        return;
+      } catch (retryError) {
+        lastError = retryError;
+        if (!isFirebasePermissionError(retryError)) {
+          throw retryError;
+        }
       }
     }
+  }
 
-    await currentUser.getIdToken(true);
-    await db.ref('noticias').set(payload);
+  if (lastError) {
+    lastError.code = lastError.code || 'PERMISSION_DENIED';
+    throw lastError;
   }
 }
 
@@ -2298,9 +2347,9 @@ async function saveNoticia() {
       errorMsg = 'Sessão expirada. Faça login novamente.';
       applySignedOutUiState();
     } else if (error.code === 'PERMISSION_DENIED') {
-      errorMsg = 'Erro de permissão: Não tem permissão para guardar. Verifique se está logado.';
+      errorMsg = 'Erro de permissão no Firebase ao guardar notícias. Se continuar, é necessário permitir escrita em /noticias nas regras do Realtime Database.';
     } else if (error.message && error.message.includes('permission')) {
-      errorMsg = 'Erro de permissão no Firebase. Contacte o administrador.';
+      errorMsg = 'Erro de permissão no Firebase ao guardar notícias. Verifique as regras de escrita de /noticias.';
     } else if (error.message) {
       errorMsg = `Erro: ${error.message}`;
     }
