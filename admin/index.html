@@ -1013,7 +1013,6 @@ const db = firebase.database();
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
 let persistenceReady = false;
-let authStateNullTimer = null;
 
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
   console.warn('Não foi possível configurar persistência LOCAL:', error);
@@ -1909,10 +1908,6 @@ btnLogout.addEventListener('click', () => {
 // Check auth state
 auth.onAuthStateChanged((user) => {
   if (user) {
-    if (authStateNullTimer) {
-      clearTimeout(authStateNullTimer);
-      authStateNullTimer = null;
-    }
     currentUser = user;
     try {
       localStorage.setItem(AUTH_LAST_EMAIL_KEY, user.email || authEmail.value || '');
@@ -1927,18 +1922,7 @@ auth.onAuthStateChanged((user) => {
       updatePreviewContent();
     }, 50);
   } else {
-    // Evita logout imediato em flutuações curtas do estado de auth após operações de escrita.
-    if (authStateNullTimer) {
-      clearTimeout(authStateNullTimer);
-    }
-
-    authStateNullTimer = setTimeout(() => {
-      authStateNullTimer = null;
-      if (auth.currentUser) {
-        return;
-      }
-      applySignedOutUiState();
-    }, 2500);
+    applySignedOutUiState();
   }
 });
 
@@ -2157,9 +2141,22 @@ function isFirebasePermissionError(error) {
 }
 
 async function saveNoticiasWithAuthRetry(payload) {
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const resolveActiveUser = async () => {
+    if (auth.currentUser) return auth.currentUser;
+
+    // Alguns browsers podem demorar a restaurar auth após operações de storage.
+    for (let i = 0; i < 8; i++) {
+      await wait(250);
+      if (auth.currentUser) return auth.currentUser;
+    }
+
+    return null;
+  };
+
   await ensureAuthPersistence();
 
-  const user = auth.currentUser;
+  const user = await resolveActiveUser();
   if (!user) {
     const authError = new Error('AUTH_REQUIRED');
     authError.code = 'AUTH_REQUIRED';
@@ -2179,9 +2176,14 @@ async function saveNoticiasWithAuthRetry(payload) {
       throw error;
     }
 
-    const currentUser = auth.currentUser;
+    let currentUser = auth.currentUser;
     if (!currentUser) {
-      throw error;
+      currentUser = await resolveActiveUser();
+      if (!currentUser) {
+        const authError = new Error('AUTH_REQUIRED');
+        authError.code = 'AUTH_REQUIRED';
+        throw authError;
+      }
     }
 
     await currentUser.getIdToken(true);
@@ -2294,6 +2296,7 @@ async function saveNoticia() {
     
     if (error.code === 'AUTH_REQUIRED') {
       errorMsg = 'Sessão expirada. Faça login novamente.';
+      applySignedOutUiState();
     } else if (error.code === 'PERMISSION_DENIED') {
       errorMsg = 'Erro de permissão: Não tem permissão para guardar. Verifique se está logado.';
     } else if (error.message && error.message.includes('permission')) {
