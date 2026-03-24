@@ -1,0 +1,78 @@
+{
+  "rules": {
+    "noticias": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "site_stats": {
+      ".read": true,
+      ".write": true,
+      ".validate": "newData.hasChildren(['total_visits', 'daily', 'monthly', 'last_updated'])"
+    },
+    "active_users": {
+      ".read": true,
+      ".write": true
+    },
+    "active_users_history": {
+      ".read": true,
+      ".write": true
+    },
+    "likes": {
+      ".read": true,
+      "$noticiaId": {
+        "$userId": {
+          ".write": true,
+          ".validate": "(newData.hasChildren(['timestamp']) && newData.child('timestamp').isNumber()) || !newData.exists()",
+          "timestamp": {
+            ".validate": "newData.isNumber() && newData.val() > 0"
+          }
+        }
+      }
+    },
+    "comentarios": {
+      ".read": true,
+      "$noticiaId": {
+        "$comentarioId": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['nome', 'texto', 'timestamp'])",
+          "nome": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+          },
+          "texto": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 5000"
+          },
+          "data": {
+            ".validate": "newData.isString()"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber() && newData.val() > 0"
+          },
+          "respostas": {
+            ".read": true,
+            ".write": true,
+            "$respostaId": {
+              ".validate": "newData.hasChildren(['nome', 'texto', 'timestamp']) || !newData.exists()",
+              "nome": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+              },
+              "texto": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 5000"
+              },
+              "data": {
+                ".validate": "newData.isString()"
+              },
+              "timestamp": {
+                ".validate": "newData.isNumber() && newData.val() > 0"
+              },
+              "respostas": {
+                ".read": true,
+                ".write": true,
+                ".validate": "newData.hasChildren(['nome', 'texto', 'timestamp']) || !newData.exists()"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
