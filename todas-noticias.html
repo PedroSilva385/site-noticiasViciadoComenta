@@ -1094,11 +1094,28 @@ function getArticleSlug(noticia) {
 }
 
 function buildArticleUrl(noticia) {
-  const id = encodeURIComponent(noticia.id);
+  if (!noticia || typeof noticia !== 'object') {
+    return 'artigos.html';
+  }
+
+  const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
+  const id = hasId ? encodeURIComponent(String(noticia.id).trim()) : '';
   const slug = getArticleSlug(noticia);
-  return slug
-    ? `artigos.html#/${encodeURIComponent(slug)}/${id}`
-    : `artigos.html?id=${id}`;
+
+  if (slug && hasId) {
+    return `artigos.html#/${encodeURIComponent(slug)}/${id}`;
+  }
+  if (slug) {
+    return `artigos.html#/${encodeURIComponent(slug)}`;
+  }
+  if (hasId) {
+    return `artigos.html?id=${id}`;
+  }
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
+  }
+
+  return 'artigos.html';
 }
 
 fetchNoticiasAgendadas('data/noticias.json')
