@@ -304,9 +304,10 @@ body {
   border: 1px solid #d1d5db;
   border-radius: 8px;
   background: white;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-family: 'Sora', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1.2em;
+  line-height: 1.9;
+  color: #3a3f5a;
   overflow-y: auto;
   resize: vertical;
   outline: none;
@@ -1349,8 +1350,7 @@ function normalizeEditorHtml(html) {
   const sanitizeStyle = (styleValue) => {
     if (!styleValue) return '';
     const allowed = new Set([
-      'font-size','line-height','text-align','font-weight','font-style','text-decoration',
-      'margin-left','margin-right','margin-top','margin-bottom','letter-spacing','font-family'
+      'text-align','font-weight','font-style','text-decoration'
     ]);
     const clean = [];
 
@@ -1361,6 +1361,14 @@ function normalizeEditorHtml(html) {
       const val = rawVal.trim();
       if (!allowed.has(prop)) return;
       if (/expression\s*\(|url\s*\(|javascript:/i.test(val)) return;
+
+      if (prop === 'font-weight') {
+        const normalized = val.toLowerCase();
+        if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
+      }
+
+      if (prop === 'text-align' && !/^(left|right|center|justify)$/i.test(val)) return;
+
       clean.push(`${prop}:${val}`);
     });
 
@@ -1377,7 +1385,7 @@ function normalizeEditorHtml(html) {
       const face = el.getAttribute('face');
 
       if (face) {
-        inlineStyles.push(`font-family:${face}`);
+        // Ignorado: fonte externa de colagem deve usar fonte padrão do site.
       }
       if (el.getAttribute('style')) {
         inlineStyles.push(el.getAttribute('style'));
@@ -1497,6 +1505,39 @@ function normalizeEditorHtml(html) {
     .trim();
 
   return result;
+}
+
+function normalizePlainTextToHtml(text) {
+  const safe = String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return safe
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => `<p>${block.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+}
+
+function normalizeDocsHtmlForEditor(html) {
+  if (!html) return '';
+
+  const tmp = document.createElement('div');
+  tmp.innerHTML = String(html);
+
+  // Remove wrappers/metadata comuns do Google Docs.
+  tmp.querySelectorAll('[id^="docs-internal-guid"], meta, style, link').forEach((node) => node.remove());
+
+  // Remove classes/atributos de origem para evitar estilos imprevisíveis.
+  tmp.querySelectorAll('*').forEach((el) => {
+    ['class', 'lang', 'dir', 'data-start', 'data-end', 'data-section-id'].forEach((attr) => {
+      if (el.hasAttribute(attr)) el.removeAttribute(attr);
+    });
+  });
+
+  return normalizeEditorHtml(tmp.innerHTML);
 }
 
 fontFamilySelect.addEventListener('change', () => {
@@ -1640,6 +1681,31 @@ contentEditor.addEventListener('input', () => {
   updatePreviewContent();
   setDirty(true);
   queueDraftAutosave();
+});
+
+contentEditor.addEventListener('paste', (event) => {
+  event.preventDefault();
+
+  const clipboard = event.clipboardData || window.clipboardData;
+  const html = clipboard ? clipboard.getData('text/html') : '';
+  const text = clipboard ? clipboard.getData('text/plain') : '';
+
+  let sanitizedHtml = '';
+  if (html && html.trim()) {
+    sanitizedHtml = normalizeDocsHtmlForEditor(html);
+  } else {
+    sanitizedHtml = normalizePlainTextToHtml(text);
+  }
+
+  if (sanitizedHtml) {
+    restoreEditorRange();
+    document.execCommand('insertHTML', false, sanitizedHtml);
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+  }
 });
 
 [noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaSlug].forEach((field) => {
