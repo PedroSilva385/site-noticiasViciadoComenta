@@ -312,6 +312,43 @@ body {
   outline: none;
 }
 
+#contentEditor p {
+  margin: 0 0 14px;
+}
+
+#contentEditor h2,
+#contentEditor h3 {
+  margin: 16px 0 10px;
+  line-height: 1.35;
+}
+
+#contentEditor ul,
+#contentEditor ol {
+  margin: 0 0 14px;
+  padding-left: 28px;
+}
+
+#contentEditor li {
+  margin-bottom: 6px;
+}
+
+#contentEditor blockquote {
+  border-left: 4px solid #c7d2fe;
+  margin: 14px 0;
+  padding: 8px 14px;
+  color: #334155;
+  background: #f8fafc;
+}
+
+#contentEditor pre {
+  margin: 14px 0;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
 #contentEditor:focus {
   border-color: #4f46e5;
   box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
@@ -368,6 +405,131 @@ body {
   margin-top: 6px;
 }
 
+.editor-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.editor-layout.split {
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+}
+
+.editor-pane,
+.preview-pane {
+  min-width: 0;
+}
+
+.preview-pane {
+  display: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.editor-layout.split .preview-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #eef2ff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #3730a3;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.preview-body {
+  padding: 14px;
+  overflow-y: auto;
+  max-height: 420px;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #3a3f5a;
+}
+
+.preview-body p {
+  margin: 0 0 16px;
+  text-align: justify;
+}
+
+.preview-body ul,
+.preview-body ol {
+  margin: 0 0 16px;
+  padding-left: 28px;
+}
+
+.preview-body li {
+  margin-bottom: 6px;
+}
+
+.preview-body blockquote {
+  border-left: 4px solid #93c5fd;
+  background: #eff6ff;
+  padding: 8px 14px;
+  margin: 14px 0;
+}
+
+.preview-body pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 14px 0;
+}
+
+.preview-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 14px 0;
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quality-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  background: #f9fafb;
+}
+
+.quality-card .label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.quality-card .value {
+  margin-top: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.quality-hints {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+.quality-hints strong {
+  color: #1f2937;
+}
+
 /* ========== TOOLBAR ========== */
 .editor-toolbar {
   display: flex;
@@ -389,6 +551,21 @@ body {
   transition: all 0.2s;
 }
 
+.editor-toolbar select {
+  padding: 8px 10px;
+  font-size: 0.84rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #1f2937;
+}
+
+.editor-toolbar select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
 .editor-toolbar button:hover {
   background: #f9fafb;
   border-color: #4f46e5;
@@ -399,6 +576,12 @@ body {
   background: #4f46e5;
   color: white;
   border-color: #4f46e5;
+}
+
+.editor-toolbar .btn-accent {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
 }
 
 .toolbar-separator {
@@ -543,6 +726,18 @@ button {
   }
 
   .form-row, .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-layout.split {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-pane {
+    display: none !important;
+  }
+
+  .quality-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -690,12 +885,35 @@ button {
               <button type="button" id="btnUnderline" title="Sublinhado (seleciona texto e carrega)" style="text-decoration:underline;">
                 U
               </button>
+              <select id="fontFamilySelect" title="Tipo de letra">
+                <option value="">Fonte</option>
+                <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                <option value="Arial, Helvetica, sans-serif">Arial</option>
+                <option value="Georgia, 'Times New Roman', serif">Georgia</option>
+                <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet</option>
+                <option value="'Courier New', Courier, monospace">Courier New</option>
+              </select>
               <div class="toolbar-separator"></div>
               <button type="button" id="btnHeading" title="Título H2">
                 H2
               </button>
+              <button type="button" id="btnSubHeading" title="Subtítulo H3">
+                H3
+              </button>
+              <button type="button" id="btnQuote" title="Citação">
+                ❝
+              </button>
+              <button type="button" id="btnListUl" title="Lista com bullets">
+                • Lista
+              </button>
+              <button type="button" id="btnListOl" title="Lista numerada">
+                1. Lista
+              </button>
               <button type="button" id="btnCode" title="Código inline">
                 &lt;/&gt;
+              </button>
+              <button type="button" id="btnCodeBlock" title="Bloco de código">
+                [code]
               </button>
               <div class="toolbar-separator"></div>
               <button type="button" id="btnLink" title="Inserir link">
@@ -704,9 +922,42 @@ button {
               <button type="button" id="btnImage" title="Inserir imagem">
                 🖼️ Imagem
               </button>
+              <button type="button" id="btnUploadImage" class="btn-accent" title="Upload de imagem">
+                ⤴ Upload
+              </button>
+              <input type="file" id="imageUploadInput" accept="image/*" style="display:none;">
+              <button type="button" id="btnClearFormatting" title="Limpar formatação">
+                Tx
+              </button>
+              <button type="button" id="btnTogglePreview" class="btn-accent" title="Mostrar/Ocultar preview">
+                👁️ Preview
+              </button>
             </div>
-            <div id="contentEditor" contenteditable="true" role="textbox" aria-label="Editor de conteúdo" placeholder="Cole ou escreve o conteúdo aqui. Seleciona texto e usa os botões acima para formatar."></div>
-            <div class="editor-counter"><span id="charCount">0</span> caracteres</div>
+            <div class="editor-layout" id="editorLayout">
+              <div class="editor-pane">
+                <div id="contentEditor" contenteditable="true" role="textbox" aria-label="Editor de conteúdo" placeholder="Cole ou escreve o conteúdo aqui. Seleciona texto e usa os botões acima para formatar."></div>
+              </div>
+              <aside class="preview-pane" id="previewPane">
+                <div class="preview-header">Pré-visualização do artigo</div>
+                <div class="preview-body" id="contentPreview"></div>
+              </aside>
+            </div>
+            <div class="editor-counter"><span id="charCount">0</span> caracteres • <span id="wordCount">0</span> palavras</div>
+            <div class="quality-grid">
+              <div class="quality-card">
+                <div class="label">Leitura</div>
+                <div class="value" id="readingTime">0 min</div>
+              </div>
+              <div class="quality-card">
+                <div class="label">Título SEO</div>
+                <div class="value" id="seoTitleScore">0 / 70</div>
+              </div>
+              <div class="quality-card">
+                <div class="label">Resumo SEO</div>
+                <div class="value" id="seoResumoScore">0 / 160</div>
+              </div>
+            </div>
+            <div class="quality-hints" id="qualityHints"></div>
           </div>
         </div>
 
@@ -727,9 +978,9 @@ button {
 
         <!-- Ações -->
         <div class="form-actions">
-          <button class="btn-primary" id="btnSave">💾 Guardar</button>
-          <button class="btn-secondary" id="btnCancel">Cancelar</button>
-          <button class="btn-danger" id="btnDelete" style="margin-left: auto;">🗑️ Eliminar</button>
+          <button type="button" class="btn-primary" id="btnSave">💾 Guardar</button>
+          <button type="button" class="btn-secondary" id="btnCancel">Cancelar</button>
+          <button type="button" class="btn-danger" id="btnDelete" style="margin-left: auto;">🗑️ Eliminar</button>
         </div>
       </div>
     </div>
@@ -757,6 +1008,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
+  console.warn('Não foi possível configurar persistência LOCAL:', error);
+});
 
 // ===== STATE =====
 let currentUser = null;
@@ -805,9 +1060,34 @@ const btnLink = document.getElementById('btnLink');
 const btnImage = document.getElementById('btnImage');
 const btnHeading = document.getElementById('btnHeading');
 const btnCode = document.getElementById('btnCode');
+const btnSubHeading = document.getElementById('btnSubHeading');
+const btnQuote = document.getElementById('btnQuote');
+const btnListUl = document.getElementById('btnListUl');
+const btnListOl = document.getElementById('btnListOl');
+const btnCodeBlock = document.getElementById('btnCodeBlock');
+const btnClearFormatting = document.getElementById('btnClearFormatting');
+const btnUploadImage = document.getElementById('btnUploadImage');
+const imageUploadInput = document.getElementById('imageUploadInput');
+const fontFamilySelect = document.getElementById('fontFamilySelect');
+const btnTogglePreview = document.getElementById('btnTogglePreview');
+const editorLayout = document.getElementById('editorLayout');
+const contentPreview = document.getElementById('contentPreview');
+const qualityHints = document.getElementById('qualityHints');
+const wordCountEl = document.getElementById('wordCount');
+const readingTimeEl = document.getElementById('readingTime');
+const seoTitleScoreEl = document.getElementById('seoTitleScore');
+const seoResumoScoreEl = document.getElementById('seoResumoScore');
 
 // ===== EDITOR TOOLBAR FUNCTIONS =====
 let savedRange = null;
+let previewEnabled = false;
+let isDirty = false;
+let autosaveTimer = null;
+const DRAFT_STORAGE_KEY = 'admin-noticia-draft-v1';
+
+if (typeof document.execCommand === 'function') {
+  document.execCommand('defaultParagraphSeparator', false, 'p');
+}
 
 // Guarda o Range sempre que o utilizador seleciona texto ou move o cursor no editor
 function saveEditorRange() {
@@ -845,7 +1125,313 @@ document.querySelector('.editor-toolbar').addEventListener('mousedown', (e) => {
 });
 
 // Handlers dos botões da toolbar
-const TOOLBAR_BUTTONS = ['btnBold','btnItalic','btnUnderline','btnHeading','btnCode','btnLink','btnImage'];
+const TOOLBAR_BUTTONS = [
+  'btnBold','btnItalic','btnUnderline','btnHeading','btnSubHeading','btnQuote',
+  'btnListUl','btnListOl','btnCode','btnCodeBlock','btnLink','btnImage',
+  'btnUploadImage','btnClearFormatting','btnTogglePreview'
+];
+
+function updatePreviewContent() {
+  if (!contentPreview) return;
+  const html = normalizeEditorHtml(contentEditor.innerHTML || '');
+  contentPreview.innerHTML = html || '<p style="color:#94a3b8;">Pré-visualização vazia.</p>';
+}
+
+function setDirty(value) {
+  isDirty = !!value;
+}
+
+function getEditorMetrics() {
+  const text = (contentEditor.innerText || '').trim();
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  const chars = text.length;
+  const readingMin = Math.max(1, Math.ceil(words / 200));
+  return { words, chars, readingMin };
+}
+
+function updateQualityHints() {
+  const tituloLen = noticiaTitulo.value.trim().length;
+  const resumoLen = noticiaResumo.value.trim().length;
+  const metrics = getEditorMetrics();
+
+  const charCounter = document.getElementById('charCount');
+  if (charCounter) charCounter.textContent = String(metrics.chars);
+  if (wordCountEl) wordCountEl.textContent = String(metrics.words);
+  if (readingTimeEl) readingTimeEl.textContent = `${metrics.readingMin} min`;
+  if (seoTitleScoreEl) seoTitleScoreEl.textContent = `${tituloLen} / 70`;
+  if (seoResumoScoreEl) seoResumoScoreEl.textContent = `${resumoLen} / 160`;
+
+  const hints = [];
+  if (tituloLen < 45) hints.push('Título SEO curto (ideal: 45-70).');
+  if (tituloLen > 70) hints.push('Título SEO longo (ideal: até 70).');
+  if (resumoLen < 120) hints.push('Resumo curto para meta description (ideal: 120-160).');
+  if (resumoLen > 160) hints.push('Resumo longo para meta description (ideal: até 160).');
+  if (metrics.words < 180) hints.push('Conteúdo curto; recomenda-se >= 180 palavras.');
+
+  if (qualityHints) {
+    qualityHints.innerHTML = hints.length
+      ? `<strong>Melhorias sugeridas:</strong> ${hints.join(' ')}`
+      : '<strong>SEO básico:</strong> Título, resumo e conteúdo dentro de um intervalo saudável.';
+  }
+}
+
+function queueDraftAutosave() {
+  if (autosaveTimer) {
+    clearTimeout(autosaveTimer);
+  }
+  autosaveTimer = setTimeout(() => {
+    const payload = {
+      selectedNoticiaId,
+      noticiaId: noticiaId.value,
+      titulo: noticiaTitulo.value,
+      autor: noticiaAutor.value,
+      data: noticiaData.value,
+      categoriaInput: noticiaCategoria.value,
+      categoriaSelect: categoriasSelect.value,
+      resumo: noticiaResumo.value,
+      conteudo: contentEditor.innerHTML,
+      video: noticiaVideo.value,
+      slug: noticiaSlug.value,
+      scheduleMode: document.querySelector('input[name="scheduling"]:checked')?.value || 'immediate',
+      scheduleDate: noticiaScheduleDate.value,
+      scheduleTime: noticiaScheduleTime.value,
+      timestamp: Date.now()
+    };
+
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+    } catch (error) {
+      console.warn('Falha ao guardar rascunho local:', error);
+    }
+  }, 500);
+}
+
+function restoreDraftIfAvailable() {
+  try {
+    const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return;
+    const draft = JSON.parse(raw);
+    if (!draft || !draft.timestamp) return;
+
+    const draftAgeMs = Date.now() - draft.timestamp;
+    if (draftAgeMs > 1000 * 60 * 60 * 24 * 3) {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      return;
+    }
+
+    if (selectedNoticiaId !== null) return;
+
+    noticiaId.value = draft.noticiaId || noticiaId.value;
+    noticiaTitulo.value = draft.titulo || '';
+    noticiaAutor.value = draft.autor || 'Pedro Silva';
+    noticiaData.value = draft.data || noticiaData.value;
+    noticiaCategoria.value = draft.categoriaInput || '';
+    categoriasSelect.value = draft.categoriaSelect || '';
+    noticiaResumo.value = draft.resumo || '';
+    contentEditor.innerHTML = draft.conteudo || '';
+    noticiaVideo.value = draft.video || '';
+    noticiaSlug.value = draft.slug || '';
+
+    const scheduleMode = draft.scheduleMode === 'scheduled' ? 'scheduled' : 'immediate';
+    const radio = document.querySelector(`input[name="scheduling"][value="${scheduleMode}"]`);
+    if (radio) radio.checked = true;
+    schedulingFields.classList.toggle('active', scheduleMode === 'scheduled');
+    noticiaScheduleDate.value = draft.scheduleDate || '';
+    noticiaScheduleTime.value = draft.scheduleTime || '18:00';
+
+    updatePreviewContent();
+    updateQualityHints();
+    setDirty(true);
+    showStatus('Rascunho local restaurado automaticamente.', 'success');
+  } catch (error) {
+    console.warn('Falha ao restaurar rascunho local:', error);
+  }
+}
+
+function clearDraftAutosave() {
+  try {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+  } catch (_) {}
+}
+
+function togglePreview() {
+  previewEnabled = !previewEnabled;
+  editorLayout.classList.toggle('split', previewEnabled);
+  btnTogglePreview.classList.toggle('active', previewEnabled);
+  updatePreviewContent();
+}
+
+function insertImageHtml(src, altText) {
+  const safeAlt = String(altText || '').replace(/"/g, '&quot;');
+  const html = `<img src="${src}" alt="${safeAlt}" style="max-width:100%;height:auto;">`;
+  document.execCommand('insertHTML', false, html);
+}
+
+function applyFontFamily(fontValue) {
+  if (!fontValue) return;
+
+  restoreEditorRange();
+  document.execCommand('fontName', false, fontValue);
+  saveEditorRange();
+
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+}
+
+function normalizeEditorHtml(html) {
+  if (!html) return '';
+
+  const tmp = document.createElement('div');
+  tmp.innerHTML = String(html);
+
+  const disallowedTags = 'script,style,iframe,object,embed,form,input,button,textarea,select,option';
+  tmp.querySelectorAll(disallowedTags).forEach((node) => node.remove());
+
+  const allowedTags = new Set([
+    'p','br','strong','b','em','i','u','s','a','img','h2','h3','ul','ol','li',
+    'blockquote','pre','code','span','div','font'
+  ]);
+
+  const sanitizeStyle = (styleValue) => {
+    if (!styleValue) return '';
+    const allowed = new Set([
+      'font-size','line-height','text-align','font-weight','font-style','text-decoration',
+      'margin-left','margin-right','margin-top','margin-bottom','letter-spacing','font-family'
+    ]);
+    const clean = [];
+
+    String(styleValue).split(';').forEach((rule) => {
+      const [rawProp, rawVal] = rule.split(':');
+      if (!rawProp || !rawVal) return;
+      const prop = rawProp.trim().toLowerCase();
+      const val = rawVal.trim();
+      if (!allowed.has(prop)) return;
+      if (/expression\s*\(|url\s*\(|javascript:/i.test(val)) return;
+      clean.push(`${prop}:${val}`);
+    });
+
+    return clean.join(';');
+  };
+
+  const nodes = Array.from(tmp.querySelectorAll('*'));
+  nodes.forEach((el) => {
+    const tag = el.tagName.toLowerCase();
+
+    if (tag === 'font') {
+      const span = document.createElement('span');
+      const inlineStyles = [];
+      const face = el.getAttribute('face');
+
+      if (face) {
+        inlineStyles.push(`font-family:${face}`);
+      }
+      if (el.getAttribute('style')) {
+        inlineStyles.push(el.getAttribute('style'));
+      }
+
+      if (inlineStyles.length) {
+        const safeStyle = sanitizeStyle(inlineStyles.join(';'));
+        if (safeStyle) {
+          span.setAttribute('style', safeStyle);
+        }
+      }
+
+      span.innerHTML = el.innerHTML;
+      el.replaceWith(span);
+      return;
+    }
+
+    if (!allowedTags.has(tag)) {
+      while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+      el.remove();
+      return;
+    }
+
+    [...el.attributes].forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      const value = attr.value;
+
+      if (name.startsWith('on')) {
+        el.removeAttribute(attr.name);
+        return;
+      }
+
+      if (name === 'style') {
+        const safeStyle = sanitizeStyle(value);
+        if (safeStyle) {
+          el.setAttribute('style', safeStyle);
+        } else {
+          el.removeAttribute('style');
+        }
+        return;
+      }
+
+      if (tag === 'a' && name === 'href') {
+        if (/^javascript:/i.test(value)) {
+          el.removeAttribute('href');
+        }
+        return;
+      }
+
+      if (tag === 'a' && (name === 'target' || name === 'rel' || name === 'title')) {
+        return;
+      }
+
+      if (tag === 'img' && ['src','alt','title','width','height'].includes(name)) {
+        return;
+      }
+
+      el.removeAttribute(attr.name);
+    });
+
+    if (tag === 'a') {
+      if (!el.getAttribute('target')) el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener noreferrer');
+    }
+
+    if (tag === 'img') {
+      const currentStyle = el.getAttribute('style') || '';
+      const merged = `${currentStyle}${currentStyle ? ';' : ''}max-width:100%;height:auto`;
+      el.setAttribute('style', merged);
+    }
+
+    if (tag === 'div') {
+      const p = document.createElement('p');
+      p.innerHTML = el.innerHTML;
+      if (el.hasAttribute('style')) p.setAttribute('style', el.getAttribute('style'));
+      el.replaceWith(p);
+    }
+  });
+
+  tmp.querySelectorAll('b').forEach((el) => {
+    const strong = document.createElement('strong');
+    strong.innerHTML = el.innerHTML;
+    if (el.getAttribute('style')) strong.setAttribute('style', el.getAttribute('style'));
+    el.replaceWith(strong);
+  });
+
+  tmp.querySelectorAll('i').forEach((el) => {
+    const em = document.createElement('em');
+    em.innerHTML = el.innerHTML;
+    if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
+    el.replaceWith(em);
+  });
+
+  let result = tmp.innerHTML
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
+    .trim();
+
+  return result;
+}
+
+fontFamilySelect.addEventListener('change', () => {
+  const fontValue = fontFamilySelect.value;
+  applyFontFamily(fontValue);
+  fontFamilySelect.value = '';
+});
 
 document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
@@ -866,6 +1452,14 @@ document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
     document.execCommand('underline', false, null);
   } else if (id === 'btnHeading') {
     document.execCommand('formatBlock', false, 'h2');
+  } else if (id === 'btnSubHeading') {
+    document.execCommand('formatBlock', false, 'h3');
+  } else if (id === 'btnQuote') {
+    document.execCommand('formatBlock', false, 'blockquote');
+  } else if (id === 'btnListUl') {
+    document.execCommand('insertUnorderedList', false, null);
+  } else if (id === 'btnListOl') {
+    document.execCommand('insertOrderedList', false, null);
   } else if (id === 'btnCode') {
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
@@ -875,6 +1469,8 @@ document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
         document.execCommand('insertHTML', false, `<code>${sel.toString()}</code>`);
       }
     }
+  } else if (id === 'btnCodeBlock') {
+    document.execCommand('insertHTML', false, '<pre><code>cole o código aqui</code></pre><p></p>');
   } else if (id === 'btnLink') {
     const url = prompt('URL do link:');
     if (url) {
@@ -885,11 +1481,72 @@ document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
     const url = prompt('URL da imagem:');
     if (url) {
       const alt = prompt('Descrição da imagem (alt text):') || '';
-      document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt}" style="max-width:100%;height:auto;">`);
+      insertImageHtml(url, alt);
     }
+  } else if (id === 'btnUploadImage') {
+    imageUploadInput.click();
+  } else if (id === 'btnClearFormatting') {
+    document.execCommand('removeFormat', false, null);
+  } else if (id === 'btnTogglePreview') {
+    togglePreview();
   }
 
   saveEditorRange();
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+});
+
+imageUploadInput.addEventListener('change', () => {
+  const file = imageUploadInput.files && imageUploadInput.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    showStatus('Selecione um ficheiro de imagem válido.', 'error');
+    imageUploadInput.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    restoreEditorRange();
+    const alt = prompt('Descrição da imagem (alt text):') || file.name;
+    insertImageHtml(reader.result, alt);
+    saveEditorRange();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+  };
+  reader.readAsDataURL(file);
+  imageUploadInput.value = '';
+});
+
+document.addEventListener('keydown', (event) => {
+  if (!(event.ctrlKey || event.metaKey)) return;
+  const key = event.key.toLowerCase();
+
+  if (key === 's') {
+    event.preventDefault();
+    saveNoticia();
+  } else if (document.activeElement === contentEditor) {
+    if (key === 'b') {
+      event.preventDefault();
+      document.execCommand('bold', false, null);
+    } else if (key === 'i') {
+      event.preventDefault();
+      document.execCommand('italic', false, null);
+    } else if (key === 'u') {
+      event.preventDefault();
+      document.execCommand('underline', false, null);
+    } else if (key === 'k') {
+      event.preventDefault();
+      const url = prompt('URL do link:');
+      if (url) document.execCommand('createLink', false, url);
+    }
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+  }
 });
 
 // ===== SCHEDULING =====
@@ -900,14 +1557,25 @@ schedulingRadios.forEach(radio => {
     } else {
       schedulingFields.classList.remove('active');
     }
+    setDirty(true);
+    queueDraftAutosave();
   });
 });
 
 // ===== EDITOR CHAR COUNTER =====
 contentEditor.addEventListener('input', () => {
-  const charCount = contentEditor.innerText.length;
-  const counter = document.getElementById('charCount');
-  if (counter) counter.textContent = charCount;
+  updateQualityHints();
+  updatePreviewContent();
+  setDirty(true);
+  queueDraftAutosave();
+});
+
+[noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaSlug].forEach((field) => {
+  field.addEventListener('input', () => {
+    updateQualityHints();
+    setDirty(true);
+    queueDraftAutosave();
+  });
 });
 // ===== CATEGORIES FUNCTION =====
 const categoriasSelect = document.getElementById('categoriasSelect');
@@ -949,6 +1617,9 @@ categoriasSelect.addEventListener('change', () => {
   } else {
     noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
   }
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
 });
 
 function getCategoriaValue() {
@@ -1011,6 +1682,9 @@ function showAuthError(msg) {
 }
 
 btnLogout.addEventListener('click', () => {
+  if (isDirty && !confirm('Existem alterações por guardar. Sair sem guardar?')) {
+    return;
+  }
   auth.signOut().then(() => {
     currentUser = null;
   });
@@ -1024,6 +1698,11 @@ auth.onAuthStateChanged((user) => {
     authScreen.style.display = 'none';
     dashboard.classList.add('active');
     loadNoticias();
+    setTimeout(() => {
+      restoreDraftIfAvailable();
+      updateQualityHints();
+      updatePreviewContent();
+    }, 50);
   } else {
     currentUser = null;
     authScreen.style.display = 'flex';
@@ -1032,7 +1711,14 @@ auth.onAuthStateChanged((user) => {
     authPassword.value = '';
     allNoticias = [];
     selectedNoticiaId = null;
+    setDirty(false);
   }
+});
+
+window.addEventListener('beforeunload', (event) => {
+  if (!isDirty) return;
+  event.preventDefault();
+  event.returnValue = '';
 });
 
 // ===== NOTÍCIAS FUNCTIONS =====
@@ -1123,6 +1809,11 @@ function renderNoticiasList() {
 }
 
 function selectNoticia(id) {
+  if (isDirty && selectedNoticiaId !== id) {
+    const discard = confirm('Existem alterações por guardar. Deseja descartar e abrir outra notícia?');
+    if (!discard) return;
+  }
+
   selectedNoticiaId = id;
   const noticia = allNoticias.find(n => n.id == id);
   
@@ -1143,7 +1834,7 @@ function selectNoticia(id) {
       noticiaCategoria.value = cat;
     }
     noticiaResumo.value = noticia.resumo || '';
-    contentEditor.innerHTML = (noticia.conteudo || '').replace(/\n/g, '<br>');
+    contentEditor.innerHTML = noticia.conteudo || '';
     noticiaVideo.value = noticia.video || '';
     noticiaSlug.value = noticia.slug || '';
     
@@ -1163,12 +1854,20 @@ function selectNoticia(id) {
     emptyState.style.display = 'none';
     editorPanel.style.display = 'block';
     btnDelete.style.display = 'inline-block';
+    updatePreviewContent();
+    updateQualityHints();
+    setDirty(false);
   }
   
   renderNoticiasList();
 }
 
 btnNewNoticia.addEventListener('click', () => {
+  if (isDirty) {
+    const discard = confirm('Existem alterações por guardar. Criar nova notícia sem guardar as alterações atuais?');
+    if (!discard) return;
+  }
+
   selectedNoticiaId = null;
   const newId = String(Math.max(...allNoticias.map(n => parseInt(n.id) || 0), 0) + 1);
   
@@ -1193,11 +1892,15 @@ btnNewNoticia.addEventListener('click', () => {
   emptyState.style.display = 'none';
   editorPanel.style.display = 'block';
   btnDelete.style.display = 'none';
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(false);
+  restoreDraftIfAvailable();
   
   noticiaTitulo.focus();
 });
 
-noticiaTitulo.addEventListener('change', updateSlug);
+noticiaTitulo.addEventListener('input', updateSlug);
 function updateSlug() {
   if (selectedNoticiaId === null) {
     const slug = noticiaTitulo.value
@@ -1211,6 +1914,49 @@ function updateSlug() {
 }
 
 btnSave.addEventListener('click', saveNoticia);
+
+function isFirebasePermissionError(error) {
+  if (!error) return false;
+  const code = String(error.code || '').toUpperCase();
+  const message = String(error.message || '').toLowerCase();
+  return (
+    code.includes('PERMISSION_DENIED') ||
+    code.includes('PERMISSION-DENIED') ||
+    message.includes('permission denied') ||
+    message.includes('permission')
+  );
+}
+
+async function saveNoticiasWithAuthRetry(payload) {
+  const user = auth.currentUser;
+  if (!user) {
+    const authError = new Error('AUTH_REQUIRED');
+    authError.code = 'AUTH_REQUIRED';
+    throw authError;
+  }
+
+  try {
+    await user.getIdToken();
+  } catch (tokenError) {
+    console.warn('Falha ao obter token atual, a tentar renovar...', tokenError);
+  }
+
+  try {
+    await db.ref('noticias').set(payload);
+  } catch (error) {
+    if (!isFirebasePermissionError(error)) {
+      throw error;
+    }
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw error;
+    }
+
+    await currentUser.getIdToken(true);
+    await db.ref('noticias').set(payload);
+  }
+}
 
 async function saveNoticia() {
   if (!noticiaTitulo.value.trim()) {
@@ -1229,48 +1975,26 @@ async function saveNoticia() {
   const isNew = selectedNoticiaId === null;
   const id = noticiaId.value;
 
-  // Normalizar HTML do editor antes de guardar
-  function normalizeEditorHtml(html) {
-    if (!html) return '';
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
+  const tituloLen = noticiaTitulo.value.trim().length;
+  const resumoLen = noticiaResumo.value.trim().length;
+  const palavras = getEditorMetrics().words;
+  const validationNotes = [];
 
-    // <b> → <strong>
-    tmp.querySelectorAll('b').forEach(el => {
-      const strong = document.createElement('strong');
-      strong.innerHTML = el.innerHTML;
-      el.replaceWith(strong);
-    });
+  if (tituloLen < 45 || tituloLen > 70) {
+    validationNotes.push(`Título SEO fora do intervalo ideal (45-70). Atual: ${tituloLen}`);
+  }
+  if (resumoLen < 120 || resumoLen > 160) {
+    validationNotes.push(`Resumo SEO fora do intervalo ideal (120-160). Atual: ${resumoLen}`);
+  }
+  if (palavras < 180) {
+    validationNotes.push(`Conteúdo curto para SEO (ideal >= 180 palavras). Atual: ${palavras}`);
+  }
 
-    // <i> → <em>
-    tmp.querySelectorAll('i').forEach(el => {
-      const em = document.createElement('em');
-      em.innerHTML = el.innerHTML;
-      el.replaceWith(em);
-    });
-
-    // Remover <span> mas manter o conteúdo
-    tmp.querySelectorAll('span').forEach(el => {
-      while (el.firstChild) el.before(el.firstChild);
-      el.remove();
-    });
-
-    // <div> → quebra de linha (Chrome usa divs para Enter no contenteditable)
-    tmp.querySelectorAll('div').forEach(el => {
-      const br = document.createElement('br');
-      el.before(br);
-      while (el.firstChild) el.before(el.firstChild);
-      el.remove();
-    });
-
-    // Normalizar múltiplos <br> e limpar início/fim
-    let result = tmp.innerHTML
-      .replace(/(<br\s*\/?>){3,}/gi, '<br><br>')
-      .replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, '')
-      .replace(/&nbsp;/g, ' ')
-      .trim();
-
-    return result;
+  if (validationNotes.length > 0) {
+    const proceed = confirm(`Validação de conteúdo:\n- ${validationNotes.join('\n- ')}\n\nDeseja guardar mesmo assim?`);
+    if (!proceed) {
+      return;
+    }
   }
 
   const conteudoHtml = normalizeEditorHtml(contentEditor.innerHTML);
@@ -1304,8 +2028,8 @@ async function saveNoticia() {
       if (idx >= 0) allNoticias[idx] = noticiaObj;
     }
 
-    // Guardar no Firebase
-    await db.ref('noticias').set(allNoticias);
+    // Guardar no Firebase (com retry após renovação de token, se necessário)
+    await saveNoticiasWithAuthRetry(allNoticias);
     console.log('✅ Notícia guardada no Firebase com sucesso!');
     
     // Também tentar sincronizar com servidor local (se disponível)
@@ -1325,14 +2049,21 @@ async function saveNoticia() {
     );
     
     selectedNoticiaId = id;
+    contentEditor.innerHTML = conteudoHtml;
+    updatePreviewContent();
+    updateQualityHints();
     renderNoticiasList();
+    setDirty(false);
+    clearDraftAutosave();
     
   } catch (error) {
     console.error('Erro ao guardar:', error);
     
     let errorMsg = 'Erro ao guardar notícia';
     
-    if (error.code === 'PERMISSION_DENIED') {
+    if (error.code === 'AUTH_REQUIRED') {
+      errorMsg = 'Sessão expirada. Faça login novamente.';
+    } else if (error.code === 'PERMISSION_DENIED') {
       errorMsg = 'Erro de permissão: Não tem permissão para guardar. Verifique se está logado.';
     } else if (error.message && error.message.includes('permission')) {
       errorMsg = 'Erro de permissão no Firebase. Contacte o administrador.';
@@ -1359,7 +2090,7 @@ btnDelete.addEventListener('click', async () => {
       allNoticias.splice(idx, 1);
     }
 
-    await db.ref('noticias').set(allNoticias);
+    await saveNoticiasWithAuthRetry(allNoticias);
     
     showStatus('Notícia eliminada com sucesso!', 'success');
     
@@ -1377,9 +2108,15 @@ btnDelete.addEventListener('click', async () => {
 });
 
 btnCancel.addEventListener('click', () => {
+  if (isDirty) {
+    const discard = confirm('Descartar alterações não guardadas?');
+    if (!discard) return;
+  }
+
   selectedNoticiaId = null;
   emptyState.style.display = 'block';
   editorPanel.style.display = 'none';
+  setDirty(false);
 });
 
 function generateSlug(texto) {
