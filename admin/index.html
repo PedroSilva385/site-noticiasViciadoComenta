@@ -2021,6 +2021,9 @@ btnNewNoticia.addEventListener('click', () => {
     if (!discard) return;
   }
 
+  // Criar nova notícia deve abrir editor limpo, sem restaurar rascunhos antigos.
+  clearDraftAutosave();
+
   selectedNoticiaId = null;
   const newId = String(Math.max(...allNoticias.map(n => parseInt(n.id) || 0), 0) + 1);
   
@@ -2048,7 +2051,6 @@ btnNewNoticia.addEventListener('click', () => {
   updatePreviewContent();
   updateQualityHints();
   setDirty(false);
-  restoreDraftIfAvailable();
   
   noticiaTitulo.focus();
 });
