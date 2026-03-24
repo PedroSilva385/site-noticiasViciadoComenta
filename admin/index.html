@@ -1707,11 +1707,21 @@ contentEditor.addEventListener('input', () => {
 });
 
 contentEditor.addEventListener('paste', (event) => {
-  event.preventDefault();
-
   const clipboard = event.clipboardData || window.clipboardData;
-  const html = clipboard ? clipboard.getData('text/html') : '';
-  const text = clipboard ? clipboard.getData('text/plain') : '';
+  if (!clipboard) {
+    // Sem acesso à clipboard, deixa o browser executar a colagem padrão.
+    return;
+  }
+
+  const html = clipboard.getData('text/html') || '';
+  const text = clipboard.getData('text/plain') || '';
+
+  if (!html.trim() && !text.trim()) {
+    // Sem conteúdo legível, não bloquear o comportamento nativo.
+    return;
+  }
+
+  event.preventDefault();
 
   let sanitizedHtml = '';
   if (html && html.trim()) {
@@ -1723,12 +1733,19 @@ contentEditor.addEventListener('paste', (event) => {
   if (sanitizedHtml) {
     restoreEditorRange();
     document.execCommand('insertHTML', false, sanitizedHtml);
-    saveEditorRange();
-    updateQualityHints();
-    updatePreviewContent();
-    setDirty(true);
-    queueDraftAutosave();
+  } else if (text.trim()) {
+    // Fallback: cola texto simples se a normalização não produzir HTML.
+    restoreEditorRange();
+    document.execCommand('insertText', false, text);
+  } else {
+    return;
   }
+
+  saveEditorRange();
+  updateQualityHints();
+  updatePreviewContent();
+  setDirty(true);
+  queueDraftAutosave();
 });
 
 [noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaSlug].forEach((field) => {
