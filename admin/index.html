@@ -1869,7 +1869,6 @@ auth.onAuthStateChanged((user) => {
     startAuthKeepAlive();
     loadNoticias();
     setTimeout(() => {
-      restoreDraftIfAvailable();
       updateQualityHints();
       updatePreviewContent();
     }, 50);
