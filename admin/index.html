@@ -1563,6 +1563,42 @@ function normalizeDocsHtmlForEditor(html) {
   return normalizeEditorHtml(tmp.innerHTML);
 }
 
+function insertHtmlIntoEditor(html) {
+  const selection = window.getSelection();
+  if (!selection) {
+    contentEditor.innerHTML += html;
+    return;
+  }
+
+  let range = null;
+  if (selection.rangeCount > 0) {
+    range = selection.getRangeAt(0);
+  }
+
+  // Se não houver seleção válida no editor, coloca o cursor no fim.
+  if (!range || !contentEditor.contains(range.commonAncestorContainer)) {
+    contentEditor.focus();
+    range = document.createRange();
+    range.selectNodeContents(contentEditor);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  range.deleteContents();
+  const fragment = range.createContextualFragment(String(html || ''));
+  const lastNode = fragment.lastChild;
+  range.insertNode(fragment);
+
+  if (lastNode) {
+    range = document.createRange();
+    range.setStartAfter(lastNode);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+}
+
 fontFamilySelect.addEventListener('change', () => {
   const fontValue = fontFamilySelect.value;
   applyFontFamily(fontValue);
@@ -1730,16 +1766,22 @@ contentEditor.addEventListener('paste', (event) => {
     sanitizedHtml = normalizePlainTextToHtml(text);
   }
 
-  if (sanitizedHtml) {
-    restoreEditorRange();
-    document.execCommand('insertHTML', false, sanitizedHtml);
-  } else if (text.trim()) {
-    // Fallback: cola texto simples se a normalização não produzir HTML.
-    restoreEditorRange();
-    document.execCommand('insertText', false, text);
-  } else {
-    return;
+  if (!sanitizedHtml && html.trim()) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    const extractedText = (tmp.innerText || tmp.textContent || '').trim();
+    if (extractedText) {
+      sanitizedHtml = normalizePlainTextToHtml(extractedText);
+    }
   }
+
+  if (!sanitizedHtml && text.trim()) {
+    sanitizedHtml = normalizePlainTextToHtml(text);
+  }
+
+  if (!sanitizedHtml) return;
+
+  insertHtmlIntoEditor(sanitizedHtml);
 
   saveEditorRange();
   updateQualityHints();
