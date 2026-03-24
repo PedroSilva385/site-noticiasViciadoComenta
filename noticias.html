@@ -2172,21 +2172,37 @@ function getArticleIdentifierFromLocation() {
   let hashSlug = null;
   const hash = String(window.location.hash || '');
   const hashClean = hash.replace(/^#/, '');
-  const hashMatch = hashClean.match(/^\/([^/]+)\/([^/]+)$/);
+  const hashMatch = hashClean.match(/^\/([^/]+)(?:\/([^/]+))?$/);
   if (hashMatch) {
-    hashSlug = decodeURIComponent(hashMatch[1] || '');
-    hashId = decodeURIComponent(hashMatch[2] || '');
+    const part1 = decodeURIComponent(hashMatch[1] || '');
+    const part2 = decodeURIComponent(hashMatch[2] || '');
+    if (part2) {
+      hashSlug = part1;
+      hashId = part2;
+    } else if (/^\d+$/.test(part1)) {
+      hashId = part1;
+    } else {
+      hashSlug = part1;
+    }
   }
 
   let pathId = null;
   let pathSlug = null;
   const pathname = String(window.location.pathname || '');
   const cleanPath = pathname.replace(/\/+$/, '');
-  const match = cleanPath.match(/\/noticias\.html\/([^/]+)\/([^/]+)$/i);
+  const match = cleanPath.match(/\/noticias\.html\/([^/]+)(?:\/([^/]+))?$/i);
 
   if (match) {
-    pathSlug = decodeURIComponent(match[1] || '');
-    pathId = decodeURIComponent(match[2] || '');
+    const part1 = decodeURIComponent(match[1] || '');
+    const part2 = decodeURIComponent(match[2] || '');
+    if (part2) {
+      pathSlug = part1;
+      pathId = part2;
+    } else if (/^\d+$/.test(part1)) {
+      pathId = part1;
+    } else {
+      pathSlug = part1;
+    }
   }
 
   return {
@@ -2206,15 +2222,28 @@ function buildArticleUrlById(noticiaId) {
 }
 
 function buildArticleUrlByData(noticia) {
-  if (!noticia || typeof noticia.id === 'undefined' || noticia.id === null) {
+  if (!noticia || typeof noticia !== 'object') {
     return 'noticias.html';
   }
-  const id = String(noticia.id);
+
+  const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
+  const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
-  if (slug) {
+
+  if (slug && hasId) {
     return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
   }
-  return `noticias.html?id=${encodeURIComponent(id)}`;
+  if (slug) {
+    return `noticias.html#/${encodeURIComponent(slug)}`;
+  }
+  if (hasId) {
+    return `noticias.html?id=${encodeURIComponent(id)}`;
+  }
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
+  }
+
+  return 'noticias.html';
 }
 
 function parseNoticiaDateForSort(data) {
@@ -2949,10 +2978,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🆔 IDs disponíveis:', data.noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
+        const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
         const noticia = data.noticias.find(n => {
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
-          const slugMatch = noticiaSlug && getArticleSlug(n) === noticiaSlug;
+          const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
         });
         console.log('✅ Notícia encontrada:', noticia ? noticia.titulo : 'NENHUMA');
