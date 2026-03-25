@@ -17,6 +17,20 @@
       ".read": true,
       ".write": true
     },
+    "click_stats": {
+      ".read": true,
+      ".write": true,
+      "visitors": {
+        "$dateKey": {
+          "$visitorHash": {
+            ".validate": "newData.hasChildren(['total_clicks']) || !newData.exists()",
+            "total_clicks": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
+          }
+        }
+      }
+    },
     "likes": {
       ".read": true,
       "$noticiaId": {
