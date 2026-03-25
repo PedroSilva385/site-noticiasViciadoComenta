@@ -356,6 +356,68 @@ main {
   gap: 6px;
 }
 
+.artigo-quality-meta {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.artigo-quality-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eef5ff;
+  border: 1px solid #d5e6ff;
+  color: #1e3a8a;
+  font-size: 0.84em;
+  font-weight: 600;
+}
+
+.artigo-contexto-box,
+.artigo-fontes-box {
+  margin: 16px 0 20px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  background: #f8fbff;
+}
+
+.artigo-contexto-box h3,
+.artigo-fontes-box h3 {
+  margin: 0 0 8px;
+  font-size: 0.92em;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #1e3a8a;
+}
+
+.artigo-contexto-box p,
+.artigo-fontes-box p {
+  margin: 0;
+  font-size: 0.92em;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.artigo-fontes-box ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.artigo-fontes-box li {
+  margin-bottom: 6px;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
+
+.artigo-fontes-box a {
+  color: #0f3f93;
+  text-decoration: underline;
+}
+
 .artigo-conteudo {
   font-size: 1.2em;
   line-height: 1.9;
@@ -425,6 +487,33 @@ main {
   gap: 6px;
   color: #0066cc;
   font-weight: 600;
+}
+
+body.dark .artigo-quality-pill {
+  background: rgba(30, 64, 175, 0.2);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #bfdbfe;
+}
+
+body.dark .artigo-contexto-box,
+body.dark .artigo-fontes-box {
+  background: #0f172a;
+  border-color: #1e3a5f;
+}
+
+body.dark .artigo-contexto-box h3,
+body.dark .artigo-fontes-box h3 {
+  color: #93c5fd;
+}
+
+body.dark .artigo-contexto-box p,
+body.dark .artigo-fontes-box p,
+body.dark .artigo-fontes-box li {
+  color: #cbd5e1;
+}
+
+body.dark .artigo-fontes-box a {
+  color: #93c5fd;
 }
 
 .artigo-conteudo strong {
@@ -2163,6 +2252,87 @@ function getArticleSlug(noticia) {
   return slugifyTitulo((noticia && noticia.titulo) || '');
 }
 
+function escapeHtmlText(value) {
+  const div = document.createElement('div');
+  div.textContent = String(value || '');
+  return div.innerHTML;
+}
+
+function extractArticleSources(noticia) {
+  const sources = [];
+
+  const pushSource = (value) => {
+    const normalized = String(value || '').trim();
+    if (!normalized) return;
+    if (!sources.includes(normalized)) {
+      sources.push(normalized);
+    }
+  };
+
+  if (Array.isArray(noticia?.fontes)) {
+    noticia.fontes.forEach(pushSource);
+  } else if (typeof noticia?.fontes === 'string') {
+    noticia.fontes.split(/\n|;/).forEach(pushSource);
+  }
+
+  if (typeof noticia?.fonte === 'string') {
+    noticia.fonte.split(/\n|;/).forEach(pushSource);
+  }
+
+  if (typeof noticia?.link === 'string' && noticia.link.trim()) {
+    pushSource(noticia.link);
+  }
+
+  return sources.slice(0, 6);
+}
+
+function buildArticleQualityBlocks(noticia) {
+  const autor = String(noticia?.autor || 'Redacao Viciado Comenta').trim();
+  const atualizadoEm = [
+    noticia?.dataAtualizacao,
+    noticia?.dataPublicacao,
+    noticia?.updatedAt,
+    noticia?.atualizadoEm,
+    noticia?.data
+  ].find((value) => typeof value === 'string' && value.trim()) || '';
+
+  const contexto = String(
+    noticia?.contexto ||
+    noticia?.notaEditorial ||
+    'Esta analise foi produzida com base em informacao publica, observacao do mercado e contexto tecnico para apoiar a decisao do leitor.'
+  ).trim();
+
+  const sources = extractArticleSources(noticia);
+  const sourcesItems = sources.map((item) => {
+    if (/^https?:\/\//i.test(item)) {
+      const safeUrl = escapeHtmlText(item);
+      return `<li><a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${safeUrl}</a></li>`;
+    }
+    return `<li>${escapeHtmlText(item)}</li>`;
+  }).join('');
+
+  return {
+    qualityMetaHtml: `
+      <div class="artigo-quality-meta">
+        <span class="artigo-quality-pill">✍️ Autor: ${escapeHtmlText(autor)}</span>
+        <span class="artigo-quality-pill">🔄 Atualizado em: ${escapeHtmlText(atualizadoEm || 'Data editorial')}</span>
+      </div>
+    `,
+    contextoHtml: `
+      <section class="artigo-contexto-box" aria-label="Contexto editorial">
+        <h3>Contexto editorial</h3>
+        <p>${escapeHtmlText(contexto)}</p>
+      </section>
+    `,
+    fontesHtml: `
+      <section class="artigo-fontes-box" aria-label="Fontes da noticia">
+        <h3>Fontes e referencias</h3>
+        ${sourcesItems ? `<ul>${sourcesItems}</ul>` : '<p>Fontes editoriais e dados publicos analisados pela redacao.</p>'}
+      </section>
+    `
+  };
+}
+
 function getArticleIdentifierFromLocation() {
   const params = new URLSearchParams(window.location.search || '');
   const queryId = params.get('id');
@@ -3071,6 +3241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const numeroPalavras = conteudoCompleto.trim().split(/\s+/).length;
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
+        const qualityBlocks = buildArticleQualityBlocks(noticia);
         
         container.innerHTML = `
           <div class="artigo-header">
@@ -3081,11 +3252,14 @@ document.addEventListener('DOMContentLoaded', () => {
               <span>✍️ ${noticia.autor}</span>
               <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
+            ${qualityBlocks.qualityMetaHtml}
           </div>
           ${videoHTML}
           <div class="artigo-conteudo">
+            ${qualityBlocks.contextoHtml}
             <p><strong>${noticia.resumo}</strong></p>
             <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${qualityBlocks.fontesHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">
               <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
