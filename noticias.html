@@ -3082,19 +3082,32 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('Formato JSON inválido');
         }
 
-        triggerNewArticleNotification(data.noticias);
-        triggerPushAlerts(data.noticias);
-        
-        data.noticias.forEach((item) => {
-          window.articleSlugById[String(item.id)] = getArticleSlug(item);
+        const noticias = data.noticias.filter((item) => {
+          if (!item || typeof item !== 'object') return false;
+          const hasId = typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '';
+          const hasSlug = typeof item.slug === 'string' && item.slug.trim() !== '';
+          return hasId || hasSlug;
         });
 
-        console.log('🆔 IDs disponíveis:', data.noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        if (!noticias.length) {
+          throw new Error('Nenhuma notícia válida encontrada');
+        }
+
+        triggerNewArticleNotification(noticias);
+        triggerPushAlerts(noticias);
+        
+        noticias.forEach((item) => {
+          if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
+            window.articleSlugById[String(item.id)] = getArticleSlug(item);
+          }
+        });
+
+        console.log('🆔 IDs disponíveis:', noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = data.noticias.find(n => {
+        const noticia = noticias.find(n => {
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
@@ -3244,7 +3257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLikeCount(noticiaIdResolvido);
 
         // Secção de artigos relacionados
-        renderRelatedArticles(noticia, data.noticias || []);
+        renderRelatedArticles(noticia, noticias);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
@@ -3288,14 +3301,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sem ID: listar notícias em grelha
     fetchNoticiasAgendadas('data/noticias.json')
       .then(data => {
-        triggerNewArticleNotification(data.noticias || []);
-        triggerPushAlerts(data.noticias || []);
+        const noticias = Array.isArray(data && data.noticias)
+          ? data.noticias.filter((item) => item && typeof item === 'object')
+          : [];
+
+        triggerNewArticleNotification(noticias);
+        triggerPushAlerts(noticias);
+
+        if (!noticias.length) {
+          throw new Error('Nenhuma notícia válida encontrada');
+        }
+
         const parseDate = (str) => {
           if (!str) return 0;
           const [dia, mes, ano] = str.split('/').map(Number);
           return new Date(ano, mes - 1, dia).getTime();
         };
-        const noticiasOrdenadas = [...data.noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
+        const noticiasOrdenadas = [...noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
         const container = document.getElementById('artigo');
         container.innerHTML = `
           <div class="lista-header">
