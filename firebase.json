@@ -4,6 +4,26 @@
 	},
 	"hosting": {
 		"public": ".",
+		"headers": [
+			{
+				"source": "/admin/index.html",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "no-store, no-cache, must-revalidate"
+					}
+				]
+			},
+			{
+				"source": "/estatisticas.html",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "no-store, no-cache, must-revalidate"
+					}
+				]
+			}
+		],
 		"ignore": [
 			"firebase.json",
 			"**/.*",

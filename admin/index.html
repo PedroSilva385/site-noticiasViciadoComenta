@@ -136,6 +136,34 @@ body {
   align-items: center;
 }
 
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-right: 8px;
+}
+
+.admin-tab-btn {
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-tab-btn:hover {
+  border-color: #4f46e5;
+  color: #4338ca;
+}
+
+.admin-tab-btn.active {
+  background: #eef2ff;
+  border-color: #4f46e5;
+  color: #312e81;
+}
+
 .user-info {
   font-size: 0.9rem;
   color: #6b7280;
@@ -164,6 +192,58 @@ body {
   padding: 24px;
   display: flex;
   gap: 24px;
+}
+
+.panel-view {
+  display: none;
+  flex: 1;
+  width: 100%;
+}
+
+.panel-view.active {
+  display: flex;
+}
+
+.stats-shell {
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stats-toolbar {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.stats-toolbar .btn-inline {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #3730a3;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stats-toolbar .btn-inline:hover {
+  background: #e0e7ff;
+}
+
+.stats-frame {
+  width: 100%;
+  min-height: 78vh;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
 }
 
 .sidebar {
@@ -719,6 +799,22 @@ button {
 }
 
 @media (max-width: 1024px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header-right {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .admin-tabs {
+    width: 100%;
+    margin-right: 0;
+  }
+
   .container {
     flex-direction: column;
   }
@@ -789,12 +885,16 @@ button {
   <div class="header">
     <h1>📰 Painel Admin - Notícias</h1>
     <div class="header-right">
+      <div class="admin-tabs" role="tablist" aria-label="Abas do painel admin">
+        <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
+        <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
+      </div>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
       <button class="btn-logout" id="btnLogout">Sair</button>
     </div>
   </div>
 
-  <div class="container">
+  <div class="container panel-view active" id="newsView">
     <!-- SIDEBAR -->
     <div class="sidebar">
       <h2>Notícias</h2>
@@ -987,6 +1087,25 @@ button {
       </div>
     </div>
   </div>
+
+  <div class="panel-view" id="statsView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <div class="stats-toolbar">
+          <button type="button" class="btn-inline" id="btnReloadStats">Atualizar estatísticas</button>
+          <a class="btn-inline" href="../estatisticas.html" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
+        </div>
+        <iframe
+          id="statsFrame"
+          class="stats-frame"
+          src="../estatisticas.html"
+          title="Estatísticas do site"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Firebase SDK (Compat version for compatibility) -->
@@ -1063,6 +1182,7 @@ function stopAuthKeepAlive() {
 function applySignedOutUiState() {
   currentUser = null;
   stopAuthKeepAlive();
+  setAdminView('noticias');
   authScreen.style.display = 'flex';
   dashboard.classList.remove('active');
   try {
@@ -1091,11 +1211,43 @@ const authPassword = document.getElementById('authPassword');
 const authError = document.getElementById('authError');
 const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
+const adminTabNoticias = document.getElementById('adminTabNoticias');
+const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
+const newsView = document.getElementById('newsView');
+const statsView = document.getElementById('statsView');
+const statsFrame = document.getElementById('statsFrame');
+const btnReloadStats = document.getElementById('btnReloadStats');
 const noticiasList = document.getElementById('noticiasList');
 const btnNewNoticia = document.getElementById('btnNewNoticia');
 const status = document.getElementById('status');
 const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
+
+function setAdminView(viewName) {
+  const showStats = viewName === 'estatisticas';
+
+  adminTabNoticias.classList.toggle('active', !showStats);
+  adminTabEstatisticas.classList.toggle('active', showStats);
+  adminTabNoticias.setAttribute('aria-selected', showStats ? 'false' : 'true');
+  adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
+
+  newsView.classList.toggle('active', !showStats);
+  statsView.classList.toggle('active', showStats);
+  statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
+}
+
+adminTabNoticias.addEventListener('click', () => {
+  setAdminView('noticias');
+});
+
+adminTabEstatisticas.addEventListener('click', () => {
+  setAdminView('estatisticas');
+});
+
+btnReloadStats.addEventListener('click', () => {
+  const src = statsFrame.getAttribute('src') || '../estatisticas.html';
+  statsFrame.setAttribute('src', src);
+});
 
 try {
   const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY);
@@ -1916,6 +2068,7 @@ auth.onAuthStateChanged((user) => {
     userEmail.textContent = user.email;
     authScreen.style.display = 'none';
     dashboard.classList.add('active');
+    setAdminView('noticias');
     startAuthKeepAlive();
     loadNoticias();
     setTimeout(() => {

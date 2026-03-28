@@ -36,6 +36,7 @@ Write-Host "`nPreparando ficheiros para commit..." -ForegroundColor Yellow
 # Normalizar para LF e evitar warnings CRLF->LF no git add
 $filesToNormalize = @(
     'index.html',
+    'admin/index.html',
     'todas-noticias.html',
     'noticias.html',
     '404.html',
@@ -60,6 +61,7 @@ if (Test-Path 'artigos') {
 }
 
 git add index.html
+git add admin/index.html
 git add todas-noticias.html
 git add noticias.html
 git add 404.html
