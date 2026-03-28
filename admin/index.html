@@ -2135,11 +2135,6 @@ async function loadNoticias() {
     if (data) {
       // Firebase Realtime Database
       allNoticias = Array.isArray(data) ? data : Object.values(data);
-    } else {
-      // Fallback: carregar do JSON local via API
-      const response = await fetch('../data/noticias.json');
-      const jsonData = await response.json();
-      allNoticias = jsonData.noticias || [];
     }
 
     allNoticias = deduplicateNoticiasList(allNoticias);
