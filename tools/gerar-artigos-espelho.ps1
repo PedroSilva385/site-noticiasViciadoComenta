@@ -121,6 +121,71 @@ function Parse-DataPublicacao {
     return $null
 }
 
+function Get-YouTubeId {
+    param([string]$Url)
+
+    if ([string]::IsNullOrWhiteSpace($Url)) { return '' }
+
+    foreach ($pattern in @('youtu\.be/([A-Za-z0-9_-]{11})', '[?&]v=([A-Za-z0-9_-]{11})', 'youtube\.com/embed/([A-Za-z0-9_-]{11})', 'youtube\.com/shorts/([A-Za-z0-9_-]{11})')) {
+        $m = [regex]::Match($Url, $pattern)
+        if ($m.Success) { return $m.Groups[1].Value }
+    }
+
+    return ''
+}
+
+function Get-StaticArticleHtml {
+    param([object]$Noticia)
+
+    $titulo    = Escape-Html -Text ([string]$Noticia.titulo)
+    $categoria = Escape-Html -Text ([string]$Noticia.categoria)
+    $dataStr   = Escape-Html -Text ([string]$Noticia.data)
+    $autor     = Escape-Html -Text ([string]$Noticia.autor)
+    $resumo    = if ($Noticia.PSObject.Properties.Name -contains 'resumo')   { [string]$Noticia.resumo }   else { '' }
+    $conteudo  = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
+    $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
+
+    $wordCount  = [Math]::Max(1, (Strip-Html -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
+    $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
+    $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
+
+    $videoSection = ''
+    $videoId = Get-YouTubeId -Url $videoUrl
+    if (-not [string]::IsNullOrWhiteSpace($videoId)) {
+        $videoSection = @"
+
+          <div class="artigo-video">
+            <iframe id="videoFrame-article" src="https://www.youtube.com/embed/$videoId" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="$titulo" loading="lazy"></iframe>
+          </div>
+"@
+    }
+
+        $authorBioSection = @"
+
+                    <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunicacoes e analiso, junto da comunidade, as novidades e mudancas deste setor.</p>
+                    </aside>
+"@
+
+    return @"
+          <div class="artigo-header">
+            <span class="artigo-categoria">$categoria</span>
+            <h1 class="artigo-titulo">$titulo</h1>
+            <div class="artigo-meta">
+              <span>&#128197; $dataStr</span>
+              <span>&#9997;&#65039; $autor</span>
+              <span class="tempo-leitura">&#9201;&#65039; $tempoTexto de leitura</span>
+            </div>
+          </div>$videoSection
+          <div class="artigo-conteudo">
+            <p><strong>$resumo</strong></p>
+            <div id="artigoConteudoBody">$conteudo</div>
+                        $authorBioSection
+          </div>
+"@
+}
+
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $jsonPath = Join-Path $root 'data/noticias.json'
 $templatePath = Join-Path $root 'noticias.html'
@@ -314,6 +379,15 @@ foreach ($noticia in $noticias) {
 "@
 
     $content = $content -replace '</head>', "$seoMeta`n$bootstrapScript`n</head>"
+
+    # Injetar conteúdo estático pré-renderizado para SEO/AdSense (substitui placeholder "Notícia não encontrada")
+    $staticArticleBody = Get-StaticArticleHtml -Noticia $noticia
+    $safeStaticBody = $staticArticleBody.Replace('$', '$$')
+    $content = [regex]::Replace(
+        $content,
+        '(?s)<div\s+class="noticia-nao-encontrada">.*?</div>\s*</article>',
+        "$safeStaticBody`n  </article>"
+    )
 
     $outPath = Join-Path $artigosDir "$slug.html"
     [System.IO.File]::WriteAllText($outPath, $content, [System.Text.UTF8Encoding]::new($false))
