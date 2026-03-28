@@ -4,8 +4,31 @@
 
   const DEFAULT_OPTIONS = {
     pollIntervalMs: 120000,
-    fetchUrl: 'data/noticias.json'
+    fetchUrl: ''
   };
+
+  async function loadNoticias(options) {
+    if (typeof window.fetchNoticiasAgendadas === 'function') {
+      const data = await window.fetchNoticiasAgendadas();
+      return Array.isArray(data && data.noticias) ? data.noticias : [];
+    }
+
+    if (typeof firebase !== 'undefined' && firebase.database) {
+      const snapshot = await firebase.database().ref('noticias').once('value');
+      const raw = snapshot.val();
+      const noticias = Array.isArray(raw) ? raw : Object.values(raw || {});
+      return Array.isArray(noticias) ? noticias : [];
+    }
+
+    if (options.fetchUrl) {
+      const response = await fetch(options.fetchUrl, { cache: 'no-store' });
+      if (!response.ok) return [];
+      const data = await response.json();
+      return Array.isArray(data && data.noticias) ? data.noticias : [];
+    }
+
+    return [];
+  }
 
   function slugifyTitulo(titulo) {
     if (!titulo || typeof titulo !== 'string') return '';
@@ -209,11 +232,8 @@
 
   async function pollNewArticles(options, state) {
     try {
-      const response = await fetch(options.fetchUrl, { cache: 'no-store' });
-      if (!response.ok) return;
-
-      const data = await response.json();
-      const noticias = Array.isArray(data.noticias) ? data.noticias : [];
+      const noticias = await loadNoticias(options);
+      if (!Array.isArray(noticias) || noticias.length === 0) return;
 
       const now = Date.now();
       const newArticles = noticias
