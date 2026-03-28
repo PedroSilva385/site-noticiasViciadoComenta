@@ -307,23 +307,80 @@ document.addEventListener('DOMContentLoaded',()=>{initTheme();const btn=document
   </div>
 </nav>
 <main>
-  <h2 style="text-align:center; margin-bottom:20px;">Vídeos Recentes</h2>
-  <div class="video-grid">
-    <!-- Substituir VIDEO1..12 pelos links reais -->
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO1" frameborder="0" allowfullscreen></iframe><p>DIGI 1</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO2" frameborder="0" allowfullscreen></iframe><p>DIGI 2</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO3" frameborder="0" allowfullscreen></iframe><p>DIGI 3</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO4" frameborder="0" allowfullscreen></iframe><p>DIGI 4</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO5" frameborder="0" allowfullscreen></iframe><p>MERCADO 1</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO6" frameborder="0" allowfullscreen></iframe><p>MERCADO 2</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO7" frameborder="0" allowfullscreen></iframe><p>MERCADO 3</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO8" frameborder="0" allowfullscreen></iframe><p>MERCADO 4</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO9" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 1</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO10" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 2</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO11" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 3</p></div>
-    <div class="video-item"><iframe src="https://www.youtube.com/embed/VIDEO12" frameborder="0" allowfullscreen></iframe><p>NOTÍCIAS 4</p></div>
+  <h2 style="text-align:center; margin-bottom:8px;">Vídeos Recentes</h2>
+  <p style="text-align:center; margin-bottom:24px; color:rgba(255,255,255,0.85); font-size:0.95em;">Os vídeos mais recentes de todos os canais — Viciado Comenta, Viciado Ponto Crítico e Metin2.</p>
+  <div class="video-grid" id="videos-grid">
+    <p style="grid-column:1/-1; text-align:center; padding:40px; opacity:0.8;">A carregar vídeos...</p>
   </div>
 </main>
+
+<script>
+function extrairYouTubeId(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace('www.', '');
+    if (host === 'youtu.be') return (parsed.pathname.split('/').filter(Boolean)[0] || '').trim();
+    if (host.endsWith('youtube.com')) {
+      const v = parsed.searchParams.get('v');
+      if (v) return v.trim();
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      const idx = parts.findIndex(p => ['embed','live','shorts'].includes(p));
+      if (idx >= 0 && parts[idx + 1]) return parts[idx + 1].trim();
+    }
+  } catch (e) {}
+  const m = String(url).match(/(?:v=|youtu\.be\/|embed\/|live\/|shorts\/)([A-Za-z0-9_-]{6,})/i);
+  return m ? m[1] : '';
+}
+
+async function carregarTodosVideos() {
+  const grid = document.getElementById('videos-grid');
+  const fontes = [
+    { ficheiro: 'data/viciado-comenta-videos.json', label: 'Viciado Comenta' },
+    { ficheiro: 'data/viciado-ponto-critico-videos.json', label: 'Viciado: Ponto Crítico' },
+    { ficheiro: 'data/metin2-videos.json', label: 'Metin2' }
+  ];
+
+  try {
+    const resultados = await Promise.all(
+      fontes.map(f => fetch(f.ficheiro, { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : [])
+        .then(lista => lista.map(v => ({ url: typeof v === 'string' ? v : v.url, data: typeof v === 'object' && v.data ? v.data : '1970-01-01' })))
+        .catch(() => [])
+      )
+    );
+
+    let todos = resultados.flat();
+    todos = todos.filter(v => extrairYouTubeId(v.url));
+    todos.sort((a, b) => new Date(b.data) - new Date(a.data));
+    todos = todos.slice(0, 24);
+
+    if (!todos.length) {
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:40px;opacity:0.8;">Nenhum vídeo disponível.</p>';
+      return;
+    }
+
+    grid.innerHTML = todos.map(v => {
+      const id = extrairYouTubeId(v.url);
+      const thumb = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+      return `
+        <div class="video-item">
+          <a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;">
+            <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;border-radius:6px;overflow:hidden;">
+              <img src="${thumb}" alt="Vídeo YouTube" loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);">
+                <span style="font-size:2.5em;opacity:0.9;">▶</span>
+              </div>
+            </div>
+          </a>
+        </div>`;
+    }).join('');
+  } catch (err) {
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:40px;color:#f87171;">Erro ao carregar vídeos.</p>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', carregarTodosVideos);
+</script>
 <footer>
   <div class="footer-contacts">
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
