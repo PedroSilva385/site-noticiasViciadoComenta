@@ -520,11 +520,15 @@
 
     async function carregarNoticiasMap() {
       try {
-        const response = await fetch('data/noticias.json', { cache: 'no-store' });
-        if (!response.ok) return;
-        const data = await response.json();
-        if (!data || !Array.isArray(data.noticias)) return;
-        data.noticias.forEach((item) => {
+        const snapshot = await database.ref('noticias').once('value');
+        const rawNoticias = snapshot.val();
+        const noticias = Array.isArray(rawNoticias)
+          ? rawNoticias
+          : Object.values(rawNoticias || {});
+
+        if (!Array.isArray(noticias)) return;
+
+        noticias.forEach((item) => {
           noticiasMap[String(item.id)] = item.titulo || `Notícia ${item.id}`;
         });
       } catch (error) {

@@ -30,7 +30,7 @@ if (Test-Path $mirrorScript) {
     Write-Host "O deploy continuara sem regenerar /artigos." -ForegroundColor Yellow
 }
 
-# 2) Stage dos ficheiros relevantes (inclui noticias.json)
+# 2) Stage dos ficheiros relevantes
 Write-Host "`nPreparando ficheiros para commit..." -ForegroundColor Yellow
 
 # Normalizar para LF e evitar warnings CRLF->LF no git add
@@ -43,7 +43,6 @@ $filesToNormalize = @(
     'firebase.json',
     'sitemap.xml',
     'robots.txt',
-    'data/noticias.json',
     'data/viciado-comenta-videos.json',
     'data/viciado-ponto-critico-videos.json',
     'data/metin2-videos.json',
@@ -68,7 +67,6 @@ git add 404.html
 git add firebase.json
 git add sitemap.xml
 git add robots.txt
-git add data/noticias.json
 git add data/viciado-comenta-videos.json
 git add data/viciado-ponto-critico-videos.json
 git add data/metin2-videos.json
