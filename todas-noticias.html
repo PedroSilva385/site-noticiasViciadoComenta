@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artigos - VICIADO COMENTA</title>
-<meta name="description" content="Arquivo de artigos e notícias do VICIADO COMENTA com conteúdo original sobre telecomunicações, tecnologia e gaming.">
+<meta name="description" content="Arquivo de artigos e notÃ­cias do VICIADO COMENTA com conteÃºdo original sobre telecomunicaÃ§Ãµes, tecnologia e gaming.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" href="https://www.viciadocomenta.pt/todas-noticias.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="VICIADO COMENTA">
 <meta property="og:title" content="Artigos - VICIADO COMENTA">
-<meta property="og:description" content="Arquivo de artigos e notícias com análise editorial sobre telecom, tecnologia e gaming.">
+<meta property="og:description" content="Arquivo de artigos e notÃ­cias com anÃ¡lise editorial sobre telecom, tecnologia e gaming.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/todas-noticias.html">
 <meta property="og:locale" content="pt_PT">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Artigos - VICIADO COMENTA">
-<meta name="twitter:description" content="Arquivo de artigos e notícias com análise editorial sobre telecom, tecnologia e gaming.">
+<meta name="twitter:description" content="Arquivo de artigos e notÃ­cias com anÃ¡lise editorial sobre telecom, tecnologia e gaming.">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
@@ -170,7 +170,7 @@ nav a:hover {
 }
 
 .nav-dropdown > a::after {
-  content: '▼';
+  content: 'â–¼';
   font-size: 0.65em;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -945,8 +945,8 @@ footer {
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
     <div class="cookie-banner__content">
       <div class="cookie-banner__text">
-        Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
-        <a href="politica-privacidade.html">Política de Privacidade</a>.
+        Usamos cookies para medir audiÃªncias e melhorar a experiÃªncia. Pode aceitar ou recusar. Saiba mais em
+        <a href="politica-privacidade.html">PolÃ­tica de Privacidade</a>.
       </div>
       <div class="cookie-banner__actions">
         <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
@@ -999,7 +999,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <header>
   <h1>VICIADO COMENTA</h1>
-  <p class="header-subtitle">Análise e crítica de notícias</p>
+  <p class="header-subtitle">AnÃ¡lise e crÃ­tica de notÃ­cias</p>
   
   <div class="social-media">
     <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
@@ -1021,14 +1021,14 @@ document.addEventListener('DOMContentLoaded', () => {
 </header>
 
 <nav>
-  <a href="index.html">Início</a>
+  <a href="index.html">InÃ­cio</a>
   <a href="todas-noticias.html">Artigos</a>
-  <a href="sobre-nos.html">Sobre Nós</a>
+  <a href="sobre-nos.html">Sobre NÃ³s</a>
   <div class="nav-dropdown">
-    <a href="#">Conteúdos</a>
+    <a href="#">ConteÃºdos</a>
     <div class="dropdown-menu">
       <a href="viciado-comenta.html">Viciado Comenta</a>
-      <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
+      <a href="viciado-ponto-critico.html">Viciado - Ponto CrÃ­tico</a>
       <a href="metin2.html">Metin2</a>
       <a href="livestreams.html">Livestreams</a>
     </div>
@@ -1059,20 +1059,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <footer>
   <div class="footer-links">
-    <a href="sobre-nos.html">Sobre Nós</a>
-    <a href="politica-privacidade.html">Política de Privacidade</a>
-    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="sobre-nos.html">Sobre NÃ³s</a>
+    <a href="politica-privacidade.html">PolÃ­tica de Privacidade</a>
+    <a href="politica-privacidade.html#cookies">PolÃ­tica de Cookies</a>
     <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
   </div>
   <div class="footer-contacts">
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
   </div>
-  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+  <div class="footer-copy">Â© 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
 
 <script>
-// Carregar todas as notícias
+// Carregar todas as notÃ­cias
 let todasAsNoticias = [];
 
 function slugifyTitulo(titulo) {
@@ -1129,7 +1129,7 @@ fetchNoticiasAgendadas('data/noticias.json')
     
     todasAsNoticias = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
     
-    // Renderizar todas as notícias inicialmente
+    // Renderizar todas as notÃ­cias inicialmente
     renderizarNoticias(todasAsNoticias);
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
@@ -1143,26 +1143,26 @@ fetchNoticiasAgendadas('data/noticias.json')
       });
     }
     
-    // Adicionar event listeners aos botões de filtro
+    // Adicionar event listeners aos botÃµes de filtro
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        // Remover classe active de todos os botões
+        // Remover classe active de todos os botÃµes
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        // Adicionar classe active ao botão clicado
+        // Adicionar classe active ao botÃ£o clicado
         btn.classList.add('active');
         
         aplicarFiltros();
       });
     });
     
-    // Adicionar event listener para ordenação por data
+    // Adicionar event listener para ordenaÃ§Ã£o por data
     document.getElementById('dateSort').addEventListener('change', () => {
       aplicarFiltros();
     });
   })
-  .catch(err => console.error('Erro ao carregar notícias:', err));
+  .catch(err => console.error('Erro ao carregar notÃ­cias:', err));
 
-// Função para aplicar filtros de categoria e ordenação
+// FunÃ§Ã£o para aplicar filtros de categoria e ordenaÃ§Ã£o
 function aplicarFiltros() {
   const categoriaAtiva = document.querySelector('.filter-btn.active').getAttribute('data-categoria');
   const ordenacao = document.getElementById('dateSort').value;
@@ -1192,12 +1192,12 @@ function aplicarFiltros() {
   renderizarNoticias(noticiasFiltrares);
 }
 
-// Função para renderizar as notícias
+// FunÃ§Ã£o para renderizar as notÃ­cias
 function renderizarNoticias(noticias) {
   const container = document.getElementById('noticiasContainer');
   container.innerHTML = '';
   
-  // Função para extrair ID do YouTube
+  // FunÃ§Ã£o para extrair ID do YouTube
   function extrairVideoId(url) {
     if (!url) return '';
     const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
@@ -1206,7 +1206,7 @@ function renderizarNoticias(noticias) {
   }
   
   if (noticias.length === 0) {
-    container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhuma notícia encontrada nesta categoria.</p>';
+    container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhuma notÃ­cia encontrada nesta categoria.</p>';
     return;
   }
   
@@ -1215,12 +1215,12 @@ function renderizarNoticias(noticias) {
     let videoHTML = '';
     if (videoId) {
       videoHTML = `<div class="noticia-video" id="videoContainer-${noticia.id}">
-        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-${noticia.id}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
+        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vÃ­deo" id="thumbnail-${noticia.id}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
         <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-${noticia.id}" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
       </div>`;
     }
     
-    // Criar preview do conteúdo (primeiros 250 caracteres)
+    // Criar preview do conteÃºdo (primeiros 250 caracteres)
     const conteudoTexto = typeof noticia.conteudo === 'string' ? noticia.conteudo : '';
     const conteudoPreview = conteudoTexto.length > 250 
       ? conteudoTexto.substring(0, 250) + '...' 
@@ -1231,15 +1231,15 @@ function renderizarNoticias(noticias) {
     noticiaEl.innerHTML = `
       <div class="noticia-meta-header">
         <span class="noticia-categoria">${noticia.categoria}</span>
-        <span class="noticia-data">📅 ${noticia.data}</span>
-        <span class="noticia-autor">✍️ ${noticia.autor}</span>
+        <span class="noticia-data">ðŸ“… ${noticia.data}</span>
+        <span class="noticia-autor">âœï¸ ${noticia.autor}</span>
       </div>
       <h3 class="noticia-titulo">${noticia.titulo}</h3>
       <div class="noticia-resumo">${noticia.resumo}</div>
       ${videoHTML}
       <div class="noticia-conteudo">
         <p>${conteudoPreview}</p>
-        <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver Mais →</a>
+        <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver Mais â†’</a>
       </div>
       ${index < noticias.length - 1 ? '<div class="noticia-divider"></div>' : ''}
     `;
@@ -1263,3 +1263,4 @@ function renderizarNoticias(noticias) {
 
 </body>
 </html>
+
