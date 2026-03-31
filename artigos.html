@@ -3195,6 +3195,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
         const qualityBlocks = buildArticleQualityBlocks(noticia);
+        const autorNome = (typeof noticia.autor === 'string' && noticia.autor.trim()) ? noticia.autor.trim() : 'Pedro Silva';
+        const authorBioHtml = `
+          <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
+            <img src="assets/perfil.png" alt="${autorNome}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
+              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>${autorNome}</strong> - Sou um grande apaixonado pelo mundo das telecomunicacoes e analiso, junto da comunidade, as novidades e mudancas deste setor.</p>
+            </div>
+          </aside>
+        `;
         
         container.innerHTML = `
           <div class="artigo-header">
@@ -3202,7 +3212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h1 class="artigo-titulo">${noticia.titulo}</h1>
             <div class="artigo-meta">
               <span>📅 ${noticia.data}</span>
-              <span>✍️ ${noticia.autor}</span>
+              <span>✍️ ${autorNome}</span>
               <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
             ${qualityBlocks.qualityMetaHtml}
@@ -3211,6 +3221,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
             <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${authorBioHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">
               <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
