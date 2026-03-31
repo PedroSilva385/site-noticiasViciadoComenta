@@ -1,31 +1,31 @@
 {
-  "_INSTRUCOES": "Cole o texto do LibreOffice Writer diretamente no campo 'conteudo'. Cada linha vira um paragrafo. Podes ter espacos no inicio das linhas, o site remove automaticamente. IMPORTANTE: Troca aspas duplas por aspas simples.",
-  "noticias": [
-    {
-      "id": "2",
-      "titulo": "28/01/2026",
-      "data": "",
-      "autor": "Pedro Silva",
-      "categoria": "",
-      "resumo": "",
-      "conteudo": "E a operadora vencedora do prémio Escolha do Consumidor 2026, na categoria “Tarifários Móveis sem Fidelização”, foi…?
-                   Surpreendentemente nem DIGI, nem MEO, nem NOS, nem Vodafone… Foi a Lycamobile!
-                   Com um índice de satisfação global de 87,7%, a Lyca garantiu a vitória neste segmento em particular. 
-                   Numa altura em que o mercado das telecomunicações em Portugal está ao rubro, com os 3 tradicionais players (MEO, NOS e Vodafone) a lutar contra a nova entrante (DIGI), é muito interessante que uma MVNO (LycaMobile) consiga garantir uma pole position nesta luta pelo melhor serviço, numa categoria tão frágil como a dos Tarifários Móveis sem Fidelização.
-                   Vale a pena analisar, que a categoria em questão é uma das que maior competitividade tem, uma vez que se trata de um produto sem fidelização, o que garante um índice de mobilidade enorme, por parte dos consumidores em caso de problemas.
-                   Em suma, a LycaMobile a conseguir ganhar o seu espaço, rodeada de operadores em feroz concorrência, e com uma posição reduzida face à sua condição de MVNO. 
-                   Achas justa esta vitória?",
-      "video": ""
-    },
-    {
-      "id": "1",
-      "titulo": "MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...",
-      "data": "27/01/2026",
-      "autor": "Pedro Silva",
-      "categoria": "Mercado telecomunicações",
-      "resumo": "Neste vídeo analisamos a operadora vencedora da categoria de tarifário móvel sem fidelização, no prémio escolha do consumidor de 2026!",
-      "conteudo": "🎉 E o prémio Escolha do Consumidor 2026 na categoria 'Tarifários Móveis sem Fidelização' vai para…?\n\nSurpreendentemente, não foi a DIGI, nem a MEO, nem a NOS, nem sequer a Vodafone. A grande vencedora foi a Lycamobile!\n\nCom um impressionante índice de satisfação global de 87,7%, a Lyca conquistou o primeiro lugar neste segmento específico.\n\nNum momento em que o mercado das telecomunicações em Portugal está ao rubro — com os três operadores tradicionais (MEO, NOS e Vodafone) a enfrentarem a entrada agressiva da DIGI — é notável ver uma MVNO como a Lycamobile alcançar a liderança numa categoria tão sensível como a dos tarifários móveis sem fidelização.\n\nEsta categoria é, aliás, uma das mais competitivas do setor, precisamente por não exigir fidelização. Isso confere aos consumidores uma enorme liberdade para mudar de operador em caso de insatisfação, tornando a conquista da Lyca ainda mais relevante.\n\nEm suma, a Lycamobile conseguiu afirmar-se num espaço dominado por gigantes, com uma estrutura mais limitada e uma presença discreta — mas eficaz.\n\n👉 Achas justa esta vitória?",
-      "video": "https://youtu.be/E5jXjkJd-DI"
-    }
-  ]
+    "_INSTRUCOES":  "Cole o texto do LibreOffice Writer diretamente no campo \u0027conteudo\u0027. Cada linha vira um paragrafo. Podes ter espacos no inicio das linhas, o site remove automaticamente. IMPORTANTE: Troca aspas duplas por aspas simples.",
+    "noticias":  [
+                     {
+                         "id":  "2",
+                         "titulo":  "28/01/2026",
+                         "data":  "",
+                         "autor":  "Pedro Silva",
+                         "categoria":  "",
+                         "resumo":  "",
+                         "conteudo":  "E a operadora vencedora do prémio Escolha do Consumidor 2026, na categoria “Tarifários Móveis sem Fidelização”, foi…?\r\n                   Surpreendentemente nem DIGI, nem MEO, nem NOS, nem Vodafone… Foi a Lycamobile!\r\n                   Com um índice de satisfação global de 87,7%, a Lyca garantiu a vitória neste segmento em particular. \r\n                   Numa altura em que o mercado das telecomunicações em Portugal está ao rubro, com os 3 tradicionais players (MEO, NOS e Vodafone) a lutar contra a nova entrante (DIGI), é muito interessante que uma MVNO (LycaMobile) consiga garantir uma pole position nesta luta pelo melhor serviço, numa categoria tão frágil como a dos Tarifários Móveis sem Fidelização.\r\n                   Vale a pena analisar, que a categoria em questão é uma das que maior competitividade tem, uma vez que se trata de um produto sem fidelização, o que garante um índice de mobilidade enorme, por parte dos consumidores em caso de problemas.\r\n                   Em suma, a LycaMobile a conseguir ganhar o seu espaço, rodeada de operadores em feroz concorrência, e com uma posição reduzida face à sua condição de MVNO. \r\n                   Achas justa esta vitória?",
+                         "video":  "",
+                         "slug":  "28-01-2026",
+                         "link":  "https://www.viciadocomenta.pt/artigos/28-01-2026.html",
+                         "linkEditavel":  "https://www.viciadocomenta.pt/noticias.html?id=2\u0026slug=28-01-2026\u0026edit=1"
+                     },
+                     {
+                         "id":  "1",
+                         "titulo":  "MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...",
+                         "data":  "27/01/2026",
+                         "autor":  "Pedro Silva",
+                         "categoria":  "Mercado telecomunicações",
+                         "resumo":  "Neste vídeo analisamos a operadora vencedora da categoria de tarifário móvel sem fidelização, no prémio escolha do consumidor de 2026!",
+                         "conteudo":  "🎉 E o prémio Escolha do Consumidor 2026 na categoria \u0027Tarifários Móveis sem Fidelização\u0027 vai para…?\n\nSurpreendentemente, não foi a DIGI, nem a MEO, nem a NOS, nem sequer a Vodafone. A grande vencedora foi a Lycamobile!\n\nCom um impressionante índice de satisfação global de 87,7%, a Lyca conquistou o primeiro lugar neste segmento específico.\n\nNum momento em que o mercado das telecomunicações em Portugal está ao rubro — com os três operadores tradicionais (MEO, NOS e Vodafone) a enfrentarem a entrada agressiva da DIGI — é notável ver uma MVNO como a Lycamobile alcançar a liderança numa categoria tão sensível como a dos tarifários móveis sem fidelização.\n\nEsta categoria é, aliás, uma das mais competitivas do setor, precisamente por não exigir fidelização. Isso confere aos consumidores uma enorme liberdade para mudar de operador em caso de insatisfação, tornando a conquista da Lyca ainda mais relevante.\n\nEm suma, a Lycamobile conseguiu afirmar-se num espaço dominado por gigantes, com uma estrutura mais limitada e uma presença discreta — mas eficaz.\n\n👉 Achas justa esta vitória?",
+                         "video":  "https://youtu.be/E5jXjkJd-DI",
+                         "slug":  "melhor-tarifario-sem-fidelizacao-de-2026-e-da",
+                         "link":  "https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html",
+                         "linkEditavel":  "https://www.viciadocomenta.pt/noticias.html?id=1\u0026slug=melhor-tarifario-sem-fidelizacao-de-2026-e-da\u0026edit=1"
+                     }
+                 ]
 }

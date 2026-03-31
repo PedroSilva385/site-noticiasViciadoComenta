@@ -373,6 +373,41 @@ try {
                 continue
             }
 
+            # Static file handler
+            $staticFilePath = Join-Path $root ($path -replace '/', [System.IO.Path]::DirectorySeparatorChar)
+            $resolvedRoot = [System.IO.Path]::GetFullPath($root)
+            $resolvedFile = $null
+            try { $resolvedFile = [System.IO.Path]::GetFullPath($staticFilePath) } catch { }
+
+            if ($resolvedFile -and $resolvedFile.StartsWith($resolvedRoot + [System.IO.Path]::DirectorySeparatorChar) -and (Test-Path $resolvedFile -PathType Leaf)) {
+                $ext = [System.IO.Path]::GetExtension($resolvedFile).ToLowerInvariant()
+                $mimeType = switch ($ext) {
+                    '.html'  { 'text/html; charset=utf-8' }
+                    '.css'   { 'text/css; charset=utf-8' }
+                    '.js'    { 'application/javascript; charset=utf-8' }
+                    '.json'  { 'application/json; charset=utf-8' }
+                    '.png'   { 'image/png' }
+                    '.jpg'   { 'image/jpeg' }
+                    '.jpeg'  { 'image/jpeg' }
+                    '.gif'   { 'image/gif' }
+                    '.svg'   { 'image/svg+xml' }
+                    '.ico'   { 'image/x-icon' }
+                    '.woff'  { 'font/woff' }
+                    '.woff2' { 'font/woff2' }
+                    '.txt'   { 'text/plain; charset=utf-8' }
+                    '.xml'   { 'application/xml; charset=utf-8' }
+                    default  { 'application/octet-stream' }
+                }
+                $fileBytes = [System.IO.File]::ReadAllBytes($resolvedFile)
+                Add-CorsHeaders -Response $response
+                $response.StatusCode = 200
+                $response.ContentType = $mimeType
+                $response.ContentLength64 = $fileBytes.Length
+                $response.OutputStream.Write($fileBytes, 0, $fileBytes.Length)
+                $response.Close()
+                continue
+            }
+
             Write-JsonResponse -Response $response -StatusCode 404 -Payload @{ ok = $false; error = 'Endpoint não encontrado.' }
         }
         catch {
