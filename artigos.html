@@ -2048,6 +2048,7 @@ footer {
   <div class="footer-links">
     <a href="sobre-nos.html">Sobre Nós</a>
     <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="termos-servico.html">Termos de Serviço</a>
     <a href="politica-privacidade.html#cookies">Política de Cookies</a>
     <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
   </div>
@@ -3099,9 +3100,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (identificadorArtigo) {
     console.log('🔍 ID da URL:', noticiaId, '| slug da URL:', noticiaSlug);
-    fetchNoticiasAgendadas("data/noticias.json")
+    fetchNoticiasAgendadas()
       .then(data => {
-        console.log('📄 JSON recebido:', data);
+        console.log('📄 Firebase recebido:', data);
         console.log('📄 Notícias carregadas:', data.noticias ? data.noticias.length : 'NENHUMA');
         
         if (!data.noticias || !Array.isArray(data.noticias)) {
@@ -3305,7 +3306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   } else {
     // Sem ID: listar notícias em grelha
-    fetchNoticiasAgendadas('data/noticias.json')
+    fetchNoticiasAgendadas()
       .then(data => {
         triggerNewArticleNotification(data.noticias || []);
         triggerPushAlerts(data.noticias || []);
