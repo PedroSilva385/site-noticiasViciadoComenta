@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Fix Artigo 21 - LigaT</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background:#0f172a; color:#e2e8f0; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
+.box { background:#1e293b; border-radius:12px; padding:40px; max-width:480px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+h1 { font-size:1.4rem; color:#f8fafc; margin-bottom:8px; }
+p { color:#94a3b8; font-size:.9rem; margin-bottom:24px; }
+label { display:block; font-size:.85rem; color:#94a3b8; margin-bottom:6px; }
+input { width:100%; padding:10px 12px; background:#0f172a; border:1px solid #334155; border-radius:8px; color:#f1f5f9; font-size:.95rem; box-sizing:border-box; margin-bottom:16px; }
+button { width:100%; padding:12px; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:1rem; }
+button:hover { background:#2563eb; }
+button:disabled { background:#1d4ed8; opacity:.6; cursor:not-allowed; }
+.log { margin-top:20px; background:#0f172a; border-radius:8px; padding:14px; font-size:.82rem; font-family:monospace; min-height:60px; color:#7dd3fc; white-space:pre-wrap; word-break:break-word; }
+.ok { color:#4ade80; }
+.err { color:#f87171; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>🔧 Fix Artigo 21 — Link LigaT</h1>
+  <p>Corrige <code>href="https://"</code> → <code>href="https://ligat.pt/"</code> no Firebase.</p>
+  <label>Email admin</label>
+  <input type="email" id="email" value="" placeholder="admin@email.com">
+  <label>Password</label>
+  <input type="password" id="pass" placeholder="••••••••">
+  <button id="btnFix" onclick="runFix()">Aplicar correção no Firebase</button>
+  <div class="log" id="log">Aguardando...</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+  authDomain: "chat-viciadocomenta.firebaseapp.com",
+  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chat-viciadocomenta",
+  storageBucket: "chat-viciadocomenta.firebasestorage.app",
+  messagingSenderId: "183684670526",
+  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const auth = firebase.auth();
+
+function log(msg, cls) {
+  const el = document.getElementById('log');
+  el.className = 'log' + (cls ? ' ' + cls : '');
+  el.textContent = msg;
+}
+
+async function runFix() {
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('pass').value;
+  const btn = document.getElementById('btnFix');
+
+  if (!email || !pass) { log('Preenche email e password.', 'err'); return; }
+
+  btn.disabled = true;
+  log('A autenticar...');
+
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+    log('Autenticado. A ler notícias do Firebase...');
+
+    const snapshot = await db.ref('noticias').once('value');
+    const rawNoticias = snapshot.val();
+    const noticias = Array.isArray(rawNoticias) ? rawNoticias : Object.values(rawNoticias || {});
+
+    log(`${noticias.length} notícias carregadas. A procurar artigo 21...`);
+
+    const idx = noticias.findIndex(n => String(n.id) === '21');
+    if (idx === -1) { log('Artigo 21 não encontrado no Firebase!', 'err'); btn.disabled = false; return; }
+
+    const before = noticias[idx].conteudo || '';
+    const after = before.replace(/href="https:\/\/"/g, 'href="https://ligat.pt/"');
+
+    if (before === after) {
+      log('O link já está correto (https://ligat.pt/) — nada a fazer.', 'ok');
+      btn.disabled = false;
+      return;
+    }
+
+    noticias[idx].conteudo = after;
+    log('Link corrigido. A guardar no Firebase...');
+
+    await db.ref('noticias').set(noticias);
+    log('✅ Firebase atualizado com sucesso!\nhref="https://ligat.pt/" no artigo 21.', 'ok');
+
+    // Tentar sincronizar JSON local via servidor
+    try {
+      await fetch('/data/noticias.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ noticias })
+      });
+      log('✅ Firebase + JSON local atualizados com sucesso!', 'ok');
+    } catch (_) {
+      log('✅ Firebase atualizado.\n(JSON local não sincronizado — servidor não está ativo)', 'ok');
+    }
+  } catch (err) {
+    log('Erro: ' + err.message, 'err');
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
