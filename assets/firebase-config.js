@@ -400,6 +400,91 @@ function ensureFirebaseInitialized() {
   return Promise.resolve(true);
 }
 
+let deferredFirebaseWorkStarted = false;
+
+function scheduleDeferredFirebaseWork(callback) {
+  const runCallback = () => {
+    window.setTimeout(callback, 0);
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(runCallback, { timeout: 2000 });
+    return;
+  }
+
+  if (document.readyState === 'complete') {
+    runCallback();
+    return;
+  }
+
+  window.addEventListener('load', runCallback, { once: true });
+}
+
+function initializeDeferredFirebaseWork() {
+  if (deferredFirebaseWorkStarted) {
+    return;
+  }
+
+  deferredFirebaseWorkStarted = true;
+
+  try {
+    if (shouldSkipAnalyticsTracking()) {
+      console.log('ℹ️ Tracking de analytics desativado para este navegador/dispositivo');
+      return;
+    }
+
+    const db = firebase.database();
+    getVisitorFingerprint()
+      .then((visitorHash) => {
+        const shouldCountSessionVisit = shouldRegisterVisitForSession();
+        registerVisitMetrics(db, visitorHash, shouldCountSessionVisit)
+          .then(() => {
+            if (shouldCountSessionVisit) {
+              console.log('✓ Métricas de visita registadas (entrada na sessão)');
+            } else {
+              console.log('ℹ️ Navegação interna: sessão não recontada, página registada');
+            }
+          })
+          .catch((error) => {
+            console.error('❌ Erro ao registar métricas de visita:', error);
+          });
+
+        setupClickTracking(db, visitorHash);
+        console.log('✓ Tracking de cliques ativo');
+      })
+      .catch((error) => {
+        console.error('❌ Erro ao obter fingerprint de visitante:', error);
+      });
+
+    const userId = 'user_' + Math.random().toString(36).substr(2,9);
+    const activeUserRef = db.ref('active_users/' + userId);
+    activeUserRef.set({
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      page: window.location.pathname
+    });
+    activeUserRef.onDisconnect().remove();
+    window.addEventListener('beforeunload', () => activeUserRef.remove());
+
+    const sessionKey = 'vc_active_session_id';
+    let sessionId = sessionStorage.getItem(sessionKey);
+    if (!sessionId) {
+      sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+      sessionStorage.setItem(sessionKey, sessionId);
+    }
+
+    const historyEntryId = sessionId + '_' + Date.now();
+    db.ref('active_users_history/' + historyEntryId).set({
+      sessionId,
+      page: window.location.pathname,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
+
+    console.log('✓ Analytics configurado');
+  } catch (analyticsError) {
+    console.error('❌ Erro no analytics:', analyticsError);
+  }
+}
+
 // Inicializar Firebase
 function initializeFirebaseApp() {
   if (typeof firebase === 'undefined') {
@@ -419,65 +504,7 @@ function initializeFirebaseApp() {
       }
 
       console.log('✓ Firebase inicializado com sucesso');
-
-      // Analytics de visitas após inicialização
-      try {
-        if (shouldSkipAnalyticsTracking()) {
-          console.log('ℹ️ Tracking de analytics desativado para este navegador/dispositivo');
-          return;
-        }
-
-        const db = firebase.database();
-        getVisitorFingerprint()
-          .then((visitorHash) => {
-            const shouldCountSessionVisit = shouldRegisterVisitForSession();
-            registerVisitMetrics(db, visitorHash, shouldCountSessionVisit)
-              .then(() => {
-                if (shouldCountSessionVisit) {
-                  console.log('✓ Métricas de visita registadas (entrada na sessão)');
-                } else {
-                  console.log('ℹ️ Navegação interna: sessão não recontada, página registada');
-                }
-              })
-              .catch((error) => {
-                console.error('❌ Erro ao registar métricas de visita:', error);
-              });
-
-            setupClickTracking(db, visitorHash);
-            console.log('✓ Tracking de cliques ativo');
-          })
-          .catch((error) => {
-            console.error('❌ Erro ao obter fingerprint de visitante:', error);
-          });
-
-        const userId = 'user_' + Math.random().toString(36).substr(2,9);
-        const activeUserRef = db.ref('active_users/' + userId);
-        activeUserRef.set({
-          timestamp: firebase.database.ServerValue.TIMESTAMP,
-          page: window.location.pathname
-        });
-        activeUserRef.onDisconnect().remove();
-        window.addEventListener('beforeunload', () => activeUserRef.remove());
-
-        // Histórico persistente — regista cada página visitada
-        const sessionKey = 'vc_active_session_id';
-        let sessionId = sessionStorage.getItem(sessionKey);
-        if (!sessionId) {
-          sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
-          sessionStorage.setItem(sessionKey, sessionId);
-        }
-
-        const historyEntryId = sessionId + '_' + Date.now();
-        db.ref('active_users_history/' + historyEntryId).set({
-          sessionId,
-          page: window.location.pathname,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
-
-        console.log('✓ Analytics configurado');
-      } catch (analyticsError) {
-        console.error('❌ Erro no analytics:', analyticsError);
-      }
+      scheduleDeferredFirebaseWork(initializeDeferredFirebaseWork);
     } catch (error) {
       console.error('Erro ao inicializar Firebase:', error);
     }

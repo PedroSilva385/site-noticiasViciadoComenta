@@ -1509,8 +1509,51 @@ function togglePreview() {
 
 function insertImageHtml(src, altText) {
   const safeAlt = String(altText || '').replace(/"/g, '&quot;');
-  const html = `<img src="${src}" alt="${safeAlt}" style="max-width:100%;height:auto;">`;
+  const html = `<img src="${src}" alt="${safeAlt}" loading="lazy" decoding="async" style="max-width:100%;height:auto;">`;
   document.execCommand('insertHTML', false, html);
+}
+
+function isLocalStudioHost() {
+  const host = String(window.location.hostname || '').toLowerCase();
+  return host === 'localhost' || host === '127.0.0.1';
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Falha ao ler imagem localmente.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadImageViaLocalServer(file) {
+  if (!isLocalStudioHost()) {
+    throw new Error('Abra o admin pelo Noticias Studio local para fazer upload de imagens sem base64.');
+  }
+
+  const dataUrl = await readFileAsDataUrl(file);
+  const response = await fetch('/api/images/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fileName: file.name,
+      dataUrl
+    })
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    payload = null;
+  }
+
+  if (!response.ok || !payload || payload.ok === false || !payload.url) {
+    throw new Error((payload && payload.error) ? payload.error : `Upload falhou (${response.status})`);
+  }
+
+  return payload.url;
 }
 
 function applyFontFamily(fontValue) {
@@ -1632,7 +1675,7 @@ function normalizeEditorHtml(html) {
         return;
       }
 
-      if (tag === 'img' && ['src','alt','title','width','height'].includes(name)) {
+      if (tag === 'img' && ['src','alt','title','width','height','loading','decoding','fetchpriority'].includes(name)) {
         return;
       }
 
@@ -1849,18 +1892,27 @@ imageUploadInput.addEventListener('change', () => {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    restoreEditorRange();
-    const alt = prompt('Descrição da imagem (alt text):') || file.name;
-    insertImageHtml(reader.result, alt);
-    saveEditorRange();
-    updatePreviewContent();
-    setDirty(true);
-    queueDraftAutosave();
+  const finalizeUpload = async () => {
+    try {
+      showStatus('A carregar imagem para assets/imagens...', 'success');
+      const uploadedUrl = await uploadImageViaLocalServer(file);
+      restoreEditorRange();
+      const alt = prompt('Descrição da imagem (alt text):') || file.name;
+      insertImageHtml(uploadedUrl, alt);
+      saveEditorRange();
+      updatePreviewContent();
+      setDirty(true);
+      queueDraftAutosave();
+      showStatus('Imagem adicionada ao artigo com URL local.', 'success');
+    } catch (error) {
+      console.error('Erro no upload da imagem:', error);
+      showStatus(error.message || 'Não foi possível enviar a imagem sem base64.', 'error');
+    } finally {
+      imageUploadInput.value = '';
+    }
   };
-  reader.readAsDataURL(file);
-  imageUploadInput.value = '';
+
+  finalizeUpload();
 });
 
 document.addEventListener('keydown', (event) => {
@@ -2429,6 +2481,10 @@ async function saveNoticia() {
   }
 
   const conteudoHtml = normalizeEditorHtml(contentEditor.innerHTML);
+  if (/src\s*=\s*["']data:image\//i.test(conteudoHtml)) {
+    showStatus('Este artigo ainda contém imagens em base64. Refaça o upload pelo Noticias Studio local ou use URLs de imagem.', 'error');
+    return;
+  }
   
   const noticiaObj = {
     id: id,

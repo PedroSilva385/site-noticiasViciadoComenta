@@ -9,21 +9,21 @@
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html">
 <!-- Firebase Analytics -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-<script src="assets/firebase-config.js?v=20260209"></script>
-<script src="assets/news-scheduler.js"></script>
-<script src="assets/new-article-notification.js?v=20260301"></script>
-<script src="assets/push-notifications.js?v=20260301"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" defer></script>
+<script src="assets/firebase-config.js?v=20260209" defer></script>
+<script src="assets/news-scheduler.js" defer></script>
+<script src="assets/new-article-notification.js?v=20260301" defer></script>
+<script src="assets/push-notifications.js?v=20260301" defer></script>
 
 <!-- Markdown Parser -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
-<script src="assets/security.js"></script>
-<script src="assets/article-tts.js?v=20260312"></script>
+<script src="assets/security.js" defer></script>
+<script src="assets/article-tts.js?v=20260312" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -2481,6 +2481,23 @@ function normalizeBrokenLineWraps(html) {
 function sanitizeArticleInlineTypography(html) {
   if (!html) return '';
 
+  function isSafeArticleImageSource(value) {
+    if (!value) return false;
+
+    const normalized = String(value).trim();
+    if (!normalized) return false;
+
+    if (/^data:image\//i.test(normalized)) {
+      return true;
+    }
+
+    if (/^https?:/i.test(normalized)) {
+      return true;
+    }
+
+    return /^(?:\.\.\/|\.\/)?assets\/imagens\/[a-z0-9][a-z0-9._\/-]*$/i.test(normalized);
+  }
+
   const root = document.createElement('div');
   root.innerHTML = String(html);
 
@@ -2584,8 +2601,8 @@ function sanitizeArticleInlineTypography(html) {
         return;
       }
 
-      if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height'].includes(name)) {
-        if (name === 'src' && !/^(https?:|data:image\/)/i.test(value)) {
+      if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height', 'loading', 'decoding', 'fetchpriority'].includes(name)) {
+        if (name === 'src' && !isSafeArticleImageSource(value)) {
           el.removeAttribute('src');
         }
         return;
@@ -2603,6 +2620,9 @@ function sanitizeArticleInlineTypography(html) {
       const style = el.getAttribute('style') || '';
       const safeStyle = sanitizeStyle(`${style};max-width:100%;height:auto`);
       el.setAttribute('style', safeStyle || 'max-width:100%;height:auto');
+      if (!el.getAttribute('loading')) el.setAttribute('loading', 'lazy');
+      if (!el.getAttribute('decoding')) el.setAttribute('decoding', 'async');
+      if (!el.getAttribute('fetchpriority')) el.setAttribute('fetchpriority', 'low');
     }
 
     if (tag === 'div') {
