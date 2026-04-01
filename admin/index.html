@@ -1444,7 +1444,8 @@ function buildSitePreviewEditorUrl() {
 
   const slug = encodeURIComponent(payload.slug || payload.id);
   const id = encodeURIComponent(payload.id);
-  return `../artigos.html?edit=1&adminPreview=1#/${slug}/${id}`;
+  const previewTs = encodeURIComponent(String(payload.updatedAt || Date.now()));
+  return `../artigos.html?edit=1&adminPreview=1&previewTs=${previewTs}#/${slug}/${id}`;
 }
 
 function updateSitePreviewActionState() {
