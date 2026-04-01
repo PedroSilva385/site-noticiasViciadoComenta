@@ -400,12 +400,44 @@ body.dark .video-watch-btn.watched {
 /* FOOTER */
 footer {
   background: #1a1f3a;
-  border-top: 1px solid rgba(0, 102, 204, 0.2);
   text-align: center;
   padding: 40px 20px;
   margin-top: 80px;
   font-size: 0.9em;
+  color: #ffffff;
+}
+
+footer a {
+  color: #0066cc;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+footer a:hover {
+  color: #0052a3;
+  text-decoration: underline;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-links a {
   color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .footer-contacts {
