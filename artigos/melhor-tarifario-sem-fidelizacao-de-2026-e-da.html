@@ -2753,9 +2753,19 @@ function sanitizeArticleInlineTypography(html) {
 
   const allowedStyles = new Set([
     'line-height', 'text-align', 'font-weight', 'font-style',
-    'text-decoration', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+    'text-decoration', 'font-size', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
     'letter-spacing', 'color'
   ]);
+
+  const legacyFontSizeMap = {
+    '1': '0.8em',
+    '2': '0.9em',
+    '3': '1em',
+    '4': '1.15em',
+    '5': '1.3em',
+    '6': '1.5em',
+    '7': '1.8em'
+  };
 
   const sanitizeStyle = (styleText) => {
     if (!styleText) return '';
@@ -2774,6 +2784,15 @@ function sanitizeArticleInlineTypography(html) {
         if (/^[1-9]00$/.test(normalized) && parseInt(normalized, 10) > 700) return;
       }
 
+      if (prop === 'font-size') {
+        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
+        if (!match) return;
+        const amount = parseFloat(match[1]);
+        const unit = match[2].toLowerCase();
+        if (unit === 'px' && (amount < 12 || amount > 40)) return;
+        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
+      }
+
       safeRules.push(`${prop}:${val}`);
     });
     return safeRules.join(';');
@@ -2786,9 +2805,13 @@ function sanitizeArticleInlineTypography(html) {
       const span = document.createElement('span');
       const inlineStyles = [];
       const color = el.getAttribute('color');
+      const size = String(el.getAttribute('size') || '').trim();
 
       if (color) {
         inlineStyles.push(`color:${color}`);
+      }
+      if (legacyFontSizeMap[size]) {
+        inlineStyles.push(`font-size:${legacyFontSizeMap[size]}`);
       }
       const face = el.getAttribute('face');
       if (face) {
