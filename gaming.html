@@ -176,7 +176,10 @@ main {
 .twitch-container {
   width: 100%;
   max-width: 800px;
-  height: 450px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-height: 450px;
+  min-height: 220px;
   margin: 0 auto;
 }
 .twitch-container iframe {
@@ -240,8 +243,8 @@ footer {
     font-size: 1.8em;
   }
 
-  .twitch-embed {
-    height: 350px;
+  .twitch-container {
+    max-height: 350px;
   }
 
   footer {
@@ -306,8 +309,9 @@ footer {
     font-size: 1.4em;
   }
 
-  .twitch-embed {
-    height: 250px;
+  .twitch-container {
+    max-height: 250px;
+    min-height: 180px;
   }
 
   footer {
@@ -349,8 +353,9 @@ footer {
     font-size: 1.2em;
   }
 
-  .twitch-embed {
-    height: 200px;
+  .twitch-container {
+    max-height: 200px;
+    min-height: 160px;
   }
 
   footer {
