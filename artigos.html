@@ -438,6 +438,35 @@ main {
   display: inline;
 }
 
+.artigo-conteudo .article-comparison-list {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 22px;
+}
+
+.artigo-conteudo .article-comparison-item {
+  padding: 14px 16px;
+  border: 1px solid #dbeafe;
+  border-left: 4px solid #60a5fa;
+  border-radius: 14px;
+  background: #f8fbff;
+}
+
+.artigo-conteudo .article-comparison-label {
+  margin: 0 0 6px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.84em;
+  font-weight: 800;
+  color: #0f3f7a;
+}
+
+.artigo-conteudo .article-comparison-text {
+  margin: 0;
+  text-align: left;
+}
+
 .tempo-leitura {
   display: flex;
   align-items: center;
@@ -2467,6 +2496,129 @@ function normalizeBrokenLineWraps(html) {
     .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
 }
 
+function isComparisonLabelText(value) {
+  const text = String(value || '').replace(/\u00a0/g, ' ').trim();
+  if (!text || text.length > 28) return false;
+  if (/[.!?:]/.test(text)) return false;
+
+  const words = text.split(/\s+/).filter(Boolean);
+  if (!words.length || words.length > 3) return false;
+
+  return /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ0-9&+\-/ ]+$/.test(text)
+    || /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç0-9+\-/]*(?:\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç0-9+\-/]*){0,2}$/.test(text);
+}
+
+function buildComparisonBlockHtml(items) {
+  return `
+    <div class="article-comparison-list">
+      ${items.map((item) => `
+        <div class="article-comparison-item">
+          <p class="article-comparison-label">${escapeHtmlText(item.label)}</p>
+          <p class="article-comparison-text">${item.bodyHtml || applyInlineMarkdownTypography(item.body)}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function enhanceComparisonBlocks(html) {
+  if (!html) return '';
+
+  const root = document.createElement('div');
+  root.innerHTML = String(html);
+
+  let current = root.firstElementChild;
+  while (current) {
+    if (!current.matches('p')) {
+      current = current.nextElementSibling;
+      continue;
+    }
+
+    let probe = current;
+    const items = [];
+
+    while (probe && probe.matches('p')) {
+      const next = probe.nextElementSibling;
+      if (!next || !next.matches('p')) break;
+
+      const labelText = String(probe.textContent || '').replace(/\u00a0/g, ' ').trim();
+      const bodyText = String(next.textContent || '').replace(/\u00a0/g, ' ').trim();
+      const bodyHasBlocks = !!next.querySelector('img,figure,ul,ol,blockquote,pre,table');
+
+      if (!isComparisonLabelText(labelText) || !bodyText || bodyText.length < 24 || bodyHasBlocks || isComparisonLabelText(bodyText)) {
+        break;
+      }
+
+      items.push({
+        label: labelText,
+        bodyHtml: String(next.innerHTML || '').trim()
+      });
+
+      probe = next.nextElementSibling;
+    }
+
+    if (items.length >= 2) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = buildComparisonBlockHtml(items).trim();
+
+      let node = current;
+      while (node && node !== probe) {
+        const nextNode = node.nextElementSibling;
+        node.remove();
+        node = nextNode;
+      }
+
+      root.insertBefore(wrapper.firstElementChild, probe);
+      current = probe;
+      continue;
+    }
+
+    current = current.nextElementSibling;
+  }
+
+  return root.innerHTML;
+}
+
+function renderStructuredPlainText(content) {
+  const blocks = String(content || '')
+    .replace(/\n{3,}/g, '\n\n')
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+  if (!blocks.length) return '';
+
+  const parts = [];
+
+  for (let index = 0; index < blocks.length;) {
+    const items = [];
+    let cursor = index;
+
+    while (cursor + 1 < blocks.length) {
+      const label = blocks[cursor].replace(/\n+/g, ' ').trim();
+      const body = blocks[cursor + 1].replace(/\n+/g, ' ').trim();
+
+      if (!isComparisonLabelText(label) || !body || body.length < 24 || isComparisonLabelText(body)) {
+        break;
+      }
+
+      items.push({ label, body });
+      cursor += 2;
+    }
+
+    if (items.length >= 2) {
+      parts.push(buildComparisonBlockHtml(items));
+      index = cursor;
+      continue;
+    }
+
+    const paragraph = blocks[index++].replace(/\n+/g, ' ').trim();
+    parts.push(`<p>${applyInlineMarkdownTypography(paragraph)}</p>`);
+  }
+
+  return parts.join('');
+}
+
 function sanitizeArticleInlineTypography(html) {
   if (!html) return '';
 
@@ -2808,6 +2960,7 @@ function formatArticleContent(rawContent) {
   }
 
   // Detecta se tem Markdown
+      htmlContent = enhanceComparisonBlocks(htmlContent);
   const hasMarkdown = /\*\*|\*(?!\s)|__(?!\s)|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)|^#+\s|^-\s|^\d+\./m.test(content);
 
   if (hasMarkdown) {
@@ -2854,17 +3007,7 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  const paragraphToken = '__PARAGRAPH_BREAK__';
-  content = content
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\n\n+/g, paragraphToken)
-    .replace(/\n+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
-
-  content = normalizeBrokenLineWraps(content);
-  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
-  return content.trim();
+  return renderStructuredPlainText(content).trim();
 }
 
 function canUseLiveEditor() {
