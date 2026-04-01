@@ -531,18 +531,18 @@ body {
   overflow-y: auto;
   max-height: 420px;
   font-size: 1rem;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #3a3f5a;
 }
 
 .preview-body p {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   text-align: justify;
 }
 
 .preview-body ul,
 .preview-body ol {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   padding-left: 28px;
 }
 
@@ -571,6 +571,31 @@ body {
   height: auto;
   border-radius: 10px;
   margin: 14px 0;
+}
+
+.preview-body br {
+  display: inline;
+}
+
+.preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.preview-actions .btn-secondary {
+  width: 100%;
+  justify-content: center;
+}
+
+.preview-site-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #64748b;
 }
 
 .quality-grid {
@@ -1042,6 +1067,10 @@ button {
               <aside class="preview-pane" id="previewPane">
                 <div class="preview-header">Pré-visualização do artigo</div>
                 <div class="preview-body" id="contentPreview"></div>
+                <div class="preview-actions">
+                  <button type="button" class="btn-secondary" id="btnOpenSitePreview">Abrir no site para editar</button>
+                  <p class="preview-site-hint" id="previewSiteHint">Abre o artigo no layout real e devolve o texto editado ao painel quando carregares em guardar.</p>
+                </div>
               </aside>
             </div>
             <div class="editor-counter"><span id="charCount">0</span> caracteres • <span id="wordCount">0</span> palavras</div>
@@ -1295,6 +1324,8 @@ const fontFamilySelect = document.getElementById('fontFamilySelect');
 const btnTogglePreview = document.getElementById('btnTogglePreview');
 const editorLayout = document.getElementById('editorLayout');
 const contentPreview = document.getElementById('contentPreview');
+const btnOpenSitePreview = document.getElementById('btnOpenSitePreview');
+const previewSiteHint = document.getElementById('previewSiteHint');
 const qualityHints = document.getElementById('qualityHints');
 const wordCountEl = document.getElementById('wordCount');
 const readingTimeEl = document.getElementById('readingTime');
@@ -1306,7 +1337,10 @@ let savedRange = null;
 let previewEnabled = false;
 let isDirty = false;
 let autosaveTimer = null;
+let lastPreviewSyncTimestamp = 0;
 const DRAFT_STORAGE_KEY = 'admin-noticia-draft-v1';
+const SITE_PREVIEW_DRAFT_PREFIX = 'vc_admin_site_preview_';
+const SITE_PREVIEW_SYNC_PREFIX = 'vc_admin_site_sync_';
 
 if (typeof document.execCommand === 'function') {
   document.execCommand('defaultParagraphSeparator', false, 'p');
@@ -1358,6 +1392,98 @@ function updatePreviewContent() {
   if (!contentPreview) return;
   const html = normalizeEditorHtml(contentEditor.innerHTML || '');
   contentPreview.innerHTML = html || '<p style="color:#94a3b8;">Pré-visualização vazia.</p>';
+  updateSitePreviewActionState();
+}
+
+function getSitePreviewDraftKey(articleId) {
+  return `${SITE_PREVIEW_DRAFT_PREFIX}${String(articleId || '').trim()}`;
+}
+
+function getSitePreviewSyncKey(articleId) {
+  return `${SITE_PREVIEW_SYNC_PREFIX}${String(articleId || '').trim()}`;
+}
+
+function getCurrentSitePreviewPayload() {
+  const id = String(noticiaId.value || '').trim();
+  const titulo = noticiaTitulo.value.trim();
+
+  if (!id || !titulo || selectedNoticiaId === null) {
+    return null;
+  }
+
+  return {
+    id,
+    titulo,
+    resumo: noticiaResumo.value.trim(),
+    autor: noticiaAutor.value.trim(),
+    data: noticiaData.value.trim(),
+    categoria: getCategoriaValue(),
+    video: noticiaVideo.value.trim(),
+    slug: noticiaSlug.value.trim() || generateSlug(titulo),
+    conteudo: normalizeEditorHtml(contentEditor.innerHTML),
+    updatedAt: Date.now()
+  };
+}
+
+function persistSitePreviewPayload() {
+  const payload = getCurrentSitePreviewPayload();
+  if (!payload) return null;
+
+  try {
+    localStorage.setItem(getSitePreviewDraftKey(payload.id), JSON.stringify(payload));
+  } catch (error) {
+    console.warn('Falha ao preparar preview do site:', error);
+  }
+
+  return payload;
+}
+
+function buildSitePreviewEditorUrl() {
+  const payload = persistSitePreviewPayload();
+  if (!payload) return '';
+
+  const slug = encodeURIComponent(payload.slug || payload.id);
+  const id = encodeURIComponent(payload.id);
+  return `../artigos.html?edit=1&adminPreview=1#/${slug}/${id}`;
+}
+
+function updateSitePreviewActionState() {
+  if (!btnOpenSitePreview || !previewSiteHint) return;
+
+  const payload = getCurrentSitePreviewPayload();
+  const enabled = !!payload;
+
+  btnOpenSitePreview.disabled = !enabled;
+
+  if (enabled) {
+    previewSiteHint.textContent = 'Abre o artigo no layout real, permite editar o texto lá e devolve as alterações ao painel quando guardares.';
+    return;
+  }
+
+  previewSiteHint.textContent = 'Guarda ou seleciona primeiro uma notícia existente para abrir a edição diretamente no site.';
+}
+
+async function applySitePreviewSyncPayload(payload) {
+  if (!payload || !payload.articleId || !payload.html) return;
+  if (String(payload.articleId) !== String(noticiaId.value || '')) return;
+
+  const syncTimestamp = Number(payload.timestamp || Date.now());
+  if (syncTimestamp <= lastPreviewSyncTimestamp) return;
+  lastPreviewSyncTimestamp = syncTimestamp;
+
+  contentEditor.innerHTML = normalizeEditorHtml(payload.html);
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+
+  try {
+    await saveNoticia();
+    showStatus('Texto atualizado a partir do site e guardado no painel.', 'success');
+  } catch (error) {
+    console.error('Erro ao aplicar edição vinda do site:', error);
+    showStatus('Texto recebido do site, mas falhou o guardar automático. Use Guardar.', 'error');
+  }
 }
 
 function setDirty(value) {
@@ -1413,7 +1539,7 @@ function queueDraftAutosave() {
       categoriaInput: noticiaCategoria.value,
       categoriaSelect: categoriasSelect.value,
       resumo: noticiaResumo.value,
-      conteudo: contentEditor.innerHTML,
+      conteudo: normalizeEditorHtml(contentEditor.innerHTML),
       video: noticiaVideo.value,
       slug: noticiaSlug.value,
       scheduleMode: document.querySelector('input[name="scheduling"]:checked')?.value || 'immediate',
@@ -1470,7 +1596,7 @@ function restoreDraftIfAvailable() {
     noticiaCategoria.value = draft.categoriaInput || '';
     categoriasSelect.value = draft.categoriaSelect || '';
     noticiaResumo.value = draft.resumo || '';
-    contentEditor.innerHTML = draft.conteudo || '';
+    contentEditor.innerHTML = normalizeEditorHtml(draft.conteudo || '');
     noticiaVideo.value = draft.video || '';
     noticiaSlug.value = draft.slug || '';
 
@@ -1506,6 +1632,41 @@ function togglePreview() {
   btnTogglePreview.classList.toggle('active', previewEnabled);
   updatePreviewContent();
 }
+
+if (btnOpenSitePreview) {
+  btnOpenSitePreview.addEventListener('click', () => {
+    const targetUrl = buildSitePreviewEditorUrl();
+    if (!targetUrl) {
+      updateSitePreviewActionState();
+      return;
+    }
+
+    const previewWindow = window.open(targetUrl, 'vcSitePreviewEditor');
+    if (!previewWindow) {
+      showStatus('O browser bloqueou a abertura da página de preview no site.', 'error');
+    }
+  });
+}
+
+window.addEventListener('message', (event) => {
+  const data = event && event.data;
+  if (!data || data.type !== 'vc-admin-preview-save') return;
+  applySitePreviewSyncPayload(data.payload);
+});
+
+window.addEventListener('storage', (event) => {
+  if (!event || !event.key || !event.newValue) return;
+
+  const currentId = String(noticiaId.value || '').trim();
+  if (!currentId || event.key !== getSitePreviewSyncKey(currentId)) return;
+
+  try {
+    const payload = JSON.parse(event.newValue);
+    applySitePreviewSyncPayload(payload);
+  } catch (error) {
+    console.warn('Falha ao ler sincronização vinda do site:', error);
+  }
+});
 
 function insertImageHtml(src, altText) {
   const safeAlt = String(altText || '').replace(/"/g, '&quot;');
@@ -1574,6 +1735,7 @@ function normalizeEditorHtml(html) {
 
   const tmp = document.createElement('div');
   tmp.innerHTML = String(html);
+  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   const disallowedTags = 'script,style,iframe,object,embed,form,input,button,textarea,select,option';
   tmp.querySelectorAll(disallowedTags).forEach((node) => node.remove());
@@ -1713,6 +1875,38 @@ function normalizeEditorHtml(html) {
     em.innerHTML = el.innerHTML;
     if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
     el.replaceWith(em);
+  });
+
+  tmp.querySelectorAll('span, p, h2, h3').forEach((el) => {
+    if (!el.querySelector(blockLikeSelector)) return;
+
+    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return false;
+      }
+
+      return !node.matches(blockLikeSelector);
+    });
+
+    if (hasMeaningfulInlineContent) return;
+
+    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+    el.remove();
+  });
+
+  tmp.querySelectorAll('p, span').forEach((el) => {
+    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
+    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
+    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
+
+    if (hasRichContent) return;
+    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
+      el.remove();
+    }
   });
 
   // Converte negrito por estilo inline para <strong> para garantir persistência no live.
@@ -2246,7 +2440,7 @@ function selectNoticia(id) {
       noticiaCategoria.value = cat;
     }
     noticiaResumo.value = noticia.resumo || '';
-    contentEditor.innerHTML = noticia.conteudo || '';
+    contentEditor.innerHTML = normalizeDocsHtmlForEditor(noticia.conteudo || '');
     noticiaVideo.value = noticia.video || '';
     noticiaSlug.value = noticia.slug || '';
     
