@@ -839,6 +839,16 @@ body.dark .relacionado-link {
   cursor: pointer;
 }
 
+.live-edit-select {
+  border: 1px solid #dbe6f3;
+  background: #ffffff;
+  color: #1a1f3a;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
 .live-edit-btn:hover {
   border-color: #0066cc;
   color: #0066cc;
@@ -864,6 +874,12 @@ body.dark .relacionado-link {
 }
 
 body.dark .live-edit-btn {
+  background: #1a2332;
+  border-color: #2d3748;
+  color: #d1d5db;
+}
+
+body.dark .live-edit-select {
   background: #1a2332;
   border-color: #2d3748;
   color: #d1d5db;
@@ -2728,9 +2744,19 @@ function sanitizeArticleInlineTypography(html) {
 
   const allowedStyles = new Set([
     'line-height', 'text-align', 'font-weight', 'font-style',
-    'text-decoration', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+    'text-decoration', 'font-size', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
     'letter-spacing', 'color'
   ]);
+
+  const legacyFontSizeMap = {
+    '1': '0.8em',
+    '2': '0.9em',
+    '3': '1em',
+    '4': '1.15em',
+    '5': '1.3em',
+    '6': '1.5em',
+    '7': '1.8em'
+  };
 
   const sanitizeStyle = (styleText) => {
     if (!styleText) return '';
@@ -2747,6 +2773,15 @@ function sanitizeArticleInlineTypography(html) {
         const normalized = val.toLowerCase();
         if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
         if (/^[1-9]00$/.test(normalized) && parseInt(normalized, 10) > 700) return;
+      }
+
+      if (prop === 'font-size') {
+        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
+        if (!match) return;
+        const amount = parseFloat(match[1]);
+        const unit = match[2].toLowerCase();
+        if (unit === 'px' && (amount < 12 || amount > 40)) return;
+        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
       }
 
       safeRules.push(`${prop}:${val}`);
@@ -2766,9 +2801,13 @@ function sanitizeArticleInlineTypography(html) {
       const span = document.createElement('span');
       const inlineStyles = [];
       const color = el.getAttribute('color');
+      const size = String(el.getAttribute('size') || '').trim();
 
       if (color) {
         inlineStyles.push(`color:${color}`);
+      }
+      if (legacyFontSizeMap[size]) {
+        inlineStyles.push(`font-size:${legacyFontSizeMap[size]}`);
       }
       const face = el.getAttribute('face');
       if (face) {
@@ -3340,6 +3379,7 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   const contentBody = document.getElementById('artigoConteudoBody');
   const btnEdit = document.getElementById('btnLiveEdit');
   const btnBold = document.getElementById('btnLiveBold');
+  const fontSizeSelect = document.getElementById('liveFontSizeSelect');
   const btnLink = document.getElementById('btnLiveLink');
   const btnSave = document.getElementById('btnLiveSave');
   const btnCancel = document.getElementById('btnLiveCancel');
@@ -3347,15 +3387,50 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   const editNote = document.querySelector('.live-edit-note');
   const adminPreviewMode = isAdminPreviewMode();
 
-  if (!contentWrapper || !contentBody || !btnEdit || !btnBold || !btnLink || !btnSave || !btnCancel || !btnReset) return;
+  if (!contentWrapper || !contentBody || !btnEdit || !btnBold || !fontSizeSelect || !btnLink || !btnSave || !btnCancel || !btnReset) return;
 
   let baselineHtml = contentBody.innerHTML;
+  const legacyFontSizeMap = {
+    '1': '0.8em',
+    '2': '0.9em',
+    '3': '1em',
+    '4': '1.15em',
+    '5': '1.3em',
+    '6': '1.5em',
+    '7': '1.8em'
+  };
+
+  function convertLegacyFontTags(rootElement) {
+    if (!rootElement) return;
+
+    rootElement.querySelectorAll('font').forEach((fontEl) => {
+      const span = document.createElement('span');
+      const inlineStyles = [];
+      const size = String(fontEl.getAttribute('size') || '').trim();
+
+      if (legacyFontSizeMap[size]) {
+        inlineStyles.push(`font-size:${legacyFontSizeMap[size]}`);
+      }
+
+      if (fontEl.getAttribute('style')) {
+        inlineStyles.push(fontEl.getAttribute('style'));
+      }
+
+      span.innerHTML = fontEl.innerHTML;
+      if (inlineStyles.length) {
+        span.setAttribute('style', inlineStyles.join(';'));
+      }
+
+      fontEl.replaceWith(span);
+    });
+  }
 
   function setEditState(isEditing) {
     contentWrapper.classList.toggle('is-editing', isEditing);
     contentBody.contentEditable = isEditing ? 'true' : 'false';
     btnEdit.style.display = isEditing ? 'none' : 'inline-flex';
     btnBold.style.display = isEditing ? 'inline-flex' : 'none';
+    fontSizeSelect.style.display = isEditing ? 'inline-flex' : 'none';
     btnLink.style.display = isEditing ? 'inline-flex' : 'none';
     btnSave.style.display = isEditing ? 'inline-flex' : 'none';
     btnCancel.style.display = isEditing ? 'inline-flex' : 'none';
@@ -3370,6 +3445,16 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   btnBold.addEventListener('click', () => {
     contentBody.focus();
     document.execCommand('bold', false, null);
+  });
+
+  fontSizeSelect.addEventListener('change', () => {
+    const fontSizeValue = fontSizeSelect.value;
+    if (!fontSizeValue) return;
+
+    contentBody.focus();
+    document.execCommand('fontSize', false, fontSizeValue);
+    convertLegacyFontTags(contentBody);
+    fontSizeSelect.value = '';
   });
 
   btnLink.addEventListener('click', () => {
@@ -3651,6 +3736,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="live-edit-tools" id="liveEditTools">
               <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
               <button class="live-edit-btn" id="btnLiveBold" type="button" style="display:none;">𝐁 Negrito</button>
+              <select class="live-edit-select" id="liveFontSizeSelect" style="display:none;">
+                <option value="">Tamanho</option>
+                <option value="2">Pequeno</option>
+                <option value="3">Normal</option>
+                <option value="4">Grande</option>
+                <option value="5">Maior</option>
+                <option value="6">Destaque</option>
+              </select>
               <button class="live-edit-btn" id="btnLiveLink" type="button" style="display:none;">🔗 Hiperligação</button>
               <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">${isAdminPreviewMode() ? '💾 Guardar no painel' : '💾 Guardar edição'}</button>
               <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">↩️ Cancelar</button>

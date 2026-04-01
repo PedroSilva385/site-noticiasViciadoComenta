@@ -1020,6 +1020,14 @@ button {
                 <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet</option>
                 <option value="'Courier New', Courier, monospace">Courier New</option>
               </select>
+              <select id="fontSizeSelect" title="Tamanho da letra">
+                <option value="">Tamanho</option>
+                <option value="2">Pequeno</option>
+                <option value="3">Normal</option>
+                <option value="4">Grande</option>
+                <option value="5">Maior</option>
+                <option value="6">Destaque</option>
+              </select>
               <div class="toolbar-separator"></div>
               <button type="button" id="btnHeading" title="Título H2">
                 H2
@@ -1321,6 +1329,7 @@ const btnClearFormatting = document.getElementById('btnClearFormatting');
 const btnUploadImage = document.getElementById('btnUploadImage');
 const imageUploadInput = document.getElementById('imageUploadInput');
 const fontFamilySelect = document.getElementById('fontFamilySelect');
+const fontSizeSelect = document.getElementById('fontSizeSelect');
 const btnTogglePreview = document.getElementById('btnTogglePreview');
 const editorLayout = document.getElementById('editorLayout');
 const contentPreview = document.getElementById('contentPreview');
@@ -1341,6 +1350,15 @@ let lastPreviewSyncTimestamp = 0;
 const DRAFT_STORAGE_KEY = 'admin-noticia-draft-v1';
 const SITE_PREVIEW_DRAFT_PREFIX = 'vc_admin_site_preview_';
 const SITE_PREVIEW_SYNC_PREFIX = 'vc_admin_site_sync_';
+const LEGACY_FONT_SIZE_MAP = {
+  '1': '0.8em',
+  '2': '0.9em',
+  '3': '1em',
+  '4': '1.15em',
+  '5': '1.3em',
+  '6': '1.5em',
+  '7': '1.8em'
+};
 
 if (typeof document.execCommand === 'function') {
   document.execCommand('defaultParagraphSeparator', false, 'p');
@@ -1731,6 +1749,46 @@ function applyFontFamily(fontValue) {
   queueDraftAutosave();
 }
 
+function convertLegacyFontTags(rootElement) {
+  if (!rootElement) return;
+
+  rootElement.querySelectorAll('font').forEach((fontEl) => {
+    const span = document.createElement('span');
+    const inlineStyles = [];
+    const size = String(fontEl.getAttribute('size') || '').trim();
+    const mappedSize = LEGACY_FONT_SIZE_MAP[size];
+
+    if (mappedSize) {
+      inlineStyles.push(`font-size:${mappedSize}`);
+    }
+
+    if (fontEl.getAttribute('style')) {
+      inlineStyles.push(fontEl.getAttribute('style'));
+    }
+
+    if (inlineStyles.length) {
+      span.setAttribute('style', inlineStyles.join(';'));
+    }
+
+    span.innerHTML = fontEl.innerHTML;
+    fontEl.replaceWith(span);
+  });
+}
+
+function applyFontSize(fontSizeCommand) {
+  if (!fontSizeCommand) return;
+
+  restoreEditorRange();
+  document.execCommand('fontSize', false, fontSizeCommand);
+  convertLegacyFontTags(contentEditor);
+  saveEditorRange();
+
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+}
+
 function normalizeEditorHtml(html) {
   if (!html) return '';
 
@@ -1749,7 +1807,7 @@ function normalizeEditorHtml(html) {
   const sanitizeStyle = (styleValue) => {
     if (!styleValue) return '';
     const allowed = new Set([
-      'text-align','font-weight','font-style','text-decoration'
+      'text-align','font-weight','font-style','text-decoration','font-size'
     ]);
     const clean = [];
 
@@ -1768,6 +1826,15 @@ function normalizeEditorHtml(html) {
 
       if (prop === 'text-align' && !/^(left|right|center|justify)$/i.test(val)) return;
 
+      if (prop === 'font-size') {
+        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
+        if (!match) return;
+        const amount = parseFloat(match[1]);
+        const unit = match[2].toLowerCase();
+        if (unit === 'px' && (amount < 12 || amount > 40)) return;
+        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
+      }
+
       clean.push(`${prop}:${val}`);
     });
 
@@ -1781,10 +1848,14 @@ function normalizeEditorHtml(html) {
     if (tag === 'font') {
       const span = document.createElement('span');
       const inlineStyles = [];
+      const size = String(el.getAttribute('size') || '').trim();
       const face = el.getAttribute('face');
 
       if (face) {
         // Ignorado: fonte externa de colagem deve usar fonte padrão do site.
+      }
+      if (LEGACY_FONT_SIZE_MAP[size]) {
+        inlineStyles.push(`font-size:${LEGACY_FONT_SIZE_MAP[size]}`);
       }
       if (el.getAttribute('style')) {
         inlineStyles.push(el.getAttribute('style'));
@@ -2011,6 +2082,12 @@ fontFamilySelect.addEventListener('change', () => {
   const fontValue = fontFamilySelect.value;
   applyFontFamily(fontValue);
   fontFamilySelect.value = '';
+});
+
+fontSizeSelect.addEventListener('change', () => {
+  const fontSizeValue = fontSizeSelect.value;
+  applyFontSize(fontSizeValue);
+  fontSizeSelect.value = '';
 });
 
 document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
