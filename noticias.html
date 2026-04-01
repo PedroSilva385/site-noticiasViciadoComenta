@@ -379,12 +379,12 @@ main {
 
 .artigo-conteudo {
   font-size: 1.2em;
-  line-height: 1.9;
+  line-height: 1.72;
   color: #3a3f5a;
 }
 
 .artigo-conteudo p {
-  margin-bottom: 24px;
+  margin: 0 0 16px;
   text-align: justify;
 }
 
@@ -397,16 +397,16 @@ main {
 
 .artigo-conteudo ul,
 .artigo-conteudo ol {
-  margin: 0 0 24px;
+  margin: 0 0 18px;
   padding-left: 30px;
 }
 
 .artigo-conteudo li {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .artigo-conteudo blockquote {
-  margin: 22px 0;
+  margin: 18px 0;
   padding: 10px 16px;
   border-left: 4px solid #93c5fd;
   background: #eff6ff;
@@ -414,7 +414,7 @@ main {
 }
 
 .artigo-conteudo pre {
-  margin: 22px 0;
+  margin: 18px 0;
   padding: 14px;
   border-radius: 10px;
   overflow-x: auto;
@@ -435,9 +435,7 @@ main {
 }
 
 .artigo-conteudo br {
-  display: block;
-  content: "";
-  margin-top: 16px;
+  display: inline;
 }
 
 .tempo-leitura {
@@ -2252,6 +2250,7 @@ function getArticleIdentifierFromLocation() {
     } else {
       hashSlug = part1;
     }
+    }
   }
 
   let pathId = null;
@@ -2474,6 +2473,7 @@ function sanitizeArticleInlineTypography(html) {
 
   const root = document.createElement('div');
   root.innerHTML = String(html);
+  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   root.querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,option').forEach((node) => node.remove());
 
@@ -2621,6 +2621,40 @@ function sanitizeArticleInlineTypography(html) {
     em.innerHTML = el.innerHTML;
     if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
     el.replaceWith(em);
+  });
+
+  root.querySelectorAll('span, p, h2, h3').forEach((el) => {
+    if (!el.querySelector(blockLikeSelector)) return;
+
+    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return false;
+      }
+
+      return !node.matches(blockLikeSelector);
+    });
+
+    if (hasMeaningfulInlineContent) return;
+
+    while (el.firstChild) {
+      el.parentNode.insertBefore(el.firstChild, el);
+    }
+    el.remove();
+  });
+
+  root.querySelectorAll('p, span').forEach((el) => {
+    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
+    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
+    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
+
+    if (hasRichContent) return;
+    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
+      el.remove();
+    }
   });
 
   root.querySelectorAll('[style]').forEach((el) => {

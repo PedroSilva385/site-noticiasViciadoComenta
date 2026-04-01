@@ -379,12 +379,12 @@ main {
 
 .artigo-conteudo {
   font-size: 1.2em;
-  line-height: 1.9;
+  line-height: 1.72;
   color: #3a3f5a;
 }
 
 .artigo-conteudo p {
-  margin-bottom: 24px;
+  margin: 0 0 16px;
   text-align: justify;
 }
 
@@ -397,16 +397,16 @@ main {
 
 .artigo-conteudo ul,
 .artigo-conteudo ol {
-  margin: 0 0 24px;
+  margin: 0 0 18px;
   padding-left: 30px;
 }
 
 .artigo-conteudo li {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .artigo-conteudo blockquote {
-  margin: 22px 0;
+  margin: 18px 0;
   padding: 10px 16px;
   border-left: 4px solid #93c5fd;
   background: #eff6ff;
@@ -414,7 +414,7 @@ main {
 }
 
 .artigo-conteudo pre {
-  margin: 22px 0;
+  margin: 18px 0;
   padding: 14px;
   border-radius: 10px;
   overflow-x: auto;
@@ -435,9 +435,7 @@ main {
 }
 
 .artigo-conteudo br {
-  display: block;
-  content: "";
-  margin-top: 16px;
+  display: inline;
 }
 
 .tempo-leitura {
@@ -2252,6 +2250,7 @@ function getArticleIdentifierFromLocation() {
     } else {
       hashSlug = part1;
     }
+    }
   }
 
   let pathId = null;
@@ -2474,6 +2473,7 @@ function sanitizeArticleInlineTypography(html) {
 
   const root = document.createElement('div');
   root.innerHTML = String(html);
+  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   root.querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,option').forEach((node) => node.remove());
 
@@ -2621,6 +2621,40 @@ function sanitizeArticleInlineTypography(html) {
     em.innerHTML = el.innerHTML;
     if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
     el.replaceWith(em);
+  });
+
+  root.querySelectorAll('span, p, h2, h3').forEach((el) => {
+    if (!el.querySelector(blockLikeSelector)) return;
+
+    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return false;
+      }
+
+      return !node.matches(blockLikeSelector);
+    });
+
+    if (hasMeaningfulInlineContent) return;
+
+    while (el.firstChild) {
+      el.parentNode.insertBefore(el.firstChild, el);
+    }
+    el.remove();
+  });
+
+  root.querySelectorAll('p, span').forEach((el) => {
+    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
+    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
+    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
+
+    if (hasRichContent) return;
+    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
+      el.remove();
+    }
   });
 
   root.querySelectorAll('[style]').forEach((el) => {
@@ -2840,6 +2874,70 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
+function isAdminPreviewMode() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('adminPreview') === '1';
+}
+
+function getAdminPreviewDraftKey(noticiaId) {
+  return `vc_admin_site_preview_${String(noticiaId || '').trim()}`;
+}
+
+function getAdminPreviewSyncKey(noticiaId) {
+  return `vc_admin_site_sync_${String(noticiaId || '').trim()}`;
+}
+
+function getAdminPreviewDraft(noticiaId) {
+  try {
+    const raw = localStorage.getItem(getAdminPreviewDraftKey(noticiaId));
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    console.warn('Não foi possível ler o draft vindo do painel:', error);
+    return null;
+  }
+}
+
+function saveAdminPreviewDraft(noticiaId, payload) {
+  try {
+    localStorage.setItem(getAdminPreviewDraftKey(noticiaId), JSON.stringify(payload || {}));
+  } catch (error) {
+    console.warn('Não foi possível atualizar o draft do painel:', error);
+  }
+}
+
+function syncAdminPreviewSave(noticiaId, html) {
+  const timestamp = Date.now();
+  const existingDraft = getAdminPreviewDraft(noticiaId) || {};
+  const nextDraft = {
+    ...existingDraft,
+    conteudo: String(html || '').trim(),
+    updatedAt: timestamp
+  };
+  const syncPayload = {
+    articleId: String(noticiaId || '').trim(),
+    html: String(html || '').trim(),
+    timestamp
+  };
+
+  saveAdminPreviewDraft(noticiaId, nextDraft);
+
+  try {
+    localStorage.setItem(getAdminPreviewSyncKey(noticiaId), JSON.stringify(syncPayload));
+  } catch (error) {
+    console.warn('Não foi possível publicar sincronização para o painel:', error);
+  }
+
+  try {
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage({ type: 'vc-admin-preview-save', payload: syncPayload }, window.location.origin);
+    }
+  } catch (error) {
+    console.warn('Não foi possível comunicar diretamente com o painel:', error);
+  }
+
+  return syncPayload;
+}
+
 let studioApiBaseCache = null;
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 6000) {
@@ -3012,6 +3110,7 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   const btnCancel = document.getElementById('btnLiveCancel');
   const btnReset = document.getElementById('btnLiveReset');
   const editNote = document.querySelector('.live-edit-note');
+  const adminPreviewMode = isAdminPreviewMode();
 
   if (!contentWrapper || !contentBody || !btnEdit || !btnBold || !btnLink || !btnSave || !btnCancel || !btnReset) return;
 
@@ -3068,9 +3167,20 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
     }
 
     btnSave.disabled = true;
-    btnSave.textContent = '⏳ A guardar...';
+    btnSave.textContent = adminPreviewMode ? '⏳ A devolver...' : '⏳ A guardar...';
 
     try {
+      if (adminPreviewMode) {
+        syncAdminPreviewSave(noticiaId, editedHtml);
+        saveLiveEditedContent(noticiaId, editedHtml);
+        baselineHtml = editedHtml;
+        setEditState(false);
+        if (editNote) {
+          editNote.textContent = 'Alterações devolvidas ao painel de admin. O painel trata do resto.';
+        }
+        return;
+      }
+
       const result = await saveArticleContentToJson(noticiaId, editedHtml);
       saveLiveEditedContent(noticiaId, editedHtml);
       baselineHtml = editedHtml;
@@ -3088,7 +3198,7 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
       }
     } finally {
       btnSave.disabled = false;
-      btnSave.textContent = '💾 Guardar edição';
+      btnSave.textContent = adminPreviewMode ? '💾 Guardar no painel' : '💾 Guardar edição';
     }
   });
 
@@ -3197,7 +3307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = data.noticias.find(n => {
+        let noticia = data.noticias.find(n => {
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
@@ -3206,6 +3316,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (noticia) {
         const noticiaIdResolvido = String(noticia.id);
+        const adminPreviewDraft = isAdminPreviewMode() ? getAdminPreviewDraft(noticiaIdResolvido) : null;
+        if (adminPreviewDraft && typeof adminPreviewDraft === 'object') {
+          noticia = { ...noticia, ...adminPreviewDraft };
+        }
         window.currentArticleId = noticiaIdResolvido;
         incrementArticleReadCount(noticiaIdResolvido);
 
@@ -3260,7 +3374,7 @@ document.addEventListener('DOMContentLoaded', () => {
           conteudoHTML = formatArticleContent(noticia.conteudo);
         }
 
-        const savedLiveContent = getLiveEditedContent(noticiaIdResolvido);
+        const savedLiveContent = isAdminPreviewMode() ? null : getLiveEditedContent(noticiaIdResolvido);
         if (savedLiveContent) {
           conteudoHTML = savedLiveContent;
         }
@@ -3303,10 +3417,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
               <button class="live-edit-btn" id="btnLiveBold" type="button" style="display:none;">𝐁 Negrito</button>
               <button class="live-edit-btn" id="btnLiveLink" type="button" style="display:none;">🔗 Hiperligação</button>
-              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">💾 Guardar edição</button>
+              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">${isAdminPreviewMode() ? '💾 Guardar no painel' : '💾 Guardar edição'}</button>
               <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">↩️ Cancelar</button>
               <button class="live-edit-btn" id="btnLiveReset" type="button">🧹 Repor original</button>
-              <div class="live-edit-note">Modo de edição ativo (guardar escreve no noticias.json via servidor local).</div>
+              <div class="live-edit-note">${isAdminPreviewMode() ? 'Modo preview do painel ativo (guardar devolve o texto ao admin).' : 'Modo de edição ativo (guardar escreve no noticias.json via servidor local).'}</div>
             </div>
             ` : ''}
           </div>
