@@ -2530,6 +2530,62 @@ function buildComparisonBlockHtml(items) {
   `;
 }
 
+function getComparisonLabelFromList(listElement) {
+  if (!listElement || !listElement.matches('ul,ol')) return '';
+
+  const items = Array.from(listElement.children).filter((child) => child.matches('li'));
+  if (items.length !== 1) return '';
+
+  return String(items[0].textContent || '').replace(/\u00a0/g, ' ').trim();
+}
+
+function collectComparisonBodyFromSiblings(startNode) {
+  const bodyNodes = [];
+  let cursor = startNode;
+
+  while (cursor) {
+    if (cursor.matches && cursor.matches('ul,ol,h1,h2,h3,h4,h5,h6,figure,img,blockquote,pre,table,hr')) {
+      break;
+    }
+
+    if (cursor.matches && cursor.matches('p') && cursor.querySelector('img,figure,ul,ol,blockquote,pre,table')) {
+      break;
+    }
+
+    if (cursor.matches && cursor.matches('span,p,div')) {
+      const textContent = String(cursor.textContent || '').replace(/\u00a0/g, ' ').trim();
+      if (textContent) {
+        bodyNodes.push(cursor);
+      } else if (cursor.matches('p')) {
+        break;
+      }
+    } else {
+      break;
+    }
+
+    cursor = cursor.nextElementSibling;
+  }
+
+  const bodyText = bodyNodes
+    .map((node) => String(node.textContent || '').replace(/\u00a0/g, ' ').trim())
+    .filter(Boolean)
+    .join(' ')
+    .trim();
+
+  const bodyHtml = bodyNodes
+    .map((node) => String(node.innerHTML || '').trim())
+    .filter(Boolean)
+    .join(' ')
+    .trim();
+
+  return {
+    bodyNodes,
+    bodyText,
+    bodyHtml,
+    nextNode: cursor
+  };
+}
+
 function enhanceComparisonBlocks(html) {
   if (!html) return '';
 
@@ -2538,6 +2594,43 @@ function enhanceComparisonBlocks(html) {
 
   let current = root.firstElementChild;
   while (current) {
+    if (current.matches('ul,ol')) {
+      let probe = current;
+      const items = [];
+
+      while (probe && probe.matches('ul,ol')) {
+        const labelText = getComparisonLabelFromList(probe);
+        const { bodyNodes, bodyText, bodyHtml, nextNode } = collectComparisonBodyFromSiblings(probe.nextElementSibling);
+
+        if (!isComparisonLabelText(labelText) || !bodyText || bodyText.length < 24 || isComparisonLabelText(bodyText)) {
+          break;
+        }
+
+        items.push({
+          label: labelText,
+          bodyHtml
+        });
+
+        probe = nextNode;
+      }
+
+      if (items.length >= 2) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = buildComparisonBlockHtml(items).trim();
+
+        let node = current;
+        while (node && node !== probe) {
+          const nextNode = node.nextElementSibling;
+          node.remove();
+          node = nextNode;
+        }
+
+        root.insertBefore(wrapper.firstElementChild, probe);
+        current = probe;
+        continue;
+      }
+    }
+
     if (!current.matches('p')) {
       current = current.nextElementSibling;
       continue;
