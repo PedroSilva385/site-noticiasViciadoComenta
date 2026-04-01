@@ -9,6 +9,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
   <script src="assets/firebase-config.js?v=20260301"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -163,6 +164,60 @@
       margin-bottom: 4px;
     }
     body.dark .meta { color: #9ca3af; }
+
+    footer {
+      background: #1a1f3a;
+      color: #ffffff;
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 60px;
+      font-size: 0.9em;
+    }
+
+    footer a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #dbeafe;
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .footer-links a {
+      font-weight: 600;
+    }
+
+    .footer-contacts {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .footer-contacts a {
+      font-weight: 600;
+    }
+
+    .footer-contacts i {
+      margin-right: 8px;
+    }
+
+    .footer-copy {
+      color: rgba(255, 255, 255, 0.85);
+    }
   </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
 </head>
@@ -428,6 +483,21 @@
       </section>
     </section>
   </div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="sobre-nos.html">Sobre Nós</a>
+      <a href="politica-privacidade.html">Política de Privacidade</a>
+      <a href="termos-servico.html">Termos de Serviço</a>
+      <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+      <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
+    </div>
+    <div class="footer-contacts">
+      <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+      <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+    </div>
+    <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+  </footer>
 
   <script>
     const database = firebase.database();
