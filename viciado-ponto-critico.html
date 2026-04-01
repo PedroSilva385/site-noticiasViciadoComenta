@@ -177,6 +177,13 @@ nav a:hover {
   transform: translateY(0);
 }
 
+.nav-dropdown:focus-within .dropdown-menu,
+.nav-dropdown.active .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .nav-dropdown:hover > a::after {
   transform: rotate(180deg);
 }
@@ -414,9 +421,254 @@ footer {
 }
 
 @media (max-width: 768px) {
-  nav { gap: 20px; }
-  header h1 { font-size: 2.2em; }
-  .page-header h1 { font-size: 1.7em; }
+  header {
+    padding: 25px 15px;
+  }
+
+  header h1 {
+    font-size: 2.2em;
+  }
+
+  nav {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  nav a {
+    padding: 12px 8px;
+    font-size: 0.9em;
+  }
+
+  .nav-dropdown > a {
+    padding: 12px 8px;
+  }
+
+  .dropdown-menu {
+    left: 50%;
+    min-width: 150px;
+    max-width: calc(100vw - 24px);
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  .nav-dropdown:hover .dropdown-menu,
+  .nav-dropdown:focus-within .dropdown-menu,
+  .nav-dropdown.active .dropdown-menu {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  main {
+    padding: 0 12px;
+    margin-top: 24px;
+  }
+
+  .page-header h1 {
+    font-size: 1.7em;
+  }
+
+  .playlist-button {
+    padding: 14px 22px;
+    font-size: 1em;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  footer {
+    padding: 20px 12px;
+    font-size: 0.85em;
+  }
+
+  .footer-links {
+    gap: 15px;
+  }
+
+  .footer-contacts {
+    gap: 12px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 18px 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  .header-subtitle {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+  }
+
+  .social-media {
+    gap: 8px;
+  }
+
+  .social-media a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85em;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    font-size: 0.9em;
+  }
+
+  nav {
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  nav a {
+    padding: 10px 6px;
+    font-size: 0.8em;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-dropdown {
+    flex: 0 0 auto;
+  }
+
+  .nav-dropdown > a {
+    padding: 10px 6px;
+    min-height: 44px;
+  }
+
+  .dropdown-menu {
+    min-width: 140px;
+  }
+
+  main {
+    padding: 0 10px;
+    margin-top: 18px;
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+  }
+
+  .page-header h1 {
+    font-size: 1.4em;
+  }
+
+  .page-header p {
+    font-size: 0.85em;
+  }
+
+  .playlist-button {
+    padding: 12px 18px;
+    font-size: 0.9em;
+    margin-bottom: 28px;
+  }
+
+  .miniaturas-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  footer {
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+
+  .footer-links {
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  .footer-contacts {
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.75em;
+  }
+
+  .footer-copy {
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  header {
+    padding: 14px 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+
+  .header-subtitle {
+    font-size: 0.75em;
+  }
+
+  .social-media {
+    gap: 6px;
+  }
+
+  .social-media a {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75em;
+  }
+
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 5px 6px;
+    font-size: 0.85em;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    font-size: 0.75em;
+    min-height: 40px;
+  }
+
+  .nav-dropdown > a {
+    padding: 8px 4px;
+    min-height: 40px;
+  }
+
+  .dropdown-menu {
+    min-width: 130px;
+  }
+
+  .page-header h1 {
+    font-size: 1.2em;
+  }
+
+  .page-header p {
+    font-size: 0.8em;
+  }
+
+  .playlist-button {
+    padding: 10px 14px;
+    font-size: 0.8em;
+  }
+
+  footer {
+    padding: 12px 8px;
+    font-size: 0.7em;
+  }
+
+  .footer-links {
+    gap: 8px;
+  }
+
+  .footer-contacts {
+    font-size: 0.7em;
+  }
 }
 </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
@@ -711,6 +963,21 @@ function toggleWatched(event, videoId) {
 // Carregar vídeos quando a página carregar
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && window.innerWidth <= 768) {
+    const dropdownLink = dropdown.querySelector(':scope > a');
+    if (dropdownLink) {
+      dropdownLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        dropdown.classList.toggle('active');
+      });
+      document.addEventListener('click', (event) => {
+        if (!dropdown.contains(event.target)) {
+          dropdown.classList.remove('active');
+        }
+      });
+    }
+  }
   carregarVideos();
 });
 </script>

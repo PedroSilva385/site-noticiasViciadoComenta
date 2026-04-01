@@ -114,6 +114,117 @@ footer a:hover {
 .footer-copy {
   color: rgba(255, 255, 255, 0.85);
 }
+
+@media (max-width: 768px) {
+  body {
+    padding: 18px 18px 0;
+  }
+
+  .container {
+    padding: 28px 22px;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  footer {
+    width: calc(100% + 36px);
+    margin: 32px -18px 0;
+    padding: 20px 12px;
+    font-size: 0.85em;
+  }
+
+  .footer-links {
+    gap: 15px;
+  }
+
+  .footer-contacts {
+    gap: 12px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px 12px 0;
+  }
+
+  .container {
+    width: 100%;
+    padding: 24px 16px;
+    border-radius: 14px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  a {
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+  }
+
+  footer {
+    width: calc(100% + 24px);
+    margin: 24px -12px 0;
+    padding: 15px 10px;
+    font-size: 0.75em;
+  }
+
+  .footer-links {
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  .footer-contacts {
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.75em;
+  }
+
+  .footer-copy {
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 360px) {
+  body {
+    padding: 10px 10px 0;
+  }
+
+  .container {
+    padding: 20px 14px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    font-size: 0.92rem;
+  }
+
+  footer {
+    width: calc(100% + 20px);
+    margin: 20px -10px 0;
+    padding: 12px 8px;
+    font-size: 0.7em;
+  }
+
+  .footer-links {
+    gap: 8px;
+  }
+
+  .footer-contacts {
+    font-size: 0.7em;
+  }
+}
 </style>
 </head>
 <body>
