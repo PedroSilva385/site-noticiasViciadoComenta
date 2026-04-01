@@ -155,6 +155,56 @@ function deduplicarNoticias(noticias) {
   return resultado;
 }
 
+const NEWS_CACHE_KEY = 'vc_noticias_cache_v1';
+const NEWS_CACHE_TTL_MS = 5 * 60 * 1000;
+
+function readNoticiasCache() {
+  try {
+    const rawValue = localStorage.getItem(NEWS_CACHE_KEY);
+    if (!rawValue) return null;
+
+    const parsed = JSON.parse(rawValue);
+    const isFresh = parsed && Number.isFinite(parsed.timestamp) && (Date.now() - parsed.timestamp) < NEWS_CACHE_TTL_MS;
+    const noticias = parsed && Array.isArray(parsed.noticias) ? parsed.noticias : null;
+
+    if (!isFresh || !noticias) {
+      localStorage.removeItem(NEWS_CACHE_KEY);
+      return null;
+    }
+
+    return { noticias };
+  } catch (error) {
+    return null;
+  }
+}
+
+function writeNoticiasCache(noticias) {
+  if (!Array.isArray(noticias)) return;
+
+  try {
+    localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({
+      timestamp: Date.now(),
+      noticias
+    }));
+  } catch (error) {
+    // ignore cache write errors
+  }
+}
+
+function normalizeNoticiasResponse(data) {
+  const noticias = Array.isArray(data && data.noticias) ? data.noticias : [];
+  const noticiaSolicitada = obterNoticiaSolicitadaDaURL(noticias);
+  const publicadas = ordenarNoticiasPorData(deduplicarNoticias(filtrarNoticiasPublicadas(noticias)));
+
+  if (noticiaSolicitada && !publicadas.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
+    publicadas.unshift(noticiaSolicitada);
+  }
+
+  return {
+    noticias: ordenarNoticiasPorData(deduplicarNoticias(publicadas))
+  };
+}
+
 async function garantirAcessoNoticiasFirebase() {
   if (typeof window.ensureFirebaseInitialized === 'function') {
     await window.ensureFirebaseInitialized();
@@ -178,40 +228,33 @@ async function lerNoticiasDoFirebase() {
 
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
- * Carrega notícias exclusivamente do Firebase.
+ * Usa Firebase como fonte principal e recorre ao cache local apenas se necessário.
  * @param {string} url - Ignorado (mantido por compatibilidade)
  * @returns {Promise} - Promise com as notícias filtradas e ordenadas
  */
 async function fetchNoticiasAgendadas(url) {
-  if (typeof window.ensureFirebaseInitialized === 'function') {
-    await window.ensureFirebaseInitialized();
-  }
+  let lastError = null;
 
-  if (typeof firebase === 'undefined' || !firebase.database) {
-    throw new Error('Firebase indisponível para carregar notícias.');
-  }
+  try {
+    await garantirAcessoNoticiasFirebase();
+    const firebaseData = await lerNoticiasDoFirebase();
+    const normalizedFirebaseData = normalizeNoticiasResponse(firebaseData);
 
-  const snapshot = await firebase.database().ref('noticias').once('value');
-  const rawNoticias = snapshot.val();
-
-  const noticias = Array.isArray(rawNoticias)
-    ? rawNoticias
-    : Object.values(rawNoticias || {});
-
-  const data = { noticias };
-
-  if (data.noticias && Array.isArray(data.noticias)) {
-    const noticiaSolicitada = obterNoticiaSolicitadaDaURL(data.noticias);
-    data.noticias = deduplicarNoticias(filtrarNoticiasPublicadas(data.noticias));
-
-    if (noticiaSolicitada && !data.noticias.some((n) => String(n.id) === String(noticiaSolicitada.id))) {
-      data.noticias.unshift(noticiaSolicitada);
+    if (normalizedFirebaseData.noticias.length > 0) {
+      writeNoticiasCache(firebaseData.noticias);
     }
 
-    data.noticias = ordenarNoticiasPorData(deduplicarNoticias(data.noticias));
+    return normalizedFirebaseData;
+  } catch (error) {
+    lastError = error;
   }
 
-  return data;
+  const cachedData = readNoticiasCache();
+  if (cachedData) {
+    return normalizeNoticiasResponse(cachedData);
+  }
+
+  throw lastError || new Error('Nao foi possivel carregar as noticias.');
 }
 
 // Exporta para uso global

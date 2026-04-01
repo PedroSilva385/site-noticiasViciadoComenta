@@ -6,6 +6,7 @@ $jsonPath = Join-Path $root 'data/noticias.json'
 $gerarArtigosScript = Join-Path $toolsDir 'gerar-artigos-espelho.ps1'
 $videosDataDir = Join-Path $root 'data'
 $deployScript = Join-Path $root 'deploy.ps1'
+$imagesDir = Join-Path $root 'assets/imagens'
 
 $preferredPorts = @(8787, 8788)
 $prefix = $null
@@ -93,6 +94,65 @@ function Get-RequestBody {
         return $reader.ReadToEnd()
     } finally {
         $reader.Dispose()
+    }
+}
+
+function Get-SafeSlug {
+    param([Parameter(Mandatory = $true)] [string] $Value)
+
+    $normalized = $Value.ToLowerInvariant()
+    $normalized = [regex]::Replace($normalized, '[^a-z0-9]+', '-')
+    $normalized = $normalized.Trim('-')
+
+    if ([string]::IsNullOrWhiteSpace($normalized)) {
+        return 'imagem'
+    }
+
+    return $normalized
+}
+
+function Convert-DataUrlToImageFile {
+    param(
+        [Parameter(Mandatory = $true)] [string] $DataUrl,
+        [Parameter(Mandatory = $false)] [string] $FileName
+    )
+
+    if ($DataUrl -notmatch '^data:(?<mime>image\/[a-zA-Z0-9.+-]+);base64,(?<data>.+)$') {
+        throw 'Formato de imagem inválido. Esperado data URL base64.'
+    }
+
+    $mime = $Matches['mime'].ToLowerInvariant()
+    $base64 = $Matches['data']
+    $extension = switch ($mime) {
+        'image/jpeg' { '.jpg' }
+        'image/jpg' { '.jpg' }
+        'image/png' { '.png' }
+        'image/gif' { '.gif' }
+        'image/webp' { '.webp' }
+        default { throw "Tipo de imagem não suportado: $mime" }
+    }
+
+    $baseName = if ([string]::IsNullOrWhiteSpace($FileName)) {
+        'imagem'
+    } else {
+        [System.IO.Path]::GetFileNameWithoutExtension($FileName)
+    }
+
+    $safeName = Get-SafeSlug -Value $baseName
+    $targetName = '{0}-{1}{2}' -f $safeName, (Get-Date -Format 'yyyyMMdd-HHmmss'), $extension
+
+    if (-not (Test-Path $imagesDir)) {
+        New-Item -ItemType Directory -Path $imagesDir | Out-Null
+    }
+
+    $targetPath = Join-Path $imagesDir $targetName
+    $bytes = [Convert]::FromBase64String($base64)
+    [System.IO.File]::WriteAllBytes($targetPath, $bytes)
+
+    return @{
+        filePath = $targetPath
+        publicUrl = "/assets/imagens/$targetName"
+        fileName = $targetName
     }
 }
 
@@ -284,6 +344,24 @@ try {
                 continue
             }
 
+            if ($method -eq 'POST' -and $path -eq 'api/images/upload') {
+                $body = Get-RequestBody -Request $request
+                if ([string]::IsNullOrWhiteSpace($body)) {
+                    Write-JsonResponse -Response $response -StatusCode 400 -Payload @{ ok = $false; error = 'Body vazio.' }
+                    continue
+                }
+
+                $payload = $body | ConvertFrom-Json
+                if (-not $payload -or [string]::IsNullOrWhiteSpace([string]$payload.dataUrl)) {
+                    Write-JsonResponse -Response $response -StatusCode 400 -Payload @{ ok = $false; error = 'Payload inválido. Esperado objeto com dataUrl.' }
+                    continue
+                }
+
+                $savedImage = Convert-DataUrlToImageFile -DataUrl ([string]$payload.dataUrl) -FileName ([string]$payload.fileName)
+                Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; url = $savedImage.publicUrl; file = $savedImage.fileName }
+                continue
+            }
+
             if ($method -eq 'GET' -and $path -eq 'api/videos/load') {
                 $target = ''
                 if ($null -ne $request.QueryString['target']) {
@@ -390,6 +468,7 @@ try {
                     '.jpg'   { 'image/jpeg' }
                     '.jpeg'  { 'image/jpeg' }
                     '.gif'   { 'image/gif' }
+                    '.webp'  { 'image/webp' }
                     '.svg'   { 'image/svg+xml' }
                     '.ico'   { 'image/x-icon' }
                     '.woff'  { 'font/woff' }

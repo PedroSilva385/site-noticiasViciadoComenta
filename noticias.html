@@ -18,21 +18,21 @@
 <meta name="twitter:title" content="Notícia - VICIADO COMENTA">
 <meta name="twitter:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">
 <!-- Firebase Analytics -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-<script src="assets/firebase-config.js?v=20260209"></script>
-<script src="assets/news-scheduler.js"></script>
-<script src="assets/new-article-notification.js?v=20260301"></script>
-<script src="assets/push-notifications.js?v=20260301"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" defer></script>
+<script src="assets/firebase-config.js?v=20260209" defer></script>
+<script src="assets/news-scheduler.js" defer></script>
+<script src="assets/new-article-notification.js?v=20260301" defer></script>
+<script src="assets/push-notifications.js?v=20260301" defer></script>
 
 <!-- Markdown Parser -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
 <!-- Funções de Segurança -->
-<script src="assets/security.js"></script>
-<script src="assets/article-tts.js?v=20260312"></script>
+<script src="assets/security.js" defer></script>
+<script src="assets/article-tts.js?v=20260312" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -496,10 +496,17 @@ body.dark .artigo-quality-pill {
 .artigo-conteudo figure {
   margin: 20px 0;
   text-align: center;
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
 }
 
 .artigo-conteudo figure img {
   margin: 0 auto;
+}
+
+.artigo-conteudo img[data-deferred-image="true"] {
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.08), rgba(0, 102, 204, 0.14));
+  min-height: 220px;
 }
 
 .artigo-conteudo figcaption {
@@ -2503,6 +2510,11 @@ function sanitizeArticleInlineTypography(html) {
     return safeRules.join(';');
   };
 
+  const isSafeArticleImageSrc = (value) => {
+    if (!value) return false;
+    return /^(https?:|data:image\/|\/|\.\/|\.\.\/|assets\/)/i.test(String(value).trim());
+  };
+
   Array.from(root.querySelectorAll('*')).forEach((el) => {
     let tag = el.tagName.toLowerCase();
 
@@ -2569,7 +2581,7 @@ function sanitizeArticleInlineTypography(html) {
       }
 
       if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height'].includes(name)) {
-        if (name === 'src' && !/^(https?:|data:image\/)/i.test(value)) {
+        if (name === 'src' && !isSafeArticleImageSrc(value)) {
           el.removeAttribute('src');
         }
         return;
@@ -2651,6 +2663,67 @@ function sanitizeArticleInlineTypography(html) {
     .trim();
 }
 
+function optimizeArticleMediaMarkup(html) {
+  if (!html) return '';
+
+  const root = document.createElement('div');
+  root.innerHTML = String(html);
+
+  const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  const images = Array.from(root.querySelectorAll('img'));
+
+  images.forEach((img, index) => {
+    const currentSrc = img.getAttribute('src') || '';
+    if (!currentSrc) return;
+
+    if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
+    if (!img.getAttribute('loading')) img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+    if (!img.getAttribute('fetchpriority')) img.setAttribute('fetchpriority', index === 0 ? 'high' : 'low');
+
+    const isInlineImage = /^data:image\//i.test(currentSrc);
+    if (isInlineImage && index > 0) {
+      img.setAttribute('data-src', currentSrc);
+      img.setAttribute('data-deferred-image', 'true');
+      img.setAttribute('src', placeholderSrc);
+    }
+  });
+
+  return root.innerHTML;
+}
+
+function activateDeferredArticleImages(root) {
+  if (!root) return;
+
+  const deferredImages = Array.from(root.querySelectorAll('img[data-src]'));
+  if (!deferredImages.length) return;
+
+  const loadImage = (img) => {
+    if (!img) return;
+    const src = img.getAttribute('data-src');
+    if (!src) return;
+    img.setAttribute('src', src);
+    img.removeAttribute('data-src');
+    img.removeAttribute('data-deferred-image');
+  };
+
+  if (!('IntersectionObserver' in window)) {
+    deferredImages.forEach(loadImage);
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      loadImage(entry.target);
+    });
+  }, {
+    rootMargin: '300px 0px'
+  });
+
+  deferredImages.forEach((img) => observer.observe(img));
+}
+
 function applyInlineMarkdownTypography(content) {
   if (!content) return '';
 
@@ -2696,6 +2769,7 @@ function formatArticleContent(rawContent) {
 
     htmlContent = normalizeBrokenLineWraps(htmlContent);
     htmlContent = htmlContent.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+    htmlContent = optimizeArticleMediaMarkup(htmlContent);
     return htmlContent.trim();
   }
 
@@ -2719,6 +2793,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -3270,6 +3346,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Secção de artigos relacionados
         renderRelatedArticles(noticia, noticias);
+
+        activateDeferredArticleImages(container);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
