@@ -514,10 +514,17 @@ body.dark .artigo-quality-pill {
 .artigo-conteudo figure {
   margin: 20px 0;
   text-align: center;
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
 }
 
 .artigo-conteudo figure img {
   margin: 0 auto;
+}
+
+.artigo-conteudo img[data-deferred-image="true"] {
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.08), rgba(0, 102, 204, 0.14));
+  min-height: 220px;
 }
 
 .artigo-conteudo figcaption {
@@ -1984,7 +1991,7 @@ footer {
 <meta name="twitter:title" content="MELHOR tarif&#225;rio SEM FIDELIZA&#199;&#195;O de 2026 &#233; da?...">
 <meta name="twitter:description" content="Neste v&#237;deo analisamos a operadora vencedora da categoria de tarif&#225;rio m&#243;vel sem fideliza&#231;&#227;o, no pr&#233;mio escolha do consumidor de 2026!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html"},"headline":"MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...","description":"Neste vídeo analisamos a operadora vencedora da categoria de tarifário móvel sem fidelização, no prémio escolha do consumidor de 2026!","datePublished":"2026-03-31T00:11:07Z","dateModified":"2026-03-31T00:11:07Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html"},"headline":"MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...","description":"Neste vídeo analisamos a operadora vencedora da categoria de tarifário móvel sem fidelização, no prémio escolha do consumidor de 2026!","datePublished":"2026-04-02T16:21:24Z","dateModified":"2026-04-02T16:21:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2091,10 +2098,10 @@ footer {
 
 <footer>
   <div class="footer-links">
-    <a href="../sobre-nos.html">Sobre Nós</a>
-    <a href="../politica-privacidade.html">Política de Privacidade</a>
-    <a href="../termos-servico.html">Termos de Serviço</a>
-    <a href="../politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="termos-servico.html">Termos de Serviço</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
     <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
   </div>
   <div class="footer-contacts">
@@ -2724,25 +2731,9 @@ function renderStructuredPlainText(content) {
 function sanitizeArticleInlineTypography(html) {
   if (!html) return '';
 
-  function isSafeArticleImageSource(value) {
-    if (!value) return false;
-
-    const normalized = String(value).trim();
-    if (!normalized) return false;
-
-    if (/^data:image\//i.test(normalized)) {
-      return true;
-    }
-
-    if (/^https?:/i.test(normalized)) {
-      return true;
-    }
-
-    return /^(?:\.\.\/|\.\/)?assets\/imagens\/[a-z0-9][a-z0-9._\/-]*$/i.test(normalized);
-  }
-
   const root = document.createElement('div');
   root.innerHTML = String(html);
+  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   root.querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,option').forEach((node) => node.remove());
 
@@ -2796,6 +2787,11 @@ function sanitizeArticleInlineTypography(html) {
       safeRules.push(`${prop}:${val}`);
     });
     return safeRules.join(';');
+  };
+
+  const isSafeArticleImageSrc = (value) => {
+    if (!value) return false;
+    return /^(https?:|data:image\/|\/|\.\/|\.\.\/|assets\/)/i.test(String(value).trim());
   };
 
   Array.from(root.querySelectorAll('*')).forEach((el) => {
@@ -2867,8 +2863,8 @@ function sanitizeArticleInlineTypography(html) {
         return;
       }
 
-      if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height', 'loading', 'decoding', 'fetchpriority'].includes(name)) {
-        if (name === 'src' && !isSafeArticleImageSource(value)) {
+      if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height'].includes(name)) {
+        if (name === 'src' && !isSafeArticleImageSrc(value)) {
           el.removeAttribute('src');
         }
         return;
@@ -2886,9 +2882,6 @@ function sanitizeArticleInlineTypography(html) {
       const style = el.getAttribute('style') || '';
       const safeStyle = sanitizeStyle(`${style};max-width:100%;height:auto`);
       el.setAttribute('style', safeStyle || 'max-width:100%;height:auto');
-      if (!el.getAttribute('loading')) el.setAttribute('loading', 'lazy');
-      if (!el.getAttribute('decoding')) el.setAttribute('decoding', 'async');
-      if (!el.getAttribute('fetchpriority')) el.setAttribute('fetchpriority', 'low');
     }
 
     if (tag === 'div') {
@@ -2911,6 +2904,40 @@ function sanitizeArticleInlineTypography(html) {
     em.innerHTML = el.innerHTML;
     if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
     el.replaceWith(em);
+  });
+
+  root.querySelectorAll('span, p, h2, h3').forEach((el) => {
+    if (!el.querySelector(blockLikeSelector)) return;
+
+    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return false;
+      }
+
+      return !node.matches(blockLikeSelector);
+    });
+
+    if (hasMeaningfulInlineContent) return;
+
+    while (el.firstChild) {
+      el.parentNode.insertBefore(el.firstChild, el);
+    }
+    el.remove();
+  });
+
+  root.querySelectorAll('p, span').forEach((el) => {
+    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
+    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
+    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
+
+    if (hasRichContent) return;
+    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
+      el.remove();
+    }
   });
 
   root.querySelectorAll('[style]').forEach((el) => {
@@ -2951,6 +2978,67 @@ function sanitizeArticleInlineTypography(html) {
     .replace(/&nbsp;/gi, ' ')
     .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
     .trim();
+}
+
+function optimizeArticleMediaMarkup(html) {
+  if (!html) return '';
+
+  const root = document.createElement('div');
+  root.innerHTML = String(html);
+
+  const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  const images = Array.from(root.querySelectorAll('img'));
+
+  images.forEach((img, index) => {
+    const currentSrc = img.getAttribute('src') || '';
+    if (!currentSrc) return;
+
+    if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
+    if (!img.getAttribute('loading')) img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+    if (!img.getAttribute('fetchpriority')) img.setAttribute('fetchpriority', index === 0 ? 'high' : 'low');
+
+    const isInlineImage = /^data:image\//i.test(currentSrc);
+    if (isInlineImage && index > 0) {
+      img.setAttribute('data-src', currentSrc);
+      img.setAttribute('data-deferred-image', 'true');
+      img.setAttribute('src', placeholderSrc);
+    }
+  });
+
+  return root.innerHTML;
+}
+
+function activateDeferredArticleImages(root) {
+  if (!root) return;
+
+  const deferredImages = Array.from(root.querySelectorAll('img[data-src]'));
+  if (!deferredImages.length) return;
+
+  const loadImage = (img) => {
+    if (!img) return;
+    const src = img.getAttribute('data-src');
+    if (!src) return;
+    img.setAttribute('src', src);
+    img.removeAttribute('data-src');
+    img.removeAttribute('data-deferred-image');
+  };
+
+  if (!('IntersectionObserver' in window)) {
+    deferredImages.forEach(loadImage);
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      loadImage(entry.target);
+    });
+  }, {
+    rootMargin: '300px 0px'
+  });
+
+  deferredImages.forEach((img) => observer.observe(img));
 }
 
 function applyInlineMarkdownTypography(content) {
@@ -2998,11 +3086,12 @@ function formatArticleContent(rawContent) {
 
     htmlContent = normalizeBrokenLineWraps(htmlContent);
     htmlContent = htmlContent.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
-    htmlContent = enhanceComparisonBlocks(htmlContent);
+    htmlContent = optimizeArticleMediaMarkup(htmlContent);
     return htmlContent.trim();
   }
 
   // Detecta se tem Markdown
+      htmlContent = enhanceComparisonBlocks(htmlContent);
   const hasMarkdown = /\*\*|\*(?!\s)|__(?!\s)|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)|^#+\s|^-\s|^\d+\./m.test(content);
 
   if (hasMarkdown) {
@@ -3022,6 +3111,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -3563,6 +3654,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Secção de artigos relacionados
         renderRelatedArticles(noticia, noticias);
+
+        activateDeferredArticleImages(container);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
