@@ -85,13 +85,7 @@ O slug é gerado automaticamente do título.
 
 1. Abra a aba **"Vídeos"** no topo do painel
 2. Aí pode adicionar vídeos a **Viciado Comenta**, **Metin2** e mudar o **vídeo em destaque**
-3. Para guardar/publicar, use o painel através do studio local em:
-
-```text
-http://localhost:8787/admin/
-```
-
-O editor de vídeos usa o mesmo servidor local do `Vídeos Studio` para gravar os ficheiros JSON em `data/`.
+3. Ao guardar, o painel atualiza diretamente o Firebase e os vídeos ficam disponíveis no site sem precisares de iniciar o studio local.
 
 ### 🗑️ Eliminar Notícia
 

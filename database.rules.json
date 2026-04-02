@@ -4,6 +4,10 @@
       ".read": true,
       ".write": "auth != null"
     },
+    "videos": {
+      ".read": true,
+      ".write": "auth != null"
+    },
     "site_stats": {
       ".read": true,
       ".write": true,
