@@ -1,0 +1,38 @@
+{
+	"database": {
+		"rules": "database.rules.json"
+	},
+	"hosting": {
+		"public": ".",
+		"headers": [
+			{
+				"source": "/admin/index.html",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "no-store, no-cache, must-revalidate"
+					}
+				]
+			},
+			{
+				"source": "/estatisticas.html",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "no-store, no-cache, must-revalidate"
+					}
+				]
+			}
+		],
+		"ignore": [
+			"firebase.json",
+			"**/.*",
+			"**/node_modules/**",
+			"backups/**",
+			"docs/**",
+			"functions/**",
+			"tools/**"
+		]
+	}
+}
+

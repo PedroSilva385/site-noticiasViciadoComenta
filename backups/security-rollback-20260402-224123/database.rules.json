@@ -2,32 +2,28 @@
   "rules": {
     "noticias": {
       ".read": true,
-      ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'"
+      ".write": "auth != null"
     },
     "videos": {
       ".read": true,
-      ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'"
+      ".write": "auth != null"
     },
     "site_stats": {
       ".read": true,
-      ".write": "auth != null",
+      ".write": true,
       ".validate": "newData.hasChildren(['total_visits', 'daily', 'monthly', 'last_updated'])"
     },
-    "site_unique_views": {
-      ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
-      ".write": "auth != null"
-    },
     "active_users": {
-      ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "active_users_history": {
-      ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "click_stats": {
-      ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
-      ".write": "auth != null",
+      ".read": true,
+      ".write": true,
       "visitors": {
         "$dateKey": {
           "$visitorHash": {
@@ -39,18 +35,11 @@
         }
       }
     },
-    "article_reads": {
-      ".read": true,
-      "$noticiaId": {
-        ".write": "auth != null",
-        ".validate": "newData.isNumber() && newData.val() >= 0"
-      }
-    },
     "likes": {
       ".read": true,
       "$noticiaId": {
         "$userId": {
-          ".write": "auth != null",
+          ".write": true,
           ".validate": "(newData.hasChildren(['timestamp']) && newData.child('timestamp').isNumber()) || !newData.exists()",
           "timestamp": {
             ".validate": "newData.isNumber() && newData.val() > 0"
@@ -62,7 +51,7 @@
       ".read": true,
       "$noticiaId": {
         "$comentarioId": {
-          ".write": "auth != null",
+          ".write": true,
           ".validate": "newData.hasChildren(['nome', 'texto', 'timestamp'])",
           "nome": {
             ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
@@ -78,7 +67,7 @@
           },
           "respostas": {
             ".read": true,
-            ".write": "auth != null",
+            ".write": true,
             "$respostaId": {
               ".validate": "newData.hasChildren(['nome', 'texto', 'timestamp']) || !newData.exists()",
               "nome": {
@@ -95,7 +84,7 @@
               },
               "respostas": {
                 ".read": true,
-                ".write": "auth != null",
+                ".write": true,
                 ".validate": "newData.hasChildren(['nome', 'texto', 'timestamp']) || !newData.exists()"
               }
             }
