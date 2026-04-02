@@ -81,6 +81,18 @@ O slug é gerado automaticamente do título.
 2. Modifique os campos
 3. Clique **"💾 Guardar"**
 
+### 🎬 Gerir Vídeos
+
+1. Abra a aba **"Vídeos"** no topo do painel
+2. Aí pode adicionar vídeos a **Viciado Comenta**, **Metin2** e mudar o **vídeo em destaque**
+3. Para guardar/publicar, use o painel através do studio local em:
+
+```text
+http://localhost:8787/admin/
+```
+
+O editor de vídeos usa o mesmo servidor local do `Vídeos Studio` para gravar os ficheiros JSON em `data/`.
+
 ### 🗑️ Eliminar Notícia
 
 1. Selecione a notícia
@@ -199,6 +211,7 @@ Se algo não funcionar, leia nesta ordem:
 
 - ✅ Autenticação Firebase (Email/Senha)
 - ✅ CRUD completo (Criar, Ler, Atualizar, Deletar)
+- ✅ Gestão de vídeos para Viciado Comenta, Metin2 e destaque
 - ✅ Interface limpa e intuitiva
 - ✅ Sincronização automática
 - ✅ Slug automático (baseado no título)

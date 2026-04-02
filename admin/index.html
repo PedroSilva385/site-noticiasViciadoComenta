@@ -246,6 +246,20 @@ body {
   background: #f8fafc;
 }
 
+.tool-notice {
+  padding: 12px 14px;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.tool-notice strong {
+  color: #312e81;
+}
+
 .sidebar {
   width: 280px;
   background: white;
@@ -381,37 +395,38 @@ body {
 /* ========== EDITOR WYSIWYG ========== */
 #contentEditor {
   min-height: 250px;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  padding: 40px 48px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
   background: white;
-  font-family: 'Sora', 'Segoe UI', Tahoma, sans-serif;
-  font-size: 1.2em;
-  line-height: 1.55;
-  color: #3a3f5a;
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.15;
+  color: #202124;
   overflow-y: auto;
   resize: vertical;
   outline: none;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15);
 }
 
 #contentEditor p {
-  margin: 0 0 8px;
+  margin: 0;
 }
 
 #contentEditor h2,
 #contentEditor h3 {
-  margin: 16px 0 10px;
-  line-height: 1.35;
+  margin: 18px 0 6px;
+  line-height: 1.25;
 }
 
 #contentEditor ul,
 #contentEditor ol {
-  margin: 0 0 8px;
-  padding-left: 28px;
+  margin: 0;
+  padding-left: 1.5em;
 }
 
 #contentEditor li {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 #contentEditor blockquote {
@@ -912,6 +927,7 @@ button {
     <div class="header-right">
       <div class="admin-tabs" role="tablist" aria-label="Abas do painel admin">
         <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
+        <button type="button" class="admin-tab-btn" id="adminTabVideos" role="tab" aria-selected="false" aria-controls="videosView">🎬 Vídeos</button>
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
       </div>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
@@ -1143,6 +1159,28 @@ button {
       </div>
     </div>
   </div>
+
+  <div class="panel-view" id="videosView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <div class="tool-notice">
+          Gere aqui os vídeos das páginas <strong>Viciado Comenta</strong>, <strong>Metin2</strong> e o <strong>vídeo em destaque</strong> da homepage. Para guardar e publicar, abre o painel com o servidor local do studio em <strong>http://localhost:8787</strong>.
+        </div>
+        <div class="stats-toolbar">
+          <button type="button" class="btn-inline" id="btnReloadVideosStudio">Atualizar painel de vídeos</button>
+          <a class="btn-inline" href="../tools/videos-studio.html" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
+        </div>
+        <iframe
+          id="videosStudioFrame"
+          class="stats-frame"
+          src="../tools/videos-studio.html"
+          title="Painel de vídeos"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Firebase SDK (Compat version for compatibility) -->
@@ -1249,10 +1287,14 @@ const authError = document.getElementById('authError');
 const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
 const adminTabNoticias = document.getElementById('adminTabNoticias');
+const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
 const newsView = document.getElementById('newsView');
+const videosView = document.getElementById('videosView');
 const statsView = document.getElementById('statsView');
+const videosStudioFrame = document.getElementById('videosStudioFrame');
 const statsFrame = document.getElementById('statsFrame');
+const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
 const btnReloadStats = document.getElementById('btnReloadStats');
 const noticiasList = document.getElementById('noticiasList');
 const btnNewNoticia = document.getElementById('btnNewNoticia');
@@ -1261,15 +1303,21 @@ const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
 
 function setAdminView(viewName) {
+  const showNoticias = viewName === 'noticias';
+  const showVideos = viewName === 'videos';
   const showStats = viewName === 'estatisticas';
 
-  adminTabNoticias.classList.toggle('active', !showStats);
+  adminTabNoticias.classList.toggle('active', showNoticias);
+  adminTabVideos.classList.toggle('active', showVideos);
   adminTabEstatisticas.classList.toggle('active', showStats);
-  adminTabNoticias.setAttribute('aria-selected', showStats ? 'false' : 'true');
+  adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
+  adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
   adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
 
-  newsView.classList.toggle('active', !showStats);
+  newsView.classList.toggle('active', showNoticias);
+  videosView.classList.toggle('active', showVideos);
   statsView.classList.toggle('active', showStats);
+  videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
 }
 
@@ -1277,8 +1325,17 @@ adminTabNoticias.addEventListener('click', () => {
   setAdminView('noticias');
 });
 
+adminTabVideos.addEventListener('click', () => {
+  setAdminView('videos');
+});
+
 adminTabEstatisticas.addEventListener('click', () => {
   setAdminView('estatisticas');
+});
+
+btnReloadVideosStudio.addEventListener('click', () => {
+  const src = videosStudioFrame.getAttribute('src') || '../tools/videos-studio.html';
+  videosStudioFrame.setAttribute('src', src);
 });
 
 btnReloadStats.addEventListener('click', () => {
@@ -1807,7 +1864,8 @@ function normalizeEditorHtml(html) {
   const sanitizeStyle = (styleValue) => {
     if (!styleValue) return '';
     const allowed = new Set([
-      'text-align','font-weight','font-style','text-decoration','font-size'
+      'text-align','font-weight','font-style','text-decoration','font-size',
+      'line-height','margin-left','margin-right','margin-top','margin-bottom','color'
     ]);
     const clean = [];
 
@@ -1833,6 +1891,34 @@ function normalizeEditorHtml(html) {
         const unit = match[2].toLowerCase();
         if (unit === 'px' && (amount < 12 || amount > 40)) return;
         if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
+      }
+
+      if (prop === 'line-height') {
+        const normalized = val.trim().toLowerCase();
+        if (/^[0-9]+(?:\.[0-9]+)?$/.test(normalized)) {
+          const amount = parseFloat(normalized);
+          if (amount < 1 || amount > 3) return;
+        } else {
+          const match = normalized.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem|%)$/i);
+          if (!match) return;
+          const amount = parseFloat(match[1]);
+          const unit = match[2].toLowerCase();
+          if (unit === '%' && (amount < 100 || amount > 300)) return;
+          if (unit === 'px' && (amount < 14 || amount > 72)) return;
+          if ((unit === 'em' || unit === 'rem') && (amount < 1 || amount > 3)) return;
+        }
+      }
+
+      if (/^margin-(left|right|top|bottom)$/.test(prop)) {
+        const match = val.match(/^(-?[0-9]+(?:\.[0-9]+)?)(px|em|rem|pt)$/i);
+        if (!match) return;
+        const amount = parseFloat(match[1]);
+        if (amount < -72 || amount > 160) return;
+      }
+
+      if (prop === 'color') {
+        const normalized = val.trim();
+        if (!/^(#[0-9a-f]{3,8}|rgb(a)?\([^\)]+\)|hsl(a)?\([^\)]+\)|[a-z]+)$/i.test(normalized)) return;
       }
 
       clean.push(`${prop}:${val}`);
@@ -2042,6 +2128,53 @@ function normalizeDocsHtmlForEditor(html) {
   return normalizeEditorHtml(tmp.innerHTML);
 }
 
+function isGoogleDocsHtml(html) {
+  const source = String(html || '');
+  return /docs-internal-guid|id="docs-internal-guid|docs.google.com|Google Docs/i.test(source);
+}
+
+function handleEditorPaste(event) {
+  const clipboard = event.clipboardData;
+  if (!clipboard) return false;
+
+  const html = clipboard.getData('text/html');
+  const text = clipboard.getData('text/plain');
+
+  if (html) {
+    event.preventDefault();
+
+    const normalized = isGoogleDocsHtml(html)
+      ? normalizeDocsHtmlForEditor(html)
+      : normalizeEditorHtml(html);
+
+    if (normalized) {
+      insertHtmlIntoEditor(normalized);
+    } else if (text) {
+      insertHtmlIntoEditor(normalizePlainTextToHtml(text));
+    }
+
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+    return true;
+  }
+
+  if (text) {
+    event.preventDefault();
+    insertHtmlIntoEditor(normalizePlainTextToHtml(text));
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+    return true;
+  }
+
+  return false;
+}
+
 function insertHtmlIntoEditor(html) {
   const selection = window.getSelection();
   if (!selection) {
@@ -2236,9 +2369,9 @@ contentEditor.addEventListener('input', () => {
   queueDraftAutosave();
 });
 
-contentEditor.addEventListener('paste', () => {
-  // Compatibilidade máxima: deixa o browser colar normalmente (incluindo Google Docs)
-  // e normaliza no tick seguinte para manter o padrão visual do site.
+contentEditor.addEventListener('paste', (event) => {
+  if (handleEditorPaste(event)) return;
+
   setTimeout(() => {
     const currentHtml = contentEditor.innerHTML || '';
     const normalized = normalizeEditorHtml(currentHtml);
