@@ -7,6 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
   <script src="assets/firebase-config.js?v=20260301"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -363,6 +364,21 @@
         font-size: 0.7em;
       }
     }
+
+    .access-notice {
+      margin-bottom: 18px;
+      border-left: 4px solid #dc2626;
+    }
+
+    .access-notice strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #991b1b;
+    }
+
+    body.dark .access-notice strong {
+      color: #fca5a5;
+    }
   </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
 </head>
@@ -392,6 +408,11 @@
       <button class="btn btn-secondary" id="themeBtn">🌙 Tema</button>
       <button class="btn btn-danger" id="resetBtn">🔄 Resetar estatísticas</button>
     </div>
+
+    <section class="panel access-notice" id="statsAccessNotice" hidden>
+      <strong>Acesso restrito</strong>
+      <div>As estatísticas detalhadas só estão disponíveis para administradores autenticados.</div>
+    </section>
 
     <div class="tabs">
       <button class="tab-btn active" data-tab="visitas">📈 Visitas</button>
@@ -646,11 +667,65 @@
 
   <script>
     const database = firebase.database();
+    const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
     const noticiasMap = {};
     let hourlyTotalsByDate = {};
     let hourlyUniqueByDate = {};
     let _sessionNumberMap = new Map();
     let _nextSessionNumber = 1;
+    let statsInitialized = false;
+
+    function isStatsAdminUser(user) {
+      return !!(user && !user.isAnonymous);
+    }
+
+    function setStatsAccessState(hasAccess, message = '') {
+      const accessNotice = document.getElementById('statsAccessNotice');
+      const tabs = document.querySelector('.tabs');
+      const panels = document.querySelectorAll('.tab-panel');
+      const resetBtn = document.getElementById('resetBtn');
+
+      if (accessNotice) {
+        accessNotice.hidden = hasAccess;
+        if (message) {
+          accessNotice.querySelector('div').textContent = message;
+        }
+      }
+
+      if (tabs) {
+        tabs.style.display = hasAccess ? '' : 'none';
+      }
+
+      if (resetBtn) {
+        resetBtn.style.display = hasAccess ? '' : 'none';
+      }
+
+      panels.forEach((panel) => {
+        panel.style.display = hasAccess ? '' : 'none';
+      });
+    }
+
+    function initializeStatsDashboard() {
+      if (statsInitialized) {
+        return;
+      }
+
+      statsInitialized = true;
+
+      document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
+      initTheme();
+      initTabs();
+      initPastHourlySelector();
+      carregarNoticiasMap().finally(() => {
+        carregarEstatisticasCompleto();
+        carregarComentariosRecentes();
+        carregarLikesRecentes();
+        carregarOnlineAgora();
+        carregarTopArtigos();
+        carregarTopCliques();
+        carregarHistorico();
+      });
+    }
 
     function getSessionNumber(sessionId) {
       const key = String(sessionId || '').trim();
@@ -1466,19 +1541,22 @@
       }
     }
 
-    document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
     initTheme();
-    initTabs();
-    initPastHourlySelector();
-    carregarNoticiasMap().finally(() => {
-      carregarEstatisticasCompleto();
-      carregarComentariosRecentes();
-      carregarLikesRecentes();
-      carregarOnlineAgora();
-      carregarTopArtigos();
-      carregarTopCliques();
-      carregarHistorico();
-    });
+    setStatsAccessState(false, 'Inicie sessão no painel admin para consultar as estatísticas.');
+
+    if (!auth) {
+      setStatsAccessState(false, 'O módulo de autenticação do Firebase não está disponível nesta página.');
+    } else {
+      auth.onAuthStateChanged((user) => {
+        if (!isStatsAdminUser(user)) {
+          setStatsAccessState(false, 'Inicie sessão no painel admin com uma conta administrativa para consultar as estatísticas.');
+          return;
+        }
+
+        setStatsAccessState(true);
+        initializeStatsDashboard();
+      });
+    }
   </script>
 </body>
 </html>

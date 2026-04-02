@@ -169,6 +169,12 @@ button:disabled {
 .back-link a:hover {
   text-decoration: underline;
 }
+
+.warning-danger {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
 </style>
 </head>
 <body>
@@ -240,8 +246,27 @@ const passwordConfirmInput = document.getElementById('passwordConfirm');
 const btnRegister = document.getElementById('btnRegister');
 const status = document.getElementById('status');
 
+function isLocalSetupHost() {
+  const hostname = (window.location.hostname || '').toLowerCase();
+  return window.location.protocol === 'file:' || hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+if (!isLocalSetupHost()) {
+  const warning = document.querySelector('.warning');
+  if (warning) {
+    warning.classList.add('warning-danger');
+    warning.innerHTML = '⛔ <strong>Registo público desativado:</strong> as contas admin só podem ser criadas localmente ou no Firebase Console.';
+  }
+  btnRegister.disabled = true;
+}
+
 registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  if (!isLocalSetupHost()) {
+    showStatus('Registo público desativado. Crie utilizadores apenas no ambiente local ou no Firebase Console.', 'error');
+    return;
+  }
 
   const email = emailInput.value.trim();
   const password = passwordInput.value;

@@ -2,11 +2,11 @@
   "rules": {
     "noticias": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'"
     },
     "videos": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'"
     },
     "site_stats": {
       ".read": true,
