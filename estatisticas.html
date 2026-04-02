@@ -166,6 +166,55 @@
     }
     body.dark .meta { color: #9ca3af; }
 
+    .history-toggle {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #1e3a8a;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      padding: 0;
+      font-size: 0.85rem;
+      vertical-align: middle;
+    }
+
+    .history-toggle:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .history-session-summary {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .history-detail-row td {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.92em;
+    }
+
+    body.dark .history-toggle {
+      background: #111827;
+      border-color: #475569;
+      color: #93c5fd;
+    }
+
+    body.dark .history-session-summary {
+      color: #e5e7eb;
+    }
+
+    body.dark .history-detail-row td {
+      background: #111827;
+      color: #cbd5e1;
+    }
+
     footer {
       background: #1a1f3a;
       color: #ffffff;
@@ -418,9 +467,7 @@
       <button class="tab-btn active" data-tab="visitas">📈 Visitas</button>
       <button class="tab-btn" data-tab="comentarios">💬 Comentários recentes</button>
       <button class="tab-btn" data-tab="likes">❤️ Likes recentes</button>
-      <button class="tab-btn" data-tab="online">🔴 Online Agora</button>
       <button class="tab-btn" data-tab="paginas">📄 Páginas</button>
-      <button class="tab-btn" data-tab="artigos">📰 Artigos</button>
       <button class="tab-btn" data-tab="cliques">🖱️ Cliques</button>
       <button class="tab-btn" data-tab="fontes">🌐 Fontes</button>
       <button class="tab-btn" data-tab="historico">📋 Histórico</button>
@@ -451,10 +498,6 @@
         <div class="card">
           <div class="card-label">Última atualização</div>
           <div class="card-value" id="lastUpdate" style="font-size:1.15em;">-</div>
-        </div>
-        <div class="card" style="border-top:3px solid #22c55e;">
-          <div class="card-label">🟢 Online agora</div>
-          <div class="card-value" id="onlineNow">-</div>
         </div>
       </div>
 
@@ -553,45 +596,14 @@
       </section>
     </section>
 
-    <section class="tab-panel" id="tab-online">
-      <div class="cards">
-        <div class="card" style="border-top:3px solid #22c55e;">
-          <div class="card-label">🟢 Sessões ativas agora</div>
-          <div class="card-value" id="onlineNowDetail">-</div>
-        </div>
-      </div>
-      <section class="panel">
-        <h2>🔴 Utilizadores Online em Tempo Real</h2>
-        <table>
-          <thead>
-            <tr><th>Sessão</th><th>Página</th><th>Desde</th></tr>
-          </thead>
-          <tbody id="onlineBody"></tbody>
-        </table>
-        <div class="status" id="onlineStatus">A carregar...</div>
-      </section>
-    </section>
-
     <section class="tab-panel" id="tab-paginas">
       <section class="panel">
-        <h2>📄 Páginas Mais Visitadas</h2>
+        <h2>📄 Páginas e Artigos Mais Visitados</h2>
         <table>
           <thead>
-            <tr><th>Página</th><th>Visitas</th></tr>
+            <tr><th>Destino</th><th>Tipo</th><th>Visitas</th></tr>
           </thead>
           <tbody id="paginasBody"></tbody>
-        </table>
-      </section>
-    </section>
-
-    <section class="tab-panel" id="tab-artigos">
-      <section class="panel">
-        <h2>📰 Artigos Mais Lidos</h2>
-        <table>
-          <thead>
-            <tr><th>Artigo</th><th>Leituras</th></tr>
-          </thead>
-          <tbody id="artigosBody"></tbody>
         </table>
       </section>
     </section>
@@ -633,7 +645,7 @@
         </div>
       </div>
       <section class="panel">
-        <h2>📋 Histórico de Atividade (últimas 300 entradas)</h2>
+        <h2>📋 Histórico de Atividade (últimas 24h)</h2>
         <div class="inline-controls">
           <label for="historicoFiltro">Filtrar sessão:</label>
           <input id="historicoFiltro" type="text" placeholder="número da sessão ou sess_xxx" style="border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-family:inherit;background:#fff;color:#1a1f3a;" />
@@ -641,7 +653,7 @@
         </div>
         <table>
           <thead>
-            <tr><th>Quando</th><th>Sessão</th><th>Página visitada</th></tr>
+            <tr><th>Última atividade</th><th>Sessão</th><th>Resumo / páginas</th></tr>
           </thead>
           <tbody id="historicoBody"></tbody>
         </table>
@@ -669,10 +681,15 @@
     const database = firebase.database();
     const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
     const noticiasMap = {};
+    const noticiaMetaMap = {};
+    const noticiaIdBySlug = {};
     let hourlyTotalsByDate = {};
     let hourlyUniqueByDate = {};
+    let latestArticleReads = {};
     let _sessionNumberMap = new Map();
     let _nextSessionNumber = 1;
+    let _historicoSessions = [];
+    const expandedHistorySessions = new Set();
     let statsInitialized = false;
 
     function isStatsAdminUser(user) {
@@ -720,8 +737,7 @@
         carregarEstatisticasCompleto();
         carregarComentariosRecentes();
         carregarLikesRecentes();
-        carregarOnlineAgora();
-        carregarTopArtigos();
+        carregarMetricasArtigos();
         carregarTopCliques();
         carregarHistorico();
       });
@@ -808,6 +824,17 @@
       return noticiasMap[String(noticiaId)] || `Notícia ${noticiaId}`;
     }
 
+    function getNoticiaMeta(noticiaId) {
+      return noticiaMetaMap[String(noticiaId)] || null;
+    }
+
+    function getNoticiaTitleBySlug(slug) {
+      const key = String(slug || '').trim();
+      if (!key) return 'Artigo';
+      const noticiaId = noticiaIdBySlug[key];
+      return noticiaId ? getNoticiaTitle(noticiaId) : key.replace(/-/g, ' ');
+    }
+
     async function carregarNoticiasMap() {
       try {
         const snapshot = await database.ref('noticias').once('value');
@@ -819,11 +846,86 @@
         if (!Array.isArray(noticias)) return;
 
         noticias.forEach((item) => {
-          noticiasMap[String(item.id)] = item.titulo || `Notícia ${item.id}`;
+          const id = String(item.id);
+          const titulo = item.titulo || `Notícia ${item.id}`;
+          const slug = String(item.slug || '').trim();
+
+          noticiasMap[id] = titulo;
+          noticiaMetaMap[id] = { titulo, slug };
+
+          if (slug) {
+            noticiaIdBySlug[slug] = id;
+          }
         });
       } catch (error) {
         console.warn('Não foi possível carregar mapa de notícias:', error);
       }
+    }
+
+    function getFriendlyTopLevelPageLabel(name) {
+      const labels = {
+        'index': 'Página inicial',
+        'noticias': 'Notícias',
+        'artigos': 'Artigos',
+        'todas-noticias': 'Todas as notícias',
+        'videos': 'Vídeos',
+        'gaming': 'Gaming',
+        'metin2': 'Metin2',
+        'livestreams': 'Livestreams',
+        'viciado-comenta': 'Viciado Comenta',
+        'viciado-ponto-critico': 'Viciado Ponto Crítico',
+        'sobre-nos': 'Sobre nós',
+        'politica-privacidade': 'Política de privacidade',
+        'termos-servico': 'Termos de serviço',
+        'estatisticas': 'Estatísticas'
+      };
+
+      return labels[name] || `/${name}.html`;
+    }
+
+    function decodeStatsPageKey(rawKey) {
+      const key = String(rawKey || '').trim();
+
+      if (!key || key === '_' || key === '_index_html') {
+        return {
+          rowKey: 'page:/',
+          label: 'Página inicial',
+          path: '/',
+          type: 'Página'
+        };
+      }
+
+      const articleMatch = key.match(/^_artigos_(.+)_html$/i);
+      if (articleMatch) {
+        const slug = articleMatch[1];
+        const noticiaId = noticiaIdBySlug[slug] || '';
+
+        return {
+          rowKey: noticiaId ? `article:${noticiaId}` : `article-slug:${slug}`,
+          label: getNoticiaTitleBySlug(slug),
+          path: `/artigos/${slug}.html`,
+          type: 'Artigo'
+        };
+      }
+
+      const topLevelMatch = key.match(/^_([a-z0-9-]+)_html$/i);
+      if (topLevelMatch) {
+        const pageName = topLevelMatch[1];
+        return {
+          rowKey: `page:/${pageName}.html`,
+          label: getFriendlyTopLevelPageLabel(pageName),
+          path: `/${pageName}.html`,
+          type: 'Página'
+        };
+      }
+
+      const genericPath = `/${key.replace(/^_+/, '').replace(/_html$/i, '.html')}`;
+      return {
+        rowKey: `page:${genericPath}`,
+        label: genericPath,
+        path: genericPath,
+        type: 'Página'
+      };
     }
 
     function renderHourlyRowsToBody(bodyId, hourlyTotals = {}, hourlyUnique = {}, highlightedHour = '') {
@@ -1193,110 +1295,89 @@
       });
     }
 
-    function carregarOnlineAgora() {
-      database.ref('active_users').on('value', (snapshot) => {
-        const users = [];
-        snapshot.forEach((snap) => {
-          const val = snap.val() || {};
-          users.push({ key: snap.key, page: val.page || '/', timestamp: val.timestamp || 0 });
-        });
-
-        const count = users.length;
-        setText('onlineNow', count.toString());
-        setText('onlineNowDetail', count.toString());
-
-        const tbody = document.getElementById('onlineBody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-
-        if (!count) {
-          renderEmptyRow('onlineBody', 'Nenhuma sessão ativa neste momento.', 3);
-          setText('onlineStatus', 'Nenhum utilizador online.');
-          return;
-        }
-
-        users.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        users.forEach((user) => {
-          const tr = document.createElement('tr');
-
-          const keyCell = document.createElement('td');
-          keyCell.textContent = getSessionLabel(user.key);
-          keyCell.title = user.key;
-
-          const pageCell = document.createElement('td');
-          pageCell.textContent = user.page;
-
-          const timeCell = document.createElement('td');
-          timeCell.textContent = user.timestamp ? formatDateTime(user.timestamp) : '-';
-
-          tr.appendChild(keyCell);
-          tr.appendChild(pageCell);
-          tr.appendChild(timeCell);
-          tbody.appendChild(tr);
-        });
-
-        setText('onlineStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
-      }, (error) => {
-        console.error('Erro ao carregar utilizadores online:', error);
-        setText('onlineStatus', 'Erro ao carregar dados.');
-      });
-    }
-
-    function renderTopPaginas(pagesObj) {
+    function renderTopPaginas(pagesObj, articleReadsObj = latestArticleReads) {
       const tbody = document.getElementById('paginasBody');
       if (!tbody) return;
       tbody.innerHTML = '';
 
-      const entries = Object.entries(pagesObj || {})
-        .map(([key, count]) => [key.replace(/__/g, '/').replace(/_/g, '/'), Number(count) || 0])
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 30);
+      const entriesMap = new Map();
+
+      const upsertEntry = (entry, preferCount = false) => {
+        const existing = entriesMap.get(entry.rowKey);
+        if (!existing) {
+          entriesMap.set(entry.rowKey, entry);
+          return;
+        }
+
+        existing.label = entry.label || existing.label;
+        existing.path = entry.path || existing.path;
+        existing.type = entry.type || existing.type;
+        existing.count = preferCount ? entry.count : Math.max(existing.count, entry.count);
+      };
+
+      Object.entries(pagesObj || {}).forEach(([key, count]) => {
+        const decoded = decodeStatsPageKey(key);
+        upsertEntry({
+          rowKey: decoded.rowKey,
+          label: decoded.label,
+          path: decoded.path,
+          type: decoded.type,
+          count: Number(count) || 0
+        });
+      });
+
+      Object.entries(articleReadsObj || {}).forEach(([id, count]) => {
+        const meta = getNoticiaMeta(id);
+        const articlePath = meta && meta.slug ? `/artigos/${meta.slug}.html` : `Artigo ${id}`;
+        upsertEntry({
+          rowKey: `article:${id}`,
+          label: getNoticiaTitle(id),
+          path: articlePath,
+          type: 'Artigo',
+          count: Number(count) || 0
+        }, true);
+      });
+
+      const entries = Array.from(entriesMap.values())
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 40);
 
       if (!entries.length) {
-        renderEmptyRow('paginasBody', 'Sem dados de páginas.', 2);
+        renderEmptyRow('paginasBody', 'Sem dados de páginas ou artigos.', 3);
         return;
       }
 
-      entries.forEach(([page, count]) => {
+      entries.forEach((entry) => {
         const tr = document.createElement('tr');
-        const pageCell = document.createElement('td');
-        pageCell.textContent = page;
+
+        const destinationCell = document.createElement('td');
+        const titleLine = document.createElement('div');
+        titleLine.textContent = entry.label;
+        const metaLine = document.createElement('div');
+        metaLine.className = 'meta';
+        metaLine.textContent = entry.path;
+        destinationCell.appendChild(titleLine);
+        destinationCell.appendChild(metaLine);
+
+        const typeCell = document.createElement('td');
+        typeCell.textContent = entry.type;
+
         const countCell = document.createElement('td');
-        countCell.textContent = count.toLocaleString('pt-PT');
-        tr.appendChild(pageCell);
+        countCell.textContent = entry.count.toLocaleString('pt-PT');
+
+        tr.appendChild(destinationCell);
+        tr.appendChild(typeCell);
         tr.appendChild(countCell);
         tbody.appendChild(tr);
       });
     }
 
-    function carregarTopArtigos() {
+    function carregarMetricasArtigos() {
       database.ref('article_reads').on('value', (snapshot) => {
-        const tbody = document.getElementById('artigosBody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-
-        const data = snapshot.val() || {};
-        const entries = Object.entries(data)
-          .map(([id, count]) => [id, Number(count) || 0])
-          .sort((a, b) => b[1] - a[1]);
-
-        if (!entries.length) {
-          renderEmptyRow('artigosBody', 'Sem dados de leituras ainda.', 2);
-          return;
-        }
-
-        entries.forEach(([id, count]) => {
-          const tr = document.createElement('tr');
-          const titleCell = document.createElement('td');
-          titleCell.textContent = getNoticiaTitle(id);
-          const countCell = document.createElement('td');
-          countCell.textContent = count.toLocaleString('pt-PT');
-          tr.appendChild(titleCell);
-          tr.appendChild(countCell);
-          tbody.appendChild(tr);
-        });
+        latestArticleReads = snapshot.val() || {};
+        renderTopPaginas(undefined, latestArticleReads);
       }, (error) => {
-        console.error('Erro ao carregar artigos:', error);
+        console.error('Erro ao carregar métricas de artigos:', error);
       });
     }
 
@@ -1415,7 +1496,7 @@
         setText('hourlyStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
 
         // Alimentar tabs adicionais
-        renderTopPaginas(stats.pages || {});
+        renderTopPaginas(stats.pages || {}, latestArticleReads);
         renderFontes(stats.referrers || {});
       }, (error) => {
         console.error('Erro ao carregar estatísticas:', error);
@@ -1424,8 +1505,6 @@
       });
     }
 
-    let _historicoRows = [];
-
     function renderHistoricoRows(filtro) {
       const tbody = document.getElementById('historicoBody');
       if (!tbody) return;
@@ -1433,17 +1512,17 @@
 
       const rawFilter = String(filtro || '').trim();
       const numberFilter = /^\d+$/.test(rawFilter) ? Number(rawFilter) : null;
-      const rows = rawFilter
-        ? _historicoRows.filter((r) => {
-          if (!r.sessionId) return false;
+      const sessions = rawFilter
+        ? _historicoSessions.filter((session) => {
+          if (!session.sessionId) return false;
           if (numberFilter !== null) {
-            return getSessionNumber(r.sessionId) === numberFilter;
+            return getSessionNumber(session.sessionId) === numberFilter;
           }
-          return r.sessionId.toLowerCase().includes(rawFilter.toLowerCase());
+          return session.sessionId.toLowerCase().includes(rawFilter.toLowerCase());
         })
-        : _historicoRows;
+        : _historicoSessions;
 
-      if (!rows.length) {
+      if (!sessions.length) {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
         td.colSpan = 3;
@@ -1454,32 +1533,77 @@
         return;
       }
 
-      rows.forEach((item) => {
+      sessions.forEach((session) => {
         const tr = document.createElement('tr');
 
         const whenCell = document.createElement('td');
-        whenCell.textContent = item.timestamp ? formatDateTime(item.timestamp) : '-';
+        whenCell.textContent = session.lastTimestamp ? formatDateTime(session.lastTimestamp) : '-';
 
         const sessCell = document.createElement('td');
-        sessCell.textContent = getSessionLabel(item.sessionId);
-        sessCell.style.cursor = 'pointer';
-        sessCell.title = `ID real: ${item.sessionId || '-'} • Clica para filtrar por número`;
-        sessCell.addEventListener('click', () => {
-          const input = document.getElementById('historicoFiltro');
-          if (input) {
-            const number = getSessionNumber(item.sessionId);
-            input.value = number ? String(number) : '';
-            renderHistoricoRows(input.value);
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'history-toggle';
+        toggleBtn.textContent = expandedHistorySessions.has(session.sessionId) ? '▾' : '▸';
+        toggleBtn.disabled = session.events.length <= 1;
+        toggleBtn.title = session.events.length > 1 ? 'Expandir/fechar logs da sessão' : 'Sessão com uma única atividade';
+        toggleBtn.addEventListener('click', () => {
+          if (expandedHistorySessions.has(session.sessionId)) {
+            expandedHistorySessions.delete(session.sessionId);
+          } else {
+            expandedHistorySessions.add(session.sessionId);
           }
+          renderHistoricoRows((document.getElementById('historicoFiltro') || {}).value || '');
         });
 
+        const summary = document.createElement('span');
+        summary.className = 'history-session-summary';
+        summary.textContent = getSessionLabel(session.sessionId);
+        sessCell.appendChild(toggleBtn);
+        sessCell.appendChild(summary);
+
+        const sessionMeta = document.createElement('div');
+        sessionMeta.className = 'meta';
+        sessionMeta.textContent = `${session.events.length} atividade(s) • ID real: ${session.sessionId || '-'}`;
+        sessCell.appendChild(sessionMeta);
+
         const pageCell = document.createElement('td');
-        pageCell.textContent = item.page || '/';
+        const pageTitle = document.createElement('div');
+        pageTitle.textContent = session.latestPage || '/';
+        const pageMeta = document.createElement('div');
+        pageMeta.className = 'meta';
+        pageMeta.textContent = session.events.length > 1
+          ? `Última página registada • ${session.events.length - 1} registo(s) adicional(is) disponíveis na sessão`
+          : 'Único registo da sessão nas últimas 24 horas';
+        pageCell.appendChild(pageTitle);
+        pageCell.appendChild(pageMeta);
 
         tr.appendChild(whenCell);
         tr.appendChild(sessCell);
         tr.appendChild(pageCell);
         tbody.appendChild(tr);
+
+        if (!expandedHistorySessions.has(session.sessionId)) {
+          return;
+        }
+
+        session.events.slice(1).forEach((event) => {
+          const detailRow = document.createElement('tr');
+          detailRow.className = 'history-detail-row';
+
+          const detailWhen = document.createElement('td');
+          detailWhen.textContent = event.timestamp ? formatDateTime(event.timestamp) : '-';
+
+          const detailSession = document.createElement('td');
+          detailSession.textContent = '↳ Continuação';
+
+          const detailPage = document.createElement('td');
+          detailPage.textContent = event.page || '/';
+
+          detailRow.appendChild(detailWhen);
+          detailRow.appendChild(detailSession);
+          detailRow.appendChild(detailPage);
+          tbody.appendChild(detailRow);
+        });
       });
     }
 
@@ -1511,18 +1635,43 @@
           });
         });
 
-        // mais recente primeiro
-        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        rebuildSessionNumbering(rows);
-        _historicoRows = rows.slice(0, 300);
+        const cutoffTimestamp = Date.now() - (24 * 60 * 60 * 1000);
+        const recentRows = rows
+          .filter((row) => (row.timestamp || 0) >= cutoffTimestamp)
+          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-        const sessoes = new Set(_historicoRows.map((r) => r.sessionId).filter(Boolean));
-        setText('historicoTotal', _historicoRows.length.toLocaleString('pt-PT'));
-        setText('historicoSessoes', sessoes.size.toLocaleString('pt-PT'));
+        rebuildSessionNumbering(recentRows);
+
+        const groupedSessions = new Map();
+        recentRows.forEach((row) => {
+          const sessionId = row.sessionId || 'sessao-desconhecida';
+          if (!groupedSessions.has(sessionId)) {
+            groupedSessions.set(sessionId, {
+              sessionId,
+              lastTimestamp: 0,
+              latestPage: '/',
+              events: []
+            });
+          }
+
+          groupedSessions.get(sessionId).events.push(row);
+        });
+
+        _historicoSessions = Array.from(groupedSessions.values())
+          .map((session) => {
+            session.events.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            session.lastTimestamp = session.events[0] ? session.events[0].timestamp : 0;
+            session.latestPage = session.events[0] ? session.events[0].page : '/';
+            return session;
+          })
+          .sort((a, b) => (b.lastTimestamp || 0) - (a.lastTimestamp || 0));
+
+        setText('historicoTotal', recentRows.length.toLocaleString('pt-PT'));
+        setText('historicoSessoes', _historicoSessions.length.toLocaleString('pt-PT'));
 
         const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
         renderHistoricoRows(filtro);
-        setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${_historicoRows.length} entradas`);
+        setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${recentRows.length} atividade(s) nas últimas 24h`);
       }, (error) => {
         console.error('Erro ao carregar histórico:', error);
         setText('historicoStatus', 'Erro ao carregar dados.');
