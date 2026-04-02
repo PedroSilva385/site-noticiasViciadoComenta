@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/video-data.js?v=20260402"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -1165,16 +1166,15 @@ function extrairYouTubeId(url) {
   return fallback ? fallback[1] : '';
 }
 
-// Carregar vídeos do ficheiro JSON
+// Carregar vídeos do Firebase com fallback para JSON
 async function carregarVideos() {
   try {
-    const response = await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' });
-    let videos = await response.json();
+    let videos = await window.VCVideoData.loadTarget('viciado-comenta', { fallbackUrl: 'data/viciado-comenta-videos.json' });
     
     const grid = document.getElementById('miniaturas-grid');
     
     if (videos.length === 0) {
-      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento. Adiciona vídeos ao ficheiro viciado-comenta-videos.json</p>';
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento.</p>';
       return;
     }
     
@@ -1227,7 +1227,7 @@ async function carregarVideos() {
   } catch (error) {
     console.error('Erro ao carregar vídeos:', error);
     const grid = document.getElementById('miniaturas-grid');
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos. Verifica se o ficheiro viciado-comenta-videos.json existe e está correto.</p>';
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos.</p>';
   }
 }
 

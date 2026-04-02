@@ -17,6 +17,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VICIADO COMENTA - Vídeos Recentes">
 <meta name="twitter:description" content="Vídeos recentes com opinião e análise sobre telecom, tecnologia e gaming.">
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/video-data.js?v=20260402"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -335,18 +339,25 @@ function extrairYouTubeId(url) {
 async function carregarTodosVideos() {
   const grid = document.getElementById('videos-grid');
   const fontes = [
-    { ficheiro: 'data/viciado-comenta-videos.json', label: 'Viciado Comenta' },
-    { ficheiro: 'data/viciado-ponto-critico-videos.json', label: 'Viciado: Ponto Crítico' },
-    { ficheiro: 'data/metin2-videos.json', label: 'Metin2' }
+    { target: 'viciado-comenta', ficheiro: 'data/viciado-comenta-videos.json', label: 'Viciado Comenta' },
+    { target: 'viciado-ponto-critico', ficheiro: 'data/viciado-ponto-critico-videos.json', label: 'Viciado: Ponto Crítico' },
+    { target: 'metin2', ficheiro: 'data/metin2-videos.json', label: 'Metin2' }
   ];
 
   try {
     const resultados = await Promise.all(
-      fontes.map(f => fetch(f.ficheiro, { cache: 'no-store' })
-        .then(r => r.ok ? r.json() : [])
-        .then(lista => lista.map(v => ({ url: typeof v === 'string' ? v : v.url, data: typeof v === 'object' && v.data ? v.data : '1970-01-01' })))
-        .catch(() => [])
-      )
+      fontes.map(async (fonte) => {
+        const data = await window.VCVideoData.loadTarget(fonte.target, { fallbackUrl: fonte.ficheiro });
+
+        if (fonte.target === 'metin2') {
+          return Object.values(data || {}).flatMap((lista) => (Array.isArray(lista) ? lista : []).map((url) => ({ url, data: '1970-01-01' })));
+        }
+
+        return (Array.isArray(data) ? data : []).map((video) => ({
+          url: typeof video === 'string' ? video : video.url,
+          data: typeof video === 'object' && video.data ? video.data : '1970-01-01'
+        }));
+      })
     );
 
     let todos = resultados.flat();

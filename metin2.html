@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/video-data.js?v=20260402"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -910,11 +911,10 @@ function extrairYouTubeId(url) {
   return fallback ? fallback[1] : '';
 }
 
-// Carregar vídeos do ficheiro JSON
+// Carregar vídeos do Firebase com fallback para JSON
 async function carregarVideos() {
   try {
-    const response = await fetch('data/metin2-videos.json', { cache: 'no-store' });
-    const data = await response.json();
+    const data = await window.VCVideoData.loadTarget('metin2', { fallbackUrl: 'data/metin2-videos.json' });
     
     // Carregar Série RL2
     const videosRL2 = data.serie_rl2 || [];
@@ -942,7 +942,7 @@ async function carregarVideos() {
     
   } catch (error) {
     console.error('Erro ao carregar vídeos:', error);
-    document.getElementById('miniaturas-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos. Verifica se o ficheiro metin2-videos.json existe e está correto.</p>';
+    document.getElementById('miniaturas-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos.</p>';
   }
 }
 

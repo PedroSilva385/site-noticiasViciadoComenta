@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vídeos Studio</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="../assets/firebase-config.js?v=20260209"></script>
+<script src="../assets/video-data.js?v=20260402"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1f3b73 0%, #4b2a7b 100%); color: #1f2937; min-height: 100vh; padding: 20px; }
@@ -47,8 +52,8 @@ button:hover { filter: brightness(.95); }
   <p class="subtitle">Adicionar e gerir vídeos das várias páginas no mesmo painel.</p>
 
   <div class="notice">
-    Abre por <strong>http://localhost:8787/tools/videos-studio.html</strong>.<br>
-    Para iniciar o servidor: <strong>iniciar-noticias-studio.cmd</strong>
+    Funciona diretamente no site publicado e no painel admin.<br>
+    Se estiver autenticado, ao guardar os vídeos eles ficam disponíveis sem precisares de iniciar o studio local.
   </div>
 
   <div class="grid">
@@ -105,7 +110,7 @@ button:hover { filter: brightness(.95); }
       </div>
 
       <div class="actions">
-        <button class="btn-secondary" id="btnVerificar">🟢 Verificar servidor</button>
+        <button class="btn-secondary" id="btnVerificar">🟢 Verificar Firebase</button>
         <button class="btn-primary" id="btnRecarregar">🔃 Recarregar destino</button>
         <button class="btn-success" id="btnAdicionar">➕ Adicionar vídeo</button>
       </div>
@@ -113,8 +118,8 @@ button:hover { filter: brightness(.95); }
       <hr style="margin:14px 0; border:none; border-top:1px solid #e5e7eb;">
 
       <div class="actions">
-        <button class="btn-primary" id="btnGuardar">💾 Guardar JSON de vídeos</button>
-        <button class="btn-success" id="btnPublicar">🚀 Publicar (deploy)</button>
+        <button class="btn-primary" id="btnGuardar">💾 Guardar no site</button>
+        <button class="btn-success" id="btnPublicar">🚀 Guardar e publicar</button>
       </div>
 
       <div style="margin-top:10px;">
@@ -133,9 +138,18 @@ button:hover { filter: brightness(.95); }
 </div>
 
 <script>
-const API_BASE = 'http://localhost:8787';
 let currentTarget = 'viciado-comenta';
 let videosData = null;
+const FALLBACK_FILES = {
+  'featured': '../data/featured-video.json',
+  'viciado-comenta': '../data/viciado-comenta-videos.json',
+  'viciado-ponto-critico': '../data/viciado-ponto-critico-videos.json',
+  'metin2': '../data/metin2-videos.json'
+};
+
+function getFallbackUrl(target) {
+  return FALLBACK_FILES[String(target || '').trim()] || '';
+}
 
 function createVideoOptionRow(url = '', data = '') {
   const row = document.createElement('div');
@@ -211,48 +225,8 @@ function setStatus(message, type = 'info') {
   el.textContent = message;
 }
 
-function safeJsonParse(text, endpointLabel) {
-  try { return JSON.parse(text); }
-  catch (error) { throw new Error(`JSON inválido em ${endpointLabel}: ${error.message}`); }
-}
-
-async function apiRequest(path, options = {}) {
-  const urls = [path];
-  if (!/^https?:\/\//i.test(path)) urls.push(`${API_BASE}${path}`);
-
-  let lastError = null;
-  for (const url of urls) {
-    try {
-      const response = await fetch(url, options);
-      const text = await response.text();
-      const contentType = (response.headers.get('content-type') || '').toLowerCase();
-      if (!contentType.includes('application/json')) {
-        throw new Error('Resposta não-JSON da API.');
-      }
-      return { payload: safeJsonParse(text, url), url };
-    } catch (error) {
-      const msg = String(error.message || '');
-      if (/failed to fetch|networkerror|load failed|cors/i.test(msg)) {
-        lastError = new Error('Servidor offline. Executa iniciar-noticias-studio.cmd e volta a tentar.');
-      } else {
-        lastError = error;
-      }
-    }
-  }
-  throw lastError || new Error('Falha ao comunicar com API.');
-}
-
 function normalizeByTarget(target, raw) {
-  if (target === 'featured') {
-    return (raw && typeof raw === 'object') ? raw : { url: '', titulo: '', descricao: '', cta: 'Ver no YouTube' };
-  }
-  if (target === 'metin2') {
-    return (raw && typeof raw === 'object') ? raw : { serie_rl2: [], analise_2024: [] };
-  }
-  if (raw && typeof raw === 'object' && Array.isArray(raw.value)) {
-    return raw.value;
-  }
-  return Array.isArray(raw) ? raw : [];
+  return window.VCVideoData.normalizeByTarget(target, raw);
 }
 
 function updateTargetUI() {
@@ -379,12 +353,7 @@ async function carregarDestino() {
   currentTarget = document.getElementById('targetSelect').value;
   setStatus('A carregar dados de vídeos...', 'info');
 
-  const { payload } = await apiRequest(`/api/videos/load?target=${encodeURIComponent(currentTarget)}`);
-  if (!payload.ok) {
-    throw new Error(payload.error || 'Falha ao carregar dados.');
-  }
-
-  videosData = normalizeByTarget(currentTarget, payload.data);
+  videosData = await window.VCVideoData.loadTarget(currentTarget, { fallbackUrl: getFallbackUrl(currentTarget) });
   updateTargetUI();
   renderList();
   setStatus(`Dados carregados: ${currentTarget}.`, 'ok');
@@ -463,40 +432,29 @@ async function guardarDestino() {
     currentTarget = selectedTarget;
   }
 
-  setStatus('A guardar ficheiro de vídeos...', 'info');
-  const { payload } = await apiRequest(`/api/videos/save?target=${encodeURIComponent(selectedTarget)}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(videosData)
-  });
+  setStatus('A guardar vídeos no Firebase...', 'info');
+  await window.VCVideoData.saveTarget(selectedTarget, videosData);
 
-  if (!payload.ok) {
-    throw new Error(payload.error || 'Falha ao guardar vídeos.');
-  }
-
-  const savedFile = payload.file || '(ficheiro não identificado)';
-  document.getElementById('logSaida').value = `${payload.message || 'Ficheiro guardado.'}\nDestino: ${payload.target || selectedTarget}\nFicheiro: ${savedFile}`;
-  setStatus('Ficheiro de vídeos guardado com sucesso.', 'ok');
+  document.getElementById('logSaida').value = `Vídeos guardados com sucesso.\nDestino: ${selectedTarget}\nOrigem: Firebase Realtime Database`;
+  setStatus('Vídeos guardados e publicados no site.', 'ok');
 }
 
 async function publicar() {
   await guardarDestino();
-
-  setStatus('A executar deploy...', 'info');
-  const { payload } = await apiRequest('/api/publish', { method: 'POST' });
-
-  document.getElementById('logSaida').value = payload.output || payload.message || '';
-  if (!payload.ok) throw new Error(payload.error || 'Deploy falhou.');
-
-  setStatus('Deploy concluído com sucesso.', 'ok');
+  setStatus('Vídeos publicados no site.', 'ok');
 }
 
 async function verificarServidor() {
   try {
-    await apiRequest('/api/noticias', { method: 'GET' });
-    setStatus('Servidor online.', 'ok');
+    await window.VCVideoData.ensureFirebaseReady();
+    if (typeof firebase !== 'undefined' && typeof firebase.auth === 'function' && firebase.auth().currentUser) {
+      setStatus('Firebase online e sessão admin ativa.', 'ok');
+      return;
+    }
+
+    setStatus('Firebase online. Faça login no painel admin para guardar alterações.', 'info');
   } catch (error) {
-    setStatus('Servidor offline. Executa iniciar-noticias-studio.cmd.', 'err');
+    setStatus(error.message || 'Falha ao verificar Firebase.', 'err');
   }
 }
 
@@ -533,11 +491,8 @@ function bindEvents() {
 (async function init() {
   bindEvents();
 
-  if (!(window.location.origin || '').includes('localhost:8787')) {
-    setStatus('Abre esta tool por http://localhost:8787/tools/videos-studio.html', 'info');
-  }
-
   try {
+    await verificarServidor();
     await carregarDestino();
   } catch (error) {
     setStatus(error.message, 'err');
