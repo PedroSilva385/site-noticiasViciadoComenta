@@ -1,0 +1,3041 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin - Viciado Comenta</title>
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0f172a;
+  color: #1f2937;
+  min-height: 100vh;
+}
+
+/* ========== AUTH SCREEN ========== */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1f3b73 0%, #4b2a7b 100%);
+}
+
+.auth-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-box h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.auth-box .subtitle {
+  color: #6b7280;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: 18px;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 12px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+.auth-form button:hover {
+  background: #4338ca;
+}
+
+.auth-error {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  display: none;
+  font-size: 0.9rem;
+}
+
+#authError.show {
+  display: block;
+}
+
+/* ========== MAIN DASHBOARD ========== */
+.dashboard {
+  display: none;
+}
+
+.dashboard.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.header {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-right: 8px;
+}
+
+.admin-tab-btn {
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-tab-btn:hover {
+  border-color: #4f46e5;
+  color: #4338ca;
+}
+
+.admin-tab-btn.active {
+  background: #eef2ff;
+  border-color: #4f46e5;
+  color: #312e81;
+}
+
+.user-info {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.btn-logout {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.btn-logout:hover {
+  background: #b91c1c;
+}
+
+.container {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  gap: 24px;
+}
+
+.panel-view {
+  display: none;
+  flex: 1;
+  width: 100%;
+}
+
+.panel-view.active {
+  display: flex;
+}
+
+.stats-shell {
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stats-toolbar {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.stats-toolbar .btn-inline {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #3730a3;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stats-toolbar .btn-inline:hover {
+  background: #e0e7ff;
+}
+
+.stats-frame {
+  width: 100%;
+  min-height: 78vh;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.tool-notice {
+  padding: 12px 14px;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.tool-notice strong {
+  color: #312e81;
+}
+
+.sidebar {
+  width: 280px;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  height: fit-content;
+}
+
+.sidebar h2 {
+  font-size: 0.95rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sidebar .btn-new {
+  width: 100%;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.sidebar .btn-new:hover {
+  background: #15803d;
+}
+
+.noticias-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.noticia-item {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: all 0.2s;
+}
+
+.noticia-item:hover {
+  background: #f3f4f6;
+  border-color: #4f46e5;
+}
+
+.noticia-item.active {
+  background: #eef2ff;
+  border-color: #4f46e5;
+}
+
+.noticia-item .title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noticia-item .date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.main-panel {
+  flex: 1;
+  background: white;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-section h3 {
+  font-size: 1rem;
+  color: #111827;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Courier New', monospace;
+}
+
+/* ========== EDITOR WYSIWYG ========== */
+#contentEditor {
+  min-height: 250px;
+  padding: 40px 48px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background: white;
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.15;
+  color: #202124;
+  overflow-y: auto;
+  resize: vertical;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15);
+}
+
+#contentEditor p {
+  margin: 0;
+}
+
+#contentEditor h2,
+#contentEditor h3 {
+  margin: 18px 0 6px;
+  line-height: 1.25;
+}
+
+#contentEditor ul,
+#contentEditor ol {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+#contentEditor li {
+  margin-bottom: 2px;
+}
+
+#contentEditor blockquote {
+  border-left: 4px solid #c7d2fe;
+  margin: 10px 0;
+  padding: 8px 14px;
+  color: #334155;
+  background: #f8fafc;
+}
+
+#contentEditor pre {
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+#contentEditor:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+#contentEditor:empty:before {
+  content: attr(placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+#contentEditor strong, #contentEditor b {
+  font-weight: 700;
+}
+
+#contentEditor em, #contentEditor i {
+  font-style: italic;
+}
+
+#contentEditor u {
+  text-decoration: underline;
+}
+
+#contentEditor h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 10px 0 4px;
+}
+
+#contentEditor a {
+  color: #4f46e5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#contentEditor code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+#contentEditor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.editor-counter {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.editor-layout.split {
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+}
+
+.editor-pane,
+.preview-pane {
+  min-width: 0;
+}
+
+.preview-pane {
+  display: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.editor-layout.split .preview-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #eef2ff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #3730a3;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.preview-body {
+  padding: 14px;
+  overflow-y: auto;
+  max-height: 420px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #3a3f5a;
+}
+
+.preview-body p {
+  margin: 0 0 14px;
+  text-align: justify;
+}
+
+.preview-body ul,
+.preview-body ol {
+  margin: 0 0 14px;
+  padding-left: 28px;
+}
+
+.preview-body li {
+  margin-bottom: 6px;
+}
+
+.preview-body blockquote {
+  border-left: 4px solid #93c5fd;
+  background: #eff6ff;
+  padding: 8px 14px;
+  margin: 14px 0;
+}
+
+.preview-body pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 14px 0;
+}
+
+.preview-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 14px 0;
+}
+
+.preview-body br {
+  display: inline;
+}
+
+.preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.preview-actions .btn-secondary {
+  width: 100%;
+  justify-content: center;
+}
+
+.preview-site-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quality-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  background: #f9fafb;
+}
+
+.quality-card .label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.quality-card .value {
+  margin-top: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.quality-hints {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+.quality-hints strong {
+  color: #1f2937;
+}
+
+/* ========== TOOLBAR ========== */
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.editor-toolbar button {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editor-toolbar select {
+  padding: 8px 10px;
+  font-size: 0.84rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #1f2937;
+}
+
+.editor-toolbar select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.1);
+}
+
+.editor-toolbar button:hover {
+  background: #f9fafb;
+  border-color: #4f46e5;
+  color: #4f46e5;
+}
+
+.editor-toolbar button.active {
+  background: #4f46e5;
+  color: white;
+  border-color: #4f46e5;
+}
+
+.editor-toolbar .btn-accent {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
+}
+
+.toolbar-separator {
+  width: 1px;
+  background: #d1d5db;
+  margin: 0 4px;
+}
+
+/* ========== SCHEDULING ========== */
+.scheduling-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.scheduling-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scheduling-option input[type="radio"] {
+  width: auto;
+  margin: 0;
+}
+
+.scheduling-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+
+.scheduling-fields.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #4338ca;
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.status {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: none;
+  font-weight: 600;
+}
+
+.status.show {
+  display: block;
+}
+
+.status.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.status.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+}
+
+.empty-state h3 {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header-right {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .admin-tabs {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+  }
+
+  .form-row, .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-layout.split {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-pane {
+    display: none !important;
+  }
+
+  .quality-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.loading {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="auth-container">
+  <div class="auth-box">
+    <h1>Painel Admin</h1>
+    <p class="subtitle">Gerencie as notícias do site</p>
+    <div id="authError" class="auth-error"></div>
+    <form class="auth-form" id="authForm">
+      <div class="form-group">
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" placeholder="seu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="authPassword">Senha</label>
+        <input type="password" id="authPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit">Entrar</button>
+      <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
+        Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+  <div class="header">
+    <h1>📰 Painel Admin - Notícias</h1>
+    <div class="header-right">
+      <div class="admin-tabs" role="tablist" aria-label="Abas do painel admin">
+        <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
+        <button type="button" class="admin-tab-btn" id="adminTabVideos" role="tab" aria-selected="false" aria-controls="videosView">🎬 Vídeos</button>
+        <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
+      </div>
+      <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
+      <button class="btn-logout" id="btnLogout">Sair</button>
+    </div>
+  </div>
+
+  <div class="container panel-view active" id="newsView">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h2>Notícias</h2>
+      <button class="btn-new" id="btnNewNoticia">+ Nova Notícia</button>
+      <div class="noticias-list" id="noticiasList"></div>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <div class="main-panel">
+      <div id="status" class="status"></div>
+      <div id="emptyState" class="empty-state">
+        <h3>Selecione uma notícia para editar</h3>
+        <p>Ou crie uma nova notícia</p>
+      </div>
+
+      <div id="editorPanel" style="display: none;">
+        <!-- Informações básicas -->
+        <div class="form-section">
+          <h3>Informações Básicas</h3>
+          <div class="form-group">
+            <label for="noticiaId">ID (automático)</label>
+            <input type="text" id="noticiaId" readonly>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noticiaTitulo">Título *</label>
+              <input type="text" id="noticiaTitulo" required>
+            </div>
+            <div class="form-group">
+              <label for="noticiaAutor">Autor</label>
+              <input type="text" id="noticiaAutor">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noticiaData">Data (DD/MM/AAAA) *</label>
+              <input type="text" id="noticiaData" placeholder="20/03/2026" required>
+            </div>
+            <div class="form-group">
+              <label for="categoriasSelect">Categoria *</label>
+              <select id="categoriasSelect">
+                <option value="">-- Selecionar categoria --</option>
+              </select>
+              <input type="text" id="noticiaCategoria" placeholder="Ou escreve uma nova categoria..." style="margin-top:8px;">
+            </div>
+          </div>
+
+          <!-- Agendamento -->
+          <div class="form-section" style="border-top: 1px solid #e5e7eb; padding-top: 16px; margin-top: 12px;">
+            <h4 style="font-size: 0.95rem; margin-bottom: 12px;">Publicação</h4>
+            <div class="scheduling-group">
+              <label class="scheduling-option">
+                <input type="radio" name="scheduling" value="immediate" checked>
+                <span>Publicar imediatamente</span>
+              </label>
+              <label class="scheduling-option">
+                <input type="radio" name="scheduling" value="scheduled">
+                <span>Agendar para data/hora</span>
+              </label>
+            </div>
+            <div class="scheduling-fields" id="schedulingFields">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="noticiaScheduleDate">Data</label>
+                <input type="date" id="noticiaScheduleDate">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="noticiaScheduleTime">Hora</label>
+                <input type="time" id="noticiaScheduleTime" value="18:00">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="form-section">
+          <h3>Conteúdo</h3>
+          <div class="form-group">
+            <label for="noticiaResumo">Resumo (breve descrição)</label>
+            <textarea id="noticiaResumo" placeholder="Resumo da notícia em 2-3 linhas..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="contentEditor">Conteúdo principal *</label>
+            <div class="editor-toolbar">
+              <button type="button" id="btnBold" title="Negrito (seleciona texto e carrega)" style="font-weight:700;">
+                B
+              </button>
+              <button type="button" id="btnItalic" title="Itálico (seleciona texto e carrega)" style="font-style:italic;">
+                I
+              </button>
+              <button type="button" id="btnUnderline" title="Sublinhado (seleciona texto e carrega)" style="text-decoration:underline;">
+                U
+              </button>
+              <select id="fontFamilySelect" title="Tipo de letra">
+                <option value="">Fonte</option>
+                <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                <option value="Arial, Helvetica, sans-serif">Arial</option>
+                <option value="Georgia, 'Times New Roman', serif">Georgia</option>
+                <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet</option>
+                <option value="'Courier New', Courier, monospace">Courier New</option>
+              </select>
+              <select id="fontSizeSelect" title="Tamanho da letra">
+                <option value="">Tamanho</option>
+                <option value="2">Pequeno</option>
+                <option value="3">Normal</option>
+                <option value="4">Grande</option>
+                <option value="5">Maior</option>
+                <option value="6">Destaque</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <button type="button" id="btnHeading" title="Título H2">
+                H2
+              </button>
+              <button type="button" id="btnSubHeading" title="Subtítulo H3">
+                H3
+              </button>
+              <button type="button" id="btnQuote" title="Citação">
+                ❝
+              </button>
+              <button type="button" id="btnListUl" title="Lista com bullets">
+                • Lista
+              </button>
+              <button type="button" id="btnListOl" title="Lista numerada">
+                1. Lista
+              </button>
+              <button type="button" id="btnCode" title="Código inline">
+                &lt;/&gt;
+              </button>
+              <button type="button" id="btnCodeBlock" title="Bloco de código">
+                [code]
+              </button>
+              <div class="toolbar-separator"></div>
+              <button type="button" id="btnLink" title="Inserir link">
+                🔗 Link
+              </button>
+              <button type="button" id="btnImage" title="Inserir imagem">
+                🖼️ Imagem
+              </button>
+              <button type="button" id="btnUploadImage" class="btn-accent" title="Upload de imagem">
+                ⤴ Upload
+              </button>
+              <input type="file" id="imageUploadInput" accept="image/*" style="display:none;">
+              <button type="button" id="btnClearFormatting" title="Limpar formatação">
+                Tx
+              </button>
+              <button type="button" id="btnTogglePreview" class="btn-accent" title="Mostrar/Ocultar preview">
+                👁️ Preview
+              </button>
+            </div>
+            <div class="editor-layout" id="editorLayout">
+              <div class="editor-pane">
+                <div id="contentEditor" contenteditable="true" role="textbox" aria-label="Editor de conteúdo" placeholder="Cole ou escreve o conteúdo aqui. Seleciona texto e usa os botões acima para formatar."></div>
+              </div>
+              <aside class="preview-pane" id="previewPane">
+                <div class="preview-header">Pré-visualização do artigo</div>
+                <div class="preview-body" id="contentPreview"></div>
+                <div class="preview-actions">
+                  <button type="button" class="btn-secondary" id="btnOpenSitePreview">Abrir no site para editar</button>
+                  <p class="preview-site-hint" id="previewSiteHint">Abre o artigo no layout real e devolve o texto editado ao painel quando carregares em guardar.</p>
+                </div>
+              </aside>
+            </div>
+            <div class="editor-counter"><span id="charCount">0</span> caracteres • <span id="wordCount">0</span> palavras</div>
+            <div class="quality-grid">
+              <div class="quality-card">
+                <div class="label">Leitura</div>
+                <div class="value" id="readingTime">0 min</div>
+              </div>
+              <div class="quality-card">
+                <div class="label">Título SEO</div>
+                <div class="value" id="seoTitleScore">0 / 70</div>
+              </div>
+              <div class="quality-card">
+                <div class="label">Resumo SEO</div>
+                <div class="value" id="seoResumoScore">0 / 160</div>
+              </div>
+            </div>
+            <div class="quality-hints" id="qualityHints"></div>
+          </div>
+        </div>
+
+        <!-- Multimédia e links -->
+        <div class="form-section">
+          <h3>Multimédia e Links</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noticiaVideo">Vídeo (URL do YouTube)</label>
+              <input type="url" id="noticiaVideo" placeholder="https://youtu.be/...">
+            </div>
+            <div class="form-group">
+              <label for="noticiaSlug">Slug (automático)</label>
+              <input type="text" id="noticiaSlug" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="form-actions">
+          <button type="button" class="btn-primary" id="btnSave">💾 Guardar</button>
+          <button type="button" class="btn-secondary" id="btnCancel">Cancelar</button>
+          <button type="button" class="btn-danger" id="btnDelete" style="margin-left: auto;">🗑️ Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-view" id="statsView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <div class="stats-toolbar">
+          <button type="button" class="btn-inline" id="btnReloadStats">Atualizar estatísticas</button>
+          <a class="btn-inline" href="../estatisticas.html" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
+        </div>
+        <iframe
+          id="statsFrame"
+          class="stats-frame"
+          src="../estatisticas.html"
+          title="Estatísticas do site"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-view" id="videosView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <div class="tool-notice">
+          Gere aqui os vídeos das páginas <strong>Viciado Comenta</strong>, <strong>Metin2</strong> e o <strong>vídeo em destaque</strong> da homepage. As alterações passam a ser guardadas diretamente no Firebase e ficam disponíveis no site sem precisares de abrir o studio local.
+        </div>
+        <div class="stats-toolbar">
+          <button type="button" class="btn-inline" id="btnReloadVideosStudio">Atualizar painel de vídeos</button>
+          <a class="btn-inline" href="../tools/videos-studio.html" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
+        </div>
+        <iframe
+          id="videosStudioFrame"
+          class="stats-frame"
+          src="../tools/videos-studio.html"
+          title="Painel de vídeos"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK (Compat version for compatibility) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+// Firebase Config (do seu arquivo)
+const firebaseConfig = {
+  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+  authDomain: "chat-viciadocomenta.firebaseapp.com",
+  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chat-viciadocomenta",
+  storageBucket: "chat-viciadocomenta.firebasestorage.app",
+  messagingSenderId: "183684670526",
+  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
+let authKeepAliveTimer = null;
+let persistenceReady = false;
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
+  console.warn('Não foi possível configurar persistência LOCAL:', error);
+});
+
+async function ensureAuthPersistence() {
+  if (persistenceReady) return;
+
+  try {
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    persistenceReady = true;
+    return;
+  } catch (error) {
+    console.warn('Persistência LOCAL falhou, a tentar SESSION...', error);
+  }
+
+  try {
+    await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    persistenceReady = true;
+  } catch (error) {
+    console.warn('Persistência SESSION também falhou.', error);
+  }
+}
+
+function startAuthKeepAlive() {
+  if (authKeepAliveTimer) {
+    clearInterval(authKeepAliveTimer);
+  }
+
+  authKeepAliveTimer = setInterval(async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      await user.getIdToken(true);
+    } catch (error) {
+      console.warn('Falha no refresh periódico de token:', error);
+    }
+  }, 20 * 60 * 1000);
+}
+
+function stopAuthKeepAlive() {
+  if (!authKeepAliveTimer) return;
+  clearInterval(authKeepAliveTimer);
+  authKeepAliveTimer = null;
+}
+
+function applySignedOutUiState() {
+  currentUser = null;
+  stopAuthKeepAlive();
+  setAdminView('noticias');
+  authScreen.style.display = 'flex';
+  dashboard.classList.remove('active');
+  try {
+    const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY) || '';
+    authEmail.value = rememberedEmail;
+  } catch (_) {
+    authEmail.value = '';
+  }
+  authPassword.value = '';
+  allNoticias = [];
+  selectedNoticiaId = null;
+  setDirty(false);
+}
+
+// ===== STATE =====
+let currentUser = null;
+let allNoticias = [];
+let selectedNoticiaId = null;
+
+// ===== DOM ELEMENTS =====
+const authScreen = document.getElementById('authScreen');
+const dashboard = document.getElementById('dashboard');
+const authForm = document.getElementById('authForm');
+const authEmail = document.getElementById('authEmail');
+const authPassword = document.getElementById('authPassword');
+const authError = document.getElementById('authError');
+const userEmail = document.getElementById('userEmail');
+const btnLogout = document.getElementById('btnLogout');
+const adminTabNoticias = document.getElementById('adminTabNoticias');
+const adminTabVideos = document.getElementById('adminTabVideos');
+const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
+const newsView = document.getElementById('newsView');
+const videosView = document.getElementById('videosView');
+const statsView = document.getElementById('statsView');
+const videosStudioFrame = document.getElementById('videosStudioFrame');
+const statsFrame = document.getElementById('statsFrame');
+const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
+const btnReloadStats = document.getElementById('btnReloadStats');
+const noticiasList = document.getElementById('noticiasList');
+const btnNewNoticia = document.getElementById('btnNewNoticia');
+const status = document.getElementById('status');
+const emptyState = document.getElementById('emptyState');
+const editorPanel = document.getElementById('editorPanel');
+
+function setAdminView(viewName) {
+  const showNoticias = viewName === 'noticias';
+  const showVideos = viewName === 'videos';
+  const showStats = viewName === 'estatisticas';
+
+  adminTabNoticias.classList.toggle('active', showNoticias);
+  adminTabVideos.classList.toggle('active', showVideos);
+  adminTabEstatisticas.classList.toggle('active', showStats);
+  adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
+  adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
+  adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
+
+  newsView.classList.toggle('active', showNoticias);
+  videosView.classList.toggle('active', showVideos);
+  statsView.classList.toggle('active', showStats);
+  videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
+  statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
+}
+
+adminTabNoticias.addEventListener('click', () => {
+  setAdminView('noticias');
+});
+
+adminTabVideos.addEventListener('click', () => {
+  setAdminView('videos');
+});
+
+adminTabEstatisticas.addEventListener('click', () => {
+  setAdminView('estatisticas');
+});
+
+btnReloadVideosStudio.addEventListener('click', () => {
+  const src = videosStudioFrame.getAttribute('src') || '../tools/videos-studio.html';
+  videosStudioFrame.setAttribute('src', src);
+});
+
+btnReloadStats.addEventListener('click', () => {
+  const src = statsFrame.getAttribute('src') || '../estatisticas.html';
+  statsFrame.setAttribute('src', src);
+});
+
+try {
+  const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY);
+  if (rememberedEmail) {
+    authEmail.value = rememberedEmail;
+  }
+} catch (_) {}
+
+// Form fields
+const noticiaId = document.getElementById('noticiaId');
+const noticiaTitulo = document.getElementById('noticiaTitulo');
+const noticiaAutor = document.getElementById('noticiaAutor');
+const noticiaData = document.getElementById('noticiaData');
+const noticiaCategoria = document.getElementById('noticiaCategoria');
+const noticiaResumo = document.getElementById('noticiaResumo');
+const contentEditor = document.getElementById('contentEditor');
+const noticiaVideo = document.getElementById('noticiaVideo');
+const noticiaSlug = document.getElementById('noticiaSlug');
+const btnSave = document.getElementById('btnSave');
+const btnCancel = document.getElementById('btnCancel');
+const btnDelete = document.getElementById('btnDelete');
+
+// Scheduling fields
+const schedulingRadios = document.querySelectorAll('input[name="scheduling"]');
+const schedulingFields = document.getElementById('schedulingFields');
+const noticiaScheduleDate = document.getElementById('noticiaScheduleDate');
+const noticiaScheduleTime = document.getElementById('noticiaScheduleTime');
+
+// Editor toolbar buttons
+const btnBold = document.getElementById('btnBold');
+const btnItalic = document.getElementById('btnItalic');
+const btnLink = document.getElementById('btnLink');
+const btnImage = document.getElementById('btnImage');
+const btnHeading = document.getElementById('btnHeading');
+const btnCode = document.getElementById('btnCode');
+const btnSubHeading = document.getElementById('btnSubHeading');
+const btnQuote = document.getElementById('btnQuote');
+const btnListUl = document.getElementById('btnListUl');
+const btnListOl = document.getElementById('btnListOl');
+const btnCodeBlock = document.getElementById('btnCodeBlock');
+const btnClearFormatting = document.getElementById('btnClearFormatting');
+const btnUploadImage = document.getElementById('btnUploadImage');
+const imageUploadInput = document.getElementById('imageUploadInput');
+const fontFamilySelect = document.getElementById('fontFamilySelect');
+const fontSizeSelect = document.getElementById('fontSizeSelect');
+const btnTogglePreview = document.getElementById('btnTogglePreview');
+const editorLayout = document.getElementById('editorLayout');
+const contentPreview = document.getElementById('contentPreview');
+const btnOpenSitePreview = document.getElementById('btnOpenSitePreview');
+const previewSiteHint = document.getElementById('previewSiteHint');
+const qualityHints = document.getElementById('qualityHints');
+const wordCountEl = document.getElementById('wordCount');
+const readingTimeEl = document.getElementById('readingTime');
+const seoTitleScoreEl = document.getElementById('seoTitleScore');
+const seoResumoScoreEl = document.getElementById('seoResumoScore');
+
+// ===== EDITOR TOOLBAR FUNCTIONS =====
+let savedRange = null;
+let previewEnabled = false;
+let isDirty = false;
+let autosaveTimer = null;
+let lastPreviewSyncTimestamp = 0;
+const DRAFT_STORAGE_KEY = 'admin-noticia-draft-v1';
+const SITE_PREVIEW_DRAFT_PREFIX = 'vc_admin_site_preview_';
+const SITE_PREVIEW_SYNC_PREFIX = 'vc_admin_site_sync_';
+const LEGACY_FONT_SIZE_MAP = {
+  '1': '0.8em',
+  '2': '0.9em',
+  '3': '1em',
+  '4': '1.15em',
+  '5': '1.3em',
+  '6': '1.5em',
+  '7': '1.8em'
+};
+
+if (typeof document.execCommand === 'function') {
+  document.execCommand('defaultParagraphSeparator', false, 'p');
+}
+
+// Guarda o Range sempre que o utilizador seleciona texto ou move o cursor no editor
+function saveEditorRange() {
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0);
+    if (contentEditor.contains(range.commonAncestorContainer)) {
+      savedRange = range.cloneRange();
+    }
+  }
+}
+
+// Restaura o Range guardado e foca o editor
+function restoreEditorRange() {
+  contentEditor.focus();
+  if (savedRange) {
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+}
+
+contentEditor.addEventListener('mouseup', saveEditorRange);
+contentEditor.addEventListener('keyup', saveEditorRange);
+contentEditor.addEventListener('selectionchange', saveEditorRange);
+document.addEventListener('selectionchange', () => {
+  if (document.activeElement === contentEditor) saveEditorRange();
+});
+
+// Impede que o clique nos botões da toolbar tire o foco do editor
+document.querySelector('.editor-toolbar').addEventListener('mousedown', (e) => {
+  if (e.target.closest('button')) {
+    e.preventDefault();
+  }
+});
+
+// Handlers dos botões da toolbar
+const TOOLBAR_BUTTONS = [
+  'btnBold','btnItalic','btnUnderline','btnHeading','btnSubHeading','btnQuote',
+  'btnListUl','btnListOl','btnCode','btnCodeBlock','btnLink','btnImage',
+  'btnUploadImage','btnClearFormatting','btnTogglePreview'
+];
+
+function updatePreviewContent() {
+  if (!contentPreview) return;
+  const html = normalizeEditorHtml(contentEditor.innerHTML || '');
+  contentPreview.innerHTML = html || '<p style="color:#94a3b8;">Pré-visualização vazia.</p>';
+  updateSitePreviewActionState();
+}
+
+function getSitePreviewDraftKey(articleId) {
+  return `${SITE_PREVIEW_DRAFT_PREFIX}${String(articleId || '').trim()}`;
+}
+
+function getSitePreviewSyncKey(articleId) {
+  return `${SITE_PREVIEW_SYNC_PREFIX}${String(articleId || '').trim()}`;
+}
+
+function getCurrentSitePreviewPayload() {
+  const id = String(noticiaId.value || '').trim();
+  const titulo = noticiaTitulo.value.trim();
+
+  if (!id || !titulo || selectedNoticiaId === null) {
+    return null;
+  }
+
+  return {
+    id,
+    titulo,
+    resumo: noticiaResumo.value.trim(),
+    autor: noticiaAutor.value.trim(),
+    data: noticiaData.value.trim(),
+    categoria: getCategoriaValue(),
+    video: noticiaVideo.value.trim(),
+    slug: noticiaSlug.value.trim() || generateSlug(titulo),
+    conteudo: normalizeEditorHtml(contentEditor.innerHTML),
+    updatedAt: Date.now()
+  };
+}
+
+function persistSitePreviewPayload() {
+  const payload = getCurrentSitePreviewPayload();
+  if (!payload) return null;
+
+  try {
+    localStorage.setItem(getSitePreviewDraftKey(payload.id), JSON.stringify(payload));
+  } catch (error) {
+    console.warn('Falha ao preparar preview do site:', error);
+  }
+
+  return payload;
+}
+
+function buildSitePreviewEditorUrl() {
+  const payload = persistSitePreviewPayload();
+  if (!payload) return '';
+
+  const slug = encodeURIComponent(payload.slug || payload.id);
+  const id = encodeURIComponent(payload.id);
+  const previewTs = encodeURIComponent(String(payload.updatedAt || Date.now()));
+  return `../artigos.html?edit=1&adminPreview=1&previewTs=${previewTs}#/${slug}/${id}`;
+}
+
+function updateSitePreviewActionState() {
+  if (!btnOpenSitePreview || !previewSiteHint) return;
+
+  const payload = getCurrentSitePreviewPayload();
+  const enabled = !!payload;
+
+  btnOpenSitePreview.disabled = !enabled;
+
+  if (enabled) {
+    previewSiteHint.textContent = 'Abre o artigo no layout real, permite editar o texto lá e devolve as alterações ao painel quando guardares.';
+    return;
+  }
+
+  previewSiteHint.textContent = 'Guarda ou seleciona primeiro uma notícia existente para abrir a edição diretamente no site.';
+}
+
+async function applySitePreviewSyncPayload(payload) {
+  if (!payload || !payload.articleId || !payload.html) return;
+  if (String(payload.articleId) !== String(noticiaId.value || '')) return;
+
+  const syncTimestamp = Number(payload.timestamp || Date.now());
+  if (syncTimestamp <= lastPreviewSyncTimestamp) return;
+  lastPreviewSyncTimestamp = syncTimestamp;
+
+  contentEditor.innerHTML = normalizeEditorHtml(payload.html);
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+
+  try {
+    await saveNoticia();
+    showStatus('Texto atualizado a partir do site e guardado no painel.', 'success');
+  } catch (error) {
+    console.error('Erro ao aplicar edição vinda do site:', error);
+    showStatus('Texto recebido do site, mas falhou o guardar automático. Use Guardar.', 'error');
+  }
+}
+
+function setDirty(value) {
+  isDirty = !!value;
+}
+
+function getEditorMetrics() {
+  const text = (contentEditor.innerText || '').trim();
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  const chars = text.length;
+  const readingMin = Math.max(1, Math.ceil(words / 200));
+  return { words, chars, readingMin };
+}
+
+function updateQualityHints() {
+  const tituloLen = noticiaTitulo.value.trim().length;
+  const resumoLen = noticiaResumo.value.trim().length;
+  const metrics = getEditorMetrics();
+
+  const charCounter = document.getElementById('charCount');
+  if (charCounter) charCounter.textContent = String(metrics.chars);
+  if (wordCountEl) wordCountEl.textContent = String(metrics.words);
+  if (readingTimeEl) readingTimeEl.textContent = `${metrics.readingMin} min`;
+  if (seoTitleScoreEl) seoTitleScoreEl.textContent = `${tituloLen} / 70`;
+  if (seoResumoScoreEl) seoResumoScoreEl.textContent = `${resumoLen} / 160`;
+
+  const hints = [];
+  if (tituloLen < 45) hints.push('Título SEO curto (ideal: 45-70).');
+  if (tituloLen > 70) hints.push('Título SEO longo (ideal: até 70).');
+  if (resumoLen < 120) hints.push('Resumo curto para meta description (ideal: 120-160).');
+  if (resumoLen > 160) hints.push('Resumo longo para meta description (ideal: até 160).');
+  if (metrics.words < 180) hints.push('Conteúdo curto; recomenda-se >= 180 palavras.');
+
+  if (qualityHints) {
+    qualityHints.innerHTML = hints.length
+      ? `<strong>Melhorias sugeridas:</strong> ${hints.join(' ')}`
+      : '<strong>SEO básico:</strong> Título, resumo e conteúdo dentro de um intervalo saudável.';
+  }
+}
+
+function queueDraftAutosave() {
+  if (autosaveTimer) {
+    clearTimeout(autosaveTimer);
+  }
+  autosaveTimer = setTimeout(() => {
+    const payload = {
+      selectedNoticiaId,
+      isNewDraft: selectedNoticiaId === null,
+      noticiaId: noticiaId.value,
+      titulo: noticiaTitulo.value,
+      autor: noticiaAutor.value,
+      data: noticiaData.value,
+      categoriaInput: noticiaCategoria.value,
+      categoriaSelect: categoriasSelect.value,
+      resumo: noticiaResumo.value,
+      conteudo: normalizeEditorHtml(contentEditor.innerHTML),
+      video: noticiaVideo.value,
+      slug: noticiaSlug.value,
+      scheduleMode: document.querySelector('input[name="scheduling"]:checked')?.value || 'immediate',
+      scheduleDate: noticiaScheduleDate.value,
+      scheduleTime: noticiaScheduleTime.value,
+      timestamp: Date.now()
+    };
+
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+    } catch (error) {
+      console.warn('Falha ao guardar rascunho local:', error);
+    }
+  }, 500);
+}
+
+function restoreDraftIfAvailable() {
+  try {
+    const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return;
+    const draft = JSON.parse(raw);
+    if (!draft || !draft.timestamp) return;
+
+    const draftAgeMs = Date.now() - draft.timestamp;
+    if (draftAgeMs > 1000 * 60 * 60 * 24 * 3) {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      return;
+    }
+
+    if (selectedNoticiaId !== null) return;
+
+    // Evita restaurar rascunhos de edição de notícias já existentes.
+    if (draft.isNewDraft !== true) {
+      return;
+    }
+
+    const hasContent = [draft.titulo, draft.resumo, draft.conteudo].some((value) =>
+      String(value || '').trim().length > 0
+    );
+    if (!hasContent) {
+      return;
+    }
+
+    const shouldRestore = confirm('Foi encontrado um rascunho local de notícia nova. Deseja restaurar?');
+    if (!shouldRestore) {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      return;
+    }
+
+    noticiaId.value = draft.noticiaId || noticiaId.value;
+    noticiaTitulo.value = draft.titulo || '';
+    noticiaAutor.value = draft.autor || 'Pedro Silva';
+    noticiaData.value = draft.data || noticiaData.value;
+    noticiaCategoria.value = draft.categoriaInput || '';
+    categoriasSelect.value = draft.categoriaSelect || '';
+    noticiaResumo.value = draft.resumo || '';
+    contentEditor.innerHTML = normalizeEditorHtml(draft.conteudo || '');
+    noticiaVideo.value = draft.video || '';
+    noticiaSlug.value = draft.slug || '';
+
+    const scheduleMode = draft.scheduleMode === 'scheduled' ? 'scheduled' : 'immediate';
+    const radio = document.querySelector(`input[name="scheduling"][value="${scheduleMode}"]`);
+    if (radio) radio.checked = true;
+    schedulingFields.classList.toggle('active', scheduleMode === 'scheduled');
+    noticiaScheduleDate.value = draft.scheduleDate || '';
+    noticiaScheduleTime.value = draft.scheduleTime || '18:00';
+
+    updatePreviewContent();
+    updateQualityHints();
+    setDirty(true);
+    showStatus('Rascunho local restaurado automaticamente.', 'success');
+  } catch (error) {
+    console.warn('Falha ao restaurar rascunho local:', error);
+  }
+}
+
+function clearDraftAutosave() {
+  if (autosaveTimer) {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = null;
+  }
+  try {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+  } catch (_) {}
+}
+
+function togglePreview() {
+  previewEnabled = !previewEnabled;
+  editorLayout.classList.toggle('split', previewEnabled);
+  btnTogglePreview.classList.toggle('active', previewEnabled);
+  updatePreviewContent();
+}
+
+if (btnOpenSitePreview) {
+  btnOpenSitePreview.addEventListener('click', () => {
+    const targetUrl = buildSitePreviewEditorUrl();
+    if (!targetUrl) {
+      updateSitePreviewActionState();
+      return;
+    }
+
+    const previewWindow = window.open(targetUrl, 'vcSitePreviewEditor');
+    if (!previewWindow) {
+      showStatus('O browser bloqueou a abertura da página de preview no site.', 'error');
+    }
+  });
+}
+
+window.addEventListener('message', (event) => {
+  const data = event && event.data;
+  if (!data || data.type !== 'vc-admin-preview-save') return;
+  applySitePreviewSyncPayload(data.payload);
+});
+
+window.addEventListener('storage', (event) => {
+  if (!event || !event.key || !event.newValue) return;
+
+  const currentId = String(noticiaId.value || '').trim();
+  if (!currentId || event.key !== getSitePreviewSyncKey(currentId)) return;
+
+  try {
+    const payload = JSON.parse(event.newValue);
+    applySitePreviewSyncPayload(payload);
+  } catch (error) {
+    console.warn('Falha ao ler sincronização vinda do site:', error);
+  }
+});
+
+function insertImageHtml(src, altText) {
+  const safeAlt = String(altText || '').replace(/"/g, '&quot;');
+  const html = `<img src="${src}" alt="${safeAlt}" loading="lazy" decoding="async" style="max-width:100%;height:auto;">`;
+  document.execCommand('insertHTML', false, html);
+}
+
+function isLocalStudioHost() {
+  const host = String(window.location.hostname || '').toLowerCase();
+  return host === 'localhost' || host === '127.0.0.1';
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Falha ao ler imagem localmente.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadImageViaLocalServer(file) {
+  if (!isLocalStudioHost()) {
+    throw new Error('Abra o admin pelo Noticias Studio local para fazer upload de imagens sem base64.');
+  }
+
+  const dataUrl = await readFileAsDataUrl(file);
+  const response = await fetch('/api/images/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fileName: file.name,
+      dataUrl
+    })
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    payload = null;
+  }
+
+  if (!response.ok || !payload || payload.ok === false || !payload.url) {
+    throw new Error((payload && payload.error) ? payload.error : `Upload falhou (${response.status})`);
+  }
+
+  return payload.url;
+}
+
+function applyFontFamily(fontValue) {
+  if (!fontValue) return;
+
+  restoreEditorRange();
+  document.execCommand('fontName', false, fontValue);
+  saveEditorRange();
+
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+}
+
+function convertLegacyFontTags(rootElement) {
+  if (!rootElement) return;
+
+  rootElement.querySelectorAll('font').forEach((fontEl) => {
+    const span = document.createElement('span');
+    const inlineStyles = [];
+    const size = String(fontEl.getAttribute('size') || '').trim();
+    const mappedSize = LEGACY_FONT_SIZE_MAP[size];
+
+    if (mappedSize) {
+      inlineStyles.push(`font-size:${mappedSize}`);
+    }
+
+    if (fontEl.getAttribute('style')) {
+      inlineStyles.push(fontEl.getAttribute('style'));
+    }
+
+    if (inlineStyles.length) {
+      span.setAttribute('style', inlineStyles.join(';'));
+    }
+
+    span.innerHTML = fontEl.innerHTML;
+    fontEl.replaceWith(span);
+  });
+}
+
+function applyFontSize(fontSizeCommand) {
+  if (!fontSizeCommand) return;
+
+  restoreEditorRange();
+  document.execCommand('fontSize', false, fontSizeCommand);
+  convertLegacyFontTags(contentEditor);
+  saveEditorRange();
+
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+}
+
+function normalizeEditorHtml(html) {
+  if (!html) return '';
+
+  const tmp = document.createElement('div');
+  tmp.innerHTML = String(html);
+  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
+
+  const disallowedTags = 'script,style,iframe,object,embed,form,input,button,textarea,select,option';
+  tmp.querySelectorAll(disallowedTags).forEach((node) => node.remove());
+
+  const allowedTags = new Set([
+    'p','br','strong','b','em','i','u','s','a','img','h2','h3','ul','ol','li',
+    'blockquote','pre','code','span','div','font'
+  ]);
+
+  const sanitizeStyle = (styleValue) => {
+    if (!styleValue) return '';
+    const allowed = new Set([
+      'text-align','font-weight','font-style','text-decoration','font-size',
+      'line-height','margin-left','margin-right','margin-top','margin-bottom','color'
+    ]);
+    const clean = [];
+
+    String(styleValue).split(';').forEach((rule) => {
+      const [rawProp, rawVal] = rule.split(':');
+      if (!rawProp || !rawVal) return;
+      const prop = rawProp.trim().toLowerCase();
+      const val = rawVal.trim();
+      if (!allowed.has(prop)) return;
+      if (/expression\s*\(|url\s*\(|javascript:/i.test(val)) return;
+
+      if (prop === 'font-weight') {
+        const normalized = val.toLowerCase();
+        if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
+      }
+
+      if (prop === 'text-align' && !/^(left|right|center|justify)$/i.test(val)) return;
+
+      if (prop === 'font-size') {
+        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
+        if (!match) return;
+        const amount = parseFloat(match[1]);
+        const unit = match[2].toLowerCase();
+        if (unit === 'px' && (amount < 12 || amount > 40)) return;
+        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
+      }
+
+      if (prop === 'line-height') {
+        const normalized = val.trim().toLowerCase();
+        if (/^[0-9]+(?:\.[0-9]+)?$/.test(normalized)) {
+          const amount = parseFloat(normalized);
+          if (amount < 1 || amount > 3) return;
+        } else {
+          const match = normalized.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem|%)$/i);
+          if (!match) return;
+          const amount = parseFloat(match[1]);
+          const unit = match[2].toLowerCase();
+          if (unit === '%' && (amount < 100 || amount > 300)) return;
+          if (unit === 'px' && (amount < 14 || amount > 72)) return;
+          if ((unit === 'em' || unit === 'rem') && (amount < 1 || amount > 3)) return;
+        }
+      }
+
+      if (/^margin-(left|right|top|bottom)$/.test(prop)) {
+        const match = val.match(/^(-?[0-9]+(?:\.[0-9]+)?)(px|em|rem|pt)$/i);
+        if (!match) return;
+        const amount = parseFloat(match[1]);
+        if (amount < -72 || amount > 160) return;
+      }
+
+      if (prop === 'color') {
+        const normalized = val.trim();
+        if (!/^(#[0-9a-f]{3,8}|rgb(a)?\([^\)]+\)|hsl(a)?\([^\)]+\)|[a-z]+)$/i.test(normalized)) return;
+      }
+
+      clean.push(`${prop}:${val}`);
+    });
+
+    return clean.join(';');
+  };
+
+  const nodes = Array.from(tmp.querySelectorAll('*'));
+  nodes.forEach((el) => {
+    const tag = el.tagName.toLowerCase();
+
+    if (tag === 'font') {
+      const span = document.createElement('span');
+      const inlineStyles = [];
+      const size = String(el.getAttribute('size') || '').trim();
+      const face = el.getAttribute('face');
+
+      if (face) {
+        // Ignorado: fonte externa de colagem deve usar fonte padrão do site.
+      }
+      if (LEGACY_FONT_SIZE_MAP[size]) {
+        inlineStyles.push(`font-size:${LEGACY_FONT_SIZE_MAP[size]}`);
+      }
+      if (el.getAttribute('style')) {
+        inlineStyles.push(el.getAttribute('style'));
+      }
+
+      if (inlineStyles.length) {
+        const safeStyle = sanitizeStyle(inlineStyles.join(';'));
+        if (safeStyle) {
+          span.setAttribute('style', safeStyle);
+        }
+      }
+
+      span.innerHTML = el.innerHTML;
+      el.replaceWith(span);
+      return;
+    }
+
+    if (!allowedTags.has(tag)) {
+      while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+      el.remove();
+      return;
+    }
+
+    [...el.attributes].forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      const value = attr.value;
+
+      if (name.startsWith('on')) {
+        el.removeAttribute(attr.name);
+        return;
+      }
+
+      if (name === 'style') {
+        const safeStyle = sanitizeStyle(value);
+        if (safeStyle) {
+          el.setAttribute('style', safeStyle);
+        } else {
+          el.removeAttribute('style');
+        }
+        return;
+      }
+
+      if (tag === 'a' && name === 'href') {
+        if (/^javascript:/i.test(value)) {
+          el.removeAttribute('href');
+        }
+        return;
+      }
+
+      if (tag === 'a' && (name === 'target' || name === 'rel' || name === 'title')) {
+        return;
+      }
+
+      if (tag === 'img' && ['src','alt','title','width','height','loading','decoding','fetchpriority'].includes(name)) {
+        return;
+      }
+
+      el.removeAttribute(attr.name);
+    });
+
+    if (tag === 'a') {
+      if (!el.getAttribute('target')) el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener noreferrer');
+    }
+
+    if (tag === 'img') {
+      const currentStyle = el.getAttribute('style') || '';
+      const merged = `${currentStyle}${currentStyle ? ';' : ''}max-width:100%;height:auto`;
+      el.setAttribute('style', merged);
+    }
+
+    if (tag === 'div') {
+      const p = document.createElement('p');
+      p.innerHTML = el.innerHTML;
+      if (el.hasAttribute('style')) p.setAttribute('style', el.getAttribute('style'));
+      el.replaceWith(p);
+    }
+  });
+
+  tmp.querySelectorAll('b').forEach((el) => {
+    const strong = document.createElement('strong');
+    strong.innerHTML = el.innerHTML;
+    if (el.getAttribute('style')) strong.setAttribute('style', el.getAttribute('style'));
+    el.replaceWith(strong);
+  });
+
+  tmp.querySelectorAll('i').forEach((el) => {
+    const em = document.createElement('em');
+    em.innerHTML = el.innerHTML;
+    if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
+    el.replaceWith(em);
+  });
+
+  tmp.querySelectorAll('span, p, h2, h3').forEach((el) => {
+    if (!el.querySelector(blockLikeSelector)) return;
+
+    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return false;
+      }
+
+      return !node.matches(blockLikeSelector);
+    });
+
+    if (hasMeaningfulInlineContent) return;
+
+    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+    el.remove();
+  });
+
+  tmp.querySelectorAll('p, span').forEach((el) => {
+    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
+    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
+    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
+
+    if (hasRichContent) return;
+    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
+      el.remove();
+    }
+  });
+
+  // Converte negrito por estilo inline para <strong> para garantir persistência no live.
+  tmp.querySelectorAll('[style]').forEach((el) => {
+    const tag = el.tagName.toLowerCase();
+    if (tag === 'strong' || tag === 'b') return;
+
+    const currentStyle = String(el.getAttribute('style') || '');
+    if (!/font-weight\s*:\s*(bold|[6-9]00)/i.test(currentStyle)) return;
+
+    const styleWithoutWeight = currentStyle.replace(/font-weight\s*:\s*(bold|[1-9]00)\s*;?/gi, '');
+    const cleanedStyle = sanitizeStyle(styleWithoutWeight);
+
+    const strong = document.createElement('strong');
+    strong.innerHTML = el.innerHTML;
+    if (cleanedStyle) {
+      strong.setAttribute('style', cleanedStyle);
+    }
+
+    el.replaceWith(strong);
+  });
+
+  let result = tmp.innerHTML
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>')
+    .trim();
+
+  return result;
+}
+
+function normalizePlainTextToHtml(text) {
+  const safe = String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return safe
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => `<p>${block.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+}
+
+function normalizeDocsHtmlForEditor(html) {
+  if (!html) return '';
+
+  const tmp = document.createElement('div');
+  tmp.innerHTML = String(html);
+
+  // Remove wrappers/metadata comuns do Google Docs.
+  tmp.querySelectorAll('[id^="docs-internal-guid"], meta, style, link').forEach((node) => node.remove());
+
+  // Remove classes/atributos de origem para evitar estilos imprevisíveis.
+  tmp.querySelectorAll('*').forEach((el) => {
+    ['class', 'lang', 'dir', 'data-start', 'data-end', 'data-section-id'].forEach((attr) => {
+      if (el.hasAttribute(attr)) el.removeAttribute(attr);
+    });
+  });
+
+  return normalizeEditorHtml(tmp.innerHTML);
+}
+
+function isGoogleDocsHtml(html) {
+  const source = String(html || '');
+  return /docs-internal-guid|id="docs-internal-guid|docs.google.com|Google Docs/i.test(source);
+}
+
+function handleEditorPaste(event) {
+  const clipboard = event.clipboardData;
+  if (!clipboard) return false;
+
+  const html = clipboard.getData('text/html');
+  const text = clipboard.getData('text/plain');
+
+  if (html) {
+    event.preventDefault();
+
+    const normalized = isGoogleDocsHtml(html)
+      ? normalizeDocsHtmlForEditor(html)
+      : normalizeEditorHtml(html);
+
+    if (normalized) {
+      insertHtmlIntoEditor(normalized);
+    } else if (text) {
+      insertHtmlIntoEditor(normalizePlainTextToHtml(text));
+    }
+
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+    return true;
+  }
+
+  if (text) {
+    event.preventDefault();
+    insertHtmlIntoEditor(normalizePlainTextToHtml(text));
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+    return true;
+  }
+
+  return false;
+}
+
+function insertHtmlIntoEditor(html) {
+  const selection = window.getSelection();
+  if (!selection) {
+    contentEditor.innerHTML += html;
+    return;
+  }
+
+  let range = null;
+  if (selection.rangeCount > 0) {
+    range = selection.getRangeAt(0);
+  }
+
+  // Se não houver seleção válida no editor, coloca o cursor no fim.
+  if (!range || !contentEditor.contains(range.commonAncestorContainer)) {
+    contentEditor.focus();
+    range = document.createRange();
+    range.selectNodeContents(contentEditor);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  range.deleteContents();
+  const fragment = range.createContextualFragment(String(html || ''));
+  const lastNode = fragment.lastChild;
+  range.insertNode(fragment);
+
+  if (lastNode) {
+    range = document.createRange();
+    range.setStartAfter(lastNode);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+}
+
+fontFamilySelect.addEventListener('change', () => {
+  const fontValue = fontFamilySelect.value;
+  applyFontFamily(fontValue);
+  fontFamilySelect.value = '';
+});
+
+fontSizeSelect.addEventListener('change', () => {
+  const fontSizeValue = fontSizeSelect.value;
+  applyFontSize(fontSizeValue);
+  fontSizeSelect.value = '';
+});
+
+document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const id = btn.id;
+  if (!TOOLBAR_BUTTONS.includes(id)) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  restoreEditorRange();
+
+  if (id === 'btnBold') {
+    document.execCommand('bold', false, null);
+  } else if (id === 'btnItalic') {
+    document.execCommand('italic', false, null);
+  } else if (id === 'btnUnderline') {
+    document.execCommand('underline', false, null);
+  } else if (id === 'btnHeading') {
+    document.execCommand('formatBlock', false, 'h2');
+  } else if (id === 'btnSubHeading') {
+    document.execCommand('formatBlock', false, 'h3');
+  } else if (id === 'btnQuote') {
+    document.execCommand('formatBlock', false, 'blockquote');
+  } else if (id === 'btnListUl') {
+    document.execCommand('insertUnorderedList', false, null);
+  } else if (id === 'btnListOl') {
+    document.execCommand('insertOrderedList', false, null);
+  } else if (id === 'btnCode') {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+      const range = sel.getRangeAt(0);
+      const code = document.createElement('code');
+      try { range.surroundContents(code); } catch(e) {
+        document.execCommand('insertHTML', false, `<code>${sel.toString()}</code>`);
+      }
+    }
+  } else if (id === 'btnCodeBlock') {
+    document.execCommand('insertHTML', false, '<pre><code>cole o código aqui</code></pre><p></p>');
+  } else if (id === 'btnLink') {
+    const url = prompt('URL do link:');
+    if (url) {
+      document.execCommand('createLink', false, url);
+      contentEditor.querySelectorAll('a:not([target])').forEach(a => a.target = '_blank');
+    }
+  } else if (id === 'btnImage') {
+    const url = prompt('URL da imagem:');
+    if (url) {
+      const alt = prompt('Descrição da imagem (alt text):') || '';
+      insertImageHtml(url, alt);
+    }
+  } else if (id === 'btnUploadImage') {
+    imageUploadInput.click();
+  } else if (id === 'btnClearFormatting') {
+    document.execCommand('removeFormat', false, null);
+  } else if (id === 'btnTogglePreview') {
+    togglePreview();
+  }
+
+  saveEditorRange();
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+});
+
+imageUploadInput.addEventListener('change', () => {
+  const file = imageUploadInput.files && imageUploadInput.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    showStatus('Selecione um ficheiro de imagem válido.', 'error');
+    imageUploadInput.value = '';
+    return;
+  }
+
+  const finalizeUpload = async () => {
+    try {
+      showStatus('A carregar imagem para assets/imagens...', 'success');
+      const uploadedUrl = await uploadImageViaLocalServer(file);
+      restoreEditorRange();
+      const alt = prompt('Descrição da imagem (alt text):') || file.name;
+      insertImageHtml(uploadedUrl, alt);
+      saveEditorRange();
+      updatePreviewContent();
+      setDirty(true);
+      queueDraftAutosave();
+      showStatus('Imagem adicionada ao artigo com URL local.', 'success');
+    } catch (error) {
+      console.error('Erro no upload da imagem:', error);
+      showStatus(error.message || 'Não foi possível enviar a imagem sem base64.', 'error');
+    } finally {
+      imageUploadInput.value = '';
+    }
+  };
+
+  finalizeUpload();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (!(event.ctrlKey || event.metaKey)) return;
+  const key = event.key.toLowerCase();
+
+  if (key === 's') {
+    event.preventDefault();
+    saveNoticia();
+  } else if (document.activeElement === contentEditor) {
+    if (key === 'b') {
+      event.preventDefault();
+      document.execCommand('bold', false, null);
+    } else if (key === 'i') {
+      event.preventDefault();
+      document.execCommand('italic', false, null);
+    } else if (key === 'u') {
+      event.preventDefault();
+      document.execCommand('underline', false, null);
+    } else if (key === 'k') {
+      event.preventDefault();
+      const url = prompt('URL do link:');
+      if (url) document.execCommand('createLink', false, url);
+    }
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+  }
+});
+
+// ===== SCHEDULING =====
+schedulingRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (document.querySelector('input[name="scheduling"]:checked').value === 'scheduled') {
+      schedulingFields.classList.add('active');
+    } else {
+      schedulingFields.classList.remove('active');
+    }
+    setDirty(true);
+    queueDraftAutosave();
+  });
+});
+
+// ===== EDITOR CHAR COUNTER =====
+contentEditor.addEventListener('input', () => {
+  updateQualityHints();
+  updatePreviewContent();
+  setDirty(true);
+  queueDraftAutosave();
+});
+
+contentEditor.addEventListener('paste', (event) => {
+  if (handleEditorPaste(event)) return;
+
+  setTimeout(() => {
+    const currentHtml = contentEditor.innerHTML || '';
+    const normalized = normalizeEditorHtml(currentHtml);
+
+    if (normalized && normalized !== currentHtml) {
+      const prevScroll = contentEditor.scrollTop;
+      contentEditor.innerHTML = normalized;
+      contentEditor.scrollTop = prevScroll;
+    }
+
+    saveEditorRange();
+    updateQualityHints();
+    updatePreviewContent();
+    setDirty(true);
+    queueDraftAutosave();
+  }, 0);
+});
+
+[noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaSlug].forEach((field) => {
+  field.addEventListener('input', () => {
+    updateQualityHints();
+    setDirty(true);
+    queueDraftAutosave();
+  });
+});
+// ===== CATEGORIES FUNCTION =====
+const categoriasSelect = document.getElementById('categoriasSelect');
+
+function updateCategoriesList() {
+  const categories = new Set();
+  allNoticias.forEach(noticia => {
+    if (noticia.categoria && noticia.categoria.trim()) {
+      categories.add(noticia.categoria.trim());
+    }
+  });
+  
+  const currentVal = noticiaCategoria.value;
+  
+  // Reconstruir select
+  categoriasSelect.innerHTML = '<option value="">-- Selecionar categoria --</option>';
+  [...categories].sort().forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    if (cat === currentVal) option.selected = true;
+    categoriasSelect.appendChild(option);
+  });
+  
+  // Sincronizar select → input
+  if (currentVal && categories.has(currentVal)) {
+    categoriasSelect.value = currentVal;
+    noticiaCategoria.value = '';
+    noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
+  }
+}
+
+// Quando seleciona do dropdown, preenche o input oculto e limpa o texto livre
+categoriasSelect.addEventListener('change', () => {
+  const val = categoriasSelect.value;
+  if (val) {
+    noticiaCategoria.value = '';
+    noticiaCategoria.placeholder = `Selecionado: ${val} (escreve para substituir)`;
+  } else {
+    noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
+  }
+  updateQualityHints();
+  setDirty(true);
+  queueDraftAutosave();
+});
+
+function getCategoriaValue() {
+  // Prioridade: texto livre > select
+  const textVal = noticiaCategoria.value.trim();
+  const selectVal = categoriasSelect.value;
+  return textVal || selectVal || '';
+}
+
+// ===== AUTH FUNCTIONS =====
+authForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if (!email || !password) {
+    showAuthError('Email e senha são obrigatórios');
+    return;
+  }
+
+  try {
+    await ensureAuthPersistence();
+
+    authEmail.disabled = true;
+    authPassword.disabled = true;
+    authForm.querySelector('button').disabled = true;
+
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    currentUser = result.user;
+    try {
+      localStorage.setItem(AUTH_LAST_EMAIL_KEY, email);
+    } catch (_) {}
+    
+  } catch (error) {
+    console.error('Erro de autenticação Firebase:', error);
+    let msg = 'Erro ao entrar';
+
+    if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') {
+      msg = 'Email ou senha inválidos';
+    } else if (error.code === 'auth/user-not-found') {
+      msg = 'Email não encontrado';
+    } else if (error.code === 'auth/wrong-password') {
+      msg = 'Senha incorreta';
+    } else if (error.code === 'auth/invalid-email') {
+      msg = 'Email inválido';
+    } else if (error.code === 'auth/operation-not-allowed') {
+      msg = 'Login por Email/Senha está desativado no Firebase';
+    } else if (error.code === 'auth/too-many-requests') {
+      msg = 'Muitas tentativas. Aguarde alguns minutos e tente novamente';
+    } else if (error.code === 'auth/network-request-failed') {
+      msg = 'Falha de rede. Verifique a internet e tente novamente';
+    }
+
+    showAuthError(msg);
+    authEmail.disabled = false;
+    authPassword.disabled = false;
+    authForm.querySelector('button').disabled = false;
+  }
+});
+
+function showAuthError(msg) {
+  authError.textContent = msg;
+  authError.classList.add('show');
+  setTimeout(() => authError.classList.remove('show'), 5000);
+}
+
+btnLogout.addEventListener('click', () => {
+  if (isDirty && !confirm('Existem alterações por guardar. Sair sem guardar?')) {
+    return;
+  }
+  auth.signOut().then(() => {
+    currentUser = null;
+  });
+});
+
+// Check auth state
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    currentUser = user;
+    try {
+      localStorage.setItem(AUTH_LAST_EMAIL_KEY, user.email || authEmail.value || '');
+    } catch (_) {}
+    userEmail.textContent = user.email;
+    authScreen.style.display = 'none';
+    dashboard.classList.add('active');
+    setAdminView('noticias');
+    startAuthKeepAlive();
+    loadNoticias();
+    setTimeout(() => {
+      updateQualityHints();
+      updatePreviewContent();
+    }, 50);
+  } else {
+    applySignedOutUiState();
+  }
+});
+
+window.addEventListener('beforeunload', (event) => {
+  if (!isDirty) return;
+  event.preventDefault();
+  event.returnValue = '';
+});
+
+// ===== NOTÍCIAS FUNCTIONS =====
+function slugifyAdminTitle(text) {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-');
+}
+
+function deduplicateNoticiasList(noticias) {
+  if (!Array.isArray(noticias)) return [];
+
+  const seen = new Set();
+  const result = [];
+
+  noticias.forEach((noticia) => {
+    if (!noticia || typeof noticia !== 'object') return;
+
+    const id = String(noticia.id || '').trim();
+    const slug = slugifyAdminTitle(noticia.slug || noticia.titulo || '');
+    const title = String(noticia.titulo || '').trim().toLowerCase();
+    const date = String(noticia.data || '').trim();
+
+    const key = id
+      ? `id:${id}`
+      : (slug
+        ? `slug:${slug}`
+        : `title:${title}|date:${date}`);
+
+    if (seen.has(key)) return;
+    seen.add(key);
+    result.push(noticia);
+  });
+
+  return result;
+}
+
+async function loadNoticias() {
+  try {
+    // Tentar carregar do Firebase
+    const snapshot = await db.ref('noticias').once('value');
+    const data = snapshot.val();
+    
+    if (data) {
+      // Firebase Realtime Database
+      allNoticias = Array.isArray(data) ? data : Object.values(data);
+    }
+
+    allNoticias = deduplicateNoticiasList(allNoticias);
+    
+    renderNoticiasList();
+  } catch (error) {
+    console.error('Erro ao carregar notícias:', error);
+    showStatus('Erro ao carregar notícias', 'error');
+  }
+}
+
+function renderNoticiasList() {
+  noticiasList.innerHTML = '';
+  
+  if (allNoticias.length === 0) {
+    noticiasList.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">Nenhuma notícia</p>';
+    return;
+  }
+
+  allNoticias.forEach((noticia) => {
+    const item = document.createElement('div');
+    item.className = 'noticia-item' + (noticia.id === selectedNoticiaId ? ' active' : '');
+    item.innerHTML = `
+      <div class="title">${noticia.titulo || 'Sem título'}</div>
+      <div class="date">${noticia.data || 'Sem data'}</div>
+    `;
+    item.addEventListener('click', () => selectNoticia(noticia.id));
+    noticiasList.appendChild(item);
+  });
+  
+  updateCategoriesList();
+}
+
+function selectNoticia(id) {
+  if (isDirty && selectedNoticiaId !== id) {
+    const discard = confirm('Existem alterações por guardar. Deseja descartar e abrir outra notícia?');
+    if (!discard) return;
+  }
+
+  selectedNoticiaId = id;
+  const noticia = allNoticias.find(n => n.id == id);
+  
+  if (noticia) {
+    noticiaId.value = noticia.id || '';
+    noticiaTitulo.value = noticia.titulo || '';
+    noticiaAutor.value = noticia.autor || '';
+    noticiaData.value = noticia.data || '';
+    // Preencher categoria: tentar select primeiro, senão input livre
+    const cat = noticia.categoria || '';
+    const selectOpt = categoriasSelect.querySelector(`option[value="${CSS.escape(cat)}"]`);
+    if (selectOpt) {
+      categoriasSelect.value = cat;
+      noticiaCategoria.value = '';
+      noticiaCategoria.placeholder = `Selecionado: ${cat} (escreve para substituir)`;
+    } else {
+      categoriasSelect.value = '';
+      noticiaCategoria.value = cat;
+    }
+    noticiaResumo.value = noticia.resumo || '';
+    contentEditor.innerHTML = normalizeDocsHtmlForEditor(noticia.conteudo || '');
+    noticiaVideo.value = noticia.video || '';
+    noticiaSlug.value = noticia.slug || '';
+    
+    // Load scheduling info if exists
+    if (noticia.scheduleDate && noticia.scheduleTime) {
+      document.querySelector('input[name="scheduling"][value="scheduled"]').checked = true;
+      schedulingFields.classList.add('active');
+      noticiaScheduleDate.value = noticia.scheduleDate;
+      noticiaScheduleTime.value = noticia.scheduleTime;
+    } else {
+      document.querySelector('input[name="scheduling"][value="immediate"]').checked = true;
+      schedulingFields.classList.remove('active');
+      noticiaScheduleDate.value = '';
+      noticiaScheduleTime.value = '18:00';
+    }
+    
+    emptyState.style.display = 'none';
+    editorPanel.style.display = 'block';
+    btnDelete.style.display = 'inline-block';
+    updatePreviewContent();
+    updateQualityHints();
+    setDirty(false);
+  }
+  
+  renderNoticiasList();
+}
+
+btnNewNoticia.addEventListener('click', () => {
+  if (isDirty) {
+    const discard = confirm('Existem alterações por guardar. Criar nova notícia sem guardar as alterações atuais?');
+    if (!discard) return;
+  }
+
+  // Criar nova notícia deve abrir editor limpo, sem restaurar rascunhos antigos.
+  clearDraftAutosave();
+
+  selectedNoticiaId = null;
+  const newId = String(Math.max(...allNoticias.map(n => parseInt(n.id) || 0), 0) + 1);
+  
+  noticiaId.value = newId;
+  noticiaTitulo.value = '';
+  noticiaAutor.value = 'Pedro Silva';
+  noticiaData.value = new Date().toLocaleDateString('pt-PT');
+  noticiaCategoria.value = '';
+  noticiaCategoria.placeholder = 'Ou escreve uma nova categoria...';
+  categoriasSelect.value = '';
+  noticiaResumo.value = '';
+  contentEditor.innerHTML = '';
+  noticiaVideo.value = '';
+  noticiaSlug.value = '';
+  
+  // Reset scheduling to immediate
+  document.querySelector('input[name="scheduling"][value="immediate"]').checked = true;
+  schedulingFields.classList.remove('active');
+  noticiaScheduleDate.value = '';
+  noticiaScheduleTime.value = '18:00';
+  
+  emptyState.style.display = 'none';
+  editorPanel.style.display = 'block';
+  btnDelete.style.display = 'none';
+  updatePreviewContent();
+  updateQualityHints();
+  setDirty(false);
+  
+  noticiaTitulo.focus();
+});
+
+noticiaTitulo.addEventListener('input', updateSlug);
+function updateSlug() {
+  if (selectedNoticiaId === null) {
+    const slug = noticiaTitulo.value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    noticiaSlug.value = slug;
+  }
+}
+
+btnSave.addEventListener('click', saveNoticia);
+
+function isFirebasePermissionError(error) {
+  if (!error) return false;
+  const code = String(error.code || '').toUpperCase();
+  const message = String(error.message || '').toLowerCase();
+  return (
+    code.includes('PERMISSION_DENIED') ||
+    code.includes('PERMISSION-DENIED') ||
+    message.includes('permission denied') ||
+    message.includes('permission')
+  );
+}
+
+function buildNoticiasWritePayloadVariants(payload) {
+  if (!Array.isArray(payload)) {
+    return [payload];
+  }
+
+  const mapPayload = {};
+  let mappedCount = 0;
+
+  payload.forEach((item) => {
+    if (!item || typeof item !== 'object') return;
+    const rawId = item.id;
+    if (typeof rawId === 'undefined' || rawId === null) return;
+    const id = String(rawId).trim();
+    if (!id) return;
+    mapPayload[id] = item;
+    mappedCount += 1;
+  });
+
+  // Alguns projetos usam /noticias como mapa por id em vez de array.
+  if (mappedCount > 0) {
+    return [mapPayload, payload];
+  }
+
+  return [payload];
+}
+
+async function saveNoticiasWithAuthRetry(payload) {
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const resolveActiveUser = async () => {
+    if (auth.currentUser) return auth.currentUser;
+
+    // Alguns browsers podem demorar a restaurar auth após operações de storage.
+    for (let i = 0; i < 8; i++) {
+      await wait(250);
+      if (auth.currentUser) return auth.currentUser;
+    }
+
+    return null;
+  };
+
+  await ensureAuthPersistence();
+
+  const user = await resolveActiveUser();
+  if (!user) {
+    const authError = new Error('AUTH_REQUIRED');
+    authError.code = 'AUTH_REQUIRED';
+    throw authError;
+  }
+
+  try {
+    await user.getIdToken();
+  } catch (tokenError) {
+    console.warn('Falha ao obter token atual, a tentar renovar...', tokenError);
+  }
+
+  const payloadVariants = buildNoticiasWritePayloadVariants(payload);
+  let lastError = null;
+
+  for (let i = 0; i < payloadVariants.length; i++) {
+    const variant = payloadVariants[i];
+    try {
+      await db.ref('noticias').set(variant);
+      return;
+    } catch (error) {
+      lastError = error;
+
+      if (!isFirebasePermissionError(error)) {
+        throw error;
+      }
+
+      let currentUser = auth.currentUser;
+      if (!currentUser) {
+        currentUser = await resolveActiveUser();
+        if (!currentUser) {
+          const authError = new Error('AUTH_REQUIRED');
+          authError.code = 'AUTH_REQUIRED';
+          throw authError;
+        }
+      }
+
+      await currentUser.getIdToken(true);
+
+      try {
+        await db.ref('noticias').set(variant);
+        return;
+      } catch (retryError) {
+        lastError = retryError;
+        if (!isFirebasePermissionError(retryError)) {
+          throw retryError;
+        }
+      }
+    }
+  }
+
+  if (lastError) {
+    lastError.code = lastError.code || 'PERMISSION_DENIED';
+    throw lastError;
+  }
+}
+
+async function saveNoticia() {
+  if (!noticiaTitulo.value.trim()) {
+    showStatus('Título é obrigatório', 'error');
+    return;
+  }
+  if (!noticiaData.value.trim()) {
+    showStatus('Data é obrigatória', 'error');
+    return;
+  }
+  if (!contentEditor.innerText.trim()) {
+    showStatus('Conteúdo é obrigatório', 'error');
+    return;
+  }
+
+  const isNew = selectedNoticiaId === null;
+  const id = noticiaId.value;
+
+  const tituloLen = noticiaTitulo.value.trim().length;
+  const resumoLen = noticiaResumo.value.trim().length;
+  const palavras = getEditorMetrics().words;
+  const validationNotes = [];
+
+  if (tituloLen < 45 || tituloLen > 70) {
+    validationNotes.push(`Título SEO fora do intervalo ideal (45-70). Atual: ${tituloLen}`);
+  }
+  if (resumoLen < 120 || resumoLen > 160) {
+    validationNotes.push(`Resumo SEO fora do intervalo ideal (120-160). Atual: ${resumoLen}`);
+  }
+  if (palavras < 180) {
+    validationNotes.push(`Conteúdo curto para SEO (ideal >= 180 palavras). Atual: ${palavras}`);
+  }
+
+  if (validationNotes.length > 0) {
+    const proceed = confirm(`Validação de conteúdo:\n- ${validationNotes.join('\n- ')}\n\nDeseja guardar mesmo assim?`);
+    if (!proceed) {
+      return;
+    }
+  }
+
+  const conteudoHtml = normalizeEditorHtml(contentEditor.innerHTML);
+  if (/src\s*=\s*["']data:image\//i.test(conteudoHtml)) {
+    showStatus('Este artigo ainda contém imagens em base64. Refaça o upload pelo Noticias Studio local ou use URLs de imagem.', 'error');
+    return;
+  }
+  
+  const noticiaObj = {
+    id: id,
+    titulo: noticiaTitulo.value.trim(),
+    autor: noticiaAutor.value.trim(),
+    data: noticiaData.value.trim(),
+    categoria: getCategoriaValue(),
+    resumo: noticiaResumo.value.trim(),
+    conteudo: conteudoHtml,
+    video: noticiaVideo.value.trim(),
+    slug: noticiaSlug.value.trim() || generateSlug(noticiaTitulo.value)
+  };
+
+  // Add scheduling info if scheduled
+  const schedulingMode = document.querySelector('input[name="scheduling"]:checked').value;
+  if (schedulingMode === 'scheduled' && noticiaScheduleDate.value && noticiaScheduleTime.value) {
+    noticiaObj.scheduleDate = noticiaScheduleDate.value;
+    noticiaObj.scheduleTime = noticiaScheduleTime.value;
+  }
+
+  try {
+    btnSave.disabled = true;
+    
+    if (isNew) {
+      allNoticias.push(noticiaObj);
+    } else {
+      const idx = allNoticias.findIndex(n => n.id == id);
+      if (idx >= 0) allNoticias[idx] = noticiaObj;
+    }
+
+    // Guardar no Firebase (com retry após renovação de token, se necessário)
+    await saveNoticiasWithAuthRetry(allNoticias);
+    console.log('✅ Notícia guardada no Firebase com sucesso!');
+    
+    // Sincronização local só em localhost (evita erro 405 em produção estática).
+    const host = String(window.location.hostname || '').toLowerCase();
+    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+    if (isLocalHost) {
+      try {
+        const localSyncResponse = await fetch('/api/noticias/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ noticias: allNoticias })
+        });
+
+        if (!localSyncResponse.ok) {
+          throw new Error(`Local sync HTTP ${localSyncResponse.status}`);
+        }
+      } catch (e) {
+        console.log('Nota: servidor local de sync não disponível. Firebase já foi atualizado.');
+      }
+    }
+
+    showStatus(
+      isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!',
+      'success'
+    );
+    
+    selectedNoticiaId = id;
+    contentEditor.innerHTML = conteudoHtml;
+    updatePreviewContent();
+    updateQualityHints();
+    renderNoticiasList();
+    setDirty(false);
+    clearDraftAutosave();
+    
+  } catch (error) {
+    console.error('Erro ao guardar:', error);
+    
+    let errorMsg = 'Erro ao guardar notícia';
+    
+    if (error.code === 'AUTH_REQUIRED') {
+      errorMsg = 'Sessão expirada. Faça login novamente.';
+      applySignedOutUiState();
+    } else if (error.code === 'PERMISSION_DENIED') {
+      errorMsg = 'Erro de permissão no Firebase ao guardar notícias. Se continuar, é necessário permitir escrita em /noticias nas regras do Realtime Database.';
+    } else if (error.message && error.message.includes('permission')) {
+      errorMsg = 'Erro de permissão no Firebase ao guardar notícias. Verifique as regras de escrita de /noticias.';
+    } else if (error.message) {
+      errorMsg = `Erro: ${error.message}`;
+    }
+    
+    showStatus(errorMsg, 'error');
+  } finally {
+    btnSave.disabled = false;
+  }
+}
+
+btnDelete.addEventListener('click', async () => {
+  if (!selectedNoticiaId) return;
+  
+  if (!confirm('Tem certeza que quer eliminar esta notícia?')) return;
+
+  try {
+    btnDelete.disabled = true;
+    
+    const idx = allNoticias.findIndex(n => n.id == selectedNoticiaId);
+    if (idx >= 0) {
+      allNoticias.splice(idx, 1);
+    }
+
+    await saveNoticiasWithAuthRetry(allNoticias);
+    
+    showStatus('Notícia eliminada com sucesso!', 'success');
+    
+    selectedNoticiaId = null;
+    renderNoticiasList();
+    emptyState.style.display = 'block';
+    editorPanel.style.display = 'none';
+    
+  } catch (error) {
+    console.error('Erro ao eliminar:', error);
+    showStatus('Erro ao eliminar notícia', 'error');
+  } finally {
+    btnDelete.disabled = false;
+  }
+});
+
+btnCancel.addEventListener('click', () => {
+  if (isDirty) {
+    const discard = confirm('Descartar alterações não guardadas?');
+    if (!discard) return;
+  }
+
+  selectedNoticiaId = null;
+  emptyState.style.display = 'block';
+  editorPanel.style.display = 'none';
+  setDirty(false);
+});
+
+function generateSlug(texto) {
+  return texto
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function showStatus(msg, type) {
+  status.textContent = msg;
+  status.className = 'status show ' + type;
+  setTimeout(() => status.classList.remove('show'), 4000);
+}
+</script>
+
+</body>
+</html>
