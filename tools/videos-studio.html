@@ -180,23 +180,38 @@ function createVideoOptionRow(url = '', data = '') {
   return row;
 }
 
+function expandUrls(rawValue) {
+  const normalized = String(rawValue || '').replace(/\r/g, '\n');
+  const parts = normalized
+    .split(/\n+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (parts.length > 1) {
+    return parts;
+  }
+
+  const single = normalized.trim();
+  return single ? [single] : [];
+}
+
 function getVideoEntriesFromForm() {
   const entries = [];
 
   const baseUrl = document.getElementById('videoUrl').value.trim();
   const baseData = document.getElementById('videoData').value.trim();
-  if (baseUrl) {
-    entries.push({ url: baseUrl, data: baseData });
-  }
+  expandUrls(baseUrl).forEach((url) => {
+    entries.push({ url, data: baseData });
+  });
 
   document.querySelectorAll('.video-option-row').forEach((row) => {
     const urlInput = row.querySelector('.video-url-extra');
     const dataInput = row.querySelector('.video-data-extra');
     const rowUrl = (urlInput && urlInput.value ? urlInput.value : '').trim();
     const rowData = (dataInput && dataInput.value ? dataInput.value : '').trim();
-    if (rowUrl) {
-      entries.push({ url: rowUrl, data: rowData });
-    }
+    expandUrls(rowUrl).forEach((url) => {
+      entries.push({ url, data: rowData || baseData });
+    });
   });
 
   return entries;
@@ -423,7 +438,8 @@ async function guardarDestino() {
   if (entriesPendentes.length > 0) {
     const added = adicionarVideo();
     if (!added) {
-      throw new Error('Não foi possível adicionar os dados preenchidos antes de guardar.');
+      const currentMessage = (document.getElementById('status').textContent || '').trim();
+      throw new Error(currentMessage || 'Não foi possível adicionar os dados preenchidos antes de guardar.');
     }
   }
 
