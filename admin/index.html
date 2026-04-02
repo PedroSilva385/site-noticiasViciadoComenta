@@ -913,8 +913,8 @@ button {
         <input type="password" id="authPassword" placeholder="••••••••" required>
       </div>
       <button type="submit">Entrar</button>
-      <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
-        Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>
+      <p id="registerHint" style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
+        As contas de administração são criadas apenas em ambiente local ou diretamente no Firebase Console.
       </p>
     </form>
   </div>
@@ -1286,6 +1286,7 @@ const authPassword = document.getElementById('authPassword');
 const authError = document.getElementById('authError');
 const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
+const registerHint = document.getElementById('registerHint');
 const adminTabNoticias = document.getElementById('adminTabNoticias');
 const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
@@ -1301,6 +1302,15 @@ const btnNewNoticia = document.getElementById('btnNewNoticia');
 const status = document.getElementById('status');
 const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
+
+function isLocalAdminSetupHost() {
+  const hostname = (window.location.hostname || '').toLowerCase();
+  return window.location.protocol === 'file:' || hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+if (registerHint && isLocalAdminSetupHost()) {
+  registerHint.innerHTML = 'Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>';
+}
 
 function setAdminView(viewName) {
   const showNoticias = viewName === 'noticias';
