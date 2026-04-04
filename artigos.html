@@ -3200,6 +3200,66 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
+const ARTICLE_SHELL_BUILD_VERSION = '__VC_BUILD_VERSION__';
+const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
+const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
+
+function getCurrentArticleShellBuildVersion() {
+  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '__VC_BUILD_VERSION__') {
+    return '';
+  }
+
+  return String(ARTICLE_SHELL_BUILD_VERSION).trim();
+}
+
+async function ensureLatestArticleShellVersion() {
+  const shellVersion = getCurrentArticleShellBuildVersion();
+  const versionUrl = `data/build-version.json?t=${Date.now()}`;
+
+  try {
+    const response = await fetch(versionUrl, {
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const payload = await response.json();
+    const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
+    if (!deployedVersion || deployedVersion === '__VC_BUILD_VERSION__') {
+      return;
+    }
+
+    const storedVersion = localStorage.getItem(ARTICLE_BUILD_VERSION_STORAGE_KEY) || '';
+    localStorage.setItem(ARTICLE_BUILD_VERSION_STORAGE_KEY, deployedVersion);
+
+    if (shellVersion && shellVersion !== deployedVersion) {
+      const alreadyReloadedFor = sessionStorage.getItem(ARTICLE_BUILD_VERSION_RELOAD_KEY);
+      if (alreadyReloadedFor === deployedVersion) {
+        return;
+      }
+
+      sessionStorage.setItem(ARTICLE_BUILD_VERSION_RELOAD_KEY, deployedVersion);
+
+      const reloadUrl = new URL(window.location.href);
+      reloadUrl.searchParams.set('_build', deployedVersion.slice(0, 8));
+      window.location.replace(reloadUrl.toString());
+      await new Promise(() => {});
+      return;
+    }
+
+    if (storedVersion && storedVersion === deployedVersion) {
+      sessionStorage.removeItem(ARTICLE_BUILD_VERSION_RELOAD_KEY);
+    }
+  } catch (error) {
+    console.warn('Não foi possível verificar a versão publicada do artigos.html:', error);
+  }
+}
+
 function isAdminPreviewMode() {
   const params = new URLSearchParams(window.location.search);
   return params.get('adminPreview') === '1';
@@ -3590,7 +3650,8 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   setEditState(false);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await ensureLatestArticleShellVersion();
   initTheme();
   const btn = document.createElement('button');
   btn.id = 'themeToggle';

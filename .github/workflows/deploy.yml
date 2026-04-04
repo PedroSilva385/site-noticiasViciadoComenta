@@ -112,6 +112,18 @@ jobs:
         EOF
       env:
         FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+
+    - name: Gerar metadados de build
+      run: |
+        mkdir -p data
+        cat > data/build-version.json << EOF
+        {
+          "version": "${{ github.sha }}",
+          "shortVersion": "${{ github.sha }}",
+          "builtAt": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+        }
+        EOF
+        sed -i "s/__VC_BUILD_VERSION__/${{ github.sha }}/g" artigos.html
     
     # Deploy para GitHub Pages
     - name: Deploy para GitHub Pages
