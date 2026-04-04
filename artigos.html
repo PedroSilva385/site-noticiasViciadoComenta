@@ -395,6 +395,10 @@ main {
   color: #1a1f3a;
 }
 
+.artigo-conteudo h3.article-subheading {
+  margin: 18px 0 10px;
+}
+
 .artigo-conteudo ul,
 .artigo-conteudo ol {
   margin: 0 0 18px;
@@ -2537,6 +2541,43 @@ function buildComparisonBlockHtml(items) {
   `;
 }
 
+function isStandaloneSubheadingText(value) {
+  const text = String(value || '').replace(/\u00a0/g, ' ').trim();
+  if (!text || text.length > 120) return false;
+  if (/[.!]$/.test(text)) return false;
+
+  const words = text.split(/\s+/).filter(Boolean);
+  if (!words.length || words.length > 12) return false;
+
+  return /[:?]$/.test(text)
+    || /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ0-9][A-Za-zÁÀÂÃÉÊÍÓÔÕÚÇáàâãéêíóôõúç0-9%(),\-\/\s]+$/.test(text);
+}
+
+function promoteStandaloneStrongParagraphs(root) {
+  if (!root) return;
+
+  root.querySelectorAll('p').forEach((paragraph) => {
+    if (!paragraph || paragraph.querySelector('img,figure,ul,ol,blockquote,pre,table,code')) return;
+
+    const trimmedHtml = String(paragraph.innerHTML || '').trim();
+    const onlyStrong = trimmedHtml.match(/^<(strong|b)(\s[^>]*)?>\s*([\s\S]+?)\s*<\/\1>$/i);
+    if (!onlyStrong) return;
+
+    const text = String(paragraph.textContent || '').replace(/\u00a0/g, ' ').trim();
+    if (!isStandaloneSubheadingText(text)) return;
+
+    const heading = document.createElement('h3');
+    heading.className = 'article-subheading';
+    heading.innerHTML = onlyStrong[3].trim();
+
+    if (paragraph.getAttribute('style')) {
+      heading.setAttribute('style', paragraph.getAttribute('style'));
+    }
+
+    paragraph.replaceWith(heading);
+  });
+}
+
 function getComparisonLabelFromList(listElement) {
   if (!listElement || !listElement.matches('ul,ol')) return '';
 
@@ -2722,7 +2763,16 @@ function renderStructuredPlainText(content) {
     }
 
     const paragraph = blocks[index++].replace(/\n+/g, ' ').trim();
-    parts.push(`<p>${applyInlineMarkdownTypography(paragraph)}</p>`);
+    const paragraphHtml = applyInlineMarkdownTypography(paragraph);
+    const paragraphText = paragraph.replace(/[*_]+/g, '').trim();
+    const isStrongOnlyParagraph = /^<(strong|b)>[\s\S]+<\/\1>$/.test(paragraphHtml.trim());
+
+    if (isStrongOnlyParagraph && isStandaloneSubheadingText(paragraphText)) {
+      parts.push(`<h3 class="article-subheading">${paragraphHtml.replace(/^<(strong|b)>|<\/(strong|b)>$/g, '')}</h3>`);
+      continue;
+    }
+
+    parts.push(`<p>${paragraphHtml}</p>`);
   }
 
   return parts.join('');
@@ -2973,6 +3023,8 @@ function sanitizeArticleInlineTypography(html) {
       heading.replaceWith(paragraph);
     }
   });
+
+  promoteStandaloneStrongParagraphs(root);
 
   return root.innerHTML
     .replace(/&nbsp;/gi, ' ')
