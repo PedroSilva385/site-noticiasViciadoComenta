@@ -3075,7 +3075,6 @@ function formatArticleContent(rawContent) {
   }
 
   // Detecta se tem Markdown
-      htmlContent = enhanceComparisonBlocks(htmlContent);
   const hasMarkdown = /\*\*|\*(?!\s)|__(?!\s)|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)|^#+\s|^-\s|^\d+\./m.test(content);
 
   if (hasMarkdown) {
@@ -3096,6 +3095,7 @@ function formatArticleContent(rawContent) {
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
 
+      htmlContent = enhanceComparisonBlocks(htmlContent);
       htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
