@@ -4157,6 +4157,18 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
     return;
   }
 
+  if (!window.authReady && !window.authFailed) {
+    if (attempt < 20) {
+      setTimeout(() => incrementArticleReadCount(noticiaId, attempt + 1), 350);
+    }
+    return;
+  }
+
+  if (window.authFailed) {
+    console.warn('Contagem de leitura ignorada: autenticacao anonima indisponivel.');
+    return;
+  }
+
   try {
     if (!window.database && typeof firebase !== 'undefined' && firebase.database) {
       window.database = firebase.database();
