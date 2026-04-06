@@ -3144,7 +3144,6 @@ function formatArticleContent(rawContent) {
   }
 
   // Detecta se tem Markdown
-      htmlContent = enhanceComparisonBlocks(htmlContent);
   const hasMarkdown = /\*\*|\*(?!\s)|__(?!\s)|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)|^#+\s|^-\s|^\d+\./m.test(content);
 
   if (hasMarkdown) {
@@ -3165,6 +3164,7 @@ function formatArticleContent(rawContent) {
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
 
+      htmlContent = enhanceComparisonBlocks(htmlContent);
       htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
@@ -3200,12 +3200,12 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
-const ARTICLE_SHELL_BUILD_VERSION = 'b22931eafbf1b984fa7db6fb3b6317791dbce980';
+const ARTICLE_SHELL_BUILD_VERSION = 'c0df34a6386015b50a1da85ae734abacc13a3a35';
 const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
 const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
 
 function getCurrentArticleShellBuildVersion() {
-  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === 'b22931eafbf1b984fa7db6fb3b6317791dbce980') {
+  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === 'c0df34a6386015b50a1da85ae734abacc13a3a35') {
     return '';
   }
 
@@ -3230,7 +3230,7 @@ async function ensureLatestArticleShellVersion() {
 
     const payload = await response.json();
     const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
-    if (!deployedVersion || deployedVersion === 'b22931eafbf1b984fa7db6fb3b6317791dbce980') {
+    if (!deployedVersion || deployedVersion === 'c0df34a6386015b50a1da85ae734abacc13a3a35') {
       return;
     }
 
