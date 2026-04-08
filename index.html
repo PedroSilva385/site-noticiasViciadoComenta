@@ -874,6 +874,10 @@ body.dark .artigo-mais-lido-meta {
   box-shadow: 0 10px 28px rgba(0, 82, 163, 0.25);
 }
 
+.featured-content.text-only {
+  gap: 0;
+}
+
 .main-content > h2 {
   margin-top: 18px;
 }
@@ -2703,15 +2707,9 @@ fetchNoticiasAgendadas("data/noticias.json")
           };
         }
       } else {
-        // Se não houver vídeo, mostrar mensagem
+        // Se não houver vídeo, mostrar o artigo em destaque sem bloco de erro
         featuredSection.innerHTML = `
-          <div class="featured-content">
-            <div class="featured-video">
-              <div class="featured-video-error">
-                <h3>Vídeo não disponível</h3>
-                <p>Verifique o link do vídeo no JSON</p>
-              </div>
-            </div>
+          <div class="featured-content text-only">
             <div class="featured-info-box">
               <span class="featured-categoria">${featured.categoria}</span>
               <h2>${featured.titulo}</h2>
