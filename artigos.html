@@ -3200,12 +3200,12 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
-const ARTICLE_SHELL_BUILD_VERSION = 'bfb9c722feef26170def6613ce1aa56948775b12';
+const ARTICLE_SHELL_BUILD_VERSION = 'e1cc6a6143f5e3e499dcbc0e5eeede9d4ecf3159';
 const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
 const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
 
 function getCurrentArticleShellBuildVersion() {
-  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === 'bfb9c722feef26170def6613ce1aa56948775b12') {
+  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === 'e1cc6a6143f5e3e499dcbc0e5eeede9d4ecf3159') {
     return '';
   }
 
@@ -3230,7 +3230,7 @@ async function ensureLatestArticleShellVersion() {
 
     const payload = await response.json();
     const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
-    if (!deployedVersion || deployedVersion === 'bfb9c722feef26170def6613ce1aa56948775b12') {
+    if (!deployedVersion || deployedVersion === 'e1cc6a6143f5e3e499dcbc0e5eeede9d4ecf3159') {
       return;
     }
 
@@ -3835,7 +3835,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             <h1 class="artigo-titulo">${noticia.titulo}</h1>
             <div class="artigo-meta">
               <span>📅 ${noticia.data}</span>
-              <span>✍️ ${autorNome}</span>
               <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
             ${qualityBlocks.qualityMetaHtml}
