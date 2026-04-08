@@ -3200,12 +3200,12 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
-const ARTICLE_SHELL_BUILD_VERSION = 'e1cc6a6143f5e3e499dcbc0e5eeede9d4ecf3159';
+const ARTICLE_SHELL_BUILD_VERSION = '1e5e03e6147093576575af5bc132b5cb5d4aed0a';
 const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
 const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
 
 function getCurrentArticleShellBuildVersion() {
-  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === 'e1cc6a6143f5e3e499dcbc0e5eeede9d4ecf3159') {
+  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '1e5e03e6147093576575af5bc132b5cb5d4aed0a') {
     return '';
   }
 
@@ -3230,7 +3230,7 @@ async function ensureLatestArticleShellVersion() {
 
     const payload = await response.json();
     const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
-    if (!deployedVersion || deployedVersion === 'e1cc6a6143f5e3e499dcbc0e5eeede9d4ecf3159') {
+    if (!deployedVersion || deployedVersion === '1e5e03e6147093576575af5bc132b5cb5d4aed0a') {
       return;
     }
 
