@@ -212,6 +212,10 @@ foreach ($noticia in $noticias) {
     $publishDate = Parse-DataPublicacao -DataStr $noticia.dataPublicacao
     $isPublished = (-not $publishDate) -or ($publishDate -le $now)
 
+    if (-not $publishDate) {
+        $publishDate = Parse-DataPublicacao -DataStr $noticia.data
+    }
+
     $id = [string]$noticia.id
 
     $baseSlug = if ($noticia.PSObject.Properties.Name -contains 'slug' -and -not [string]::IsNullOrWhiteSpace($noticia.slug)) {
@@ -270,7 +274,7 @@ foreach ($noticia in $noticias) {
     } else {
         (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     }
-    $modifiedDateIso = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    $modifiedDateIso = $publishedDateIso
 
     $safeTitle = Escape-Html -Text $rawTitle
     $safeDescription = Escape-Html -Text $metaDescription
