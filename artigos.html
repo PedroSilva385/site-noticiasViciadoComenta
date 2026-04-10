@@ -2353,6 +2353,10 @@ function buildArticleUrlByData(noticia) {
     return 'artigos.html';
   }
 
+  if (typeof noticia.link === 'string' && /^https:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(noticia.link.trim())) {
+    return noticia.link.trim();
+  }
+
   const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
@@ -2366,10 +2370,6 @@ function buildArticleUrlByData(noticia) {
   if (hasId) {
     return `artigos.html?id=${encodeURIComponent(id)}`;
   }
-  if (typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
   return 'artigos.html';
 }
 
@@ -3200,12 +3200,12 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
-const ARTICLE_SHELL_BUILD_VERSION = '9ef5552ef0668c5728919bce900d7baa24b003b6';
+const ARTICLE_SHELL_BUILD_VERSION = '5cc0b619a027454f6e51f387666ff6b8afacc13a';
 const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
 const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
 
 function getCurrentArticleShellBuildVersion() {
-  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '9ef5552ef0668c5728919bce900d7baa24b003b6') {
+  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '5cc0b619a027454f6e51f387666ff6b8afacc13a') {
     return '';
   }
 
@@ -3230,7 +3230,7 @@ async function ensureLatestArticleShellVersion() {
 
     const payload = await response.json();
     const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
-    if (!deployedVersion || deployedVersion === '9ef5552ef0668c5728919bce900d7baa24b003b6') {
+    if (!deployedVersion || deployedVersion === '5cc0b619a027454f6e51f387666ff6b8afacc13a') {
       return;
     }
 

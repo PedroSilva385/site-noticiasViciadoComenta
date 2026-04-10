@@ -17,6 +17,36 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VICIADO COMENTA">
 <meta name="twitter:description" content="Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade em Portugal.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.viciadocomenta.pt/#organization",
+      "name": "VICIADO COMENTA",
+      "url": "https://www.viciadocomenta.pt/",
+      "logo": "https://www.viciadocomenta.pt/assets/favicon.svg",
+      "email": "mailto:theviciado.contactos@gmail.com",
+      "sameAs": [
+        "https://www.youtube.com/@TheViciado",
+        "https://www.twitch.tv/theviciado13",
+        "https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.viciadocomenta.pt/#website",
+      "url": "https://www.viciadocomenta.pt/",
+      "name": "VICIADO COMENTA",
+      "publisher": {
+        "@id": "https://www.viciadocomenta.pt/#organization"
+      },
+      "inLanguage": "pt-PT"
+    }
+  ]
+}
+</script>
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
@@ -1415,6 +1445,45 @@ body.dark .sidebar-title {
   text-align: center;
 }
 
+.editorial-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f8fc 100%);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 32px 0 40px;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  border: 1px solid #e0e8f5;
+}
+
+.editorial-section h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #1a1f3a;
+  margin-bottom: 16px;
+}
+
+.editorial-section p {
+  margin-bottom: 14px;
+  color: #334155;
+}
+
+.editorial-section p:last-child {
+  margin-bottom: 0;
+}
+
+body.dark .editorial-section {
+  background: #0b1220;
+  border-color: #1f2937;
+}
+
+body.dark .editorial-section h2 {
+  color: #ffffff !important;
+}
+
+body.dark .editorial-section p {
+  color: #cbd5e1 !important;
+}
+
 /* FOOTER */
 footer {
   background: #1a1f3a;
@@ -2204,6 +2273,13 @@ footer {
 
     <div class="featured-section" id="featured"></div>
     
+    <section class="editorial-section" aria-labelledby="editorialTitle">
+      <h2 id="editorialTitle">Linha editorial e autoria</h2>
+      <p>O VICIADO COMENTA publica conteúdo próprio focado em telecomunicações, tecnologia, consumo digital e temas de atualidade em Portugal. O objetivo do projeto é complementar o trabalho em vídeo com artigos escritos, contexto adicional e opinião editorial identificada.</p>
+      <p>Os conteúdos são assinados por Pedro Silva e privilegiam utilidade prática para o leitor: análise de tarifários, interpretação de novidades do mercado e enquadramento de decisões que afetam consumidores portugueses.</p>
+      <p>Para conhecer a política editorial, os canais oficiais e a forma de contacto, consulta a página <a href="sobre-nos.html">Sobre Nós</a> ou escreve para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+    </section>
+    
     <h2>Últimos Artigos</h2>
     
     <section class="noticias-list" id="noticiasList"></section>
@@ -2362,6 +2438,9 @@ fetchNoticiasAgendadas("data/noticias.json")
     };
 
     const buildArticleUrl = (noticia) => {
+      if (noticia && typeof noticia.link === 'string' && /^https:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(noticia.link.trim())) {
+        return noticia.link.trim();
+      }
       const id = encodeURIComponent(noticia.id);
       const slug = getArticleSlug(noticia);
       return slug

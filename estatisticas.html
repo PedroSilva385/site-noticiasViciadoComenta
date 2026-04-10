@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estatísticas - VICIADO COMENTA</title>
+  <meta name="description" content="Painel interno de estatísticas e gestão do VICIADO COMENTA.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="canonical" href="https://www.viciadocomenta.pt/estatisticas.html">
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
@@ -96,6 +99,32 @@
     .card-label { font-size: 0.85em; color: #6b7280; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
     body.dark .card-label { color: #9ca3af; }
     .card-value { font-family: 'Outfit', sans-serif; font-size: 2em; font-weight: 700; }
+    .card-subvalue {
+      margin-top: 8px;
+      font-size: 0.92em;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+    body.dark .card-subvalue { color: #9ca3af; }
+    .card-value--compact {
+      font-size: 1.3em;
+      line-height: 1.3;
+    }
+    .metric-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.88em;
+      font-weight: 700;
+    }
+    .metric-chip.positive { background: #dcfce7; color: #166534; }
+    .metric-chip.negative { background: #fee2e2; color: #991b1b; }
+    .metric-chip.neutral { background: #dbeafe; color: #1d4ed8; }
+    body.dark .metric-chip.positive { background: rgba(34,197,94,.18); color: #86efac; }
+    body.dark .metric-chip.negative { background: rgba(239,68,68,.18); color: #fca5a5; }
+    body.dark .metric-chip.neutral { background: rgba(59,130,246,.18); color: #93c5fd; }
 
     .grid {
       display: grid;
@@ -464,7 +493,8 @@
     </section>
 
     <div class="tabs">
-      <button class="tab-btn active" data-tab="visitas">📈 Visitas</button>
+      <button class="tab-btn active" data-tab="resumo">🧭 Resumo</button>
+      <button class="tab-btn" data-tab="visitas">📈 Visitas</button>
       <button class="tab-btn" data-tab="comentarios">💬 Comentários recentes</button>
       <button class="tab-btn" data-tab="likes">❤️ Likes recentes</button>
       <button class="tab-btn" data-tab="paginas">📄 Páginas</button>
@@ -473,7 +503,84 @@
       <button class="tab-btn" data-tab="historico">📋 Histórico</button>
     </div>
 
-    <section class="tab-panel active" id="tab-visitas">
+    <section class="tab-panel active" id="tab-resumo">
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Últimos 7 dias</div>
+          <div class="card-value" id="summaryWeekVisits">-</div>
+          <div class="card-subvalue" id="summaryWeekVisitsMeta">Comparação semanal indisponível.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">IPs únicos em 7 dias</div>
+          <div class="card-value" id="summaryWeekUnique">-</div>
+          <div class="card-subvalue" id="summaryWeekUniqueMeta">A calcular recorrência.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Tendência semanal</div>
+          <div class="card-value card-value--compact" id="summaryWeekTrend">-</div>
+          <div class="card-subvalue" id="summaryWeekTrendMeta">Sem base comparativa.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Tráfego direto</div>
+          <div class="card-value" id="summaryDirectShare">-</div>
+          <div class="card-subvalue" id="summaryDirectShareMeta">Sem fontes registadas.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Engagement acumulado</div>
+          <div class="card-value" id="summaryEngagement">-</div>
+          <div class="card-subvalue" id="summaryEngagementMeta">Likes e comentários acumulados.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Profundidade de sessão (24h)</div>
+          <div class="card-value" id="summarySessionDepth">-</div>
+          <div class="card-subvalue" id="summarySessionDepthMeta">Sem atividade recente.</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>📊 Tendência dos últimos 7 dias</h2>
+          <table>
+            <thead>
+              <tr><th>Métrica</th><th>Últimos 7 dias</th><th>7 dias anteriores</th><th>Variação</th></tr>
+            </thead>
+            <tbody id="summaryTrendBody"></tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <h2>🌐 Saúde do tráfego</h2>
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Valor</th></tr>
+            </thead>
+            <tbody id="summaryTrafficBody"></tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <h2>🔥 Conteúdo com mais engagement</h2>
+          <table>
+            <thead>
+              <tr><th>Conteúdo</th><th>Leituras</th><th>Likes</th><th>Comentários</th><th>Score</th></tr>
+            </thead>
+            <tbody id="summaryEngagementBody"></tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <h2>👥 Sessões mais ativas nas últimas 24h</h2>
+          <table>
+            <thead>
+              <tr><th>Sessão</th><th>Páginas</th><th>Última página</th><th>Última atividade</th></tr>
+            </thead>
+            <tbody id="summarySessionBody"></tbody>
+          </table>
+        </section>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-visitas">
       <div class="cards">
         <div class="card">
           <div class="card-label">Acessos hoje (total)</div>
@@ -683,6 +790,17 @@
     const noticiasMap = {};
     const noticiaMetaMap = {};
     const noticiaIdBySlug = {};
+    const dashboardState = {
+      stats: null,
+      commentRows: [],
+      commentCountsByArticle: {},
+      likeRows: [],
+      likeCountsByArticle: {},
+      articleReads: {},
+      clickTargets: {},
+      sessions: [],
+      historyRows: []
+    };
     let hourlyTotalsByDate = {};
     let hourlyUniqueByDate = {};
     let latestArticleReads = {};
@@ -807,6 +925,55 @@
       if (el) el.textContent = value;
     }
 
+    function getRecentDateKeys(days, offset = 0) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const keys = [];
+
+      for (let index = offset; index < offset + days; index += 1) {
+        const targetDate = new Date(today);
+        targetDate.setDate(today.getDate() - index);
+        keys.push(formatLocalDateKey(targetDate));
+      }
+
+      return keys;
+    }
+
+    function sumValuesForKeys(source, keys) {
+      return (keys || []).reduce((total, key) => total + safeNumber((source || {})[key]), 0);
+    }
+
+    function formatPercent(value, decimals = 1) {
+      if (!Number.isFinite(value)) return '-';
+      return `${value.toFixed(decimals).replace('.', ',')}%`;
+    }
+
+    function getTrendDescriptor(currentValue, previousValue) {
+      if (previousValue <= 0) {
+        if (currentValue > 0) {
+          return {
+            text: 'Novo tráfego',
+            detail: 'Não existe base útil para comparar a semana anterior.',
+            tone: 'neutral'
+          };
+        }
+
+        return {
+          text: 'Sem movimento',
+          detail: 'Ainda não existem dados suficientes para comparação.',
+          tone: 'neutral'
+        };
+      }
+
+      const delta = ((currentValue - previousValue) / previousValue) * 100;
+      const rounded = `${delta > 0 ? '+' : ''}${delta.toFixed(1).replace('.', ',')}%`;
+      return {
+        text: rounded,
+        detail: `${currentValue.toLocaleString('pt-PT')} vs ${previousValue.toLocaleString('pt-PT')}`,
+        tone: delta > 3 ? 'positive' : delta < -3 ? 'negative' : 'neutral'
+      };
+    }
+
     function renderEmptyRow(bodyId, text, colSpan = 3) {
       const tbody = document.getElementById(bodyId);
       if (!tbody) return;
@@ -926,6 +1093,259 @@
         path: genericPath,
         type: 'Página'
       };
+    }
+
+    function buildTopPageEntries(pagesObj, articleReadsObj = latestArticleReads) {
+      const entriesMap = new Map();
+
+      const upsertEntry = (entry, preferCount = false) => {
+        const existing = entriesMap.get(entry.rowKey);
+        if (!existing) {
+          entriesMap.set(entry.rowKey, entry);
+          return;
+        }
+
+        existing.label = entry.label || existing.label;
+        existing.path = entry.path || existing.path;
+        existing.type = entry.type || existing.type;
+        existing.count = preferCount ? entry.count : Math.max(existing.count, entry.count);
+      };
+
+      Object.entries(pagesObj || {}).forEach(([key, count]) => {
+        const decoded = decodeStatsPageKey(key);
+        upsertEntry({
+          rowKey: decoded.rowKey,
+          label: decoded.label,
+          path: decoded.path,
+          type: decoded.type,
+          count: Number(count) || 0
+        });
+      });
+
+      Object.entries(articleReadsObj || {}).forEach(([id, count]) => {
+        const meta = getNoticiaMeta(id);
+        const articlePath = meta && meta.slug ? `/artigos/${meta.slug}.html` : `Artigo ${id}`;
+        upsertEntry({
+          rowKey: `article:${id}`,
+          label: getNoticiaTitle(id),
+          path: articlePath,
+          type: 'Artigo',
+          count: Number(count) || 0
+        }, true);
+      });
+
+      return Array.from(entriesMap.values()).sort((a, b) => b.count - a.count);
+    }
+
+    function renderSummaryTwoColumnTable(bodyId, rows, emptyText) {
+      const tbody = document.getElementById(bodyId);
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!rows.length) {
+        renderEmptyRow(bodyId, emptyText, 2);
+        return;
+      }
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const labelCell = document.createElement('td');
+        labelCell.textContent = row.label;
+        const valueCell = document.createElement('td');
+        valueCell.textContent = row.value;
+        tr.appendChild(labelCell);
+        tr.appendChild(valueCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSummaryTrendTable(stats) {
+      const tbody = document.getElementById('summaryTrendBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const dailyTotals = stats.daily || {};
+      const dailyUnique = stats.unique_daily || {};
+      const last7Keys = getRecentDateKeys(7, 0);
+      const prev7Keys = getRecentDateKeys(7, 7);
+
+      const last7Visits = sumValuesForKeys(dailyTotals, last7Keys);
+      const prev7Visits = sumValuesForKeys(dailyTotals, prev7Keys);
+      const last7Unique = sumValuesForKeys(dailyUnique, last7Keys);
+      const prev7Unique = sumValuesForKeys(dailyUnique, prev7Keys);
+      const visitsPerUniqueNow = last7Unique > 0 ? last7Visits / last7Unique : 0;
+      const visitsPerUniquePrev = prev7Unique > 0 ? prev7Visits / prev7Unique : 0;
+
+      const rows = [
+        { label: 'Visitas', current: last7Visits.toLocaleString('pt-PT'), previous: prev7Visits.toLocaleString('pt-PT'), trend: getTrendDescriptor(last7Visits, prev7Visits) },
+        { label: 'IPs únicos', current: last7Unique.toLocaleString('pt-PT'), previous: prev7Unique.toLocaleString('pt-PT'), trend: getTrendDescriptor(last7Unique, prev7Unique) },
+        { label: 'Visitas por IP', current: visitsPerUniqueNow ? visitsPerUniqueNow.toFixed(2).replace('.', ',') : '0,00', previous: visitsPerUniquePrev ? visitsPerUniquePrev.toFixed(2).replace('.', ',') : '0,00', trend: getTrendDescriptor(visitsPerUniqueNow, visitsPerUniquePrev) }
+      ];
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const labelCell = document.createElement('td');
+        labelCell.textContent = row.label;
+        const currentCell = document.createElement('td');
+        currentCell.textContent = row.current;
+        const previousCell = document.createElement('td');
+        previousCell.textContent = row.previous;
+        const trendCell = document.createElement('td');
+        const chip = document.createElement('span');
+        chip.className = `metric-chip ${row.trend.tone}`;
+        chip.textContent = row.trend.text;
+        trendCell.appendChild(chip);
+        tr.appendChild(labelCell);
+        tr.appendChild(currentCell);
+        tr.appendChild(previousCell);
+        tr.appendChild(trendCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSummaryTrafficTable(stats) {
+      const referrers = stats.referrers || {};
+      const totalReferrals = Object.values(referrers).reduce((sum, value) => sum + safeNumber(value), 0);
+      const direct = safeNumber(referrers.direct);
+      const referralOnly = Math.max(totalReferrals - direct, 0);
+      const directShare = totalReferrals > 0 ? (direct / totalReferrals) * 100 : 0;
+      const trackedPages = buildTopPageEntries(stats.pages || {}, dashboardState.articleReads).length;
+      const trackedClicks = Object.values(dashboardState.clickTargets || {}).reduce((sum, item) => sum + safeNumber(item && item.count), 0);
+      const topSource = Object.entries(referrers)
+        .map(([key, count]) => ({ key, count: safeNumber(count) }))
+        .sort((a, b) => b.count - a.count)[0];
+
+      renderSummaryTwoColumnTable('summaryTrafficBody', [
+        { label: 'Quota de tráfego direto', value: formatPercent(directShare) },
+        { label: 'Visitas diretas registadas', value: direct.toLocaleString('pt-PT') },
+        { label: 'Visitas com origem identificada', value: referralOnly.toLocaleString('pt-PT') },
+        { label: 'Origem líder', value: topSource ? `${topSource.key === 'direct' ? 'Acesso direto' : topSource.key} (${topSource.count.toLocaleString('pt-PT')})` : '-' },
+        { label: 'Páginas/artigos com tráfego', value: trackedPages.toLocaleString('pt-PT') },
+        { label: 'Cliques rastreados', value: trackedClicks.toLocaleString('pt-PT') }
+      ], 'Sem dados de qualidade de tráfego ainda.');
+    }
+
+    function renderSummaryEngagementTable() {
+      const tbody = document.getElementById('summaryEngagementBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const ids = new Set([
+        ...Object.keys(dashboardState.articleReads || {}),
+        ...Object.keys(dashboardState.likeCountsByArticle || {}),
+        ...Object.keys(dashboardState.commentCountsByArticle || {})
+      ]);
+
+      const rows = Array.from(ids)
+        .map((id) => {
+          const reads = safeNumber((dashboardState.articleReads || {})[id]);
+          const likes = safeNumber((dashboardState.likeCountsByArticle || {})[id]);
+          const comments = safeNumber((dashboardState.commentCountsByArticle || {})[id]);
+          return {
+            title: getNoticiaTitle(id),
+            reads,
+            likes,
+            comments,
+            score: (likes * 3) + (comments * 2) + reads
+          };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+
+      if (!rows.length) {
+        renderEmptyRow('summaryEngagementBody', 'Sem dados de engagement ainda.', 5);
+        return;
+      }
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const titleCell = document.createElement('td');
+        titleCell.textContent = row.title;
+        const readsCell = document.createElement('td');
+        readsCell.textContent = row.reads.toLocaleString('pt-PT');
+        const likesCell = document.createElement('td');
+        likesCell.textContent = row.likes.toLocaleString('pt-PT');
+        const commentsCell = document.createElement('td');
+        commentsCell.textContent = row.comments.toLocaleString('pt-PT');
+        const scoreCell = document.createElement('td');
+        scoreCell.textContent = row.score.toLocaleString('pt-PT');
+        tr.appendChild(titleCell);
+        tr.appendChild(readsCell);
+        tr.appendChild(likesCell);
+        tr.appendChild(commentsCell);
+        tr.appendChild(scoreCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSummarySessionTable() {
+      const tbody = document.getElementById('summarySessionBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const rows = (dashboardState.sessions || []).slice(0, 8);
+      if (!rows.length) {
+        renderEmptyRow('summarySessionBody', 'Sem sessões recentes nas últimas 24 horas.', 4);
+        return;
+      }
+
+      rows.forEach((session) => {
+        const tr = document.createElement('tr');
+        const sessionCell = document.createElement('td');
+        sessionCell.textContent = getSessionLabel(session.sessionId);
+        const pageCountCell = document.createElement('td');
+        pageCountCell.textContent = safeNumber(session.events.length).toLocaleString('pt-PT');
+        const latestPageCell = document.createElement('td');
+        latestPageCell.textContent = session.latestPage || '/';
+        const whenCell = document.createElement('td');
+        whenCell.textContent = session.lastTimestamp ? formatDateTime(session.lastTimestamp) : '-';
+        tr.appendChild(sessionCell);
+        tr.appendChild(pageCountCell);
+        tr.appendChild(latestPageCell);
+        tr.appendChild(whenCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSummaryOverview() {
+      const stats = dashboardState.stats || {};
+      const dailyTotals = stats.daily || {};
+      const dailyUnique = stats.unique_daily || {};
+      const last7Keys = getRecentDateKeys(7, 0);
+      const prev7Keys = getRecentDateKeys(7, 7);
+      const last7Visits = sumValuesForKeys(dailyTotals, last7Keys);
+      const prev7Visits = sumValuesForKeys(dailyTotals, prev7Keys);
+      const last7Unique = sumValuesForKeys(dailyUnique, last7Keys);
+      const prev7Unique = sumValuesForKeys(dailyUnique, prev7Keys);
+      const weekTrend = getTrendDescriptor(last7Visits, prev7Visits);
+      const uniqueTrend = getTrendDescriptor(last7Unique, prev7Unique);
+      const referrers = stats.referrers || {};
+      const totalReferrals = Object.values(referrers).reduce((sum, value) => sum + safeNumber(value), 0);
+      const direct = safeNumber(referrers.direct);
+      const directShare = totalReferrals > 0 ? (direct / totalReferrals) * 100 : 0;
+      const totalLikes = Object.values(dashboardState.likeCountsByArticle || {}).reduce((sum, value) => sum + safeNumber(value), 0);
+      const totalComments = Object.values(dashboardState.commentCountsByArticle || {}).reduce((sum, value) => sum + safeNumber(value), 0);
+      const historyRows = dashboardState.historyRows || [];
+      const sessions = dashboardState.sessions || [];
+      const avgPagesPerSession = sessions.length ? historyRows.length / sessions.length : 0;
+
+      setText('summaryWeekVisits', last7Visits.toLocaleString('pt-PT'));
+      setText('summaryWeekVisitsMeta', `Semana anterior: ${prev7Visits.toLocaleString('pt-PT')} acessos.`);
+      setText('summaryWeekUnique', last7Unique.toLocaleString('pt-PT'));
+      setText('summaryWeekUniqueMeta', uniqueTrend.detail);
+      setText('summaryWeekTrend', weekTrend.text);
+      setText('summaryWeekTrendMeta', weekTrend.detail);
+      setText('summaryDirectShare', formatPercent(directShare));
+      setText('summaryDirectShareMeta', `${direct.toLocaleString('pt-PT')} visitas diretas em ${totalReferrals.toLocaleString('pt-PT')} origens registadas.`);
+      setText('summaryEngagement', (totalLikes + totalComments).toLocaleString('pt-PT'));
+      setText('summaryEngagementMeta', `${totalLikes.toLocaleString('pt-PT')} likes e ${totalComments.toLocaleString('pt-PT')} comentários/respostas.`);
+      setText('summarySessionDepth', sessions.length ? avgPagesPerSession.toFixed(2).replace('.', ',') : '-');
+      setText('summarySessionDepthMeta', sessions.length ? `${sessions.length.toLocaleString('pt-PT')} sessões e ${historyRows.length.toLocaleString('pt-PT')} atividades nas últimas 24h.` : 'Sem atividade recente.');
+
+      renderSummaryTrendTable(stats);
+      renderSummaryTrafficTable(stats);
+      renderSummaryEngagementTable();
+      renderSummarySessionTable();
     }
 
     function renderHourlyRowsToBody(bodyId, hourlyTotals = {}, hourlyUnique = {}, highlightedHour = '') {
@@ -1180,6 +1600,13 @@
 
         rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         const limited = rows.slice(0, 80);
+        const countsByArticle = {};
+        rows.forEach((row) => {
+          countsByArticle[row.noticiaId] = (countsByArticle[row.noticiaId] || 0) + 1;
+        });
+        dashboardState.commentRows = rows;
+        dashboardState.commentCountsByArticle = countsByArticle;
+        renderSummaryOverview();
 
         renderRecentTable('commentsRecentBody', limited, 'Sem comentários recentes.', (item) => {
           const when = document.createElement('td');
@@ -1223,6 +1650,13 @@
 
         rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         const limited = rows.slice(0, 80);
+        const countsByArticle = {};
+        rows.forEach((row) => {
+          countsByArticle[row.noticiaId] = (countsByArticle[row.noticiaId] || 0) + 1;
+        });
+        dashboardState.likeRows = rows;
+        dashboardState.likeCountsByArticle = countsByArticle;
+        renderSummaryOverview();
 
         renderRecentTable('likesRecentBody', limited, 'Sem likes recentes.', (item) => {
           const when = document.createElement('td');
@@ -1299,47 +1733,7 @@
       const tbody = document.getElementById('paginasBody');
       if (!tbody) return;
       tbody.innerHTML = '';
-
-      const entriesMap = new Map();
-
-      const upsertEntry = (entry, preferCount = false) => {
-        const existing = entriesMap.get(entry.rowKey);
-        if (!existing) {
-          entriesMap.set(entry.rowKey, entry);
-          return;
-        }
-
-        existing.label = entry.label || existing.label;
-        existing.path = entry.path || existing.path;
-        existing.type = entry.type || existing.type;
-        existing.count = preferCount ? entry.count : Math.max(existing.count, entry.count);
-      };
-
-      Object.entries(pagesObj || {}).forEach(([key, count]) => {
-        const decoded = decodeStatsPageKey(key);
-        upsertEntry({
-          rowKey: decoded.rowKey,
-          label: decoded.label,
-          path: decoded.path,
-          type: decoded.type,
-          count: Number(count) || 0
-        });
-      });
-
-      Object.entries(articleReadsObj || {}).forEach(([id, count]) => {
-        const meta = getNoticiaMeta(id);
-        const articlePath = meta && meta.slug ? `/artigos/${meta.slug}.html` : `Artigo ${id}`;
-        upsertEntry({
-          rowKey: `article:${id}`,
-          label: getNoticiaTitle(id),
-          path: articlePath,
-          type: 'Artigo',
-          count: Number(count) || 0
-        }, true);
-      });
-
-      const entries = Array.from(entriesMap.values())
-        .sort((a, b) => b.count - a.count)
+      const entries = buildTopPageEntries(pagesObj, articleReadsObj)
         .slice(0, 40);
 
       if (!entries.length) {
@@ -1375,7 +1769,9 @@
     function carregarMetricasArtigos() {
       database.ref('article_reads').on('value', (snapshot) => {
         latestArticleReads = snapshot.val() || {};
+        dashboardState.articleReads = latestArticleReads;
         renderTopPaginas(undefined, latestArticleReads);
+        renderSummaryOverview();
       }, (error) => {
         console.error('Erro ao carregar métricas de artigos:', error);
       });
@@ -1386,6 +1782,8 @@
         const tbody = document.getElementById('cliquesBody');
         if (!tbody) return;
         tbody.innerHTML = '';
+        dashboardState.clickTargets = data || {};
+        renderSummaryOverview();
 
         const entries = Object.values(data || {})
           .map((item) => ({
@@ -1460,6 +1858,7 @@
     function carregarEstatisticasCompleto() {
       database.ref('site_stats').on('value', (snapshot) => {
         const stats = snapshot.val() || {};
+        dashboardState.stats = stats;
         const todayKey = formatLocalDateKey(new Date());
 
         const dailyTotals = stats.daily || {};
@@ -1498,6 +1897,7 @@
         // Alimentar tabs adicionais
         renderTopPaginas(stats.pages || {}, latestArticleReads);
         renderFontes(stats.referrers || {});
+        renderSummaryOverview();
       }, (error) => {
         console.error('Erro ao carregar estatísticas:', error);
         setText('hourlyStatus', 'Erro ao carregar dados do Firebase.');
@@ -1666,11 +2066,15 @@
           })
           .sort((a, b) => (b.lastTimestamp || 0) - (a.lastTimestamp || 0));
 
+        dashboardState.historyRows = recentRows;
+        dashboardState.sessions = _historicoSessions;
+
         setText('historicoTotal', recentRows.length.toLocaleString('pt-PT'));
         setText('historicoSessoes', _historicoSessions.length.toLocaleString('pt-PT'));
 
         const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
         renderHistoricoRows(filtro);
+        renderSummaryOverview();
         setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${recentRows.length} atividade(s) nas últimas 24h`);
       }, (error) => {
         console.error('Erro ao carregar histórico:', error);

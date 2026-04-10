@@ -19,7 +19,17 @@ function Convert-FileToLf {
 
 Write-Host "Iniciando deploy..." -ForegroundColor Cyan
 
-# 1) Gerar paginas /artigos com template espelho e atualizar sitemap
+# 1) Sincronizar noticias locais com a fonte real no Firebase
+$syncScript = "tools/sync-noticias-firebase.ps1"
+if (Test-Path $syncScript) {
+    Write-Host "`nA sincronizar noticias locais a partir do Firebase..." -ForegroundColor Yellow
+    & powershell -ExecutionPolicy Bypass -File $syncScript
+    Write-Host "Snapshot local de noticias atualizado." -ForegroundColor Green
+} else {
+    Write-Host "`nScript de sincronizacao nao encontrado: $syncScript" -ForegroundColor Yellow
+}
+
+# 2) Gerar paginas /artigos com template espelho e atualizar sitemap
 $mirrorScript = "tools/gerar-artigos-espelho.ps1"
 if (Test-Path $mirrorScript) {
     Write-Host "`nGerando paginas /artigos e sitemap automaticamente..." -ForegroundColor Yellow
@@ -30,7 +40,7 @@ if (Test-Path $mirrorScript) {
     Write-Host "O deploy continuara sem regenerar /artigos." -ForegroundColor Yellow
 }
 
-# 2) Stage dos ficheiros relevantes
+# 3) Stage dos ficheiros relevantes
 Write-Host "`nPreparando ficheiros para commit..." -ForegroundColor Yellow
 
 # Normalizar para LF e evitar warnings CRLF->LF no git add
@@ -43,6 +53,8 @@ $filesToNormalize = @(
     'firebase.json',
     'sitemap.xml',
     'robots.txt',
+    'sobre-nos.html',
+    'data/noticias.json',
     'data/viciado-comenta-videos.json',
     'data/viciado-ponto-critico-videos.json',
     'data/metin2-videos.json',
@@ -67,6 +79,8 @@ git add 404.html
 git add firebase.json
 git add sitemap.xml
 git add robots.txt
+git add sobre-nos.html
+git add data/noticias.json
 git add data/viciado-comenta-videos.json
 git add data/viciado-ponto-critico-videos.json
 git add data/metin2-videos.json
@@ -75,7 +89,7 @@ if (Test-Path "artigos") {
     git add artigos
 }
 
-# 3) Commit apenas se houver alteracoes staged
+# 4) Commit apenas se houver alteracoes staged
 git diff --cached --quiet
 if ($LASTEXITCODE -ne 0) {
     $commitMessage = "Deploy: noticias + artigos + sitemap - $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
@@ -86,7 +100,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "Nao ha alteracoes para commitar." -ForegroundColor Cyan
 }
 
-# 4) Verificar se o ficheiro de configuracao usado pelo frontend esta acessivel no site publicado
+# 5) Verificar se o ficheiro de configuracao usado pelo frontend esta acessivel no site publicado
 $siteUrl = "https://viciadocomenta.pt"
 if (-not $siteUrl.StartsWith("http")) {
     $siteUrl = "https://$siteUrl"

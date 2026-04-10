@@ -428,13 +428,9 @@ foreach ($noticia in $noticias) {
 $baseUrls = @(
     'https://www.viciadocomenta.pt/',
     'https://www.viciadocomenta.pt/todas-noticias.html',
-    'https://www.viciadocomenta.pt/viciado-comenta.html',
-    'https://www.viciadocomenta.pt/viciado-ponto-critico.html',
-    'https://www.viciadocomenta.pt/metin2.html',
-    'https://www.viciadocomenta.pt/livestreams.html',
-    'https://www.viciadocomenta.pt/videos.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
-    'https://www.viciadocomenta.pt/politica-privacidade.html'
+    'https://www.viciadocomenta.pt/politica-privacidade.html',
+    'https://www.viciadocomenta.pt/termos-servico.html'
 )
 
 $sitemapLines = @('<?xml version="1.0" encoding="UTF-8"?>')
