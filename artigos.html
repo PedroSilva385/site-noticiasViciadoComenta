@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia - VICIADO COMENTA</title>
 <meta name="description" content="Leia notícias e artigos completos no VICIADO COMENTA, com foco em telecomunicações, tecnologia, gaming e temas de atualidade.">
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos.html">
 <meta property="og:type" content="article">
@@ -3200,12 +3200,12 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
-const ARTICLE_SHELL_BUILD_VERSION = '5cc0b619a027454f6e51f387666ff6b8afacc13a';
+const ARTICLE_SHELL_BUILD_VERSION = '88fb53800b3127eff897cc0201f7de0a664aff0c';
 const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
 const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
 
 function getCurrentArticleShellBuildVersion() {
-  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '5cc0b619a027454f6e51f387666ff6b8afacc13a') {
+  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '88fb53800b3127eff897cc0201f7de0a664aff0c') {
     return '';
   }
 
@@ -3230,7 +3230,7 @@ async function ensureLatestArticleShellVersion() {
 
     const payload = await response.json();
     const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
-    if (!deployedVersion || deployedVersion === '5cc0b619a027454f6e51f387666ff6b8afacc13a') {
+    if (!deployedVersion || deployedVersion === '88fb53800b3127eff897cc0201f7de0a664aff0c') {
       return;
     }
 
