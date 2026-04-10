@@ -2353,6 +2353,10 @@ function buildArticleUrlByData(noticia) {
     return 'artigos.html';
   }
 
+  if (typeof noticia.link === 'string' && /^https:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(noticia.link.trim())) {
+    return noticia.link.trim();
+  }
+
   const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
@@ -2366,10 +2370,6 @@ function buildArticleUrlByData(noticia) {
   if (hasId) {
     return `artigos.html?id=${encodeURIComponent(id)}`;
   }
-  if (typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
   return 'artigos.html';
 }
 
