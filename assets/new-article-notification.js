@@ -10,6 +10,27 @@
 		scanSelector: 'a[href]'
 	};
 
+	function isValidArticle(item) {
+		return !!(item && typeof item === 'object');
+	}
+
+	function getArticleKey(item) {
+		if (!isValidArticle(item)) return '';
+
+		const id = String(typeof item.id !== 'undefined' && item.id !== null ? item.id : '').trim();
+		if (id) return `id:${id}`;
+
+		const slug = slugifyTitulo(item && item.slug ? String(item.slug) : String(item && item.titulo ? item.titulo : ''));
+		if (slug) return `slug:${slug}`;
+
+		return '';
+	}
+
+	function normalizeArticleList(items) {
+		if (!Array.isArray(items)) return [];
+		return items.filter((item) => isValidArticle(item));
+	}
+
 	function slugifyTitulo(titulo) {
 		if (!titulo || typeof titulo !== 'string') return '';
 		return titulo
@@ -43,6 +64,8 @@
 	}
 
 	function getArticleTimestamp(noticia) {
+		if (!isValidArticle(noticia)) return 0;
+
 		const dataPublicacaoTs = parseDataPublicacao(noticia.dataPublicacao);
 		if (dataPublicacaoTs > 0) return dataPublicacaoTs;
 
@@ -139,9 +162,10 @@
 	}
 
 	function showToast(newArticles, options) {
-		if (!Array.isArray(newArticles) || newArticles.length === 0) return;
+		const normalizedArticles = normalizeArticleList(newArticles);
+		if (normalizedArticles.length === 0) return;
 
-		const signature = newArticles.map((item) => String(item.id)).sort().join('|');
+		const signature = normalizedArticles.map((item) => getArticleKey(item)).filter(Boolean).sort().join('|');
 		if (!signature) return;
 
 		if (localStorage.getItem(STORAGE_NOTIFICATION_SHOWN) === signature) {
@@ -150,18 +174,18 @@
 
 		localStorage.setItem(STORAGE_NOTIFICATION_SHOWN, signature);
 
-		const firstArticle = newArticles[0];
+		const firstArticle = normalizedArticles[0];
 		const toast = document.createElement('div');
 		toast.className = 'vc-new-toast';
 
-		if (newArticles.length === 1) {
+		if (normalizedArticles.length === 1) {
 			toast.innerHTML = `<strong>📰 Novo artigo publicado</strong>${firstArticle.titulo}`;
 		} else {
-			toast.innerHTML = `<strong>📰 ${newArticles.length} novos artigos publicados</strong>Clique para ver os artigos mais recentes.`;
+			toast.innerHTML = `<strong>📰 ${normalizedArticles.length} novos artigos publicados</strong>Clique para ver os artigos mais recentes.`;
 		}
 
 		toast.addEventListener('click', () => {
-			const destination = newArticles.length === 1
+			const destination = normalizedArticles.length === 1
 				? buildArticlePath(firstArticle)
 				: '/todas-noticias.html';
 			window.location.href = destination;
@@ -175,9 +199,10 @@
 	}
 
 	function addNewBadges(newArticles, options) {
-		if (!Array.isArray(newArticles) || newArticles.length === 0) return;
+		const normalizedArticles = normalizeArticleList(newArticles);
+		if (normalizedArticles.length === 0) return;
 
-		const newPaths = new Set(newArticles.map((item) => normalizePath(buildArticlePath(item))));
+		const newPaths = new Set(normalizedArticles.map((item) => normalizePath(buildArticlePath(item))));
 		const anchors = document.querySelectorAll(options.scanSelector);
 
 		anchors.forEach((anchor) => {
@@ -193,6 +218,9 @@
 	}
 
 	function observeAndReapply(newArticles, options) {
+		const normalizedArticles = normalizeArticleList(newArticles);
+		if (normalizedArticles.length === 0) return;
+
 		if (!options.observeDom) return;
 
 		let queued = false;
@@ -201,7 +229,7 @@
 			queued = true;
 			setTimeout(() => {
 				queued = false;
-				addNewBadges(newArticles, options);
+				addNewBadges(normalizedArticles, options);
 			}, 120);
 		});
 
@@ -212,6 +240,7 @@
 	}
 
 	function getNewArticles(noticias) {
+		const normalizedNoticias = normalizeArticleList(noticias);
 		const now = Date.now();
 		const lastVisitRaw = localStorage.getItem(STORAGE_LAST_VISIT);
 		const lastVisit = Number(lastVisitRaw);
@@ -222,24 +251,25 @@
 			return [];
 		}
 
-		const newArticles = noticias.filter((noticia) => {
+		const newArticles = normalizedNoticias.filter((noticia) => {
 			const ts = getArticleTimestamp(noticia);
 			return ts > lastVisit && ts <= now;
 		});
 
 		localStorage.setItem(STORAGE_LAST_VISIT, String(now));
-		localStorage.setItem(STORAGE_LAST_NEW_IDS, JSON.stringify(newArticles.map((item) => String(item.id))));
+		localStorage.setItem(STORAGE_LAST_NEW_IDS, JSON.stringify(newArticles.map((item) => getArticleKey(item)).filter(Boolean)));
 
 		return newArticles;
 	}
 
 	function init(noticias, customOptions) {
-		if (!Array.isArray(noticias) || noticias.length === 0) return;
+		const normalizedNoticias = normalizeArticleList(noticias);
+		if (normalizedNoticias.length === 0) return;
 
 		const options = { ...DEFAULT_OPTIONS, ...(customOptions || {}) };
 		ensureStyles();
 
-		const newArticles = getNewArticles(noticias);
+		const newArticles = getNewArticles(normalizedNoticias);
 		if (newArticles.length === 0) return;
 
 		addNewBadges(newArticles, options);
