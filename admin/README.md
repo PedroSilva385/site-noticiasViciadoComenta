@@ -141,20 +141,18 @@ Clique no botão **"Sair"** (canto superior direito)
 
 ## 🔁 Regeneração Remota dos Artigos
 
-O botão **"💾 Guardar"** passou a disparar automaticamente a regeneração dos ficheiros estáticos da pasta `/artigos/`, mesmo quando estiver a editar a partir de outro computador.
+O botão **"💾 Guardar"** passou a acionar o fluxo remoto de atualização dos ficheiros estáticos da pasta `/artigos/`, mesmo quando estiver a editar a partir de outro computador.
 
-### O que precisa estar configurado
+### Como funciona neste projeto
 
-1. Fazer deploy da Cloud Function `triggerArticlesRebuild`
-2. Definir o secret Firebase Functions `GITHUB_ACTIONS_TRIGGER_TOKEN`
-3. Garantir que esse token do GitHub tem permissão para disparar workflows no repositório
+1. A notícia fica guardada imediatamente no Firebase
+2. O workflow `rebuild-artigos.yml` corre automaticamente no GitHub Actions de 5 em 5 minutos
+3. O workflow sincroniza `data/noticias.json`, regenera `/artigos/` e atualiza `sitemap.xml`
+4. Se houver alterações, faz commit para `main` e o deploy normal do site continua a partir daí
 
-### Resultado esperado
+### Nota importante
 
-- A notícia fica guardada imediatamente no Firebase
-- O workflow `rebuild-artigos.yml` corre no GitHub
-- O workflow sincroniza `data/noticias.json`, regenera `/artigos/` e atualiza `sitemap.xml`
-- Se houver alterações, faz commit para `main` e o deploy normal do site continua a partir daí
+O disparo imediato via Firebase Functions ficou preparado no código, mas exige plano Blaze no Firebase. Enquanto o projeto estiver sem Blaze, o modo suportado é o agendamento automático por GitHub Actions, com atraso normal até cerca de 5 minutos.
 
 ---
 
