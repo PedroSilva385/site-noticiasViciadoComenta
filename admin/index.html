@@ -1211,7 +1211,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-const REMOTE_REBUILD_ENDPOINT = 'https://europe-west1-chat-viciadocomenta.cloudfunctions.net/triggerArticlesRebuild';
+const REMOTE_REBUILD_ENDPOINT = '';
+const REMOTE_REBUILD_STRATEGY = 'github-schedule';
 
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
@@ -1309,6 +1310,16 @@ async function triggerLocalArticlesRebuild() {
 }
 
 async function triggerRemoteArticlesRebuild(meta) {
+  if (!REMOTE_REBUILD_ENDPOINT) {
+    return {
+      ok: true,
+      mode: REMOTE_REBUILD_STRATEGY,
+      scheduled: true,
+      slug: meta && meta.slug ? meta.slug : '',
+      noticiaId: meta && meta.noticiaId ? meta.noticiaId : ''
+    };
+  }
+
   const idToken = await getAuthenticatedAdminIdToken();
   const response = await fetch(REMOTE_REBUILD_ENDPOINT, {
     method: 'POST',
@@ -3067,13 +3078,22 @@ async function saveNoticia() {
     }
 
     const baseSuccessMessage = isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!';
+    const remoteUsesSchedule = !REMOTE_REBUILD_ENDPOINT && REMOTE_REBUILD_STRATEGY === 'github-schedule';
 
     if (remoteRebuildError) {
       showStatus(`${baseSuccessMessage} O conteúdo foi guardado, mas falhou o disparo da regeneração remota: ${remoteRebuildError.message}`, 'warning');
     } else if (localRebuildError) {
-      showStatus(`${baseSuccessMessage} Regeneração remota iniciada, mas a regeneração local falhou: ${localRebuildError.message}`, 'warning');
+      if (remoteUsesSchedule) {
+        showStatus(`${baseSuccessMessage} A regeneração local falhou, mas a atualização remota será processada automaticamente pelo GitHub Actions em até 5 minutos.`, 'warning');
+      } else {
+        showStatus(`${baseSuccessMessage} Regeneração remota iniciada, mas a regeneração local falhou: ${localRebuildError.message}`, 'warning');
+      }
     } else {
-      showStatus(`${baseSuccessMessage} Regeneração ${isLocalHost ? 'local e remota' : 'remota'} iniciada.`, 'success');
+      if (remoteUsesSchedule) {
+        showStatus(`${baseSuccessMessage} A regeneração remota será processada automaticamente pelo GitHub Actions em até 5 minutos.`, 'success');
+      } else {
+        showStatus(`${baseSuccessMessage} Regeneração ${isLocalHost ? 'local e remota' : 'remota'} iniciada.`, 'success');
+      }
     }
     
     selectedNoticiaId = id;
