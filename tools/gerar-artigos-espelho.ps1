@@ -422,9 +422,15 @@ foreach ($noticia in $noticias) {
     }
 
     if ($isPublished) {
+        $articleLastMod = if ($publishDate) {
+            $publishDate.ToString('yyyy-MM-dd')
+        } else {
+            (Get-Date).ToString('yyyy-MM-dd')
+        }
+
         $generatedArticles += [pscustomobject]@{
             slug = $slug
-            lastmod = (Get-Date).ToString('yyyy-MM-dd')
+            lastmod = $articleLastMod
         }
     }
 }
