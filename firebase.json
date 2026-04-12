@@ -53,6 +53,7 @@
 			"firebase.json",
 			"**/.*",
 			"**/node_modules/**",
+			"admin/index.html",
 			"admin/register.html",
 			"backups/**",
 			"docs/**",
