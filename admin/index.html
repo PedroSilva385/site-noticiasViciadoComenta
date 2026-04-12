@@ -827,6 +827,12 @@ button {
   border: 1px solid #fecaca;
 }
 
+.status.warning {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
 .empty-state {
   text-align: center;
   padding: 40px;
@@ -1205,6 +1211,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
+const REMOTE_REBUILD_ENDPOINT = 'https://europe-west1-chat-viciadocomenta.cloudfunctions.net/triggerArticlesRebuild';
 
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
@@ -1257,6 +1264,77 @@ function stopAuthKeepAlive() {
   if (!authKeepAliveTimer) return;
   clearInterval(authKeepAliveTimer);
   authKeepAliveTimer = null;
+}
+
+async function getAuthenticatedAdminIdToken() {
+  await ensureAuthPersistence();
+
+  let user = auth.currentUser;
+  if (!isAuthenticatedAdminUser(user)) {
+    for (let attempt = 0; attempt < 8; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      user = auth.currentUser;
+      if (isAuthenticatedAdminUser(user)) break;
+    }
+  }
+
+  if (!isAuthenticatedAdminUser(user)) {
+    const authError = new Error('AUTH_REQUIRED');
+    authError.code = 'AUTH_REQUIRED';
+    throw authError;
+  }
+
+  return user.getIdToken();
+}
+
+async function triggerLocalArticlesRebuild() {
+  const response = await fetch('/api/noticias/rebuild', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ source: 'admin-save' })
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    payload = null;
+  }
+
+  if (!response.ok || !payload || payload.ok === false) {
+    throw new Error((payload && payload.error) ? payload.error : `Local rebuild HTTP ${response.status}`);
+  }
+
+  return payload;
+}
+
+async function triggerRemoteArticlesRebuild(meta) {
+  const idToken = await getAuthenticatedAdminIdToken();
+  const response = await fetch(REMOTE_REBUILD_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${idToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      noticiaId: meta && meta.noticiaId ? meta.noticiaId : '',
+      slug: meta && meta.slug ? meta.slug : '',
+      action: meta && meta.action ? meta.action : 'save'
+    })
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    payload = null;
+  }
+
+  if (!response.ok || !payload || payload.ok === false) {
+    throw new Error((payload && payload.error) ? payload.error : `Remote rebuild HTTP ${response.status}`);
+  }
+
+  return payload;
 }
 
 function applySignedOutUiState() {
@@ -2936,6 +3014,8 @@ async function saveNoticia() {
 
   try {
     btnSave.disabled = true;
+    let localRebuildError = null;
+    let remoteRebuildError = null;
     
     if (isNew) {
       allNoticias.push(noticiaObj);
@@ -2963,15 +3043,38 @@ async function saveNoticia() {
         if (!localSyncResponse.ok) {
           throw new Error(`Local sync HTTP ${localSyncResponse.status}`);
         }
+
+        try {
+          await triggerLocalArticlesRebuild();
+        } catch (rebuildError) {
+          localRebuildError = rebuildError;
+          console.warn('Falha na regeneração local de artigos:', rebuildError);
+        }
       } catch (e) {
         console.log('Nota: servidor local de sync não disponível. Firebase já foi atualizado.');
       }
     }
 
-    showStatus(
-      isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!',
-      'success'
-    );
+    try {
+      await triggerRemoteArticlesRebuild({
+        noticiaId: id,
+        slug: noticiaObj.slug,
+        action: isNew ? 'create' : 'update'
+      });
+    } catch (rebuildError) {
+      remoteRebuildError = rebuildError;
+      console.warn('Falha ao disparar a regeneração remota:', rebuildError);
+    }
+
+    const baseSuccessMessage = isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!';
+
+    if (remoteRebuildError) {
+      showStatus(`${baseSuccessMessage} O conteúdo foi guardado, mas falhou o disparo da regeneração remota: ${remoteRebuildError.message}`, 'warning');
+    } else if (localRebuildError) {
+      showStatus(`${baseSuccessMessage} Regeneração remota iniciada, mas a regeneração local falhou: ${localRebuildError.message}`, 'warning');
+    } else {
+      showStatus(`${baseSuccessMessage} Regeneração ${isLocalHost ? 'local e remota' : 'remota'} iniciada.`, 'success');
+    }
     
     selectedNoticiaId = id;
     contentEditor.innerHTML = conteudoHtml;

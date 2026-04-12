@@ -1,0 +1,80 @@
+name: Regenerar Artigos Espelho
+
+on:
+  workflow_dispatch:
+    inputs:
+      trigger_source:
+        description: Origem do disparo
+        required: false
+        default: manual
+      noticia_id:
+        description: ID da noticia alterada
+        required: false
+        default: ''
+      slug:
+        description: Slug da noticia alterada
+        required: false
+        default: ''
+      action:
+        description: Tipo de alteracao
+        required: false
+        default: save
+      requested_by:
+        description: Utilizador que pediu a regeneracao
+        required: false
+        default: ''
+
+concurrency:
+  group: rebuild-artigos
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Criar firebase-config.js
+      shell: bash
+      run: |
+        mkdir -p assets
+        cat > assets/firebase-config.js << 'EOF'
+        const firebaseConfig = {
+          apiKey: "${{ secrets.FIREBASE_API_KEY }}",
+          authDomain: "chat-viciadocomenta.firebaseapp.com",
+          databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "chat-viciadocomenta",
+          storageBucket: "chat-viciadocomenta.firebasestorage.app",
+          messagingSenderId: "183684670526",
+          appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+        };
+        EOF
+
+    - name: Sincronizar noticias do Firebase
+      shell: pwsh
+      run: ./tools/sync-noticias-firebase.ps1
+
+    - name: Regenerar artigos espelho e sitemap
+      shell: pwsh
+      run: ./tools/gerar-artigos-espelho.ps1
+
+    - name: Commit e push se houver alteracoes
+      shell: bash
+      run: |
+        if [ -z "$(git status --porcelain -- data/noticias.json sitemap.xml artigos)" ]; then
+          echo "Sem alteracoes para publicar."
+          exit 0
+        fi
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add data/noticias.json sitemap.xml artigos
+        git commit -m "chore: regenerar artigos espelho"
+        git push

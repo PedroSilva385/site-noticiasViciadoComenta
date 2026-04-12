@@ -133,7 +133,28 @@ Clique no botão **"Sair"** (canto superior direito)
 2. Autentica com Firebase
 3. O painel carrega as notícias da Realtime DB
 4. Você cria/edita/deleta
-5. Tudo é guardado no Firebase *e* sincronizado com `data/noticias.json` local
+5. Tudo é guardado no Firebase
+6. Em localhost, o painel continua a sincronizar `data/noticias.json` e a regenerar `/artigos/`
+7. Em qualquer computador, o painel dispara uma regeneração remota no GitHub Actions para atualizar `/artigos/` e `sitemap.xml`
+
+---
+
+## 🔁 Regeneração Remota dos Artigos
+
+O botão **"💾 Guardar"** passou a disparar automaticamente a regeneração dos ficheiros estáticos da pasta `/artigos/`, mesmo quando estiver a editar a partir de outro computador.
+
+### O que precisa estar configurado
+
+1. Fazer deploy da Cloud Function `triggerArticlesRebuild`
+2. Definir o secret Firebase Functions `GITHUB_ACTIONS_TRIGGER_TOKEN`
+3. Garantir que esse token do GitHub tem permissão para disparar workflows no repositório
+
+### Resultado esperado
+
+- A notícia fica guardada imediatamente no Firebase
+- O workflow `rebuild-artigos.yml` corre no GitHub
+- O workflow sincroniza `data/noticias.json`, regenera `/artigos/` e atualiza `sitemap.xml`
+- Se houver alterações, faz commit para `main` e o deploy normal do site continua a partir daí
 
 ---
 
