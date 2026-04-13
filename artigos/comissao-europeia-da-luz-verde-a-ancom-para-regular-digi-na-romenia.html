@@ -1964,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="Comiss&#227;o Europeia d&#225; luz verde &#224; ANCOM para regular DIGI na Rom&#233;nia!">
 <meta name="twitter:description" content="Regulador Romeno com luz verde para avan&#231;ar, para a regula&#231;&#227;o de zonas sem concorr&#234;ncia dominadas pela DIGI. Acesso &#224; rede DIGI em 6300 localidades, em cima da mesa!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/comissao-europeia-da-luz-verde-a-ancom-para-regular-digi-na-romenia.html"},"headline":"Comissão Europeia dá luz verde à ANCOM para regular DIGI na Roménia!","description":"Regulador Romeno com luz verde para avançar, para a regulação de zonas sem concorrência dominadas pela DIGI. Acesso à rede DIGI em 6300 localidades, em cima da mesa!","datePublished":"2026-04-13T23:45:53Z","dateModified":"2026-04-13T23:45:53Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/comissao-europeia-da-luz-verde-a-ancom-para-regular-digi-na-romenia.html"},"headline":"Comissão Europeia dá luz verde à ANCOM para regular DIGI na Roménia!","description":"Regulador Romeno com luz verde para avançar, para a regulação de zonas sem concorrência dominadas pela DIGI. Acesso à rede DIGI em 6300 localidades, em cima da mesa!","datePublished":"2026-04-13T23:46:13Z","dateModified":"2026-04-13T23:46:13Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2689,6 +2689,10 @@ function optimizeArticleMediaMarkup(html) {
     'assets/imagens/lidllinhas.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/lidllinhas.png',
     'assets/imagens/tarifário.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png'
   };
+  const imageStyleOverrides = {
+    'assets/imagens/tarifário.png': 'width:100%;max-width:760px;height:auto;display:block;margin-left:auto;margin-right:auto',
+    'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png': 'width:100%;max-width:760px;height:auto;display:block;margin-left:auto;margin-right:auto'
+  };
 
   const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
   const images = Array.from(root.querySelectorAll('img'));
@@ -2699,6 +2703,11 @@ function optimizeArticleMediaMarkup(html) {
 
     if (assetFallbacks[currentSrc]) {
       img.setAttribute('src', assetFallbacks[currentSrc]);
+    }
+
+    const resolvedSrc = img.getAttribute('src') || currentSrc;
+    if (imageStyleOverrides[currentSrc] || imageStyleOverrides[resolvedSrc]) {
+      img.setAttribute('style', imageStyleOverrides[currentSrc] || imageStyleOverrides[resolvedSrc]);
     }
 
     if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
