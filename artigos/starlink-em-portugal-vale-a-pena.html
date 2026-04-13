@@ -1964,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="STARLINK em PORTUGAL vale a PENA?">
 <meta name="twitter:description" content="Conversamos com Eduardo Gomes, cliente Starlink, que nos d&#225; conta da sua opini&#227;o em contexto real do uso deste servi&#231;o.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/starlink-em-portugal-vale-a-pena.html"},"headline":"STARLINK em PORTUGAL vale a PENA?","description":"Conversamos com Eduardo Gomes, cliente Starlink, que nos dá conta da sua opinião em contexto real do uso deste serviço.","datePublished":"2026-02-26T19:00:00Z","dateModified":"2026-04-13T23:42:39Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/starlink-em-portugal-vale-a-pena.html"},"headline":"STARLINK em PORTUGAL vale a PENA?","description":"Conversamos com Eduardo Gomes, cliente Starlink, que nos dá conta da sua opinião em contexto real do uso deste serviço.","datePublished":"2026-02-26T19:00:00Z","dateModified":"2026-04-13T23:44:04Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2684,6 +2684,11 @@ function optimizeArticleMediaMarkup(html) {
 
   const root = document.createElement('div');
   root.innerHTML = String(html);
+  const assetFallbacks = {
+    'assets/imagens/Lidl.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/Lidl.png',
+    'assets/imagens/lidllinhas.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/lidllinhas.png',
+    'assets/imagens/tarifário.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png'
+  };
 
   const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
   const images = Array.from(root.querySelectorAll('img'));
@@ -2691,6 +2696,10 @@ function optimizeArticleMediaMarkup(html) {
   images.forEach((img, index) => {
     const currentSrc = img.getAttribute('src') || '';
     if (!currentSrc) return;
+
+    if (assetFallbacks[currentSrc]) {
+      img.setAttribute('src', assetFallbacks[currentSrc]);
+    }
 
     if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
     if (!img.getAttribute('loading')) img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
