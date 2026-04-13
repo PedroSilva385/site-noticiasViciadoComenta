@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia - VICIADO COMENTA</title>
 <meta name="description" content="Leia notícias e artigos completos no VICIADO COMENTA, com foco em telecomunicações, tecnologia, gaming e temas de atualidade.">
-<meta name="robots" content="noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos.html">
 <meta property="og:type" content="article">
@@ -379,12 +379,12 @@ main {
 
 .artigo-conteudo {
   font-size: 1.2em;
-  line-height: 1.72;
+  line-height: 1.9;
   color: #3a3f5a;
 }
 
 .artigo-conteudo p {
-  margin: 0 0 16px;
+  margin-bottom: 24px;
   text-align: justify;
 }
 
@@ -395,22 +395,18 @@ main {
   color: #1a1f3a;
 }
 
-.artigo-conteudo h3.article-subheading {
-  margin: 18px 0 10px;
-}
-
 .artigo-conteudo ul,
 .artigo-conteudo ol {
-  margin: 0 0 18px;
+  margin: 0 0 24px;
   padding-left: 30px;
 }
 
 .artigo-conteudo li {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .artigo-conteudo blockquote {
-  margin: 18px 0;
+  margin: 22px 0;
   padding: 10px 16px;
   border-left: 4px solid #93c5fd;
   background: #eff6ff;
@@ -418,7 +414,7 @@ main {
 }
 
 .artigo-conteudo pre {
-  margin: 18px 0;
+  margin: 22px 0;
   padding: 14px;
   border-radius: 10px;
   overflow-x: auto;
@@ -439,36 +435,9 @@ main {
 }
 
 .artigo-conteudo br {
-  display: inline;
-}
-
-.artigo-conteudo .article-comparison-list {
-  display: grid;
-  gap: 12px;
-  margin: 8px 0 22px;
-}
-
-.artigo-conteudo .article-comparison-item {
-  padding: 14px 16px;
-  border: 1px solid #dbeafe;
-  border-left: 4px solid #60a5fa;
-  border-radius: 14px;
-  background: #f8fbff;
-}
-
-.artigo-conteudo .article-comparison-label {
-  margin: 0 0 6px;
-  text-align: left;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.84em;
-  font-weight: 800;
-  color: #0f3f7a;
-}
-
-.artigo-conteudo .article-comparison-text {
-  margin: 0;
-  text-align: left;
+  display: block;
+  content: "";
+  margin-top: 16px;
 }
 
 .tempo-leitura {
@@ -843,16 +812,6 @@ body.dark .relacionado-link {
   cursor: pointer;
 }
 
-.live-edit-select {
-  border: 1px solid #dbe6f3;
-  background: #ffffff;
-  color: #1a1f3a;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.9em;
-  font-weight: 600;
-}
-
 .live-edit-btn:hover {
   border-color: #0066cc;
   color: #0066cc;
@@ -878,12 +837,6 @@ body.dark .relacionado-link {
 }
 
 body.dark .live-edit-btn {
-  background: #1a2332;
-  border-color: #2d3748;
-  color: #d1d5db;
-}
-
-body.dark .live-edit-select {
   background: #1a2332;
   border-color: #2d3748;
   color: #d1d5db;
@@ -2271,7 +2224,7 @@ function buildArticleQualityBlocks(noticia) {
   return {
     qualityMetaHtml: `
       <div class="artigo-quality-meta">
-        <span class="artigo-quality-pill">✍️ ${escapeHtmlText(autor)}</span>
+        <span class="artigo-quality-pill">✍️ Autor: ${escapeHtmlText(autor)}</span>
         <span class="artigo-quality-pill">🔄 Atualizado em: ${escapeHtmlText(atualizadoEm || 'Data editorial')}</span>
       </div>
     `
@@ -2353,10 +2306,6 @@ function buildArticleUrlByData(noticia) {
     return 'artigos.html';
   }
 
-  if (typeof noticia.link === 'string' && /^https:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(noticia.link.trim())) {
-    return noticia.link.trim();
-  }
-
   const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
@@ -2370,6 +2319,10 @@ function buildArticleUrlByData(noticia) {
   if (hasId) {
     return `artigos.html?id=${encodeURIComponent(id)}`;
   }
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
+  }
+
   return 'artigos.html';
 }
 
@@ -2516,274 +2469,11 @@ function normalizeBrokenLineWraps(html) {
     .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
 }
 
-function isComparisonLabelText(value) {
-  const text = String(value || '').replace(/\u00a0/g, ' ').trim();
-  if (!text || text.length > 28) return false;
-  if (/[.!?:]/.test(text)) return false;
-
-  const words = text.split(/\s+/).filter(Boolean);
-  if (!words.length || words.length > 3) return false;
-
-  return /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ0-9&+\-/ ]+$/.test(text)
-    || /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç0-9+\-/]*(?:\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç0-9+\-/]*){0,2}$/.test(text);
-}
-
-function buildComparisonBlockHtml(items) {
-  return `
-    <div class="article-comparison-list">
-      ${items.map((item) => `
-        <div class="article-comparison-item">
-          <p class="article-comparison-label">${escapeHtmlText(item.label)}</p>
-          <p class="article-comparison-text">${item.bodyHtml || applyInlineMarkdownTypography(item.body)}</p>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function isStandaloneSubheadingText(value) {
-  const text = String(value || '').replace(/\u00a0/g, ' ').trim();
-  if (!text || text.length > 120) return false;
-  if (/[.!]$/.test(text)) return false;
-
-  const words = text.split(/\s+/).filter(Boolean);
-  if (!words.length || words.length > 12) return false;
-
-  return /[:?]$/.test(text)
-    || /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ0-9][A-Za-zÁÀÂÃÉÊÍÓÔÕÚÇáàâãéêíóôõúç0-9%(),\-\/\s]+$/.test(text);
-}
-
-function promoteStandaloneStrongParagraphs(root) {
-  if (!root) return;
-
-  root.querySelectorAll('p').forEach((paragraph) => {
-    if (!paragraph || paragraph.querySelector('img,figure,ul,ol,blockquote,pre,table,code')) return;
-
-    const trimmedHtml = String(paragraph.innerHTML || '').trim();
-    const onlyStrong = trimmedHtml.match(/^<(strong|b)(\s[^>]*)?>\s*([\s\S]+?)\s*<\/\1>$/i);
-    if (!onlyStrong) return;
-
-    const text = String(paragraph.textContent || '').replace(/\u00a0/g, ' ').trim();
-    if (!isStandaloneSubheadingText(text)) return;
-
-    const heading = document.createElement('h3');
-    heading.className = 'article-subheading';
-    heading.innerHTML = onlyStrong[3].trim();
-
-    if (paragraph.getAttribute('style')) {
-      heading.setAttribute('style', paragraph.getAttribute('style'));
-    }
-
-    paragraph.replaceWith(heading);
-  });
-}
-
-function getComparisonLabelFromList(listElement) {
-  if (!listElement || !listElement.matches('ul,ol')) return '';
-
-  const items = Array.from(listElement.children).filter((child) => child.matches('li'));
-  if (items.length !== 1) return '';
-
-  return String(items[0].textContent || '').replace(/\u00a0/g, ' ').trim();
-}
-
-function collectComparisonBodyFromSiblings(startNode) {
-  const bodyNodes = [];
-  let cursor = startNode;
-
-  while (cursor) {
-    if (cursor.matches && cursor.matches('ul,ol,h1,h2,h3,h4,h5,h6,figure,img,blockquote,pre,table,hr')) {
-      break;
-    }
-
-    if (cursor.matches && cursor.matches('p') && cursor.querySelector('img,figure,ul,ol,blockquote,pre,table')) {
-      break;
-    }
-
-    if (cursor.matches && cursor.matches('span,p,div')) {
-      const textContent = String(cursor.textContent || '').replace(/\u00a0/g, ' ').trim();
-      if (textContent) {
-        bodyNodes.push(cursor);
-      } else if (cursor.matches('p')) {
-        break;
-      }
-    } else {
-      break;
-    }
-
-    cursor = cursor.nextElementSibling;
-  }
-
-  const bodyText = bodyNodes
-    .map((node) => String(node.textContent || '').replace(/\u00a0/g, ' ').trim())
-    .filter(Boolean)
-    .join(' ')
-    .trim();
-
-  const bodyHtml = bodyNodes
-    .map((node) => String(node.innerHTML || '').trim())
-    .filter(Boolean)
-    .join(' ')
-    .trim();
-
-  return {
-    bodyNodes,
-    bodyText,
-    bodyHtml,
-    nextNode: cursor
-  };
-}
-
-function enhanceComparisonBlocks(html) {
-  if (!html) return '';
-
-  const root = document.createElement('div');
-  root.innerHTML = String(html);
-
-  let current = root.firstElementChild;
-  while (current) {
-    if (current.matches('ul,ol')) {
-      let probe = current;
-      const items = [];
-
-      while (probe && probe.matches('ul,ol')) {
-        const labelText = getComparisonLabelFromList(probe);
-        const { bodyNodes, bodyText, bodyHtml, nextNode } = collectComparisonBodyFromSiblings(probe.nextElementSibling);
-
-        if (!isComparisonLabelText(labelText) || !bodyText || bodyText.length < 24 || isComparisonLabelText(bodyText)) {
-          break;
-        }
-
-        items.push({
-          label: labelText,
-          bodyHtml
-        });
-
-        probe = nextNode;
-      }
-
-      if (items.length >= 2) {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = buildComparisonBlockHtml(items).trim();
-
-        let node = current;
-        while (node && node !== probe) {
-          const nextNode = node.nextElementSibling;
-          node.remove();
-          node = nextNode;
-        }
-
-        root.insertBefore(wrapper.firstElementChild, probe);
-        current = probe;
-        continue;
-      }
-    }
-
-    if (!current.matches('p')) {
-      current = current.nextElementSibling;
-      continue;
-    }
-
-    let probe = current;
-    const items = [];
-
-    while (probe && probe.matches('p')) {
-      const next = probe.nextElementSibling;
-      if (!next || !next.matches('p')) break;
-
-      const labelText = String(probe.textContent || '').replace(/\u00a0/g, ' ').trim();
-      const bodyText = String(next.textContent || '').replace(/\u00a0/g, ' ').trim();
-      const bodyHasBlocks = !!next.querySelector('img,figure,ul,ol,blockquote,pre,table');
-
-      if (!isComparisonLabelText(labelText) || !bodyText || bodyText.length < 24 || bodyHasBlocks || isComparisonLabelText(bodyText)) {
-        break;
-      }
-
-      items.push({
-        label: labelText,
-        bodyHtml: String(next.innerHTML || '').trim()
-      });
-
-      probe = next.nextElementSibling;
-    }
-
-    if (items.length >= 2) {
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = buildComparisonBlockHtml(items).trim();
-
-      let node = current;
-      while (node && node !== probe) {
-        const nextNode = node.nextElementSibling;
-        node.remove();
-        node = nextNode;
-      }
-
-      root.insertBefore(wrapper.firstElementChild, probe);
-      current = probe;
-      continue;
-    }
-
-    current = current.nextElementSibling;
-  }
-
-  return root.innerHTML;
-}
-
-function renderStructuredPlainText(content) {
-  const blocks = String(content || '')
-    .replace(/\n{3,}/g, '\n\n')
-    .split(/\n\s*\n/)
-    .map((block) => block.trim())
-    .filter(Boolean);
-
-  if (!blocks.length) return '';
-
-  const parts = [];
-
-  for (let index = 0; index < blocks.length;) {
-    const items = [];
-    let cursor = index;
-
-    while (cursor + 1 < blocks.length) {
-      const label = blocks[cursor].replace(/\n+/g, ' ').trim();
-      const body = blocks[cursor + 1].replace(/\n+/g, ' ').trim();
-
-      if (!isComparisonLabelText(label) || !body || body.length < 24 || isComparisonLabelText(body)) {
-        break;
-      }
-
-      items.push({ label, body });
-      cursor += 2;
-    }
-
-    if (items.length >= 2) {
-      parts.push(buildComparisonBlockHtml(items));
-      index = cursor;
-      continue;
-    }
-
-    const paragraph = blocks[index++].replace(/\n+/g, ' ').trim();
-    const paragraphHtml = applyInlineMarkdownTypography(paragraph);
-    const paragraphText = paragraph.replace(/[*_]+/g, '').trim();
-    const isStrongOnlyParagraph = /^<(strong|b)>[\s\S]+<\/\1>$/.test(paragraphHtml.trim());
-
-    if (isStrongOnlyParagraph && isStandaloneSubheadingText(paragraphText)) {
-      parts.push(`<h3 class="article-subheading">${paragraphHtml.replace(/^<(strong|b)>|<\/(strong|b)>$/g, '')}</h3>`);
-      continue;
-    }
-
-    parts.push(`<p>${paragraphHtml}</p>`);
-  }
-
-  return parts.join('');
-}
-
 function sanitizeArticleInlineTypography(html) {
   if (!html) return '';
 
   const root = document.createElement('div');
   root.innerHTML = String(html);
-  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   root.querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,option').forEach((node) => node.remove());
 
@@ -2794,19 +2484,9 @@ function sanitizeArticleInlineTypography(html) {
 
   const allowedStyles = new Set([
     'line-height', 'text-align', 'font-weight', 'font-style',
-    'text-decoration', 'font-size', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+    'text-decoration', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
     'letter-spacing', 'color'
   ]);
-
-  const legacyFontSizeMap = {
-    '1': '0.8em',
-    '2': '0.9em',
-    '3': '1em',
-    '4': '1.15em',
-    '5': '1.3em',
-    '6': '1.5em',
-    '7': '1.8em'
-  };
 
   const sanitizeStyle = (styleText) => {
     if (!styleText) return '';
@@ -2823,15 +2503,6 @@ function sanitizeArticleInlineTypography(html) {
         const normalized = val.toLowerCase();
         if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
         if (/^[1-9]00$/.test(normalized) && parseInt(normalized, 10) > 700) return;
-      }
-
-      if (prop === 'font-size') {
-        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
-        if (!match) return;
-        const amount = parseFloat(match[1]);
-        const unit = match[2].toLowerCase();
-        if (unit === 'px' && (amount < 12 || amount > 40)) return;
-        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
       }
 
       safeRules.push(`${prop}:${val}`);
@@ -2851,13 +2522,9 @@ function sanitizeArticleInlineTypography(html) {
       const span = document.createElement('span');
       const inlineStyles = [];
       const color = el.getAttribute('color');
-      const size = String(el.getAttribute('size') || '').trim();
 
       if (color) {
         inlineStyles.push(`color:${color}`);
-      }
-      if (legacyFontSizeMap[size]) {
-        inlineStyles.push(`font-size:${legacyFontSizeMap[size]}`);
       }
       const face = el.getAttribute('face');
       if (face) {
@@ -2956,40 +2623,6 @@ function sanitizeArticleInlineTypography(html) {
     el.replaceWith(em);
   });
 
-  root.querySelectorAll('span, p, h2, h3').forEach((el) => {
-    if (!el.querySelector(blockLikeSelector)) return;
-
-    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
-      }
-
-      if (node.nodeType !== Node.ELEMENT_NODE) {
-        return false;
-      }
-
-      return !node.matches(blockLikeSelector);
-    });
-
-    if (hasMeaningfulInlineContent) return;
-
-    while (el.firstChild) {
-      el.parentNode.insertBefore(el.firstChild, el);
-    }
-    el.remove();
-  });
-
-  root.querySelectorAll('p, span').forEach((el) => {
-    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
-    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
-    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
-
-    if (hasRichContent) return;
-    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
-      el.remove();
-    }
-  });
-
   root.querySelectorAll('[style]').forEach((el) => {
     const tag = el.tagName.toLowerCase();
     if (tag === 'strong' || tag === 'b') return;
@@ -3023,8 +2656,6 @@ function sanitizeArticleInlineTypography(html) {
       heading.replaceWith(paragraph);
     }
   });
-
-  promoteStandaloneStrongParagraphs(root);
 
   return root.innerHTML
     .replace(/&nbsp;/gi, ' ')
@@ -3164,7 +2795,6 @@ function formatArticleContent(rawContent) {
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
 
-      htmlContent = enhanceComparisonBlocks(htmlContent);
       htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
@@ -3191,137 +2821,23 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  return renderStructuredPlainText(content).trim();
+  const paragraphToken = '__PARAGRAPH_BREAK__';
+  content = content
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\n\n+/g, paragraphToken)
+    .replace(/\n+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
+
+  content = normalizeBrokenLineWraps(content);
+  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+  return content.trim();
 }
 
 function canUseLiveEditor() {
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
   return editEnabled;
-}
-
-const ARTICLE_SHELL_BUILD_VERSION = '__VC_BUILD_VERSION__';
-const ARTICLE_BUILD_VERSION_STORAGE_KEY = 'vc_artigos_build_version';
-const ARTICLE_BUILD_VERSION_RELOAD_KEY = 'vc_artigos_build_reload';
-
-function getCurrentArticleShellBuildVersion() {
-  if (!ARTICLE_SHELL_BUILD_VERSION || ARTICLE_SHELL_BUILD_VERSION === '__VC_BUILD_VERSION__') {
-    return '';
-  }
-
-  return String(ARTICLE_SHELL_BUILD_VERSION).trim();
-}
-
-async function ensureLatestArticleShellVersion() {
-  const shellVersion = getCurrentArticleShellBuildVersion();
-  const versionUrl = `data/build-version.json?t=${Date.now()}`;
-
-  try {
-    const response = await fetch(versionUrl, {
-      cache: 'no-store',
-      headers: {
-        Accept: 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      return;
-    }
-
-    const payload = await response.json();
-    const deployedVersion = String(payload && (payload.version || payload.shortVersion) || '').trim();
-    if (!deployedVersion || deployedVersion === '__VC_BUILD_VERSION__') {
-      return;
-    }
-
-    const storedVersion = localStorage.getItem(ARTICLE_BUILD_VERSION_STORAGE_KEY) || '';
-    localStorage.setItem(ARTICLE_BUILD_VERSION_STORAGE_KEY, deployedVersion);
-
-    if (shellVersion && shellVersion !== deployedVersion) {
-      const alreadyReloadedFor = sessionStorage.getItem(ARTICLE_BUILD_VERSION_RELOAD_KEY);
-      if (alreadyReloadedFor === deployedVersion) {
-        return;
-      }
-
-      sessionStorage.setItem(ARTICLE_BUILD_VERSION_RELOAD_KEY, deployedVersion);
-
-      const reloadUrl = new URL(window.location.href);
-      reloadUrl.searchParams.set('_build', deployedVersion.slice(0, 8));
-      window.location.replace(reloadUrl.toString());
-      await new Promise(() => {});
-      return;
-    }
-
-    if (storedVersion && storedVersion === deployedVersion) {
-      sessionStorage.removeItem(ARTICLE_BUILD_VERSION_RELOAD_KEY);
-    }
-  } catch (error) {
-    console.warn('Não foi possível verificar a versão publicada do artigos.html:', error);
-  }
-}
-
-function isAdminPreviewMode() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('adminPreview') === '1';
-}
-
-function getAdminPreviewDraftKey(noticiaId) {
-  return `vc_admin_site_preview_${String(noticiaId || '').trim()}`;
-}
-
-function getAdminPreviewSyncKey(noticiaId) {
-  return `vc_admin_site_sync_${String(noticiaId || '').trim()}`;
-}
-
-function getAdminPreviewDraft(noticiaId) {
-  try {
-    const raw = localStorage.getItem(getAdminPreviewDraftKey(noticiaId));
-    return raw ? JSON.parse(raw) : null;
-  } catch (error) {
-    console.warn('Não foi possível ler o draft vindo do painel:', error);
-    return null;
-  }
-}
-
-function saveAdminPreviewDraft(noticiaId, payload) {
-  try {
-    localStorage.setItem(getAdminPreviewDraftKey(noticiaId), JSON.stringify(payload || {}));
-  } catch (error) {
-    console.warn('Não foi possível atualizar o draft do painel:', error);
-  }
-}
-
-function syncAdminPreviewSave(noticiaId, html) {
-  const timestamp = Date.now();
-  const existingDraft = getAdminPreviewDraft(noticiaId) || {};
-  const nextDraft = {
-    ...existingDraft,
-    conteudo: String(html || '').trim(),
-    updatedAt: timestamp
-  };
-  const syncPayload = {
-    articleId: String(noticiaId || '').trim(),
-    html: String(html || '').trim(),
-    timestamp
-  };
-
-  saveAdminPreviewDraft(noticiaId, nextDraft);
-
-  try {
-    localStorage.setItem(getAdminPreviewSyncKey(noticiaId), JSON.stringify(syncPayload));
-  } catch (error) {
-    console.warn('Não foi possível publicar sincronização para o painel:', error);
-  }
-
-  try {
-    if (window.opener && !window.opener.closed) {
-      window.opener.postMessage({ type: 'vc-admin-preview-save', payload: syncPayload }, window.location.origin);
-    }
-  } catch (error) {
-    console.warn('Não foi possível comunicar diretamente com o painel:', error);
-  }
-
-  return syncPayload;
 }
 
 let studioApiBaseCache = null;
@@ -3491,58 +3007,21 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   const contentBody = document.getElementById('artigoConteudoBody');
   const btnEdit = document.getElementById('btnLiveEdit');
   const btnBold = document.getElementById('btnLiveBold');
-  const fontSizeSelect = document.getElementById('liveFontSizeSelect');
   const btnLink = document.getElementById('btnLiveLink');
   const btnSave = document.getElementById('btnLiveSave');
   const btnCancel = document.getElementById('btnLiveCancel');
   const btnReset = document.getElementById('btnLiveReset');
   const editNote = document.querySelector('.live-edit-note');
-  const adminPreviewMode = isAdminPreviewMode();
 
-  if (!contentWrapper || !contentBody || !btnEdit || !btnBold || !fontSizeSelect || !btnLink || !btnSave || !btnCancel || !btnReset) return;
+  if (!contentWrapper || !contentBody || !btnEdit || !btnBold || !btnLink || !btnSave || !btnCancel || !btnReset) return;
 
   let baselineHtml = contentBody.innerHTML;
-  const legacyFontSizeMap = {
-    '1': '0.8em',
-    '2': '0.9em',
-    '3': '1em',
-    '4': '1.15em',
-    '5': '1.3em',
-    '6': '1.5em',
-    '7': '1.8em'
-  };
-
-  function convertLegacyFontTags(rootElement) {
-    if (!rootElement) return;
-
-    rootElement.querySelectorAll('font').forEach((fontEl) => {
-      const span = document.createElement('span');
-      const inlineStyles = [];
-      const size = String(fontEl.getAttribute('size') || '').trim();
-
-      if (legacyFontSizeMap[size]) {
-        inlineStyles.push(`font-size:${legacyFontSizeMap[size]}`);
-      }
-
-      if (fontEl.getAttribute('style')) {
-        inlineStyles.push(fontEl.getAttribute('style'));
-      }
-
-      span.innerHTML = fontEl.innerHTML;
-      if (inlineStyles.length) {
-        span.setAttribute('style', inlineStyles.join(';'));
-      }
-
-      fontEl.replaceWith(span);
-    });
-  }
 
   function setEditState(isEditing) {
     contentWrapper.classList.toggle('is-editing', isEditing);
     contentBody.contentEditable = isEditing ? 'true' : 'false';
     btnEdit.style.display = isEditing ? 'none' : 'inline-flex';
     btnBold.style.display = isEditing ? 'inline-flex' : 'none';
-    fontSizeSelect.style.display = isEditing ? 'inline-flex' : 'none';
     btnLink.style.display = isEditing ? 'inline-flex' : 'none';
     btnSave.style.display = isEditing ? 'inline-flex' : 'none';
     btnCancel.style.display = isEditing ? 'inline-flex' : 'none';
@@ -3557,16 +3036,6 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   btnBold.addEventListener('click', () => {
     contentBody.focus();
     document.execCommand('bold', false, null);
-  });
-
-  fontSizeSelect.addEventListener('change', () => {
-    const fontSizeValue = fontSizeSelect.value;
-    if (!fontSizeValue) return;
-
-    contentBody.focus();
-    document.execCommand('fontSize', false, fontSizeValue);
-    convertLegacyFontTags(contentBody);
-    fontSizeSelect.value = '';
   });
 
   btnLink.addEventListener('click', () => {
@@ -3599,20 +3068,9 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
     }
 
     btnSave.disabled = true;
-    btnSave.textContent = adminPreviewMode ? '⏳ A devolver...' : '⏳ A guardar...';
+    btnSave.textContent = '⏳ A guardar...';
 
     try {
-      if (adminPreviewMode) {
-        syncAdminPreviewSave(noticiaId, editedHtml);
-        saveLiveEditedContent(noticiaId, editedHtml);
-        baselineHtml = editedHtml;
-        setEditState(false);
-        if (editNote) {
-          editNote.textContent = 'Alterações devolvidas ao painel de admin. O painel trata do resto.';
-        }
-        return;
-      }
-
       const result = await saveArticleContentToJson(noticiaId, editedHtml);
       saveLiveEditedContent(noticiaId, editedHtml);
       baselineHtml = editedHtml;
@@ -3630,7 +3088,7 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
       }
     } finally {
       btnSave.disabled = false;
-      btnSave.textContent = adminPreviewMode ? '💾 Guardar no painel' : '💾 Guardar edição';
+      btnSave.textContent = '💾 Guardar edição';
     }
   });
 
@@ -3650,8 +3108,7 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   setEditState(false);
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await ensureLatestArticleShellVersion();
+document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   const btn = document.createElement('button');
   btn.id = 'themeToggle';
@@ -3740,7 +3197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        let noticia = data.noticias.find(n => {
+        const noticia = data.noticias.find(n => {
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
@@ -3749,10 +3206,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (noticia) {
         const noticiaIdResolvido = String(noticia.id);
-        const adminPreviewDraft = isAdminPreviewMode() ? getAdminPreviewDraft(noticiaIdResolvido) : null;
-        if (adminPreviewDraft && typeof adminPreviewDraft === 'object') {
-          noticia = { ...noticia, ...adminPreviewDraft };
-        }
         window.currentArticleId = noticiaIdResolvido;
         incrementArticleReadCount(noticiaIdResolvido);
 
@@ -3807,7 +3260,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           conteudoHTML = formatArticleContent(noticia.conteudo);
         }
 
-        const savedLiveContent = isAdminPreviewMode() ? null : getLiveEditedContent(noticiaIdResolvido);
+        const savedLiveContent = getLiveEditedContent(noticiaIdResolvido);
         if (savedLiveContent) {
           conteudoHTML = savedLiveContent;
         }
@@ -3835,6 +3288,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <h1 class="artigo-titulo">${noticia.titulo}</h1>
             <div class="artigo-meta">
               <span>📅 ${noticia.data}</span>
+              <span>✍️ ${autorNome}</span>
               <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
             ${qualityBlocks.qualityMetaHtml}
@@ -3848,19 +3302,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="live-edit-tools" id="liveEditTools">
               <button class="live-edit-btn" id="btnLiveEdit" type="button">✏️ Editar texto</button>
               <button class="live-edit-btn" id="btnLiveBold" type="button" style="display:none;">𝐁 Negrito</button>
-              <select class="live-edit-select" id="liveFontSizeSelect" style="display:none;">
-                <option value="">Tamanho</option>
-                <option value="2">Pequeno</option>
-                <option value="3">Normal</option>
-                <option value="4">Grande</option>
-                <option value="5">Maior</option>
-                <option value="6">Destaque</option>
-              </select>
               <button class="live-edit-btn" id="btnLiveLink" type="button" style="display:none;">🔗 Hiperligação</button>
-              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">${isAdminPreviewMode() ? '💾 Guardar no painel' : '💾 Guardar edição'}</button>
+              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">💾 Guardar edição</button>
               <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">↩️ Cancelar</button>
               <button class="live-edit-btn" id="btnLiveReset" type="button">🧹 Repor original</button>
-              <div class="live-edit-note">${isAdminPreviewMode() ? 'Modo preview do painel ativo (guardar devolve o texto ao admin).' : 'Modo de edição ativo (guardar escreve no noticias.json via servidor local).'}</div>
+              <div class="live-edit-note">Modo de edição ativo (guardar escreve no noticias.json via servidor local).</div>
             </div>
             ` : ''}
           </div>
@@ -4153,18 +3599,6 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
 
   const sessionKey = `vc_article_read_counted_${noticiaId}`;
   if (sessionStorage.getItem(sessionKey) === '1') {
-    return;
-  }
-
-  if (!window.authReady && !window.authFailed) {
-    if (attempt < 20) {
-      setTimeout(() => incrementArticleReadCount(noticiaId, attempt + 1), 350);
-    }
-    return;
-  }
-
-  if (window.authFailed) {
-    console.warn('Contagem de leitura ignorada: autenticacao anonima indisponivel.');
     return;
   }
 

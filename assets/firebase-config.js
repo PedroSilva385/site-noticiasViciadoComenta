@@ -400,85 +400,6 @@ function ensureFirebaseInitialized() {
   return Promise.resolve(true);
 }
 
-function shouldEnablePublicAnonymousAuth() {
-  if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
-    return false;
-  }
-
-  const path = (window.location.pathname || '').toLowerCase();
-  if (path.includes('/tools/') || path.endsWith('/estatisticas.html') || path.endsWith('estatisticas.html')) {
-    return false;
-  }
-
-  return true;
-}
-
-let publicAnonymousAuthPromise = null;
-
-function ensurePublicAnonymousAuth() {
-  if (!shouldEnablePublicAnonymousAuth()) {
-    return Promise.resolve(null);
-  }
-
-  if (publicAnonymousAuthPromise) {
-    return publicAnonymousAuthPromise;
-  }
-
-  const auth = firebase.auth();
-
-  if (auth.currentUser) {
-    publicAnonymousAuthPromise = Promise.resolve(auth.currentUser);
-    return publicAnonymousAuthPromise;
-  }
-
-  publicAnonymousAuthPromise = new Promise((resolve) => {
-    let settled = false;
-    let unsubscribe = () => {};
-
-    const finish = (user) => {
-      if (settled) {
-        return;
-      }
-
-      settled = true;
-      try {
-        unsubscribe();
-      } catch (_) {}
-      resolve(user || null);
-    };
-
-    unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        finish(user);
-      }
-    });
-
-    window.setTimeout(() => {
-      if (settled) {
-        return;
-      }
-
-      if (auth.currentUser) {
-        finish(auth.currentUser);
-        return;
-      }
-
-      auth.signInAnonymously()
-        .then((credential) => finish((credential && credential.user) || auth.currentUser || null))
-        .catch((error) => {
-          console.warn('⚠️ Autenticacao anonima indisponivel para interacoes publicas:', error);
-          finish(null);
-        });
-    }, 700);
-
-    window.setTimeout(() => {
-      finish(auth.currentUser || null);
-    }, 5000);
-  });
-
-  return publicAnonymousAuthPromise;
-}
-
 let deferredFirebaseWorkStarted = false;
 
 function scheduleDeferredFirebaseWork(callback) {
@@ -512,66 +433,53 @@ function initializeDeferredFirebaseWork() {
       return;
     }
 
-    ensurePublicAnonymousAuth()
-      .then((authUser) => {
-        if (shouldEnablePublicAnonymousAuth() && !authUser) {
-          console.warn('⚠️ Firebase Auth público indisponível; writes de métricas foram desativados nesta página.');
-          return;
-        }
-
-        const db = firebase.database();
-        getVisitorFingerprint()
-          .then((visitorHash) => {
-            const shouldCountSessionVisit = shouldRegisterVisitForSession();
-            registerVisitMetrics(db, visitorHash, shouldCountSessionVisit)
-              .then(() => {
-                if (shouldCountSessionVisit) {
-                  console.log('✓ Métricas de visita registadas (entrada na sessão)');
-                } else {
-                  console.log('ℹ️ Navegação interna: sessão não recontada, página registada');
-                }
-              })
-              .catch((error) => {
-                console.error('❌ Erro ao registar métricas de visita:', error);
-              });
-
-            setupClickTracking(db, visitorHash);
-            console.log('✓ Tracking de cliques ativo');
+    const db = firebase.database();
+    getVisitorFingerprint()
+      .then((visitorHash) => {
+        const shouldCountSessionVisit = shouldRegisterVisitForSession();
+        registerVisitMetrics(db, visitorHash, shouldCountSessionVisit)
+          .then(() => {
+            if (shouldCountSessionVisit) {
+              console.log('✓ Métricas de visita registadas (entrada na sessão)');
+            } else {
+              console.log('ℹ️ Navegação interna: sessão não recontada, página registada');
+            }
           })
           .catch((error) => {
-            console.error('❌ Erro ao obter fingerprint de visitante:', error);
+            console.error('❌ Erro ao registar métricas de visita:', error);
           });
 
-        const userId = 'user_' + Math.random().toString(36).substr(2,9);
-        const activeUserRef = db.ref('active_users/' + userId);
-        activeUserRef.set({
-          timestamp: firebase.database.ServerValue.TIMESTAMP,
-          page: window.location.pathname
-        }).catch((error) => {
-          console.error('❌ Erro ao registar utilizador ativo:', error);
-        });
-        activeUserRef.onDisconnect().remove();
-        window.addEventListener('beforeunload', () => activeUserRef.remove());
-
-        const sessionKey = 'vc_active_session_id';
-        let sessionId = sessionStorage.getItem(sessionKey);
-        if (!sessionId) {
-          sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
-          sessionStorage.setItem(sessionKey, sessionId);
-        }
-
-        const historyEntryId = sessionId + '_' + Date.now();
-        db.ref('active_users_history/' + historyEntryId).set({
-          sessionId,
-          page: window.location.pathname,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
-
-        console.log('✓ Analytics configurado');
+        setupClickTracking(db, visitorHash);
+        console.log('✓ Tracking de cliques ativo');
       })
-      .catch((authError) => {
-        console.error('❌ Erro ao preparar autenticacao publica do Firebase:', authError);
+      .catch((error) => {
+        console.error('❌ Erro ao obter fingerprint de visitante:', error);
       });
+
+    const userId = 'user_' + Math.random().toString(36).substr(2,9);
+    const activeUserRef = db.ref('active_users/' + userId);
+    activeUserRef.set({
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      page: window.location.pathname
+    });
+    activeUserRef.onDisconnect().remove();
+    window.addEventListener('beforeunload', () => activeUserRef.remove());
+
+    const sessionKey = 'vc_active_session_id';
+    let sessionId = sessionStorage.getItem(sessionKey);
+    if (!sessionId) {
+      sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+      sessionStorage.setItem(sessionKey, sessionId);
+    }
+
+    const historyEntryId = sessionId + '_' + Date.now();
+    db.ref('active_users_history/' + historyEntryId).set({
+      sessionId,
+      page: window.location.pathname,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
+
+    console.log('✓ Analytics configurado');
   } catch (analyticsError) {
     console.error('❌ Erro no analytics:', analyticsError);
   }

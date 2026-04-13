@@ -11,8 +11,6 @@ function filtrarNoticiasPublicadas(noticias) {
   const agora = new Date();
   
   return noticias.filter(noticia => {
-    if (!noticia || typeof noticia !== 'object') return false;
-
     // Se não tem dataPublicacao definida, mostra imediatamente
     if (!noticia.dataPublicacao) return true;
     
@@ -194,13 +192,11 @@ function writeNoticiasCache(noticias) {
 }
 
 function normalizeNoticiasResponse(data) {
-  const noticias = Array.isArray(data && data.noticias)
-    ? data.noticias.filter((item) => item && typeof item === 'object')
-    : [];
+  const noticias = Array.isArray(data && data.noticias) ? data.noticias : [];
   const noticiaSolicitada = obterNoticiaSolicitadaDaURL(noticias);
   const publicadas = ordenarNoticiasPorData(deduplicarNoticias(filtrarNoticiasPublicadas(noticias)));
 
-  if (noticiaSolicitada && !publicadas.some((noticia) => noticia && String(noticia.id) === String(noticiaSolicitada.id))) {
+  if (noticiaSolicitada && !publicadas.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
     publicadas.unshift(noticiaSolicitada);
   }
 
