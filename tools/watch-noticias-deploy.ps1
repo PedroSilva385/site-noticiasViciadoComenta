@@ -1,4 +1,13 @@
+$EnableAutoDeploy = $false
+
 $ErrorActionPreference = 'Stop'
+
+if (-not $EnableAutoDeploy) {
+    Write-Host "Auto-deploy para GitHub desativado neste workspace." -ForegroundColor Yellow
+    Write-Host "O watcher foi desligado para evitar loops de commits/push a partir de data/noticias.json." -ForegroundColor Yellow
+    Write-Host "Se precisares disto no futuro, reativa explicitamente o script antes de o correr." -ForegroundColor Yellow
+    exit 0
+}
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
 $dataDir = Join-Path $projectRoot 'data'
@@ -58,7 +67,7 @@ $invokeDeploy = {
 $state.invokeDeploy = $invokeDeploy
 
 $action = {
-    param($sender, $eventArgs)
+    param($watcherSender, $watcherEventArgs)
 
     $sharedState = $event.MessageData
     $sharedState.lastChange = Get-Date
