@@ -370,12 +370,12 @@ main {
 
 .artigo-conteudo {
   font-size: 1.2em;
-  line-height: 1.72;
+  line-height: 1.9;
   color: #3a3f5a;
 }
 
 .artigo-conteudo p {
-  margin: 0 0 16px;
+  margin-bottom: 24px;
   text-align: justify;
 }
 
@@ -388,16 +388,16 @@ main {
 
 .artigo-conteudo ul,
 .artigo-conteudo ol {
-  margin: 0 0 18px;
+  margin: 0 0 24px;
   padding-left: 30px;
 }
 
 .artigo-conteudo li {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .artigo-conteudo blockquote {
-  margin: 18px 0;
+  margin: 22px 0;
   padding: 10px 16px;
   border-left: 4px solid #93c5fd;
   background: #eff6ff;
@@ -405,7 +405,7 @@ main {
 }
 
 .artigo-conteudo pre {
-  margin: 18px 0;
+  margin: 22px 0;
   padding: 14px;
   border-radius: 10px;
   overflow-x: auto;
@@ -426,36 +426,9 @@ main {
 }
 
 .artigo-conteudo br {
-  display: inline;
-}
-
-.artigo-conteudo .article-comparison-list {
-  display: grid;
-  gap: 12px;
-  margin: 8px 0 22px;
-}
-
-.artigo-conteudo .article-comparison-item {
-  padding: 14px 16px;
-  border: 1px solid #dbeafe;
-  border-left: 4px solid #60a5fa;
-  border-radius: 14px;
-  background: #f8fbff;
-}
-
-.artigo-conteudo .article-comparison-label {
-  margin: 0 0 6px;
-  text-align: left;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.84em;
-  font-weight: 800;
-  color: #0f3f7a;
-}
-
-.artigo-conteudo .article-comparison-text {
-  margin: 0;
-  text-align: left;
+  display: block;
+  content: "";
+  margin-top: 16px;
 }
 
 .tempo-leitura {
@@ -1991,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="ANACOM, EVOMEDIA, UN2… QUEM fala sobre este ESC&#194;NDALO?">
 <meta name="twitter:description" content="O caso da UN2 foi dos mais estranhos que passou por Portugal. 7 meses depois, o que se sabe?">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/anacom-evomedia-un2-quem-fala-sobre-este-escandalo.html"},"headline":"ANACOM, EVOMEDIA, UN2… QUEM fala sobre este ESCÂNDALO?","description":"O caso da UN2 foi dos mais estranhos que passou por Portugal. 7 meses depois, o que se sabe?","datePublished":"2026-04-12T00:00:00Z","dateModified":"2026-04-12T00:00:00Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/anacom-evomedia-un2-quem-fala-sobre-este-escandalo.html"},"headline":"ANACOM, EVOMEDIA, UN2… QUEM fala sobre este ESCÂNDALO?","description":"O caso da UN2 foi dos mais estranhos que passou por Portugal. 7 meses depois, o que se sabe?","datePublished":"2026-04-13T23:35:25Z","dateModified":"2026-04-13T23:35:25Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2349,10 +2322,6 @@ function buildArticleUrlByData(noticia) {
     return 'noticias.html';
   }
 
-  if (typeof noticia.link === 'string' && /^https:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(noticia.link.trim())) {
-    return noticia.link.trim();
-  }
-
   const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
@@ -2366,6 +2335,10 @@ function buildArticleUrlByData(noticia) {
   if (hasId) {
     return `noticias.html?id=${encodeURIComponent(id)}`;
   }
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
+  }
+
   return 'noticias.html';
 }
 
@@ -2512,228 +2485,11 @@ function normalizeBrokenLineWraps(html) {
     .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
 }
 
-function isComparisonLabelText(value) {
-  const text = String(value || '').replace(/\u00a0/g, ' ').trim();
-  if (!text || text.length > 28) return false;
-  if (/[.!?:]/.test(text)) return false;
-
-  const words = text.split(/\s+/).filter(Boolean);
-  if (!words.length || words.length > 3) return false;
-
-  return /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ0-9&+\-/ ]+$/.test(text)
-    || /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç0-9+\-/]*(?:\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç0-9+\-/]*){0,2}$/.test(text);
-}
-
-function buildComparisonBlockHtml(items) {
-  return `
-    <div class="article-comparison-list">
-      ${items.map((item) => `
-        <div class="article-comparison-item">
-          <p class="article-comparison-label">${escapeHtmlText(item.label)}</p>
-          <p class="article-comparison-text">${item.bodyHtml || applyInlineMarkdownTypography(item.body)}</p>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function getComparisonLabelFromList(listElement) {
-  if (!listElement || !listElement.matches('ul,ol')) return '';
-
-  const items = Array.from(listElement.children).filter((child) => child.matches('li'));
-  if (items.length !== 1) return '';
-
-  return String(items[0].textContent || '').replace(/\u00a0/g, ' ').trim();
-}
-
-function collectComparisonBodyFromSiblings(startNode) {
-  const bodyNodes = [];
-  let cursor = startNode;
-
-  while (cursor) {
-    if (cursor.matches && cursor.matches('ul,ol,h1,h2,h3,h4,h5,h6,figure,img,blockquote,pre,table,hr')) {
-      break;
-    }
-
-    if (cursor.matches && cursor.matches('p') && cursor.querySelector('img,figure,ul,ol,blockquote,pre,table')) {
-      break;
-    }
-
-    if (cursor.matches && cursor.matches('span,p,div')) {
-      const textContent = String(cursor.textContent || '').replace(/\u00a0/g, ' ').trim();
-      if (textContent) {
-        bodyNodes.push(cursor);
-      } else if (cursor.matches('p')) {
-        break;
-      }
-    } else {
-      break;
-    }
-
-    cursor = cursor.nextElementSibling;
-  }
-
-  const bodyText = bodyNodes
-    .map((node) => String(node.textContent || '').replace(/\u00a0/g, ' ').trim())
-    .filter(Boolean)
-    .join(' ')
-    .trim();
-
-  const bodyHtml = bodyNodes
-    .map((node) => String(node.innerHTML || '').trim())
-    .filter(Boolean)
-    .join(' ')
-    .trim();
-
-  return {
-    bodyNodes,
-    bodyText,
-    bodyHtml,
-    nextNode: cursor
-  };
-}
-
-function enhanceComparisonBlocks(html) {
-  if (!html) return '';
-
-  const root = document.createElement('div');
-  root.innerHTML = String(html);
-
-  let current = root.firstElementChild;
-  while (current) {
-    if (current.matches('ul,ol')) {
-      let probe = current;
-      const items = [];
-
-      while (probe && probe.matches('ul,ol')) {
-        const labelText = getComparisonLabelFromList(probe);
-        const { bodyNodes, bodyText, bodyHtml, nextNode } = collectComparisonBodyFromSiblings(probe.nextElementSibling);
-
-        if (!isComparisonLabelText(labelText) || !bodyText || bodyText.length < 24 || isComparisonLabelText(bodyText)) {
-          break;
-        }
-
-        items.push({
-          label: labelText,
-          bodyHtml
-        });
-
-        probe = nextNode;
-      }
-
-      if (items.length >= 2) {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = buildComparisonBlockHtml(items).trim();
-
-        let node = current;
-        while (node && node !== probe) {
-          const nextNode = node.nextElementSibling;
-          node.remove();
-          node = nextNode;
-        }
-
-        root.insertBefore(wrapper.firstElementChild, probe);
-        current = probe;
-        continue;
-      }
-    }
-
-    if (!current.matches('p')) {
-      current = current.nextElementSibling;
-      continue;
-    }
-
-    let probe = current;
-    const items = [];
-
-    while (probe && probe.matches('p')) {
-      const next = probe.nextElementSibling;
-      if (!next || !next.matches('p')) break;
-
-      const labelText = String(probe.textContent || '').replace(/\u00a0/g, ' ').trim();
-      const bodyText = String(next.textContent || '').replace(/\u00a0/g, ' ').trim();
-      const bodyHasBlocks = !!next.querySelector('img,figure,ul,ol,blockquote,pre,table');
-
-      if (!isComparisonLabelText(labelText) || !bodyText || bodyText.length < 24 || bodyHasBlocks || isComparisonLabelText(bodyText)) {
-        break;
-      }
-
-      items.push({
-        label: labelText,
-        bodyHtml: String(next.innerHTML || '').trim()
-      });
-
-      probe = next.nextElementSibling;
-    }
-
-    if (items.length >= 2) {
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = buildComparisonBlockHtml(items).trim();
-
-      let node = current;
-      while (node && node !== probe) {
-        const nextNode = node.nextElementSibling;
-        node.remove();
-        node = nextNode;
-      }
-
-      root.insertBefore(wrapper.firstElementChild, probe);
-      current = probe;
-      continue;
-    }
-
-    current = current.nextElementSibling;
-  }
-
-  return root.innerHTML;
-}
-
-function renderStructuredPlainText(content) {
-  const blocks = String(content || '')
-    .replace(/\n{3,}/g, '\n\n')
-    .split(/\n\s*\n/)
-    .map((block) => block.trim())
-    .filter(Boolean);
-
-  if (!blocks.length) return '';
-
-  const parts = [];
-
-  for (let index = 0; index < blocks.length;) {
-    const items = [];
-    let cursor = index;
-
-    while (cursor + 1 < blocks.length) {
-      const label = blocks[cursor].replace(/\n+/g, ' ').trim();
-      const body = blocks[cursor + 1].replace(/\n+/g, ' ').trim();
-
-      if (!isComparisonLabelText(label) || !body || body.length < 24 || isComparisonLabelText(body)) {
-        break;
-      }
-
-      items.push({ label, body });
-      cursor += 2;
-    }
-
-    if (items.length >= 2) {
-      parts.push(buildComparisonBlockHtml(items));
-      index = cursor;
-      continue;
-    }
-
-    const paragraph = blocks[index++].replace(/\n+/g, ' ').trim();
-    parts.push(`<p>${applyInlineMarkdownTypography(paragraph)}</p>`);
-  }
-
-  return parts.join('');
-}
-
 function sanitizeArticleInlineTypography(html) {
   if (!html) return '';
 
   const root = document.createElement('div');
   root.innerHTML = String(html);
-  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   root.querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,option').forEach((node) => node.remove());
 
@@ -2744,19 +2500,9 @@ function sanitizeArticleInlineTypography(html) {
 
   const allowedStyles = new Set([
     'line-height', 'text-align', 'font-weight', 'font-style',
-    'text-decoration', 'font-size', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+    'text-decoration', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
     'letter-spacing', 'color'
   ]);
-
-  const legacyFontSizeMap = {
-    '1': '0.8em',
-    '2': '0.9em',
-    '3': '1em',
-    '4': '1.15em',
-    '5': '1.3em',
-    '6': '1.5em',
-    '7': '1.8em'
-  };
 
   const sanitizeStyle = (styleText) => {
     if (!styleText) return '';
@@ -2773,15 +2519,6 @@ function sanitizeArticleInlineTypography(html) {
         const normalized = val.toLowerCase();
         if (!/^(normal|bold|[1-9]00)$/.test(normalized)) return;
         if (/^[1-9]00$/.test(normalized) && parseInt(normalized, 10) > 700) return;
-      }
-
-      if (prop === 'font-size') {
-        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
-        if (!match) return;
-        const amount = parseFloat(match[1]);
-        const unit = match[2].toLowerCase();
-        if (unit === 'px' && (amount < 12 || amount > 40)) return;
-        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
       }
 
       safeRules.push(`${prop}:${val}`);
@@ -2801,13 +2538,9 @@ function sanitizeArticleInlineTypography(html) {
       const span = document.createElement('span');
       const inlineStyles = [];
       const color = el.getAttribute('color');
-      const size = String(el.getAttribute('size') || '').trim();
 
       if (color) {
         inlineStyles.push(`color:${color}`);
-      }
-      if (legacyFontSizeMap[size]) {
-        inlineStyles.push(`font-size:${legacyFontSizeMap[size]}`);
       }
       const face = el.getAttribute('face');
       if (face) {
@@ -2904,40 +2637,6 @@ function sanitizeArticleInlineTypography(html) {
     em.innerHTML = el.innerHTML;
     if (el.getAttribute('style')) em.setAttribute('style', el.getAttribute('style'));
     el.replaceWith(em);
-  });
-
-  root.querySelectorAll('span, p, h2, h3').forEach((el) => {
-    if (!el.querySelector(blockLikeSelector)) return;
-
-    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
-      }
-
-      if (node.nodeType !== Node.ELEMENT_NODE) {
-        return false;
-      }
-
-      return !node.matches(blockLikeSelector);
-    });
-
-    if (hasMeaningfulInlineContent) return;
-
-    while (el.firstChild) {
-      el.parentNode.insertBefore(el.firstChild, el);
-    }
-    el.remove();
-  });
-
-  root.querySelectorAll('p, span').forEach((el) => {
-    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
-    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
-    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
-
-    if (hasRichContent) return;
-    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
-      el.remove();
-    }
   });
 
   root.querySelectorAll('[style]').forEach((el) => {
@@ -3111,7 +2810,6 @@ function formatArticleContent(rawContent) {
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
 
-      htmlContent = enhanceComparisonBlocks(htmlContent);
       htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
@@ -3121,7 +2819,17 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  return renderStructuredPlainText(content).trim();
+  const paragraphToken = '__PARAGRAPH_BREAK__';
+  content = content
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\n\n+/g, paragraphToken)
+    .replace(/\n+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
+
+  content = normalizeBrokenLineWraps(content);
+  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+  return content.trim();
 }
 
 function canUseLiveEditor() {
@@ -3910,18 +3618,6 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
 
   const sessionKey = `vc_article_read_counted_${noticiaId}`;
   if (sessionStorage.getItem(sessionKey) === '1') {
-    return;
-  }
-
-  if (!window.authReady && !window.authFailed) {
-    if (attempt < 20) {
-      setTimeout(() => incrementArticleReadCount(noticiaId, attempt + 1), 350);
-    }
-    return;
-  }
-
-  if (window.authFailed) {
-    console.warn('Contagem de leitura ignorada: autenticacao anonima indisponivel.');
     return;
   }
 

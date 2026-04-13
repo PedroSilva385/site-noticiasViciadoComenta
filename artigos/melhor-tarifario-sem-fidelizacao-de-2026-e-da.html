@@ -487,10 +487,17 @@ body.dark .artigo-quality-pill {
 .artigo-conteudo figure {
   margin: 20px 0;
   text-align: center;
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
 }
 
 .artigo-conteudo figure img {
   margin: 0 auto;
+}
+
+.artigo-conteudo img[data-deferred-image="true"] {
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.08), rgba(0, 102, 204, 0.14));
+  min-height: 220px;
 }
 
 .artigo-conteudo figcaption {
@@ -1945,19 +1952,19 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-<meta name="description" content="Neste v&#237;deo analisamos a operadora vencedora da categoria de tarif&#225;rio m&#243;vel sem fideliza&#231;&#227;o, no pr&#233;mio escolha do consumidor de 2026!">
+<meta name="description" content="Analisamos a vit&#243;ria da Lycamobile na categoria de tarif&#225;rios m&#243;veis sem fideliza&#231;&#227;o e o que este resultado pode significar para o mercado em 2026.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="VICIADO COMENTA">
 <meta property="og:locale" content="pt_PT">
 <meta property="og:title" content="MELHOR tarif&#225;rio SEM FIDELIZA&#199;&#195;O de 2026 &#233; da?...">
-<meta property="og:description" content="Neste v&#237;deo analisamos a operadora vencedora da categoria de tarif&#225;rio m&#243;vel sem fideliza&#231;&#227;o, no pr&#233;mio escolha do consumidor de 2026!">
+<meta property="og:description" content="Analisamos a vit&#243;ria da Lycamobile na categoria de tarif&#225;rios m&#243;veis sem fideliza&#231;&#227;o e o que este resultado pode significar para o mercado em 2026.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html">
 <meta property="og:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MELHOR tarif&#225;rio SEM FIDELIZA&#199;&#195;O de 2026 &#233; da?...">
-<meta name="twitter:description" content="Neste v&#237;deo analisamos a operadora vencedora da categoria de tarif&#225;rio m&#243;vel sem fideliza&#231;&#227;o, no pr&#233;mio escolha do consumidor de 2026!">
+<meta name="twitter:description" content="Analisamos a vit&#243;ria da Lycamobile na categoria de tarif&#225;rios m&#243;veis sem fideliza&#231;&#227;o e o que este resultado pode significar para o mercado em 2026.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html"},"headline":"MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...","description":"Neste vídeo analisamos a operadora vencedora da categoria de tarifário móvel sem fidelização, no prémio escolha do consumidor de 2026!","datePublished":"2026-03-31T00:11:07Z","dateModified":"2026-03-31T00:11:07Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html"},"headline":"MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...","description":"Analisamos a vitória da Lycamobile na categoria de tarifários móveis sem fidelização e o que este resultado pode significar para o mercado em 2026.","datePublished":"2026-04-13T23:35:24Z","dateModified":"2026-04-13T23:35:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -2064,10 +2071,10 @@ footer {
 
 <footer>
   <div class="footer-links">
-    <a href="../sobre-nos.html">Sobre Nós</a>
-    <a href="../politica-privacidade.html">Política de Privacidade</a>
-    <a href="../termos-servico.html">Termos de Serviço</a>
-    <a href="../politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="termos-servico.html">Termos de Serviço</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
     <a href="mailto:theviciado.contactos@gmail.com">Contacto</a>
   </div>
   <div class="footer-contacts">
@@ -2519,6 +2526,11 @@ function sanitizeArticleInlineTypography(html) {
     return safeRules.join(';');
   };
 
+  const isSafeArticleImageSrc = (value) => {
+    if (!value) return false;
+    return /^(https?:|data:image\/|\/|\.\/|\.\.\/|assets\/)/i.test(String(value).trim());
+  };
+
   Array.from(root.querySelectorAll('*')).forEach((el) => {
     let tag = el.tagName.toLowerCase();
 
@@ -2585,7 +2597,7 @@ function sanitizeArticleInlineTypography(html) {
       }
 
       if (tag === 'img' && ['src', 'alt', 'title', 'width', 'height'].includes(name)) {
-        if (name === 'src' && !/^(https?:|data:image\/)/i.test(value)) {
+        if (name === 'src' && !isSafeArticleImageSrc(value)) {
           el.removeAttribute('src');
         }
         return;
@@ -2667,6 +2679,67 @@ function sanitizeArticleInlineTypography(html) {
     .trim();
 }
 
+function optimizeArticleMediaMarkup(html) {
+  if (!html) return '';
+
+  const root = document.createElement('div');
+  root.innerHTML = String(html);
+
+  const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  const images = Array.from(root.querySelectorAll('img'));
+
+  images.forEach((img, index) => {
+    const currentSrc = img.getAttribute('src') || '';
+    if (!currentSrc) return;
+
+    if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
+    if (!img.getAttribute('loading')) img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+    if (!img.getAttribute('fetchpriority')) img.setAttribute('fetchpriority', index === 0 ? 'high' : 'low');
+
+    const isInlineImage = /^data:image\//i.test(currentSrc);
+    if (isInlineImage && index > 0) {
+      img.setAttribute('data-src', currentSrc);
+      img.setAttribute('data-deferred-image', 'true');
+      img.setAttribute('src', placeholderSrc);
+    }
+  });
+
+  return root.innerHTML;
+}
+
+function activateDeferredArticleImages(root) {
+  if (!root) return;
+
+  const deferredImages = Array.from(root.querySelectorAll('img[data-src]'));
+  if (!deferredImages.length) return;
+
+  const loadImage = (img) => {
+    if (!img) return;
+    const src = img.getAttribute('data-src');
+    if (!src) return;
+    img.setAttribute('src', src);
+    img.removeAttribute('data-src');
+    img.removeAttribute('data-deferred-image');
+  };
+
+  if (!('IntersectionObserver' in window)) {
+    deferredImages.forEach(loadImage);
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      loadImage(entry.target);
+    });
+  }, {
+    rootMargin: '300px 0px'
+  });
+
+  deferredImages.forEach((img) => observer.observe(img));
+}
+
 function applyInlineMarkdownTypography(content) {
   if (!content) return '';
 
@@ -2712,6 +2785,7 @@ function formatArticleContent(rawContent) {
 
     htmlContent = normalizeBrokenLineWraps(htmlContent);
     htmlContent = htmlContent.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
+    htmlContent = optimizeArticleMediaMarkup(htmlContent);
     return htmlContent.trim();
   }
 
@@ -2735,6 +2809,8 @@ function formatArticleContent(rawContent) {
         .replace(/<br>\n/g, '<br>')
         .replace(/<br><br><br>/g, '<br><br>')
         .trim();
+
+      htmlContent = optimizeArticleMediaMarkup(htmlContent);
       
       return htmlContent;
     } catch (e) {
@@ -3286,6 +3362,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Secção de artigos relacionados
         renderRelatedArticles(noticia, noticias);
+
+        activateDeferredArticleImages(container);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
