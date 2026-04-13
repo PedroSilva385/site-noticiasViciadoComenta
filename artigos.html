@@ -2668,6 +2668,11 @@ function optimizeArticleMediaMarkup(html) {
 
   const root = document.createElement('div');
   root.innerHTML = String(html);
+  const assetFallbacks = {
+    'assets/imagens/Lidl.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/Lidl.png',
+    'assets/imagens/lidllinhas.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/lidllinhas.png',
+    'assets/imagens/tarifário.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png'
+  };
 
   const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
   const images = Array.from(root.querySelectorAll('img'));
@@ -2675,6 +2680,10 @@ function optimizeArticleMediaMarkup(html) {
   images.forEach((img, index) => {
     const currentSrc = img.getAttribute('src') || '';
     if (!currentSrc) return;
+
+    if (assetFallbacks[currentSrc]) {
+      img.setAttribute('src', assetFallbacks[currentSrc]);
+    }
 
     if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
     if (!img.getAttribute('loading')) img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
