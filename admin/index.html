@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Admin - Viciado Comenta</title>
-<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -247,20 +246,6 @@ body {
   background: #f8fafc;
 }
 
-.tool-notice {
-  padding: 12px 14px;
-  border: 1px solid #c7d2fe;
-  border-radius: 10px;
-  background: #eef2ff;
-  color: #3730a3;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-.tool-notice strong {
-  color: #312e81;
-}
-
 .sidebar {
   width: 280px;
   background: white;
@@ -396,38 +381,37 @@ body {
 /* ========== EDITOR WYSIWYG ========== */
 #contentEditor {
   min-height: 250px;
-  padding: 40px 48px;
-  border: 1px solid #dadce0;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   background: white;
-  font-family: Arial, sans-serif;
-  font-size: 11pt;
-  line-height: 1.15;
-  color: #202124;
+  font-family: 'Sora', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1.2em;
+  line-height: 1.55;
+  color: #3a3f5a;
   overflow-y: auto;
   resize: vertical;
   outline: none;
-  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15);
 }
 
 #contentEditor p {
-  margin: 0;
+  margin: 0 0 8px;
 }
 
 #contentEditor h2,
 #contentEditor h3 {
-  margin: 18px 0 6px;
-  line-height: 1.25;
+  margin: 16px 0 10px;
+  line-height: 1.35;
 }
 
 #contentEditor ul,
 #contentEditor ol {
-  margin: 0;
-  padding-left: 1.5em;
+  margin: 0 0 8px;
+  padding-left: 28px;
 }
 
 #contentEditor li {
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 #contentEditor blockquote {
@@ -547,18 +531,18 @@ body {
   overflow-y: auto;
   max-height: 420px;
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.8;
   color: #3a3f5a;
 }
 
 .preview-body p {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   text-align: justify;
 }
 
 .preview-body ul,
 .preview-body ol {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   padding-left: 28px;
 }
 
@@ -587,31 +571,6 @@ body {
   height: auto;
   border-radius: 10px;
   margin: 14px 0;
-}
-
-.preview-body br {
-  display: inline;
-}
-
-.preview-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 12px 14px 14px;
-  border-top: 1px solid #e5e7eb;
-  background: #f8fafc;
-}
-
-.preview-actions .btn-secondary {
-  width: 100%;
-  justify-content: center;
-}
-
-.preview-site-hint {
-  margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  color: #64748b;
 }
 
 .quality-grid {
@@ -827,12 +786,6 @@ button {
   border: 1px solid #fecaca;
 }
 
-.status.warning {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fcd34d;
-}
-
 .empty-state {
   text-align: center;
   padding: 40px;
@@ -920,8 +873,8 @@ button {
         <input type="password" id="authPassword" placeholder="••••••••" required>
       </div>
       <button type="submit">Entrar</button>
-      <p id="registerHint" style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
-        As contas de administração são criadas apenas em ambiente local ou diretamente no Firebase Console.
+      <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
+        Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>
       </p>
     </form>
   </div>
@@ -934,7 +887,6 @@ button {
     <div class="header-right">
       <div class="admin-tabs" role="tablist" aria-label="Abas do painel admin">
         <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
-        <button type="button" class="admin-tab-btn" id="adminTabVideos" role="tab" aria-selected="false" aria-controls="videosView">🎬 Vídeos</button>
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
       </div>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
@@ -1043,14 +995,6 @@ button {
                 <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet</option>
                 <option value="'Courier New', Courier, monospace">Courier New</option>
               </select>
-              <select id="fontSizeSelect" title="Tamanho da letra">
-                <option value="">Tamanho</option>
-                <option value="2">Pequeno</option>
-                <option value="3">Normal</option>
-                <option value="4">Grande</option>
-                <option value="5">Maior</option>
-                <option value="6">Destaque</option>
-              </select>
               <div class="toolbar-separator"></div>
               <button type="button" id="btnHeading" title="Título H2">
                 H2
@@ -1098,10 +1042,6 @@ button {
               <aside class="preview-pane" id="previewPane">
                 <div class="preview-header">Pré-visualização do artigo</div>
                 <div class="preview-body" id="contentPreview"></div>
-                <div class="preview-actions">
-                  <button type="button" class="btn-secondary" id="btnOpenSitePreview">Abrir no site para editar</button>
-                  <p class="preview-site-hint" id="previewSiteHint">Abre o artigo no layout real e devolve o texto editado ao painel quando carregares em guardar.</p>
-                </div>
               </aside>
             </div>
             <div class="editor-counter"><span id="charCount">0</span> caracteres • <span id="wordCount">0</span> palavras</div>
@@ -1166,28 +1106,6 @@ button {
       </div>
     </div>
   </div>
-
-  <div class="panel-view" id="videosView" aria-hidden="true">
-    <div class="container" style="padding-top: 0;">
-      <div class="stats-shell">
-        <div class="tool-notice">
-          Gere aqui os vídeos das páginas <strong>Viciado Comenta</strong>, <strong>Metin2</strong> e o <strong>vídeo em destaque</strong> da homepage. As alterações passam a ser guardadas diretamente no Firebase e ficam disponíveis no site sem precisares de abrir o studio local.
-        </div>
-        <div class="stats-toolbar">
-          <button type="button" class="btn-inline" id="btnReloadVideosStudio">Atualizar painel de vídeos</button>
-          <a class="btn-inline" href="../tools/videos-studio.html" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
-        </div>
-        <iframe
-          id="videosStudioFrame"
-          class="stats-frame"
-          src="../tools/videos-studio.html"
-          title="Painel de vídeos"
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Firebase SDK (Compat version for compatibility) -->
@@ -1211,16 +1129,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-const REMOTE_REBUILD_ENDPOINT = '';
-const REMOTE_REBUILD_STRATEGY = 'github-schedule';
 
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
 let persistenceReady = false;
-
-function isAuthenticatedAdminUser(user) {
-  return !!(user && !user.isAnonymous);
-}
 
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
   console.warn('Não foi possível configurar persistência LOCAL:', error);
@@ -1252,7 +1164,7 @@ function startAuthKeepAlive() {
 
   authKeepAliveTimer = setInterval(async () => {
     const user = auth.currentUser;
-    if (!isAuthenticatedAdminUser(user)) return;
+    if (!user) return;
     try {
       await user.getIdToken(true);
     } catch (error) {
@@ -1265,87 +1177,6 @@ function stopAuthKeepAlive() {
   if (!authKeepAliveTimer) return;
   clearInterval(authKeepAliveTimer);
   authKeepAliveTimer = null;
-}
-
-async function getAuthenticatedAdminIdToken() {
-  await ensureAuthPersistence();
-
-  let user = auth.currentUser;
-  if (!isAuthenticatedAdminUser(user)) {
-    for (let attempt = 0; attempt < 8; attempt++) {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      user = auth.currentUser;
-      if (isAuthenticatedAdminUser(user)) break;
-    }
-  }
-
-  if (!isAuthenticatedAdminUser(user)) {
-    const authError = new Error('AUTH_REQUIRED');
-    authError.code = 'AUTH_REQUIRED';
-    throw authError;
-  }
-
-  return user.getIdToken();
-}
-
-async function triggerLocalArticlesRebuild() {
-  const response = await fetch('/api/noticias/rebuild', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ source: 'admin-save' })
-  });
-
-  let payload = null;
-  try {
-    payload = await response.json();
-  } catch (_) {
-    payload = null;
-  }
-
-  if (!response.ok || !payload || payload.ok === false) {
-    throw new Error((payload && payload.error) ? payload.error : `Local rebuild HTTP ${response.status}`);
-  }
-
-  return payload;
-}
-
-async function triggerRemoteArticlesRebuild(meta) {
-  if (!REMOTE_REBUILD_ENDPOINT) {
-    return {
-      ok: true,
-      mode: REMOTE_REBUILD_STRATEGY,
-      scheduled: true,
-      slug: meta && meta.slug ? meta.slug : '',
-      noticiaId: meta && meta.noticiaId ? meta.noticiaId : ''
-    };
-  }
-
-  const idToken = await getAuthenticatedAdminIdToken();
-  const response = await fetch(REMOTE_REBUILD_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${idToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      noticiaId: meta && meta.noticiaId ? meta.noticiaId : '',
-      slug: meta && meta.slug ? meta.slug : '',
-      action: meta && meta.action ? meta.action : 'save'
-    })
-  });
-
-  let payload = null;
-  try {
-    payload = await response.json();
-  } catch (_) {
-    payload = null;
-  }
-
-  if (!response.ok || !payload || payload.ok === false) {
-    throw new Error((payload && payload.error) ? payload.error : `Remote rebuild HTTP ${response.status}`);
-  }
-
-  return payload;
 }
 
 function applySignedOutUiState() {
@@ -1380,16 +1211,11 @@ const authPassword = document.getElementById('authPassword');
 const authError = document.getElementById('authError');
 const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
-const registerHint = document.getElementById('registerHint');
 const adminTabNoticias = document.getElementById('adminTabNoticias');
-const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
 const newsView = document.getElementById('newsView');
-const videosView = document.getElementById('videosView');
 const statsView = document.getElementById('statsView');
-const videosStudioFrame = document.getElementById('videosStudioFrame');
 const statsFrame = document.getElementById('statsFrame');
-const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
 const btnReloadStats = document.getElementById('btnReloadStats');
 const noticiasList = document.getElementById('noticiasList');
 const btnNewNoticia = document.getElementById('btnNewNoticia');
@@ -1397,31 +1223,16 @@ const status = document.getElementById('status');
 const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
 
-function isLocalAdminSetupHost() {
-  const hostname = (window.location.hostname || '').toLowerCase();
-  return window.location.protocol === 'file:' || hostname === 'localhost' || hostname === '127.0.0.1';
-}
-
-if (registerHint && isLocalAdminSetupHost()) {
-  registerHint.innerHTML = 'Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>';
-}
-
 function setAdminView(viewName) {
-  const showNoticias = viewName === 'noticias';
-  const showVideos = viewName === 'videos';
   const showStats = viewName === 'estatisticas';
 
-  adminTabNoticias.classList.toggle('active', showNoticias);
-  adminTabVideos.classList.toggle('active', showVideos);
+  adminTabNoticias.classList.toggle('active', !showStats);
   adminTabEstatisticas.classList.toggle('active', showStats);
-  adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
-  adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
+  adminTabNoticias.setAttribute('aria-selected', showStats ? 'false' : 'true');
   adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
 
-  newsView.classList.toggle('active', showNoticias);
-  videosView.classList.toggle('active', showVideos);
+  newsView.classList.toggle('active', !showStats);
   statsView.classList.toggle('active', showStats);
-  videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
 }
 
@@ -1429,17 +1240,8 @@ adminTabNoticias.addEventListener('click', () => {
   setAdminView('noticias');
 });
 
-adminTabVideos.addEventListener('click', () => {
-  setAdminView('videos');
-});
-
 adminTabEstatisticas.addEventListener('click', () => {
   setAdminView('estatisticas');
-});
-
-btnReloadVideosStudio.addEventListener('click', () => {
-  const src = videosStudioFrame.getAttribute('src') || '../tools/videos-studio.html';
-  videosStudioFrame.setAttribute('src', src);
 });
 
 btnReloadStats.addEventListener('click', () => {
@@ -1490,12 +1292,9 @@ const btnClearFormatting = document.getElementById('btnClearFormatting');
 const btnUploadImage = document.getElementById('btnUploadImage');
 const imageUploadInput = document.getElementById('imageUploadInput');
 const fontFamilySelect = document.getElementById('fontFamilySelect');
-const fontSizeSelect = document.getElementById('fontSizeSelect');
 const btnTogglePreview = document.getElementById('btnTogglePreview');
 const editorLayout = document.getElementById('editorLayout');
 const contentPreview = document.getElementById('contentPreview');
-const btnOpenSitePreview = document.getElementById('btnOpenSitePreview');
-const previewSiteHint = document.getElementById('previewSiteHint');
 const qualityHints = document.getElementById('qualityHints');
 const wordCountEl = document.getElementById('wordCount');
 const readingTimeEl = document.getElementById('readingTime');
@@ -1507,19 +1306,7 @@ let savedRange = null;
 let previewEnabled = false;
 let isDirty = false;
 let autosaveTimer = null;
-let lastPreviewSyncTimestamp = 0;
 const DRAFT_STORAGE_KEY = 'admin-noticia-draft-v1';
-const SITE_PREVIEW_DRAFT_PREFIX = 'vc_admin_site_preview_';
-const SITE_PREVIEW_SYNC_PREFIX = 'vc_admin_site_sync_';
-const LEGACY_FONT_SIZE_MAP = {
-  '1': '0.8em',
-  '2': '0.9em',
-  '3': '1em',
-  '4': '1.15em',
-  '5': '1.3em',
-  '6': '1.5em',
-  '7': '1.8em'
-};
 
 if (typeof document.execCommand === 'function') {
   document.execCommand('defaultParagraphSeparator', false, 'p');
@@ -1571,99 +1358,6 @@ function updatePreviewContent() {
   if (!contentPreview) return;
   const html = normalizeEditorHtml(contentEditor.innerHTML || '');
   contentPreview.innerHTML = html || '<p style="color:#94a3b8;">Pré-visualização vazia.</p>';
-  updateSitePreviewActionState();
-}
-
-function getSitePreviewDraftKey(articleId) {
-  return `${SITE_PREVIEW_DRAFT_PREFIX}${String(articleId || '').trim()}`;
-}
-
-function getSitePreviewSyncKey(articleId) {
-  return `${SITE_PREVIEW_SYNC_PREFIX}${String(articleId || '').trim()}`;
-}
-
-function getCurrentSitePreviewPayload() {
-  const id = String(noticiaId.value || '').trim();
-  const titulo = noticiaTitulo.value.trim();
-
-  if (!id || !titulo || selectedNoticiaId === null) {
-    return null;
-  }
-
-  return {
-    id,
-    titulo,
-    resumo: noticiaResumo.value.trim(),
-    autor: noticiaAutor.value.trim(),
-    data: noticiaData.value.trim(),
-    categoria: getCategoriaValue(),
-    video: noticiaVideo.value.trim(),
-    slug: noticiaSlug.value.trim() || generateSlug(titulo),
-    conteudo: normalizeEditorHtml(contentEditor.innerHTML),
-    updatedAt: Date.now()
-  };
-}
-
-function persistSitePreviewPayload() {
-  const payload = getCurrentSitePreviewPayload();
-  if (!payload) return null;
-
-  try {
-    localStorage.setItem(getSitePreviewDraftKey(payload.id), JSON.stringify(payload));
-  } catch (error) {
-    console.warn('Falha ao preparar preview do site:', error);
-  }
-
-  return payload;
-}
-
-function buildSitePreviewEditorUrl() {
-  const payload = persistSitePreviewPayload();
-  if (!payload) return '';
-
-  const slug = encodeURIComponent(payload.slug || payload.id);
-  const id = encodeURIComponent(payload.id);
-  const previewTs = encodeURIComponent(String(payload.updatedAt || Date.now()));
-  return `../artigos.html?edit=1&adminPreview=1&previewTs=${previewTs}#/${slug}/${id}`;
-}
-
-function updateSitePreviewActionState() {
-  if (!btnOpenSitePreview || !previewSiteHint) return;
-
-  const payload = getCurrentSitePreviewPayload();
-  const enabled = !!payload;
-
-  btnOpenSitePreview.disabled = !enabled;
-
-  if (enabled) {
-    previewSiteHint.textContent = 'Abre o artigo no layout real, permite editar o texto lá e devolve as alterações ao painel quando guardares.';
-    return;
-  }
-
-  previewSiteHint.textContent = 'Guarda ou seleciona primeiro uma notícia existente para abrir a edição diretamente no site.';
-}
-
-async function applySitePreviewSyncPayload(payload) {
-  if (!payload || !payload.articleId || !payload.html) return;
-  if (String(payload.articleId) !== String(noticiaId.value || '')) return;
-
-  const syncTimestamp = Number(payload.timestamp || Date.now());
-  if (syncTimestamp <= lastPreviewSyncTimestamp) return;
-  lastPreviewSyncTimestamp = syncTimestamp;
-
-  contentEditor.innerHTML = normalizeEditorHtml(payload.html);
-  updatePreviewContent();
-  updateQualityHints();
-  setDirty(true);
-  queueDraftAutosave();
-
-  try {
-    await saveNoticia();
-    showStatus('Texto atualizado a partir do site e guardado no painel.', 'success');
-  } catch (error) {
-    console.error('Erro ao aplicar edição vinda do site:', error);
-    showStatus('Texto recebido do site, mas falhou o guardar automático. Use Guardar.', 'error');
-  }
 }
 
 function setDirty(value) {
@@ -1719,7 +1413,7 @@ function queueDraftAutosave() {
       categoriaInput: noticiaCategoria.value,
       categoriaSelect: categoriasSelect.value,
       resumo: noticiaResumo.value,
-      conteudo: normalizeEditorHtml(contentEditor.innerHTML),
+      conteudo: contentEditor.innerHTML,
       video: noticiaVideo.value,
       slug: noticiaSlug.value,
       scheduleMode: document.querySelector('input[name="scheduling"]:checked')?.value || 'immediate',
@@ -1776,7 +1470,7 @@ function restoreDraftIfAvailable() {
     noticiaCategoria.value = draft.categoriaInput || '';
     categoriasSelect.value = draft.categoriaSelect || '';
     noticiaResumo.value = draft.resumo || '';
-    contentEditor.innerHTML = normalizeEditorHtml(draft.conteudo || '');
+    contentEditor.innerHTML = draft.conteudo || '';
     noticiaVideo.value = draft.video || '';
     noticiaSlug.value = draft.slug || '';
 
@@ -1812,41 +1506,6 @@ function togglePreview() {
   btnTogglePreview.classList.toggle('active', previewEnabled);
   updatePreviewContent();
 }
-
-if (btnOpenSitePreview) {
-  btnOpenSitePreview.addEventListener('click', () => {
-    const targetUrl = buildSitePreviewEditorUrl();
-    if (!targetUrl) {
-      updateSitePreviewActionState();
-      return;
-    }
-
-    const previewWindow = window.open(targetUrl, 'vcSitePreviewEditor');
-    if (!previewWindow) {
-      showStatus('O browser bloqueou a abertura da página de preview no site.', 'error');
-    }
-  });
-}
-
-window.addEventListener('message', (event) => {
-  const data = event && event.data;
-  if (!data || data.type !== 'vc-admin-preview-save') return;
-  applySitePreviewSyncPayload(data.payload);
-});
-
-window.addEventListener('storage', (event) => {
-  if (!event || !event.key || !event.newValue) return;
-
-  const currentId = String(noticiaId.value || '').trim();
-  if (!currentId || event.key !== getSitePreviewSyncKey(currentId)) return;
-
-  try {
-    const payload = JSON.parse(event.newValue);
-    applySitePreviewSyncPayload(payload);
-  } catch (error) {
-    console.warn('Falha ao ler sincronização vinda do site:', error);
-  }
-});
 
 function insertImageHtml(src, altText) {
   const safeAlt = String(altText || '').replace(/"/g, '&quot;');
@@ -1910,52 +1569,11 @@ function applyFontFamily(fontValue) {
   queueDraftAutosave();
 }
 
-function convertLegacyFontTags(rootElement) {
-  if (!rootElement) return;
-
-  rootElement.querySelectorAll('font').forEach((fontEl) => {
-    const span = document.createElement('span');
-    const inlineStyles = [];
-    const size = String(fontEl.getAttribute('size') || '').trim();
-    const mappedSize = LEGACY_FONT_SIZE_MAP[size];
-
-    if (mappedSize) {
-      inlineStyles.push(`font-size:${mappedSize}`);
-    }
-
-    if (fontEl.getAttribute('style')) {
-      inlineStyles.push(fontEl.getAttribute('style'));
-    }
-
-    if (inlineStyles.length) {
-      span.setAttribute('style', inlineStyles.join(';'));
-    }
-
-    span.innerHTML = fontEl.innerHTML;
-    fontEl.replaceWith(span);
-  });
-}
-
-function applyFontSize(fontSizeCommand) {
-  if (!fontSizeCommand) return;
-
-  restoreEditorRange();
-  document.execCommand('fontSize', false, fontSizeCommand);
-  convertLegacyFontTags(contentEditor);
-  saveEditorRange();
-
-  updatePreviewContent();
-  updateQualityHints();
-  setDirty(true);
-  queueDraftAutosave();
-}
-
 function normalizeEditorHtml(html) {
   if (!html) return '';
 
   const tmp = document.createElement('div');
   tmp.innerHTML = String(html);
-  const blockLikeSelector = 'p,div,h2,h3,ul,ol,li,blockquote,pre,figure,figcaption';
 
   const disallowedTags = 'script,style,iframe,object,embed,form,input,button,textarea,select,option';
   tmp.querySelectorAll(disallowedTags).forEach((node) => node.remove());
@@ -1968,8 +1586,7 @@ function normalizeEditorHtml(html) {
   const sanitizeStyle = (styleValue) => {
     if (!styleValue) return '';
     const allowed = new Set([
-      'text-align','font-weight','font-style','text-decoration','font-size',
-      'line-height','margin-left','margin-right','margin-top','margin-bottom','color'
+      'text-align','font-weight','font-style','text-decoration'
     ]);
     const clean = [];
 
@@ -1988,43 +1605,6 @@ function normalizeEditorHtml(html) {
 
       if (prop === 'text-align' && !/^(left|right|center|justify)$/i.test(val)) return;
 
-      if (prop === 'font-size') {
-        const match = val.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem)$/i);
-        if (!match) return;
-        const amount = parseFloat(match[1]);
-        const unit = match[2].toLowerCase();
-        if (unit === 'px' && (amount < 12 || amount > 40)) return;
-        if ((unit === 'em' || unit === 'rem') && (amount < 0.8 || amount > 2)) return;
-      }
-
-      if (prop === 'line-height') {
-        const normalized = val.trim().toLowerCase();
-        if (/^[0-9]+(?:\.[0-9]+)?$/.test(normalized)) {
-          const amount = parseFloat(normalized);
-          if (amount < 1 || amount > 3) return;
-        } else {
-          const match = normalized.match(/^([0-9]+(?:\.[0-9]+)?)(px|em|rem|%)$/i);
-          if (!match) return;
-          const amount = parseFloat(match[1]);
-          const unit = match[2].toLowerCase();
-          if (unit === '%' && (amount < 100 || amount > 300)) return;
-          if (unit === 'px' && (amount < 14 || amount > 72)) return;
-          if ((unit === 'em' || unit === 'rem') && (amount < 1 || amount > 3)) return;
-        }
-      }
-
-      if (/^margin-(left|right|top|bottom)$/.test(prop)) {
-        const match = val.match(/^(-?[0-9]+(?:\.[0-9]+)?)(px|em|rem|pt)$/i);
-        if (!match) return;
-        const amount = parseFloat(match[1]);
-        if (amount < -72 || amount > 160) return;
-      }
-
-      if (prop === 'color') {
-        const normalized = val.trim();
-        if (!/^(#[0-9a-f]{3,8}|rgb(a)?\([^\)]+\)|hsl(a)?\([^\)]+\)|[a-z]+)$/i.test(normalized)) return;
-      }
-
       clean.push(`${prop}:${val}`);
     });
 
@@ -2038,14 +1618,10 @@ function normalizeEditorHtml(html) {
     if (tag === 'font') {
       const span = document.createElement('span');
       const inlineStyles = [];
-      const size = String(el.getAttribute('size') || '').trim();
       const face = el.getAttribute('face');
 
       if (face) {
         // Ignorado: fonte externa de colagem deve usar fonte padrão do site.
-      }
-      if (LEGACY_FONT_SIZE_MAP[size]) {
-        inlineStyles.push(`font-size:${LEGACY_FONT_SIZE_MAP[size]}`);
       }
       if (el.getAttribute('style')) {
         inlineStyles.push(el.getAttribute('style'));
@@ -2139,38 +1715,6 @@ function normalizeEditorHtml(html) {
     el.replaceWith(em);
   });
 
-  tmp.querySelectorAll('span, p, h2, h3').forEach((el) => {
-    if (!el.querySelector(blockLikeSelector)) return;
-
-    const hasMeaningfulInlineContent = Array.from(el.childNodes).some((node) => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        return String(node.textContent || '').replace(/\u00a0/g, ' ').trim().length > 0;
-      }
-
-      if (node.nodeType !== Node.ELEMENT_NODE) {
-        return false;
-      }
-
-      return !node.matches(blockLikeSelector);
-    });
-
-    if (hasMeaningfulInlineContent) return;
-
-    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
-    el.remove();
-  });
-
-  tmp.querySelectorAll('p, span').forEach((el) => {
-    const hasRichContent = el.querySelector('img,figure,ul,ol,blockquote,pre,code');
-    const inner = String(el.innerHTML || '').replace(/&nbsp;/gi, ' ').trim();
-    const text = String(el.textContent || '').replace(/\u00a0/g, ' ').trim();
-
-    if (hasRichContent) return;
-    if (!text && (!inner || /^<br\s*\/?>(\s*<br\s*\/?>)*$/i.test(inner))) {
-      el.remove();
-    }
-  });
-
   // Converte negrito por estilo inline para <strong> para garantir persistência no live.
   tmp.querySelectorAll('[style]').forEach((el) => {
     const tag = el.tagName.toLowerCase();
@@ -2232,53 +1776,6 @@ function normalizeDocsHtmlForEditor(html) {
   return normalizeEditorHtml(tmp.innerHTML);
 }
 
-function isGoogleDocsHtml(html) {
-  const source = String(html || '');
-  return /docs-internal-guid|id="docs-internal-guid|docs.google.com|Google Docs/i.test(source);
-}
-
-function handleEditorPaste(event) {
-  const clipboard = event.clipboardData;
-  if (!clipboard) return false;
-
-  const html = clipboard.getData('text/html');
-  const text = clipboard.getData('text/plain');
-
-  if (html) {
-    event.preventDefault();
-
-    const normalized = isGoogleDocsHtml(html)
-      ? normalizeDocsHtmlForEditor(html)
-      : normalizeEditorHtml(html);
-
-    if (normalized) {
-      insertHtmlIntoEditor(normalized);
-    } else if (text) {
-      insertHtmlIntoEditor(normalizePlainTextToHtml(text));
-    }
-
-    saveEditorRange();
-    updateQualityHints();
-    updatePreviewContent();
-    setDirty(true);
-    queueDraftAutosave();
-    return true;
-  }
-
-  if (text) {
-    event.preventDefault();
-    insertHtmlIntoEditor(normalizePlainTextToHtml(text));
-    saveEditorRange();
-    updateQualityHints();
-    updatePreviewContent();
-    setDirty(true);
-    queueDraftAutosave();
-    return true;
-  }
-
-  return false;
-}
-
 function insertHtmlIntoEditor(html) {
   const selection = window.getSelection();
   if (!selection) {
@@ -2319,12 +1816,6 @@ fontFamilySelect.addEventListener('change', () => {
   const fontValue = fontFamilySelect.value;
   applyFontFamily(fontValue);
   fontFamilySelect.value = '';
-});
-
-fontSizeSelect.addEventListener('change', () => {
-  const fontSizeValue = fontSizeSelect.value;
-  applyFontSize(fontSizeValue);
-  fontSizeSelect.value = '';
 });
 
 document.querySelector('.editor-toolbar').addEventListener('click', (e) => {
@@ -2473,9 +1964,9 @@ contentEditor.addEventListener('input', () => {
   queueDraftAutosave();
 });
 
-contentEditor.addEventListener('paste', (event) => {
-  if (handleEditorPaste(event)) return;
-
+contentEditor.addEventListener('paste', () => {
+  // Compatibilidade máxima: deixa o browser colar normalmente (incluindo Google Docs)
+  // e normaliza no tick seguinte para manter o padrão visual do site.
   setTimeout(() => {
     const currentHtml = contentEditor.innerHTML || '';
     const normalized = normalizeEditorHtml(currentHtml);
@@ -2620,8 +2111,8 @@ btnLogout.addEventListener('click', () => {
 });
 
 // Check auth state
-auth.onAuthStateChanged(async (user) => {
-  if (isAuthenticatedAdminUser(user)) {
+auth.onAuthStateChanged((user) => {
+  if (user) {
     currentUser = user;
     try {
       localStorage.setItem(AUTH_LAST_EMAIL_KEY, user.email || authEmail.value || '');
@@ -2638,15 +2129,6 @@ auth.onAuthStateChanged(async (user) => {
     }, 50);
   } else {
     applySignedOutUiState();
-
-    if (user && user.isAnonymous) {
-      try {
-        await auth.signOut();
-      } catch (error) {
-        console.warn('Não foi possível terminar a sessão anónima no admin:', error);
-      }
-      showAuthError('Sessão pública detetada. Faça login com uma conta admin para abrir o painel.');
-    }
   }
 });
 
@@ -2764,7 +2246,7 @@ function selectNoticia(id) {
       noticiaCategoria.value = cat;
     }
     noticiaResumo.value = noticia.resumo || '';
-    contentEditor.innerHTML = normalizeDocsHtmlForEditor(noticia.conteudo || '');
+    contentEditor.innerHTML = noticia.conteudo || '';
     noticiaVideo.value = noticia.video || '';
     noticiaSlug.value = noticia.slug || '';
     
@@ -2888,12 +2370,12 @@ function buildNoticiasWritePayloadVariants(payload) {
 async function saveNoticiasWithAuthRetry(payload) {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const resolveActiveUser = async () => {
-    if (isAuthenticatedAdminUser(auth.currentUser)) return auth.currentUser;
+    if (auth.currentUser) return auth.currentUser;
 
     // Alguns browsers podem demorar a restaurar auth após operações de storage.
     for (let i = 0; i < 8; i++) {
       await wait(250);
-      if (isAuthenticatedAdminUser(auth.currentUser)) return auth.currentUser;
+      if (auth.currentUser) return auth.currentUser;
     }
 
     return null;
@@ -2930,7 +2412,7 @@ async function saveNoticiasWithAuthRetry(payload) {
       }
 
       let currentUser = auth.currentUser;
-      if (!isAuthenticatedAdminUser(currentUser)) {
+      if (!currentUser) {
         currentUser = await resolveActiveUser();
         if (!currentUser) {
           const authError = new Error('AUTH_REQUIRED');
@@ -3025,8 +2507,6 @@ async function saveNoticia() {
 
   try {
     btnSave.disabled = true;
-    let localRebuildError = null;
-    let remoteRebuildError = null;
     
     if (isNew) {
       allNoticias.push(noticiaObj);
@@ -3054,47 +2534,15 @@ async function saveNoticia() {
         if (!localSyncResponse.ok) {
           throw new Error(`Local sync HTTP ${localSyncResponse.status}`);
         }
-
-        try {
-          await triggerLocalArticlesRebuild();
-        } catch (rebuildError) {
-          localRebuildError = rebuildError;
-          console.warn('Falha na regeneração local de artigos:', rebuildError);
-        }
       } catch (e) {
         console.log('Nota: servidor local de sync não disponível. Firebase já foi atualizado.');
       }
     }
 
-    try {
-      await triggerRemoteArticlesRebuild({
-        noticiaId: id,
-        slug: noticiaObj.slug,
-        action: isNew ? 'create' : 'update'
-      });
-    } catch (rebuildError) {
-      remoteRebuildError = rebuildError;
-      console.warn('Falha ao disparar a regeneração remota:', rebuildError);
-    }
-
-    const baseSuccessMessage = isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!';
-    const remoteUsesSchedule = !REMOTE_REBUILD_ENDPOINT && REMOTE_REBUILD_STRATEGY === 'github-schedule';
-
-    if (remoteRebuildError) {
-      showStatus(`${baseSuccessMessage} O conteúdo foi guardado, mas falhou o disparo da regeneração remota: ${remoteRebuildError.message}`, 'warning');
-    } else if (localRebuildError) {
-      if (remoteUsesSchedule) {
-        showStatus(`${baseSuccessMessage} A regeneração local falhou, mas a atualização remota será processada automaticamente pelo GitHub Actions em até 5 minutos.`, 'warning');
-      } else {
-        showStatus(`${baseSuccessMessage} Regeneração remota iniciada, mas a regeneração local falhou: ${localRebuildError.message}`, 'warning');
-      }
-    } else {
-      if (remoteUsesSchedule) {
-        showStatus(`${baseSuccessMessage} A regeneração remota será processada automaticamente pelo GitHub Actions em até 5 minutos.`, 'success');
-      } else {
-        showStatus(`${baseSuccessMessage} Regeneração ${isLocalHost ? 'local e remota' : 'remota'} iniciada.`, 'success');
-      }
-    }
+    showStatus(
+      isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!',
+      'success'
+    );
     
     selectedNoticiaId = id;
     contentEditor.innerHTML = conteudoHtml;

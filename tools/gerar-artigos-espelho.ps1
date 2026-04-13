@@ -212,10 +212,6 @@ foreach ($noticia in $noticias) {
     $publishDate = Parse-DataPublicacao -DataStr $noticia.dataPublicacao
     $isPublished = (-not $publishDate) -or ($publishDate -le $now)
 
-    if (-not $publishDate) {
-        $publishDate = Parse-DataPublicacao -DataStr $noticia.data
-    }
-
     $id = [string]$noticia.id
 
     $baseSlug = if ($noticia.PSObject.Properties.Name -contains 'slug' -and -not [string]::IsNullOrWhiteSpace($noticia.slug)) {
@@ -274,7 +270,7 @@ foreach ($noticia in $noticias) {
     } else {
         (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     }
-    $modifiedDateIso = $publishedDateIso
+    $modifiedDateIso = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 
     $safeTitle = Escape-Html -Text $rawTitle
     $safeDescription = Escape-Html -Text $metaDescription
@@ -422,15 +418,9 @@ foreach ($noticia in $noticias) {
     }
 
     if ($isPublished) {
-        $articleLastMod = if ($publishDate) {
-            $publishDate.ToString('yyyy-MM-dd')
-        } else {
-            (Get-Date).ToString('yyyy-MM-dd')
-        }
-
         $generatedArticles += [pscustomobject]@{
             slug = $slug
-            lastmod = $articleLastMod
+            lastmod = (Get-Date).ToString('yyyy-MM-dd')
         }
     }
 }
@@ -438,9 +428,13 @@ foreach ($noticia in $noticias) {
 $baseUrls = @(
     'https://www.viciadocomenta.pt/',
     'https://www.viciadocomenta.pt/todas-noticias.html',
+    'https://www.viciadocomenta.pt/viciado-comenta.html',
+    'https://www.viciadocomenta.pt/viciado-ponto-critico.html',
+    'https://www.viciadocomenta.pt/metin2.html',
+    'https://www.viciadocomenta.pt/livestreams.html',
+    'https://www.viciadocomenta.pt/videos.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
-    'https://www.viciadocomenta.pt/politica-privacidade.html',
-    'https://www.viciadocomenta.pt/termos-servico.html'
+    'https://www.viciadocomenta.pt/politica-privacidade.html'
 )
 
 $sitemapLines = @('<?xml version="1.0" encoding="UTF-8"?>')
