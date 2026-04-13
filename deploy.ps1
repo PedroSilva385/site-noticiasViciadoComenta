@@ -85,6 +85,9 @@ git add data/viciado-comenta-videos.json
 git add data/viciado-ponto-critico-videos.json
 git add data/metin2-videos.json
 git add data/featured-video.json
+if (Test-Path "assets/imagens") {
+    git add assets/imagens
+}
 if (Test-Path "artigos") {
     git add artigos
 }
