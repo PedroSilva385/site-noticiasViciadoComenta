@@ -2673,6 +2673,10 @@ function optimizeArticleMediaMarkup(html) {
     'assets/imagens/lidllinhas.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/lidllinhas.png',
     'assets/imagens/tarifário.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png'
   };
+  const imageStyleOverrides = {
+    'assets/imagens/tarifário.png': 'width:100%;max-width:760px;height:auto;display:block;margin-left:auto;margin-right:auto',
+    'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png': 'width:100%;max-width:760px;height:auto;display:block;margin-left:auto;margin-right:auto'
+  };
 
   const placeholderSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
   const images = Array.from(root.querySelectorAll('img'));
@@ -2683,6 +2687,11 @@ function optimizeArticleMediaMarkup(html) {
 
     if (assetFallbacks[currentSrc]) {
       img.setAttribute('src', assetFallbacks[currentSrc]);
+    }
+
+    const resolvedSrc = img.getAttribute('src') || currentSrc;
+    if (imageStyleOverrides[currentSrc] || imageStyleOverrides[resolvedSrc]) {
+      img.setAttribute('style', imageStyleOverrides[currentSrc] || imageStyleOverrides[resolvedSrc]);
     }
 
     if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
