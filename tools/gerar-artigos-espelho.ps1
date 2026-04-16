@@ -71,6 +71,16 @@ function Escape-Html {
     return [System.Net.WebUtility]::HtmlEncode($Text)
 }
 
+function Convert-ToLfText {
+    param([string]$Text)
+
+    if ($null -eq $Text) {
+        return ''
+    }
+
+    return ($Text -replace "`r`n", "`n")
+}
+
 function Get-RedirectHtml {
     param(
         [string]$TargetUrl,
@@ -400,7 +410,7 @@ foreach ($noticia in $noticias) {
     )
 
     $outPath = Join-Path $artigosDir "$slug.html"
-    [System.IO.File]::WriteAllText($outPath, $content, [System.Text.UTF8Encoding]::new($false))
+    [System.IO.File]::WriteAllText($outPath, (Convert-ToLfText -Text $content), [System.Text.UTF8Encoding]::new($false))
 
     if ($noticia.PSObject.Properties.Name -contains 'aliases' -and $noticia.aliases) {
         $aliases = @($noticia.aliases)
@@ -422,7 +432,7 @@ foreach ($noticia in $noticias) {
 
             $aliasPath = Join-Path $artigosDir "$aliasSlug.html"
             $redirectHtml = Get-RedirectHtml -TargetUrl $articleUrl -Title $rawTitle
-            [System.IO.File]::WriteAllText($aliasPath, $redirectHtml, [System.Text.UTF8Encoding]::new($false))
+            [System.IO.File]::WriteAllText($aliasPath, (Convert-ToLfText -Text $redirectHtml), [System.Text.UTF8Encoding]::new($false))
             $usedSlugs[$aliasSlug] = $true
         }
     }
