@@ -1964,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="MELHOR tarif&#225;rio SEM FIDELIZA&#199;&#195;O de 2026 &#233; da?...">
 <meta name="twitter:description" content="Analisamos a vit&#243;ria da Lycamobile na categoria de tarif&#225;rios m&#243;veis sem fideliza&#231;&#227;o e o que este resultado pode significar para o mercado em 2026.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html"},"headline":"MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...","description":"Analisamos a vitória da Lycamobile na categoria de tarifários móveis sem fidelização e o que este resultado pode significar para o mercado em 2026.","datePublished":"2026-04-16T00:52:24Z","dateModified":"2026-04-16T00:52:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/melhor-tarifario-sem-fidelizacao-de-2026-e-da.html"},"headline":"MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...","description":"Analisamos a vitória da Lycamobile na categoria de tarifários móveis sem fidelização e o que este resultado pode significar para o mercado em 2026.","datePublished":"2026-04-16T00:58:28Z","dateModified":"2026-04-16T00:58:28Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -3212,8 +3212,17 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('Nenhuma notícia válida encontrada');
         }
 
-        triggerNewArticleNotification(noticias);
-        triggerPushAlerts(noticias);
+        try {
+          triggerNewArticleNotification(noticias);
+        } catch (notificationError) {
+          console.warn('Falha ao disparar notificação de novo artigo:', notificationError);
+        }
+
+        try {
+          triggerPushAlerts(noticias);
+        } catch (pushAlertError) {
+          console.warn('Falha ao disparar alertas push:', pushAlertError);
+        }
         
         noticias.forEach((item) => {
           if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
@@ -3221,12 +3230,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
-        console.log('🆔 IDs disponíveis:', noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        console.log('🆔 IDs disponíveis:', noticias.map((n) => {
+          if (!n || typeof n !== 'object') {
+            return 'inválido';
+          }
+          return `${n.id} (tipo: ${typeof n.id})`;
+        }));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = noticias.find(n => {
+        const noticia = noticias.find((n) => {
+          if (!n || typeof n !== 'object') {
+            return false;
+          }
+
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;

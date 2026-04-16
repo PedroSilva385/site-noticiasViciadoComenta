@@ -1964,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="LIDL uma MVNO de sucesso?!">
 <meta name="twitter:description" content="Sabias que o Lidl det&#233;m opera&#231;&#227;o de telecomunica&#231;&#245;es MVNO em v&#225;rios pa&#237;ses? Vamos analisar este assunto!">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/lidl-uma-mvno-de-sucesso.html"},"headline":"LIDL uma MVNO de sucesso?!","description":"Sabias que o Lidl detém operação de telecomunicações MVNO em vários países? Vamos analisar este assunto!","datePublished":"2026-04-16T00:52:25Z","dateModified":"2026-04-16T00:52:25Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/lidl-uma-mvno-de-sucesso.html"},"headline":"LIDL uma MVNO de sucesso?!","description":"Sabias que o Lidl detém operação de telecomunicações MVNO em vários países? Vamos analisar este assunto!","datePublished":"2026-04-16T00:58:29Z","dateModified":"2026-04-16T00:58:29Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -3212,8 +3212,17 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('Nenhuma notícia válida encontrada');
         }
 
-        triggerNewArticleNotification(noticias);
-        triggerPushAlerts(noticias);
+        try {
+          triggerNewArticleNotification(noticias);
+        } catch (notificationError) {
+          console.warn('Falha ao disparar notificação de novo artigo:', notificationError);
+        }
+
+        try {
+          triggerPushAlerts(noticias);
+        } catch (pushAlertError) {
+          console.warn('Falha ao disparar alertas push:', pushAlertError);
+        }
         
         noticias.forEach((item) => {
           if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
@@ -3221,12 +3230,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
-        console.log('🆔 IDs disponíveis:', noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        console.log('🆔 IDs disponíveis:', noticias.map((n) => {
+          if (!n || typeof n !== 'object') {
+            return 'inválido';
+          }
+          return `${n.id} (tipo: ${typeof n.id})`;
+        }));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = noticias.find(n => {
+        const noticia = noticias.find((n) => {
+          if (!n || typeof n !== 'object') {
+            return false;
+          }
+
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
