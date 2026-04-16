@@ -1964,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="OPERADORAS atacam MARCELO sem PIEDADE!">
 <meta name="twitter:description" content="Analisamos as rea&#231;&#245;es de MEO, NOS e APRITEL &#224;s declara&#231;&#245;es do Presidente da Rep&#250;blica sobre a resposta das operadoras durante a depress&#227;o Kristin.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-04-16T00:52:24Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/operadoras-atacam-marcelo-sem-piedade.html"},"headline":"OPERADORAS atacam MARCELO sem PIEDADE!","description":"Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.","datePublished":"2026-02-09T19:00:00Z","dateModified":"2026-04-16T00:58:28Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -3212,8 +3212,17 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('Nenhuma notícia válida encontrada');
         }
 
-        triggerNewArticleNotification(noticias);
-        triggerPushAlerts(noticias);
+        try {
+          triggerNewArticleNotification(noticias);
+        } catch (notificationError) {
+          console.warn('Falha ao disparar notificação de novo artigo:', notificationError);
+        }
+
+        try {
+          triggerPushAlerts(noticias);
+        } catch (pushAlertError) {
+          console.warn('Falha ao disparar alertas push:', pushAlertError);
+        }
         
         noticias.forEach((item) => {
           if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
@@ -3221,12 +3230,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
-        console.log('🆔 IDs disponíveis:', noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        console.log('🆔 IDs disponíveis:', noticias.map((n) => {
+          if (!n || typeof n !== 'object') {
+            return 'inválido';
+          }
+          return `${n.id} (tipo: ${typeof n.id})`;
+        }));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = noticias.find(n => {
+        const noticia = noticias.find((n) => {
+          if (!n || typeof n !== 'object') {
+            return false;
+          }
+
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;

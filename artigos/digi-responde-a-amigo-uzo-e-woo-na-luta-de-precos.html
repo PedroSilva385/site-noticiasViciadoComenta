@@ -1964,7 +1964,7 @@ footer {
 <meta name="twitter:title" content="DIGI responde a AMIGO, UZO e WOO na luta de pre&#231;os!">
 <meta name="twitter:description" content="A DIGI respondeu &#224;s press&#245;es das marcas brancas das operadoras incumbentes, com uma melhoria dos tarif&#225;rios m&#243;veis! +GB e -pre&#231;o, &#233; a f&#243;rmula de sucesso da operadora romena.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html"},"headline":"DIGI responde a AMIGO, UZO e WOO na luta de preços!","description":"A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.","datePublished":"2026-04-16T00:52:25Z","dateModified":"2026-04-16T00:52:25Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html"},"headline":"DIGI responde a AMIGO, UZO e WOO na luta de preços!","description":"A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.","datePublished":"2026-04-16T00:58:29Z","dateModified":"2026-04-16T00:58:29Z","author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}</script>
 <script>
 (function () {
   var params = new URLSearchParams(window.location.search);
@@ -3212,8 +3212,17 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('Nenhuma notícia válida encontrada');
         }
 
-        triggerNewArticleNotification(noticias);
-        triggerPushAlerts(noticias);
+        try {
+          triggerNewArticleNotification(noticias);
+        } catch (notificationError) {
+          console.warn('Falha ao disparar notificação de novo artigo:', notificationError);
+        }
+
+        try {
+          triggerPushAlerts(noticias);
+        } catch (pushAlertError) {
+          console.warn('Falha ao disparar alertas push:', pushAlertError);
+        }
         
         noticias.forEach((item) => {
           if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
@@ -3221,12 +3230,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
-        console.log('🆔 IDs disponíveis:', noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        console.log('🆔 IDs disponíveis:', noticias.map((n) => {
+          if (!n || typeof n !== 'object') {
+            return 'inválido';
+          }
+          return `${n.id} (tipo: ${typeof n.id})`;
+        }));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = noticias.find(n => {
+        const noticia = noticias.find((n) => {
+          if (!n || typeof n !== 'object') {
+            return false;
+          }
+
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;

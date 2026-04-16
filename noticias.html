@@ -3196,8 +3196,17 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('Nenhuma notícia válida encontrada');
         }
 
-        triggerNewArticleNotification(noticias);
-        triggerPushAlerts(noticias);
+        try {
+          triggerNewArticleNotification(noticias);
+        } catch (notificationError) {
+          console.warn('Falha ao disparar notificação de novo artigo:', notificationError);
+        }
+
+        try {
+          triggerPushAlerts(noticias);
+        } catch (pushAlertError) {
+          console.warn('Falha ao disparar alertas push:', pushAlertError);
+        }
         
         noticias.forEach((item) => {
           if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
@@ -3205,12 +3214,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
-        console.log('🆔 IDs disponíveis:', noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        console.log('🆔 IDs disponíveis:', noticias.map((n) => {
+          if (!n || typeof n !== 'object') {
+            return 'inválido';
+          }
+          return `${n.id} (tipo: ${typeof n.id})`;
+        }));
         console.log('🔎 Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('🔎 Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = noticias.find(n => {
+        const noticia = noticias.find((n) => {
+          if (!n || typeof n !== 'object') {
+            return false;
+          }
+
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
