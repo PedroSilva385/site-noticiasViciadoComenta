@@ -366,6 +366,10 @@ foreach ($noticia in $noticias) {
     $bootstrapScript = @"
 <script>
 (function () {
+    window.__VC_STATIC_ARTICLE = {
+        id: '$id',
+        slug: '$slug'
+    };
   var params = new URLSearchParams(window.location.search);
   if (!params.get('id')) params.set('id', '$id');
   if (!params.get('slug')) params.set('slug', '$slug');
@@ -385,7 +389,7 @@ foreach ($noticia in $noticias) {
     $safeStaticBody = $staticArticleBody.Replace('$', '$$')
     $content = [regex]::Replace(
         $content,
-        '(?s)<div\s+class="noticia-nao-encontrada">.*?</div>\s*</article>',
+        '(?s)<div\s+class="noticia-nao-encontrada"[^>]*>.*?</div>\s*</article>',
         "$safeStaticBody`n  </article>"
     )
 
