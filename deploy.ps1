@@ -75,6 +75,7 @@ git add index.html
 git add admin/index.html
 git add todas-noticias.html
 git add noticias.html
+git add assets/news-scheduler.js
 git add 404.html
 git add firebase.json
 git add sitemap.xml

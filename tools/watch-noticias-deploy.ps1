@@ -1,4 +1,4 @@
-$EnableAutoDeploy = $false
+$EnableAutoDeploy = $true
 
 $ErrorActionPreference = 'Stop'
 
@@ -12,6 +12,7 @@ if (-not $EnableAutoDeploy) {
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
 $dataDir = Join-Path $projectRoot 'data'
 $targetFile = 'noticias.json'
+$targetPath = Join-Path $dataDir $targetFile
 $deployScript = Join-Path $projectRoot 'deploy.ps1'
 
 if (-not (Test-Path $deployScript)) {
@@ -19,15 +20,33 @@ if (-not (Test-Path $deployScript)) {
 }
 
 $debounceSeconds = 10
+$cooldownSeconds = 20
+
+function Get-FileHashSafe {
+    param([string]$Path)
+
+    if ([string]::IsNullOrWhiteSpace($Path) -or -not (Test-Path $Path)) {
+        return ''
+    }
+
+    try {
+        return (Get-FileHash -Path $Path -Algorithm SHA256).Hash
+    } catch {
+        return ''
+    }
+}
 
 $state = [hashtable]::Synchronized(@{
     lastRun = [datetime]::MinValue
     lastChange = [datetime]::MinValue
     running = $false
     scheduled = $false
-    pending = $false
     deployScript = $deployScript
     debounceSeconds = $debounceSeconds
+    cooldownSeconds = $cooldownSeconds
+    targetPath = $targetPath
+    lastKnownHash = (Get-FileHashSafe -Path $targetPath)
+    ignoreEventsUntil = [datetime]::MinValue
 })
 
 $watcher = New-Object System.IO.FileSystemWatcher
@@ -59,7 +78,9 @@ $invokeDeploy = {
     } catch {
         Write-Host "[WATCHER] Erro ao executar deploy: $($_.Exception.Message)" -ForegroundColor Red
     } finally {
-        Start-Sleep -Seconds 1
+        $sharedState.lastKnownHash = Get-FileHashSafe -Path $sharedState.targetPath
+        $sharedState.ignoreEventsUntil = (Get-Date).AddSeconds($sharedState.cooldownSeconds)
+        Write-Host "[WATCHER] Eventos proprios do deploy serao ignorados ate $($sharedState.ignoreEventsUntil.ToString('HH:mm:ss'))." -ForegroundColor DarkYellow
         $sharedState.running = $false
     }
 }
@@ -70,12 +91,20 @@ $action = {
     param($watcherSender, $watcherEventArgs)
 
     $sharedState = $event.MessageData
-    $sharedState.lastChange = Get-Date
+    $now = Get-Date
+    $currentHash = Get-FileHashSafe -Path $sharedState.targetPath
 
-    if ($sharedState.running) {
-        $sharedState.pending = $true
+    if ($sharedState.ignoreEventsUntil -gt $now -and $currentHash -eq $sharedState.lastKnownHash) {
+        Write-Host "[WATCHER] Alteracao ignorada: corresponde ao hash gerado pelo deploy anterior." -ForegroundColor DarkGray
         return
     }
+
+    if ($sharedState.running) {
+        Write-Host "[WATCHER] Alteracao ignorada durante deploy em curso para evitar loop." -ForegroundColor DarkGray
+        return
+    }
+
+    $sharedState.lastChange = $now
 
     if ($sharedState.scheduled) {
         return
@@ -90,18 +119,14 @@ $action = {
                 Start-Sleep -Seconds 1
             }
 
-            if ($sharedState.running) {
-                $sharedState.pending = $true
-                return
-            }
-
-            & $sharedState.invokeDeploy $sharedState
-
-            if (-not $sharedState.pending) {
+            $currentHash = Get-FileHashSafe -Path $sharedState.targetPath
+            if ($sharedState.ignoreEventsUntil -gt (Get-Date) -and $currentHash -eq $sharedState.lastKnownHash) {
+                Write-Host "[WATCHER] Nenhum deploy necessario: alteracao ja foi produzida pelo ultimo deploy." -ForegroundColor DarkGray
                 break
             }
 
-            $sharedState.pending = $false
+            & $sharedState.invokeDeploy $sharedState
+            break
         }
     } finally {
         $sharedState.scheduled = $false
@@ -114,6 +139,7 @@ $eventRenamed = Register-ObjectEvent -InputObject $watcher -EventName Renamed -A
 
 Write-Host "Watcher ativo para data/noticias.json" -ForegroundColor Yellow
 Write-Host "Deploy automatico com debounce de $debounceSeconds segundos apos a ultima alteracao." -ForegroundColor Yellow
+Write-Host "Cooldown anti-loop ativo por $cooldownSeconds segundos apos cada deploy." -ForegroundColor Yellow
 Write-Host "Para parar: Ctrl+C neste terminal." -ForegroundColor Yellow
 
 try {
