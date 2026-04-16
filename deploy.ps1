@@ -72,10 +72,12 @@ if (Test-Path 'artigos') {
 }
 
 git add index.html
+git add deploy.ps1
 git add admin/index.html
 git add todas-noticias.html
 git add noticias.html
 git add assets/news-scheduler.js
+git add tools/gerar-artigos-espelho.ps1
 git add 404.html
 git add firebase.json
 git add sitemap.xml
