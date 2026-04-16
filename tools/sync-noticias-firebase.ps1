@@ -38,11 +38,24 @@ $payload = [ordered]@{
     noticias = $items
 }
 
+$json = $payload | ConvertTo-Json -Depth 100
+
+$existingJson = ''
+if (Test-Path $targetPath) {
+    $existingJson = [System.IO.File]::ReadAllText($targetPath)
+}
+
+if ($existingJson -eq $json) {
+    Write-Output 'Sem alteracoes em data/noticias.json; escrita ignorada.'
+    Write-Output "Noticias sincronizadas: $($items.Count)"
+    Write-Output "Destino: $targetPath"
+    exit 0
+}
+
 if (Test-Path $targetPath) {
     Copy-Item -Path $targetPath -Destination $backupPath -Force
 }
 
-$json = $payload | ConvertTo-Json -Depth 100
 [System.IO.File]::WriteAllText($targetPath, $json, [System.Text.UTF8Encoding]::new($false))
 
 Write-Output "Noticias sincronizadas: $($items.Count)"
