@@ -116,7 +116,7 @@ if ($LASTEXITCODE -ne 0) {
     throw "Falha ao atualizar referencias remotas de origin/$currentBranch."
 }
 
-git rebase "origin/$currentBranch"
+git rebase -X theirs "origin/$currentBranch"
 if ($LASTEXITCODE -ne 0) {
     throw "Falha ao fazer rebase sobre origin/$currentBranch. Resolve o rebase ou executa 'git rebase --abort'."
 }
