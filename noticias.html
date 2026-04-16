@@ -3140,6 +3140,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const noticiaSlug = routeInfo.slug;
 
   const identificadorArtigo = noticiaId || noticiaSlug;
+  const staticArticleInfo = window.__VC_STATIC_ARTICLE || null;
+  const isStaticMirrorPage = /\/artigos\/[^/]+\.html$/i.test(String(window.location.pathname || ''));
+  const hasPreRenderedStaticArticle = !!document.querySelector('#artigo .artigo-titulo');
   let newArticleNotificationTriggered = false;
   let pushAlertsTriggered = false;
 
@@ -3174,7 +3177,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('🔍 Identificador da URL:', identificadorArtigo);
 
-  if (identificadorArtigo) {
+  if (isStaticMirrorPage && hasPreRenderedStaticArticle) {
+    const staticArticleId = String(
+      noticiaId ||
+      (staticArticleInfo && staticArticleInfo.id) ||
+      ''
+    ).trim();
+
+    if (staticArticleId) {
+      window.currentArticleId = staticArticleId;
+
+      const comentariosSection = document.getElementById('comentariosSection');
+      if (comentariosSection) {
+        comentariosSection.style.display = 'block';
+      }
+
+      try {
+        carregarComentarios(staticArticleId);
+      } catch (commentsError) {
+        console.warn('Falha ao carregar comentários do artigo estático:', commentsError);
+      }
+
+      try {
+        updateLikeCount(staticArticleId);
+      } catch (likeError) {
+        console.warn('Falha ao atualizar likes do artigo estático:', likeError);
+      }
+    }
+  } else if (identificadorArtigo) {
     console.log('🔍 ID da URL:', noticiaId, '| slug da URL:', noticiaSlug);
     fetchNoticiasAgendadas("data/noticias.json")
       .then(data => {
