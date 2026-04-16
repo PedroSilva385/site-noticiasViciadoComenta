@@ -11,6 +11,8 @@ function filtrarNoticiasPublicadas(noticias) {
   const agora = new Date();
   
   return noticias.filter(noticia => {
+    if (!noticia || typeof noticia !== 'object') return false;
+
     // Se não tem dataPublicacao definida, mostra imediatamente
     if (!noticia.dataPublicacao) return true;
     
@@ -23,6 +25,12 @@ function filtrarNoticiasPublicadas(noticias) {
     // Mostra apenas se a data de publicação já passou
     return dataPublicacao <= agora;
   });
+}
+
+function sanitizeNoticiasList(noticias) {
+  if (!Array.isArray(noticias)) return [];
+
+  return noticias.filter((noticia) => noticia && typeof noticia === 'object');
 }
 
 function normalizarSlug(valor) {
@@ -192,16 +200,16 @@ function writeNoticiasCache(noticias) {
 }
 
 function normalizeNoticiasResponse(data) {
-  const noticias = Array.isArray(data && data.noticias) ? data.noticias : [];
+  const noticias = sanitizeNoticiasList(Array.isArray(data && data.noticias) ? data.noticias : []);
   const noticiaSolicitada = obterNoticiaSolicitadaDaURL(noticias);
   const publicadas = ordenarNoticiasPorData(deduplicarNoticias(filtrarNoticiasPublicadas(noticias)));
 
-  if (noticiaSolicitada && !publicadas.some((noticia) => String(noticia.id) === String(noticiaSolicitada.id))) {
+  if (noticiaSolicitada && !publicadas.some((noticia) => noticia && String(noticia.id) === String(noticiaSolicitada.id))) {
     publicadas.unshift(noticiaSolicitada);
   }
 
   return {
-    noticias: ordenarNoticiasPorData(deduplicarNoticias(publicadas))
+    noticias: ordenarNoticiasPorData(deduplicarNoticias(sanitizeNoticiasList(publicadas)))
   };
 }
 
