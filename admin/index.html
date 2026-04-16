@@ -169,6 +169,21 @@ body {
   color: #6b7280;
 }
 
+.btn-publish-site {
+  background: #0f766e;
+  color: white;
+  font-weight: 700;
+}
+
+.btn-publish-site:hover {
+  background: #115e59;
+}
+
+.btn-publish-site:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
 .btn-logout {
   background: #dc2626;
   color: white;
@@ -889,6 +904,7 @@ button {
         <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
       </div>
+      <button type="button" class="btn-publish-site" id="btnPublishSite" title="Executa o deploy manual via servidor local">🚀 Publicar site</button>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
       <button class="btn-logout" id="btnLogout">Sair</button>
     </div>
@@ -1217,6 +1233,7 @@ const newsView = document.getElementById('newsView');
 const statsView = document.getElementById('statsView');
 const statsFrame = document.getElementById('statsFrame');
 const btnReloadStats = document.getElementById('btnReloadStats');
+const btnPublishSite = document.getElementById('btnPublishSite');
 const noticiasList = document.getElementById('noticiasList');
 const btnNewNoticia = document.getElementById('btnNewNoticia');
 const status = document.getElementById('status');
@@ -1269,6 +1286,8 @@ const noticiaSlug = document.getElementById('noticiaSlug');
 const btnSave = document.getElementById('btnSave');
 const btnCancel = document.getElementById('btnCancel');
 const btnDelete = document.getElementById('btnDelete');
+const publishButtonDefaultLabel = btnPublishSite ? btnPublishSite.textContent : '🚀 Publicar site';
+const REMOTE_REBUILD_ENDPOINT = 'https://europe-west1-chat-viciadocomenta.cloudfunctions.net/triggerArticlesRebuild';
 
 // Scheduling fields
 const schedulingRadios = document.querySelectorAll('input[name="scheduling"]');
@@ -1516,6 +1535,127 @@ function insertImageHtml(src, altText) {
 function isLocalStudioHost() {
   const host = String(window.location.hostname || '').toLowerCase();
   return host === 'localhost' || host === '127.0.0.1';
+}
+
+function configurePublishButton() {
+  if (!btnPublishSite) return;
+
+  if (isLocalStudioHost()) {
+    btnPublishSite.disabled = false;
+    btnPublishSite.title = 'Executa sync, geração de artigos e deploy para o GitHub.';
+    return;
+  }
+
+  btnPublishSite.disabled = false;
+  btnPublishSite.title = 'Dispara a regeneração remota dos artigos estáticos via GitHub Actions.';
+}
+
+async function triggerRemoteArticlesRebuild(options = {}) {
+  const user = auth.currentUser || currentUser;
+  if (!user) {
+    const authError = new Error('AUTH_REQUIRED');
+    authError.code = 'AUTH_REQUIRED';
+    throw authError;
+  }
+
+  const idToken = await user.getIdToken(true);
+  const response = await fetch(REMOTE_REBUILD_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    },
+    body: JSON.stringify({
+      noticiaId: options.noticiaId || '',
+      slug: options.slug || '',
+      action: options.action || 'manual'
+    })
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    payload = null;
+  }
+
+  if (!response.ok || !payload || payload.ok === false) {
+    const error = new Error((payload && payload.error) ? payload.error : `Rebuild remoto falhou (${response.status})`);
+    error.code = response.status === 404 ? 'REMOTE_FUNCTION_UNAVAILABLE' : 'REMOTE_REBUILD_FAILED';
+    error.details = payload;
+    throw error;
+  }
+
+  return payload;
+}
+
+async function publishSiteManually() {
+  if (!btnPublishSite) return;
+
+  if (isDirty) {
+    showStatus('Guarde a notícia antes de publicar o site.', 'error');
+    return;
+  }
+
+  const confirmed = confirm(
+    isLocalStudioHost()
+      ? 'Isto vai sincronizar o Firebase, regenerar os artigos espelho e fazer commit/push para o GitHub. Pretende continuar?'
+      : 'Isto vai disparar a regeneração remota dos artigos espelho e do sitemap via GitHub Actions. Pretende continuar?'
+  );
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    btnPublishSite.disabled = true;
+    btnPublishSite.textContent = '⏳ A publicar...';
+    showStatus(
+      isLocalStudioHost()
+        ? 'Deploy manual em execução. Aguarde pela conclusão...'
+        : 'Rebuild remoto em execução. Aguarde pelo GitHub Actions...',
+      'success'
+    );
+
+    if (isLocalStudioHost()) {
+      const response = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      let payload = null;
+      try {
+        payload = await response.json();
+      } catch (_) {
+        payload = null;
+      }
+
+      if (!response.ok || !payload || payload.ok === false) {
+        throw new Error((payload && payload.error) ? payload.error : `Deploy falhou (${response.status})`);
+      }
+    } else {
+      await triggerRemoteArticlesRebuild({ action: 'manual-publish' });
+    }
+
+    showStatus(
+      isLocalStudioHost()
+        ? 'Deploy concluído com sucesso!'
+        : 'Rebuild remoto disparado com sucesso. O GitHub Actions vai atualizar os ficheiros estáticos.',
+      'success'
+    );
+  } catch (error) {
+    console.error('Erro ao executar deploy manual:', error);
+
+    if (error.code === 'REMOTE_FUNCTION_UNAVAILABLE') {
+      showStatus('A função remota ainda não está disponível. O workflow automático continua a correr de 5 em 5 minutos.', 'error');
+    } else if (error.code === 'AUTH_REQUIRED') {
+      showStatus('Sessão expirada. Faça login novamente para publicar.', 'error');
+    } else {
+      showStatus(error.message || 'Não foi possível concluir a publicação.', 'error');
+    }
+  } finally {
+    btnPublishSite.textContent = publishButtonDefaultLabel;
+    configurePublishButton();
+  }
 }
 
 function readFileAsDataUrl(file) {
@@ -2537,12 +2677,24 @@ async function saveNoticia() {
       } catch (e) {
         console.log('Nota: servidor local de sync não disponível. Firebase já foi atualizado.');
       }
+    } else {
+      try {
+        await triggerRemoteArticlesRebuild({
+          noticiaId: noticiaObj.id,
+          slug: noticiaObj.slug,
+          action: isNew ? 'create' : 'save'
+        });
+      } catch (rebuildError) {
+        console.warn('Falha ao disparar rebuild remoto:', rebuildError);
+      }
     }
 
-    showStatus(
-      isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!',
-      'success'
-    );
+    let successMessage = isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!';
+    if (!isLocalHost) {
+      successMessage += ' Rebuild remoto pedido ao GitHub Actions.';
+    }
+
+    showStatus(successMessage, 'success');
     
     selectedNoticiaId = id;
     contentEditor.innerHTML = conteudoHtml;
@@ -2603,6 +2755,11 @@ btnDelete.addEventListener('click', async () => {
     btnDelete.disabled = false;
   }
 });
+
+if (btnPublishSite) {
+  btnPublishSite.addEventListener('click', publishSiteManually);
+  configurePublishButton();
+}
 
 btnCancel.addEventListener('click', () => {
   if (isDirty) {
