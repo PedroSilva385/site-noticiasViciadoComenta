@@ -77,6 +77,7 @@ git add admin/index.html
 git add todas-noticias.html
 git add noticias.html
 git add assets/news-scheduler.js
+git add tools/artigo-estatico.cmd
 git add tools/gerar-artigos-espelho.ps1
 git add 404.html
 git add firebase.json
@@ -96,14 +97,47 @@ if (Test-Path "artigos") {
 }
 
 # 4) Commit apenas se houver alteracoes staged
+$currentBranch = (git rev-parse --abbrev-ref HEAD).Trim()
+
 git diff --cached --quiet
 if ($LASTEXITCODE -ne 0) {
     $commitMessage = "Deploy: noticias + artigos + sitemap - $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
     git commit -m $commitMessage
-    git push origin main
-    Write-Host "Alteracoes enviadas para GitHub." -ForegroundColor Green
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Falha ao criar o commit do deploy.'
+    }
 } else {
     Write-Host "Nao ha alteracoes para commitar." -ForegroundColor Cyan
+}
+
+Write-Host "`nA sincronizar branch local com origin/$currentBranch..." -ForegroundColor Yellow
+git fetch origin $currentBranch
+if ($LASTEXITCODE -ne 0) {
+    throw "Falha ao atualizar referencias remotas de origin/$currentBranch."
+}
+
+git rebase "origin/$currentBranch"
+if ($LASTEXITCODE -ne 0) {
+    throw "Falha ao fazer rebase sobre origin/$currentBranch. Resolve o rebase ou executa 'git rebase --abort'."
+}
+
+$aheadCountRaw = git rev-list --count "origin/$currentBranch..HEAD"
+if ($LASTEXITCODE -ne 0) {
+    throw "Falha ao calcular commits por enviar para origin/$currentBranch."
+}
+
+$aheadCount = 0
+[void][int]::TryParse(($aheadCountRaw | Select-Object -First 1), [ref]$aheadCount)
+
+if ($aheadCount -gt 0) {
+    git push origin $currentBranch
+    if ($LASTEXITCODE -ne 0) {
+        throw "Falha ao enviar alteracoes para origin/$currentBranch."
+    }
+
+    Write-Host "Alteracoes enviadas para GitHub." -ForegroundColor Green
+} else {
+    Write-Host "Branch local ja alinhada com origin/$currentBranch." -ForegroundColor Cyan
 }
 
 # 5) Verificar se o ficheiro de configuracao usado pelo frontend esta acessivel no site publicado
