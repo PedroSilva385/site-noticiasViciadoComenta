@@ -265,10 +265,16 @@ foreach ($noticia in $noticias) {
 
     $rawTitle = [string]$noticia.titulo
     $metaDescription = Get-MetaDescription -Noticia $noticia
-    $publishedDateIso = if ($publishDate) {
-        $publishDate.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    $effectivePublishedDate = if ($publishDate) {
+        $publishDate
     } else {
-        (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        Parse-DataPublicacao -DataStr ([string]$noticia.data)
+    }
+
+    $publishedDateIso = if ($effectivePublishedDate) {
+        $effectivePublishedDate.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    } else {
+        '2026-01-01T00:00:00Z'
     }
     $modifiedDateIso = $publishedDateIso
 
