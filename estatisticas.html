@@ -840,6 +840,10 @@
       });
     }
 
+    function redirectToAdminLogin() {
+      window.location.replace('admin/');
+    }
+
     function initializeStatsDashboard() {
       if (statsInitialized) {
         return;
@@ -2099,10 +2103,12 @@
 
     if (!auth) {
       setStatsAccessState(false, 'O módulo de autenticação do Firebase não está disponível nesta página.');
+      setTimeout(redirectToAdminLogin, 1200);
     } else {
       auth.onAuthStateChanged((user) => {
         if (!isStatsAdminUser(user)) {
           setStatsAccessState(false, 'Inicie sessão no painel admin com uma conta administrativa para consultar as estatísticas.');
+          setTimeout(redirectToAdminLogin, 1200);
           return;
         }
 

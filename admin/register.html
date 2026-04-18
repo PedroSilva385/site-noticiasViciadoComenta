@@ -256,9 +256,12 @@ if (!isLocalSetupHost()) {
   const warning = document.querySelector('.warning');
   if (warning) {
     warning.classList.add('warning-danger');
-    warning.innerHTML = '⛔ <strong>Registo público desativado:</strong> as contas admin só podem ser criadas localmente ou no Firebase Console.';
+    warning.innerHTML = '⛔ <strong>Registo público desativado:</strong> as contas admin só podem ser criadas localmente ou no Firebase Console. Esta página vai voltar ao login do painel.';
   }
   btnRegister.disabled = true;
+  setTimeout(() => {
+    window.location.replace('./index.html');
+  }, 2500);
 }
 
 registerForm.addEventListener('submit', async (e) => {

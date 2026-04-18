@@ -889,7 +889,7 @@ button {
         <input type="password" id="authPassword" placeholder="••••••••" required>
       </div>
       <button type="submit">Entrar</button>
-      <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
+      <p id="registerCta" style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: #6b7280;">
         Não tem conta? <a href="./register.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Criar agora</a>
       </p>
     </form>
@@ -1226,6 +1226,7 @@ const authForm = document.getElementById('authForm');
 const authEmail = document.getElementById('authEmail');
 const authPassword = document.getElementById('authPassword');
 const authError = document.getElementById('authError');
+const registerCta = document.getElementById('registerCta');
 const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
 const adminTabNoticias = document.getElementById('adminTabNoticias');
@@ -1240,6 +1241,15 @@ const btnNewNoticia = document.getElementById('btnNewNoticia');
 const status = document.getElementById('status');
 const emptyState = document.getElementById('emptyState');
 const editorPanel = document.getElementById('editorPanel');
+
+function isLocalSetupHost() {
+  const hostname = (window.location.hostname || '').toLowerCase();
+  return window.location.protocol === 'file:' || hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+if (registerCta && !isLocalSetupHost()) {
+  registerCta.style.display = 'none';
+}
 
 function setAdminView(viewName) {
   const showStats = viewName === 'estatisticas';
