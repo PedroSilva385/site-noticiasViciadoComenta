@@ -2437,15 +2437,41 @@ fetchNoticiasAgendadas("data/noticias.json")
       return slugifyTitulo((noticia && noticia.titulo) || '');
     };
 
-    const buildArticleUrl = (noticia) => {
-      if (noticia && typeof noticia.link === 'string' && /^https:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(noticia.link.trim())) {
-        return noticia.link.trim();
+    const normalizeCanonicalArticleLink = (link) => {
+      if (typeof link !== 'string') {
+        return '';
       }
-      const id = encodeURIComponent(noticia.id);
+
+      const trimmedLink = link.trim();
+      if (!trimmedLink) {
+        return '';
+      }
+
+      if (/^https?:\/\/www\.viciadocomenta\.pt\/artigos\/.+\.html$/i.test(trimmedLink)) {
+        return trimmedLink;
+      }
+
+      if (/^\/?artigos\/.+\.html$/i.test(trimmedLink)) {
+        return trimmedLink.startsWith('/') ? trimmedLink.slice(1) : trimmedLink;
+      }
+
+      return '';
+    };
+
+    const buildArticleUrl = (noticia) => {
+      const canonicalLink = normalizeCanonicalArticleLink(noticia && noticia.link);
+      if (canonicalLink) {
+        return canonicalLink;
+      }
       const slug = getArticleSlug(noticia);
-      return slug
-        ? `artigos.html#/${encodeURIComponent(slug)}/${id}`
-        : `artigos.html?id=${id}`;
+      if (slug) {
+        return `artigos/${encodeURIComponent(slug)}.html`;
+      }
+
+      const id = noticia && typeof noticia.id !== 'undefined' && noticia.id !== null
+        ? encodeURIComponent(String(noticia.id))
+        : '';
+      return id ? `artigos.html?id=${id}` : 'artigos.html';
     };
 
     class ArticleReadTracker {
