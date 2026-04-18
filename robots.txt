@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /estatisticas.html
 Disallow: /tools/
 Disallow: /backups/
 Disallow: /data/

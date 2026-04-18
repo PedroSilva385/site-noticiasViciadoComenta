@@ -280,6 +280,11 @@ foreach ($noticia in $noticias) {
     } else {
         Parse-DataPublicacao -DataStr ([string]$noticia.data)
     }
+    $sitemapLastMod = if ($effectivePublishedDate) {
+        $effectivePublishedDate.ToString('yyyy-MM-dd')
+    } else {
+        (Get-Date).ToString('yyyy-MM-dd')
+    }
 
     $publishedDateIso = if ($effectivePublishedDate) {
         $effectivePublishedDate.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
@@ -440,7 +445,7 @@ foreach ($noticia in $noticias) {
     if ($isPublished) {
         $generatedArticles += [pscustomobject]@{
             slug = $slug
-            lastmod = (Get-Date).ToString('yyyy-MM-dd')
+            lastmod = $sitemapLastMod
         }
     }
 }
