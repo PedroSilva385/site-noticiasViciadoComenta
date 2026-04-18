@@ -2337,18 +2337,47 @@ function isArticleHashRoute(hashValue) {
   return /^#\/[^/]+(?:\/[^/]+)?$/.test(hash);
 }
 
+function getCanonicalArticleUrlFromRoute() {
+  const requestedRoute = getRequestedArticleRoute();
+  const routeId = requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
+    ? String(requestedRoute.id)
+    : '';
+  const slug = (requestedRoute && requestedRoute.slug) || window.articleSlugById[routeId] || '';
+  return slug ? `artigos/${encodeURIComponent(slug)}.html` : '';
+}
+
+function redirectLegacyArticleRoute() {
+  if (!isArticleHashRoute(window.location.hash)) {
+    return false;
+  }
+
+  const canonicalUrl = getCanonicalArticleUrlFromRoute();
+  if (!canonicalUrl) {
+    return false;
+  }
+
+  window.location.replace(canonicalUrl);
+  return true;
+}
+
 window.addEventListener('hashchange', () => {
-  // Recarrega para aplicar a nova rota hash de artigo no fluxo atual.
+  if (redirectLegacyArticleRoute()) {
+    return;
+  }
+
+  // Mantém o fallback antigo se não for possível resolver um URL canónico.
   if (isArticleHashRoute(window.location.hash)) {
     window.location.reload();
   }
 });
 
+redirectLegacyArticleRoute();
+
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2362,11 +2391,8 @@ function buildArticleUrlByData(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
-  if (slug && hasId) {
-    return `noticias.html#/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
-  }
   if (slug) {
-    return `noticias.html#/${encodeURIComponent(slug)}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
   if (hasId) {
     return `noticias.html?id=${encodeURIComponent(id)}`;
