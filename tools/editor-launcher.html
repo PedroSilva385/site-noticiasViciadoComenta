@@ -316,13 +316,13 @@ function getBaseUrl() {
 function buildEditUrl(noticia) {
   const slug = getSlug(noticia);
   const base = getBaseUrl();
-  return `${base}/artigos/${encodeURIComponent(slug)}.html?id=${noticia.id}&slug=${encodeURIComponent(slug)}&edit=1`;
+  return `${base}/artigos/${encodeURIComponent(slug)}.html?edit=1`;
 }
 
 function buildPreviewUrl(noticia) {
   const slug = getSlug(noticia);
   const base = getBaseUrl();
-  return `${base}/artigos/${encodeURIComponent(slug)}.html?id=${noticia.id}&slug=${encodeURIComponent(slug)}`;
+  return `${base}/artigos/${encodeURIComponent(slug)}.html`;
 }
 
 function applyBaseUrl() {
