@@ -241,7 +241,7 @@ foreach ($noticia in $noticias) {
     $content = $template
 
     $articleUrl = "https://www.viciadocomenta.pt/artigos/$slug.html"
-    $editableLiveUrl = "https://www.viciadocomenta.pt/noticias.html?id=$id&slug=$slug&edit=1"
+    $editableLiveUrl = "https://www.viciadocomenta.pt/artigos/$slug.html?edit=1"
 
     $currentSlug = if ($noticia.PSObject.Properties.Name -contains 'slug') { [string]$noticia.slug } else { '' }
     if ($currentSlug -ne $slug) {
@@ -391,14 +391,6 @@ foreach ($noticia in $noticias) {
         id: '$id',
         slug: '$slug'
     };
-  var params = new URLSearchParams(window.location.search);
-  if (!params.get('id')) params.set('id', '$id');
-  if (!params.get('slug')) params.set('slug', '$slug');
-  var qs = params.toString();
-  var next = window.location.pathname + (qs ? ('?' + qs) : '');
-  if (window.location.search !== ('?' + qs)) {
-    window.history.replaceState({}, '', next);
-  }
 })();
 </script>
 "@

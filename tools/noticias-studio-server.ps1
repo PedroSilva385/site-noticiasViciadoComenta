@@ -212,7 +212,7 @@ function Sync-NoticiasLinks {
         }
 
         $editableLink = if (-not [string]::IsNullOrWhiteSpace($slug)) {
-            "https://www.viciadocomenta.pt/noticias.html?id=$id&slug=$slug&edit=1"
+            "https://www.viciadocomenta.pt/artigos/$slug.html?edit=1"
         } else {
             "https://www.viciadocomenta.pt/noticias.html?id=$id&edit=1"
         }
