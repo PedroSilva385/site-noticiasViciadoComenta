@@ -64,6 +64,11 @@ function sanitizeFirebaseKey(rawValue) {
     .slice(0, 180) || 'unknown';
 }
 
+function normalizeCount(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+}
+
 function getLocalDateKey(date = new Date()) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -175,24 +180,24 @@ async function registerVisitMetrics(db, visitorHash, countSessionVisit = true) {
     }
 
     if (countSessionVisit) {
-      data.total_visits = (data.total_visits || 0) + 1;
+      data.total_visits = normalizeCount(data.total_visits) + 1;
 
       if (!data.daily) data.daily = {};
-      data.daily[today] = (data.daily[today] || 0) + 1;
+      data.daily[today] = normalizeCount(data.daily[today]) + 1;
 
       if (!data.monthly) data.monthly = {};
-      data.monthly[month] = (data.monthly[month] || 0) + 1;
+      data.monthly[month] = normalizeCount(data.monthly[month]) + 1;
 
       if (!data.hourly) data.hourly = {};
       if (!data.hourly[today]) data.hourly[today] = {};
-      data.hourly[today][hour] = (data.hourly[today][hour] || 0) + 1;
+      data.hourly[today][hour] = normalizeCount(data.hourly[today][hour]) + 1;
     }
 
     if (!data.pages) data.pages = {};
-    data.pages[pageKey] = (data.pages[pageKey] || 0) + 1;
+    data.pages[pageKey] = normalizeCount(data.pages[pageKey]) + 1;
 
     if (!data.referrers) data.referrers = {};
-    data.referrers[referrerKey] = (data.referrers[referrerKey] || 0) + 1;
+    data.referrers[referrerKey] = normalizeCount(data.referrers[referrerKey]) + 1;
 
     data.last_updated = new Date().toISOString();
     return data;
@@ -253,23 +258,23 @@ async function registerVisitMetrics(db, visitorHash, countSessionVisit = true) {
     }
 
     if (isUniqueGlobal) {
-      data.unique_total = (data.unique_total || 0) + 1;
+      data.unique_total = normalizeCount(data.unique_total) + 1;
     }
 
     if (!data.unique_daily) data.unique_daily = {};
     if (isUniqueForDay) {
-      data.unique_daily[today] = (data.unique_daily[today] || 0) + 1;
+      data.unique_daily[today] = normalizeCount(data.unique_daily[today]) + 1;
     }
 
     if (!data.unique_monthly) data.unique_monthly = {};
     if (isUniqueForDay) {
-      data.unique_monthly[month] = (data.unique_monthly[month] || 0) + 1;
+      data.unique_monthly[month] = normalizeCount(data.unique_monthly[month]) + 1;
     }
 
     if (!data.unique_hourly) data.unique_hourly = {};
     if (!data.unique_hourly[today]) data.unique_hourly[today] = {};
     if (isUniqueForDay) {
-      data.unique_hourly[today][hour] = (data.unique_hourly[today][hour] || 0) + 1;
+      data.unique_hourly[today][hour] = normalizeCount(data.unique_hourly[today][hour]) + 1;
     }
 
     data.last_updated = new Date().toISOString();
@@ -322,7 +327,7 @@ function setupClickTracking(db, visitorHash) {
         if (!data) {
           data = { count: 0, label, href, page: pagePath, last_clicked: null };
         }
-        data.count = (data.count || 0) + 1;
+        data.count = normalizeCount(data.count) + 1;
         data.label = label;
         data.href = href;
         data.page = pagePath;
@@ -335,7 +340,7 @@ function setupClickTracking(db, visitorHash) {
         if (!data) {
           data = { count: 0, path: pagePath, last_clicked: null };
         }
-        data.count = (data.count || 0) + 1;
+        data.count = normalizeCount(data.count) + 1;
         data.path = pagePath;
         data.last_clicked = new Date().toISOString();
         return data;
@@ -347,7 +352,7 @@ function setupClickTracking(db, visitorHash) {
         if (!data) {
           data = { count: 0, label, href };
         }
-        data.count = (data.count || 0) + 1;
+        data.count = normalizeCount(data.count) + 1;
         data.label = label;
         data.href = href;
         return data;
@@ -358,7 +363,7 @@ function setupClickTracking(db, visitorHash) {
         if (!data) {
           data = { total_clicks: 0 };
         }
-        data.total_clicks = (data.total_clicks || 0) + 1;
+        data.total_clicks = normalizeCount(data.total_clicks) + 1;
         return data;
       }).catch(() => {});
 
@@ -368,7 +373,7 @@ function setupClickTracking(db, visitorHash) {
         if (!data) {
           data = { count: 0, label, href, page: pagePath, last_clicked: null };
         }
-        data.count = (data.count || 0) + 1;
+        data.count = normalizeCount(data.count) + 1;
         data.label = label;
         data.href = href;
         data.page = pagePath;

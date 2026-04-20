@@ -894,6 +894,17 @@
       return Number.isFinite(num) ? num : 0;
     }
 
+    function getReliableTotalVisits(stats) {
+      const directTotal = safeNumber(stats && stats.total_visits);
+      const dailyTotal = Object.values((stats && stats.daily) || {}).reduce((sum, value) => sum + safeNumber(value), 0);
+
+      if (dailyTotal > 0) {
+        return Math.max(directTotal, dailyTotal);
+      }
+
+      return directTotal;
+    }
+
     function formatLocalDateKey(date = new Date()) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -1525,7 +1536,7 @@
 
         setText('todayTotal', todayTotal.toLocaleString('pt-PT'));
         setText('todayUnique', safeNumber(dailyUnique[todayKey]).toLocaleString('pt-PT'));
-        setText('allTotal', safeNumber(stats.total_visits).toLocaleString('pt-PT'));
+        setText('allTotal', getReliableTotalVisits(stats).toLocaleString('pt-PT'));
         setText('allUnique', safeNumber(stats.unique_total).toLocaleString('pt-PT'));
         setText('lastUpdate', stats.last_updated ? new Date(stats.last_updated).toLocaleString('pt-PT') : '-');
 
@@ -1878,7 +1889,7 @@
 
         setText('todayTotal', todayTotal.toLocaleString('pt-PT'));
         setText('todayUnique', safeNumber(dailyUnique[todayKey]).toLocaleString('pt-PT'));
-        setText('allTotal', safeNumber(stats.total_visits).toLocaleString('pt-PT'));
+        setText('allTotal', getReliableTotalVisits(stats).toLocaleString('pt-PT'));
         setText('allUnique', safeNumber(stats.unique_total).toLocaleString('pt-PT'));
         setText('lastUpdate', stats.last_updated ? new Date(stats.last_updated).toLocaleString('pt-PT') : '-');
 

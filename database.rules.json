@@ -11,7 +11,68 @@
     "site_stats": {
       ".read": true,
       ".write": "auth != null",
-      ".validate": "newData.hasChildren(['total_visits', 'daily', 'monthly', 'last_updated'])"
+      ".validate": "newData.hasChildren(['total_visits', 'daily', 'monthly', 'last_updated'])",
+      "total_visits": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "unique_total": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "daily": {
+        "$dateKey": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "monthly": {
+        "$monthKey": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "hourly": {
+        "$dateKey": {
+          "$hourKey": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
+      },
+      "unique_daily": {
+        "$dateKey": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "unique_monthly": {
+        "$monthKey": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "unique_hourly": {
+        "$dateKey": {
+          "$hourKey": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
+      },
+      "pages": {
+        "$pageKey": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "referrers": {
+        "$referrerKey": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "click_targets": {
+        "$targetKey": {
+          ".validate": "newData.hasChildren(['count']) || !newData.exists()",
+          "count": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
+      },
+      "last_updated": {
+        ".validate": "newData.isString()"
+      }
     },
     "site_unique_views": {
       ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
