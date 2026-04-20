@@ -2044,7 +2044,7 @@ footer {
           </div>
           <div class="artigo-conteudo">
             <p><strong>Amigo, UZO e WOO mantém preços, apesar da decisão da DIGI em baixar ainda mais os seus tarifários móveis!</strong></p>
-            <div id="artigoConteudoBody"><p>No passado dia 9 de abril de 2026, a DIGI abalou o mercado das telecomunicações em Portugal com uma nova redução de preços nos seus tarifários móveis. Aqui, no Viciado Comenta, <a href="https://www.viciadocomenta.pt/artigos.html#/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos/35" target="_blank" rel="noopener noreferrer">tivemos oportunidade de analisar</a> e comentar os efeitos desta mudança. Uma das questões que ficou por esclarecer foi: qual será a resposta das marcas brancas?</p><p>Com uma promoção válida até 15 de abril, as marcas brancas tiveram seis dias para decidir o que fariam aquando do fim da mesma. Chegada a hora da decisão, a resposta foi clara: não acompanhar.</p><p><strong>Posições das marcas brancas:</strong></p><p>A <strong>Amigo<u> </u></strong>foi a primeira a alterar o seu site, apresentando o prolongamento da promoção até ao dia 15 de maio de 2026. As condições mantêm-se as mesmas já propostas anteriormente: planos de 5€ e 7€, com 100 GB de dados ou ilimitados, respetivamente.</p><p>A <strong>UZO </strong>acompanha e mantém também a sua proposta inalterada até ao próximo dia 15 de maio.</p><p>A <strong>WOO </strong>replica. Conhecida por demorar mais neste tipo de decisões, a WOO aparenta ter alinhado no segmento low-cost e acompanha agora, até em termos de calendário, as propostas das suas concorrentes.</p><p><strong>Acabou a capacidade de resposta?</strong></p><p>Teremos de esperar pelos próximos meses para retirar esse tipo de conclusões. O que sabemos é que a DIGI está a baixar a fasquia de preços para valores que estão a deixar as incumbentes numa situação claramente desconfortável. Se, por um lado, as incumbentes detêm uma margem significativa para reduzir as suas receitas, por outro, possuem uma estrutura muito mais pesada do que a DIGI, que exige margens maiores para se sustentar.</p><p><strong>Conclusão:</strong></p><p>Até ao próximo dia 15 de maio, os clientes que pretendam maximizar a poupança têm uma escolha óbvia: a DIGI. As marcas brancas posicionam-se ligeiramente acima, confiantes de que a reduzida diferença financeira será desvalorizada face à perceção de maior estabilidade, numa altura em que a infraestrutura da DIGI ainda se encontra em amadurecimento.</p></div>
+            <div id="artigoConteudoBody"><p>No passado dia 9 de abril de 2026, a DIGI abalou o mercado das telecomunicações em Portugal com uma nova redução de preços nos seus tarifários móveis. Aqui, no Viciado Comenta, <a href="https://www.viciadocomenta.pt/noticias.html?id=35&slug=digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos" target="_blank" rel="noopener noreferrer">tivemos oportunidade de analisar</a> e comentar os efeitos desta mudança. Uma das questões que ficou por esclarecer foi: qual será a resposta das marcas brancas?</p><p>Com uma promoção válida até 15 de abril, as marcas brancas tiveram seis dias para decidir o que fariam aquando do fim da mesma. Chegada a hora da decisão, a resposta foi clara: não acompanhar.</p><p><strong>Posições das marcas brancas:</strong></p><p>A <strong>Amigo<u> </u></strong>foi a primeira a alterar o seu site, apresentando o prolongamento da promoção até ao dia 15 de maio de 2026. As condições mantêm-se as mesmas já propostas anteriormente: planos de 5€ e 7€, com 100 GB de dados ou ilimitados, respetivamente.</p><p>A <strong>UZO </strong>acompanha e mantém também a sua proposta inalterada até ao próximo dia 15 de maio.</p><p>A <strong>WOO </strong>replica. Conhecida por demorar mais neste tipo de decisões, a WOO aparenta ter alinhado no segmento low-cost e acompanha agora, até em termos de calendário, as propostas das suas concorrentes.</p><p><strong>Acabou a capacidade de resposta?</strong></p><p>Teremos de esperar pelos próximos meses para retirar esse tipo de conclusões. O que sabemos é que a DIGI está a baixar a fasquia de preços para valores que estão a deixar as incumbentes numa situação claramente desconfortável. Se, por um lado, as incumbentes detêm uma margem significativa para reduzir as suas receitas, por outro, possuem uma estrutura muito mais pesada do que a DIGI, que exige margens maiores para se sustentar.</p><p><strong>Conclusão:</strong></p><p>Até ao próximo dia 15 de maio, os clientes que pretendam maximizar a poupança têm uma escolha óbvia: a DIGI. As marcas brancas posicionam-se ligeiramente acima, confiantes de que a reduzida diferença financeira será desvalorizada face à perceção de maior estabilidade, numa altura em que a infraestrutura da DIGI ainda se encontra em amadurecimento.</p></div>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -2346,7 +2346,8 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    const params = new URLSearchParams({ id, slug });
+    return `noticias.html?${params.toString()}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2381,6 +2382,61 @@ function buildArticleReaderUrl(noticia) {
 
 function buildArticleUrlByData(noticia) {
   return buildArticleReaderUrl(noticia);
+}
+
+function getCanonicalArticleUrlByData(noticia) {
+  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
+  }
+
+  const slug = getArticleSlug(noticia);
+  if (slug) {
+    return `artigos/${encodeURIComponent(slug)}.html`;
+  }
+
+  return buildArticleReaderUrl(noticia);
+}
+
+function buildArticleMetaDescription(noticia) {
+  const baseText = noticia && typeof noticia.resumo === 'string' && noticia.resumo.trim()
+    ? noticia.resumo
+    : (noticia && typeof noticia.conteudo === 'string' ? noticia.conteudo : '');
+
+  const helper = document.createElement('div');
+  helper.innerHTML = baseText;
+  const plainText = (helper.textContent || helper.innerText || '').replace(/\s+/g, ' ').trim();
+
+  if (plainText.length <= 180) {
+    return plainText;
+  }
+
+  return `${plainText.slice(0, 177).trim()}...`;
+}
+
+function updateMetaTag(selector, attr, value) {
+  const el = document.querySelector(selector);
+  if (el && typeof value === 'string' && value.trim()) {
+    el.setAttribute(attr, value.trim());
+  }
+}
+
+function updateArticleSeoMeta(noticia) {
+  if (!noticia || typeof noticia !== 'object') {
+    return;
+  }
+
+  const canonicalUrl = new URL(getCanonicalArticleUrlByData(noticia), 'https://www.viciadocomenta.pt/').toString();
+  const metaDescription = buildArticleMetaDescription(noticia);
+  const title = `${noticia.titulo} - VICIADO COMENTA`;
+
+  document.title = title;
+  updateMetaTag('#canonicalLink', 'href', canonicalUrl);
+  updateMetaTag('meta[name="description"]', 'content', metaDescription);
+  updateMetaTag('meta[property="og:title"]', 'content', title);
+  updateMetaTag('meta[property="og:description"]', 'content', metaDescription);
+  updateMetaTag('meta[property="og:url"]', 'content', canonicalUrl);
+  updateMetaTag('meta[name="twitter:title"]', 'content', title);
+  updateMetaTag('meta[name="twitter:description"]', 'content', metaDescription);
 }
 
 function parseNoticiaDateForSort(data) {
@@ -3268,7 +3324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="share-btn share-linkedin" onclick="partilharLinkedIn(${safeTitleJs}, ${safeIdJs})" title="LinkedIn">
           <i class="fab fa-linkedin-in"></i>
         </button>
-        <button class="share-btn share-copy" onclick="copiarLink(${safeIdJs})" title="Copiar Link">
+        <button class="share-btn share-copy" onclick="copiarLink(${safeIdJs}, this)" title="Copiar Link">
           <i class="fas fa-link"></i>
         </button>
       </div>
@@ -3371,8 +3427,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.currentArticleId = noticiaIdResolvido;
         incrementArticleReadCount(noticiaIdResolvido);
 
-        const canonicalArticleUrl = buildArticleUrlByData(noticia);
-        const articleUrl = new URL(canonicalArticleUrl, window.location.origin);
+        const readerArticleUrl = buildArticleUrlByData(noticia);
+        const articleUrl = new URL(readerArticleUrl, window.location.origin);
         const editParam = urlParams.get('edit');
         const host = (window.location.hostname || '').toLowerCase();
         const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
@@ -3390,12 +3446,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        const canonicalEl = document.getElementById('canonicalLink');
-        if (canonicalEl) {
-          canonicalEl.href = new URL(canonicalArticleUrl, 'https://www.viciadocomenta.pt/').toString();
-        }
-
-        document.title = noticia.titulo + " - VICIADO COMENTA";
+        updateArticleSeoMeta(noticia);
         
         // Extrair ID do YouTube
         function extrairVideoId(url) {
@@ -3495,7 +3546,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <button class="share-btn share-linkedin" onclick="partilharLinkedIn('${noticia.titulo}', '${noticiaIdResolvido}')" title="LinkedIn">
                 <i class="fab fa-linkedin-in"></i>
               </button>
-              <button class="share-btn share-copy" onclick="copiarLink('${noticiaIdResolvido}')" title="Copiar Link">
+              <button class="share-btn share-copy" onclick="copiarLink('${noticiaIdResolvido}', this)" title="Copiar Link">
                 <i class="fas fa-link"></i>
               </button>
             </div>
@@ -3806,7 +3857,26 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
 // ========== FUNÇÕES DE PARTILHA SOCIAL ==========
 function getArticleURL(noticiaId) {
   const articlePath = buildArticleUrlById(noticiaId);
-  return new URL(articlePath, window.location.href).toString();
+  return new URL(articlePath, `${window.location.origin}/`).toString();
+}
+
+function showCopyFeedback(triggerEl) {
+  const shareBtn = triggerEl && typeof triggerEl.closest === 'function'
+    ? triggerEl.closest('.share-copy')
+    : null;
+
+  if (!shareBtn) {
+    return;
+  }
+
+  const textoOriginal = shareBtn.innerHTML;
+  shareBtn.innerHTML = '<i class="fas fa-check"></i>';
+  shareBtn.style.background = '#10b981';
+
+  setTimeout(() => {
+    shareBtn.innerHTML = textoOriginal;
+    shareBtn.style.background = '';
+  }, 2000);
 }
 
 function partilharFacebook(titulo, noticiaId) {
@@ -3841,40 +3911,36 @@ function partilharTelegram(titulo, noticiaId) {
   window.open(telegramURL, 'telegram-share', 'width=550,height=420');
 }
 
-function copiarLink(noticiaId) {
+function copiarLink(noticiaId, triggerEl) {
   const url = getArticleURL(noticiaId);
   
   // Usar Clipboard API
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).then(() => {
-      // Mostrar notificação de sucesso
-      const shareBtn = event.target.closest('.share-copy');
-      const textoOriginal = shareBtn.innerHTML;
-      shareBtn.innerHTML = '<i class="fas fa-check"></i>';
-      shareBtn.style.background = '#10b981';
-      
-      setTimeout(() => {
-        shareBtn.innerHTML = textoOriginal;
-        shareBtn.style.background = '';
-      }, 2000);
-    }).catch(err => {
+      showCopyFeedback(triggerEl);
+    }).catch(() => {
       // Fallback para navegadores antigos
-      fallbackCopyLink(url);
+      fallbackCopyLink(url, triggerEl);
     });
   } else {
     // Fallback para navegadores que não suportam Clipboard API
-    fallbackCopyLink(url);
+    fallbackCopyLink(url, triggerEl);
   }
 }
 
-function fallbackCopyLink(url) {
+function fallbackCopyLink(url, triggerEl) {
   const textarea = document.createElement('textarea');
   textarea.value = url;
   document.body.appendChild(textarea);
   textarea.select();
-  document.execCommand('copy');
+  const copied = document.execCommand('copy');
   document.body.removeChild(textarea);
-  
+
+  if (copied) {
+    showCopyFeedback(triggerEl);
+    return;
+  }
+
   alert('Link copiado para a área de transferência!');
 }
 

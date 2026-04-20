@@ -2317,7 +2317,8 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    const params = new URLSearchParams({ id, slug });
+    return `noticias.html?${params.toString()}`;
   }
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
@@ -2352,6 +2353,61 @@ function buildArticleReaderUrl(noticia) {
 
 function buildArticleUrlByData(noticia) {
   return buildArticleReaderUrl(noticia);
+}
+
+function getCanonicalArticleUrlByData(noticia) {
+  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
+  }
+
+  const slug = getArticleSlug(noticia);
+  if (slug) {
+    return `artigos/${encodeURIComponent(slug)}.html`;
+  }
+
+  return buildArticleReaderUrl(noticia);
+}
+
+function buildArticleMetaDescription(noticia) {
+  const baseText = noticia && typeof noticia.resumo === 'string' && noticia.resumo.trim()
+    ? noticia.resumo
+    : (noticia && typeof noticia.conteudo === 'string' ? noticia.conteudo : '');
+
+  const helper = document.createElement('div');
+  helper.innerHTML = baseText;
+  const plainText = (helper.textContent || helper.innerText || '').replace(/\s+/g, ' ').trim();
+
+  if (plainText.length <= 180) {
+    return plainText;
+  }
+
+  return `${plainText.slice(0, 177).trim()}...`;
+}
+
+function updateMetaTag(selector, attr, value) {
+  const el = document.querySelector(selector);
+  if (el && typeof value === 'string' && value.trim()) {
+    el.setAttribute(attr, value.trim());
+  }
+}
+
+function updateArticleSeoMeta(noticia) {
+  if (!noticia || typeof noticia !== 'object') {
+    return;
+  }
+
+  const canonicalUrl = new URL(getCanonicalArticleUrlByData(noticia), 'https://www.viciadocomenta.pt/').toString();
+  const metaDescription = buildArticleMetaDescription(noticia);
+  const title = `${noticia.titulo} - VICIADO COMENTA`;
+
+  document.title = title;
+  updateMetaTag('#canonicalLink', 'href', canonicalUrl);
+  updateMetaTag('meta[name="description"]', 'content', metaDescription);
+  updateMetaTag('meta[property="og:title"]', 'content', title);
+  updateMetaTag('meta[property="og:description"]', 'content', metaDescription);
+  updateMetaTag('meta[property="og:url"]', 'content', canonicalUrl);
+  updateMetaTag('meta[name="twitter:title"]', 'content', title);
+  updateMetaTag('meta[name="twitter:description"]', 'content', metaDescription);
 }
 
 function parseNoticiaDateForSort(data) {
@@ -3239,7 +3295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="share-btn share-linkedin" onclick="partilharLinkedIn(${safeTitleJs}, ${safeIdJs})" title="LinkedIn">
           <i class="fab fa-linkedin-in"></i>
         </button>
-        <button class="share-btn share-copy" onclick="copiarLink(${safeIdJs})" title="Copiar Link">
+        <button class="share-btn share-copy" onclick="copiarLink(${safeIdJs}, this)" title="Copiar Link">
           <i class="fas fa-link"></i>
         </button>
       </div>
@@ -3342,8 +3398,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.currentArticleId = noticiaIdResolvido;
         incrementArticleReadCount(noticiaIdResolvido);
 
-        const canonicalArticleUrl = buildArticleUrlByData(noticia);
-        const articleUrl = new URL(canonicalArticleUrl, window.location.origin);
+        const readerArticleUrl = buildArticleUrlByData(noticia);
+        const articleUrl = new URL(readerArticleUrl, window.location.origin);
         const editParam = urlParams.get('edit');
         const host = (window.location.hostname || '').toLowerCase();
         const isPublicHost = host === 'www.viciadocomenta.pt' || host === 'viciadocomenta.pt';
@@ -3361,12 +3417,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        const canonicalEl = document.getElementById('canonicalLink');
-        if (canonicalEl) {
-          canonicalEl.href = new URL(canonicalArticleUrl, 'https://www.viciadocomenta.pt/').toString();
-        }
-
-        document.title = noticia.titulo + " - VICIADO COMENTA";
+        updateArticleSeoMeta(noticia);
         
         // Extrair ID do YouTube
         function extrairVideoId(url) {
@@ -3466,7 +3517,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <button class="share-btn share-linkedin" onclick="partilharLinkedIn('${noticia.titulo}', '${noticiaIdResolvido}')" title="LinkedIn">
                 <i class="fab fa-linkedin-in"></i>
               </button>
-              <button class="share-btn share-copy" onclick="copiarLink('${noticiaIdResolvido}')" title="Copiar Link">
+              <button class="share-btn share-copy" onclick="copiarLink('${noticiaIdResolvido}', this)" title="Copiar Link">
                 <i class="fas fa-link"></i>
               </button>
             </div>
@@ -3777,7 +3828,26 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
 // ========== FUNÇÕES DE PARTILHA SOCIAL ==========
 function getArticleURL(noticiaId) {
   const articlePath = buildArticleUrlById(noticiaId);
-  return new URL(articlePath, window.location.href).toString();
+  return new URL(articlePath, `${window.location.origin}/`).toString();
+}
+
+function showCopyFeedback(triggerEl) {
+  const shareBtn = triggerEl && typeof triggerEl.closest === 'function'
+    ? triggerEl.closest('.share-copy')
+    : null;
+
+  if (!shareBtn) {
+    return;
+  }
+
+  const textoOriginal = shareBtn.innerHTML;
+  shareBtn.innerHTML = '<i class="fas fa-check"></i>';
+  shareBtn.style.background = '#10b981';
+
+  setTimeout(() => {
+    shareBtn.innerHTML = textoOriginal;
+    shareBtn.style.background = '';
+  }, 2000);
 }
 
 function partilharFacebook(titulo, noticiaId) {
@@ -3812,40 +3882,36 @@ function partilharTelegram(titulo, noticiaId) {
   window.open(telegramURL, 'telegram-share', 'width=550,height=420');
 }
 
-function copiarLink(noticiaId) {
+function copiarLink(noticiaId, triggerEl) {
   const url = getArticleURL(noticiaId);
   
   // Usar Clipboard API
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).then(() => {
-      // Mostrar notificação de sucesso
-      const shareBtn = event.target.closest('.share-copy');
-      const textoOriginal = shareBtn.innerHTML;
-      shareBtn.innerHTML = '<i class="fas fa-check"></i>';
-      shareBtn.style.background = '#10b981';
-      
-      setTimeout(() => {
-        shareBtn.innerHTML = textoOriginal;
-        shareBtn.style.background = '';
-      }, 2000);
-    }).catch(err => {
+      showCopyFeedback(triggerEl);
+    }).catch(() => {
       // Fallback para navegadores antigos
-      fallbackCopyLink(url);
+      fallbackCopyLink(url, triggerEl);
     });
   } else {
     // Fallback para navegadores que não suportam Clipboard API
-    fallbackCopyLink(url);
+    fallbackCopyLink(url, triggerEl);
   }
 }
 
-function fallbackCopyLink(url) {
+function fallbackCopyLink(url, triggerEl) {
   const textarea = document.createElement('textarea');
   textarea.value = url;
   document.body.appendChild(textarea);
   textarea.select();
-  document.execCommand('copy');
+  const copied = document.execCommand('copy');
   document.body.removeChild(textarea);
-  
+
+  if (copied) {
+    showCopyFeedback(triggerEl);
+    return;
+  }
+
   alert('Link copiado para a área de transferência!');
 }
 
