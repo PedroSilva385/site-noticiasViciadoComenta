@@ -2330,7 +2330,7 @@ function buildArticleUrlById(noticiaId) {
   return `artigos.html?id=${encodeURIComponent(id)}`;
 }
 
-function buildArticleUrlByData(noticia) {
+function buildArticleReaderUrl(noticia) {
   if (!noticia || typeof noticia !== 'object') {
     return 'artigos.html';
   }
@@ -2339,17 +2339,27 @@ function buildArticleUrlByData(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
+  }
+
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  if (hasId) {
-    return `artigos.html?id=${encodeURIComponent(id)}`;
-  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   return 'artigos.html';
+}
+
+function buildArticleUrlByData(noticia) {
+  return buildArticleReaderUrl(noticia);
 }
 
 function parseNoticiaDateForSort(data) {
