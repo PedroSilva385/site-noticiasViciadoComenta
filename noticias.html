@@ -2024,14 +2024,6 @@ footer {
     </div>
   </article>
 
-  <aside class="author-bio-static" style="margin:24px 0 8px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-    <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
-      <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunicacoes e analiso, junto da comunidade, as novidades e mudancas deste setor.</p>
-    </div>
-  </aside>
-
   <section class="comentarios-section" id="comentariosSection" style="display: none;">
     <h3>💬 Comentários</h3>
     
@@ -2330,7 +2322,7 @@ function buildArticleUrlById(noticiaId) {
   return `noticias.html?id=${encodeURIComponent(id)}`;
 }
 
-function buildArticleUrlByData(noticia) {
+function buildArticleReaderUrl(noticia) {
   if (!noticia || typeof noticia !== 'object') {
     return 'noticias.html';
   }
@@ -2339,17 +2331,27 @@ function buildArticleUrlByData(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `noticias.html?${params.toString()}`;
+  }
+
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  if (hasId) {
-    return `noticias.html?id=${encodeURIComponent(id)}`;
-  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   return 'noticias.html';
+}
+
+function buildArticleUrlByData(noticia) {
+  return buildArticleReaderUrl(noticia);
 }
 
 function parseNoticiaDateForSort(data) {
@@ -3203,6 +3205,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('🔍 Identificador da URL:', identificadorArtigo);
 
+  function ensureStaticArticleActions(noticiaId) {
+    const article = document.getElementById('artigo');
+    if (!article || article.querySelector('.artigo-actions')) {
+      return;
+    }
+
+    const articleTitle = (article.querySelector('.artigo-titulo')?.textContent || document.title || 'Artigo').trim();
+    const safeTitleJs = JSON.stringify(articleTitle);
+    const safeIdJs = JSON.stringify(String(noticiaId || '').trim());
+    const actions = document.createElement('div');
+    actions.className = 'artigo-actions';
+    actions.innerHTML = `
+      <button class="artigo-like-btn" id="likeBtn" onclick="toggleLike(${safeIdJs})">
+        <i class="fas fa-heart"></i>
+        <span id="likeCount">0</span> Gosto
+      </button>
+
+      <div class="artigo-share">
+        <span class="artigo-share-label">📤 Partilhar:</span>
+        <button class="share-btn share-facebook" onclick="partilharFacebook(${safeTitleJs}, ${safeIdJs})" title="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </button>
+        <button class="share-btn share-twitter" onclick="partilharTwitter(${safeTitleJs}, ${safeIdJs})" title="Twitter">
+          <i class="fab fa-twitter"></i>
+        </button>
+        <button class="share-btn share-whatsapp" onclick="partilharWhatsApp(${safeTitleJs}, ${safeIdJs})" title="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </button>
+        <button class="share-btn share-telegram" onclick="partilharTelegram(${safeTitleJs}, ${safeIdJs})" title="Telegram">
+          <i class="fab fa-telegram"></i>
+        </button>
+        <button class="share-btn share-linkedin" onclick="partilharLinkedIn(${safeTitleJs}, ${safeIdJs})" title="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </button>
+        <button class="share-btn share-copy" onclick="copiarLink(${safeIdJs})" title="Copiar Link">
+          <i class="fas fa-link"></i>
+        </button>
+      </div>
+    `;
+
+    article.appendChild(actions);
+  }
+
   if (isStaticMirrorPage && hasPreRenderedStaticArticle) {
     const staticArticleId = String(
       noticiaId ||
@@ -3212,6 +3257,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (staticArticleId) {
       window.currentArticleId = staticArticleId;
+      ensureStaticArticleActions(staticArticleId);
 
       const comentariosSection = document.getElementById('comentariosSection');
       if (comentariosSection) {

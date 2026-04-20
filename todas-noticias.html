@@ -1120,14 +1120,22 @@ function buildArticleUrl(noticia) {
     return 'artigos.html';
   }
 
+  const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
+  const id = hasId ? encodeURIComponent(String(noticia.id).trim()) : '';
+  const slug = getArticleSlug(noticia);
+
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `noticias.html?${params.toString()}`;
+  }
+
   const canonicalLink = normalizeCanonicalArticleLink(noticia.link);
   if (canonicalLink) {
     return canonicalLink;
   }
-
-  const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
-  const id = hasId ? encodeURIComponent(String(noticia.id).trim()) : '';
-  const slug = getArticleSlug(noticia);
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
