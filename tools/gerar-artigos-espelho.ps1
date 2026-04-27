@@ -158,6 +158,12 @@ function Get-StaticArticleHtml {
     $wordCount  = [Math]::Max(1, (Strip-Html -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
     $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
     $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
+    $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudo", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
+    $sourcingNote = if ($hasSourcesInBody) {
+        'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+    } else {
+        'Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.'
+    }
 
     $videoSection = ''
     $videoId = Get-YouTubeId -Url $videoUrl
@@ -178,6 +184,16 @@ function Get-StaticArticleHtml {
                     </aside>
 "@
 
+    $trustBoxSection = @"
+
+                    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de $categoria do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">$sourcingNote</p>
+                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+                    </aside>
+"@
+
     return @"
           <div class="artigo-header">
             <span class="artigo-categoria">$categoria</span>
@@ -191,6 +207,7 @@ function Get-StaticArticleHtml {
           <div class="artigo-conteudo">
             <p><strong>$resumo</strong></p>
             <div id="artigoConteudoBody">$conteudo</div>
+                                                $trustBoxSection
                         $authorBioSection
           </div>
 "@

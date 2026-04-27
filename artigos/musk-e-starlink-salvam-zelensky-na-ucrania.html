@@ -2045,6 +2045,13 @@ footer {
           <div class="artigo-conteudo">
             <p><strong>Analisamos a rápida ação de Elon Musk e da Starlink, ao bloquear o acesso ao russos, não permitindo o uso pelos mesmos desta tecnologia!</strong></p>
             <div id="artigoConteudoBody">É certo e sabido que a guerra da Ucrânia está para durar. Após vários esforços no sentido da paz, ainda não foi possível aos dois países encontrar uma solução diplomática que ponha um ponto final no conflito.<br><br>Enquanto isso, no campo de batalha, luta-se com as armas que se têm. Com os avanços tecnológicos alcançados ao longo das últimas décadas, as guerras tornaram-se cada vez mais eletrónicas. Com isso, a introdução de sistemas cada vez mais dependentes da internet tornou a defesa das redes cada vez mais relevante num contexto militar.<br><br>Se há coisa que esta guerra veio colocar a nu foi a cada vez maior importância dos drones num conflito moderno. São baratos, transportam carga explosiva, têm capacidade de espionagem e alcances cada vez maiores.<br><br>Longe das frentes costumam estar os operadores de drones. Remotamente, operam os aparelhos rumo aos seus objetivos no campo de batalha, permitindo, assim, garantir sucessos no terreno sem baixas efetivas nessa progressão.<br><br>Com o avançar da guerra, ambos os lados foram desenvolvendo medidas “anti-drone”. Essas medidas podem ser bloqueios eletrónicos (que visam mitigar o sinal que permite controlar os aparelhos à distância) ou até barreiras físicas (que danifiquem os cabos de fibra ótica que permitem o controlo do aparelho por “cabo”).<br><br>Foi aqui que entrou uma novidade: drones com terminais Starlink.<br><br>Através da internet via satélite da empresa de Elon Musk, SpaceX, drones russos foram capazes de voar, fugindo aos bloqueios eletrónicos dos ucranianos, dando, assim, um poder de fogo mais resiliente aos militares de Moscovo.<br><br>Rapidamente, a Ucrânia ficou em alerta. Isto porque, apesar de não ser legal a venda de terminais Starlink para a Rússia (devido aos embargos), os militares russos podiam usá-los dentro do território ucraniano a seu favor.<br><br>Mykhailo Fedorov (ministro da Defesa ucraniano) contactou de imediato a SpaceX, no sentido de serem implementadas medidas que visassem o bloqueio desta tecnologia aos militares russos, protegendo, assim, a vida dos soldados ucranianos no campo de batalha.<br><br>Prontamente, a SpaceX implementou essas medidas, e foi o próprio Elon Musk, na sua rede social X, a informar que essas medidas já estavam a ter efeitos no sentido de bloquear o uso pelos russos, deixando aberta a via do diálogo para qualquer eventualidade futura.<br><br><strong>Terá, assim, Elon Musk salvo a pele a Zelensky nesta guerra tecnológica em que se tornaram os campos de batalha em 2026?</strong><br><br></div>
+                                                
+                    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de Telecom do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.</p>
+                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+                    </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -2250,6 +2257,23 @@ function buildArticleQualityBlocks(noticia) {
       </div>
     `
   };
+}
+
+function buildArticleTrustBox(noticia) {
+  const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
+  const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
+  const sourcingNote = hasSourcesInBody
+    ? 'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+    : 'Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.';
+
+  return `
+    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+      <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de ${categoria} do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">${sourcingNote}</p>
+      <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+    </aside>
+  `;
 }
 
 function getArticleIdentifierFromLocation() {
@@ -3484,6 +3508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
         const qualityBlocks = buildArticleQualityBlocks(noticia);
+        const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
             <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -3509,6 +3534,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
             <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${trustBoxHtml}
             ${authorBioHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">
