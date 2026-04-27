@@ -2045,6 +2045,13 @@ footer {
           <div class="artigo-conteudo">
             <p><strong>Avaliamos os resultados financeiros preliminares do grupo DIGI, referentes ao ano de 2025.</strong></p>
             <div id="artigoConteudoBody">Terminou o ano de 2025 e é tempo de fazer o balanço provisório da operação da DIGI. O ano que agora fica para trás fica marcado por uma fortíssima expansão por parte da operadora romena, que está a expandir-se em vários mercados em simultâneo.<br><br><strong>Espanha, Roménia, Portugal, Bélgica e Itália</strong> são os mercados onde a operadora low-cost está a desenvolver a sua operação. Como pode imaginar, algo desta dimensão custa dinheiro e, num setor de capital intensivo, pode ser uma tarefa muito complicada de equilibrar financeiramente.<br><br>Olhando para as contas globais, a DIGI anunciou <strong>receitas de 2,2 mil milhões de euros</strong>. No capítulo dos gastos, as <strong>despesas operacionais foram da ordem dos 1,7 mil milhões de euros</strong> e os <strong>custos com salários rondaram os 413 milhões de euros</strong>. Tudo isto leva a DIGI global a apresentar <strong>prejuízos de 33 milhões de euros</strong> na operação.<br><br><strong>Dito isto, é motivo para alarme?</strong><br><br>Enquanto operação global, a DIGI registou um <strong>aumento do volume de receitas de 292 milhões de euros</strong> face a 2024. Mas, como se costuma dizer, é preciso semear para colher os frutos mais à frente. A DIGI acelerou as <strong>despesas operacionais em 305 milhões de euros</strong> e reforçou o<strong> investimento no capital humano em 81 milhões de euros</strong>.<br><br>O aumento da receita não foi capaz de equilibrar as contas, mas a operação está longe de estar descontrolada. O caminho passa pelo investimento e por esperar que a operação no terreno comece a gerar receitas para consolidar o grupo.<br><br>Nesse capítulo, o grupo DIGI apresentou uma performance muito positiva. Com <strong>32,1 milhões de unidades geradoras de receita</strong> em 2025, a DIGI <strong>cresceu 15%</strong> face a 2024, o que representa um <strong>aumento de 4,3 milhões de serviços vendidos</strong>.<br><br>Para este valor global, pesou muito a operação espanhola, que cresceu 28% nesse capítulo, seguida da operação portuguesa, que cresceu 26%, da romena, com 9%, e da italiana, com 7%.<br><br>Este é o peso que vai equilibrar esta balança. A venda massiva de serviços é o segredo para atingir o verde nas contas do próximo ano. Ao contrário das operadoras 'tradicionais', que ajustam os preços dos serviços para equilibrar a sua operação, a DIGI aposta noutra estratégia: manter o preço mínimo e maximizar a quantidade de unidades geradoras de receita.<br><br><strong>Como correu a operação em Portugal?</strong><br><br>Sendo um dos mercados num estágio de maturidade mais reduzido, é natural que ainda não esteja positiva. Em valores globais, a operação em Portugal obteve <strong>receitas na ordem dos 70 milhões de euros</strong>, o que não foi suficiente para evitar o <strong>resultado negativo</strong>, que ficou registado em <strong>78,7 milhões de euros</strong> (EBITDA ajustado, excluindo o IFRS 16).<br><br>Ainda assim, a DIGI tem motivos para sorrir. Foram atingidas as 850 mil unidades geradoras de receita, o que compara com 676 mil em 2024. 2026 será um ano de consolidação. A DIGI já anunciou uma redução na expansão da rede de fibra em Portugal, não fechando a porta à expansão futura, mas parece ter chegado a hora de colher alguns frutos de todo este investimento feito em 2025.<br><br><strong>Veremos o comportamento do mercado das telecomunicações em 2026, tanto em Portugal como nos vários mercados onde a DIGI se encontra em franca expansão.</strong> </div>
+                                                
+                    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de DIGI do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.</p>
+                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+                    </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -2250,6 +2257,23 @@ function buildArticleQualityBlocks(noticia) {
       </div>
     `
   };
+}
+
+function buildArticleTrustBox(noticia) {
+  const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
+  const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
+  const sourcingNote = hasSourcesInBody
+    ? 'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+    : 'Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.';
+
+  return `
+    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+      <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de ${categoria} do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">${sourcingNote}</p>
+      <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+    </aside>
+  `;
 }
 
 function getArticleIdentifierFromLocation() {
@@ -3484,6 +3508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
         const qualityBlocks = buildArticleQualityBlocks(noticia);
+        const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
             <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -3509,6 +3534,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
             <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${trustBoxHtml}
             ${authorBioHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">

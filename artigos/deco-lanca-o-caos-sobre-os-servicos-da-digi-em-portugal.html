@@ -2060,6 +2060,13 @@ Como se costuma dizer, o caminho faz-se caminhando. A minha experiência pessoal
 A integração com a NOWO é outro dos dossiês complicados. No final de janeiro de 2026, a DIGI ainda está longe de conseguir absorver totalmente os clientes da NOWO, não por falta de interesse dos próprios, mas por limitações na capacidade de instalação de fibra em todas as localizações. Esta integração tem-se revelado igualmente complexa ao nível da faturação, originando erros que, tal como a DECO refere no seu comunicado, se arrastam no tempo até serem corrigidos.
 Posto isto, considero que grande parte do que é apontado pela DECO corresponde à realidade. No entanto, olhando apenas para o período mais recente, parece-me justo reconhecer que a DIGI já está a dar passos concretos no sentido de resolver muitos dos problemas que têm gerado receios e frustração entre os consumidores.
 E tu, acreditas que a DIGI vai conseguir atingir o seu melhor em breve?</div>
+                                                
+                    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de DIGI do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.</p>
+                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+                    </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -2265,6 +2272,23 @@ function buildArticleQualityBlocks(noticia) {
       </div>
     `
   };
+}
+
+function buildArticleTrustBox(noticia) {
+  const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
+  const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
+  const sourcingNote = hasSourcesInBody
+    ? 'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+    : 'Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.';
+
+  return `
+    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+      <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de ${categoria} do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">${sourcingNote}</p>
+      <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+    </aside>
+  `;
 }
 
 function getArticleIdentifierFromLocation() {
@@ -3499,6 +3523,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
         const qualityBlocks = buildArticleQualityBlocks(noticia);
+        const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
             <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -3524,6 +3549,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
             <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${trustBoxHtml}
             ${authorBioHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">

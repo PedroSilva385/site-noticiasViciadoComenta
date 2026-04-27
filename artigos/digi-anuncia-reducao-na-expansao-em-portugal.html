@@ -2045,6 +2045,13 @@ footer {
           <div class="artigo-conteudo">
             <p><strong>O anúncio da redução dos custos de investimento em PORTUGAL</strong></p>
             <div id="artigoConteudoBody">Recentemente tivemos oportunidade de olhar para o que foram as contas da DIGI e, em particular, para a operação em Portugal. Não sendo nada que faça soar os alarmes, a operação da DIGI encontra-se no vermelho. Depois de um ano de 2025 em que os investimentos em território nacional foram na ordem dos 120 milhões de euros, parece agora ter chegado o momento de abrandar.<br><br>Em resposta ao Jornal de Negócios, o CEO da DIGI, Serghei Bulgac, anunciou que terá chegado o momento de reduzir os custos.<br><br><strong>O que está em causa?</strong><br><br>A DIGI avançou, ao longo do ano de 2025, para as zonas cuja densidade populacional é maior, tendo feito um grande esforço para estar presente na maioria dessas áreas. Como já tive oportunidade de referir ao longo dos vídeos, na minha área de residência a DIGI apostou fortemente nas zonas onde existem edifícios de maior dimensão, precisamente para garantir um potencial retorno do investimento mais acelerado.<br><br>Zonas de menor densidade, mesmo sendo zonas 'NOWO' e cuja proximidade geográfica é pequena, ficaram para trás e não têm, ainda hoje, cobertura. 2026 parece ser o ano em que não vão existir muitas mudanças. Uma redução no investimento na expansão da rede será o caminho para procurar alguma consolidação das contas e garantir a estabilização da operação a curto prazo. Esta será certamente uma péssima notícia para aqueles que anseiam a chegada da operadora romena às suas moradas.<br><br>A DIGI chegará a todo o país?<br><br><strong>Não.</strong><br><br>Ao longo dos últimos anos temos acompanhado a expansão, sobretudo das redes de fibra ótica pelo país, por parte das três grandes operadoras. Algo que fica claro é que mesmo para essas empresas, que se encontram numa situação de maturidade muito maior no mercado, não se chega a 100% das localidades. Existem zonas cuja viabilidade do investimento é tão baixa que nem chegam a ter cobertura para além do ADSL. Outras zonas são exploradas por empresas de fibra 'neutra', que depois alugam as suas infraestruturas aos operadores que passam a fornecer os seus serviços nessas localidades.<br><br>Diria que a DIGI ainda terá uma fatia muito substancial de regiões que pretende cobrir. Outras deverão ficar de fora, uma vez que os baixos preços dos serviços comercializados não permitem grandes aventuras com contratos de aluguer de infraestruturas a outras empresas.<br><br>Em suma, a DIGI vai agora fazer os seus 15 minutos de intervalo e esperar que a operação cresça em RGU’s ao longo de 2026, ganhando assim um novo fôlego para o segundo tempo. </div>
+                                                
+                    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de DIGI do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.</p>
+                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+                    </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -2250,6 +2257,23 @@ function buildArticleQualityBlocks(noticia) {
       </div>
     `
   };
+}
+
+function buildArticleTrustBox(noticia) {
+  const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
+  const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
+  const sourcingNote = hasSourcesInBody
+    ? 'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+    : 'Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.';
+
+  return `
+    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
+      <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de ${categoria} do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">${sourcingNote}</p>
+      <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+    </aside>
+  `;
 }
 
 function getArticleIdentifierFromLocation() {
@@ -3484,6 +3508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
         const qualityBlocks = buildArticleQualityBlocks(noticia);
+        const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
             <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
@@ -3509,6 +3534,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="artigo-conteudo">
             <p><strong>${noticia.resumo}</strong></p>
             <div id="artigoConteudoBody">${conteudoHTML}</div>
+            ${trustBoxHtml}
             ${authorBioHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">
