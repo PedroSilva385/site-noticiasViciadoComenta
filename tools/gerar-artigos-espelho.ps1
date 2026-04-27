@@ -97,6 +97,7 @@ function Get-RedirectHtml {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$safeTitle - VICIADO COMENTA</title>
+<meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="$safeTarget">
 <meta http-equiv="refresh" content="0; url=$safeTarget">
 <script>
@@ -156,6 +157,7 @@ function Get-StaticArticleHtml {
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
     $wordCount  = [Math]::Max(1, (Strip-Html -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
+    $shouldNoIndexThinArticle = $wordCount -lt 400
     $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
     $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
     $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudo", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
@@ -292,6 +294,8 @@ foreach ($noticia in $noticias) {
 
     $rawTitle = [string]$noticia.titulo
     $metaDescription = Get-MetaDescription -Noticia $noticia
+    $articleWordCount = [Math]::Max(1, (Strip-Html -Text (([string]$noticia.resumo) + ' ' + ([string]$noticia.conteudo))).Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
+    $shouldNoIndexThinArticle = $articleWordCount -lt 400
     $effectivePublishedDate = if ($publishDate) {
         $publishDate
     } else {
@@ -344,6 +348,12 @@ foreach ($noticia in $noticias) {
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
 
+    $robotsContent = if ($shouldNoIndexThinArticle) {
+        'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    } else {
+        'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    }
+
     $seoMeta = @"
 <meta name="description" content="$safeDescription">
 <meta property="og:type" content="article">
@@ -364,7 +374,7 @@ foreach ($noticia in $noticias) {
     $content = [regex]::Replace(
         $content,
         '<meta name="robots" content="[^"]*">',
-        '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">',
+        ('<meta name="robots" content="' + $robotsContent + '">'),
         1
     )
 
@@ -451,7 +461,7 @@ foreach ($noticia in $noticias) {
         }
     }
 
-    if ($isPublished) {
+    if ($isPublished -and -not $shouldNoIndexThinArticle) {
         $generatedArticles += [pscustomobject]@{
             slug = $slug
             lastmod = $sitemapLastMod
@@ -462,13 +472,9 @@ foreach ($noticia in $noticias) {
 $baseUrls = @(
     'https://www.viciadocomenta.pt/',
     'https://www.viciadocomenta.pt/todas-noticias.html',
-    'https://www.viciadocomenta.pt/viciado-comenta.html',
-    'https://www.viciadocomenta.pt/viciado-ponto-critico.html',
-    'https://www.viciadocomenta.pt/metin2.html',
-    'https://www.viciadocomenta.pt/livestreams.html',
-    'https://www.viciadocomenta.pt/videos.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
-    'https://www.viciadocomenta.pt/politica-privacidade.html'
+    'https://www.viciadocomenta.pt/politica-privacidade.html',
+    'https://www.viciadocomenta.pt/termos-servico.html'
 )
 
 $sitemapLines = @('<?xml version="1.0" encoding="UTF-8"?>')
