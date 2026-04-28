@@ -67,7 +67,8 @@ $invokeDeploy = {
         $proc = Start-Process -FilePath "powershell" -ArgumentList @(
             "-NoProfile",
             "-ExecutionPolicy", "Bypass",
-            "-File", $sharedState.deployScript
+            "-File", $sharedState.deployScript,
+            "-SkipFirebaseSync"
         ) -NoNewWindow -Wait -PassThru
 
         if ($proc.ExitCode -eq 0) {

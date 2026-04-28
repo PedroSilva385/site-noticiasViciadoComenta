@@ -1,6 +1,10 @@
 # Script de Deploy - VICIADO COMENTA
 # Automatiza geracao de /artigos + sitemap e publica alteracoes no GitHub.
 
+param(
+    [switch]$SkipFirebaseSync
+)
+
 $ErrorActionPreference = 'Stop'
 
 function Convert-FileToLf {
@@ -19,9 +23,11 @@ function Convert-FileToLf {
 
 Write-Host "Iniciando deploy..." -ForegroundColor Cyan
 
-# 1) Sincronizar noticias locais com a fonte real no Firebase
+# 1) Sincronizar noticias locais com a fonte real no Firebase (opcional)
 $syncScript = "tools/sync-noticias-firebase.ps1"
-if (Test-Path $syncScript) {
+if ($SkipFirebaseSync) {
+    Write-Host "`nSincronizacao a partir do Firebase ignorada para preservar alteracoes locais." -ForegroundColor Yellow
+} elseif (Test-Path $syncScript) {
     Write-Host "`nA sincronizar noticias locais a partir do Firebase..." -ForegroundColor Yellow
     & powershell -ExecutionPolicy Bypass -File $syncScript
     Write-Host "Snapshot local de noticias atualizado." -ForegroundColor Green
