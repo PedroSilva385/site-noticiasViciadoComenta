@@ -425,6 +425,97 @@ function scheduleDeferredFirebaseWork(callback) {
   window.addEventListener('load', runCallback, { once: true });
 }
 
+let trustBoxPlacementQueued = false;
+
+function isArticleLikePage() {
+  const path = (window.location.pathname || '').toLowerCase();
+  return path.includes('/artigos/') || path.endsWith('/artigos.html') || path.endsWith('/noticias.html');
+}
+
+function placeEditorialTrustBoxAtPageEnd() {
+  if (!isArticleLikePage()) {
+    return false;
+  }
+
+  const main = document.querySelector('main');
+  if (!main) {
+    return false;
+  }
+
+  const trustBox = main.querySelector('.article-trust-box');
+  if (!trustBox) {
+    return false;
+  }
+
+  const commentsSection = document.getElementById('comentariosSection');
+  let mount = document.getElementById('articleTrustBoxMount');
+
+  if (!mount) {
+    mount = document.createElement('div');
+    mount.id = 'articleTrustBoxMount';
+  }
+
+  if (mount.parentElement !== main) {
+    if (commentsSection && commentsSection.parentElement === main) {
+      main.insertBefore(mount, commentsSection.nextSibling);
+    } else {
+      main.appendChild(mount);
+    }
+  } else if (commentsSection && mount.previousElementSibling !== commentsSection) {
+    main.insertBefore(mount, commentsSection.nextSibling);
+  } else if (!commentsSection && main.lastElementChild !== mount) {
+    main.appendChild(mount);
+  }
+
+  if (trustBox.parentElement === mount && mount.firstElementChild === trustBox && mount.childElementCount === 1) {
+    return true;
+  }
+
+  mount.replaceChildren(trustBox);
+  return true;
+}
+
+function queueEditorialTrustBoxPlacement() {
+  if (trustBoxPlacementQueued) {
+    return;
+  }
+
+  trustBoxPlacementQueued = true;
+  window.requestAnimationFrame(() => {
+    trustBoxPlacementQueued = false;
+    placeEditorialTrustBoxAtPageEnd();
+  });
+}
+
+function setupEditorialTrustBoxPlacement() {
+  if (!isArticleLikePage()) {
+    return;
+  }
+
+  const startObserver = () => {
+    const main = document.querySelector('main');
+    if (!main) {
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      queueEditorialTrustBoxPlacement();
+    });
+
+    observer.observe(main, { childList: true, subtree: true });
+    queueEditorialTrustBoxPlacement();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startObserver, { once: true });
+  } else {
+    startObserver();
+  }
+
+  window.addEventListener('hashchange', queueEditorialTrustBoxPlacement);
+  window.addEventListener('popstate', queueEditorialTrustBoxPlacement);
+}
+
 function initializeDeferredFirebaseWork() {
   if (deferredFirebaseWorkStarted) {
     return;
@@ -520,5 +611,6 @@ function initializeFirebaseApp() {
 
 // Iniciar processo de inicialização
 initializeFirebaseApp();
+setupEditorialTrustBoxPlacement();
 
 window.ensureFirebaseInitialized = ensureFirebaseInitialized;
