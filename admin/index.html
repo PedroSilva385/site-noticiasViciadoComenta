@@ -1218,6 +1218,7 @@ function applySignedOutUiState() {
 let currentUser = null;
 let allNoticias = [];
 let selectedNoticiaId = null;
+let localStudioBaseUrl = '';
 
 // ===== DOM ELEMENTS =====
 const authScreen = document.getElementById('authScreen');
@@ -1245,6 +1246,65 @@ const editorPanel = document.getElementById('editorPanel');
 function isLocalSetupHost() {
   const hostname = (window.location.hostname || '').toLowerCase();
   return window.location.protocol === 'file:' || hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+function isLocalStudioSession() {
+  return !!(currentUser && currentUser.isLocalStudio);
+}
+
+function applyAuthenticatedUiState(user) {
+  currentUser = user;
+  userEmail.textContent = (user && user.email) ? user.email : 'Modo local';
+  authScreen.style.display = 'none';
+  dashboard.classList.add('active');
+  setAdminView('noticias');
+  loadNoticias();
+  setTimeout(() => {
+    updateQualityHints();
+    updatePreviewContent();
+  }, 50);
+}
+
+async function resolveLocalStudioBaseUrl() {
+  if (localStudioBaseUrl) {
+    return localStudioBaseUrl;
+  }
+
+  const candidates = ['http://localhost:8787', 'http://localhost:8788'];
+  for (const baseUrl of candidates) {
+    try {
+      const response = await fetch(`${baseUrl}/api/noticias`, { method: 'GET' });
+      if (response.ok) {
+        localStudioBaseUrl = baseUrl;
+        return localStudioBaseUrl;
+      }
+    } catch (_) {}
+  }
+
+  throw new Error('Noticias Studio local indisponível. Inicie o servidor local antes de usar o modo local.');
+}
+
+async function fetchLocalStudio(path, options = {}) {
+  const baseUrl = await resolveLocalStudioBaseUrl();
+  return fetch(`${baseUrl}${path}`, options);
+}
+
+async function tryEnterLocalStudioMode(email) {
+  if (!isLocalStudioHost()) {
+    return false;
+  }
+
+  await resolveLocalStudioBaseUrl();
+  stopAuthKeepAlive();
+  applyAuthenticatedUiState({
+    email: email || 'Modo local',
+    isLocalStudio: true,
+    async getIdToken() {
+      return '';
+    }
+  });
+  showStatus('Modo local ativo. As alterações serão guardadas via Noticias Studio local.', 'success');
+  return true;
 }
 
 if (registerCta && !isLocalSetupHost()) {
@@ -1628,7 +1688,7 @@ async function publishSiteManually() {
     );
 
     if (isLocalStudioHost()) {
-      const response = await fetch('/api/publish', {
+      const response = await fetchLocalStudio('/api/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -1684,7 +1744,7 @@ async function uploadImageViaLocalServer(file) {
   }
 
   const dataUrl = await readFileAsDataUrl(file);
-  const response = await fetch('/api/images/upload', {
+  const response = await fetchLocalStudio('/api/images/upload', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -2196,6 +2256,14 @@ function getCategoriaValue() {
 }
 
 // ===== AUTH FUNCTIONS =====
+function isBlockedRefererAuthError(error) {
+  const code = String(error && error.code ? error.code : '').toLowerCase();
+  const message = String(error && error.message ? error.message : '').toLowerCase();
+  return code === 'auth/app-not-authorized'
+    || message.includes('requests-from-referer-')
+    || message.includes('are-blocked');
+}
+
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = authEmail.value.trim();
@@ -2223,7 +2291,21 @@ authForm.addEventListener('submit', async (e) => {
     console.error('Erro de autenticação Firebase:', error);
     let msg = 'Erro ao entrar';
 
-    if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') {
+    if (isBlockedRefererAuthError(error)) {
+      try {
+        const enteredLocalMode = await tryEnterLocalStudioMode(email);
+        if (enteredLocalMode) {
+          return;
+        }
+      } catch (localModeError) {
+        console.warn('Falha ao ativar modo local:', localModeError);
+        msg = localModeError.message || 'Não foi possível ativar o modo local.';
+      }
+
+      if (msg === 'Erro ao entrar') {
+        msg = 'Este endereço local está bloqueado no Firebase. Autorize 127.0.0.1/localhost nas restrições da API ou use o domínio publicado do site.';
+      }
+    } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') {
       msg = 'Email ou senha inválidos';
     } else if (error.code === 'auth/user-not-found') {
       msg = 'Email não encontrado';
@@ -2256,6 +2338,10 @@ btnLogout.addEventListener('click', () => {
   if (isDirty && !confirm('Existem alterações por guardar. Sair sem guardar?')) {
     return;
   }
+  if (isLocalStudioSession()) {
+    applySignedOutUiState();
+    return;
+  }
   auth.signOut().then(() => {
     currentUser = null;
   });
@@ -2264,21 +2350,12 @@ btnLogout.addEventListener('click', () => {
 // Check auth state
 auth.onAuthStateChanged((user) => {
   if (user) {
-    currentUser = user;
     try {
       localStorage.setItem(AUTH_LAST_EMAIL_KEY, user.email || authEmail.value || '');
     } catch (_) {}
-    userEmail.textContent = user.email;
-    authScreen.style.display = 'none';
-    dashboard.classList.add('active');
-    setAdminView('noticias');
     startAuthKeepAlive();
-    loadNoticias();
-    setTimeout(() => {
-      updateQualityHints();
-      updatePreviewContent();
-    }, 50);
-  } else {
+    applyAuthenticatedUiState(user);
+  } else if (!isLocalStudioSession()) {
     applySignedOutUiState();
   }
 });
@@ -2331,13 +2408,26 @@ function deduplicateNoticiasList(noticias) {
 
 async function loadNoticias() {
   try {
-    // Tentar carregar do Firebase
-    const snapshot = await db.ref('noticias').once('value');
-    const data = snapshot.val();
-    
-    if (data) {
-      // Firebase Realtime Database
-      allNoticias = Array.isArray(data) ? data : Object.values(data);
+    if (isLocalStudioSession()) {
+      const response = await fetchLocalStudio('/api/noticias', { method: 'GET' });
+      const payload = await response.json();
+
+      if (!response.ok || !payload || !payload.ok) {
+        throw new Error((payload && payload.error) ? payload.error : `Local studio HTTP ${response.status}`);
+      }
+
+      allNoticias = payload.data && Array.isArray(payload.data.noticias)
+        ? payload.data.noticias
+        : [];
+    } else {
+      // Tentar carregar do Firebase
+      const snapshot = await db.ref('noticias').once('value');
+      const data = snapshot.val();
+      
+      if (data) {
+        // Firebase Realtime Database
+        allNoticias = Array.isArray(data) ? data : Object.values(data);
+      }
     }
 
     allNoticias = deduplicateNoticiasList(allNoticias);
@@ -2519,6 +2609,27 @@ function buildNoticiasWritePayloadVariants(payload) {
 }
 
 async function saveNoticiasWithAuthRetry(payload) {
+  if (isLocalStudioSession()) {
+    const response = await fetchLocalStudio('/api/noticias/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ noticias: payload })
+    });
+
+    let localPayload = null;
+    try {
+      localPayload = await response.json();
+    } catch (_) {
+      localPayload = null;
+    }
+
+    if (!response.ok || !localPayload || localPayload.ok === false) {
+      throw new Error((localPayload && localPayload.error) ? localPayload.error : `Local save falhou (${response.status})`);
+    }
+
+    return;
+  }
+
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const resolveActiveUser = async () => {
     if (auth.currentUser) return auth.currentUser;
@@ -2666,17 +2777,17 @@ async function saveNoticia() {
       if (idx >= 0) allNoticias[idx] = noticiaObj;
     }
 
-    // Guardar no Firebase (com retry após renovação de token, se necessário)
+    // Guardar no Firebase ou no Noticias Studio local, conforme o modo ativo.
     await saveNoticiasWithAuthRetry(allNoticias);
-    console.log('✅ Notícia guardada no Firebase com sucesso!');
+    console.log(isLocalStudioSession() ? '✅ Notícia guardada localmente com sucesso!' : '✅ Notícia guardada no Firebase com sucesso!');
     
     // Sincronização local só em localhost (evita erro 405 em produção estática).
     const host = String(window.location.hostname || '').toLowerCase();
     const isLocalHost = host === 'localhost' || host === '127.0.0.1';
 
-    if (isLocalHost) {
+    if (isLocalHost && !isLocalStudioSession()) {
       try {
-        const localSyncResponse = await fetch('/api/noticias/save', {
+        const localSyncResponse = await fetchLocalStudio('/api/noticias/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ noticias: allNoticias })
@@ -2701,6 +2812,9 @@ async function saveNoticia() {
     }
 
     let successMessage = isNew ? 'Notícia criada com sucesso!' : 'Notícia atualizada com sucesso!';
+    if (isLocalStudioSession()) {
+      successMessage += ' Modo local ativo.';
+    }
     if (!isLocalHost) {
       successMessage += ' Rebuild remoto pedido ao GitHub Actions.';
     }
