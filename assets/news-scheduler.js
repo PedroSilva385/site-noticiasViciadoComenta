@@ -234,6 +234,26 @@ async function lerNoticiasDoFirebase() {
   };
 }
 
+async function lerNoticiasDoJsonLocal() {
+  const jsonUrl = new URL('data/noticias.json', `${window.location.origin}/`);
+  const response = await fetch(jsonUrl.toString(), {
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Falha ao carregar noticias.json local (${response.status}).`);
+  }
+
+  return response.json();
+}
+
+function isLocalNoticiasPreviewHost() {
+  if (typeof window === 'undefined' || !window.location) return false;
+
+  const host = String(window.location.hostname || '').toLowerCase();
+  return host === '127.0.0.1' || host === 'localhost';
+}
+
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
  * Usa Firebase como fonte principal e recorre ao cache local apenas se necessário.
@@ -242,6 +262,21 @@ async function lerNoticiasDoFirebase() {
  */
 async function fetchNoticiasAgendadas(url) {
   let lastError = null;
+
+  if (isLocalNoticiasPreviewHost()) {
+    try {
+      const localJsonData = await lerNoticiasDoJsonLocal();
+      const normalizedLocalJsonData = normalizeNoticiasResponse(localJsonData);
+
+      if (normalizedLocalJsonData.noticias.length > 0) {
+        writeNoticiasCache(localJsonData.noticias);
+      }
+
+      return normalizedLocalJsonData;
+    } catch (error) {
+      lastError = error;
+    }
+  }
 
   try {
     await garantirAcessoNoticiasFirebase();
@@ -255,6 +290,21 @@ async function fetchNoticiasAgendadas(url) {
     return normalizedFirebaseData;
   } catch (error) {
     lastError = error;
+  }
+
+  if (!isLocalNoticiasPreviewHost()) {
+    try {
+      const localJsonData = await lerNoticiasDoJsonLocal();
+      const normalizedLocalJsonData = normalizeNoticiasResponse(localJsonData);
+
+      if (normalizedLocalJsonData.noticias.length > 0) {
+        writeNoticiasCache(localJsonData.noticias);
+      }
+
+      return normalizedLocalJsonData;
+    } catch (error) {
+      lastError = error;
+    }
   }
 
   const cachedData = readNoticiasCache();

@@ -71,6 +71,18 @@ Se entrar com sucesso, está pronto! 🎉
 ### "Erro: auth/operation-not-allowed no register.html"
 → Mesma causa anterior. Ative em Sign-in method
 
+### "Erro ao entrar" em localhost ou 127.0.0.1
+→ Se a consola mostrar `auth/requests-from-referer-...-are-blocked`, o problema não é a password.
+
+→ O Firebase/Google Cloud está a bloquear pedidos vindos de `http://127.0.0.1:*` ou `http://localhost:*`.
+
+→ Corrija em Google Cloud Console, nas restrições da chave Web/API usada pelo Firebase, autorizando estes referrers locais:
+
+1. `http://localhost/*`
+2. `http://127.0.0.1/*`
+
+→ Em alternativa, entre pelo domínio publicado do site em vez do servidor local.
+
 ---
 
 ## 🔒 Segurança Avançada (Opcional)
