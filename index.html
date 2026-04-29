@@ -2469,7 +2469,11 @@ fetchNoticiasAgendadas("data/noticias.json")
         if (slug) {
           params.set('slug', slug);
         }
-        return `noticias.html?${params.toString()}`;
+        const canonicalLink = normalizeCanonicalArticleLink(noticia && noticia.link);
+        if (canonicalLink) {
+          return canonicalLink;
+        }
+        return `artigos/${encodeURIComponent(slug)}.html`;
       }
 
       const canonicalLink = normalizeCanonicalArticleLink(noticia && noticia.link);
@@ -2480,7 +2484,7 @@ fetchNoticiasAgendadas("data/noticias.json")
       if (slug) {
         return `artigos/${encodeURIComponent(slug)}.html`;
       }
-      return id ? `artigos.html?id=${id}` : 'artigos.html';
+      return id ? `artigos/${id}.html` : 'artigos.html';
     };
 
     class ArticleReadTracker {

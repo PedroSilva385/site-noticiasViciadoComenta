@@ -2059,10 +2059,10 @@ Fontes consultadas: página oficial/campanha do projeto, vídeos de gameplay de 
 E tu, preferes esperar por versão mais madura ou experimentar já em acesso antecipado?</div>
                                                 
                     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
-                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">TransparÃªncia editorial</p>
-                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>ConteÃºdo original e assinado.</strong> Este artigo integra a cobertura editorial de Gaming do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparencia editorial</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de Gaming do VICIADO COMENTA e foi publicado com autoria identificada.</p>
                         <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.</p>
-                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorreÃ§Ã£o factual, envia um pedido de correÃ§Ã£o para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
@@ -2382,10 +2382,9 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    const params = new URLSearchParams({ id, slug });
-    return `noticias.html?${params.toString()}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  return `noticias.html?id=${encodeURIComponent(id)}`;
+  return `artigos/${encodeURIComponent(id)}.html`;
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2397,20 +2396,16 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
-  if (hasId) {
-    const params = new URLSearchParams({ id });
-    if (slug) {
-      params.set('slug', slug);
-    }
-    return `noticias.html?${params.toString()}`;
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
 
-  if (typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
+  if (hasId) {
+    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'noticias.html';
@@ -2541,10 +2536,7 @@ function getRelatedCardMedia(item) {
 
 function buildRelatedArticleNavigationUrl(item) {
   if (item && typeof item === 'object') {
-    const hasId = typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '';
-    if (hasId) {
-      return `noticias.html?id=${encodeURIComponent(String(item.id).trim())}`;
-    }
+    return getCanonicalArticleUrlByData(item);
   }
   return buildArticleUrlByData(item);
 }

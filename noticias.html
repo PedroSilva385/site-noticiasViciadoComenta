@@ -2334,10 +2334,9 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    const params = new URLSearchParams({ id, slug });
-    return `noticias.html?${params.toString()}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  return `noticias.html?id=${encodeURIComponent(id)}`;
+  return `artigos/${encodeURIComponent(id)}.html`;
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2349,20 +2348,16 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
-  if (hasId) {
-    const params = new URLSearchParams({ id });
-    if (slug) {
-      params.set('slug', slug);
-    }
-    return `noticias.html?${params.toString()}`;
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
 
-  if (typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
+  if (hasId) {
+    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'noticias.html';
@@ -2493,10 +2488,7 @@ function getRelatedCardMedia(item) {
 
 function buildRelatedArticleNavigationUrl(item) {
   if (item && typeof item === 'object') {
-    const hasId = typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '';
-    if (hasId) {
-      return `noticias.html?id=${encodeURIComponent(String(item.id).trim())}`;
-    }
+    return getCanonicalArticleUrlByData(item);
   }
   return buildArticleUrlByData(item);
 }
