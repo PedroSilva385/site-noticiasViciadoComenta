@@ -56,6 +56,14 @@ function shouldSkipAnalyticsTracking() {
   return localStorage.getItem(ANALYTICS_CONFIG.optOutStorageKey) === '1';
 }
 
+function isFirebasePermissionDenied(error) {
+  if (!error) return false;
+
+  const code = String(error.code || '').toLowerCase();
+  const message = String(error.message || '').toLowerCase();
+  return code.includes('permission_denied') || message.includes('permission_denied');
+}
+
 function sanitizeFirebaseKey(rawValue) {
   if (!rawValue) return 'unknown';
   return String(rawValue)
@@ -542,6 +550,11 @@ function initializeDeferredFirebaseWork() {
             }
           })
           .catch((error) => {
+            if (isFirebasePermissionDenied(error)) {
+              console.info('ℹ️ Métricas de visita indisponíveis neste ambiente Firebase');
+              return;
+            }
+
             console.error('❌ Erro ao registar métricas de visita:', error);
           });
 
@@ -557,9 +570,15 @@ function initializeDeferredFirebaseWork() {
     activeUserRef.set({
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       page: window.location.pathname
+    }).catch((error) => {
+      if (!isFirebasePermissionDenied(error)) {
+        console.error('❌ Erro ao registar utilizador ativo:', error);
+      }
     });
-    activeUserRef.onDisconnect().remove();
-    window.addEventListener('beforeunload', () => activeUserRef.remove());
+    activeUserRef.onDisconnect().remove().catch(() => {});
+    window.addEventListener('beforeunload', () => {
+      activeUserRef.remove().catch(() => {});
+    });
 
     const sessionKey = 'vc_active_session_id';
     let sessionId = sessionStorage.getItem(sessionKey);
@@ -573,7 +592,11 @@ function initializeDeferredFirebaseWork() {
       sessionId,
       page: window.location.pathname,
       timestamp: firebase.database.ServerValue.TIMESTAMP
-    }).catch((err) => console.error('❌ Erro no histórico de visitas:', err));
+    }).catch((err) => {
+      if (!isFirebasePermissionDenied(err)) {
+        console.error('❌ Erro no histórico de visitas:', err);
+      }
+    });
 
     console.log('✓ Analytics configurado');
   } catch (analyticsError) {
@@ -614,3 +637,4 @@ initializeFirebaseApp();
 setupEditorialTrustBoxPlacement();
 
 window.ensureFirebaseInitialized = ensureFirebaseInitialized;
+window.isFirebasePermissionDenied = isFirebasePermissionDenied;
