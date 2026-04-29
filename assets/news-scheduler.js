@@ -256,26 +256,24 @@ function isLocalNoticiasPreviewHost() {
 
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
- * Usa Firebase como fonte principal e recorre ao cache local apenas se necessário.
+ * Usa data/noticias.json como fonte canonica e recorre ao Firebase apenas como fallback.
  * @param {string} url - Ignorado (mantido por compatibilidade)
  * @returns {Promise} - Promise com as notícias filtradas e ordenadas
  */
 async function fetchNoticiasAgendadas(url) {
   let lastError = null;
 
-  if (isLocalNoticiasPreviewHost()) {
-    try {
-      const localJsonData = await lerNoticiasDoJsonLocal();
-      const normalizedLocalJsonData = normalizeNoticiasResponse(localJsonData);
+  try {
+    const localJsonData = await lerNoticiasDoJsonLocal();
+    const normalizedLocalJsonData = normalizeNoticiasResponse(localJsonData);
 
-      if (normalizedLocalJsonData.noticias.length > 0) {
-        writeNoticiasCache(localJsonData.noticias);
-      }
-
-      return normalizedLocalJsonData;
-    } catch (error) {
-      lastError = error;
+    if (normalizedLocalJsonData.noticias.length > 0) {
+      writeNoticiasCache(localJsonData.noticias);
     }
+
+    return normalizedLocalJsonData;
+  } catch (error) {
+    lastError = error;
   }
 
   try {
@@ -290,21 +288,6 @@ async function fetchNoticiasAgendadas(url) {
     return normalizedFirebaseData;
   } catch (error) {
     lastError = error;
-  }
-
-  if (!isLocalNoticiasPreviewHost()) {
-    try {
-      const localJsonData = await lerNoticiasDoJsonLocal();
-      const normalizedLocalJsonData = normalizeNoticiasResponse(localJsonData);
-
-      if (normalizedLocalJsonData.noticias.length > 0) {
-        writeNoticiasCache(localJsonData.noticias);
-      }
-
-      return normalizedLocalJsonData;
-    } catch (error) {
-      lastError = error;
-    }
   }
 
   const cachedData = readNoticiasCache();
