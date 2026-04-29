@@ -2870,6 +2870,10 @@ fetchNoticiasAgendadas("data/noticias.json")
         const snapshot = await firebase.database().ref('article_reads').once('value');
         return snapshot.val() || {};
       } catch (error) {
+        if (typeof window.isFirebasePermissionDenied === 'function' && window.isFirebasePermissionDenied(error)) {
+          return {};
+        }
+
         console.warn('Nao foi possivel carregar contagem de leituras:', error);
         return {};
       }

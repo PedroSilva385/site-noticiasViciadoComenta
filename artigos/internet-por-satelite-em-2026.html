@@ -3882,6 +3882,10 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
     (currentValue) => (Number(currentValue) || 0) + 1,
     (error, committed) => {
       if (error) {
+        if (typeof window.isFirebasePermissionDenied === 'function' && window.isFirebasePermissionDenied(error)) {
+          return;
+        }
+
         console.error('Erro ao atualizar leitura do artigo:', error);
         return;
       }
