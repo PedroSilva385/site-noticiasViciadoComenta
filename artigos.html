@@ -25,7 +25,7 @@
 
 <!-- Markdown Parser -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-<script src="assets/news-scheduler.js?v=20260428" defer></script>
+<script src="assets/news-scheduler.js?v=20260430" defer></script>
 <script src="assets/new-article-notification.js?v=20260301" defer></script>
 <script src="assets/push-notifications.js?v=20260301" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
@@ -2342,10 +2342,9 @@ function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
   if (slug) {
-    const params = new URLSearchParams({ id, slug });
-    return `artigos.html?${params.toString()}`;
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
-  return `artigos.html?id=${encodeURIComponent(id)}`;
+  return `artigos/${encodeURIComponent(id)}.html`;
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2357,20 +2356,16 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
-  if (hasId) {
-    const params = new URLSearchParams({ id });
-    if (slug) {
-      params.set('slug', slug);
-    }
-    return `artigos.html?${params.toString()}`;
+  if (typeof noticia.link === 'string' && noticia.link.trim()) {
+    return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
 
-  if (typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
+  if (hasId) {
+    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'artigos.html';
@@ -2501,10 +2496,7 @@ function getRelatedCardMedia(item) {
 
 function buildRelatedArticleNavigationUrl(item) {
   if (item && typeof item === 'object') {
-    const hasId = typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '';
-    if (hasId) {
-      return `artigos.html?id=${encodeURIComponent(String(item.id).trim())}`;
-    }
+    return getCanonicalArticleUrlByData(item);
   }
   return buildArticleUrlByData(item);
 }

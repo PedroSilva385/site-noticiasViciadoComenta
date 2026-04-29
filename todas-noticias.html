@@ -1151,7 +1151,11 @@ function buildArticleUrl(noticia) {
     if (slug) {
       params.set('slug', slug);
     }
-    return `noticias.html?${params.toString()}`;
+    const canonicalLink = normalizeCanonicalArticleLink(noticia.link);
+    if (canonicalLink) {
+      return canonicalLink;
+    }
+    return `artigos/${encodeURIComponent(slug)}.html`;
   }
 
   const canonicalLink = normalizeCanonicalArticleLink(noticia.link);
@@ -1163,7 +1167,7 @@ function buildArticleUrl(noticia) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
   if (hasId) {
-    return `artigos.html?id=${id}`;
+    return `artigos/${id}.html`;
   }
   return 'artigos.html';
 }
