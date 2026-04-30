@@ -247,6 +247,13 @@ async function lerNoticiasDoJsonLocal() {
   return response.json();
 }
 
+function mergeNoticiasSources(primaryNoticias, secondaryNoticias) {
+  return deduplicarNoticias([
+    ...sanitizeNoticiasList(primaryNoticias),
+    ...sanitizeNoticiasList(secondaryNoticias)
+  ]);
+}
+
 function isLocalNoticiasPreviewHost() {
   if (typeof window === 'undefined' || !window.location) return false;
 
@@ -256,38 +263,38 @@ function isLocalNoticiasPreviewHost() {
 
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
- * Usa data/noticias.json como fonte canonica e recorre ao Firebase apenas como fallback.
+ * Junta o JSON estático com o Firebase e dá prioridade ao Firebase para
+ * refletir artigos acabados de guardar antes da regeneração estática.
  * @param {string} url - Ignorado (mantido por compatibilidade)
  * @returns {Promise} - Promise com as notícias filtradas e ordenadas
  */
 async function fetchNoticiasAgendadas(url) {
-  let lastError = null;
+  const [localJsonResult, firebaseResult] = await Promise.allSettled([
+    lerNoticiasDoJsonLocal(),
+    (async () => {
+      await garantirAcessoNoticiasFirebase();
+      return lerNoticiasDoFirebase();
+    })()
+  ]);
 
-  try {
-    const localJsonData = await lerNoticiasDoJsonLocal();
-    const normalizedLocalJsonData = normalizeNoticiasResponse(localJsonData);
+  const localJsonData = localJsonResult.status === 'fulfilled' ? localJsonResult.value : null;
+  const firebaseData = firebaseResult.status === 'fulfilled' ? firebaseResult.value : null;
+  const lastError = firebaseResult.status === 'rejected'
+    ? firebaseResult.reason
+    : (localJsonResult.status === 'rejected' ? localJsonResult.reason : null);
 
-    if (normalizedLocalJsonData.noticias.length > 0) {
-      writeNoticiasCache(localJsonData.noticias);
+  if (firebaseData || localJsonData) {
+    const mergedNoticias = mergeNoticiasSources(
+      firebaseData && firebaseData.noticias,
+      localJsonData && localJsonData.noticias
+    );
+    const normalizedMergedData = normalizeNoticiasResponse({ noticias: mergedNoticias });
+
+    if (normalizedMergedData.noticias.length > 0) {
+      writeNoticiasCache(mergedNoticias);
     }
 
-    return normalizedLocalJsonData;
-  } catch (error) {
-    lastError = error;
-  }
-
-  try {
-    await garantirAcessoNoticiasFirebase();
-    const firebaseData = await lerNoticiasDoFirebase();
-    const normalizedFirebaseData = normalizeNoticiasResponse(firebaseData);
-
-    if (normalizedFirebaseData.noticias.length > 0) {
-      writeNoticiasCache(firebaseData.noticias);
-    }
-
-    return normalizedFirebaseData;
-  } catch (error) {
-    lastError = error;
+    return normalizedMergedData;
   }
 
   const cachedData = readNoticiasCache();
