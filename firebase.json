@@ -7,6 +7,12 @@
 	},
 	"hosting": {
 		"public": ".",
+		"rewrites": [
+			{
+				"source": "/artigos/**",
+				"destination": "/artigos.html"
+			}
+		],
 		"headers": [
 			{
 				"source": "**",
