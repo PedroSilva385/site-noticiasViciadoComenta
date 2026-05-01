@@ -2275,7 +2275,9 @@ function getArticleIdentifierFromLocation() {
   let pathSlug = null;
   const pathname = String(window.location.pathname || '');
   const cleanPath = pathname.replace(/\/+$/, '');
-  const match = cleanPath.match(/\/(?:noticias|artigos)\.html\/([^/]+)(?:\/([^/]+))?$/i);
+  const legacyMatch = cleanPath.match(/\/(?:noticias|artigos)\.html\/([^/]+)(?:\/([^/]+))?$/i);
+  const staticArticleMatch = cleanPath.match(/^\/artigos\/([^/]+?)(?:\.html)?$/i);
+  const match = legacyMatch || staticArticleMatch;
 
   if (match) {
     const part1 = decodeURIComponent(match[1] || '');
