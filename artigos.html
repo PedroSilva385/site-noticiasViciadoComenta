@@ -2788,6 +2788,10 @@ function optimizeArticleMediaMarkup(html) {
     const currentSrc = img.getAttribute('src') || '';
     if (!currentSrc) return;
 
+    if (/^(?:\/|\.\/|\.\.\/)?assets\/imagens\/[^./?#]+$/i.test(currentSrc)) {
+      img.setAttribute('src', `${currentSrc}.jpg`);
+    }
+
     if (assetFallbacks[currentSrc]) {
       img.setAttribute('src', assetFallbacks[currentSrc]);
     }
