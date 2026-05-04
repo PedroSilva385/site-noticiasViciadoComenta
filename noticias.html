@@ -2227,7 +2227,7 @@ function buildArticleTrustBox(noticia) {
   const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
   const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
   const sourcingNote = hasSourcesInBody
-    ? 'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+    ? 'Este artigo inclui uma secção explícita de fontes consultadas no corpo do texto.'
     : 'Este artigo foi preparado com base em contexto editorial, fontes públicas e páginas oficiais quando aplicável ao tema.';
 
   return `
@@ -2396,6 +2396,41 @@ function buildArticleMetaDescription(noticia) {
   return `${plainText.slice(0, 177).trim()}...`;
 }
 
+function getAbsoluteSiteUrl(url) {
+  const value = String(url || '').trim();
+  if (!value) {
+    return '';
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  return new URL(value.replace(/^\.\//, '').replace(/^\.\.\//, ''), 'https://www.viciadocomenta.pt/').toString();
+}
+
+function getFirstContentImage(noticia) {
+  const html = `${noticia?.resumo || ''} ${noticia?.conteudo || ''}`;
+  const helper = document.createElement('div');
+  helper.innerHTML = html;
+  const image = helper.querySelector('img[src]');
+
+  if (!image) {
+    return '';
+  }
+
+  return getAbsoluteSiteUrl(image.getAttribute('src'));
+}
+
+function getArticleSocialImage(noticia) {
+  const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
+  return getFirstContentImage(noticia) || 'https://www.viciadocomenta.pt/assets/perfil.png';
+}
+
 function updateMetaTag(selector, attr, value) {
   const el = document.querySelector(selector);
   if (el && typeof value === 'string' && value.trim()) {
@@ -2418,8 +2453,10 @@ function updateArticleSeoMeta(noticia) {
   updateMetaTag('meta[property="og:title"]', 'content', title);
   updateMetaTag('meta[property="og:description"]', 'content', metaDescription);
   updateMetaTag('meta[property="og:url"]', 'content', canonicalUrl);
+  updateMetaTag('meta[property="og:image"]', 'content', getArticleSocialImage(noticia));
   updateMetaTag('meta[name="twitter:title"]', 'content', title);
   updateMetaTag('meta[name="twitter:description"]', 'content', metaDescription);
+  updateMetaTag('meta[name="twitter:image"]', 'content', getArticleSocialImage(noticia));
 }
 
 function parseNoticiaDateForSort(data) {
@@ -3470,7 +3507,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
-              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunicacoes e analiso, junto da comunidade, as novidades e mudancas deste setor.</p>
+              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
             </div>
           </aside>
         `;
