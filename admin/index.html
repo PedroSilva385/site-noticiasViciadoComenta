@@ -2406,6 +2406,28 @@ function deduplicateNoticiasList(noticias) {
   return result;
 }
 
+function extractNoticiasCollection(rawData) {
+  if (!rawData) return [];
+
+  if (Array.isArray(rawData)) {
+    return rawData;
+  }
+
+  if (typeof rawData !== 'object') {
+    return [];
+  }
+
+  if (Array.isArray(rawData.noticias)) {
+    return rawData.noticias;
+  }
+
+  if (rawData.noticias && typeof rawData.noticias === 'object') {
+    return Object.values(rawData.noticias);
+  }
+
+  return Object.values(rawData).filter((item) => item && typeof item === 'object' && !Array.isArray(item));
+}
+
 async function loadNoticias() {
   try {
     if (isLocalStudioSession()) {
@@ -2416,18 +2438,13 @@ async function loadNoticias() {
         throw new Error((payload && payload.error) ? payload.error : `Local studio HTTP ${response.status}`);
       }
 
-      allNoticias = payload.data && Array.isArray(payload.data.noticias)
-        ? payload.data.noticias
-        : [];
+      allNoticias = extractNoticiasCollection(payload.data);
     } else {
       // Tentar carregar do Firebase
       const snapshot = await db.ref('noticias').once('value');
       const data = snapshot.val();
-      
-      if (data) {
-        // Firebase Realtime Database
-        allNoticias = Array.isArray(data) ? data : Object.values(data);
-      }
+
+      allNoticias = extractNoticiasCollection(data);
     }
 
     allNoticias = deduplicateNoticiasList(allNoticias);

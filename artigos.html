@@ -13,10 +13,12 @@
 <meta property="og:title" content="Notícia - VICIADO COMENTA">
 <meta property="og:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/artigos.html">
+<meta property="og:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
 <meta property="og:locale" content="pt_PT">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Notícia - VICIADO COMENTA">
 <meta name="twitter:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">
+<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js" defer></script>
@@ -885,6 +887,74 @@ body.dark .artigo-conteudo.is-editing #artigoConteudoBody {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.artigo-video-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artigo-video-trigger {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: none;
+  background: linear-gradient(180deg, rgba(10, 15, 28, 0.12), rgba(10, 15, 28, 0.55));
+  color: #ffffff;
+  cursor: pointer;
+  padding: 20px;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.artigo-video-trigger:hover,
+.artigo-video-trigger:focus-visible {
+  background: linear-gradient(180deg, rgba(10, 15, 28, 0.08), rgba(10, 15, 28, 0.42));
+}
+
+.artigo-video-trigger:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.9);
+  outline-offset: -6px;
+}
+
+.artigo-video-play {
+  width: 72px;
+  height: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #c1121f;
+  font-size: 1.8em;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.artigo-video-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+}
+
+.artigo-video-label strong {
+  font-size: 1.05em;
+}
+
+.artigo-video-label span {
+  font-size: 0.88em;
+  opacity: 0.92;
+}
+
+.artigo-video.is-loaded .artigo-video-trigger,
+.artigo-video.is-loaded .artigo-video-poster {
+  display: none;
 }
 
 /* BOTÃO VOLTAR */
@@ -2413,6 +2483,108 @@ function updateMetaTag(selector, attr, value) {
   }
 }
 
+function upsertStructuredDataScript(scriptId, payload) {
+  if (!payload || typeof payload !== 'object') {
+    return;
+  }
+
+  let script = document.getElementById(scriptId);
+  if (!script) {
+    script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = scriptId;
+    document.head.appendChild(script);
+  }
+
+  script.textContent = JSON.stringify(payload);
+}
+
+function getNoticiaPublishedIsoDate(noticia) {
+  if (!noticia || typeof noticia.data !== 'string') {
+    return '2026-01-01T00:00:00Z';
+  }
+
+  const match = noticia.data.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!match) {
+    return '2026-01-01T00:00:00Z';
+  }
+
+  const [, dia, mes, ano] = match;
+  return `${ano}-${mes}-${dia}T00:00:00Z`;
+}
+
+function getArticleSocialImage(noticia) {
+  const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
+  return 'https://www.viciadocomenta.pt/assets/favicon.svg';
+}
+
+function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, socialImageUrl) {
+  const authorName = (typeof noticia.autor === 'string' && noticia.autor.trim()) ? noticia.autor.trim() : 'Viciado Comenta';
+  const publishedIso = getNoticiaPublishedIsoDate(noticia);
+  const graph = [
+    {
+      '@type': 'NewsArticle',
+      '@id': `${canonicalUrl}#article`,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl
+      },
+      headline: noticia.titulo,
+      description: metaDescription,
+      datePublished: publishedIso,
+      dateModified: publishedIso,
+      image: [socialImageUrl],
+      author: {
+        '@type': 'Person',
+        name: authorName
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'VICIADO COMENTA',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://www.viciadocomenta.pt/assets/favicon.svg'
+        }
+      },
+      inLanguage: 'pt-PT'
+    }
+  ];
+
+  const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
+  if (videoId) {
+    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
+    const watchUrl = noticia.video && String(noticia.video).trim()
+      ? String(noticia.video).trim()
+      : `https://www.youtube.com/watch?v=${videoId}`;
+
+    graph.push({
+      '@type': 'VideoObject',
+      '@id': `${canonicalUrl}#video`,
+      name: noticia.titulo,
+      description: metaDescription,
+      thumbnailUrl: [socialImageUrl],
+      uploadDate: publishedIso,
+      embedUrl,
+      contentUrl: watchUrl,
+      isFamilyFriendly: true,
+      inLanguage: 'pt-PT'
+    });
+
+    graph[0].hasPart = {
+      '@id': `${canonicalUrl}#video`
+    };
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graph
+  };
+}
+
 function updateArticleSeoMeta(noticia) {
   if (!noticia || typeof noticia !== 'object') {
     return;
@@ -2421,6 +2593,7 @@ function updateArticleSeoMeta(noticia) {
   const canonicalUrl = new URL(getCanonicalArticleUrlByData(noticia), 'https://www.viciadocomenta.pt/').toString();
   const metaDescription = buildArticleMetaDescription(noticia);
   const title = `${noticia.titulo} - VICIADO COMENTA`;
+  const socialImageUrl = getArticleSocialImage(noticia);
 
   document.title = title;
   updateMetaTag('#canonicalLink', 'href', canonicalUrl);
@@ -2428,8 +2601,15 @@ function updateArticleSeoMeta(noticia) {
   updateMetaTag('meta[property="og:title"]', 'content', title);
   updateMetaTag('meta[property="og:description"]', 'content', metaDescription);
   updateMetaTag('meta[property="og:url"]', 'content', canonicalUrl);
+  updateMetaTag('meta[property="og:image"]', 'content', socialImageUrl);
   updateMetaTag('meta[name="twitter:title"]', 'content', title);
   updateMetaTag('meta[name="twitter:description"]', 'content', metaDescription);
+  updateMetaTag('meta[name="twitter:image"]', 'content', socialImageUrl);
+
+  upsertStructuredDataScript(
+    'articleStructuredData',
+    buildArticleStructuredData(noticia, canonicalUrl, metaDescription, socialImageUrl)
+  );
 }
 
 function parseNoticiaDateForSort(data) {
@@ -2965,6 +3145,47 @@ function canUseLiveEditor() {
   return editEnabled;
 }
 
+function loadArticleVideo(container) {
+  if (!container || container.dataset.videoLoaded === 'true') {
+    return;
+  }
+
+  const videoId = String(container.dataset.videoId || '').trim();
+  if (!videoId) {
+    return;
+  }
+
+  const iframe = document.createElement('iframe');
+  iframe.id = 'videoFrame-article';
+  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0`;
+  iframe.title = container.dataset.videoTitle || 'Vídeo do artigo';
+  iframe.loading = 'lazy';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+
+  container.appendChild(iframe);
+  container.dataset.videoLoaded = 'true';
+  container.classList.add('is-loaded');
+}
+
+function initArticleVideoEmbeds(root = document) {
+  root.querySelectorAll('.artigo-video[data-video-id]').forEach((container) => {
+    if (container.dataset.videoBound === 'true') {
+      return;
+    }
+
+    const trigger = container.querySelector('[data-video-trigger]');
+    if (!trigger) {
+      return;
+    }
+
+    trigger.addEventListener('click', () => loadArticleVideo(container));
+    container.dataset.videoBound = 'true';
+  });
+}
+
 let studioApiBaseCache = null;
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 6000) {
@@ -3366,9 +3587,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const videoId = extrairVideoId(noticia.video);
         let videoHTML = '';
         if (videoId) {
-          videoHTML = `<div class="artigo-video" id="videoContainer-article">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-article" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
-            <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-article" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
+          videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${noticia.titulo}">
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do video" id="thumbnail-article" class="artigo-video-poster" loading="lazy">
+            <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
+              <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
+              <span class="artigo-video-label"><strong>Ver video</strong><span>O player carrega apenas apos clique.</span></span>
+            </button>
           </div>`;
         }
         
@@ -3476,22 +3700,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRelatedArticles(noticia, data.noticias || []);
 
         activateDeferredArticleImages(container);
+        initArticleVideoEmbeds(container);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
-        
-        // Ocultar miniatura quando o iframe carregar
-        if (videoId) {
-          setTimeout(() => {
-            const iframe = document.getElementById('videoFrame-article');
-            const thumbnail = document.getElementById('thumbnail-article');
-            if (iframe && thumbnail) {
-              iframe.onload = () => {
-                thumbnail.style.display = 'none';
-              };
-            }
-          }, 100);
-        }
       } else {
         // Notícia não encontrada
         document.getElementById('artigo').innerHTML = `
