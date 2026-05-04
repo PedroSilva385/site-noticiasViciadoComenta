@@ -56,6 +56,19 @@ function shouldSkipAnalyticsTracking() {
   return localStorage.getItem(ANALYTICS_CONFIG.optOutStorageKey) === '1';
 }
 
+function canWriteProtectedAnalytics() {
+  try {
+    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+      return false;
+    }
+
+    const auth = firebase.auth();
+    return !!(auth && auth.currentUser);
+  } catch (_) {
+    return false;
+  }
+}
+
 function isFirebasePermissionDenied(error) {
   if (!error) return false;
 
@@ -534,6 +547,11 @@ function initializeDeferredFirebaseWork() {
   try {
     if (shouldSkipAnalyticsTracking()) {
       console.log('ℹ️ Tracking de analytics desativado para este navegador/dispositivo');
+      return;
+    }
+
+    if (!canWriteProtectedAnalytics()) {
+      console.info('ℹ️ Analytics com escrita Firebase desativado neste contexto público');
       return;
     }
 
