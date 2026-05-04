@@ -13,10 +13,12 @@
 <meta property="og:title" content="VICIADO COMENTA">
 <meta property="og:description" content="Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade em Portugal.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/">
+<meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta property="og:locale" content="pt_PT">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VICIADO COMENTA">
 <meta name="twitter:description" content="Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade em Portugal.">
+<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -2931,14 +2933,17 @@ function renderVideoDestaque() {
   const fallback = {
     url: '',
     titulo: 'Vídeo em destaque',
-    descricao: 'Atualiza o JSON para mostrar o vídeo escolhido na homepage.',
+    descricao: 'Análise editorial em vídeo sobre telecomunicações, tecnologia, gaming e temas de atualidade.',
     cta: 'Ver no YouTube'
   };
 
   const current = { ...fallback, ...(HIGHLIGHT_VIDEO || {}) };
+  const resolvedDescription = typeof current.descricao === 'string' && current.descricao.trim()
+    ? current.descricao.trim()
+    : fallback.descricao;
 
   if (titleEl) titleEl.textContent = current.titulo || fallback.titulo;
-  if (descEl) descEl.textContent = current.descricao || '';
+  if (descEl) descEl.textContent = resolvedDescription;
   if (linkTextEl) linkTextEl.textContent = current.cta || fallback.cta;
 
   const videoId = extrairVideoId(current.url);
