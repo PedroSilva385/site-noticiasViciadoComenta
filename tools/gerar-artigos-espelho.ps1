@@ -145,6 +145,31 @@ function Get-YouTubeId {
     return ''
 }
 
+function Get-AbsoluteSiteUrl {
+    param([string]$Url)
+
+    if ([string]::IsNullOrWhiteSpace($Url)) { return '' }
+    if ($Url -match '^https?://') { return $Url }
+
+    $normalized = $Url.Trim() -replace '\\', '/'
+    $normalized = $normalized -replace '^\./', ''
+    $normalized = $normalized -replace '^\.\./', ''
+    $normalized = $normalized.TrimStart('/')
+
+    if ([string]::IsNullOrWhiteSpace($normalized)) { return '' }
+    return "https://www.viciadocomenta.pt/$normalized"
+}
+
+function Get-FirstContentImageUrl {
+    param([object]$Noticia)
+
+    $html = "{0} {1}" -f ([string]$Noticia.resumo), ([string]$Noticia.conteudo)
+    $match = [regex]::Match($html, '<img[^>]+src=["''](?<src>[^"'']+)["'']', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if (-not $match.Success) { return '' }
+
+    return Get-AbsoluteSiteUrl -Url $match.Groups['src'].Value
+}
+
 function Get-StaticArticleHtml {
     param([object]$Noticia)
 
@@ -157,14 +182,13 @@ function Get-StaticArticleHtml {
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
     $wordCount  = [Math]::Max(1, (Strip-Html -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
-    $shouldNoIndexThinArticle = $wordCount -lt 400
     $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
     $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
     $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudo", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
     $sourcingNote = if ($hasSourcesInBody) {
-        'Este artigo inclui uma secao explicita de fontes consultadas no corpo do texto.'
+        'Este artigo inclui uma sec&ccedil;&atilde;o expl&iacute;cita de fontes consultadas no corpo do texto.'
     } else {
-        'Este artigo foi preparado com base em contexto editorial, fontes publicas e paginas oficiais quando aplicavel ao tema.'
+        'Este artigo foi preparado com base em contexto editorial, fontes p&uacute;blicas e p&aacute;ginas oficiais quando aplic&aacute;vel ao tema.'
     }
 
     $videoSection = ''
@@ -176,7 +200,7 @@ function Get-StaticArticleHtml {
                         <img src="https://img.youtube.com/vi/$videoId/hqdefault.jpg" alt="Miniatura do video" class="artigo-video-poster" loading="lazy">
                         <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
                             <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
-                            <span class="artigo-video-label"><strong>Ver video</strong><span>O player carrega apenas apos clique.</span></span>
+                            <span class="artigo-video-label"><strong>Ver v&iacute;deo</strong><span>O player carrega apenas ap&oacute;s clique.</span></span>
                         </button>
           </div>
 "@
@@ -186,13 +210,13 @@ function Get-StaticArticleHtml {
 
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
-                        <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunicacoes e analiso, junto da comunidade, as novidades e mudancas deste setor.</p>
+                        <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
 "@
 
-    $trustHeading = 'Transparencia editorial'
-    $trustIntro = "<strong>Conteudo original e assinado.</strong> Este artigo integra a cobertura editorial de $categoria do VICIADO COMENTA e foi publicado com autoria identificada."
-    $trustMethodology = 'Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorrecao factual, envia um pedido de correcao para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.'
+    $trustHeading = 'Transpar&ecirc;ncia editorial'
+    $trustIntro = "<strong>Conte&uacute;do original e assinado.</strong> Este artigo integra a cobertura editorial de $categoria do VICIADO COMENTA e foi publicado com autoria identificada."
+    $trustMethodology = 'Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorre&ccedil;&atilde;o factual, envia um pedido de corre&ccedil;&atilde;o para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.'
 
     $trustBoxSection = @"
 
@@ -239,7 +263,13 @@ Get-ChildItem -Path $artigosDir -Filter '*.html' -File -ErrorAction SilentlyCont
 
 $data = Get-Content -Path $jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $template = Get-Content -Path $templatePath -Raw -Encoding UTF8
-$noticias = @($data.noticias)
+$noticias = @(
+    $data.noticias | Where-Object {
+        $_ -is [object] -and
+        $_.PSObject.Properties.Name -contains 'titulo' -and
+        -not [string]::IsNullOrWhiteSpace([string]$_.titulo)
+    }
+)
 $now = Get-Date
 $usedSlugs = @{}
 $generatedArticles = @()
@@ -302,8 +332,8 @@ foreach ($noticia in $noticias) {
 
     $rawTitle = [string]$noticia.titulo
     $metaDescription = Get-MetaDescription -Noticia $noticia
-    $articleWordCount = [Math]::Max(1, (Strip-Html -Text (([string]$noticia.resumo) + ' ' + ([string]$noticia.conteudo))).Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
-    $shouldNoIndexThinArticle = $articleWordCount -lt 400
+    $videoUrl = if ($noticia.PSObject.Properties.Name -contains 'video') { [string]$noticia.video } else { '' }
+    $videoId = Get-YouTubeId -Url $videoUrl
     $effectivePublishedDate = if ($publishDate) {
         $publishDate
     } else {
@@ -325,10 +355,13 @@ foreach ($noticia in $noticias) {
     $safeTitle = Escape-Html -Text $rawTitle
     $safeDescription = Escape-Html -Text $metaDescription
     $safeUrl = Escape-Html -Text $articleUrl
+    $contentImageUrl = Get-FirstContentImageUrl -Noticia $noticia
     $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($videoId)) {
         "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
+    } elseif (-not [string]::IsNullOrWhiteSpace($contentImageUrl)) {
+        $contentImageUrl
     } else {
-        'https://www.viciadocomenta.pt/assets/favicon.svg'
+        'https://www.viciadocomenta.pt/assets/perfil.png'
     }
     $safeSocialImageUrl = Escape-Html -Text $socialImageUrl
 
@@ -356,7 +389,7 @@ foreach ($noticia in $noticias) {
             name = 'VICIADO COMENTA'
             logo = [ordered]@{
                 '@type' = 'ImageObject'
-                url = $socialImageUrl
+                url = 'https://www.viciadocomenta.pt/assets/favicon.svg'
             }
         }
         inLanguage = 'pt-PT'
@@ -392,11 +425,7 @@ foreach ($noticia in $noticias) {
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
 
-    $robotsContent = if ($shouldNoIndexThinArticle) {
-        'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
-    } else {
-        'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
-    }
+    $robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
 
     $seoMeta = @"
 <meta name="description" content="$safeDescription">
@@ -510,7 +539,7 @@ foreach ($noticia in $noticias) {
         }
     }
 
-    if ($isPublished -and -not $shouldNoIndexThinArticle) {
+    if ($isPublished) {
         $generatedArticles += [pscustomobject]@{
             slug = $slug
             lastmod = $sitemapLastMod
