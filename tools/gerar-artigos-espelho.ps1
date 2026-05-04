@@ -249,7 +249,7 @@ function Get-StaticArticleHtml {
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $jsonPath = Join-Path $root 'data/noticias.json'
-$templatePath = Join-Path $root 'noticias.html'
+$templatePath = Join-Path $root 'artigos.html'
 $artigosDir = Join-Path $root 'artigos'
 $sitemapPath = Join-Path $root 'sitemap.xml'
 
