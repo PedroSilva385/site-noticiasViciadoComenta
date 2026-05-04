@@ -540,11 +540,16 @@ function resolveCurrentArticleShareData() {
   }
 
   let url = '';
+  const currentArticlePathMatch = (window.location.pathname || '').match(/\/artigos\/[^/?#]+\.html$/i);
+  if (currentArticlePathMatch) {
+    url = normalizeShareableUrl(window.location.href);
+  }
+
   if (articleId && typeof window.getArticleURL === 'function') {
     try {
-      url = normalizeShareableUrl(window.getArticleURL(articleId));
+      url = url || normalizeShareableUrl(window.getArticleURL(articleId));
     } catch (_) {
-      url = '';
+      url = url || '';
     }
   }
 
