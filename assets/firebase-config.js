@@ -508,6 +508,154 @@ function queueEditorialTrustBoxPlacement() {
   });
 }
 
+function normalizeShareableUrl(rawUrl) {
+  try {
+    const normalizedUrl = new URL(rawUrl, window.location.origin);
+    normalizedUrl.hash = '';
+    normalizedUrl.searchParams.delete('edit');
+    return normalizedUrl.toString();
+  } catch (_) {
+    return String(rawUrl || window.location.href || '');
+  }
+}
+
+function resolveCurrentArticleShareData() {
+  const title = (
+    document.querySelector('.artigo-titulo')?.textContent ||
+    document.querySelector('meta[property="og:title"]')?.getAttribute('content') ||
+    document.title ||
+    'Artigo'
+  ).trim();
+
+  let articleId = '';
+  if (typeof window.currentArticleId === 'string' && window.currentArticleId.trim()) {
+    articleId = window.currentArticleId.trim();
+  }
+
+  if (!articleId) {
+    const articlePathMatch = (window.location.pathname || '').match(/\/artigos\/([^/?#]+)\.html$/i);
+    if (articlePathMatch && articlePathMatch[1]) {
+      articleId = decodeURIComponent(articlePathMatch[1]);
+    }
+  }
+
+  let url = '';
+  if (articleId && typeof window.getArticleURL === 'function') {
+    try {
+      url = normalizeShareableUrl(window.getArticleURL(articleId));
+    } catch (_) {
+      url = '';
+    }
+  }
+
+  if (!url) {
+    const canonicalUrl = document.querySelector('link[rel="canonical"]')?.href;
+    if (canonicalUrl) {
+      url = normalizeShareableUrl(canonicalUrl);
+    }
+  }
+
+  if (!url) {
+    url = normalizeShareableUrl(window.location.href);
+  }
+
+  return { articleId, title, url };
+}
+
+function writeShareUrlToClipboard(url, triggerEl) {
+  const showFeedback = () => {
+    if (typeof window.showCopyFeedback === 'function') {
+      window.showCopyFeedback(triggerEl);
+    }
+  };
+
+  const fallbackCopy = () => {
+    const textarea = document.createElement('textarea');
+    textarea.value = url;
+    textarea.setAttribute('readonly', 'readonly');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    let copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch (_) {
+      copied = false;
+    }
+
+    document.body.removeChild(textarea);
+
+    if (copied) {
+      showFeedback();
+      return;
+    }
+
+    window.prompt('Copie o link do artigo:', url);
+  };
+
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(url).then(showFeedback).catch(fallbackCopy);
+    return;
+  }
+
+  fallbackCopy();
+}
+
+function setupArticleShareButtonRepair() {
+  document.addEventListener('click', (event) => {
+    const shareButton = event.target && event.target.closest
+      ? event.target.closest('.artigo-share .share-btn')
+      : null;
+
+    if (!shareButton) {
+      return;
+    }
+
+    const shareData = resolveCurrentArticleShareData();
+    if (!shareData.url) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    if (shareButton.classList.contains('share-copy')) {
+      writeShareUrlToClipboard(shareData.url, shareButton);
+      return;
+    }
+
+    const encodedUrl = encodeURIComponent(shareData.url);
+    const encodedTitle = encodeURIComponent(shareData.title);
+    let shareTargetUrl = '';
+    let windowName = 'article-share';
+
+    if (shareButton.classList.contains('share-facebook')) {
+      shareTargetUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedTitle}`;
+      windowName = 'facebook-share';
+    } else if (shareButton.classList.contains('share-twitter')) {
+      shareTargetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareData.title} - Leia mais em: `)}&url=${encodedUrl}&via=TheViciado`;
+      windowName = 'twitter-share';
+    } else if (shareButton.classList.contains('share-whatsapp')) {
+      shareTargetUrl = `https://wa.me/?text=${encodeURIComponent(`${shareData.title} ${shareData.url}`)}`;
+      windowName = 'whatsapp-share';
+    } else if (shareButton.classList.contains('share-telegram')) {
+      shareTargetUrl = `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`;
+      windowName = 'telegram-share';
+    } else if (shareButton.classList.contains('share-linkedin')) {
+      shareTargetUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+      windowName = 'linkedin-share';
+    }
+
+    if (shareTargetUrl) {
+      window.open(shareTargetUrl, windowName, 'width=550,height=420');
+    }
+  }, true);
+}
+
 function setupEditorialTrustBoxPlacement() {
   if (!isArticleLikePage()) {
     return;
@@ -653,6 +801,7 @@ function initializeFirebaseApp() {
 // Iniciar processo de inicialização
 initializeFirebaseApp();
 setupEditorialTrustBoxPlacement();
+setupArticleShareButtonRepair();
 
 window.ensureFirebaseInitialized = ensureFirebaseInitialized;
 window.isFirebasePermissionDenied = isFirebasePermissionDenied;

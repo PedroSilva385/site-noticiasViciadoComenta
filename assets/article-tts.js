@@ -25,6 +25,49 @@
     return titleNode ? titleNode.textContent.trim() : '';
   }
 
+  function loadArticleVideo(container) {
+    if (!container || container.dataset.videoLoaded === 'true') return;
+
+    const videoId = String(container.dataset.videoId || '').trim();
+    if (!videoId) return;
+
+    const existingFrame = container.querySelector('iframe');
+    if (existingFrame) {
+      container.dataset.videoLoaded = 'true';
+      container.classList.add('is-loaded');
+      return;
+    }
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0`;
+    iframe.title = container.dataset.videoTitle || 'Vídeo do artigo';
+    iframe.loading = 'lazy';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+
+    container.appendChild(iframe);
+    container.dataset.videoLoaded = 'true';
+    container.classList.add('is-loaded');
+  }
+
+  function initArticleVideoEmbeds(root) {
+    const scope = root || document;
+    scope.querySelectorAll('.artigo-video[data-video-id]').forEach(function (container) {
+      if (container.dataset.videoBound === 'true') return;
+
+      const trigger = container.querySelector('[data-video-trigger]');
+      if (!trigger) return;
+
+      trigger.addEventListener('click', function () {
+        loadArticleVideo(container);
+      });
+
+      container.dataset.videoBound = 'true';
+    });
+  }
+
   function getSpeakableText() {
     const contentNode = getArticleContentNode();
     if (!contentNode) return '';
@@ -561,9 +604,13 @@
   }
 
   function initWhenReady() {
+    initArticleVideoEmbeds(document);
+
     if (mountTtsControls()) return;
 
     const observer = new MutationObserver(function () {
+      initArticleVideoEmbeds(document);
+
       if (mountTtsControls()) {
         observer.disconnect();
       }
