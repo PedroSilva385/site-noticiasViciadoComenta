@@ -172,8 +172,12 @@ function Get-StaticArticleHtml {
     if (-not [string]::IsNullOrWhiteSpace($videoId)) {
         $videoSection = @"
 
-          <div class="artigo-video">
-            <iframe id="videoFrame-article" src="https://www.youtube.com/embed/$videoId" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="$titulo" loading="lazy"></iframe>
+                    <div class="artigo-video" data-video-id="$videoId" data-video-title="$titulo">
+                        <img src="https://img.youtube.com/vi/$videoId/hqdefault.jpg" alt="Miniatura do video" class="artigo-video-poster" loading="lazy">
+                        <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
+                            <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
+                            <span class="artigo-video-label"><strong>Ver video</strong><span>O player carrega apenas apos clique.</span></span>
+                        </button>
           </div>
 "@
     }
@@ -321,12 +325,19 @@ foreach ($noticia in $noticias) {
     $safeTitle = Escape-Html -Text $rawTitle
     $safeDescription = Escape-Html -Text $metaDescription
     $safeUrl = Escape-Html -Text $articleUrl
-    $socialImageUrl = 'https://www.viciadocomenta.pt/assets/favicon.svg'
+    $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($videoId)) {
+        "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
+    } else {
+        'https://www.viciadocomenta.pt/assets/favicon.svg'
+    }
     $safeSocialImageUrl = Escape-Html -Text $socialImageUrl
 
-    $jsonLdObject = [ordered]@{
+    $authorName = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
+
+    $articleJsonLdObject = [ordered]@{
         '@context' = 'https://schema.org'
         '@type' = 'NewsArticle'
+        '@id' = "$articleUrl#article"
         mainEntityOfPage = [ordered]@{
             '@type' = 'WebPage'
             '@id' = $articleUrl
@@ -335,9 +346,10 @@ foreach ($noticia in $noticias) {
         description = $metaDescription
         datePublished = $publishedDateIso
         dateModified = $modifiedDateIso
+        image = @($socialImageUrl)
         author = [ordered]@{
             '@type' = 'Person'
-            name = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
+            name = $authorName
         }
         publisher = [ordered]@{
             '@type' = 'Organization'
@@ -348,6 +360,34 @@ foreach ($noticia in $noticias) {
             }
         }
         inLanguage = 'pt-PT'
+    }
+
+    $jsonLdGraph = @($articleJsonLdObject)
+
+    if (-not [string]::IsNullOrWhiteSpace($videoId)) {
+        $videoJsonLdObject = [ordered]@{
+            '@type' = 'VideoObject'
+            '@id' = "$articleUrl#video"
+            name = $rawTitle
+            description = $metaDescription
+            thumbnailUrl = @($socialImageUrl)
+            uploadDate = $publishedDateIso
+            embedUrl = "https://www.youtube-nocookie.com/embed/$videoId"
+            contentUrl = if (-not [string]::IsNullOrWhiteSpace($videoUrl)) { $videoUrl } else { "https://www.youtube.com/watch?v=$videoId" }
+            isFamilyFriendly = $true
+            inLanguage = 'pt-PT'
+        }
+
+        $articleJsonLdObject['hasPart'] = [ordered]@{
+            '@id' = "$articleUrl#video"
+        }
+
+        $jsonLdGraph += $videoJsonLdObject
+    }
+
+    $jsonLdObject = [ordered]@{
+        '@context' = 'https://schema.org'
+        '@graph' = $jsonLdGraph
     }
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
@@ -389,10 +429,12 @@ foreach ($noticia in $noticias) {
         '<meta property="og:title" content="Notícia - VICIADO COMENTA">',
         '<meta property="og:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">',
         '<meta property="og:url" content="https://www.viciadocomenta.pt/noticias.html">',
+        '<meta property="og:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">',
         '<meta property="og:locale" content="pt_PT">',
         '<meta name="twitter:card" content="summary_large_image">',
         '<meta name="twitter:title" content="Notícia - VICIADO COMENTA">',
-        '<meta name="twitter:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">'
+        '<meta name="twitter:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">',
+        '<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">'
     )
 
     foreach ($line in $genericMetaLines) {
@@ -404,8 +446,11 @@ foreach ($noticia in $noticias) {
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="description" content="Leia .*?VICIADO COMENTA.*?">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:description" content="Not.*?gaming\.">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:image" content=".*?">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:description" content="Not.*?gaming\.">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:image" content=".*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?s)\s*<script type="application/ld\+json">.*?</script>\s*', "`n")
 
     if ($content.Contains('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">')) {
         $content = $content.Replace('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">', ('<link rel="canonical" id="canonicalLink" href="' + $safeUrl + '">'))
