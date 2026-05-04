@@ -612,7 +612,7 @@
                          "resumo":  "Numa situação complexa, Patrick Drahi luta pela sobrevivência do grupo. A venda de ativos parece ser a única solução, e a Altice Portugal posiciona-se como um dos ativos que mais podem trazer liquidez imediata, num cenário de alienação.",
                          "slug":  "altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi",
                          "titulo":  "Altice Portugal pode ser a próxima venda de Patrick Drahi",
-                         "video":  "https://youtu.be/MFViU-mu3QM",
+                         "video":  "https://youtu.be/uWomMm4SgII",
                          "link":  "https://www.viciadocomenta.pt/artigos/altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi.html",
                          "linkEditavel":  "https://www.viciadocomenta.pt/artigos/altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi.html?edit=1"
                      },
@@ -628,6 +628,19 @@
                          "video":  "https://youtu.be/f78uBdUKbUw",
                          "link":  "https://www.viciadocomenta.pt/artigos/rede-movel-digi-continua-a-avancar-em-portugal.html",
                          "linkEditavel":  "https://www.viciadocomenta.pt/artigos/rede-movel-digi-continua-a-avancar-em-portugal.html?edit=1"
+                     },
+                     {
+                         "autor":  "Pedro Silva",
+                         "categoria":  "Telecom",
+                         "conteudo":  "\u003cp\u003eA operadora NOS aparenta estar a fazer mudanças no seu serviço de internet fixa, nomeadamente no plano de 1 Gbps. Recentemente, \u003ca href=\"https://forum.zwame.pt/threads/nos-lanca-1-1-gbps-simetricos-no-segmento-particular.1089842/\" target=\"_blank\" rel=\"noopener noreferrer\"\u003eno fórum ZWAME\u003c/a\u003e, vários utilizadores relataram essas alterações.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eAumento da velocidade de upload:\u003c/strong\u003e\u003c/p\u003e\u003cp\u003eAté aqui, a NOS operava no segmento da internet fixa com planos de 500 Mbps, 1 Gbps e 10 Gbps, sendo que os planos de 500 Mbps e 1 Gbps não eram simétricos. Nesse caso, as ofertas disponibilizavam 100 Mbps e 400 Mbps de upload, respetivamente.\u003c/p\u003e\u003cp\u003eO que foi detetado foi a criação de um novo perfil de serviço, nomeadamente no plano de 1 Gbps, que passa a incluir simetria de velocidade. Assim, vários clientes começaram a relatar, através dos seus testes, que já dispõem de velocidades de 1 Gbps de upload em casa.\u003c/p\u003e\u003cp\u003e\u003cimg src=\"/assets/imagens/NOS.png\" alt=\"1\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto\"\u003e\u003c/p\u003e\u003cp\u003eEssa alteração já consta nos termos e condições da NOS, que passaram a prever o plano 1/1 Gbps.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eNem todos os clientes foram abrangidos:\u003c/strong\u003e\u003c/p\u003e\u003cp\u003eAinda não existe qualquer comunicado oficial por parte da NOS, pelo que, até que isso aconteça, não sabemos exatamente quais são as zonas abrangidas.\u003c/p\u003e\u003cp\u003eApesar disso, segundo o que é descrito pelos utilizadores da NOS, parece que:\u003c/p\u003e\u003cp\u003e\u003c/p\u003e\u003cul\u003e\u003cli\u003eZonas de fibra neutra (DSTelecom/Fibroglobal) não dispõem desta alteração;\u003c/li\u003e\u003cli\u003eZonas com XGS-PON aparentam ser as que estão a ser abrangidas.\u003c/li\u003e\u003c/ul\u003e\u003cp\u003e\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eConclusão:\u003c/strong\u003e\u003c/p\u003e\u003cp\u003eA NOS está a avançar e deixa agora a MEO como a única das quatro operadoras que não dispõe deste perfil de velocidade 1/1 Gbps. Recorde-se que a DIGI e a Vodafone já dispõem desta simetria de velocidade há algum tempo, vindo agora a NOS a ajustar-se a esta oferta.\u003c/p\u003e\u003cp\u003ePara o cliente comum, esta pode não ser uma alteração significativa, mas existe uma franja de consumidores que privilegia bastante uma maior capacidade de upload no seu serviço doméstico.\u003c/p\u003e",
+                         "data":  "04/05/2026",
+                         "id":  "48",
+                         "resumo":  "A NOS está a fazer alterações ao seu plano de 1Gbps, passando a disponibilizar velocidade simétrica a alguns dos seus clientes residenciais!",
+                         "slug":  "nos-faz-alteracoes-ao-plano-de-1gbps",
+                         "titulo":  "NOS faz alterações ao plano de 1Gbps e disponibiliza velocidade simétrica!",
+                         "video":  "https://youtu.be/-Wu6zgAdw94",
+                         "link":  "https://www.viciadocomenta.pt/artigos/nos-faz-alteracoes-ao-plano-de-1gbps.html",
+                         "linkEditavel":  "https://www.viciadocomenta.pt/artigos/nos-faz-alteracoes-ao-plano-de-1gbps.html?edit=1"
                      }
                  ]
 }
