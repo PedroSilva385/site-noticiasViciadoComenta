@@ -261,6 +261,64 @@ function isLocalNoticiasPreviewHost() {
   return host === '127.0.0.1' || host === 'localhost';
 }
 
+function loadArticleVideoFromContainer(container) {
+  if (!container || container.dataset.videoLoaded === 'true') return;
+
+  const videoId = String(container.dataset.videoId || '').trim();
+  if (!videoId) return;
+
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0`;
+  iframe.title = container.dataset.videoTitle || 'Vídeo do artigo';
+  iframe.loading = 'lazy';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+
+  container.appendChild(iframe);
+  container.dataset.videoLoaded = 'true';
+  container.classList.add('is-loaded');
+}
+
+function initDelegatedArticleVideoEmbeds() {
+  if (typeof document === 'undefined' || document.documentElement.dataset.articleVideoDelegated === 'true') {
+    return;
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const container = target.closest('.artigo-video[data-video-id]');
+    if (!container) return;
+
+    const matchedTarget = target.closest('[data-video-trigger], .artigo-video-poster, .artigo-video');
+    if (!matchedTarget) return;
+
+    event.preventDefault();
+    loadArticleVideoFromContainer(container);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const trigger = target.closest('[data-video-trigger]');
+    if (!trigger) return;
+
+    const container = trigger.closest('.artigo-video[data-video-id]');
+    if (!container) return;
+
+    event.preventDefault();
+    loadArticleVideoFromContainer(container);
+  });
+
+  document.documentElement.dataset.articleVideoDelegated = 'true';
+}
+
 /**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
  * Junta o JSON estático com o Firebase e dá prioridade ao Firebase para
@@ -310,3 +368,12 @@ window.filtrarNoticiasPublicadas = filtrarNoticiasPublicadas;
 window.parseDataPublicacao = parseDataPublicacao;
 window.ordenarNoticiasPorData = ordenarNoticiasPorData;
 window.fetchNoticiasAgendadas = fetchNoticiasAgendadas;
+window.loadArticleVideoFromContainer = loadArticleVideoFromContainer;
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDelegatedArticleVideoEmbeds, { once: true });
+  } else {
+    initDelegatedArticleVideoEmbeds();
+  }
+}
