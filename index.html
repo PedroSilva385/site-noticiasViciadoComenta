@@ -268,7 +268,7 @@ nav a:hover {
 }
 
 .nav-dropdown > a::after {
-  content: 'â–¼';
+  content: '▼';
   font-size: 0.65em;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1108,7 +1108,7 @@ body.dark span { color: #e5e7eb !important; }
 }
 
 .noticia-item.read .noticia-thumb::before {
-  content: 'âœ“';
+  content: '✓';
   position: absolute;
   top: 8px;
   left: 8px;
@@ -2311,6 +2311,140 @@ footer {
 </footer>
 
 <script>
+const MOJIBAKE_PATTERN = /(?:Ã.|Â.|â.|ðŸ|├|�)/;
+const MOJIBAKE_ATTRIBUTE_NAMES = ['placeholder', 'title', 'aria-label', 'aria-description', 'alt', 'content'];
+
+function looksMojibake(value) {
+  return typeof value === 'string' && MOJIBAKE_PATTERN.test(value);
+}
+
+function decodeMojibake(value) {
+  if (!looksMojibake(value)) {
+    return value;
+  }
+
+  try {
+    const bytes = Uint8Array.from(Array.from(value, (char) => char.charCodeAt(0) & 0xff));
+    const decoded = new TextDecoder('utf-8').decode(bytes);
+    if (!decoded || decoded === value) {
+      return value;
+    }
+
+    const suspiciousBefore = (value.match(MOJIBAKE_PATTERN) || []).length;
+    const suspiciousAfter = (decoded.match(MOJIBAKE_PATTERN) || []).length;
+    return suspiciousAfter < suspiciousBefore ? decoded : value;
+  } catch (error) {
+    return value;
+  }
+}
+
+function repairMojibakeTextNode(node) {
+  if (!node || node.nodeType !== Node.TEXT_NODE) {
+    return;
+  }
+
+  const parentTagName = node.parentElement ? node.parentElement.tagName : '';
+  if (parentTagName && /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/i.test(parentTagName)) {
+    return;
+  }
+
+  const fixedText = decodeMojibake(node.textContent);
+  if (fixedText !== node.textContent) {
+    node.textContent = fixedText;
+  }
+}
+
+function repairMojibakeAttributes(element) {
+  if (!(element instanceof Element)) {
+    return;
+  }
+
+  MOJIBAKE_ATTRIBUTE_NAMES.forEach((attributeName) => {
+    const currentValue = element.getAttribute(attributeName);
+    if (!currentValue) {
+      return;
+    }
+
+    const fixedValue = decodeMojibake(currentValue);
+    if (fixedValue !== currentValue) {
+      element.setAttribute(attributeName, fixedValue);
+    }
+  });
+}
+
+function repairVisibleMojibake(root = document) {
+  if (typeof document.title === 'string') {
+    const fixedTitle = decodeMojibake(document.title);
+    if (fixedTitle !== document.title) {
+      document.title = fixedTitle;
+    }
+  }
+
+  const scope = root instanceof Document ? root.documentElement : root;
+  if (!scope) {
+    return;
+  }
+
+  if (scope.nodeType === Node.TEXT_NODE) {
+    repairMojibakeTextNode(scope);
+    return;
+  }
+
+  if (scope instanceof Element) {
+    repairMojibakeAttributes(scope);
+  }
+
+  const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  let currentNode = walker.currentNode;
+
+  while (currentNode) {
+    if (currentNode.nodeType === Node.TEXT_NODE) {
+      repairMojibakeTextNode(currentNode);
+    } else if (currentNode.nodeType === Node.ELEMENT_NODE) {
+      repairMojibakeAttributes(currentNode);
+    }
+
+    currentNode = walker.nextNode();
+  }
+}
+
+function initMojibakeRepairObserver() {
+  if (window.__vcMojibakeObserverStarted) {
+    return;
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'characterData') {
+        repairMojibakeTextNode(mutation.target);
+        return;
+      }
+
+      if (mutation.type === 'attributes' && mutation.target instanceof Element) {
+        repairMojibakeAttributes(mutation.target);
+        return;
+      }
+
+      mutation.addedNodes.forEach((node) => {
+        repairVisibleMojibake(node);
+      });
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    subtree: true,
+    childList: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: MOJIBAKE_ATTRIBUTE_NAMES
+  });
+
+  window.__vcMojibakeObserverStarted = true;
+}
+
+repairVisibleMojibake(document);
+initMojibakeRepairObserver();
+
 // Sistema de atualizaÃ§Ã£o de contadores a cada 24h
 // NOTA: Para atualizar manualmente, altere os valores abaixo:
 const SOCIAL_STATS = {
