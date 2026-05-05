@@ -273,6 +273,37 @@ main {
   gap: 30px;
 }
 
+.noticias-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 28px auto 0;
+}
+
+.noticias-more-btn {
+  border: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95em;
+  transition: all 0.3s;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.18);
+}
+
+.noticias-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 102, 204, 0.28);
+}
+
+body.dark .noticias-more-btn {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+  color: #ffffff !important;
+}
+
 .noticia-completa {
   background: #ffffff;
   border: 1px solid #e0e8f5;
@@ -1039,8 +1070,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <main>
   <h2 class="page-title">Artigos</h2>
+  
+  <div class="filter-section">
+    <div class="filter-row">
+      <span class="filter-label">Filtrar por categoria:</span>
+      <button class="filter-btn active" data-categoria="todas">Todas</button>
+      <button class="filter-btn" data-categoria="DIGI">DIGI</button>
+      <button class="filter-btn" data-categoria="Telecom">Telecom</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Ordenar por data:</span>
+      <select id="dateSort" class="date-sort-select">
+        <option value="desc">Mais recentes primeiro</option>
+        <option value="asc">Mais antigas primeiro</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="noticias-container" id="noticiasContainer"></div>
+  <div class="noticias-more-wrap">
+    <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
+  </div>
 
-  <section style="max-width:980px;margin:0 auto 28px;padding:24px;border-radius:18px;background:rgba(255,255,255,0.94);box-shadow:0 12px 30px rgba(0,102,204,0.10);border:1px solid rgba(0,102,204,0.08);">
+  <section style="max-width:980px;margin:32px auto 28px;padding:24px;border-radius:18px;background:rgba(255,255,255,0.94);box-shadow:0 12px 30px rgba(0,102,204,0.10);border:1px solid rgba(0,102,204,0.08);">
     <h3 style="margin:0 0 12px;font-family:'Outfit',sans-serif;font-size:1.45em;color:#0f2350;">Arquivo editorial do VICIADO COMENTA</h3>
     <p style="margin:0 0 12px;color:#28415f;line-height:1.75;">Esta página reúne os artigos publicados no VICIADO COMENTA sobre telecomunicações, tecnologia e mercado. Não funciona como uma simples lista de links: é o arquivo central da cobertura editorial do projeto, onde organizamos peças de análise, reação e acompanhamento de temas que continuam a evoluir ao longo do tempo.</p>
     <p style="margin:0 0 12px;color:#28415f;line-height:1.75;">A prioridade aqui não é replicar comunicados nem despejar novidades sem leitura própria. O objetivo é juntar contexto, opinião assinada e acompanhamento continuado das mudanças mais relevantes no setor, sobretudo em áreas como concorrência nas telecom, movimentos da DIGI, estratégias das operadoras históricas, ofertas comerciais e impacto dessas decisões no consumidor.</p>
@@ -1061,24 +1113,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <p style="margin:0;color:#36506d;line-height:1.7;">Privilegiamos contexto, autoria identificada e transparência sobre fontes e análise, em vez de produção automática ou agregação sem valor acrescentado.</p>
     </article>
   </section>
-  
-  <div class="filter-section">
-    <div class="filter-row">
-      <span class="filter-label">Filtrar por categoria:</span>
-      <button class="filter-btn active" data-categoria="todas">Todas</button>
-      <button class="filter-btn" data-categoria="DIGI">DIGI</button>
-      <button class="filter-btn" data-categoria="Telecom">Telecom</button>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label">Ordenar por data:</span>
-      <select id="dateSort" class="date-sort-select">
-        <option value="desc">Mais recentes primeiro</option>
-        <option value="asc">Mais antigas primeiro</option>
-      </select>
-    </div>
-  </div>
-  
-  <div class="noticias-container" id="noticiasContainer"></div>
 </main>
 
 <footer>
@@ -1099,6 +1133,9 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 // Carregar todas as notícias
 let todasAsNoticias = [];
+const ARTICLES_BATCH_SIZE = 4;
+let artigosVisiveis = ARTICLES_BATCH_SIZE;
+let noticiasFiltradasAtuais = [];
 
 function slugifyTitulo(titulo) {
   if (!titulo || typeof titulo !== 'string') return '';
@@ -1186,7 +1223,7 @@ fetchNoticiasAgendadas()
     todasAsNoticias = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
     
     // Renderizar todas as notícias inicialmente
-    renderizarNoticias(todasAsNoticias);
+    renderizarNoticias(todasAsNoticias, true);
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
       window.NewArticleNotification.init(todasAsNoticias);
@@ -1215,6 +1252,14 @@ fetchNoticiasAgendadas()
     document.getElementById('dateSort').addEventListener('change', () => {
       aplicarFiltros();
     });
+
+    const noticiasLoadMore = document.getElementById('noticiasLoadMore');
+    if (noticiasLoadMore) {
+      noticiasLoadMore.addEventListener('click', () => {
+        artigosVisiveis += ARTICLES_BATCH_SIZE;
+        renderizarNoticias(noticiasFiltradasAtuais, false);
+      });
+    }
   })
   .catch(err => console.error('Erro ao carregar notícias:', err));
 
@@ -1245,13 +1290,20 @@ function aplicarFiltros() {
     }
   });
   
-  renderizarNoticias(noticiasFiltrares);
+  renderizarNoticias(noticiasFiltrares, true);
 }
 
 // Função para renderizar as notícias
-function renderizarNoticias(noticias) {
+function renderizarNoticias(noticias, resetVisiveis = true) {
   const container = document.getElementById('noticiasContainer');
+  const noticiasLoadMore = document.getElementById('noticiasLoadMore');
   container.innerHTML = '';
+
+  if (resetVisiveis) {
+    artigosVisiveis = ARTICLES_BATCH_SIZE;
+  }
+
+  noticiasFiltradasAtuais = Array.isArray(noticias) ? [...noticias] : [];
   
   // Função para extrair ID do YouTube
   function extrairVideoId(url) {
@@ -1263,10 +1315,15 @@ function renderizarNoticias(noticias) {
   
   if (noticias.length === 0) {
     container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhuma notícia encontrada nesta categoria.</p>';
+    if (noticiasLoadMore) {
+      noticiasLoadMore.style.display = 'none';
+    }
     return;
   }
+
+  const noticiasParaMostrar = noticias.slice(0, artigosVisiveis);
   
-  noticias.forEach((noticia, index) => {
+  noticiasParaMostrar.forEach((noticia, index) => {
     const videoId = extrairVideoId(noticia.video);
     let videoHTML = '';
     if (videoId) {
@@ -1297,7 +1354,7 @@ function renderizarNoticias(noticias) {
         <p>${conteudoPreview}</p>
         <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver Mais →</a>
       </div>
-      ${index < noticias.length - 1 ? '<div class="noticia-divider"></div>' : ''}
+      ${index < noticiasParaMostrar.length - 1 ? '<div class="noticia-divider"></div>' : ''}
     `;
     container.appendChild(noticiaEl);
     
@@ -1314,6 +1371,10 @@ function renderizarNoticias(noticias) {
       }, 100);
     }
   });
+
+  if (noticiasLoadMore) {
+    noticiasLoadMore.style.display = noticias.length > artigosVisiveis ? 'inline-flex' : 'none';
+  }
 }
 </script>
 
