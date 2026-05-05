@@ -19,6 +19,7 @@
 <meta name="twitter:title" content="VICIADO COMENTA">
 <meta name="twitter:description" content="Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade em Portugal.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
+<script>document.documentElement.classList.add('js');</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -74,6 +75,10 @@ body {
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   color: #1a1f3a;
   line-height: 1.6;
+}
+
+.js .prerender-fallback {
+  display: none !important;
 }
 
 /* HEADER */
@@ -1069,6 +1074,10 @@ body.dark span { color: #e5e7eb !important; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 25px;
   margin-bottom: 60px;
+}
+
+.prerender-card {
+  padding-bottom: 18px;
 }
 
 .noticia-item {
@@ -2191,7 +2200,7 @@ footer {
   <a href="todas-noticias.html">Artigos</a>
   <a href="sobre-nos.html">Sobre Nós</a>
   <div class="nav-dropdown">
-    <a href="#">Conteúdos</a>
+    <a href="viciado-comenta.html">Conteúdos</a>
     <div class="dropdown-menu">
       <a href="viciado-comenta.html">Viciado Comenta</a>
       <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
@@ -2265,7 +2274,7 @@ footer {
         <div class="highlight-video-info">
           <h3 id="videoDestaqueTitulo">Vídeo em destaque do canal</h3>
           <p id="videoDestaqueDescricao">Análise editorial em vídeo sobre telecomunicações, tecnologia, gaming e temas de atualidade.</p>
-          <a id="videoDestaqueLink" class="highlight-video-cta" href="#" target="_blank" rel="noopener noreferrer">
+          <a id="videoDestaqueLink" class="highlight-video-cta" href="https://www.youtube.com/@TheViciado" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-youtube"></i>
             <span id="videoDestaqueLinkTexto">Ver no YouTube</span>
           </a>
@@ -2278,6 +2287,52 @@ footer {
     <h2>Últimos Artigos</h2>
     
     <section class="noticias-list" id="noticiasList"></section>
+    <section class="noticias-list prerender-fallback" aria-label="Artigos em destaque sem JavaScript">
+      <article class="noticia-item prerender-card">
+        <div class="noticia-conteudo">
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">Telecom</span>
+            <span class="noticia-data">📅 04/05/2026</span>
+          </div>
+          <h3>NOS faz alterações ao plano de 1Gbps e disponibiliza velocidade simétrica!</h3>
+          <p>A NOS está a fazer alterações ao seu plano de 1Gbps, passando a disponibilizar velocidade simétrica a alguns dos seus clientes residenciais.</p>
+          <a href="artigos/nos-faz-alteracoes-ao-plano-de-1gbps.html" class="noticia-link">Ler artigo →</a>
+        </div>
+      </article>
+      <article class="noticia-item prerender-card">
+        <div class="noticia-conteudo">
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">DIGI</span>
+            <span class="noticia-data">📅 01/05/2026</span>
+          </div>
+          <h3>Rede Móvel DIGI continua a avançar em Portugal</h3>
+          <p>Desde Novembro de 2024 que o serviço móvel da DIGI tem estado debaixo de fogo. A estabilidade da rede continua a ser um dos maiores desafios.</p>
+          <a href="artigos/rede-movel-digi-continua-a-avancar-em-portugal.html" class="noticia-link">Ler artigo →</a>
+        </div>
+      </article>
+      <article class="noticia-item prerender-card">
+        <div class="noticia-conteudo">
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">Telecom</span>
+            <span class="noticia-data">📅 29/04/2026</span>
+          </div>
+          <h3>Altice Portugal pode ser a próxima venda de Patrick Drahi</h3>
+          <p>Numa situação financeira complexa, a venda de ativos pode tornar a Altice Portugal num alvo prioritário para gerar liquidez.</p>
+          <a href="artigos/altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi.html" class="noticia-link">Ler artigo →</a>
+        </div>
+      </article>
+      <article class="noticia-item prerender-card">
+        <div class="noticia-conteudo">
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">DIGI</span>
+            <span class="noticia-data">📅 28/04/2026</span>
+          </div>
+          <h3>DIGI Espanha sob pressão: preços baixos, falhas na rede e concorrência agressiva</h3>
+          <p>A operação espanhola da DIGI continua valiosa, mas enfrenta sinais de desgaste num mercado cada vez mais competitivo.</p>
+          <a href="artigos/digi-espanha-sob-pressao-precos-baixos-falhas-na-rede-e-concorrencia-agressiva.html" class="noticia-link">Ler artigo →</a>
+        </div>
+      </article>
+    </section>
     <div class="noticias-more-wrap">
       <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
     </div>

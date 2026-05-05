@@ -160,6 +160,32 @@ function Get-AbsoluteSiteUrl {
     return "https://www.viciadocomenta.pt/$normalized"
 }
 
+function Normalize-LegacyArticleLinks {
+    param(
+        [string]$Html,
+        [hashtable]$LinkLookup
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Html)) {
+        return ''
+    }
+
+    return [regex]::Replace(
+        $Html,
+        'https://www\.viciadocomenta\.pt/artigos\.html#/(?<slug>[^/"''\s]+)/(?<id>\d+)',
+        {
+            param($match)
+
+            $articleId = $match.Groups['id'].Value
+            if ($LinkLookup.ContainsKey($articleId) -and -not [string]::IsNullOrWhiteSpace([string]$LinkLookup[$articleId])) {
+                return [string]$LinkLookup[$articleId]
+            }
+
+            return $match.Value
+        }
+    )
+}
+
 function Get-FirstContentImageUrl {
     param([object]$Noticia)
 
@@ -274,6 +300,16 @@ $now = Get-Date
 $usedSlugs = @{}
 $generatedArticles = @()
 $jsonUpdated = $false
+$legacyArticleLinkLookup = @{}
+
+foreach ($item in $noticias) {
+    $itemId = if ($item.PSObject.Properties.Name -contains 'id') { [string]$item.id } else { '' }
+    $itemLink = if ($item.PSObject.Properties.Name -contains 'link') { [string]$item.link } else { '' }
+
+    if (-not [string]::IsNullOrWhiteSpace($itemId) -and -not [string]::IsNullOrWhiteSpace($itemLink)) {
+        $legacyArticleLinkLookup[$itemId] = $itemLink
+    }
+}
 
 foreach ($noticia in $noticias) {
     $publishDate = Parse-DataPublicacao -DataStr $noticia.dataPublicacao
@@ -326,6 +362,30 @@ foreach ($noticia in $noticias) {
             $noticia.linkEditavel = $editableLiveUrl
         } else {
             Add-Member -InputObject $noticia -NotePropertyName 'linkEditavel' -NotePropertyValue $editableLiveUrl
+        }
+        $jsonUpdated = $true
+    }
+
+    $legacyArticleLinkLookup[$id] = $articleUrl
+
+    $currentResumo = if ($noticia.PSObject.Properties.Name -contains 'resumo') { [string]$noticia.resumo } else { '' }
+    $normalizedResumo = Normalize-LegacyArticleLinks -Html $currentResumo -LinkLookup $legacyArticleLinkLookup
+    if ($currentResumo -ne $normalizedResumo) {
+        if ($noticia.PSObject.Properties.Name -contains 'resumo') {
+            $noticia.resumo = $normalizedResumo
+        } else {
+            Add-Member -InputObject $noticia -NotePropertyName 'resumo' -NotePropertyValue $normalizedResumo
+        }
+        $jsonUpdated = $true
+    }
+
+    $currentConteudo = if ($noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$noticia.conteudo } else { '' }
+    $normalizedConteudo = Normalize-LegacyArticleLinks -Html $currentConteudo -LinkLookup $legacyArticleLinkLookup
+    if ($currentConteudo -ne $normalizedConteudo) {
+        if ($noticia.PSObject.Properties.Name -contains 'conteudo') {
+            $noticia.conteudo = $normalizedConteudo
+        } else {
+            Add-Member -InputObject $noticia -NotePropertyName 'conteudo' -NotePropertyValue $normalizedConteudo
         }
         $jsonUpdated = $true
     }
