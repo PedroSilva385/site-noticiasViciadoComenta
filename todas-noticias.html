@@ -19,11 +19,12 @@
 <meta name="twitter:title" content="Artigos - VICIADO COMENTA">
 <meta name="twitter:description" content="Arquivo de artigos e notícias com análise editorial sobre telecom, tecnologia e gaming.">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
+<script>document.documentElement.classList.add('js');</script>
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-<script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/firebase-config.js?v=20260504-3"></script>
 <script src="assets/news-scheduler.js?v=20260429"></script>
 <script src="assets/new-article-notification.js?v=20260301"></script>
 <script src="assets/push-notifications.js?v=20260301"></script>
@@ -43,6 +44,10 @@ body {
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   color: #1a1f3a;
   line-height: 1.6;
+}
+
+.js .prerender-fallback {
+  display: none !important;
 }
 
 /* Dark mode */
@@ -1058,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <a href="todas-noticias.html">Artigos</a>
   <a href="sobre-nos.html">Sobre Nós</a>
   <div class="nav-dropdown">
-    <a href="#">Conteúdos</a>
+    <a href="viciado-comenta.html">Conteúdos</a>
     <div class="dropdown-menu">
       <a href="viciado-comenta.html">Viciado Comenta</a>
       <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
@@ -1088,6 +1093,60 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   
   <div class="noticias-container" id="noticiasContainer"></div>
+  <div class="noticias-container prerender-fallback" aria-label="Artigos em destaque sem JavaScript">
+    <div class="noticia-completa">
+      <div class="noticia-meta-header">
+        <span class="noticia-categoria">Telecom</span>
+        <span class="noticia-data">📅 04/05/2026</span>
+        <span class="noticia-autor">✍️ Pedro Silva</span>
+      </div>
+      <h3 class="noticia-titulo">NOS faz alterações ao plano de 1Gbps e disponibiliza velocidade simétrica!</h3>
+      <div class="noticia-resumo">A NOS está a fazer alterações ao seu plano de 1Gbps, passando a disponibilizar velocidade simétrica a alguns dos seus clientes residenciais.</div>
+      <div class="noticia-conteudo">
+        <p>Leitura editorial sobre a revisão da oferta fixa da NOS e o impacto desta mudança para clientes residenciais.</p>
+        <a href="artigos/nos-faz-alteracoes-ao-plano-de-1gbps.html" class="noticia-ver-mais">Ver Mais →</a>
+      </div>
+    </div>
+    <div class="noticia-completa">
+      <div class="noticia-meta-header">
+        <span class="noticia-categoria">DIGI</span>
+        <span class="noticia-data">📅 01/05/2026</span>
+        <span class="noticia-autor">✍️ Pedro Silva</span>
+      </div>
+      <h3 class="noticia-titulo">Rede Móvel DIGI continua a avançar em Portugal</h3>
+      <div class="noticia-resumo">Desde Novembro de 2024 que o serviço móvel da DIGI tem estado debaixo de fogo, com cobertura e estabilidade sob observação constante.</div>
+      <div class="noticia-conteudo">
+        <p>Análise ao estado atual da rede móvel da DIGI em Portugal e aos desafios operacionais que ainda persistem.</p>
+        <a href="artigos/rede-movel-digi-continua-a-avancar-em-portugal.html" class="noticia-ver-mais">Ver Mais →</a>
+      </div>
+    </div>
+    <div class="noticia-completa">
+      <div class="noticia-meta-header">
+        <span class="noticia-categoria">Telecom</span>
+        <span class="noticia-data">📅 29/04/2026</span>
+        <span class="noticia-autor">✍️ Pedro Silva</span>
+      </div>
+      <h3 class="noticia-titulo">Altice Portugal pode ser a próxima venda de Patrick Drahi</h3>
+      <div class="noticia-resumo">A pressão financeira no grupo Altice volta a colocar a operação portuguesa no centro das hipóteses de alienação.</div>
+      <div class="noticia-conteudo">
+        <p>Contexto e leitura editorial sobre a posição da Altice Portugal num cenário de venda de ativos.</p>
+        <a href="artigos/altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi.html" class="noticia-ver-mais">Ver Mais →</a>
+      </div>
+    </div>
+    <div class="noticia-completa">
+      <div class="noticia-meta-header">
+        <span class="noticia-categoria">DIGI</span>
+        <span class="noticia-data">📅 28/04/2026</span>
+        <span class="noticia-autor">✍️ Pedro Silva</span>
+      </div>
+      <h3 class="noticia-titulo">DIGI Espanha sob pressão: preços baixos, falhas na rede e concorrência agressiva</h3>
+      <div class="noticia-resumo">A DIGI Espanha cresce, mas enfrenta novas pressões operacionais e concorrenciais que podem travar esse ritmo.</div>
+      <div class="noticia-conteudo">
+        <p>Leitura editorial sobre preços baixos, qualidade de serviço e o novo contexto competitivo no mercado espanhol.</p>
+        <a href="artigos/digi-espanha-sob-pressao-precos-baixos-falhas-na-rede-e-concorrencia-agressiva.html" class="noticia-ver-mais">Ver Mais →</a>
+      </div>
+    </div>
+  </div>
   <div class="noticias-more-wrap">
     <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
   </div>
