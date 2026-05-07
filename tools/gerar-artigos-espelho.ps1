@@ -35,7 +35,7 @@ function Get-Slug {
     return $slug
 }
 
-function Strip-Html {
+function ConvertFrom-HtmlText {
     param([string]$Text)
 
     if ([string]::IsNullOrWhiteSpace($Text)) {
@@ -56,7 +56,7 @@ function Get-MetaDescription {
         [string]$Noticia.conteudo
     }
 
-    $plain = Strip-Html -Text $baseText
+    $plain = ConvertFrom-HtmlText -Text $baseText
     if ($plain.Length -le 180) {
         return $plain
     }
@@ -64,7 +64,7 @@ function Get-MetaDescription {
     return ($plain.Substring(0, 177).Trim() + '...')
 }
 
-function Escape-Html {
+function ConvertTo-HtmlEncoded {
     param([string]$Text)
 
     if ($null -eq $Text) { return '' }
@@ -87,8 +87,8 @@ function Get-RedirectHtml {
         [string]$Title
     )
 
-    $safeTarget = Escape-Html -Text $TargetUrl
-    $safeTitle = Escape-Html -Text $Title
+    $safeTarget = ConvertTo-HtmlEncoded -Text $TargetUrl
+    $safeTitle = ConvertTo-HtmlEncoded -Text $Title
 
     return @"
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ window.location.replace('$TargetUrl');
 "@
 }
 
-function Parse-DataPublicacao {
+function ConvertTo-DataPublicacao {
     param([string]$DataStr)
 
     if ([string]::IsNullOrWhiteSpace($DataStr)) {
@@ -160,7 +160,7 @@ function Get-AbsoluteSiteUrl {
     return "https://www.viciadocomenta.pt/$normalized"
 }
 
-function Normalize-LegacyArticleLinks {
+function Update-LegacyArticleLinks {
     param(
         [string]$Html,
         [hashtable]$LinkLookup
@@ -199,15 +199,15 @@ function Get-FirstContentImageUrl {
 function Get-StaticArticleHtml {
     param([object]$Noticia)
 
-    $titulo    = Escape-Html -Text ([string]$Noticia.titulo)
-    $categoria = Escape-Html -Text ([string]$Noticia.categoria)
-    $dataStr   = Escape-Html -Text ([string]$Noticia.data)
-    $autor     = Escape-Html -Text ([string]$Noticia.autor)
+    $titulo    = ConvertTo-HtmlEncoded -Text ([string]$Noticia.titulo)
+    $categoria = ConvertTo-HtmlEncoded -Text ([string]$Noticia.categoria)
+    $dataStr   = ConvertTo-HtmlEncoded -Text ([string]$Noticia.data)
+    $autor     = ConvertTo-HtmlEncoded -Text ([string]$Noticia.autor)
     $resumo    = if ($Noticia.PSObject.Properties.Name -contains 'resumo')   { [string]$Noticia.resumo }   else { '' }
     $conteudo  = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
-    $wordCount  = [Math]::Max(1, (Strip-Html -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
+    $wordCount  = [Math]::Max(1, (ConvertFrom-HtmlText -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
     $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
     $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
     $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudo", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
@@ -308,7 +308,7 @@ foreach ($item in $noticias) {
 }
 
 foreach ($noticia in $noticias) {
-    $publishDate = Parse-DataPublicacao -DataStr $noticia.dataPublicacao
+    $publishDate = ConvertTo-DataPublicacao -DataStr $noticia.dataPublicacao
     $isPublished = (-not $publishDate) -or ($publishDate -le $now)
 
     $id = [string]$noticia.id
@@ -365,7 +365,7 @@ foreach ($noticia in $noticias) {
     $legacyArticleLinkLookup[$id] = $articleUrl
 
     $currentResumo = if ($noticia.PSObject.Properties.Name -contains 'resumo') { [string]$noticia.resumo } else { '' }
-    $normalizedResumo = Normalize-LegacyArticleLinks -Html $currentResumo -LinkLookup $legacyArticleLinkLookup
+    $normalizedResumo = Update-LegacyArticleLinks -Html $currentResumo -LinkLookup $legacyArticleLinkLookup
     if ($currentResumo -ne $normalizedResumo) {
         if ($noticia.PSObject.Properties.Name -contains 'resumo') {
             $noticia.resumo = $normalizedResumo
@@ -376,7 +376,7 @@ foreach ($noticia in $noticias) {
     }
 
     $currentConteudo = if ($noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$noticia.conteudo } else { '' }
-    $normalizedConteudo = Normalize-LegacyArticleLinks -Html $currentConteudo -LinkLookup $legacyArticleLinkLookup
+    $normalizedConteudo = Update-LegacyArticleLinks -Html $currentConteudo -LinkLookup $legacyArticleLinkLookup
     if ($currentConteudo -ne $normalizedConteudo) {
         if ($noticia.PSObject.Properties.Name -contains 'conteudo') {
             $noticia.conteudo = $normalizedConteudo
@@ -393,7 +393,7 @@ foreach ($noticia in $noticias) {
     $effectivePublishedDate = if ($publishDate) {
         $publishDate
     } else {
-        Parse-DataPublicacao -DataStr ([string]$noticia.data)
+        ConvertTo-DataPublicacao -DataStr ([string]$noticia.data)
     }
     $sitemapLastMod = if ($effectivePublishedDate) {
         $effectivePublishedDate.ToString('yyyy-MM-dd')
@@ -408,9 +408,9 @@ foreach ($noticia in $noticias) {
     }
     $modifiedDateIso = $publishedDateIso
 
-    $safeTitle = Escape-Html -Text $rawTitle
-    $safeDescription = Escape-Html -Text $metaDescription
-    $safeUrl = Escape-Html -Text $articleUrl
+    $safeTitle = ConvertTo-HtmlEncoded -Text $rawTitle
+    $safeDescription = ConvertTo-HtmlEncoded -Text $metaDescription
+    $safeUrl = ConvertTo-HtmlEncoded -Text $articleUrl
     $contentImageUrl = Get-FirstContentImageUrl -Noticia $noticia
     $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($videoId)) {
         "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
@@ -419,7 +419,7 @@ foreach ($noticia in $noticias) {
     } else {
         'https://www.viciadocomenta.pt/assets/perfil.png'
     }
-    $safeSocialImageUrl = Escape-Html -Text $socialImageUrl
+    $safeSocialImageUrl = ConvertTo-HtmlEncoded -Text $socialImageUrl
 
     $authorName = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
 
@@ -494,6 +494,7 @@ foreach ($noticia in $noticias) {
     $robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
 
     $seoMeta = @"
+    <link rel="canonical" id="canonicalLink" href="$safeUrl">
 <meta name="description" content="$safeDescription">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="VICIADO COMENTA">
@@ -545,11 +546,10 @@ foreach ($noticia in $noticias) {
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:description" content="Not.*?gaming\.">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:image" content=".*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<link rel="canonical" id="canonicalLink" href=".*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<link rel="canonical" id="canonicalLink" href="https://www\.viciadocomenta\.pt/artigos\.html">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:url" content="https://www\.viciadocomenta\.pt/artigos\.html">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?s)\s*<script type="application/ld\+json">.*?</script>\s*', "`n")
-
-    if ($content.Contains('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">')) {
-        $content = $content.Replace('<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">', ('<link rel="canonical" id="canonicalLink" href="' + $safeUrl + '">'))
-    }
 
     if ($content -notmatch '<base\s+href="\.\./"\s*/?>') {
         $content = $content -replace '<head>', ('<head>' + "`n" + '<base href="../">')
