@@ -2042,7 +2042,7 @@ footer {
 <meta name="twitter:title" content="NOVA proposta da MEO na internet FIXA!">
 <meta name="twitter:description" content="MEO avan&#231;a com nova oferta comercial, na sua internet fixa. Faz todo o sentido!">
 <meta name="twitter:image" content="https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"headline":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","datePublished":"2026-04-23T00:00:00Z","dateModified":"2026-04-23T00:00:00Z","image":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video","name":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","thumbnailUrl":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"uploadDate":"2026-04-23T00:00:00Z","embedUrl":"https://www.youtube-nocookie.com/embed/MFViU-mu3QM","contentUrl":"https://youtu.be/MFViU-mu3QM","isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"headline":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","datePublished":"2026-04-22T23:00:00Z","dateModified":"2026-04-22T23:00:00Z","image":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video","name":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","thumbnailUrl":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"uploadDate":"2026-04-22T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/MFViU-mu3QM","contentUrl":"https://www.youtube.com/watch?v=MFViU-mu3QM","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","https://www.youtube.com/watch?v=MFViU-mu3QM"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2118,11 +2118,7 @@ footer {
             </div>
           </div>
                     <div class="artigo-video" data-video-id="MFViU-mu3QM" data-video-title="NOVA proposta da MEO na internet FIXA!">
-                        <img src="https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg" alt="Miniatura do video" class="artigo-video-poster" loading="lazy">
-                        <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
-                            <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
-                            <span class="artigo-video-label"><strong>Ver v&iacute;deo</strong><span>O player carrega apenas ap&oacute;s clique.</span></span>
-                        </button>
+                        <iframe src="https://www.youtube-nocookie.com/embed/MFViU-mu3QM?modestbranding=1&amp;rel=0" title="NOVA proposta da MEO na internet FIXA!" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>
           <div class="artigo-conteudo">
             <p><strong>MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!</strong></p>
@@ -2625,9 +2621,7 @@ function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, soci
   const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
   if (videoId) {
     const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
-    const watchUrl = noticia.video && String(noticia.video).trim()
-      ? String(noticia.video).trim()
-      : `https://www.youtube.com/watch?v=${videoId}`;
+    const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
     graph.push({
       '@type': 'VideoObject',
@@ -2636,8 +2630,17 @@ function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, soci
       description: metaDescription,
       thumbnailUrl: [socialImageUrl],
       uploadDate: publishedIso,
+      url: canonicalUrl,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl
+      },
       embedUrl,
       contentUrl: watchUrl,
+      potentialAction: {
+        '@type': 'WatchAction',
+        target: [canonicalUrl, watchUrl]
+      },
       isFamilyFriendly: true,
       inLanguage: 'pt-PT'
     });
@@ -3244,6 +3247,13 @@ function initArticleVideoEmbeds(root = document) {
       return;
     }
 
+    if (container.querySelector('iframe')) {
+      container.dataset.videoLoaded = 'true';
+      container.classList.add('is-loaded');
+      container.dataset.videoBound = 'true';
+      return;
+    }
+
     const trigger = container.querySelector('[data-video-trigger]');
     if (!trigger) {
       return;
@@ -3656,11 +3666,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let videoHTML = '';
         if (videoId) {
           videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${noticia.titulo}">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do video" id="thumbnail-article" class="artigo-video-poster" loading="lazy">
-            <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
-              <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
-              <span class="artigo-video-label"><strong>Ver video</strong><span>O player carrega apenas apos clique.</span></span>
-            </button>
+            <iframe id="videoFrame-article" src="https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0" title="${noticia.titulo}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>`;
         }
         

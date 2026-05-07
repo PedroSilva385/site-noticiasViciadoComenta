@@ -2042,7 +2042,7 @@ footer {
 <meta name="twitter:title" content="INTERNET por SAT&#201;LITE em 2026!">
 <meta name="twitter:description" content="Analisamos algumas das op&#231;&#245;es de internet por sat&#233;lite, dispon&#237;veis em Portugal, em 2026.">
 <meta name="twitter:image" content="https://img.youtube.com/vi/3-s474b2puI/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html"},"headline":"INTERNET por SATÉLITE em 2026!","description":"Analisamos algumas das opções de internet por satélite, disponíveis em Portugal, em 2026.","datePublished":"2026-02-13T19:00:00Z","dateModified":"2026-02-13T19:00:00Z","image":["https://img.youtube.com/vi/3-s474b2puI/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html#video","name":"INTERNET por SATÉLITE em 2026!","description":"Analisamos algumas das opções de internet por satélite, disponíveis em Portugal, em 2026.","thumbnailUrl":["https://img.youtube.com/vi/3-s474b2puI/hqdefault.jpg"],"uploadDate":"2026-02-13T19:00:00Z","embedUrl":"https://www.youtube-nocookie.com/embed/3-s474b2puI","contentUrl":"https://youtu.be/3-s474b2puI","isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html"},"headline":"INTERNET por SATÉLITE em 2026!","description":"Analisamos algumas das opções de internet por satélite, disponíveis em Portugal, em 2026.","datePublished":"2026-02-13T19:00:00Z","dateModified":"2026-02-13T19:00:00Z","image":["https://img.youtube.com/vi/3-s474b2puI/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html#video","name":"INTERNET por SATÉLITE em 2026!","description":"Analisamos algumas das opções de internet por satélite, disponíveis em Portugal, em 2026.","thumbnailUrl":["https://img.youtube.com/vi/3-s474b2puI/hqdefault.jpg"],"uploadDate":"2026-02-13T19:00:00Z","url":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/3-s474b2puI","contentUrl":"https://www.youtube.com/watch?v=3-s474b2puI","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/internet-por-satelite-em-2026.html","https://www.youtube.com/watch?v=3-s474b2puI"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2118,11 +2118,7 @@ footer {
             </div>
           </div>
                     <div class="artigo-video" data-video-id="3-s474b2puI" data-video-title="INTERNET por SAT&#201;LITE em 2026!">
-                        <img src="https://img.youtube.com/vi/3-s474b2puI/hqdefault.jpg" alt="Miniatura do video" class="artigo-video-poster" loading="lazy">
-                        <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
-                            <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
-                            <span class="artigo-video-label"><strong>Ver v&iacute;deo</strong><span>O player carrega apenas ap&oacute;s clique.</span></span>
-                        </button>
+                        <iframe src="https://www.youtube-nocookie.com/embed/3-s474b2puI?modestbranding=1&amp;rel=0" title="INTERNET por SAT&#201;LITE em 2026!" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>
           <div class="artigo-conteudo">
             <p><strong>Analisamos algumas das opções de internet por satélite, disponíveis em Portugal, em 2026.</strong></p>
@@ -2645,9 +2641,7 @@ function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, soci
   const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
   if (videoId) {
     const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
-    const watchUrl = noticia.video && String(noticia.video).trim()
-      ? String(noticia.video).trim()
-      : `https://www.youtube.com/watch?v=${videoId}`;
+    const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
     graph.push({
       '@type': 'VideoObject',
@@ -2656,8 +2650,17 @@ function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, soci
       description: metaDescription,
       thumbnailUrl: [socialImageUrl],
       uploadDate: publishedIso,
+      url: canonicalUrl,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl
+      },
       embedUrl,
       contentUrl: watchUrl,
+      potentialAction: {
+        '@type': 'WatchAction',
+        target: [canonicalUrl, watchUrl]
+      },
       isFamilyFriendly: true,
       inLanguage: 'pt-PT'
     });
@@ -3264,6 +3267,13 @@ function initArticleVideoEmbeds(root = document) {
       return;
     }
 
+    if (container.querySelector('iframe')) {
+      container.dataset.videoLoaded = 'true';
+      container.classList.add('is-loaded');
+      container.dataset.videoBound = 'true';
+      return;
+    }
+
     const trigger = container.querySelector('[data-video-trigger]');
     if (!trigger) {
       return;
@@ -3676,11 +3686,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let videoHTML = '';
         if (videoId) {
           videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${noticia.titulo}">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do video" id="thumbnail-article" class="artigo-video-poster" loading="lazy">
-            <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
-              <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
-              <span class="artigo-video-label"><strong>Ver video</strong><span>O player carrega apenas apos clique.</span></span>
-            </button>
+            <iframe id="videoFrame-article" src="https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0" title="${noticia.titulo}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>`;
         }
         

@@ -223,11 +223,7 @@ function Get-StaticArticleHtml {
         $videoSection = @"
 
                     <div class="artigo-video" data-video-id="$videoId" data-video-title="$titulo">
-                        <img src="https://img.youtube.com/vi/$videoId/hqdefault.jpg" alt="Miniatura do video" class="artigo-video-poster" loading="lazy">
-                        <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir video do artigo">
-                            <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
-                            <span class="artigo-video-label"><strong>Ver v&iacute;deo</strong><span>O player carrega apenas ap&oacute;s clique.</span></span>
-                        </button>
+                        <iframe src="https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&amp;rel=0" title="$titulo" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>
 "@
     }
@@ -458,6 +454,7 @@ foreach ($noticia in $noticias) {
     $jsonLdGraph = @($articleJsonLdObject)
 
     if (-not [string]::IsNullOrWhiteSpace($videoId)) {
+        $watchUrl = "https://www.youtube.com/watch?v=$videoId"
         $videoJsonLdObject = [ordered]@{
             '@type' = 'VideoObject'
             '@id' = "$articleUrl#video"
@@ -465,8 +462,17 @@ foreach ($noticia in $noticias) {
             description = $metaDescription
             thumbnailUrl = @($socialImageUrl)
             uploadDate = $publishedDateIso
+            url = $articleUrl
+            mainEntityOfPage = [ordered]@{
+                '@type' = 'WebPage'
+                '@id' = $articleUrl
+            }
             embedUrl = "https://www.youtube-nocookie.com/embed/$videoId"
-            contentUrl = if (-not [string]::IsNullOrWhiteSpace($videoUrl)) { $videoUrl } else { "https://www.youtube.com/watch?v=$videoId" }
+            contentUrl = $watchUrl
+            potentialAction = [ordered]@{
+                '@type' = 'WatchAction'
+                target = @($articleUrl, $watchUrl)
+            }
             isFamilyFriendly = $true
             inLanguage = 'pt-PT'
         }
