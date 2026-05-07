@@ -3178,7 +3178,8 @@ function formatArticleContent(rawContent) {
 function canUseLiveEditor() {
   const params = new URLSearchParams(window.location.search);
   const editEnabled = params.get('edit') === '1';
-  return editEnabled;
+  const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  return editEnabled && isLocalHost;
 }
 
 function loadArticleVideo(container) {
@@ -3243,8 +3244,11 @@ async function resolveStudioApiBase() {
     return studioApiBaseCache;
   }
 
-  const candidates = [window.location.origin, 'http://localhost:8788', 'http://localhost:8787']
-    .filter((value, index, list) => value && list.indexOf(value) === index);
+  if (!canUseLiveEditor()) {
+    throw new Error('Modo de edição disponível apenas no servidor local.');
+  }
+
+  const candidates = [window.location.origin];
 
   for (const base of candidates) {
     try {
@@ -3266,7 +3270,7 @@ async function resolveStudioApiBase() {
 }
 
 async function triggerRebuildOnAvailableApi(preferredBase) {
-  const candidates = [preferredBase, 'http://localhost:8788', 'http://localhost:8787', window.location.origin]
+  const candidates = [preferredBase, window.location.origin]
     .filter((value, index, list) => value && list.indexOf(value) === index);
 
   let lastErrorMessage = 'Não foi possível regenerar os artigos espelho automaticamente.';

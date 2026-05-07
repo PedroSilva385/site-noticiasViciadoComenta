@@ -35,7 +35,7 @@ function Get-Slug {
     return $slug
 }
 
-function ConvertFrom-HtmlText {
+function Get-PlainTextFromHtml {
     param([string]$Text)
 
     if ([string]::IsNullOrWhiteSpace($Text)) {
@@ -56,7 +56,7 @@ function Get-MetaDescription {
         [string]$Noticia.conteudo
     }
 
-    $plain = ConvertFrom-HtmlText -Text $baseText
+    $plain = Get-PlainTextFromHtml -Text $baseText
     if ($plain.Length -le 180) {
         return $plain
     }
@@ -64,7 +64,7 @@ function Get-MetaDescription {
     return ($plain.Substring(0, 177).Trim() + '...')
 }
 
-function ConvertTo-HtmlEncoded {
+function ConvertTo-HtmlEntities {
     param([string]$Text)
 
     if ($null -eq $Text) { return '' }
@@ -87,8 +87,8 @@ function Get-RedirectHtml {
         [string]$Title
     )
 
-    $safeTarget = ConvertTo-HtmlEncoded -Text $TargetUrl
-    $safeTitle = ConvertTo-HtmlEncoded -Text $Title
+    $safeTarget = ConvertTo-HtmlEntities -Text $TargetUrl
+    $safeTitle = ConvertTo-HtmlEntities -Text $Title
 
     return @"
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ window.location.replace('$TargetUrl');
 "@
 }
 
-function ConvertTo-DataPublicacao {
+function Get-PublicationDateValue {
     param([string]$DataStr)
 
     if ([string]::IsNullOrWhiteSpace($DataStr)) {
@@ -160,7 +160,7 @@ function Get-AbsoluteSiteUrl {
     return "https://www.viciadocomenta.pt/$normalized"
 }
 
-function Update-LegacyArticleLinks {
+function Resolve-LegacyArticleLinks {
     param(
         [string]$Html,
         [hashtable]$LinkLookup
@@ -199,15 +199,15 @@ function Get-FirstContentImageUrl {
 function Get-StaticArticleHtml {
     param([object]$Noticia)
 
-    $titulo    = ConvertTo-HtmlEncoded -Text ([string]$Noticia.titulo)
-    $categoria = ConvertTo-HtmlEncoded -Text ([string]$Noticia.categoria)
-    $dataStr   = ConvertTo-HtmlEncoded -Text ([string]$Noticia.data)
-    $autor     = ConvertTo-HtmlEncoded -Text ([string]$Noticia.autor)
+    $titulo    = ConvertTo-HtmlEntities -Text ([string]$Noticia.titulo)
+    $categoria = ConvertTo-HtmlEntities -Text ([string]$Noticia.categoria)
+    $dataStr   = ConvertTo-HtmlEntities -Text ([string]$Noticia.data)
+    $autor     = ConvertTo-HtmlEntities -Text ([string]$Noticia.autor)
     $resumo    = if ($Noticia.PSObject.Properties.Name -contains 'resumo')   { [string]$Noticia.resumo }   else { '' }
     $conteudo  = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
-    $wordCount  = [Math]::Max(1, (ConvertFrom-HtmlText -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
+    $wordCount  = [Math]::Max(1, (Get-PlainTextFromHtml -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
     $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
     $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
     $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudo", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
@@ -308,7 +308,7 @@ foreach ($item in $noticias) {
 }
 
 foreach ($noticia in $noticias) {
-    $publishDate = ConvertTo-DataPublicacao -DataStr $noticia.dataPublicacao
+    $publishDate = Get-PublicationDateValue -DataStr $noticia.dataPublicacao
     $isPublished = (-not $publishDate) -or ($publishDate -le $now)
 
     $id = [string]$noticia.id
@@ -365,7 +365,7 @@ foreach ($noticia in $noticias) {
     $legacyArticleLinkLookup[$id] = $articleUrl
 
     $currentResumo = if ($noticia.PSObject.Properties.Name -contains 'resumo') { [string]$noticia.resumo } else { '' }
-    $normalizedResumo = Update-LegacyArticleLinks -Html $currentResumo -LinkLookup $legacyArticleLinkLookup
+    $normalizedResumo = Resolve-LegacyArticleLinks -Html $currentResumo -LinkLookup $legacyArticleLinkLookup
     if ($currentResumo -ne $normalizedResumo) {
         if ($noticia.PSObject.Properties.Name -contains 'resumo') {
             $noticia.resumo = $normalizedResumo
@@ -376,7 +376,7 @@ foreach ($noticia in $noticias) {
     }
 
     $currentConteudo = if ($noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$noticia.conteudo } else { '' }
-    $normalizedConteudo = Update-LegacyArticleLinks -Html $currentConteudo -LinkLookup $legacyArticleLinkLookup
+    $normalizedConteudo = Resolve-LegacyArticleLinks -Html $currentConteudo -LinkLookup $legacyArticleLinkLookup
     if ($currentConteudo -ne $normalizedConteudo) {
         if ($noticia.PSObject.Properties.Name -contains 'conteudo') {
             $noticia.conteudo = $normalizedConteudo
@@ -393,7 +393,7 @@ foreach ($noticia in $noticias) {
     $effectivePublishedDate = if ($publishDate) {
         $publishDate
     } else {
-        ConvertTo-DataPublicacao -DataStr ([string]$noticia.data)
+        Get-PublicationDateValue -DataStr ([string]$noticia.data)
     }
     $sitemapLastMod = if ($effectivePublishedDate) {
         $effectivePublishedDate.ToString('yyyy-MM-dd')
@@ -408,9 +408,9 @@ foreach ($noticia in $noticias) {
     }
     $modifiedDateIso = $publishedDateIso
 
-    $safeTitle = ConvertTo-HtmlEncoded -Text $rawTitle
-    $safeDescription = ConvertTo-HtmlEncoded -Text $metaDescription
-    $safeUrl = ConvertTo-HtmlEncoded -Text $articleUrl
+    $safeTitle = ConvertTo-HtmlEntities -Text $rawTitle
+    $safeDescription = ConvertTo-HtmlEntities -Text $metaDescription
+    $safeUrl = ConvertTo-HtmlEntities -Text $articleUrl
     $contentImageUrl = Get-FirstContentImageUrl -Noticia $noticia
     $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($videoId)) {
         "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
@@ -419,7 +419,7 @@ foreach ($noticia in $noticias) {
     } else {
         'https://www.viciadocomenta.pt/assets/perfil.png'
     }
-    $safeSocialImageUrl = ConvertTo-HtmlEncoded -Text $socialImageUrl
+    $safeSocialImageUrl = ConvertTo-HtmlEntities -Text $socialImageUrl
 
     $authorName = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
 
