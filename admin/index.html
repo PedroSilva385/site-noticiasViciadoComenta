@@ -231,6 +231,14 @@ body {
   gap: 12px;
 }
 
+.tool-notice {
+  background: #eef2ff;
+  border-left: 4px solid #4f46e5;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #1f2937;
+}
+
 .stats-toolbar {
   display: flex;
   gap: 10px;
@@ -904,6 +912,7 @@ button {
     <div class="header-right">
       <div class="admin-tabs" role="tablist" aria-label="Abas do painel admin">
         <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
+        <button type="button" class="admin-tab-btn" id="adminTabVideos" role="tab" aria-selected="false" aria-controls="videosView">🎬 Vídeos e Links</button>
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
       </div>
       <button type="button" class="btn-publish-site" id="btnPublishSite" title="Executa o deploy manual via servidor local">🚀 Publicar site</button>
@@ -1124,6 +1133,28 @@ button {
       </div>
     </div>
   </div>
+
+  <div class="panel-view" id="videosView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <div class="tool-notice">
+          Gere aqui o vídeo em destaque da homepage e os links principais das páginas da aba <strong>Conteúdos</strong>. As alterações ficam guardadas no Firebase e o site passa a usar esses valores sem edição manual dos HTML.
+        </div>
+        <div class="stats-toolbar">
+          <button type="button" class="btn-inline" id="btnReloadVideosStudio">Atualizar painel de vídeos e links</button>
+          <a class="btn-inline" href="../tools/videos-studio.html" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
+        </div>
+        <iframe
+          id="videosStudioFrame"
+          class="stats-frame"
+          src="../tools/videos-studio.html"
+          title="Painel de vídeos e links"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Firebase SDK (Compat version for compatibility) -->
@@ -1232,10 +1263,14 @@ const registerCta = document.getElementById('registerCta');
 const userEmail = document.getElementById('userEmail');
 const btnLogout = document.getElementById('btnLogout');
 const adminTabNoticias = document.getElementById('adminTabNoticias');
+const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
 const newsView = document.getElementById('newsView');
+const videosView = document.getElementById('videosView');
 const statsView = document.getElementById('statsView');
+const videosStudioFrame = document.getElementById('videosStudioFrame');
 const statsFrame = document.getElementById('statsFrame');
+const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
 const btnReloadStats = document.getElementById('btnReloadStats');
 const btnPublishSite = document.getElementById('btnPublishSite');
 const noticiasList = document.getElementById('noticiasList');
@@ -1313,15 +1348,21 @@ if (registerCta && !isLocalSetupHost()) {
 }
 
 function setAdminView(viewName) {
+  const showNoticias = viewName === 'noticias';
+  const showVideos = viewName === 'videos';
   const showStats = viewName === 'estatisticas';
 
-  adminTabNoticias.classList.toggle('active', !showStats);
+  adminTabNoticias.classList.toggle('active', showNoticias);
+  adminTabVideos.classList.toggle('active', showVideos);
   adminTabEstatisticas.classList.toggle('active', showStats);
-  adminTabNoticias.setAttribute('aria-selected', showStats ? 'false' : 'true');
+  adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
+  adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
   adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
 
-  newsView.classList.toggle('active', !showStats);
+  newsView.classList.toggle('active', showNoticias);
+  videosView.classList.toggle('active', showVideos);
   statsView.classList.toggle('active', showStats);
+  videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
 }
 
@@ -1329,8 +1370,17 @@ adminTabNoticias.addEventListener('click', () => {
   setAdminView('noticias');
 });
 
+adminTabVideos.addEventListener('click', () => {
+  setAdminView('videos');
+});
+
 adminTabEstatisticas.addEventListener('click', () => {
   setAdminView('estatisticas');
+});
+
+btnReloadVideosStudio.addEventListener('click', () => {
+  const src = videosStudioFrame.getAttribute('src') || '../tools/videos-studio.html';
+  videosStudioFrame.setAttribute('src', src);
 });
 
 btnReloadStats.addEventListener('click', () => {

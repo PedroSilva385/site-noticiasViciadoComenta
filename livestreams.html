@@ -21,6 +21,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
+<script src="assets/video-data.js?v=20260402"></script>
+<script src="assets/content-links.js?v=20260510"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -1031,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <h2>Junta-se ao Stream</h2>
     <p>Acompanha as transmissões ao vivo no meu canal da Twitch. Análises, comentários, jogos e muito mais! Clica no botão abaixo para ir para o meu canal.</p>
-    <a href="https://www.twitch.tv/theviciado13" target="_blank" rel="noopener noreferrer" class="twitch-button">
+    <a id="contentLinkLivestreamsPrimary" href="https://www.twitch.tv/theviciado13" target="_blank" rel="noopener noreferrer" class="twitch-button">
       <i class="fab fa-twitch"></i> Ver Canal da Twitch
     </a>
   </div>
@@ -1079,6 +1081,20 @@ document.addEventListener('DOMContentLoaded', () => {
     </footer>
 
  
+<script>
+async function carregarLinksConteudos() {
+  try {
+    const links = await window.VCContentLinks.loadLinks({ fallbackUrl: 'data/content-links.json' });
+    window.VCContentLinks.applyLinks({
+      contentLinkLivestreamsPrimary: ((links.livestreams || {}).primaryUrl) || ''
+    });
+  } catch (error) {
+    console.error('Erro ao carregar links de conteúdos:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', carregarLinksConteudos);
+</script>
 
 </body>
 </html>

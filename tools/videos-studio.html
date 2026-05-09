@@ -48,8 +48,8 @@ button:hover { filter: brightness(.95); }
 </head>
 <body>
 <div class="container">
-  <h1>🎬 Vídeos Studio</h1>
-  <p class="subtitle">Adicionar e gerir vídeos das várias páginas no mesmo painel.</p>
+  <h1>🎬 Vídeos e Links Studio</h1>
+  <p class="subtitle">Gerir o vídeo em destaque e os links principais das páginas da aba Conteúdos no mesmo painel.</p>
 
   <div class="notice">
     Funciona diretamente no site publicado e no painel admin.<br>
@@ -58,7 +58,7 @@ button:hover { filter: brightness(.95); }
 
   <div class="grid">
     <section class="panel">
-      <h2>1) Seleção e novo vídeo</h2>
+      <h2>1) Seleção e edição</h2>
 
       <div>
         <label for="targetSelect">Destino</label>
@@ -67,6 +67,7 @@ button:hover { filter: brightness(.95); }
           <option value="viciado-ponto-critico">Viciado Ponto Crítico (lista por data)</option>
           <option value="metin2">Metin2 (séries)</option>
           <option value="featured">Vídeo em destaque (único)</option>
+          <option value="content-links">Links das páginas Conteúdos</option>
         </select>
       </div>
 
@@ -109,6 +110,33 @@ button:hover { filter: brightness(.95); }
         </div>
       </div>
 
+      <div id="contentLinksFields" style="display:none; margin-top:10px;">
+        <div class="row">
+          <div>
+            <label for="linkViciadoComentaPlaylist">Viciado Comenta</label>
+            <input id="linkViciadoComentaPlaylist" type="url" placeholder="https://www.youtube.com/playlist?...">
+          </div>
+          <div>
+            <label for="linkViciadoPontoCriticoPlaylist">Viciado Ponto Crítico</label>
+            <input id="linkViciadoPontoCriticoPlaylist" type="url" placeholder="https://www.youtube.com/playlist?...">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="linkMetin2SerieRl2">Metin2 - Playlist RL2</label>
+            <input id="linkMetin2SerieRl2" type="url" placeholder="https://www.youtube.com/playlist?...">
+          </div>
+          <div>
+            <label for="linkMetin2Analise">Metin2 - Playlist Análise</label>
+            <input id="linkMetin2Analise" type="url" placeholder="https://www.youtube.com/playlist?...">
+          </div>
+        </div>
+        <div>
+          <label for="linkLivestreamsPrimary">Livestreams</label>
+          <input id="linkLivestreamsPrimary" type="url" placeholder="https://www.twitch.tv/...">
+        </div>
+      </div>
+
       <div class="actions">
         <button class="btn-secondary" id="btnVerificar">🟢 Verificar Firebase</button>
         <button class="btn-primary" id="btnRecarregar">🔃 Recarregar destino</button>
@@ -144,7 +172,8 @@ const FALLBACK_FILES = {
   'featured': '../data/featured-video.json',
   'viciado-comenta': '../data/viciado-comenta-videos.json',
   'viciado-ponto-critico': '../data/viciado-ponto-critico-videos.json',
-  'metin2': '../data/metin2-videos.json'
+  'metin2': '../data/metin2-videos.json',
+  'content-links': '../data/content-links.json'
 };
 
 function getFallbackUrl(target) {
@@ -234,6 +263,41 @@ function limparFormularioVideo() {
   if (rowsWrap) rowsWrap.innerHTML = '';
 }
 
+function preencherFeaturedForm(data) {
+  const featured = data && typeof data === 'object' ? data : {};
+  document.getElementById('videoUrl').value = String(featured.url || '');
+  document.getElementById('featuredTitulo').value = String(featured.titulo || '');
+  document.getElementById('featuredDescricao').value = String(featured.descricao || '');
+  document.getElementById('featuredCta').value = String(featured.cta || '');
+}
+
+function preencherContentLinksForm(data) {
+  const links = data && typeof data === 'object' ? data : {};
+  document.getElementById('linkViciadoComentaPlaylist').value = String(((links['viciado-comenta'] || {}).playlistUrl) || '');
+  document.getElementById('linkViciadoPontoCriticoPlaylist').value = String(((links['viciado-ponto-critico'] || {}).playlistUrl) || '');
+  document.getElementById('linkMetin2SerieRl2').value = String(((links.metin2 || {}).serieRl2PlaylistUrl) || '');
+  document.getElementById('linkMetin2Analise').value = String(((links.metin2 || {}).analisePlaylistUrl) || '');
+  document.getElementById('linkLivestreamsPrimary').value = String(((links.livestreams || {}).primaryUrl) || '');
+}
+
+function recolherContentLinksForm() {
+  return window.VCVideoData.normalizeByTarget('content-links', {
+    'viciado-comenta': {
+      playlistUrl: document.getElementById('linkViciadoComentaPlaylist').value.trim()
+    },
+    'viciado-ponto-critico': {
+      playlistUrl: document.getElementById('linkViciadoPontoCriticoPlaylist').value.trim()
+    },
+    'metin2': {
+      serieRl2PlaylistUrl: document.getElementById('linkMetin2SerieRl2').value.trim(),
+      analisePlaylistUrl: document.getElementById('linkMetin2Analise').value.trim()
+    },
+    livestreams: {
+      primaryUrl: document.getElementById('linkLivestreamsPrimary').value.trim()
+    }
+  });
+}
+
 function setStatus(message, type = 'info') {
   const el = document.getElementById('status');
   el.className = `status ${type}`;
@@ -248,16 +312,28 @@ function updateTargetUI() {
   const target = document.getElementById('targetSelect').value;
   const isFeatured = target === 'featured';
   const isMetin2 = target === 'metin2';
+  const isContentLinks = target === 'content-links';
 
   document.getElementById('featuredFields').style.display = isFeatured ? 'block' : 'none';
+  document.getElementById('contentLinksFields').style.display = isContentLinks ? 'block' : 'none';
   document.getElementById('serieWrap').style.display = isMetin2 ? 'block' : 'none';
 
-  document.getElementById('videoData').disabled = isFeatured || isMetin2;
-  document.getElementById('videoData').value = '';
+  document.getElementById('videoUrl').disabled = isContentLinks;
+  document.getElementById('videoData').disabled = isFeatured || isMetin2 || isContentLinks;
+  if (isFeatured || isMetin2 || isContentLinks) {
+    document.getElementById('videoData').value = '';
+  }
+
+  const videoRows = document.getElementById('videoRows');
+  const btnNovaOpcao = document.getElementById('btnNovaOpcao');
+  const btnAdicionar = document.getElementById('btnAdicionar');
+  videoRows.style.display = isContentLinks ? 'none' : 'block';
+  btnNovaOpcao.style.display = isContentLinks ? 'none' : 'inline-flex';
+  btnAdicionar.style.display = isContentLinks ? 'none' : 'inline-flex';
 
   document.querySelectorAll('.video-data-extra').forEach((el) => {
-    el.disabled = isFeatured || isMetin2;
-    if (isFeatured || isMetin2) {
+    el.disabled = isFeatured || isMetin2 || isContentLinks;
+    if (isFeatured || isMetin2 || isContentLinks) {
       el.value = '';
     }
   });
@@ -304,6 +380,27 @@ function renderList() {
       <div class="video-meta">CTA: ${videosData.cta || '(vazio)'}</div>
     `;
     wrap.appendChild(item);
+    return;
+  }
+
+  if (currentTarget === 'content-links') {
+    const definitions = [
+      ['Viciado Comenta', ((videosData['viciado-comenta'] || {}).playlistUrl) || ''],
+      ['Viciado Ponto Crítico', ((videosData['viciado-ponto-critico'] || {}).playlistUrl) || ''],
+      ['Metin2 - Playlist RL2', ((videosData.metin2 || {}).serieRl2PlaylistUrl) || ''],
+      ['Metin2 - Playlist Análise', ((videosData.metin2 || {}).analisePlaylistUrl) || ''],
+      ['Livestreams', ((videosData.livestreams || {}).primaryUrl) || '']
+    ];
+
+    definitions.forEach(([label, value]) => {
+      const item = document.createElement('div');
+      item.className = 'video-item';
+      item.innerHTML = `
+        <div class="video-meta"><strong>${label}</strong></div>
+        <div class="video-url">${value || '(sem URL)'}</div>
+      `;
+      wrap.appendChild(item);
+    });
     return;
   }
 
@@ -370,6 +467,12 @@ async function carregarDestino() {
 
   videosData = await window.VCVideoData.loadTarget(currentTarget, { fallbackUrl: getFallbackUrl(currentTarget) });
   updateTargetUI();
+  if (currentTarget === 'featured') {
+    preencherFeaturedForm(videosData);
+  }
+  if (currentTarget === 'content-links') {
+    preencherContentLinksForm(videosData);
+  }
   renderList();
   setStatus(`Dados carregados: ${currentTarget}.`, 'ok');
 }
@@ -383,6 +486,11 @@ function adicionarVideo() {
   const entries = getVideoEntriesFromForm();
   if (!entries.length) {
     setStatus('Indica a URL do vídeo.', 'err');
+    return false;
+  }
+
+  if (currentTarget === 'content-links') {
+    setStatus('Neste destino, edita os campos de links e usa Guardar no site.', 'info');
     return false;
   }
 
@@ -434,6 +542,19 @@ async function guardarDestino() {
     return;
   }
 
+  const selectedTarget = document.getElementById('targetSelect').value;
+
+  if (selectedTarget === 'content-links') {
+    videosData = recolherContentLinksForm();
+    renderList();
+    setStatus('A guardar links das páginas Conteúdos no Firebase...', 'info');
+    await window.VCVideoData.saveTarget(selectedTarget, videosData);
+
+    document.getElementById('logSaida').value = `Links guardados com sucesso.\nDestino: ${selectedTarget}\nOrigem: Firebase Realtime Database`;
+    setStatus('Links guardados e publicados no site.', 'ok');
+    return;
+  }
+
   const entriesPendentes = getVideoEntriesFromForm();
   if (entriesPendentes.length > 0) {
     const added = adicionarVideo();
@@ -443,7 +564,6 @@ async function guardarDestino() {
     }
   }
 
-  const selectedTarget = document.getElementById('targetSelect').value;
   if (selectedTarget !== currentTarget) {
     currentTarget = selectedTarget;
   }

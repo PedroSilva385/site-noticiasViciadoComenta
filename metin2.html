@@ -22,6 +22,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/video-data.js?v=20260402"></script>
+<script src="assets/content-links.js?v=20260510"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -773,7 +774,7 @@ footer a:hover {
   </div>
 
   <div class="playlist-section">
-    <a href="https://www.youtube.com/playlist?list=PL6kuAId83nkL--AvGu2iN7tX6r9bjyXI2" target="_blank" rel="noopener noreferrer" class="playlist-button">
+    <a id="contentLinkMetin2Rl2Playlist" href="https://www.youtube.com/playlist?list=PL6kuAId83nkL--AvGu2iN7tX6r9bjyXI2" target="_blank" rel="noopener noreferrer" class="playlist-button">
       <i class="fab fa-youtube"></i>
       Ver Playlist Completa no YouTube
     </a>
@@ -792,7 +793,7 @@ footer a:hover {
   </div>
 
   <div class="playlist-section">
-    <a href="https://www.youtube.com/playlist?list=PL6kuAId83nkIN_BBOgyyPCH4W8tO2hAoK" target="_blank" rel="noopener noreferrer" class="playlist-button">
+    <a id="contentLinkMetin2AnalisePlaylist" href="https://www.youtube.com/playlist?list=PL6kuAId83nkIN_BBOgyyPCH4W8tO2hAoK" target="_blank" rel="noopener noreferrer" class="playlist-button">
       <i class="fab fa-youtube"></i>
       Ver Playlist Completa no YouTube
     </a>
@@ -922,6 +923,18 @@ function extrairYouTubeId(url) {
   return fallback ? fallback[1] : '';
 }
 
+async function carregarLinksConteudos() {
+  try {
+    const links = await window.VCContentLinks.loadLinks({ fallbackUrl: 'data/content-links.json' });
+    window.VCContentLinks.applyLinks({
+      contentLinkMetin2Rl2Playlist: ((links.metin2 || {}).serieRl2PlaylistUrl) || '',
+      contentLinkMetin2AnalisePlaylist: ((links.metin2 || {}).analisePlaylistUrl) || ''
+    });
+  } catch (error) {
+    console.error('Erro ao carregar links de conteúdos:', error);
+  }
+}
+
 // Carregar vídeos do Firebase com fallback para JSON
 async function carregarVideos() {
   try {
@@ -1007,6 +1020,7 @@ function toggleWatched(event, videoId) {
 
 // Carregar vídeos quando a página carregar
 document.addEventListener('DOMContentLoaded', carregarVideos);
+document.addEventListener('DOMContentLoaded', carregarLinksConteudos);
 </script>
 
 </body>
