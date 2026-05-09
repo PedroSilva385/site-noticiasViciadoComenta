@@ -3,8 +3,29 @@
     'featured': 'videos/featured',
     'viciado-comenta': 'videos/viciado-comenta',
     'viciado-ponto-critico': 'videos/viciado-ponto-critico',
-    'metin2': 'videos/metin2'
+    'metin2': 'videos/metin2',
+    'content-links': 'content-links/main'
   };
+
+  const DEFAULT_CONTENT_LINKS = {
+    'viciado-comenta': {
+      playlistUrl: 'https://www.youtube.com/playlist?list=PL6kuAId83nkJllMUGSCHki6Z8B18cydqD'
+    },
+    'viciado-ponto-critico': {
+      playlistUrl: 'https://www.youtube.com/playlist?list=PL6kuAId83nkJ8jH6G8CK46lzu_oGDi9nf'
+    },
+    'metin2': {
+      serieRl2PlaylistUrl: 'https://www.youtube.com/playlist?list=PL6kuAId83nkL--AvGu2iN7tX6r9bjyXI2',
+      analisePlaylistUrl: 'https://www.youtube.com/playlist?list=PL6kuAId83nkIN_BBOgyyPCH4W8tO2hAoK'
+    },
+    'livestreams': {
+      primaryUrl: 'https://www.twitch.tv/theviciado13'
+    }
+  };
+
+  function cloneDefaultContentLinks() {
+    return JSON.parse(JSON.stringify(DEFAULT_CONTENT_LINKS));
+  }
 
   function getTargetPath(target) {
     const path = TARGET_PATHS[String(target || '').trim()];
@@ -61,6 +82,43 @@
         descricao: String(featured.descricao || '').trim(),
         cta: String(featured.cta || 'Ver no YouTube').trim() || 'Ver no YouTube'
       };
+    }
+
+    if (target === 'content-links') {
+      const source = (raw && typeof raw === 'object') ? raw : {};
+      const normalized = cloneDefaultContentLinks();
+
+      normalized['viciado-comenta'].playlistUrl = String(
+        source['viciado-comenta'] && source['viciado-comenta'].playlistUrl
+          ? source['viciado-comenta'].playlistUrl
+          : normalized['viciado-comenta'].playlistUrl
+      ).trim();
+
+      normalized['viciado-ponto-critico'].playlistUrl = String(
+        source['viciado-ponto-critico'] && source['viciado-ponto-critico'].playlistUrl
+          ? source['viciado-ponto-critico'].playlistUrl
+          : normalized['viciado-ponto-critico'].playlistUrl
+      ).trim();
+
+      normalized['metin2'].serieRl2PlaylistUrl = String(
+        source.metin2 && source.metin2.serieRl2PlaylistUrl
+          ? source.metin2.serieRl2PlaylistUrl
+          : normalized.metin2.serieRl2PlaylistUrl
+      ).trim();
+
+      normalized['metin2'].analisePlaylistUrl = String(
+        source.metin2 && source.metin2.analisePlaylistUrl
+          ? source.metin2.analisePlaylistUrl
+          : normalized.metin2.analisePlaylistUrl
+      ).trim();
+
+      normalized.livestreams.primaryUrl = String(
+        source.livestreams && source.livestreams.primaryUrl
+          ? source.livestreams.primaryUrl
+          : normalized.livestreams.primaryUrl
+      ).trim();
+
+      return normalized;
     }
 
     if (target === 'metin2') {
@@ -157,6 +215,7 @@
   }
 
   window.VCVideoData = {
+    DEFAULT_CONTENT_LINKS,
     ensureFirebaseReady,
     normalizeByTarget,
     loadTarget,
