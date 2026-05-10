@@ -70,15 +70,24 @@
   }
 
   function getArticleUrl(noticia) {
+    const id = String((noticia && noticia.id) || '').trim();
     const slug = noticia && noticia.slug
       ? slugifyTitulo(String(noticia.slug).trim())
       : slugifyTitulo((noticia && noticia.titulo) || '');
+
+    if (id) {
+      const params = new URLSearchParams({ id });
+      if (slug) {
+        params.set('slug', slug);
+      }
+      return `${window.location.origin}/artigos.html?${params.toString()}`;
+    }
 
     if (slug) {
       return `${window.location.origin}/artigos/${encodeURIComponent(slug)}.html`;
     }
 
-    return `${window.location.origin}/noticias.html?id=${encodeURIComponent(String((noticia && noticia.id) || ''))}`;
+    return `${window.location.origin}/artigos.html`;
   }
 
   function isPushSupported() {

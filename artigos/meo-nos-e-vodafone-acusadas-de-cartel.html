@@ -2041,7 +2041,7 @@ footer {
 <meta name="twitter:title" content="MEO, NOS e Vodafone acusadas de cartel!">
 <meta name="twitter:description" content="MEO, NOS e Vodafone acusadas de cartel pela AdC, numa investiga&#231;&#227;o que dura h&#225; 1 ano!">
 <meta name="twitter:image" content="https://img.youtube.com/vi/hYha2peUdCI/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html"},"headline":"MEO, NOS e Vodafone acusadas de cartel!","description":"MEO, NOS e Vodafone acusadas de cartel pela AdC, numa investigação que dura há 1 ano!","datePublished":"2026-04-20T00:00:00Z","dateModified":"2026-04-20T00:00:00Z","image":["https://img.youtube.com/vi/hYha2peUdCI/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html#video","name":"MEO, NOS e Vodafone acusadas de cartel!","description":"MEO, NOS e Vodafone acusadas de cartel pela AdC, numa investigação que dura há 1 ano!","thumbnailUrl":["https://img.youtube.com/vi/hYha2peUdCI/hqdefault.jpg"],"uploadDate":"2026-04-20T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/hYha2peUdCI","contentUrl":"https://www.youtube.com/watch?v=hYha2peUdCI","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html","https://www.youtube.com/watch?v=hYha2peUdCI"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html"},"headline":"MEO, NOS e Vodafone acusadas de cartel!","description":"MEO, NOS e Vodafone acusadas de cartel pela AdC, numa investigação que dura há 1 ano!","datePublished":"2026-04-19T23:00:00Z","dateModified":"2026-04-19T23:00:00Z","image":["https://img.youtube.com/vi/hYha2peUdCI/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html#video","name":"MEO, NOS e Vodafone acusadas de cartel!","description":"MEO, NOS e Vodafone acusadas de cartel pela AdC, numa investigação que dura há 1 ano!","thumbnailUrl":["https://img.youtube.com/vi/hYha2peUdCI/hqdefault.jpg"],"uploadDate":"2026-04-19T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/hYha2peUdCI","contentUrl":"https://www.youtube.com/watch?v=hYha2peUdCI","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/meo-nos-e-vodafone-acusadas-de-cartel.html","https://www.youtube.com/watch?v=hYha2peUdCI"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2413,11 +2413,12 @@ function isArticleHashRoute(hashValue) {
 
 function getCanonicalArticleUrlFromRoute() {
   const requestedRoute = getRequestedArticleRoute();
-  const routeId = requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
-    ? String(requestedRoute.id)
-    : '';
-  const slug = (requestedRoute && requestedRoute.slug) || window.articleSlugById[routeId] || '';
-  return slug ? `artigos/${encodeURIComponent(slug)}.html` : '';
+  return buildArticleReaderUrl({
+    id: requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
+      ? String(requestedRoute.id)
+      : '',
+    slug: (requestedRoute && requestedRoute.slug) || ''
+  });
 }
 
 function redirectLegacyArticleRoute() {
@@ -2450,10 +2451,14 @@ redirectLegacyArticleRoute();
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+  if (id) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
   }
-  return `artigos/${encodeURIComponent(id)}.html`;
+  return 'artigos.html';
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2465,16 +2470,20 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
+  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
-  if (hasId) {
-    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'artigos.html';
@@ -2485,15 +2494,6 @@ function buildArticleUrlByData(noticia) {
 }
 
 function getCanonicalArticleUrlByData(noticia) {
-  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
-  const slug = getArticleSlug(noticia);
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
   return buildArticleReaderUrl(noticia);
 }
 

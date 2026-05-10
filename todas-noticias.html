@@ -1249,11 +1249,7 @@ function buildArticleUrl(noticia) {
     if (slug) {
       params.set('slug', slug);
     }
-    const canonicalLink = normalizeCanonicalArticleLink(noticia.link);
-    if (canonicalLink) {
-      return canonicalLink;
-    }
-    return `artigos/${encodeURIComponent(slug)}.html`;
+    return `artigos.html?${params.toString()}`;
   }
 
   const canonicalLink = normalizeCanonicalArticleLink(noticia.link);

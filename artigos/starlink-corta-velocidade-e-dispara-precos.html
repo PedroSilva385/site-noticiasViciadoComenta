@@ -2041,7 +2041,7 @@ footer {
 <meta name="twitter:title" content="STARLINK corta VELOCIDADE e DISPARA pre&#231;os!">
 <meta name="twitter:description" content="A Starlink ganha relev&#226;ncia em Portugal, mas pre&#231;os mais altos e menor velocidade afastam-na da fibra, mantendo valor como backup ou em zonas sem cobertura.">
 <meta name="twitter:image" content="https://img.youtube.com/vi/vkwDxl84dWs/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html"},"headline":"STARLINK corta VELOCIDADE e DISPARA preços!","description":"A Starlink ganha relevância em Portugal, mas preços mais altos e menor velocidade afastam-na da fibra, mantendo valor como backup ou em zonas sem cobertura.","datePublished":"2026-03-30T00:00:00Z","dateModified":"2026-03-30T00:00:00Z","image":["https://img.youtube.com/vi/vkwDxl84dWs/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html#video","name":"STARLINK corta VELOCIDADE e DISPARA preços!","description":"A Starlink ganha relevância em Portugal, mas preços mais altos e menor velocidade afastam-na da fibra, mantendo valor como backup ou em zonas sem cobertura.","thumbnailUrl":["https://img.youtube.com/vi/vkwDxl84dWs/hqdefault.jpg"],"uploadDate":"2026-03-30T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/vkwDxl84dWs","contentUrl":"https://www.youtube.com/watch?v=vkwDxl84dWs","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html","https://www.youtube.com/watch?v=vkwDxl84dWs"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html"},"headline":"STARLINK corta VELOCIDADE e DISPARA preços!","description":"A Starlink ganha relevância em Portugal, mas preços mais altos e menor velocidade afastam-na da fibra, mantendo valor como backup ou em zonas sem cobertura.","datePublished":"2026-03-29T23:00:00Z","dateModified":"2026-03-29T23:00:00Z","image":["https://img.youtube.com/vi/vkwDxl84dWs/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html#video","name":"STARLINK corta VELOCIDADE e DISPARA preços!","description":"A Starlink ganha relevância em Portugal, mas preços mais altos e menor velocidade afastam-na da fibra, mantendo valor como backup ou em zonas sem cobertura.","thumbnailUrl":["https://img.youtube.com/vi/vkwDxl84dWs/hqdefault.jpg"],"uploadDate":"2026-03-29T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/vkwDxl84dWs","contentUrl":"https://www.youtube.com/watch?v=vkwDxl84dWs","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/starlink-corta-velocidade-e-dispara-precos.html","https://www.youtube.com/watch?v=vkwDxl84dWs"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2413,11 +2413,12 @@ function isArticleHashRoute(hashValue) {
 
 function getCanonicalArticleUrlFromRoute() {
   const requestedRoute = getRequestedArticleRoute();
-  const routeId = requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
-    ? String(requestedRoute.id)
-    : '';
-  const slug = (requestedRoute && requestedRoute.slug) || window.articleSlugById[routeId] || '';
-  return slug ? `artigos/${encodeURIComponent(slug)}.html` : '';
+  return buildArticleReaderUrl({
+    id: requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
+      ? String(requestedRoute.id)
+      : '',
+    slug: (requestedRoute && requestedRoute.slug) || ''
+  });
 }
 
 function redirectLegacyArticleRoute() {
@@ -2450,10 +2451,14 @@ redirectLegacyArticleRoute();
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+  if (id) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
   }
-  return `artigos/${encodeURIComponent(id)}.html`;
+  return 'artigos.html';
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2465,16 +2470,20 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
+  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
-  if (hasId) {
-    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'artigos.html';
@@ -2485,15 +2494,6 @@ function buildArticleUrlByData(noticia) {
 }
 
 function getCanonicalArticleUrlByData(noticia) {
-  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
-  const slug = getArticleSlug(noticia);
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
   return buildArticleReaderUrl(noticia);
 }
 

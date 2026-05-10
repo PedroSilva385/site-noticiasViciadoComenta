@@ -2041,7 +2041,7 @@ footer {
 <meta name="twitter:title" content="MARCAS BRANCAS j&#225; responderam ao ATAQUE da DIGI!">
 <meta name="twitter:description" content="Amigo, UZO e WOO mant&#233;m pre&#231;os, apesar da decis&#227;o da DIGI em baixar ainda mais os seus tarif&#225;rios m&#243;veis!">
 <meta name="twitter:image" content="https://img.youtube.com/vi/1PKgVV5BUuA/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html"},"headline":"MARCAS BRANCAS já responderam ao ATAQUE da DIGI!","description":"Amigo, UZO e WOO mantém preços, apesar da decisão da DIGI em baixar ainda mais os seus tarifários móveis!","datePublished":"2026-04-17T00:00:00Z","dateModified":"2026-04-17T00:00:00Z","image":["https://img.youtube.com/vi/1PKgVV5BUuA/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html#video","name":"MARCAS BRANCAS já responderam ao ATAQUE da DIGI!","description":"Amigo, UZO e WOO mantém preços, apesar da decisão da DIGI em baixar ainda mais os seus tarifários móveis!","thumbnailUrl":["https://img.youtube.com/vi/1PKgVV5BUuA/hqdefault.jpg"],"uploadDate":"2026-04-17T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/1PKgVV5BUuA","contentUrl":"https://www.youtube.com/watch?v=1PKgVV5BUuA","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html","https://www.youtube.com/watch?v=1PKgVV5BUuA"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html"},"headline":"MARCAS BRANCAS já responderam ao ATAQUE da DIGI!","description":"Amigo, UZO e WOO mantém preços, apesar da decisão da DIGI em baixar ainda mais os seus tarifários móveis!","datePublished":"2026-04-16T23:00:00Z","dateModified":"2026-04-16T23:00:00Z","image":["https://img.youtube.com/vi/1PKgVV5BUuA/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html#video","name":"MARCAS BRANCAS já responderam ao ATAQUE da DIGI!","description":"Amigo, UZO e WOO mantém preços, apesar da decisão da DIGI em baixar ainda mais os seus tarifários móveis!","thumbnailUrl":["https://img.youtube.com/vi/1PKgVV5BUuA/hqdefault.jpg"],"uploadDate":"2026-04-16T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/1PKgVV5BUuA","contentUrl":"https://www.youtube.com/watch?v=1PKgVV5BUuA","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/marcas-brancas-ja-responderam-ao-ataque-da-digi.html","https://www.youtube.com/watch?v=1PKgVV5BUuA"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2413,11 +2413,12 @@ function isArticleHashRoute(hashValue) {
 
 function getCanonicalArticleUrlFromRoute() {
   const requestedRoute = getRequestedArticleRoute();
-  const routeId = requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
-    ? String(requestedRoute.id)
-    : '';
-  const slug = (requestedRoute && requestedRoute.slug) || window.articleSlugById[routeId] || '';
-  return slug ? `artigos/${encodeURIComponent(slug)}.html` : '';
+  return buildArticleReaderUrl({
+    id: requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
+      ? String(requestedRoute.id)
+      : '',
+    slug: (requestedRoute && requestedRoute.slug) || ''
+  });
 }
 
 function redirectLegacyArticleRoute() {
@@ -2450,10 +2451,14 @@ redirectLegacyArticleRoute();
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+  if (id) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
   }
-  return `artigos/${encodeURIComponent(id)}.html`;
+  return 'artigos.html';
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2465,16 +2470,20 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
+  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
-  if (hasId) {
-    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'artigos.html';
@@ -2485,15 +2494,6 @@ function buildArticleUrlByData(noticia) {
 }
 
 function getCanonicalArticleUrlByData(noticia) {
-  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
-  const slug = getArticleSlug(noticia);
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
   return buildArticleReaderUrl(noticia);
 }
 
