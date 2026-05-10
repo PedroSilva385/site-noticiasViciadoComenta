@@ -309,6 +309,24 @@ body.dark .playlist-container {
   margin-bottom: 60px;
 }
 
+.featured-videos-section {
+  margin-bottom: 60px;
+}
+
+.section-shell {
+  background: linear-gradient(135deg, #ffffff 0%, #f4f8ff 100%);
+  border: 1px solid #dbe7fb;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 18px 45px rgba(0, 102, 204, 0.08);
+}
+
+body.dark .section-shell {
+  background: linear-gradient(135deg, #111827 0%, #172033 100%);
+  border-color: rgba(148, 163, 184, 0.18);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
 .miniaturas-title {
   font-family: 'Outfit', sans-serif;
   font-size: 1.8em;
@@ -318,10 +336,76 @@ body.dark .playlist-container {
   text-align: center;
 }
 
+.miniaturas-subtitle {
+  max-width: 760px;
+  margin: -12px auto 28px;
+  text-align: center;
+  color: #5a6b7f;
+  font-size: 1rem;
+}
+
+body.dark .miniaturas-subtitle {
+  color: #cbd5e1 !important;
+}
+
 .miniaturas-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+}
+
+.featured-grid .video-card {
+  border: 1px solid rgba(0, 102, 204, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 102, 204, 0.08);
+}
+
+.featured-badge {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(13, 148, 136, 0.94);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.videos-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.load-more-button {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #0066cc 0%, #0f766e 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.98rem;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 102, 204, 0.18);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+
+.load-more-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 102, 204, 0.24);
+}
+
+.load-more-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
 }
 
 .video-card {
@@ -727,6 +811,15 @@ footer a:hover {
     font-size: 0.95em;
   }
 
+  .section-shell {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .miniaturas-subtitle {
+    margin-bottom: 22px;
+  }
+
   .miniaturas-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
@@ -835,6 +928,10 @@ footer a:hover {
   .miniaturas-grid {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .section-shell {
+    padding: 18px;
   }
 
   .video-card {
@@ -1089,10 +1186,26 @@ document.addEventListener('DOMContentLoaded', () => {
     </a>
   </div>
 
+  <section class="featured-videos-section">
+    <div class="section-shell">
+      <h2 class="miniaturas-title">Vídeos em destaque!</h2>
+      <p class="miniaturas-subtitle">Os 4 vídeos mais recentes ficam logo em evidência para chegares mais depressa ao essencial.</p>
+      <div class="miniaturas-grid featured-grid" id="featured-videos-grid">
+        <!-- Vídeos em destaque carregados dinamicamente -->
+      </div>
+    </div>
+  </section>
+
   <div class="miniaturas-section">
-    <h2 class="miniaturas-title">Últimos Vídeos</h2>
-    <div class="miniaturas-grid" id="miniaturas-grid">
-      <!-- Vídeos carregados dinamicamente do ficheiro JSON -->
+    <div class="section-shell">
+      <h2 class="miniaturas-title">Mais vídeos</h2>
+      <p class="miniaturas-subtitle">Ficam alguns cartões à vista e podes carregar mais sem sair da página.</p>
+      <div class="miniaturas-grid" id="miniaturas-grid">
+        <!-- Vídeos carregados dinamicamente do ficheiro JSON -->
+      </div>
+      <div class="videos-actions">
+        <button type="button" class="load-more-button" id="btnLoadMoreVideos">Ver mais</button>
+      </div>
     </div>
   </div>
 
@@ -1149,6 +1262,11 @@ class VideoWatchTracker {
 }
 
 const tracker = new VideoWatchTracker();
+const FEATURED_VIDEOS_COUNT = 4;
+const INITIAL_VISIBLE_VIDEOS = 8;
+const LOAD_MORE_STEP = 8;
+let remainingVideos = [];
+let visibleVideosCount = INITIAL_VISIBLE_VIDEOS;
 
 function extrairYouTubeId(url) {
   if (!url || typeof url !== 'string') return '';
@@ -1178,68 +1296,127 @@ function extrairYouTubeId(url) {
   return fallback ? fallback[1] : '';
 }
 
+function criarCardVideo(video, index, options = {}) {
+  const url = video.url || video;
+  const videoId = extrairYouTubeId(url);
+  if (!videoId) {
+    return '';
+  }
+
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+  const isWatched = tracker.isWatched(videoId);
+  const badgeHtml = options.featured
+    ? '<span class="featured-badge"><i class="fas fa-star"></i> Em destaque</span>'
+    : '';
+
+  return `
+    <div class="video-card-wrapper">
+      <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" class="video-card ${isWatched ? 'watched' : ''}">
+        <div class="video-thumbnail">
+          <img src="${thumbnailUrl}" alt="Viciado Comenta #${index + 1}">
+          <div class="video-duration-overlay">
+            <i class="fab fa-youtube"></i>
+          </div>
+          ${badgeHtml}
+          <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
+            ✓
+          </button>
+        </div>
+      </a>
+    </div>
+  `;
+}
+
+function prepararVideosParaRender(videos) {
+  return videos.map((video) => {
+    if (typeof video === 'string') {
+      return { url: video, data: new Date().toISOString().split('T')[0] };
+    }
+    return video;
+  }).filter((video) => extrairYouTubeId(video.url || video));
+}
+
+function atualizarBotaoVerMais() {
+  const button = document.getElementById('btnLoadMoreVideos');
+  if (!button) return;
+
+  const hasMore = visibleVideosCount < remainingVideos.length;
+  button.hidden = !hasMore;
+  button.disabled = !hasMore;
+}
+
+function renderFeaturedVideos(videos) {
+  const grid = document.getElementById('featured-videos-grid');
+  if (!grid) return;
+
+  const featuredVideos = videos.slice(0, FEATURED_VIDEOS_COUNT);
+  const cards = featuredVideos.map((video, index) => criarCardVideo(video, index, { featured: true })).filter(Boolean);
+
+  if (!cards.length) {
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo em destaque disponível no momento.</p>';
+    return;
+  }
+
+  grid.innerHTML = cards.join('');
+}
+
+function renderRemainingVideos() {
+  const grid = document.getElementById('miniaturas-grid');
+  if (!grid) return;
+
+  if (!remainingVideos.length) {
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Sem mais vídeos além dos destaques.</p>';
+    atualizarBotaoVerMais();
+    return;
+  }
+
+  const visibleVideos = remainingVideos.slice(0, visibleVideosCount);
+  const cards = visibleVideos.map((video, index) => criarCardVideo(video, index + FEATURED_VIDEOS_COUNT)).filter(Boolean);
+
+  if (!cards.length) {
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Sem vídeos válidos para mostrar. Confirma se as URLs são do YouTube.</p>';
+    atualizarBotaoVerMais();
+    return;
+  }
+
+  grid.innerHTML = cards.join('');
+  atualizarBotaoVerMais();
+}
+
 // Carregar vídeos do Firebase com fallback para JSON
 async function carregarVideos() {
   try {
     let videos = await window.VCVideoData.loadTarget('viciado-comenta', { fallbackUrl: 'data/viciado-comenta-videos.json' });
-    
-    const grid = document.getElementById('miniaturas-grid');
-    
+
     if (videos.length === 0) {
-      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento.</p>';
+      document.getElementById('featured-videos-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento.</p>';
+      document.getElementById('miniaturas-grid').innerHTML = '';
+      atualizarBotaoVerMais();
       return;
     }
-    
-    // Converter para formato consistente e ordenar por data (mais recentes primeiro)
-    videos = videos.map(video => {
-      if (typeof video === 'string') {
-        return { url: video, data: new Date().toISOString().split('T')[0] };
-      }
-      return video;
-    });
-    
+
+    videos = prepararVideosParaRender(videos);
+
     // Ordenar por data descrescente (mais recentes primeiro)
     videos.sort((a, b) => new Date(b.data) - new Date(a.data));
-    
-    const cards = videos.map((video, index) => {
-      const url = video.url || video;
-      const videoId = extrairYouTubeId(url);
-      if (!videoId) {
-        return '';
-      }
-      
-      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-      const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
-      const isWatched = tracker.isWatched(videoId);
-      
-      return `
-        <div class="video-card-wrapper">
-          <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" class="video-card ${isWatched ? 'watched' : ''}">
-            <div class="video-thumbnail">
-              <img src="${thumbnailUrl}" alt="Viciado Comenta #${index + 1}">
-              <div class="video-duration-overlay">
-                <i class="fab fa-youtube"></i>
-              </div>
-              <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
-                ✓
-              </button>
-            </div>
-          </a>
-        </div>
-      `;
-    }).filter(Boolean);
 
-    if (!cards.length) {
-      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Sem vídeos válidos para mostrar. Confirma se as URLs são do YouTube.</p>';
+    if (!videos.length) {
+      document.getElementById('featured-videos-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Sem vídeos válidos para mostrar. Confirma se as URLs são do YouTube.</p>';
+      document.getElementById('miniaturas-grid').innerHTML = '';
+      atualizarBotaoVerMais();
       return;
     }
 
-    grid.innerHTML = cards.join('');
-    
+    renderFeaturedVideos(videos);
+    remainingVideos = videos.slice(FEATURED_VIDEOS_COUNT);
+    visibleVideosCount = INITIAL_VISIBLE_VIDEOS;
+    renderRemainingVideos();
   } catch (error) {
     console.error('Erro ao carregar vídeos:', error);
-    const grid = document.getElementById('miniaturas-grid');
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos.</p>';
+    document.getElementById('featured-videos-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos.</p>';
+    document.getElementById('miniaturas-grid').innerHTML = '';
+    atualizarBotaoVerMais();
   }
 }
 
@@ -1261,6 +1438,14 @@ function toggleWatched(event, videoId) {
     btn.classList.remove('watched');
     card.classList.remove('watched');
   }
+}
+
+const btnLoadMoreVideos = document.getElementById('btnLoadMoreVideos');
+if (btnLoadMoreVideos) {
+  btnLoadMoreVideos.addEventListener('click', () => {
+    visibleVideosCount += LOAD_MORE_STEP;
+    renderRemainingVideos();
+  });
 }
 
 async function carregarLinksConteudos() {
