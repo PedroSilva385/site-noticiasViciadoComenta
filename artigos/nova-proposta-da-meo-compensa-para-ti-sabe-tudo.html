@@ -2041,7 +2041,7 @@ footer {
 <meta name="twitter:title" content="NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!">
 <meta name="twitter:description" content="A MEO lan&#231;ou uma nova oferta que combina telecomunica&#231;&#245;es com energia atrav&#233;s da MEO Energia, prometendo vantagens como dados m&#243;veis ilimitados e duplica&#231;&#227;o de MEOS para cliente...">
 <meta name="twitter:image" content="https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"headline":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","datePublished":"2026-04-06T00:00:00Z","dateModified":"2026-04-06T00:00:00Z","image":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video","name":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","thumbnailUrl":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"uploadDate":"2026-04-06T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/0g2w3NEo2Cc","contentUrl":"https://www.youtube.com/watch?v=0g2w3NEo2Cc","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","https://www.youtube.com/watch?v=0g2w3NEo2Cc"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"headline":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","datePublished":"2026-04-05T23:00:00Z","dateModified":"2026-04-05T23:00:00Z","image":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video","name":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","thumbnailUrl":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"uploadDate":"2026-04-05T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/0g2w3NEo2Cc","contentUrl":"https://www.youtube.com/watch?v=0g2w3NEo2Cc","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","https://www.youtube.com/watch?v=0g2w3NEo2Cc"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2413,11 +2413,12 @@ function isArticleHashRoute(hashValue) {
 
 function getCanonicalArticleUrlFromRoute() {
   const requestedRoute = getRequestedArticleRoute();
-  const routeId = requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
-    ? String(requestedRoute.id)
-    : '';
-  const slug = (requestedRoute && requestedRoute.slug) || window.articleSlugById[routeId] || '';
-  return slug ? `artigos/${encodeURIComponent(slug)}.html` : '';
+  return buildArticleReaderUrl({
+    id: requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
+      ? String(requestedRoute.id)
+      : '',
+    slug: (requestedRoute && requestedRoute.slug) || ''
+  });
 }
 
 function redirectLegacyArticleRoute() {
@@ -2450,10 +2451,14 @@ redirectLegacyArticleRoute();
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+  if (id) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
   }
-  return `artigos/${encodeURIComponent(id)}.html`;
+  return 'artigos.html';
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2465,16 +2470,20 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
+  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
-  if (hasId) {
-    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'artigos.html';
@@ -2485,15 +2494,6 @@ function buildArticleUrlByData(noticia) {
 }
 
 function getCanonicalArticleUrlByData(noticia) {
-  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
-  const slug = getArticleSlug(noticia);
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
   return buildArticleReaderUrl(noticia);
 }
 

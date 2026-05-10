@@ -2426,11 +2426,12 @@ function isArticleHashRoute(hashValue) {
 
 function getCanonicalArticleUrlFromRoute() {
   const requestedRoute = getRequestedArticleRoute();
-  const routeId = requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
-    ? String(requestedRoute.id)
-    : '';
-  const slug = (requestedRoute && requestedRoute.slug) || window.articleSlugById[routeId] || '';
-  return slug ? `artigos/${encodeURIComponent(slug)}.html` : '';
+  return buildArticleReaderUrl({
+    id: requestedRoute && requestedRoute.id !== null && requestedRoute.id !== undefined
+      ? String(requestedRoute.id)
+      : '',
+    slug: (requestedRoute && requestedRoute.slug) || ''
+  });
 }
 
 function redirectLegacyArticleRoute() {
@@ -2463,10 +2464,14 @@ redirectLegacyArticleRoute();
 function buildArticleUrlById(noticiaId) {
   const id = String(noticiaId);
   const slug = window.articleSlugById[id];
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
+  if (id) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
   }
-  return `artigos/${encodeURIComponent(id)}.html`;
+  return 'artigos.html';
 }
 
 function buildArticleReaderUrl(noticia) {
@@ -2478,16 +2483,20 @@ function buildArticleReaderUrl(noticia) {
   const id = hasId ? String(noticia.id).trim() : '';
   const slug = getArticleSlug(noticia);
 
+  if (hasId) {
+    const params = new URLSearchParams({ id });
+    if (slug) {
+      params.set('slug', slug);
+    }
+    return `artigos.html?${params.toString()}`;
+  }
+
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
     return noticia.link.trim();
   }
 
   if (slug) {
     return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
-  if (hasId) {
-    return `artigos/${encodeURIComponent(id)}.html`;
   }
 
   return 'artigos.html';
@@ -2498,15 +2507,6 @@ function buildArticleUrlByData(noticia) {
 }
 
 function getCanonicalArticleUrlByData(noticia) {
-  if (noticia && typeof noticia.link === 'string' && noticia.link.trim()) {
-    return noticia.link.trim();
-  }
-
-  const slug = getArticleSlug(noticia);
-  if (slug) {
-    return `artigos/${encodeURIComponent(slug)}.html`;
-  }
-
   return buildArticleReaderUrl(noticia);
 }
 
