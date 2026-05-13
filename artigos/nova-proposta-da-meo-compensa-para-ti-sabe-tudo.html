@@ -1604,7 +1604,7 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 25px 15px;
+    padding: 56px 15px 25px;
   }
 
   .header-perfil {
@@ -1636,15 +1636,25 @@ footer {
   nav {
     gap: 12px;
     padding: 0 12px;
+    align-items: stretch;
   }
 
   nav a {
     padding: 12px 8px;
     font-size: 0.9em;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nav-dropdown {
+    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 12px 8px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
   }
 
   .nav-dropdown.active .dropdown-menu {
@@ -1718,7 +1728,7 @@ footer {
 
 @media (max-width: 480px) {
   header {
-    padding: 18px 10px;
+    padding: 56px 10px 18px;
   }
 
   .header-perfil {
@@ -1753,6 +1763,9 @@ footer {
     height: 36px;
     padding: 6px 8px;
     font-size: 0.9em;
+    top: 10px;
+    left: 10px;
+    right: auto;
   }
 
   nav {
@@ -1760,28 +1773,37 @@ footer {
     padding: 0 8px;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: stretch;
   }
 
   nav a {
     padding: 10px 6px;
     font-size: 0.8em;
-    flex: 0 0 auto;
+    flex: 1 1 140px;
     min-height: 44px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   .nav-dropdown {
-    flex: 0 0 auto;
+    flex: 1 1 140px;
+    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 10px 6px;
     min-height: 44px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: 150px;
+    min-width: min(220px, calc(100vw - 24px));
+    left: 50%;
+    transform: translate(-50%, -10px);
   }
 
   main {
@@ -1921,7 +1943,7 @@ footer {
 
 @media (max-width: 360px) {
   header {
-    padding: 14px 8px;
+    padding: 52px 8px 14px;
   }
 
   .header-perfil {
@@ -1953,27 +1975,44 @@ footer {
     width: 32px;
     height: 32px;
     padding: 5px 6px;
+    top: 8px;
+    left: 8px;
+    right: auto;
   }
 
   nav {
     gap: 6px;
     padding: 0 6px;
+    align-items: stretch;
   }
 
   nav a {
     padding: 8px 4px;
     font-size: 0.75em;
     min-height: 40px;
+    flex: 1 1 120px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nav-dropdown {
+    flex: 1 1 120px;
+    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 8px 4px;
     min-height: 40px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: 130px;
+    min-width: min(200px, calc(100vw - 20px));
     font-size: 0.75em;
+    left: 50%;
+    transform: translate(-50%, -10px);
   }
 
   main {
@@ -2041,7 +2080,7 @@ footer {
 <meta name="twitter:title" content="NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!">
 <meta name="twitter:description" content="A MEO lan&#231;ou uma nova oferta que combina telecomunica&#231;&#245;es com energia atrav&#233;s da MEO Energia, prometendo vantagens como dados m&#243;veis ilimitados e duplica&#231;&#227;o de MEOS para cliente...">
 <meta name="twitter:image" content="https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"headline":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","datePublished":"2026-04-06T00:00:00Z","dateModified":"2026-04-06T00:00:00Z","image":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video","name":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","thumbnailUrl":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"uploadDate":"2026-04-06T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/0g2w3NEo2Cc","contentUrl":"https://www.youtube.com/watch?v=0g2w3NEo2Cc","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","https://www.youtube.com/watch?v=0g2w3NEo2Cc"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"headline":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","datePublished":"2026-04-05T23:00:00Z","dateModified":"2026-04-05T23:00:00Z","image":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html#video","name":"NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!","description":"A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para cliente...","thumbnailUrl":["https://img.youtube.com/vi/0g2w3NEo2Cc/hqdefault.jpg"],"uploadDate":"2026-04-05T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/0g2w3NEo2Cc","contentUrl":"https://www.youtube.com/watch?v=0g2w3NEo2Cc","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-compensa-para-ti-sabe-tudo.html","https://www.youtube.com/watch?v=0g2w3NEo2Cc"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
