@@ -1529,6 +1529,71 @@ body.dark .sidebar-title {
   margin-bottom: 0;
 }
 
+.editorial-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(0, 102, 204, 0.08);
+  color: #0052a3;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.editorial-card {
+  padding: 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 102, 204, 0.12);
+}
+
+.editorial-card h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05em;
+  color: #1a1f3a;
+  margin-bottom: 8px;
+}
+
+.editorial-card p {
+  margin-bottom: 0;
+  font-size: 0.96em;
+}
+
+.editorial-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.editorial-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 102, 204, 0.16);
+  background: #ffffff;
+  color: #0052a3;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.editorial-links a:hover {
+  background: #e3f2fd;
+}
+
 body.dark .editorial-section {
   background: #0b1220;
   border-color: #1f2937;
@@ -1540,6 +1605,26 @@ body.dark .editorial-section h2 {
 
 body.dark .editorial-section p {
   color: #cbd5e1 !important;
+}
+
+body.dark .editorial-kicker {
+  background: rgba(96, 165, 250, 0.14);
+  color: #93c5fd;
+}
+
+body.dark .editorial-card {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(96, 165, 250, 0.16);
+}
+
+body.dark .editorial-card h3 {
+  color: #ffffff;
+}
+
+body.dark .editorial-links a {
+  background: #0f172a;
+  border-color: rgba(96, 165, 250, 0.2);
+  color: #93c5fd;
 }
 
 /* FOOTER */
@@ -2388,10 +2473,30 @@ footer {
 </main>
 
 <section class="editorial-section" aria-labelledby="editorialTitle" style="max-width:1200px;margin:0 auto 32px;padding-left:20px;padding-right:20px;">
+  <div class="editorial-kicker">Autoria identificada e conteúdo próprio</div>
   <h2 id="editorialTitle">Linha editorial e autoria</h2>
   <p>O VICIADO COMENTA publica conteúdo próprio focado em telecomunicações, tecnologia, consumo digital e temas de atualidade em Portugal. O objetivo do projeto é complementar o trabalho em vídeo com artigos escritos, contexto adicional e opinião editorial identificada.</p>
   <p>Os conteúdos são assinados por Pedro Silva e privilegiam utilidade prática para o leitor: análise de tarifários, interpretação de novidades do mercado e enquadramento de decisões que afetam consumidores portugueses.</p>
-  <p>Para conhecer a política editorial, os canais oficiais e a forma de contacto, consulta a página <a href="sobre-nos.html">Sobre Nós</a> ou escreve para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+  <div class="editorial-grid" aria-label="Princípios editoriais">
+    <article class="editorial-card">
+      <h3>Critério de publicação</h3>
+      <p>Os artigos só são publicados quando acrescentam contexto, comparação prática ou leitura editorial útil, em vez de replicarem comunicados sem análise.</p>
+    </article>
+    <article class="editorial-card">
+      <h3>Transparência e fontes</h3>
+      <p>Cada peça apresenta autoria, data editorial e, quando aplicável, referência explícita a fontes públicas, páginas oficiais e pedidos de correção.</p>
+    </article>
+    <article class="editorial-card">
+      <h3>Utilidade para o leitor</h3>
+      <p>O foco está em temas que impactam consumidores portugueses: tarifários, cobertura, decisões regulatórias, plataformas digitais e mudanças de mercado.</p>
+    </article>
+  </div>
+  <p>Para conhecer a política editorial, os critérios de correção e a forma de contacto, consulta a página <a href="sobre-nos.html">Sobre Nós</a> ou escreve para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+  <div class="editorial-links">
+    <a href="sobre-nos.html#como-trabalhamos">Como trabalhamos</a>
+    <a href="sobre-nos.html#criterios-editoriais">Critérios editoriais</a>
+    <a href="sobre-nos.html#correcoes">Política de correções</a>
+  </div>
 </section>
 
 <footer>
