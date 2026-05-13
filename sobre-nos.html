@@ -576,6 +576,100 @@ body.dark .stat-box {
   min-width: 250px;
 }
 
+.about-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  margin: 26px 0 32px;
+}
+
+.summary-card {
+  background: #f5f8fc;
+  border: 1px solid #e0e8f5;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.summary-card h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05em;
+  color: #1a1f3a;
+  margin-bottom: 8px;
+}
+
+.summary-card p {
+  margin: 0;
+  font-size: 0.97em;
+  text-align: left;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+  margin: 20px 0 10px;
+}
+
+.policy-card {
+  background: #f5f8fc;
+  border: 1px solid #e0e8f5;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.policy-card h3 {
+  margin-top: 0;
+}
+
+.policy-card ul {
+  margin: 12px 0 0 18px;
+}
+
+.policy-card li {
+  margin-bottom: 8px;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.quick-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1px solid #d5e3f5;
+  border-radius: 999px;
+  color: #0052a3;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.quick-links a:hover {
+  background: #e3f2fd;
+}
+
+body.dark .summary-card,
+body.dark .policy-card {
+  background: #0f172a;
+  border-color: #1f2937;
+}
+
+body.dark .summary-card h3,
+body.dark .policy-card h3 {
+  color: #ffffff !important;
+}
+
+body.dark .quick-links a {
+  background: #0f172a;
+  border-color: #1f2937;
+  color: #93c5fd !important;
+}
+
 @media (max-width: 768px) {
   header {
     padding: 25px 15px;
@@ -891,6 +985,28 @@ body.dark .stat-box {
       <p><strong>O Viciado Comenta</strong> é um site que visa, em paralelo com o canal de YouTube TheViciado, emitir opinião sobre assuntos da atualidade, nos mais diversos tópicos.</p>
     </div>
 
+    <div class="about-summary-grid" aria-label="Resumo editorial">
+      <article class="summary-card">
+        <h3>Quem publica</h3>
+        <p>Projeto editorial assinado por Pedro Silva, com identidade pública e canais próprios no YouTube, Twitch, Spotify e Discord.</p>
+      </article>
+      <article class="summary-card">
+        <h3>O que entregamos</h3>
+        <p>Artigos originais com leitura editorial, contexto adicional e foco no impacto real para consumidores portugueses.</p>
+      </article>
+      <article class="summary-card">
+        <h3>Como corrigimos</h3>
+        <p>Pedidos de correção e dúvidas editoriais são recebidos por email e tratados com atualização visível quando necessário.</p>
+      </article>
+    </div>
+
+    <div class="quick-links" aria-label="Navegação editorial rápida">
+      <a href="#como-trabalhamos">Como trabalhamos</a>
+      <a href="#criterios-editoriais">Critérios editoriais</a>
+      <a href="#correcoes">Política de correções</a>
+      <a href="#independencia-comercial">Independência comercial</a>
+    </div>
+
     <div class="about-section">
       <h2>A Nossa Missão</h2>
       <p>Criado em 2026, o Viciado Comenta nasceu com o objetivo de complementar o conteúdo em vídeo do canal TheViciado, oferecendo análises escritas mais aprofundadas e um espaço para discussão sobre os temas que importam.</p>
@@ -918,6 +1034,40 @@ body.dark .stat-box {
       <h2>Como Trabalhamos</h2>
       <p>O site não replica automaticamente comunicados nem agrega conteúdo de terceiros sem contexto. Cada artigo é pensado para acrescentar interpretação, comparação prática e um ponto de vista editorial claro, especialmente em temas de telecomunicações e mercado português.</p>
       <p>Quando um tema nasce em vídeo, a versão escrita serve para aprofundar pontos importantes, organizar a informação e deixar uma referência consultável para leitores que preferem texto. O compromisso é publicar menos, mas publicar com contexto útil, assinatura identificável e transparência sobre o âmbito de cada análise.</p>
+    </div>
+
+    <div class="about-section" id="criterios-editoriais">
+      <h2>Critérios Editoriais</h2>
+      <div class="policy-grid">
+        <article class="policy-card">
+          <h3>O que tem de existir num artigo</h3>
+          <ul>
+            <li>Assinatura identificável, enquadramento claro e linguagem acessível</li>
+            <li>Valor acrescentado face ao conteúdo original em vídeo, comunicado ou anúncio</li>
+            <li>Contexto útil para o leitor: comparação, consequência prática ou interpretação</li>
+          </ul>
+        </article>
+        <article class="policy-card">
+          <h3>O que evitamos publicar</h3>
+          <ul>
+            <li>Texto superficial apenas para preencher calendário editorial</li>
+            <li>Agregação automática de terceiros sem análise própria</li>
+            <li>Peças sem relevância concreta para o público do site</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+
+    <div class="about-section" id="correcoes">
+      <h2>Política de Correções</h2>
+      <p>Se identificarmos uma incorreção factual, informação desatualizada ou contexto insuficiente, o artigo é revisto e atualizado. Damos prioridade a correções que afetem interpretação de preços, cobertura, condições comerciais, dados regulatórios e citações.</p>
+      <p>Leitores, empresas e entidades podem pedir revisão através de <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>. Sempre que a alteração seja relevante para a compreensão do tema, a peça passa a refletir a atualização editorial.</p>
+    </div>
+
+    <div class="about-section" id="independencia-comercial">
+      <h2>Independência Comercial</h2>
+      <p>O Viciado Comenta distingue claramente conteúdo editorial de relações comerciais. A existência de publicidade ou monetização não altera a linha de análise, os critérios de publicação nem o tratamento crítico de operadoras, plataformas ou marcas.</p>
+      <p>Quando existir colaboração comercial futura, essa relação deverá ser assinalada de forma explícita. O objetivo é preservar confiança, leitura crítica e utilidade para o leitor acima de qualquer interesse promocional.</p>
     </div>
 
     <div class="stats-grid">
@@ -960,7 +1110,7 @@ body.dark .stat-box {
         </div>
         <div class="author-bio">
           <p><strong>Pedro Silva</strong> é o criador de conteúdo por trás do Viciado Comenta e do canal TheViciado. Com uma paixão por tecnologia e telecomunicações, dedica-se a informar e ajudar os consumidores portugueses a fazerem escolhas mais conscientes.</p>
-          
+          <p>Os artigos publicados no site seguem a mesma linha de análise do canal, mas são preparados para leitura autónoma, com autoria visível, enquadramento adicional e compromisso de revisão quando o tema evolui.</p>
           <p>O projeto começou no YouTube e expandiu-se para outras plataformas, incluindo Twitch para livestreams, Spotify para podcasts e agora este site para artigos escritos mais detalhados.</p>
         </div>
       </div>

@@ -64,6 +64,16 @@ function Get-MetaDescription {
     return ($plain.Substring(0, 177).Trim() + '...')
 }
 
+function Test-ArticleHasExplicitSources {
+    param([object]$Noticia)
+
+    $summaryText = if ($Noticia.PSObject.Properties.Name -contains 'resumo') { [string]$Noticia.resumo } else { '' }
+    $bodyText = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
+    $combinedText = "$summaryText $bodyText"
+
+    return [regex]::IsMatch($combinedText, 'fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+}
+
 function ConvertTo-HtmlEntities {
     param([string]$Text)
 
@@ -408,6 +418,8 @@ foreach ($noticia in $noticias) {
     }
     $modifiedDateIso = $publishedDateIso
 
+    $hasExplicitSources = Test-ArticleHasExplicitSources -Noticia $noticia
+
     $safeTitle = ConvertTo-HtmlEntities -Text $rawTitle
     $safeDescription = ConvertTo-HtmlEntities -Text $metaDescription
     $safeUrl = ConvertTo-HtmlEntities -Text $articleUrl
@@ -491,7 +503,11 @@ foreach ($noticia in $noticias) {
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
 
-    $robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    $robotsContent = if ($hasExplicitSources) {
+        'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    } else {
+        'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    }
 
     $seoMeta = @"
     <link rel="canonical" id="canonicalLink" href="$safeUrl">
@@ -605,7 +621,7 @@ foreach ($noticia in $noticias) {
         }
     }
 
-    if ($isPublished) {
+    if ($isPublished -and $hasExplicitSources) {
         $generatedArticles += [pscustomobject]@{
             slug = $slug
             lastmod = $sitemapLastMod
@@ -616,8 +632,6 @@ foreach ($noticia in $noticias) {
 $baseUrls = @(
     'https://www.viciadocomenta.pt/',
     'https://www.viciadocomenta.pt/todas-noticias.html',
-    'https://www.viciadocomenta.pt/noticias.html',
-    'https://www.viciadocomenta.pt/artigos.html',
     'https://www.viciadocomenta.pt/livestreams.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
     'https://www.viciadocomenta.pt/politica-privacidade.html',
