@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NOVA PROPOSTA da MEO compensa para ti? SABE TUDO! - VICIADO COMENTA</title>
-<meta name="robots" content="noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
@@ -1604,7 +1604,7 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 25px 15px;
+    padding: 56px 15px 25px;
   }
 
   .header-perfil {
@@ -1636,15 +1636,25 @@ footer {
   nav {
     gap: 12px;
     padding: 0 12px;
+    align-items: stretch;
   }
 
   nav a {
     padding: 12px 8px;
     font-size: 0.9em;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nav-dropdown {
+    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 12px 8px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
   }
 
   .nav-dropdown.active .dropdown-menu {
@@ -1718,7 +1728,7 @@ footer {
 
 @media (max-width: 480px) {
   header {
-    padding: 18px 10px;
+    padding: 56px 10px 18px;
   }
 
   .header-perfil {
@@ -1753,6 +1763,9 @@ footer {
     height: 36px;
     padding: 6px 8px;
     font-size: 0.9em;
+    top: 10px;
+    left: 10px;
+    right: auto;
   }
 
   nav {
@@ -1760,28 +1773,37 @@ footer {
     padding: 0 8px;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: stretch;
   }
 
   nav a {
     padding: 10px 6px;
     font-size: 0.8em;
-    flex: 0 0 auto;
+    flex: 1 1 140px;
     min-height: 44px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   .nav-dropdown {
-    flex: 0 0 auto;
+    flex: 1 1 140px;
+    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 10px 6px;
     min-height: 44px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: 150px;
+    min-width: min(220px, calc(100vw - 24px));
+    left: 50%;
+    transform: translate(-50%, -10px);
   }
 
   main {
@@ -1921,7 +1943,7 @@ footer {
 
 @media (max-width: 360px) {
   header {
-    padding: 14px 8px;
+    padding: 52px 8px 14px;
   }
 
   .header-perfil {
@@ -1953,27 +1975,44 @@ footer {
     width: 32px;
     height: 32px;
     padding: 5px 6px;
+    top: 8px;
+    left: 8px;
+    right: auto;
   }
 
   nav {
     gap: 6px;
     padding: 0 6px;
+    align-items: stretch;
   }
 
   nav a {
     padding: 8px 4px;
     font-size: 0.75em;
     min-height: 40px;
+    flex: 1 1 120px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nav-dropdown {
+    flex: 1 1 120px;
+    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 8px 4px;
     min-height: 40px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: 130px;
+    min-width: min(200px, calc(100vw - 20px));
     font-size: 0.75em;
+    left: 50%;
+    transform: translate(-50%, -10px);
   }
 
   main {
@@ -2113,7 +2152,7 @@ footer {
             <div class="artigo-meta">
               <span>&#128197; 06/04/2026</span>
               <span>&#9997;&#65039; Pedro Silva</span>
-              <span class="tempo-leitura">&#9201;&#65039; 2 min de leitura</span>
+              <span class="tempo-leitura">&#9201;&#65039; 3 min de leitura</span>
             </div>
           </div>
                     <div class="artigo-video" data-video-id="0g2w3NEo2Cc" data-video-title="NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!">
@@ -2121,12 +2160,12 @@ footer {
           </div>
           <div class="artigo-conteudo">
             <p><strong>A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para clientes com pacotes M4e.</strong></p>
-            <div id="artigoConteudoBody"><p>A <strong>MEO </strong>apresentou uma nova proposta aos seus clientes. Quem aderir à sua empresa de eletricidade, <strong><a href="https://www.meoenergia.pt/eletricidade?gad_campaignid=10522044363" target="_blank" rel="noopener noreferrer">MEO Energia</a></strong>, e já tenha ou pretenda subscrever pacotes M4e passa a beneficiar de <strong>dados móveis ilimitados nos tarifários móveis do plano</strong>, bem como da <strong>duplicação dos MEOS</strong>.</p><p>Fomos analisar se esta proposta é realmente vantajosa para quem pondera aderir. Como já sabem, no Viciado Comenta olhamos sempre para estas questões na ótica da poupança, por isso avaliámos a qualidade da oferta.<br></p><ul><li><strong>Ponto 1</strong></li></ul>Para esta análise, estamos a considerar apenas um exemplo concreto: o tarifário mais básico do pacote M4e, para perceber o posicionamento de preço da oferta.<br><br><strong><u>M4e 1 cartão – Plano Básico – 56,99€/mês com desconto durante 24 meses<br></u></strong><br>Proposta: <strong>Net 1Gbps | Móvel 5G 200GB – 3500 min + 3500 SMS | 24 meses de SkyShowtime (adesão online) | cerca de 200 canais standard + 30 canais TV extra<br></strong><br>Logo à partida, é um plano que, comparado com o que a marca branca UZO, pertencente à MEO, propõe, fica cerca de 30€/mês acima. Isto ajuda a perceber a margem entre os produtos low-cost e os premium. As principais diferenças estão, sobretudo, nos canais de televisão.<br><br><ul><li><strong>Ponto 2</strong></li></ul>A proposta da MEO Energia.<br>Recomendo que todos façam uma simulação através do site da ERSE: <a href="https://simuladorprecos.erse.pt/" target="_blank" rel="noopener noreferrer">https://simuladorprecos.erse.pt/</a>.<br><br>Esta é uma ferramenta muito útil para perceberem onde se posiciona o vosso plano atual no ranking de preços. No vídeo que acompanha este artigo explico como utilizar o simulador e como comparar, de forma clara, as propostas das várias comercializadoras.<br><br>Nas duas simulações que realizei, a <strong>MEO Energia não surge sequer no top 10 do ranking de preço</strong>. Na minha avaliação, ao aderir a esta proposta, poderá estar a ficar com o pior dos dois mundos: nas telecomunicações, um dos preços mais elevados do mercado; na energia, uma oferta longe das mais competitivas.<br><br>Ainda assim, o objetivo não é desencorajar a adesão, mas sim dar-vos ferramentas para analisarem cada proposta com dados concretos. A partir daí, poderão escolher de forma consciente.<br><br><u>No Viciado Comenta, estaremos sempre do lado do consumidor, com foco em partilhar conhecimento que ajude a poupar.</u></div>
+            <div id="artigoConteudoBody"><p>A <strong>MEO </strong>apresentou uma nova proposta aos seus clientes. Quem aderir à sua empresa de eletricidade, <strong><a href="https://www.meoenergia.pt/eletricidade?gad_campaignid=10522044363" target="_blank" rel="noopener noreferrer">MEO Energia</a></strong>, e já tenha ou pretenda subscrever pacotes M4e passa a beneficiar de <strong>dados móveis ilimitados nos tarifários móveis do plano</strong>, bem como da <strong>duplicação dos MEOS</strong>.</p><p>Fomos analisar se esta proposta é realmente vantajosa para quem pondera aderir. Como já sabem, no Viciado Comenta olhamos sempre para estas questões na ótica da poupança, por isso avaliámos a qualidade da oferta.<br></p><ul><li><strong>Ponto 1</strong></li></ul>Para esta análise, estamos a considerar apenas um exemplo concreto: o tarifário mais básico do pacote M4e, para perceber o posicionamento de preço da oferta.<br><br><strong><u>M4e 1 cartão – Plano Básico – 56,99€/mês com desconto durante 24 meses<br></u></strong><br>Proposta: <strong>Net 1Gbps | Móvel 5G 200GB – 3500 min + 3500 SMS | 24 meses de SkyShowtime (adesão online) | cerca de 200 canais standard + 30 canais TV extra<br></strong><br>Logo à partida, é um plano que, comparado com o que a marca branca UZO, pertencente à MEO, propõe, fica cerca de 30€/mês acima. Isto ajuda a perceber a margem entre os produtos low-cost e os premium. As principais diferenças estão, sobretudo, nos canais de televisão.<br><br><ul><li><strong>Ponto 2</strong></li></ul>A proposta da MEO Energia.<br>Recomendo que todos façam uma simulação através do site da ERSE: <a href="https://simuladorprecos.erse.pt/" target="_blank" rel="noopener noreferrer">https://simuladorprecos.erse.pt/</a>.<br><br>Esta é uma ferramenta muito útil para perceberem onde se posiciona o vosso plano atual no ranking de preços. No vídeo que acompanha este artigo explico como utilizar o simulador e como comparar, de forma clara, as propostas das várias comercializadoras.<br><br>Nas duas simulações que realizei, a <strong>MEO Energia não surge sequer no top 10 do ranking de preço</strong>. Na minha avaliação, ao aderir a esta proposta, poderá estar a ficar com o pior dos dois mundos: nas telecomunicações, um dos preços mais elevados do mercado; na energia, uma oferta longe das mais competitivas.<br><br>Ainda assim, o objetivo não é desencorajar a adesão, mas sim dar-vos ferramentas para analisarem cada proposta com dados concretos. A partir daí, poderão escolher de forma consciente.<br><br><u>No Viciado Comenta, estaremos sempre do lado do consumidor, com foco em partilhar conhecimento que ajude a poupar.</u><p><strong>Vale mesmo a pena esta aposta da MEO Energia?</strong></p><p>Depende menos do brilho da campanha e mais do perfil do cliente. A MEO tenta usar a energia como ferramenta de fidelizacao e de reforco do ecossistema da marca, o que faz sentido do ponto de vista comercial. O discurso das vantagens adicionais, dos dados moveis e da acumulacao de beneficios pode parecer forte, mas o consumidor so ganha realmente se o pacote final fizer sentido no custo total e nao apenas na publicidade.</p><p>E aqui esta o ponto que nao deve ser ignorado: ofertas convergentes podem parecer mais completas, mas tambem aumentam dependencia da mesma marca. Quando telecom e energia ficam juntos, a operadora ganha mais capacidade para reter o cliente e tornar a saida menos simples. Por isso, antes de olhar para a campanha como grande oportunidade, convem comparar bem a fatura final e perceber se existe ganho real ou apenas mais uma camada de fidelizacao embalada como beneficio.</p><p>Fontes consultadas: comunicacao publica da MEO Energia, informacao comercial da MEO sobre pacotes elegiveis e acompanhamento editorial da convergencia entre telecom e energia em Portugal.</p></div>
                                                 
                     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
                         <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar&ecirc;ncia editorial</p>
                         <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conte&uacute;do original e assinado.</strong> Este artigo integra a cobertura editorial de Telecom do VICIADO COMENTA e foi publicado com autoria identificada.</p>
-                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo foi preparado com base em contexto editorial, fontes p&uacute;blicas e p&aacute;ginas oficiais quando aplic&aacute;vel ao tema.</p>
+                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo inclui uma sec&ccedil;&atilde;o expl&iacute;cita de fontes consultadas no corpo do texto.</p>
                         <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorre&ccedil;&atilde;o factual, envia um pedido de corre&ccedil;&atilde;o para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
                     </aside>
                         
