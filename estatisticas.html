@@ -777,6 +777,16 @@
     <section class="tab-panel" id="tab-historico">
       <div class="cards">
         <div class="card">
+          <div class="card-label">Utilizadores ativos agora</div>
+          <div class="card-value" id="historicoAtivosAgora">-</div>
+          <div class="card-subvalue" id="historicoAtivosAgoraMeta">A aguardar dados em tempo real.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Sessões ativas agora</div>
+          <div class="card-value" id="historicoSessoesAtivas">-</div>
+          <div class="card-subvalue" id="historicoSessoesAtivasMeta">Sessões únicas atualmente ligadas.</div>
+        </div>
+        <div class="card">
           <div class="card-label">Entradas registadas</div>
           <div class="card-value" id="historicoTotal">-</div>
         </div>
@@ -785,6 +795,26 @@
           <div class="card-value" id="historicoSessoes">-</div>
         </div>
       </div>
+      <section class="panel" id="activeUsersPanel">
+        <h2>🟢 Utilizadores ativos em tempo real</h2>
+        <table>
+          <thead>
+            <tr><th>Último sinal</th><th>Sessão</th><th>Página</th></tr>
+          </thead>
+          <tbody id="activeUsersBody"></tbody>
+        </table>
+        <div class="status" id="activeUsersStatus">A carregar...</div>
+      </section>
+      <section class="panel" id="historicoHourlyPanel" style="margin-top:16px;">
+        <h2>🕒 Histórico por Hora (últimas 24h)</h2>
+        <table>
+          <thead>
+            <tr><th>Hora</th><th>Atividades</th><th>Sessões únicas</th></tr>
+          </thead>
+          <tbody id="historicoHourlyBody"></tbody>
+        </table>
+        <div class="status" id="historicoHourlyStatus">A carregar...</div>
+      </section>
       <section class="panel">
         <h2>📋 Histórico de Atividade (últimas 24h)</h2>
         <div class="inline-controls">
@@ -832,6 +862,9 @@
       likeCountsByArticle: {},
       articleReads: {},
       clickTargets: {},
+      activeUsers: [],
+      activeUsersUnique: 0,
+      activeUsersHourly: [],
       sessions: [],
       historyRows: []
     };
@@ -895,6 +928,7 @@
         carregarLikesRecentes();
         carregarMetricasArtigos();
         carregarTopCliques();
+        carregarUtilizadoresAtivos();
         carregarHistorico();
       });
     }
@@ -967,6 +1001,20 @@
         return maybeDate.toLocaleString('pt-PT');
       }
       return String(value);
+    }
+
+    function formatHourBucketLabel(bucketKey) {
+      const match = String(bucketKey || '').match(/^(\d{4}-\d{2}-\d{2})T(\d{2})$/);
+      if (!match) return String(bucketKey || '-');
+      const [, dateKey, hourKey] = match;
+      return `${formatDateLabel(dateKey)} • ${hourKey}:00-${hourKey}:59`;
+    }
+
+    function getHourBucketKeyFromTimestamp(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp);
+      if (Number.isNaN(date.getTime())) return '';
+      return `${formatLocalDateKey(date)}T${String(date.getHours()).padStart(2, '0')}`;
     }
 
     function setText(id, value) {
@@ -1147,7 +1195,9 @@
       const hasClicks = getClickEntries(dashboardState.clickTargets || {}).length > 0;
       const hasComments = (dashboardState.commentRows || []).length > 0;
       const hasLikes = (dashboardState.likeRows || []).length > 0;
-      const hasHistory = (dashboardState.historyRows || []).length > 0;
+      const hasHistory = (dashboardState.historyRows || []).length > 0
+        || (dashboardState.activeUsers || []).length > 0
+        || (dashboardState.activeUsersHourly || []).length > 0;
       const hasSummaryData = hasVisitsData || hasComments || hasLikes || hasHistory || hasTrafficSources || hasClicks || pageEntries.length > 0;
 
       setTabVisibility('resumo', hasSummaryData);
@@ -2302,6 +2352,104 @@
       });
     }
 
+    function renderActiveUsersRows(rows) {
+      const tbody = document.getElementById('activeUsersBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!rows.length) {
+        renderEmptyRow('activeUsersBody', 'Sem utilizadores ativos neste momento.', 3);
+        return;
+      }
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+
+        const whenCell = document.createElement('td');
+        whenCell.textContent = row.timestamp ? formatDateTime(row.timestamp) : '-';
+
+        const sessionCell = document.createElement('td');
+        sessionCell.textContent = row.sessionId ? getSessionLabel(row.sessionId) : 'Ligação sem sessão';
+        if (row.sessionId) {
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = row.sessionId;
+          sessionCell.appendChild(meta);
+        }
+
+        const pageCell = document.createElement('td');
+        pageCell.textContent = row.page || '/';
+
+        tr.appendChild(whenCell);
+        tr.appendChild(sessionCell);
+        tr.appendChild(pageCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderHourlyHistoryRows(rows) {
+      const tbody = document.getElementById('historicoHourlyBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!rows.length) {
+        renderEmptyRow('historicoHourlyBody', 'Sem histórico horário nas últimas 24 horas.', 3);
+        return;
+      }
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+
+        const hourCell = document.createElement('td');
+        hourCell.textContent = formatHourBucketLabel(row.bucketKey);
+
+        const totalCell = document.createElement('td');
+        totalCell.textContent = safeNumber(row.total).toLocaleString('pt-PT');
+
+        const uniqueCell = document.createElement('td');
+        uniqueCell.textContent = safeNumber(row.uniqueSessions).toLocaleString('pt-PT');
+
+        tr.appendChild(hourCell);
+        tr.appendChild(totalCell);
+        tr.appendChild(uniqueCell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function carregarUtilizadoresAtivos() {
+      database.ref('active_users').on('value', (snapshot) => {
+        const rows = [];
+
+        snapshot.forEach((activeSnap) => {
+          const value = activeSnap.val() || {};
+          rows.push({
+            sessionId: value.sessionId || '',
+            page: value.page || '/',
+            timestamp: typeof value.timestamp === 'number' ? value.timestamp : 0,
+            connectionId: activeSnap.key || ''
+          });
+        });
+
+        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        const uniqueSessions = new Set(rows.map((row) => row.sessionId || row.connectionId).filter(Boolean));
+
+        dashboardState.activeUsers = rows;
+        dashboardState.activeUsersUnique = uniqueSessions.size;
+
+        setText('historicoAtivosAgora', rows.length.toLocaleString('pt-PT'));
+        setText('historicoAtivosAgoraMeta', rows.length ? `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.` : 'Sem presença ativa neste momento.');
+        setText('historicoSessoesAtivas', uniqueSessions.size.toLocaleString('pt-PT'));
+        setText('historicoSessoesAtivasMeta', uniqueSessions.size ? `${uniqueSessions.size.toLocaleString('pt-PT')} sessão(ões) com ligação aberta.` : 'Nenhuma sessão ativa detetada.');
+        setText('activeUsersStatus', rows.length ? `Atualizado em ${new Date().toLocaleTimeString('pt-PT')} • ${rows.length} ligação(ões) ativas.` : 'Sem utilizadores ativos neste momento.');
+
+        renderActiveUsersRows(rows);
+        updateDashboardVisibility();
+      }, (error) => {
+        console.error('Erro ao carregar utilizadores ativos:', error);
+        setText('activeUsersStatus', 'Erro ao carregar utilizadores ativos.');
+      });
+    }
+
     function carregarHistorico() {
       database.ref('active_users_history').on('value', (snapshot) => {
         const rows = [];
@@ -2364,16 +2512,53 @@
         dashboardState.historyRows = recentRows;
         dashboardState.sessions = _historicoSessions;
 
+        const hourlyMap = new Map();
+        recentRows.forEach((row) => {
+          const bucketKey = getHourBucketKeyFromTimestamp(row.timestamp);
+          if (!bucketKey) {
+            return;
+          }
+
+          if (!hourlyMap.has(bucketKey)) {
+            hourlyMap.set(bucketKey, {
+              bucketKey,
+              total: 0,
+              sessionIds: new Set()
+            });
+          }
+
+          const bucket = hourlyMap.get(bucketKey);
+          bucket.total += 1;
+          if (row.sessionId) {
+            bucket.sessionIds.add(row.sessionId);
+          }
+        });
+
+        const hourlyRows = Array.from(hourlyMap.values())
+          .map((bucket) => ({
+            bucketKey: bucket.bucketKey,
+            total: bucket.total,
+            uniqueSessions: bucket.sessionIds.size
+          }))
+          .sort((a, b) => b.bucketKey.localeCompare(a.bucketKey))
+          .slice(0, 24);
+
+        dashboardState.activeUsersHourly = hourlyRows;
+
         setText('historicoTotal', recentRows.length.toLocaleString('pt-PT'));
         setText('historicoSessoes', _historicoSessions.length.toLocaleString('pt-PT'));
 
         const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
         renderHistoricoRows(filtro);
+        renderHourlyHistoryRows(hourlyRows);
         renderSummaryOverview();
         setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${recentRows.length} atividade(s) nas últimas 24h`);
+        setText('historicoHourlyStatus', hourlyRows.length ? `Últimas ${hourlyRows.length} hora(s) com atividade registada.` : 'Sem histórico horário disponível.');
+        updateDashboardVisibility();
       }, (error) => {
         console.error('Erro ao carregar histórico:', error);
         setText('historicoStatus', 'Erro ao carregar dados.');
+        setText('historicoHourlyStatus', 'Erro ao carregar histórico horário.');
       });
 
       const filtroInput = document.getElementById('historicoFiltro');

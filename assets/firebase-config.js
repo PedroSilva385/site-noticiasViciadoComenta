@@ -820,9 +820,17 @@ async function initializeDeferredFirebaseWork() {
         console.error('❌ Erro ao obter fingerprint de visitante:', error);
       });
 
+    const sessionKey = 'vc_active_session_id';
+    let sessionId = sessionStorage.getItem(sessionKey);
+    if (!sessionId) {
+      sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+      sessionStorage.setItem(sessionKey, sessionId);
+    }
+
     const userId = 'user_' + Math.random().toString(36).substr(2,9);
     const activeUserRef = db.ref('active_users/' + userId);
     activeUserRef.set({
+      sessionId,
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       page: window.location.pathname
     }).catch((error) => {
@@ -834,13 +842,6 @@ async function initializeDeferredFirebaseWork() {
     window.addEventListener('beforeunload', () => {
       activeUserRef.remove().catch(() => {});
     });
-
-    const sessionKey = 'vc_active_session_id';
-    let sessionId = sessionStorage.getItem(sessionKey);
-    if (!sessionId) {
-      sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
-      sessionStorage.setItem(sessionKey, sessionId);
-    }
 
     const historyEntryId = sessionId + '_' + Date.now();
     db.ref('active_users_history/' + historyEntryId).set({
