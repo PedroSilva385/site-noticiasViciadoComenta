@@ -69,6 +69,89 @@ function canWriteProtectedAnalytics() {
   }
 }
 
+function waitForFirebaseAuthUser(timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    try {
+      if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+        resolve(null);
+        return;
+      }
+
+      const auth = firebase.auth();
+      if (!auth) {
+        resolve(null);
+        return;
+      }
+
+      if (auth.currentUser) {
+        resolve(auth.currentUser);
+        return;
+      }
+
+      let resolved = false;
+      const finish = (user) => {
+        if (resolved) {
+          return;
+        }
+        resolved = true;
+        if (typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+        if (timerId) {
+          window.clearTimeout(timerId);
+        }
+        resolve(user || null);
+      };
+
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        finish(user || null);
+      }, () => {
+        finish(null);
+      });
+
+      const timerId = window.setTimeout(() => {
+        finish(auth.currentUser || null);
+      }, timeoutMs);
+    } catch (_) {
+      resolve(null);
+    }
+  });
+}
+
+async function ensureAnalyticsAuthUser() {
+  try {
+    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+      return null;
+    }
+
+    const auth = firebase.auth();
+    if (!auth) {
+      return null;
+    }
+
+    if (auth.currentUser) {
+      return auth.currentUser;
+    }
+
+    const existingUser = await waitForFirebaseAuthUser(1200);
+    if (existingUser) {
+      return existingUser;
+    }
+
+    try {
+      const credential = await auth.signInAnonymously();
+      return credential && credential.user ? credential.user : auth.currentUser;
+    } catch (signInError) {
+      if (!isFirebasePermissionDenied(signInError)) {
+        console.info('ℹ️ Auth anónima indisponível para analytics:', signInError && signInError.code ? signInError.code : signInError);
+      }
+      return null;
+    }
+  } catch (_) {
+    return null;
+  }
+}
+
 function isFirebasePermissionDenied(error) {
   if (!error) return false;
 
@@ -690,7 +773,7 @@ function setupEditorialTrustBoxPlacement() {
   window.addEventListener('popstate', queueEditorialTrustBoxPlacement);
 }
 
-function initializeDeferredFirebaseWork() {
+async function initializeDeferredFirebaseWork() {
   if (deferredFirebaseWorkStarted) {
     return;
   }
@@ -703,7 +786,8 @@ function initializeDeferredFirebaseWork() {
       return;
     }
 
-    if (!canWriteProtectedAnalytics()) {
+    const analyticsUser = await ensureAnalyticsAuthUser();
+    if (!analyticsUser || !canWriteProtectedAnalytics()) {
       console.info('ℹ️ Analytics com escrita Firebase desativado neste contexto público');
       return;
     }
