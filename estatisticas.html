@@ -875,6 +875,9 @@
     let _nextSessionNumber = 1;
     let _historicoSessions = [];
     const expandedHistorySessions = new Set();
+    const activeUserCleanupInFlight = new Set();
+    const ACTIVE_USER_LIVE_WINDOW_MS = 5 * 60 * 1000;
+    const ACTIVE_USER_STALE_CLEANUP_MS = 24 * 60 * 60 * 1000;
     let statsInitialized = false;
 
     function isStatsAdminUser(user) {
@@ -2431,18 +2434,43 @@
         });
 
         rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        const uniqueSessions = new Set(rows.map((row) => row.sessionId || row.connectionId).filter(Boolean));
+        const now = Date.now();
+        const liveRows = rows.filter((row) => (row.timestamp || 0) >= (now - ACTIVE_USER_LIVE_WINDOW_MS));
+        const staleRows = rows.filter((row) => (row.timestamp || 0) > 0 && (row.timestamp || 0) < (now - ACTIVE_USER_LIVE_WINDOW_MS));
+        const cleanupRows = rows.filter((row) => (row.timestamp || 0) > 0 && (row.timestamp || 0) < (now - ACTIVE_USER_STALE_CLEANUP_MS) && row.connectionId);
+        const uniqueSessions = new Set(liveRows.map((row) => row.sessionId || row.connectionId).filter(Boolean));
 
-        dashboardState.activeUsers = rows;
+        dashboardState.activeUsers = liveRows;
         dashboardState.activeUsersUnique = uniqueSessions.size;
 
-        setText('historicoAtivosAgora', rows.length.toLocaleString('pt-PT'));
-        setText('historicoAtivosAgoraMeta', rows.length ? `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.` : 'Sem presença ativa neste momento.');
+        setText('historicoAtivosAgora', liveRows.length.toLocaleString('pt-PT'));
+        setText('historicoAtivosAgoraMeta', liveRows.length ? `Sinal nos últimos 5 minutos • atualizado em ${new Date().toLocaleTimeString('pt-PT')}.` : 'Sem presença ativa recente.');
         setText('historicoSessoesAtivas', uniqueSessions.size.toLocaleString('pt-PT'));
         setText('historicoSessoesAtivasMeta', uniqueSessions.size ? `${uniqueSessions.size.toLocaleString('pt-PT')} sessão(ões) com ligação aberta.` : 'Nenhuma sessão ativa detetada.');
-        setText('activeUsersStatus', rows.length ? `Atualizado em ${new Date().toLocaleTimeString('pt-PT')} • ${rows.length} ligação(ões) ativas.` : 'Sem utilizadores ativos neste momento.');
+        setText(
+          'activeUsersStatus',
+          liveRows.length
+            ? `Atualizado em ${new Date().toLocaleTimeString('pt-PT')} • ${liveRows.length} ligação(ões) com sinal nos últimos 5 minutos.${staleRows.length ? ` ${staleRows.length} registo(s) antigo(s) ignorado(s).` : ''}`
+            : (staleRows.length ? `${staleRows.length} registo(s) antigo(s) ignorado(s); sem utilizadores ativos recentes.` : 'Sem utilizadores ativos neste momento.')
+        );
 
-        renderActiveUsersRows(rows);
+        renderActiveUsersRows(liveRows);
+
+        cleanupRows.forEach((row) => {
+          if (!row.connectionId || activeUserCleanupInFlight.has(row.connectionId) || !auth || !isStatsAdminUser(auth.currentUser)) {
+            return;
+          }
+
+          activeUserCleanupInFlight.add(row.connectionId);
+          database.ref(`active_users/${row.connectionId}`).remove()
+            .catch((error) => {
+              console.error('Erro ao limpar registo antigo de active_users:', error);
+            })
+            .finally(() => {
+              activeUserCleanupInFlight.delete(row.connectionId);
+            });
+        });
+
         updateDashboardVisibility();
       }, (error) => {
         console.error('Erro ao carregar utilizadores ativos:', error);

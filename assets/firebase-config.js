@@ -23,7 +23,8 @@ const ANALYTICS_CONFIG = {
     'https://api64.ipify.org?format=json',
     'https://api.ipify.org?format=json'
   ],
-  optOutStorageKey: 'vc_analytics_opt_out'
+  optOutStorageKey: 'vc_analytics_opt_out',
+  activeUserHeartbeatMs: 60000
 };
 
 function readAnalyticsPreferenceFromUrl() {
@@ -829,19 +830,35 @@ async function initializeDeferredFirebaseWork() {
 
     const userId = 'user_' + Math.random().toString(36).substr(2,9);
     const activeUserRef = db.ref('active_users/' + userId);
-    activeUserRef.set({
+    const writeActivePresence = () => activeUserRef.set({
       sessionId,
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       page: window.location.pathname
-    }).catch((error) => {
+    });
+
+    writeActivePresence().catch((error) => {
       if (!isFirebasePermissionDenied(error)) {
         console.error('❌ Erro ao registar utilizador ativo:', error);
       }
     });
+
+    const activeUserHeartbeatId = window.setInterval(() => {
+      writeActivePresence().catch((error) => {
+        if (!isFirebasePermissionDenied(error)) {
+          console.error('❌ Erro ao atualizar utilizador ativo:', error);
+        }
+      });
+    }, ANALYTICS_CONFIG.activeUserHeartbeatMs);
+
     activeUserRef.onDisconnect().remove().catch(() => {});
-    window.addEventListener('beforeunload', () => {
+
+    const clearActivePresence = () => {
+      window.clearInterval(activeUserHeartbeatId);
       activeUserRef.remove().catch(() => {});
-    });
+    };
+
+    window.addEventListener('beforeunload', clearActivePresence, { once: true });
+    window.addEventListener('pagehide', clearActivePresence, { once: true });
 
     const historyEntryId = sessionId + '_' + Date.now();
     db.ref('active_users_history/' + historyEntryId).set({
