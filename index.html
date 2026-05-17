@@ -1923,7 +1923,11 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 56px 15px 25px;
+    padding: 24px 15px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 
   .header-stats {
@@ -1933,8 +1937,10 @@ footer {
   .header-perfil {
     width: 100px;
     height: 100px;
-    top: 12px;
-    right: 12px;
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: 0 auto 4px;
   }
 
   header h1 {
@@ -1957,33 +1963,67 @@ footer {
   }
 
   nav {
-    gap: 12px;
-    padding: 0 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px 12px 12px;
     align-items: stretch;
   }
 
   nav a {
-    padding: 12px 8px;
+    padding: 12px 10px;
     font-size: 0.9em;
+    display: flex;
+    align-items: center;
     justify-content: center;
     text-align: center;
+    min-height: 46px;
+    border: 1px solid rgba(0, 102, 204, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.82);
   }
 
   .nav-dropdown {
-    display: flex;
+    display: block;
+    grid-column: 1 / -1;
   }
 
   .nav-dropdown > a {
-    padding: 12px 8px;
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
     justify-content: center;
     text-align: center;
     width: 100%;
+    min-height: 46px;
+  }
+
+  .dropdown-menu {
+    position: static;
+    min-width: 0;
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: none;
+    transform: none;
+    display: none;
+    opacity: 1;
+    visibility: visible;
   }
 
   .nav-dropdown.active .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .dropdown-menu a {
+    min-height: 44px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 204, 0.12);
+    background: rgba(227, 242, 253, 0.85);
   }
 
   main {
@@ -1995,6 +2035,23 @@ footer {
 
   .sidebar {
     display: none;
+  }
+
+  .search-section {
+    padding: 0 12px;
+  }
+
+  .search-input {
+    font-size: 16px;
+    padding: 14px 42px 14px 14px;
+  }
+
+  .search-icon {
+    right: 14px;
+  }
+
+  .search-dropdown {
+    max-height: min(60vh, 420px);
   }
 
   main > h2 {
@@ -2116,7 +2173,7 @@ footer {
 
 @media (max-width: 480px) {
   header {
-    padding: 56px 10px 18px;
+    padding: 18px 10px 18px;
   }
 
   .header-perfil {
@@ -2157,27 +2214,19 @@ footer {
   }
 
   nav {
+    grid-template-columns: 1fr;
     gap: 8px;
-    padding: 0 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: stretch;
+    padding: 8px;
   }
 
   nav a {
     padding: 10px 6px;
     font-size: 0.8em;
-    flex: 1 1 140px;
     min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
   }
   
   .nav-dropdown {
-    flex: 1 1 140px;
-    display: flex;
+    display: block;
   }
   
   .nav-dropdown > a {
@@ -2189,9 +2238,13 @@ footer {
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: min(220px, calc(100vw - 24px));
-    left: 50%;
-    transform: translate(-50%, -10px);
+    min-width: 0;
+    left: auto;
+    transform: none;
+  }
+
+  .nav-dropdown.active .dropdown-menu {
+    grid-template-columns: 1fr;
   }
 
   main {
@@ -3003,11 +3056,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dropdown mobile: clique para abrir/fechar
   const dropdown = document.querySelector('.nav-dropdown');
-  if (dropdown && window.innerWidth <= 768) {
+  if (dropdown) {
     const dropdownLink = dropdown.querySelector('a');
+    const dropdownItems = dropdown.querySelectorAll('.dropdown-menu a');
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+    const closeDropdown = () => dropdown.classList.remove('active');
+
     dropdownLink.addEventListener('click', (e) => {
+      if (!mobileQuery.matches) {
+        return;
+      }
+
       e.preventDefault();
       dropdown.classList.toggle('active');
+    });
+
+    dropdownItems.forEach((item) => item.addEventListener('click', closeDropdown));
+    document.addEventListener('click', (event) => {
+      if (!dropdown.contains(event.target)) {
+        closeDropdown();
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (!mobileQuery.matches) {
+        closeDropdown();
+      }
     });
   }
 
