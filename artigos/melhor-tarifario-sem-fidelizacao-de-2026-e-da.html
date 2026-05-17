@@ -2160,19 +2160,13 @@ footer {
           </div>
           <div class="artigo-conteudo">
             <p><strong>Analisamos a vitória da Lycamobile na categoria de tarifários móveis sem fidelização e o que este resultado pode significar para o mercado em 2026.</strong></p>
-            <div id="artigoConteudoBody">E o prémio Escolha do Consumidor 2026, na categoria 'Tarifários Móveis sem Fidelização', vai para... a Lycamobile.
-
-À primeira vista, o resultado surpreende: num mercado dominado por operadores com maior escala, uma MVNO conseguiu liderar com um índice global de satisfação de 87,7%. Mais do que o vencedor em si, interessa perceber o contexto em que esta distinção acontece.
-
-A categoria sem fidelização é uma das mais exigentes para qualquer marca. O cliente pode mudar de operador com facilidade e, por isso, o serviço tem de convencer todos os meses. Quando há fricção no apoio, instabilidade de rede ou preços pouco competitivos, a penalização tende a ser rápida.
-
-Também vale a pena separar duas leituras: prémio de satisfação não é, automaticamente, prémio de cobertura nacional, de velocidade máxima ou de melhor oferta para todos os perfis. É um indicador importante, mas deve ser lido em conjunto com outros fatores, como qualidade de rede na tua zona, tipo de utilização (dados, chamadas, roaming) e experiência de suporte.
-
-Na prática, o resultado da Lycamobile reforça uma ideia central: o segmento low-cost e sem fidelização continua aberto a mudanças, e os consumidores estão cada vez menos presos à inércia. Em 2026, isso pode obrigar todas as marcas a melhorar proposta de valor, transparência e serviço pós-venda.
-
-Fontes consultadas: plataforma Escolha do Consumidor (categoria tarifários móveis sem fidelização), páginas de tarifários dos operadores e informação pública do setor em Portugal.
-
-E tu, consideras que este tipo de prémio influencia a tua escolha de operador?</div>
+            <div id="artigoConteudoBody"><p>E o pr&#233;mio Escolha do Consumidor 2026, na categoria &#39;Tarif&#225;rios M&#243;veis sem Fideliza&#231;&#227;o&#39;, vai para... a Lycamobile.</p>
+<p>&#192; primeira vista, o resultado surpreende: num mercado dominado por operadores com maior escala, uma MVNO conseguiu liderar com um &#237;ndice global de satisfa&#231;&#227;o de 87,7%. Mais do que o vencedor em si, interessa perceber o contexto em que esta distin&#231;&#227;o acontece.</p>
+<p>A categoria sem fideliza&#231;&#227;o &#233; uma das mais exigentes para qualquer marca. O cliente pode mudar de operador com facilidade e, por isso, o servi&#231;o tem de convencer todos os meses. Quando h&#225; fric&#231;&#227;o no apoio, instabilidade de rede ou pre&#231;os pouco competitivos, a penaliza&#231;&#227;o tende a ser r&#225;pida.</p>
+<p>Tamb&#233;m vale a pena separar duas leituras: pr&#233;mio de satisfa&#231;&#227;o n&#227;o &#233;, automaticamente, pr&#233;mio de cobertura nacional, de velocidade m&#225;xima ou de melhor oferta para todos os perfis. &#201; um indicador importante, mas deve ser lido em conjunto com outros fatores, como qualidade de rede na tua zona, tipo de utiliza&#231;&#227;o (dados, chamadas, roaming) e experi&#234;ncia de suporte.</p>
+<p>Na pr&#225;tica, o resultado da Lycamobile refor&#231;a uma ideia central: o segmento low-cost e sem fideliza&#231;&#227;o continua aberto a mudan&#231;as, e os consumidores est&#227;o cada vez menos presos &#224; in&#233;rcia. Em 2026, isso pode obrigar todas as marcas a melhorar proposta de valor, transpar&#234;ncia e servi&#231;o p&#243;s-venda.</p>
+<p>Fontes consultadas: plataforma Escolha do Consumidor (categoria tarif&#225;rios m&#243;veis sem fideliza&#231;&#227;o), p&#225;ginas de tarif&#225;rios dos operadores e informa&#231;&#227;o p&#250;blica do setor em Portugal.</p>
+<p>E tu, consideras que este tipo de pr&#233;mio influencia a tua escolha de operador?</p></div>
                                                 
                     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
                         <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar&ecirc;ncia editorial</p>
@@ -2187,26 +2181,6 @@ E tu, consideras que este tipo de prémio influencia a tua escolha de operador?<
                     </aside>
           </div>
   </article>
-
-  <section class="comentarios-section" id="comentariosSection" style="display: none;">
-    <h3>💬 Comentários</h3>
-    
-    <div class="comentario-form">
-      <form id="comentarioForm">
-        <div class="form-group">
-          <label for="nomeComentario">Nome</label>
-          <input type="text" id="nomeComentario" placeholder="Digite seu nome" required>
-        </div>
-        <div class="form-group">
-          <label for="textoComentario">Comentário</label>
-          <textarea id="textoComentario" placeholder="Deixe seu comentário aqui..." required></textarea>
-        </div>
-        <button type="submit" class="btn-enviar">Enviar Comentário</button>
-      </form>
-    </div>
-
-    <div class="comentarios-lista" id="comentariosList"></div>
-  </section>
 </main>
 
 <footer>
@@ -3176,6 +3150,72 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function escapeArticlePlainText(content) {
+  return String(content || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatPlainTextArticleContent(rawContent) {
+  if (!rawContent) return '';
+
+  const lines = String(rawContent)
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .trim()
+    .split('\n');
+
+  const blocks = [];
+  let listItems = [];
+  let listType = '';
+
+  const flushList = () => {
+    if (!listItems.length || !listType) {
+      return;
+    }
+
+    blocks.push(`<${listType}>${listItems.join('')}</${listType}>`);
+    listItems = [];
+    listType = '';
+  };
+
+  const formatLine = (line) => applyInlineMarkdownTypography(escapeArticlePlainText(line.trim()));
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushList();
+      return;
+    }
+
+    const unorderedMatch = line.startsWith('• ')
+      ? [line, line.slice(2)]
+      : line.match(/^(?:\-|–)\s+(.*)$/);
+    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+    if (unorderedMatch || orderedMatch) {
+      const nextListType = orderedMatch ? 'ol' : 'ul';
+      if (listItems.length && listType !== nextListType) {
+        flushList();
+      }
+
+      listType = nextListType;
+      const itemText = orderedMatch ? orderedMatch[1] : unorderedMatch[1];
+      listItems.push(`<li>${formatLine(itemText)}</li>`);
+      return;
+    }
+
+    flushList();
+    blocks.push(`<p>${formatLine(line)}</p>`);
+  });
+
+  flushList();
+  return blocks.join('\n').trim();
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -3247,17 +3287,7 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  const paragraphToken = '__PARAGRAPH_BREAK__';
-  content = content
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\n\n+/g, paragraphToken)
-    .replace(/\n+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
-
-  content = normalizeBrokenLineWraps(content);
-  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
-  return content.trim();
+  return formatPlainTextArticleContent(content);
 }
 
 function canUseLiveEditor() {
@@ -3817,10 +3847,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
         
-        // Mostrar secção de comentários
-        document.getElementById('comentariosSection').style.display = 'block';
-        carregarComentarios(noticiaIdResolvido);
-        
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
 
@@ -3841,7 +3867,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">← Voltar às notícias</a>
           </div>
         `;
-        document.getElementById('comentariosSection').style.display = 'none';
       }
     })
     .catch(err => {

@@ -91,6 +91,102 @@ function Convert-ToLfText {
     return ($Text -replace "`r`n", "`n")
 }
 
+function Format-PlainTextArticleContent {
+    param([string]$Text)
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return ''
+    }
+
+    $content = (Convert-ToLfText -Text $Text).Trim()
+    $lines = $content -split "`n"
+    $blocks = New-Object System.Collections.Generic.List[string]
+    $listItems = New-Object System.Collections.Generic.List[string]
+    $listType = ''
+
+    foreach ($rawLine in $lines) {
+        $trimmedLine = ([string]$rawLine).Trim()
+
+        if ([string]::IsNullOrWhiteSpace($trimmedLine)) {
+            if ($listItems.Count -gt 0 -and -not [string]::IsNullOrWhiteSpace($listType)) {
+                $blocks.Add("<$listType>$($listItems -join '')</$listType>")
+                $listItems.Clear()
+                $listType = ''
+            }
+            continue
+        }
+
+        $hasBulletPrefix = $trimmedLine.StartsWith([string][char]8226 + ' ')
+        $unorderedMatch = if ($hasBulletPrefix) { $null } else { [regex]::Match($trimmedLine, '^(?:\-|–)\s+(.*)$') }
+        $orderedMatch = [regex]::Match($trimmedLine, '^\d+[\.)]\s+(.*)$')
+
+        if ($hasBulletPrefix -or $unorderedMatch.Success -or $orderedMatch.Success) {
+            $nextListType = if ($orderedMatch.Success) { 'ol' } else { 'ul' }
+
+            if ($listItems.Count -gt 0 -and $listType -ne $nextListType) {
+                $blocks.Add("<$listType>$($listItems -join '')</$listType>")
+                $listItems.Clear()
+            }
+
+            $listType = $nextListType
+            $itemText = if ($orderedMatch.Success) {
+                $orderedMatch.Groups[1].Value
+            } elseif ($hasBulletPrefix) {
+                $trimmedLine.Substring(2).Trim()
+            } else {
+                $unorderedMatch.Groups[1].Value
+            }
+            $listItems.Add("<li>$(ConvertTo-HtmlEntities -Text $itemText.Trim())</li>")
+            continue
+        }
+
+        if ($listItems.Count -gt 0 -and -not [string]::IsNullOrWhiteSpace($listType)) {
+            $blocks.Add("<$listType>$($listItems -join '')</$listType>")
+            $listItems.Clear()
+            $listType = ''
+        }
+
+        $blocks.Add("<p>$(ConvertTo-HtmlEntities -Text $trimmedLine)</p>")
+    }
+
+    if ($listItems.Count -gt 0 -and -not [string]::IsNullOrWhiteSpace($listType)) {
+        $blocks.Add("<$listType>$($listItems -join '')</$listType>")
+    }
+
+    return ($blocks -join "`n").Trim()
+}
+
+function Format-StaticArticleContent {
+    param([string]$Text)
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return ''
+    }
+
+    $content = (Convert-ToLfText -Text $Text).Trim()
+    if ([regex]::IsMatch($content, '<[^>]+>')) {
+        return $content
+    }
+
+    if (-not $content.Contains("`n") -and $content.Length -gt 500) {
+        $sentences = [regex]::Split($content, '(?<=[.!?])\s+') | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+        if ($sentences.Count -ge 6) {
+            $grouped = New-Object System.Collections.Generic.List[string]
+            for ($index = 0; $index -lt $sentences.Count; $index += 2) {
+                $endIndex = [Math]::Min($index + 1, $sentences.Count - 1)
+                if ($index -eq $endIndex) {
+                    $grouped.Add($sentences[$index])
+                } else {
+                    $grouped.Add(($sentences[$index..$endIndex] -join ' '))
+                }
+            }
+            $content = $grouped -join "`n`n"
+        }
+    }
+
+    return Format-PlainTextArticleContent -Text $content
+}
+
 function Get-RedirectHtml {
     param(
         [string]$TargetUrl,
@@ -214,13 +310,14 @@ function Get-StaticArticleHtml {
     $dataStr   = ConvertTo-HtmlEntities -Text ([string]$Noticia.data)
     $autor     = ConvertTo-HtmlEntities -Text ([string]$Noticia.autor)
     $resumo    = if ($Noticia.PSObject.Properties.Name -contains 'resumo')   { [string]$Noticia.resumo }   else { '' }
-    $conteudo  = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
+    $conteudoRaw = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
+    $conteudo  = Format-StaticArticleContent -Text $conteudoRaw
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
-    $wordCount  = [Math]::Max(1, (Get-PlainTextFromHtml -Text "$resumo $conteudo").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
+    $wordCount  = [Math]::Max(1, (Get-PlainTextFromHtml -Text "$resumo $conteudoRaw").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
     $readMins   = [Math]::Max(1, [Math]::Ceiling($wordCount / 200))
     $tempoTexto = if ($readMins -eq 1) { '1 min' } else { "$readMins min" }
-    $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudo", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
+    $hasSourcesInBody = ([regex]::IsMatch("$resumo $conteudoRaw", 'Fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
     $sourcingNote = if ($hasSourcesInBody) {
         'Este artigo inclui uma sec&ccedil;&atilde;o expl&iacute;cita de fontes consultadas no corpo do texto.'
     } else {
