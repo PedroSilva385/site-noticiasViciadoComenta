@@ -124,6 +124,17 @@ jobs:
         }
         EOF
         sed -i "s/__VC_BUILD_VERSION__/${{ github.sha }}/g" artigos.html
+
+    - name: Criar push-public-config.json
+      env:
+        WEB_PUSH_VAPID_PUBLIC_KEY: ${{ secrets.WEB_PUSH_VAPID_PUBLIC_KEY }}
+      run: |
+        mkdir -p data
+        cat > data/push-public-config.json << EOF
+        {
+          "vapidPublicKey": "${WEB_PUSH_VAPID_PUBLIC_KEY}"
+        }
+        EOF
     
     # Deploy para GitHub Pages
     - name: Deploy para GitHub Pages
@@ -133,3 +144,82 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: .
         cname: viciadocomenta.pt
+
+    - name: Instalar dependências para Web Push
+      if: github.ref == 'refs/heads/main'
+      env:
+        FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        WEB_PUSH_VAPID_PUBLIC_KEY: ${{ secrets.WEB_PUSH_VAPID_PUBLIC_KEY }}
+        WEB_PUSH_VAPID_PRIVATE_KEY: ${{ secrets.WEB_PUSH_VAPID_PRIVATE_KEY }}
+        WEB_PUSH_VAPID_SUBJECT: ${{ secrets.WEB_PUSH_VAPID_SUBJECT }}
+      run: |
+        if [ -z "$FIREBASE_SERVICE_ACCOUNT_JSON" ] || [ -z "$WEB_PUSH_VAPID_PUBLIC_KEY" ] || [ -z "$WEB_PUSH_VAPID_PRIVATE_KEY" ] || [ -z "$WEB_PUSH_VAPID_SUBJECT" ]; then
+          echo "Web Push desativado neste deploy: faltam GitHub secrets."
+          exit 0
+        fi
+
+        npm install --no-save firebase-admin@12.7.0 web-push@3.6.7
+
+    - name: Disparar push do artigo mais recente
+      if: github.ref == 'refs/heads/main'
+      shell: bash
+      run: |
+        if [ -z "$FIREBASE_SERVICE_ACCOUNT_JSON" ] || [ -z "$WEB_PUSH_VAPID_PUBLIC_KEY" ] || [ -z "$WEB_PUSH_VAPID_PRIVATE_KEY" ] || [ -z "$WEB_PUSH_VAPID_SUBJECT" ]; then
+          echo "Web Push desativado neste deploy: faltam GitHub secrets."
+          exit 0
+        fi
+
+        node <<'NODE' > latest-push-payload.json
+        const fs = require('fs');
+
+        function parsePublicationDate(value) {
+          if (!value || typeof value !== 'string') return 0;
+          const [datePart, timePart = '00:00'] = value.trim().split(' ');
+          const [day, month, year] = datePart.split('/').map(Number);
+          const [hour, minute] = timePart.split(':').map(Number);
+          if (!day || !month || !year) return 0;
+          return new Date(year, month - 1, day, Number.isFinite(hour) ? hour : 0, Number.isFinite(minute) ? minute : 0, 0, 0).getTime();
+        }
+
+        function slugify(value) {
+          return String(value || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .replace(/-{2,}/g, '-');
+        }
+
+        const raw = JSON.parse(fs.readFileSync('data/noticias.json', 'utf8'));
+        const noticias = Array.isArray(raw.noticias) ? raw.noticias : [];
+        const latest = [...noticias]
+          .sort((a, b) => parsePublicationDate(b.dataPublicacao || b.data) - parsePublicationDate(a.dataPublicacao || a.data))[0];
+
+        if (!latest) {
+          throw new Error('Sem noticias para notificar.');
+        }
+
+        const slug = latest.slug ? slugify(latest.slug) : slugify(latest.titulo);
+        const articleUrl = latest.id
+          ? `https://www.viciadocomenta.pt/artigos.html?id=${encodeURIComponent(String(latest.id).trim())}${slug ? `&slug=${encodeURIComponent(slug)}` : ''}`
+          : `https://www.viciadocomenta.pt/artigos.html`;
+
+        const payload = {
+          articleKey: `${latest.id || slug}|${latest.dataPublicacao || latest.data || ''}`,
+          title: '📰 Novo artigo publicado',
+          body: latest.titulo || 'Já saiu um novo artigo no VICIADO COMENTA.',
+          url: articleUrl,
+          topic: 'all'
+        };
+
+        process.stdout.write(JSON.stringify(payload));
+        NODE
+
+        node ./tools/dispatch-web-push.js latest-push-payload.json
+      env:
+        FIREBASE_DATABASE_URL: https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app
+        FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        WEB_PUSH_VAPID_PUBLIC_KEY: ${{ secrets.WEB_PUSH_VAPID_PUBLIC_KEY }}
+        WEB_PUSH_VAPID_PRIVATE_KEY: ${{ secrets.WEB_PUSH_VAPID_PRIVATE_KEY }}
+        WEB_PUSH_VAPID_SUBJECT: ${{ secrets.WEB_PUSH_VAPID_SUBJECT }}

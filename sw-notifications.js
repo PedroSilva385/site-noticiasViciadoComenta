@@ -6,6 +6,35 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
+self.addEventListener('push', (event) => {
+  let payload = {};
+
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch (error) {
+    payload = {
+      title: '📰 Novo artigo publicado',
+      body: event.data ? event.data.text() : 'Já saiu um novo artigo no VICIADO COMENTA.'
+    };
+  }
+
+  const title = String(payload.title || '📰 Novo artigo publicado');
+  const body = String(payload.body || 'Já saiu um novo artigo no VICIADO COMENTA.');
+  const url = String(payload.url || '/');
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon: payload.icon || '/assets/favicon.svg',
+      badge: payload.badge || '/assets/favicon.svg',
+      tag: payload.articleKey || url,
+      data: {
+        url
+      }
+    })
+  );
+});
+
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 

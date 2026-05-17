@@ -6,11 +6,13 @@
 		"node": "20"
 	},
 	"scripts": {
-		"lint": "node --check index.js"
+		"lint": "node --check index.js",
+		"generate:vapid": "node ./scripts/generate-vapid.js"
 	},
 	"dependencies": {
 		"firebase-admin": "^12.7.0",
-		"firebase-functions": "^5.1.1"
+		"firebase-functions": "^5.1.1",
+		"web-push": "^3.6.7"
 	}
 }
 
