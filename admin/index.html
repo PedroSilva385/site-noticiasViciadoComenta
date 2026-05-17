@@ -1060,6 +1060,7 @@ button {
         <button type="button" class="admin-tab-btn active" id="adminTabNoticias" role="tab" aria-selected="true" aria-controls="newsView">📰 Notícias</button>
         <button type="button" class="admin-tab-btn" id="adminTabVideos" role="tab" aria-selected="false" aria-controls="videosView">🎬 Vídeos e Links</button>
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
+        <button type="button" class="admin-tab-btn" id="adminTabPushSubscriptions" role="tab" aria-selected="false" aria-controls="pushView">🔔 Subscrições Push</button>
       </div>
       <button type="button" class="btn-publish-site" id="btnPublishSite" title="Executa o deploy manual via servidor local">🚀 Publicar site</button>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
@@ -1276,6 +1277,13 @@ button {
           loading="lazy"
           referrerpolicy="strict-origin-when-cross-origin">
         </iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-view" id="pushView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
         <section class="push-stats-panel" aria-labelledby="pushStatsHeading">
           <div class="push-stats-header">
             <div>
@@ -1456,9 +1464,11 @@ const btnLogout = document.getElementById('btnLogout');
 const adminTabNoticias = document.getElementById('adminTabNoticias');
 const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
+const adminTabPushSubscriptions = document.getElementById('adminTabPushSubscriptions');
 const newsView = document.getElementById('newsView');
 const videosView = document.getElementById('videosView');
 const statsView = document.getElementById('statsView');
+const pushView = document.getElementById('pushView');
 const videosStudioFrame = document.getElementById('videosStudioFrame');
 const statsFrame = document.getElementById('statsFrame');
 const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
@@ -1548,21 +1558,26 @@ function setAdminView(viewName) {
   const showNoticias = viewName === 'noticias';
   const showVideos = viewName === 'videos';
   const showStats = viewName === 'estatisticas';
+  const showPushSubscriptions = viewName === 'push-subscriptions';
 
   adminTabNoticias.classList.toggle('active', showNoticias);
   adminTabVideos.classList.toggle('active', showVideos);
   adminTabEstatisticas.classList.toggle('active', showStats);
+  adminTabPushSubscriptions.classList.toggle('active', showPushSubscriptions);
   adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
   adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
   adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
+  adminTabPushSubscriptions.setAttribute('aria-selected', showPushSubscriptions ? 'true' : 'false');
 
   newsView.classList.toggle('active', showNoticias);
   videosView.classList.toggle('active', showVideos);
   statsView.classList.toggle('active', showStats);
+  pushView.classList.toggle('active', showPushSubscriptions);
   videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
+  pushView.setAttribute('aria-hidden', showPushSubscriptions ? 'false' : 'true');
 
-  if (showStats) {
+  if (showPushSubscriptions) {
     loadPushSubscriptionsStats();
   }
 }
@@ -1577,6 +1592,10 @@ adminTabVideos.addEventListener('click', () => {
 
 adminTabEstatisticas.addEventListener('click', () => {
   setAdminView('estatisticas');
+});
+
+adminTabPushSubscriptions.addEventListener('click', () => {
+  setAdminView('push-subscriptions');
 });
 
 btnReloadVideosStudio.addEventListener('click', () => {
