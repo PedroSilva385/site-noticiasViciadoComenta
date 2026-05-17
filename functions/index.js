@@ -14,9 +14,13 @@ const GITHUB_REF = 'main';
 
 function applyCorsHeaders(response) {
 	response.set('Access-Control-Allow-Origin', '*');
-	response.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+	response.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 	response.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
 	response.set('Access-Control-Max-Age', '3600');
+}
+
+function setJsonContentType(response) {
+	response.set('Content-Type', 'application/json; charset=utf-8');
 }
 
 function getBearerToken(request) {
@@ -43,6 +47,25 @@ function normalizeRequestBody(body) {
 	}
 
 	return {};
+}
+
+function sendJson(response, statusCode, payload) {
+	setJsonContentType(response);
+	response.status(statusCode).json(payload);
+}
+
+function assertMethod(request, response, allowedMethods) {
+	if (request.method === 'OPTIONS') {
+		response.status(204).send('');
+		return false;
+	}
+
+	if (!allowedMethods.includes(request.method)) {
+		sendJson(response, 405, { ok: false, error: 'Method not allowed.' });
+		return false;
+	}
+
+	return true;
 }
 
 exports.triggerArticlesRebuild = onRequest(
