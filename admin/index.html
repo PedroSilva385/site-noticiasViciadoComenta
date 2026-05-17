@@ -271,6 +271,142 @@ body {
   background: #f8fafc;
 }
 
+.push-stats-panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.push-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.push-stats-header h3 {
+  font-size: 1rem;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.push-stats-header p {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.push-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.push-stat-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.push-stat-card .label {
+  color: #6b7280;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.push-stat-card .value {
+  margin-top: 6px;
+  color: #111827;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.push-stats-status {
+  min-height: 20px;
+  color: #475569;
+  font-size: 0.88rem;
+}
+
+.push-stats-status.error {
+  color: #b91c1c;
+}
+
+.push-stats-status.success {
+  color: #166534;
+}
+
+.push-subs-table-wrap {
+  overflow-x: auto;
+}
+
+.push-subs-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+.push-subs-table th,
+.push-subs-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+.push-subs-table th {
+  color: #475569;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.push-subs-table td {
+  color: #111827;
+  font-size: 0.88rem;
+}
+
+.push-subs-table .muted {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-pill.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.error {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-pill.invalid {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-pill.unknown {
+  background: #e5e7eb;
+  color: #475569;
+}
+
 .sidebar {
   width: 280px;
   background: white;
@@ -848,6 +984,10 @@ button {
     width: 100%;
   }
 
+  .push-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .form-row, .form-row-3 {
     grid-template-columns: 1fr;
   }
@@ -861,6 +1001,12 @@ button {
   }
 
   .quality-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .push-stats-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -1130,6 +1276,51 @@ button {
           loading="lazy"
           referrerpolicy="strict-origin-when-cross-origin">
         </iframe>
+        <section class="push-stats-panel" aria-labelledby="pushStatsHeading">
+          <div class="push-stats-header">
+            <div>
+              <h3 id="pushStatsHeading">Subscrições Push</h3>
+              <p>Lista das subscrições guardadas no Realtime Database. Apenas utilizadores autenticados do admin podem ver esta área.</p>
+            </div>
+          </div>
+          <div class="push-stats-grid">
+            <article class="push-stat-card">
+              <div class="label">Total</div>
+              <div class="value" id="pushTotalCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Ativas</div>
+              <div class="value" id="pushActiveCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Erro</div>
+              <div class="value" id="pushErrorCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Inválidas</div>
+              <div class="value" id="pushInvalidCount">0</div>
+            </article>
+          </div>
+          <div class="push-stats-status" id="pushStatsStatus">A carregar subscrições...</div>
+          <div class="push-subs-table-wrap">
+            <table class="push-subs-table">
+              <thead>
+                <tr>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Origem</th>
+                  <th scope="col">Browser</th>
+                  <th scope="col">Última atividade</th>
+                  <th scope="col">Endpoint</th>
+                </tr>
+              </thead>
+              <tbody id="pushSubscriptionsBody">
+                <tr>
+                  <td colspan="5" class="muted">Ainda sem dados carregados.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -1273,6 +1464,12 @@ const statsFrame = document.getElementById('statsFrame');
 const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
 const btnReloadStats = document.getElementById('btnReloadStats');
 const btnPublishSite = document.getElementById('btnPublishSite');
+const pushTotalCount = document.getElementById('pushTotalCount');
+const pushActiveCount = document.getElementById('pushActiveCount');
+const pushErrorCount = document.getElementById('pushErrorCount');
+const pushInvalidCount = document.getElementById('pushInvalidCount');
+const pushStatsStatus = document.getElementById('pushStatsStatus');
+const pushSubscriptionsBody = document.getElementById('pushSubscriptionsBody');
 const noticiasList = document.getElementById('noticiasList');
 const btnNewNoticia = document.getElementById('btnNewNoticia');
 const status = document.getElementById('status');
@@ -1364,6 +1561,10 @@ function setAdminView(viewName) {
   statsView.classList.toggle('active', showStats);
   videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
+
+  if (showStats) {
+    loadPushSubscriptionsStats();
+  }
 }
 
 adminTabNoticias.addEventListener('click', () => {
@@ -1386,7 +1587,131 @@ btnReloadVideosStudio.addEventListener('click', () => {
 btnReloadStats.addEventListener('click', () => {
   const src = statsFrame.getAttribute('src') || '../estatisticas.html';
   statsFrame.setAttribute('src', src);
+  loadPushSubscriptionsStats(true);
 });
+
+let pushStatsRequestId = 0;
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatPushTimestamp(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return 'Sem registo';
+  }
+
+  try {
+    return new Date(parsed).toLocaleString('pt-PT');
+  } catch (_) {
+    return 'Sem registo';
+  }
+}
+
+function summarizeUserAgent(userAgent) {
+  const source = String(userAgent || '').toLowerCase();
+  if (!source) return 'Desconhecido';
+  if (source.includes('brave')) return 'Brave';
+  if (source.includes('edg/')) return 'Edge';
+  if (source.includes('firefox/')) return 'Firefox';
+  if (source.includes('chrome/')) return 'Chrome';
+  if (source.includes('safari/') && !source.includes('chrome/')) return 'Safari';
+  return 'Browser web';
+}
+
+function setPushStatsStatus(message, tone) {
+  pushStatsStatus.textContent = message;
+  pushStatsStatus.className = 'push-stats-status';
+  if (tone) {
+    pushStatsStatus.classList.add(tone);
+  }
+}
+
+function renderPushSubscriptionsTable(items) {
+  if (!items.length) {
+    pushSubscriptionsBody.innerHTML = '<tr><td colspan="5" class="muted">Ainda não existem subscrições push registadas.</td></tr>';
+    return;
+  }
+
+  pushSubscriptionsBody.innerHTML = items.map((item) => {
+    const statusValue = String(item.status || 'unknown').toLowerCase();
+    const statusClass = ['active', 'error', 'invalid'].includes(statusValue) ? statusValue : 'unknown';
+    const origin = escapeHtml(item.origin || 'Sem origem');
+    const browser = escapeHtml(summarizeUserAgent(item.userAgent));
+    const endpoint = escapeHtml(item.subscription && item.subscription.endpoint ? item.subscription.endpoint : 'Sem endpoint');
+    const updatedAt = escapeHtml(formatPushTimestamp(item.lastSeenAt || item.updatedAt || item.createdAt));
+
+    return `
+      <tr>
+        <td><span class="status-pill ${statusClass}">${escapeHtml(statusValue)}</span></td>
+        <td>${origin}</td>
+        <td>${browser}<div class="muted">${escapeHtml(item.language || 'sem idioma')}</div></td>
+        <td>${updatedAt}</td>
+        <td><div>${endpoint}</div><div class="muted">${escapeHtml(item.id || '')}</div></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function loadPushSubscriptionsStats(forceReload) {
+  if (!pushSubscriptionsBody || !pushStatsStatus) return;
+
+  if (!forceReload && pushStatsRequestId && statsView.classList.contains('active')) {
+    return;
+  }
+
+  const requestId = Date.now();
+  pushStatsRequestId = requestId;
+  setPushStatsStatus('A carregar subscrições push...', null);
+
+  try {
+    if (isLocalStudioSession()) {
+      throw new Error('As subscrições push só ficam disponíveis no painel autenticado com Firebase.');
+    }
+
+    const snapshot = await db.ref('push_subscriptions').once('value');
+    if (pushStatsRequestId !== requestId) return;
+
+    const records = snapshot.val() || {};
+    const items = Object.entries(records).map(([id, item]) => ({ id, ...(item || {}) }));
+    items.sort((left, right) => Number(right.lastSeenAt || right.updatedAt || right.createdAt || 0) - Number(left.lastSeenAt || left.updatedAt || left.createdAt || 0));
+
+    const counts = items.reduce((acc, item) => {
+      const statusValue = String(item.status || '').toLowerCase();
+      acc.total += 1;
+      if (statusValue === 'active') acc.active += 1;
+      if (statusValue === 'error') acc.error += 1;
+      if (statusValue === 'invalid') acc.invalid += 1;
+      return acc;
+    }, { total: 0, active: 0, error: 0, invalid: 0 });
+
+    pushTotalCount.textContent = String(counts.total);
+    pushActiveCount.textContent = String(counts.active);
+    pushErrorCount.textContent = String(counts.error);
+    pushInvalidCount.textContent = String(counts.invalid);
+    renderPushSubscriptionsTable(items);
+    setPushStatsStatus(`Subscrições carregadas: ${counts.total} total, ${counts.active} ativas.`, 'success');
+  } catch (error) {
+    if (pushStatsRequestId !== requestId) return;
+
+    pushTotalCount.textContent = '0';
+    pushActiveCount.textContent = '0';
+    pushErrorCount.textContent = '0';
+    pushInvalidCount.textContent = '0';
+    pushSubscriptionsBody.innerHTML = '<tr><td colspan="5" class="muted">Não foi possível carregar as subscrições push.</td></tr>';
+
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para ler push_subscriptions. Confirma as regras do Realtime Database e faz login no admin com uma conta válida.'
+      : (error && error.message ? error.message : 'Erro ao carregar as subscrições push.');
+    setPushStatsStatus(message, 'error');
+  }
+}
 
 try {
   const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY);
