@@ -2160,19 +2160,13 @@ footer {
           </div>
           <div class="artigo-conteudo">
             <p><strong>UZO e Amigo igualaram temporariamente os preços da DIGI. Explicamos o impacto comercial desta decisão e o que deves comparar antes de mudar.</strong></p>
-            <div id="artigoConteudoBody">Ao longo dos últimos meses, as marcas low-cost dos operadores tradicionais têm ajustado preços para responder à pressão competitiva da DIGI. O novo movimento de UZO (MEO) e Amigo (Vodafone) segue essa lógica: igualar, por tempo limitado, alguns preços de referência da concorrência.
-
-A campanha anunciada aponta para dois patamares muito sensíveis para o consumidor: 100 GB por 5 €/mês e ilimitado por 7 €/mês, até 18 de março. Em termos de aquisição, é uma proposta forte. Mas preço de entrada, sozinho, não deve fechar a decisão.
-
-Antes de portar, vale comparar quatro pontos práticos: velocidade efetiva em dados móveis na tua zona, política de gestão de tráfego, qualidade de apoio ao cliente e condições após o fim da campanha. Em promoções-relâmpago, o detalhe contratual (renovações, condições futuras e serviços incluídos) faz diferença real no custo total ao longo do ano.
-
-Outro sinal interessante é a divergência estratégica entre marcas low-cost: enquanto algumas igualam imediatamente os preços da DIGI, outras mantêm diferencial de valor e apostam mais em perceção de robustez de rede e suporte. Isso mostra que a guerra comercial continua ativa e ainda longe de estabilizar.
-
-Sem dados finais de portabilidade e quotas no trimestre, qualquer conclusão definitiva é prematura. Ainda assim, para o consumidor, este cenário é positivo: mais competição tende a pressionar preços e a melhorar propostas.
-
-Fontes consultadas: páginas oficiais de tarifários das operadoras, informação pública de campanhas comerciais e dados regulatórios divulgados pela ANACOM.
-
-E tu, preferes preço mínimo imediato ou um pacote com maior previsibilidade no médio prazo?</div>
+            <div id="artigoConteudoBody"><p>Ao longo dos &#250;ltimos meses, as marcas low-cost dos operadores tradicionais t&#234;m ajustado pre&#231;os para responder &#224; press&#227;o competitiva da DIGI. O novo movimento de UZO (MEO) e Amigo (Vodafone) segue essa l&#243;gica: igualar, por tempo limitado, alguns pre&#231;os de refer&#234;ncia da concorr&#234;ncia.</p>
+<p>A campanha anunciada aponta para dois patamares muito sens&#237;veis para o consumidor: 100 GB por 5 €/m&#234;s e ilimitado por 7 €/m&#234;s, at&#233; 18 de mar&#231;o. Em termos de aquisi&#231;&#227;o, &#233; uma proposta forte. Mas pre&#231;o de entrada, sozinho, n&#227;o deve fechar a decis&#227;o.</p>
+<p>Antes de portar, vale comparar quatro pontos pr&#225;ticos: velocidade efetiva em dados m&#243;veis na tua zona, pol&#237;tica de gest&#227;o de tr&#225;fego, qualidade de apoio ao cliente e condi&#231;&#245;es ap&#243;s o fim da campanha. Em promo&#231;&#245;es-rel&#226;mpago, o detalhe contratual (renova&#231;&#245;es, condi&#231;&#245;es futuras e servi&#231;os inclu&#237;dos) faz diferen&#231;a real no custo total ao longo do ano.</p>
+<p>Outro sinal interessante &#233; a diverg&#234;ncia estrat&#233;gica entre marcas low-cost: enquanto algumas igualam imediatamente os pre&#231;os da DIGI, outras mant&#234;m diferencial de valor e apostam mais em perce&#231;&#227;o de robustez de rede e suporte. Isso mostra que a guerra comercial continua ativa e ainda longe de estabilizar.</p>
+<p>Sem dados finais de portabilidade e quotas no trimestre, qualquer conclus&#227;o definitiva &#233; prematura. Ainda assim, para o consumidor, este cen&#225;rio &#233; positivo: mais competi&#231;&#227;o tende a pressionar pre&#231;os e a melhorar propostas.</p>
+<p>Fontes consultadas: p&#225;ginas oficiais de tarif&#225;rios das operadoras, informa&#231;&#227;o p&#250;blica de campanhas comerciais e dados regulat&#243;rios divulgados pela ANACOM.</p>
+<p>E tu, preferes pre&#231;o m&#237;nimo imediato ou um pacote com maior previsibilidade no m&#233;dio prazo?</p></div>
                                                 
                     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
                         <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar&ecirc;ncia editorial</p>
@@ -2187,26 +2181,6 @@ E tu, preferes preço mínimo imediato ou um pacote com maior previsibilidade no
                     </aside>
           </div>
   </article>
-
-  <section class="comentarios-section" id="comentariosSection" style="display: none;">
-    <h3>💬 Comentários</h3>
-    
-    <div class="comentario-form">
-      <form id="comentarioForm">
-        <div class="form-group">
-          <label for="nomeComentario">Nome</label>
-          <input type="text" id="nomeComentario" placeholder="Digite seu nome" required>
-        </div>
-        <div class="form-group">
-          <label for="textoComentario">Comentário</label>
-          <textarea id="textoComentario" placeholder="Deixe seu comentário aqui..." required></textarea>
-        </div>
-        <button type="submit" class="btn-enviar">Enviar Comentário</button>
-      </form>
-    </div>
-
-    <div class="comentarios-lista" id="comentariosList"></div>
-  </section>
 </main>
 
 <footer>
@@ -3176,6 +3150,72 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function escapeArticlePlainText(content) {
+  return String(content || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatPlainTextArticleContent(rawContent) {
+  if (!rawContent) return '';
+
+  const lines = String(rawContent)
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .trim()
+    .split('\n');
+
+  const blocks = [];
+  let listItems = [];
+  let listType = '';
+
+  const flushList = () => {
+    if (!listItems.length || !listType) {
+      return;
+    }
+
+    blocks.push(`<${listType}>${listItems.join('')}</${listType}>`);
+    listItems = [];
+    listType = '';
+  };
+
+  const formatLine = (line) => applyInlineMarkdownTypography(escapeArticlePlainText(line.trim()));
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushList();
+      return;
+    }
+
+    const unorderedMatch = line.startsWith('• ')
+      ? [line, line.slice(2)]
+      : line.match(/^(?:\-|–)\s+(.*)$/);
+    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+    if (unorderedMatch || orderedMatch) {
+      const nextListType = orderedMatch ? 'ol' : 'ul';
+      if (listItems.length && listType !== nextListType) {
+        flushList();
+      }
+
+      listType = nextListType;
+      const itemText = orderedMatch ? orderedMatch[1] : unorderedMatch[1];
+      listItems.push(`<li>${formatLine(itemText)}</li>`);
+      return;
+    }
+
+    flushList();
+    blocks.push(`<p>${formatLine(line)}</p>`);
+  });
+
+  flushList();
+  return blocks.join('\n').trim();
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -3247,17 +3287,7 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  const paragraphToken = '__PARAGRAPH_BREAK__';
-  content = content
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\n\n+/g, paragraphToken)
-    .replace(/\n+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
-
-  content = normalizeBrokenLineWraps(content);
-  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
-  return content.trim();
+  return formatPlainTextArticleContent(content);
 }
 
 function canUseLiveEditor() {
@@ -3817,10 +3847,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
         
-        // Mostrar secção de comentários
-        document.getElementById('comentariosSection').style.display = 'block';
-        carregarComentarios(noticiaIdResolvido);
-        
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
 
@@ -3841,7 +3867,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">← Voltar às notícias</a>
           </div>
         `;
-        document.getElementById('comentariosSection').style.display = 'none';
       }
     })
     .catch(err => {

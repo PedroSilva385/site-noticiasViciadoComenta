@@ -2160,20 +2160,13 @@ footer {
           </div>
           <div class="artigo-conteudo">
             <p><strong>Analisamos o prémio da nPerf para a DIGI, explicando o que os dados indicam e quais os limites de comparação com os restantes operadores.</strong></p>
-            <div id="artigoConteudoBody">A DIGI conquistou o prémio de 'Melhor Internet Fixa' de 2025 no barómetro anual da nPerf. O resultado é relevante e mostra um desempenho forte nos três indicadores mais observados pelos clientes: download, upload e latência.
-
-Ainda assim, para uma leitura justa, é importante olhar para a metodologia e para o contexto da amostra. A própria fase de crescimento da DIGI, com base de clientes ainda mais pequena do que os operadores históricos, pode traduzir-se numa pressão média inferior na rede. Além disso, quando o peso de testes por operador é assimétrico, as médias devem ser lidas com prudência.
-
-Outro ponto essencial: comparar médias entre operadores com carteiras de produtos muito diferentes pode distorcer conclusões. Se um operador vende sobretudo perfis a partir de 500 Mbps e outros mantêm muitos clientes em ofertas mais baixas, o resultado agregado tende naturalmente a favorecer quem tem portefólio mais rápido à partida.
-
-Isto não retira mérito à DIGI; apenas ajuda a perceber que 'melhor média medida' e 'melhor opção para qualquer cliente' não são sempre a mesma coisa. Para decidir bem, continua a valer a regra prática: cruzar benchmarks públicos com disponibilidade real na tua morada, estabilidade em horas de ponta e qualidade do suporte técnico.
-
-Se a DIGI mantiver consistência operacional e qualidade de instalação, tem margem para consolidar resultados em 2026. Se, pelo contrário, o crescimento acelerar sem capacidade equivalente de suporte, a vantagem pode encurtar.
-
-Fontes consultadas: barómetro nPerf 2025, páginas de oferta comercial dos operadores e dados públicos setoriais.
-
-E tu, dás mais peso aos testes independentes ou à experiência prática na tua zona?
-</div>
+            <div id="artigoConteudoBody"><p>A DIGI conquistou o pr&#233;mio de &#39;Melhor Internet Fixa&#39; de 2025 no bar&#243;metro anual da nPerf. O resultado &#233; relevante e mostra um desempenho forte nos tr&#234;s indicadores mais observados pelos clientes: download, upload e lat&#234;ncia.</p>
+<p>Ainda assim, para uma leitura justa, &#233; importante olhar para a metodologia e para o contexto da amostra. A pr&#243;pria fase de crescimento da DIGI, com base de clientes ainda mais pequena do que os operadores hist&#243;ricos, pode traduzir-se numa press&#227;o m&#233;dia inferior na rede. Al&#233;m disso, quando o peso de testes por operador &#233; assim&#233;trico, as m&#233;dias devem ser lidas com prud&#234;ncia.</p>
+<p>Outro ponto essencial: comparar m&#233;dias entre operadores com carteiras de produtos muito diferentes pode distorcer conclus&#245;es. Se um operador vende sobretudo perfis a partir de 500 Mbps e outros mant&#234;m muitos clientes em ofertas mais baixas, o resultado agregado tende naturalmente a favorecer quem tem portef&#243;lio mais r&#225;pido &#224; partida.</p>
+<p>Isto n&#227;o retira m&#233;rito &#224; DIGI; apenas ajuda a perceber que &#39;melhor m&#233;dia medida&#39; e &#39;melhor op&#231;&#227;o para qualquer cliente&#39; n&#227;o s&#227;o sempre a mesma coisa. Para decidir bem, continua a valer a regra pr&#225;tica: cruzar benchmarks p&#250;blicos com disponibilidade real na tua morada, estabilidade em horas de ponta e qualidade do suporte t&#233;cnico.</p>
+<p>Se a DIGI mantiver consist&#234;ncia operacional e qualidade de instala&#231;&#227;o, tem margem para consolidar resultados em 2026. Se, pelo contr&#225;rio, o crescimento acelerar sem capacidade equivalente de suporte, a vantagem pode encurtar.</p>
+<p>Fontes consultadas: bar&#243;metro nPerf 2025, p&#225;ginas de oferta comercial dos operadores e dados p&#250;blicos setoriais.</p>
+<p>E tu, d&#225;s mais peso aos testes independentes ou &#224; experi&#234;ncia pr&#225;tica na tua zona?</p></div>
                                                 
                     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
                         <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar&ecirc;ncia editorial</p>
@@ -2188,26 +2181,6 @@ E tu, dás mais peso aos testes independentes ou à experiência prática na tua
                     </aside>
           </div>
   </article>
-
-  <section class="comentarios-section" id="comentariosSection" style="display: none;">
-    <h3>💬 Comentários</h3>
-    
-    <div class="comentario-form">
-      <form id="comentarioForm">
-        <div class="form-group">
-          <label for="nomeComentario">Nome</label>
-          <input type="text" id="nomeComentario" placeholder="Digite seu nome" required>
-        </div>
-        <div class="form-group">
-          <label for="textoComentario">Comentário</label>
-          <textarea id="textoComentario" placeholder="Deixe seu comentário aqui..." required></textarea>
-        </div>
-        <button type="submit" class="btn-enviar">Enviar Comentário</button>
-      </form>
-    </div>
-
-    <div class="comentarios-lista" id="comentariosList"></div>
-  </section>
 </main>
 
 <footer>
@@ -3177,6 +3150,72 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function escapeArticlePlainText(content) {
+  return String(content || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatPlainTextArticleContent(rawContent) {
+  if (!rawContent) return '';
+
+  const lines = String(rawContent)
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .trim()
+    .split('\n');
+
+  const blocks = [];
+  let listItems = [];
+  let listType = '';
+
+  const flushList = () => {
+    if (!listItems.length || !listType) {
+      return;
+    }
+
+    blocks.push(`<${listType}>${listItems.join('')}</${listType}>`);
+    listItems = [];
+    listType = '';
+  };
+
+  const formatLine = (line) => applyInlineMarkdownTypography(escapeArticlePlainText(line.trim()));
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushList();
+      return;
+    }
+
+    const unorderedMatch = line.startsWith('• ')
+      ? [line, line.slice(2)]
+      : line.match(/^(?:\-|–)\s+(.*)$/);
+    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+    if (unorderedMatch || orderedMatch) {
+      const nextListType = orderedMatch ? 'ol' : 'ul';
+      if (listItems.length && listType !== nextListType) {
+        flushList();
+      }
+
+      listType = nextListType;
+      const itemText = orderedMatch ? orderedMatch[1] : unorderedMatch[1];
+      listItems.push(`<li>${formatLine(itemText)}</li>`);
+      return;
+    }
+
+    flushList();
+    blocks.push(`<p>${formatLine(line)}</p>`);
+  });
+
+  flushList();
+  return blocks.join('\n').trim();
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -3248,17 +3287,7 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  const paragraphToken = '__PARAGRAPH_BREAK__';
-  content = content
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\n\n+/g, paragraphToken)
-    .replace(/\n+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
-
-  content = normalizeBrokenLineWraps(content);
-  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
-  return content.trim();
+  return formatPlainTextArticleContent(content);
 }
 
 function canUseLiveEditor() {
@@ -3818,10 +3847,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
         
-        // Mostrar secção de comentários
-        document.getElementById('comentariosSection').style.display = 'block';
-        carregarComentarios(noticiaIdResolvido);
-        
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
 
@@ -3842,7 +3867,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">← Voltar às notícias</a>
           </div>
         `;
-        document.getElementById('comentariosSection').style.display = 'none';
       }
     })
     .catch(err => {

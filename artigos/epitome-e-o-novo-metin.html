@@ -2160,19 +2160,13 @@ footer {
           </div>
           <div class="artigo-conteudo">
             <p><strong>Analisamos os trailers e a pré-alpha de Epitome, comparando pontos fortes, riscos e semelhanças com Metin2 sem cair em hype exagerado.</strong></p>
-            <div id="artigoConteudoBody">Epitome é um MMORPG em Unreal Engine 5 e ainda está numa fase inicial de desenvolvimento. Para quem vem de Metin2, a primeira impressão é inevitável: existem semelhanças visuais e estruturais que chamam a atenção.
-
-Nos materiais públicos e gameplays de pré-alpha, destacam-se alguns pontos positivos: direção artística moderna, combate com identidade própria, foco em progressão de personagem e uma proposta claramente orientada ao jogo em grupo. Para a comunidade que procura um sucessor espiritual de Metin2, isso gera curiosidade legítima.
-
-Mas também há riscos que não devem ser ignorados nesta fase. Pré-alpha não representa produto final: desempenho, equilíbrio de classes, economia interna, ritmo de conteúdo e estabilidade de servidores ainda podem mudar bastante. É precisamente aqui que muitos projetos perdem tração, sobretudo quando o roadmap não é claro ou quando o ciclo de updates abranda.
-
-Na minha leitura, Epitome tem potencial para construir uma base de comunidade sólida, mas vai depender menos do 'efeito nostalgia' e mais da execução contínua: boa comunicação da equipa, updates regulares, correção rápida de problemas e sistema de progressão justo para jogadores casuais e competitivos.
-
-Em resumo: há sinais promissores, mas ainda cedo para falar em sucessor definitivo de Metin2. O projeto merece acompanhamento, com expectativa realista.
-
-Fontes consultadas: página oficial/campanha do projeto, vídeos de gameplay de pré-alpha e referências públicas de jogos do mesmo segmento na Steam.
-
-E tu, preferes esperar por versão mais madura ou experimentar já em acesso antecipado?</div>
+            <div id="artigoConteudoBody"><p>Epitome &#233; um MMORPG em Unreal Engine 5 e ainda est&#225; numa fase inicial de desenvolvimento. Para quem vem de Metin2, a primeira impress&#227;o &#233; inevit&#225;vel: existem semelhan&#231;as visuais e estruturais que chamam a aten&#231;&#227;o.</p>
+<p>Nos materiais p&#250;blicos e gameplays de pr&#233;-alpha, destacam-se alguns pontos positivos: dire&#231;&#227;o art&#237;stica moderna, combate com identidade pr&#243;pria, foco em progress&#227;o de personagem e uma proposta claramente orientada ao jogo em grupo. Para a comunidade que procura um sucessor espiritual de Metin2, isso gera curiosidade leg&#237;tima.</p>
+<p>Mas tamb&#233;m h&#225; riscos que n&#227;o devem ser ignorados nesta fase. Pr&#233;-alpha n&#227;o representa produto final: desempenho, equil&#237;brio de classes, economia interna, ritmo de conte&#250;do e estabilidade de servidores ainda podem mudar bastante. &#201; precisamente aqui que muitos projetos perdem tra&#231;&#227;o, sobretudo quando o roadmap n&#227;o &#233; claro ou quando o ciclo de updates abranda.</p>
+<p>Na minha leitura, Epitome tem potencial para construir uma base de comunidade s&#243;lida, mas vai depender menos do &#39;efeito nostalgia&#39; e mais da execu&#231;&#227;o cont&#237;nua: boa comunica&#231;&#227;o da equipa, updates regulares, corre&#231;&#227;o r&#225;pida de problemas e sistema de progress&#227;o justo para jogadores casuais e competitivos.</p>
+<p>Em resumo: h&#225; sinais promissores, mas ainda cedo para falar em sucessor definitivo de Metin2. O projeto merece acompanhamento, com expectativa realista.</p>
+<p>Fontes consultadas: p&#225;gina oficial/campanha do projeto, v&#237;deos de gameplay de pr&#233;-alpha e refer&#234;ncias p&#250;blicas de jogos do mesmo segmento na Steam.</p>
+<p>E tu, preferes esperar por vers&#227;o mais madura ou experimentar j&#225; em acesso antecipado?</p></div>
                                                 
                     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
                         <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar&ecirc;ncia editorial</p>
@@ -2187,26 +2181,6 @@ E tu, preferes esperar por versão mais madura ou experimentar já em acesso ant
                     </aside>
           </div>
   </article>
-
-  <section class="comentarios-section" id="comentariosSection" style="display: none;">
-    <h3>💬 Comentários</h3>
-    
-    <div class="comentario-form">
-      <form id="comentarioForm">
-        <div class="form-group">
-          <label for="nomeComentario">Nome</label>
-          <input type="text" id="nomeComentario" placeholder="Digite seu nome" required>
-        </div>
-        <div class="form-group">
-          <label for="textoComentario">Comentário</label>
-          <textarea id="textoComentario" placeholder="Deixe seu comentário aqui..." required></textarea>
-        </div>
-        <button type="submit" class="btn-enviar">Enviar Comentário</button>
-      </form>
-    </div>
-
-    <div class="comentarios-lista" id="comentariosList"></div>
-  </section>
 </main>
 
 <footer>
@@ -3176,6 +3150,72 @@ function applyInlineMarkdownTypography(content) {
     .replace(/_\s*([^_\n][^_\n]*?)\s*_/g, '<em>$1</em>');
 }
 
+function escapeArticlePlainText(content) {
+  return String(content || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatPlainTextArticleContent(rawContent) {
+  if (!rawContent) return '';
+
+  const lines = String(rawContent)
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .trim()
+    .split('\n');
+
+  const blocks = [];
+  let listItems = [];
+  let listType = '';
+
+  const flushList = () => {
+    if (!listItems.length || !listType) {
+      return;
+    }
+
+    blocks.push(`<${listType}>${listItems.join('')}</${listType}>`);
+    listItems = [];
+    listType = '';
+  };
+
+  const formatLine = (line) => applyInlineMarkdownTypography(escapeArticlePlainText(line.trim()));
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushList();
+      return;
+    }
+
+    const unorderedMatch = line.startsWith('• ')
+      ? [line, line.slice(2)]
+      : line.match(/^(?:\-|–)\s+(.*)$/);
+    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+    if (unorderedMatch || orderedMatch) {
+      const nextListType = orderedMatch ? 'ol' : 'ul';
+      if (listItems.length && listType !== nextListType) {
+        flushList();
+      }
+
+      listType = nextListType;
+      const itemText = orderedMatch ? orderedMatch[1] : unorderedMatch[1];
+      listItems.push(`<li>${formatLine(itemText)}</li>`);
+      return;
+    }
+
+    flushList();
+    blocks.push(`<p>${formatLine(line)}</p>`);
+  });
+
+  flushList();
+  return blocks.join('\n').trim();
+}
+
 function formatArticleContent(rawContent) {
   if (!rawContent) return '';
 
@@ -3247,17 +3287,7 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  const paragraphToken = '__PARAGRAPH_BREAK__';
-  content = content
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\n\n+/g, paragraphToken)
-    .replace(/\n+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(new RegExp(paragraphToken, 'g'), '<br><br>');
-
-  content = normalizeBrokenLineWraps(content);
-  content = content.replace(/\s*<br\s*\/?>(?:\s*<br\s*\/?>)\s*/gi, '<br><br>');
-  return content.trim();
+  return formatPlainTextArticleContent(content);
 }
 
 function canUseLiveEditor() {
@@ -3817,10 +3847,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
         
-        // Mostrar secção de comentários
-        document.getElementById('comentariosSection').style.display = 'block';
-        carregarComentarios(noticiaIdResolvido);
-        
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
 
@@ -3841,7 +3867,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">← Voltar às notícias</a>
           </div>
         `;
-        document.getElementById('comentariosSection').style.display = 'none';
       }
     })
     .catch(err => {
