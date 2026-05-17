@@ -156,6 +156,7 @@
       launcher.type = 'button';
       launcher.id = 'vc-push-launcher';
       launcher.className = 'vc-push-launcher';
+      launcher.setAttribute('data-skip-click-tracking', 'true');
       launcher.innerHTML = '<span aria-hidden="true">🔔</span><span>Ativar notificações</span>';
       document.body.appendChild(launcher);
     }
