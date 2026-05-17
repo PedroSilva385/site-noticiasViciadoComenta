@@ -1456,7 +1456,7 @@ body.dark .noticia-item {
 .noticias-more-wrap {
   display: flex;
   justify-content: center;
-  margin: -20px 0 40px;
+  margin: 18px 0 0;
 }
 
 .noticias-more-btn {
@@ -2651,6 +2651,9 @@ footer {
             </div>
           </div>
           <section class="noticias-list" id="noticiasList"></section>
+          <div class="noticias-more-wrap">
+            <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
+          </div>
         </section>
 
         <section class="article-spotlight-section" aria-labelledby="homeDigiTitle">
@@ -2661,6 +2664,9 @@ footer {
             </div>
           </div>
           <section class="noticias-list" id="noticiasDigiList"></section>
+          <div class="noticias-more-wrap">
+            <button id="noticiasDigiLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
+          </div>
         </section>
 
         <section class="article-spotlight-section" aria-labelledby="homeTelecomTitle">
@@ -2671,6 +2677,9 @@ footer {
             </div>
           </div>
           <section class="noticias-list" id="noticiasTelecomList"></section>
+          <div class="noticias-more-wrap">
+            <button id="noticiasTelecomLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
+          </div>
         </section>
       </div>
     </section>
@@ -2721,9 +2730,6 @@ footer {
         </div>
       </article>
     </section>
-    <div class="noticias-more-wrap">
-      <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
-    </div>
   </div>
 
   <aside class="sidebar-right">
@@ -3152,26 +3158,58 @@ fetchNoticiasAgendadas("data/noticias.json")
     const noticiasDigiList = document.getElementById('noticiasDigiList');
     const noticiasTelecomList = document.getElementById('noticiasTelecomList');
     const noticiasLoadMore = document.getElementById('noticiasLoadMore');
+    const noticiasDigiLoadMore = document.getElementById('noticiasDigiLoadMore');
+    const noticiasTelecomLoadMore = document.getElementById('noticiasTelecomLoadMore');
     const NEWS_BATCH_SIZE = 4;
-    const SECONDARY_TAB_LIMIT = 4;
-    let noticiasVisiveis = NEWS_BATCH_SIZE;
+    const ARTICLE_SECTION_KEYS = {
+      latest: 'latest',
+      digi: 'digi',
+      telecom: 'telecom'
+    };
+    const articleSectionButtons = {
+      [ARTICLE_SECTION_KEYS.latest]: noticiasLoadMore,
+      [ARTICLE_SECTION_KEYS.digi]: noticiasDigiLoadMore,
+      [ARTICLE_SECTION_KEYS.telecom]: noticiasTelecomLoadMore
+    };
+    let noticiasVisiveis = {
+      [ARTICLE_SECTION_KEYS.latest]: NEWS_BATCH_SIZE,
+      [ARTICLE_SECTION_KEYS.digi]: NEWS_BATCH_SIZE,
+      [ARTICLE_SECTION_KEYS.telecom]: NEWS_BATCH_SIZE
+    };
     let noticiasAtuais = [];
+    let noticiasAtuaisPorSecao = {
+      [ARTICLE_SECTION_KEYS.latest]: [],
+      [ARTICLE_SECTION_KEYS.digi]: [],
+      [ARTICLE_SECTION_KEYS.telecom]: []
+    };
 
-    function atualizarBotaoVerMais() {
-      if (!noticiasLoadMore) return;
-      if (noticiasAtuais.length > noticiasVisiveis) {
-        noticiasLoadMore.style.display = 'inline-flex';
+    function atualizarBotaoVerMais(sectionKey) {
+      const button = articleSectionButtons[sectionKey];
+      if (!button) return;
+
+      const noticiasDaSecao = noticiasAtuaisPorSecao[sectionKey] || [];
+      const limiteAtual = noticiasVisiveis[sectionKey] || NEWS_BATCH_SIZE;
+
+      if (noticiasDaSecao.length > limiteAtual) {
+        button.style.display = 'inline-flex';
       } else {
-        noticiasLoadMore.style.display = 'none';
+        button.style.display = 'none';
       }
     }
 
-    if (noticiasLoadMore) {
-      noticiasLoadMore.addEventListener('click', () => {
-        noticiasVisiveis += NEWS_BATCH_SIZE;
+    function expandirSecaoNoticias(sectionKey) {
+      noticiasVisiveis[sectionKey] = (noticiasVisiveis[sectionKey] || NEWS_BATCH_SIZE) + NEWS_BATCH_SIZE;
+      if (noticiasAtuais.length > 0) {
         renderizarNoticias(noticiasAtuais, false);
-      });
+      }
     }
+
+    Object.entries(articleSectionButtons).forEach(([sectionKey, button]) => {
+      if (!button) return;
+      button.addEventListener('click', () => {
+        expandirSecaoNoticias(sectionKey);
+      });
+    });
 
     const normalizeText = (text) => (text || '')
       .toString()
@@ -3249,26 +3287,37 @@ fetchNoticiasAgendadas("data/noticias.json")
     }
 
     function renderizarNoticiasSecoes(noticiasOrdenadas) {
+      const noticiasDigi = filtrarNoticiasPorCategoria(noticiasOrdenadas, 'DIGI');
+      const noticiasTelecom = filtrarNoticiasPorCategoria(noticiasOrdenadas, 'Telecom');
+
+      noticiasAtuaisPorSecao = {
+        [ARTICLE_SECTION_KEYS.latest]: noticiasOrdenadas,
+        [ARTICLE_SECTION_KEYS.digi]: noticiasDigi,
+        [ARTICLE_SECTION_KEYS.telecom]: noticiasTelecom
+      };
+
       renderizarListaNoticias(
         noticiasList,
         noticiasOrdenadas,
-        noticiasVisiveis,
+        noticiasVisiveis[ARTICLE_SECTION_KEYS.latest],
         'Nenhum artigo corresponde à sua pesquisa.'
       );
       renderizarListaNoticias(
         noticiasDigiList,
-        filtrarNoticiasPorCategoria(noticiasOrdenadas, 'DIGI'),
-        SECONDARY_TAB_LIMIT,
+        noticiasDigi,
+        noticiasVisiveis[ARTICLE_SECTION_KEYS.digi],
         'Sem artigos DIGI para mostrar neste momento.'
       );
       renderizarListaNoticias(
         noticiasTelecomList,
-        filtrarNoticiasPorCategoria(noticiasOrdenadas, 'Telecom'),
-        SECONDARY_TAB_LIMIT,
+        noticiasTelecom,
+        noticiasVisiveis[ARTICLE_SECTION_KEYS.telecom],
         'Sem artigos Telecom para mostrar neste momento.'
       );
 
-      atualizarBotaoVerMais();
+      atualizarBotaoVerMais(ARTICLE_SECTION_KEYS.latest);
+      atualizarBotaoVerMais(ARTICLE_SECTION_KEYS.digi);
+      atualizarBotaoVerMais(ARTICLE_SECTION_KEYS.telecom);
     }
 
     function calcularRelevanciaPesquisa(noticia, termo) {
@@ -3404,7 +3453,11 @@ fetchNoticiasAgendadas("data/noticias.json")
       };
       
       if (resetVisiveis) {
-        noticiasVisiveis = NEWS_BATCH_SIZE;
+        noticiasVisiveis = {
+          [ARTICLE_SECTION_KEYS.latest]: NEWS_BATCH_SIZE,
+          [ARTICLE_SECTION_KEYS.digi]: NEWS_BATCH_SIZE,
+          [ARTICLE_SECTION_KEYS.telecom]: NEWS_BATCH_SIZE
+        };
       }
 
       const noticiasOrdenadas = [...noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
