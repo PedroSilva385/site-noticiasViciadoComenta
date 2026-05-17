@@ -9,6 +9,7 @@ const VAPID_PRIVATE_KEY = String(process.env.WEB_PUSH_VAPID_PRIVATE_KEY || '').t
 const VAPID_SUBJECT = String(process.env.WEB_PUSH_VAPID_SUBJECT || '').trim();
 const PUSH_SUBSCRIPTIONS_PATH = 'push_subscriptions';
 const PUSH_META_PATH = 'push_meta';
+const DISPATCH_REQUEST_TIMEOUT_MS = Number(process.env.WEB_PUSH_REQUEST_TIMEOUT_MS || 10000);
 
 function fail(message) {
   throw new Error(message);
@@ -71,6 +72,16 @@ function shouldSendToTopic(record, topic) {
   return topic === 'all' || recordTopic === 'all' || recordTopic === topic;
 }
 
+function buildSendOptions() {
+  return {
+    TTL: 60,
+    urgency: 'normal',
+    timeout: Number.isFinite(DISPATCH_REQUEST_TIMEOUT_MS) && DISPATCH_REQUEST_TIMEOUT_MS > 0
+      ? DISPATCH_REQUEST_TIMEOUT_MS
+      : 10000
+  };
+}
+
 async function markSubscriptionStatus(database, subscriptionId, status, errorMessage) {
   await database.ref(`${PUSH_SUBSCRIPTIONS_PATH}/${subscriptionId}`).update({
     status,
@@ -127,7 +138,7 @@ async function main() {
     }
 
     try {
-      await webpush.sendNotification(subscription, JSON.stringify(payload));
+      await webpush.sendNotification(subscription, JSON.stringify(payload), buildSendOptions());
       sent += 1;
       await markSubscriptionStatus(database, subscriptionId, 'active', null);
     } catch (error) {
