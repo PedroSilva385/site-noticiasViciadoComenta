@@ -400,6 +400,10 @@ function setupClickTracking(db, visitorHash) {
         return;
       }
 
+      if (clickable.hasAttribute('data-skip-click-tracking')) {
+        return;
+      }
+
       const rawLabel = (
         clickable.getAttribute('aria-label') ||
         clickable.getAttribute('title') ||
