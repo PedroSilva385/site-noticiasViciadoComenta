@@ -376,6 +376,9 @@ main {
 .artigo-conteudo p {
   margin-bottom: 24px;
   text-align: justify;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .artigo-conteudo h2,
@@ -393,6 +396,16 @@ main {
 
 .artigo-conteudo li {
   margin-bottom: 8px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.artigo-conteudo a,
+.artigo-conteudo span,
+.artigo-conteudo strong,
+.artigo-conteudo em {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .artigo-conteudo blockquote {
@@ -1604,14 +1617,20 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 56px 15px 25px;
+    padding: 24px 15px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 
   .header-perfil {
     width: 100px;
     height: 100px;
-    top: 12px;
-    right: 12px;
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: 0 auto 4px;
   }
 
   header h1 {
@@ -1634,33 +1653,67 @@ footer {
   }
 
   nav {
-    gap: 12px;
-    padding: 0 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px 12px 12px;
     align-items: stretch;
   }
 
   nav a {
-    padding: 12px 8px;
+    padding: 12px 10px;
     font-size: 0.9em;
+    display: flex;
+    align-items: center;
     justify-content: center;
     text-align: center;
+    min-height: 46px;
+    border: 1px solid rgba(0, 102, 204, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.82);
   }
 
   .nav-dropdown {
-    display: flex;
+    display: block;
+    grid-column: 1 / -1;
   }
 
   .nav-dropdown > a {
-    padding: 12px 8px;
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
     justify-content: center;
     text-align: center;
     width: 100%;
+    min-height: 46px;
+  }
+
+  .dropdown-menu {
+    position: static;
+    min-width: 0;
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: none;
+    transform: none;
+    display: none;
+    opacity: 1;
+    visibility: visible;
   }
 
   .nav-dropdown.active .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .dropdown-menu a {
+    min-height: 44px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 204, 0.12);
+    background: rgba(227, 242, 253, 0.85);
   }
 
   main {
@@ -1706,6 +1759,22 @@ footer {
     margin-bottom: 12px;
   }
 
+  .article-trust-box,
+  .author-bio {
+    padding: 14px !important;
+  }
+
+  .author-bio {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .author-bio img {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
   .btn-voltar {
     padding: 10px 20px;
     font-size: 0.9em;
@@ -1728,7 +1797,7 @@ footer {
 
 @media (max-width: 480px) {
   header {
-    padding: 56px 10px 18px;
+    padding: 18px 10px 18px;
   }
 
   .header-perfil {
@@ -1769,27 +1838,19 @@ footer {
   }
 
   nav {
+    grid-template-columns: 1fr;
     gap: 8px;
-    padding: 0 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: stretch;
+    padding: 8px;
   }
 
   nav a {
     padding: 10px 6px;
     font-size: 0.8em;
-    flex: 1 1 140px;
     min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
   }
 
   .nav-dropdown {
-    flex: 1 1 140px;
-    display: flex;
+    display: block;
   }
 
   .nav-dropdown > a {
@@ -1801,9 +1862,13 @@ footer {
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: min(220px, calc(100vw - 24px));
-    left: 50%;
-    transform: translate(-50%, -10px);
+    min-width: 0;
+    left: auto;
+    transform: none;
+  }
+
+  .nav-dropdown.active .dropdown-menu {
+    grid-template-columns: 1fr;
   }
 
   main {
@@ -1848,6 +1913,17 @@ footer {
 
   .artigo-conteudo p {
     margin-bottom: 10px;
+  }
+
+  .artigo-conteudo ul,
+  .artigo-conteudo ol {
+    padding-left: 20px;
+    margin-bottom: 18px;
+  }
+
+  .artigo-conteudo pre,
+  .artigo-conteudo blockquote {
+    margin: 16px 0;
   }
 
   /* OTIMIZAÇÕES MOBILE - Botões de Ação */
@@ -2080,7 +2156,7 @@ footer {
 <meta name="twitter:title" content="DIGI responde a AMIGO, UZO e WOO na luta de pre&#231;os!">
 <meta name="twitter:description" content="A DIGI respondeu &#224;s press&#245;es das marcas brancas das operadoras incumbentes, com uma melhoria dos tarif&#225;rios m&#243;veis! +GB e -pre&#231;o, &#233; a f&#243;rmula de sucesso da operadora romena.">
 <meta name="twitter:image" content="https://img.youtube.com/vi/l9UQllxCMuE/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html"},"headline":"DIGI responde a AMIGO, UZO e WOO na luta de preços!","description":"A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.","datePublished":"2026-04-09T00:00:00Z","dateModified":"2026-04-09T00:00:00Z","image":["https://img.youtube.com/vi/l9UQllxCMuE/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html#video","name":"DIGI responde a AMIGO, UZO e WOO na luta de preços!","description":"A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.","thumbnailUrl":["https://img.youtube.com/vi/l9UQllxCMuE/hqdefault.jpg"],"uploadDate":"2026-04-09T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/l9UQllxCMuE","contentUrl":"https://www.youtube.com/watch?v=l9UQllxCMuE","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html","https://www.youtube.com/watch?v=l9UQllxCMuE"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html"},"headline":"DIGI responde a AMIGO, UZO e WOO na luta de preços!","description":"A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.","datePublished":"2026-04-08T23:00:00Z","dateModified":"2026-04-08T23:00:00Z","image":["https://img.youtube.com/vi/l9UQllxCMuE/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html#video","name":"DIGI responde a AMIGO, UZO e WOO na luta de preços!","description":"A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.","thumbnailUrl":["https://img.youtube.com/vi/l9UQllxCMuE/hqdefault.jpg"],"uploadDate":"2026-04-08T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/l9UQllxCMuE","contentUrl":"https://www.youtube.com/watch?v=l9UQllxCMuE","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos.html","https://www.youtube.com/watch?v=l9UQllxCMuE"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -3627,11 +3703,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dropdown mobile: clique para abrir/fechar
   const dropdown = document.querySelector('.nav-dropdown');
-  if (dropdown && window.innerWidth <= 768) {
+  if (dropdown) {
     const dropdownLink = dropdown.querySelector('a');
+    const dropdownItems = dropdown.querySelectorAll('.dropdown-menu a');
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+    const closeDropdown = () => dropdown.classList.remove('active');
+
     dropdownLink.addEventListener('click', (e) => {
+      if (!mobileQuery.matches) {
+        return;
+      }
+
       e.preventDefault();
       dropdown.classList.toggle('active');
+    });
+
+    dropdownItems.forEach((item) => item.addEventListener('click', closeDropdown));
+    document.addEventListener('click', (event) => {
+      if (!dropdown.contains(event.target)) {
+        closeDropdown();
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (!mobileQuery.matches) {
+        closeDropdown();
+      }
     });
   }
 
