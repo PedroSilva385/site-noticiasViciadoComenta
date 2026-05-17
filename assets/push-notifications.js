@@ -79,12 +79,38 @@
       .vc-push-toast.vc-error {
         background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
       }
+      .vc-push-launcher {
+        position: fixed;
+        left: 18px;
+        bottom: 18px;
+        z-index: 9997;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        border-radius: 999px;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .28);
+        cursor: pointer;
+      }
+      .vc-push-launcher[hidden] {
+        display: none;
+      }
       @media (max-width: 480px) {
         .vc-push-prompt,
         .vc-push-toast {
           left: 12px;
           right: 12px;
           width: auto;
+        }
+        .vc-push-launcher {
+          left: 12px;
+          bottom: 12px;
+          right: 12px;
+          justify-content: center;
         }
       }
     `;
@@ -103,6 +129,58 @@
     setTimeout(() => {
       toast.remove();
     }, 4500);
+  }
+
+  function getLauncherElement() {
+    return document.getElementById('vc-push-launcher');
+  }
+
+  function removeLauncher() {
+    const launcher = getLauncherElement();
+    if (launcher) {
+      launcher.remove();
+    }
+  }
+
+  function showLauncher(options) {
+    if (localStorage.getItem(STORAGE_KEY_PUSH_SUBSCRIBED) === '1') {
+      removeLauncher();
+      return;
+    }
+
+    ensureStyles();
+
+    let launcher = getLauncherElement();
+    if (!launcher) {
+      launcher = document.createElement('button');
+      launcher.type = 'button';
+      launcher.id = 'vc-push-launcher';
+      launcher.className = 'vc-push-launcher';
+      launcher.innerHTML = '<span aria-hidden="true">🔔</span><span>Ativar notificações</span>';
+      document.body.appendChild(launcher);
+    }
+
+    launcher.hidden = false;
+    launcher.onclick = async () => {
+      if (Notification.permission === 'denied') {
+        showToast('No Brave, desbloqueia as notificações nas permissões do site e recarrega a página.', true);
+        return;
+      }
+
+      localStorage.removeItem(STORAGE_KEY_PUSH_PROMPT_DISMISSED);
+
+      if (Notification.permission === 'granted') {
+        try {
+          await subscribeToPush(options);
+          removeLauncher();
+        } catch (error) {
+          showToast(error && error.message ? error.message : 'Não foi possível ativar as notificações.', true);
+        }
+        return;
+      }
+
+      await showPermissionPrompt(options, true);
+    };
   }
 
   function getDatabaseInstance() {
@@ -256,9 +334,12 @@
     return isIos && !isStandalone;
   }
 
-  async function showPermissionPrompt(options) {
-    if (localStorage.getItem(STORAGE_KEY_PUSH_PROMPT_DISMISSED) === '1') return;
+  async function showPermissionPrompt(options, forceDisplay) {
+    if (!forceDisplay && localStorage.getItem(STORAGE_KEY_PUSH_PROMPT_DISMISSED) === '1') return;
     if (Notification.permission !== 'default') return;
+
+    const existingPrompt = document.querySelector('.vc-push-prompt');
+    if (existingPrompt) return;
 
     ensureStyles();
 
@@ -273,6 +354,7 @@
       allowBtn.disabled = true;
       try {
         await subscribeToPush(options);
+        removeLauncher();
         prompt.remove();
       } catch (error) {
         showToast(error && error.message ? error.message : 'Não foi possível ativar as notificações.', true);
@@ -316,8 +398,11 @@
       const alreadySubscribed = await syncExistingSubscription(options);
 
       if (alreadySubscribed || Notification.permission === 'denied') {
+        showLauncher(options);
         return;
       }
+
+      showLauncher(options);
 
       if (Notification.permission === 'default') {
         await showPermissionPrompt(options);
