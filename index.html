@@ -1116,11 +1116,129 @@ body.dark span { color: #e5e7eb !important; }
 }
 
 /* LISTA DE NOTÃCIAS */
+.article-spotlight-stack {
+  position: relative;
+  margin-bottom: 28px;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(232, 242, 255, 0.92) 100%);
+  border: 1px solid rgba(0, 102, 204, 0.12);
+  box-shadow: 0 18px 45px rgba(0, 102, 204, 0.08);
+  overflow: hidden;
+}
+
+.article-spotlight-stack::before {
+  content: '';
+  position: absolute;
+  inset: auto -80px -120px auto;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 102, 204, 0.14) 0%, rgba(0, 102, 204, 0) 72%);
+  pointer-events: none;
+}
+
+.article-spotlight-grid {
+  position: relative;
+  display: grid;
+  gap: 22px;
+}
+
+.article-spotlight-section {
+  position: relative;
+  padding: 22px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 248, 255, 0.92) 100%);
+  border: 1px solid rgba(0, 102, 204, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 102, 204, 0.06);
+}
+
+.article-spotlight-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.article-spotlight-copy {
+  max-width: 640px;
+  text-align: center;
+}
+
+.article-spotlight-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(0, 102, 204, 0.08);
+  color: #0052a3;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article-spotlight-copy h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2em;
+  color: #10213a;
+  margin-bottom: 10px;
+}
+
+.article-spotlight-subtitle {
+  color: #4f6480;
+  max-width: 56ch;
+  font-size: 0.98em;
+}
+
+.article-spotlight-lead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 246, 255, 0.9) 100%);
+  border: 1px solid rgba(0, 102, 204, 0.08);
+  text-align: center;
+}
+
+.article-spotlight-lead strong {
+  display: block;
+  color: #10213a;
+  font-size: 1em;
+  margin-bottom: 4px;
+}
+
+.article-spotlight-lead p {
+  color: #5a6b7f;
+  font-size: 0.92em;
+}
+
 .noticias-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 25px;
   margin-bottom: 60px;
+}
+
+.article-spotlight-section .noticias-list {
+  margin-bottom: 0;
+}
+
+.noticias-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 34px 20px;
+  border-radius: 16px;
+  border: 1px dashed rgba(90, 107, 127, 0.35);
+  background: rgba(255, 255, 255, 0.7);
+  color: #5a6b7f;
+  font-weight: 600;
 }
 
 .prerender-card {
@@ -1374,6 +1492,49 @@ body.dark .noticias-list .noticia-item:hover {
   box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
 }
 
+body.dark .article-spotlight-stack {
+  background: linear-gradient(145deg, rgba(18, 28, 43, 0.96) 0%, rgba(22, 37, 58, 0.96) 100%);
+  border-color: rgba(14, 165, 233, 0.18);
+  box-shadow: 0 18px 45px rgba(2, 8, 23, 0.35);
+}
+
+body.dark .article-spotlight-section {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.82) 0%, rgba(30, 41, 59, 0.92) 100%);
+  border-color: rgba(125, 211, 252, 0.12);
+}
+
+body.dark .article-spotlight-kicker {
+  background: rgba(14, 165, 233, 0.15);
+  color: #7dd3fc;
+}
+
+body.dark .article-spotlight-copy h2 {
+  color: #f8fafc;
+}
+
+body.dark .article-spotlight-subtitle {
+  color: #c0d2e8;
+}
+
+body.dark .article-spotlight-lead {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.82) 0%, rgba(30, 41, 59, 0.92) 100%);
+  border-color: rgba(125, 211, 252, 0.12);
+}
+
+body.dark .article-spotlight-lead strong {
+  color: #f8fafc;
+}
+
+body.dark .article-spotlight-lead p {
+  color: #b7c7dd;
+}
+
+body.dark .noticias-empty-state {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(125, 211, 252, 0.22);
+  color: #c0d2e8;
+}
+
 body.dark .noticia-conteudo h3 {
   color: #ffffff !important;
 }
@@ -1432,12 +1593,39 @@ body.dark .sidebar-title {
 
 /* Responsivo */
 @media (max-width: 992px) {
+  .article-spotlight-stack {
+    padding: 22px;
+  }
+
+  .article-spotlight-section {
+    padding: 18px;
+  }
+
+  .article-spotlight-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .noticias-list {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 600px) {
+  .article-spotlight-stack {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .article-spotlight-copy h2 {
+    font-size: 1.7em;
+  }
+
+  .article-spotlight-lead {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .noticias-list {
     grid-template-columns: 1fr;
   }
@@ -2451,10 +2639,42 @@ footer {
     </section>
 
     <div class="featured-section" id="featured"></div>
-    
-    <h2>Últimos Artigos</h2>
-    
-    <section class="noticias-list" id="noticiasList"></section>
+
+    <section class="article-spotlight-stack" aria-labelledby="homeArticlesTitle">
+      <div class="article-spotlight-grid">
+        <section class="article-spotlight-section">
+          <div class="article-spotlight-header">
+            <div class="article-spotlight-copy">
+              <p class="article-spotlight-kicker">Leitura por tema</p>
+              <h2 id="homeArticlesTitle">Últimos Artigos</h2>
+              <p class="article-spotlight-subtitle">O feed principal fica como antes, com os artigos mais recentes em destaque logo no topo desta área.</p>
+            </div>
+          </div>
+          <section class="noticias-list" id="noticiasList"></section>
+        </section>
+
+        <section class="article-spotlight-section" aria-labelledby="homeDigiTitle">
+          <div class="article-spotlight-lead">
+            <div>
+              <strong id="homeDigiTitle">Conteúdos DIGI</strong>
+              <p>Os 4 artigos mais recentes sobre a operadora, expansão de rede, preços e impacto no mercado.</p>
+            </div>
+          </div>
+          <section class="noticias-list" id="noticiasDigiList"></section>
+        </section>
+
+        <section class="article-spotlight-section" aria-labelledby="homeTelecomTitle">
+          <div class="article-spotlight-lead">
+            <div>
+              <strong id="homeTelecomTitle">Conteúdos Telecom</strong>
+              <p>Quatro leituras rápidas sobre operadoras, mercado português, reguladores e movimentos estratégicos.</p>
+            </div>
+          </div>
+          <section class="noticias-list" id="noticiasTelecomList"></section>
+        </section>
+      </div>
+    </section>
+
     <section class="noticias-list prerender-fallback" aria-label="Artigos em destaque sem JavaScript">
       <article class="noticia-item prerender-card">
         <div class="noticia-conteudo">
@@ -2929,8 +3149,11 @@ fetchNoticiasAgendadas("data/noticias.json")
     const searchResults = document.getElementById('searchResults');
     const searchDropdown = document.getElementById('searchDropdown');
     const noticiasList = document.getElementById('noticiasList');
+    const noticiasDigiList = document.getElementById('noticiasDigiList');
+    const noticiasTelecomList = document.getElementById('noticiasTelecomList');
     const noticiasLoadMore = document.getElementById('noticiasLoadMore');
-    const NEWS_BATCH_SIZE = 6;
+    const NEWS_BATCH_SIZE = 4;
+    const SECONDARY_TAB_LIMIT = 4;
     let noticiasVisiveis = NEWS_BATCH_SIZE;
     let noticiasAtuais = [];
 
@@ -2955,6 +3178,98 @@ fetchNoticiasAgendadas("data/noticias.json")
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
+
+    function renderizarEstadoVazio(container, mensagem) {
+      if (!container) return;
+      container.innerHTML = `<p class="noticias-empty-state">${mensagem}</p>`;
+    }
+
+    function filtrarNoticiasPorCategoria(noticias, categoriaAlvo) {
+      const categoriaNormalizada = normalizeText(categoriaAlvo);
+      return noticias.filter((noticia) => normalizeText(noticia.categoria) === categoriaNormalizada);
+    }
+
+    function criarCardNoticia(noticia) {
+      const isRead = articleReadTracker.isRead(noticia.id);
+      const videoId = extrairVideoId(noticia.video);
+      const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
+      const thumbnailMarkup = thumbnailUrl
+        ? `
+            <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
+              <div class="noticia-thumb">
+                <img src="${thumbnailUrl}" alt="Miniatura do vídeo ${noticia.titulo}" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}">
+                <span class="noticia-thumb-play"><i class="fas fa-play"></i></span>
+              </div>
+            </a>
+          `
+        : `
+            <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
+              <div class="noticia-thumb">
+                <div class="noticia-thumb-fallback">
+                  <i class="fas fa-newspaper"></i>
+                  <span>Sem miniatura</span>
+                </div>
+              </div>
+            </a>
+          `;
+
+      const article = document.createElement('article');
+      article.className = `noticia-item ${isRead ? 'read' : ''}`;
+      article.innerHTML = `
+        ${thumbnailMarkup}
+        <div class="noticia-conteudo">
+          <div class="noticia-meta-badge">
+            <span class="noticia-categoria">${noticia.categoria}</span>
+            <span class="noticia-data">📅 ${noticia.data}</span>
+          </div>
+          <h3>${noticia.titulo}</h3>
+          <p>${noticia.resumo}</p>
+          <a href="${buildArticleUrl(noticia)}" class="noticia-link">Ver mais →</a>
+        </div>
+        <button class="noticia-read-btn ${isRead ? 'read' : ''}" data-article-id="${noticia.id}" onclick="toggleArticleRead(event, '${noticia.id}')">✓</button>
+      `;
+
+      return article;
+    }
+
+    function renderizarListaNoticias(container, noticias, limite, mensagemVazia) {
+      if (!container) return;
+
+      container.innerHTML = '';
+      const noticiasParaMostrar = noticias.slice(0, limite);
+
+      if (noticiasParaMostrar.length === 0) {
+        renderizarEstadoVazio(container, mensagemVazia);
+        return;
+      }
+
+      noticiasParaMostrar.forEach((noticia) => {
+        container.appendChild(criarCardNoticia(noticia));
+      });
+    }
+
+    function renderizarNoticiasSecoes(noticiasOrdenadas) {
+      renderizarListaNoticias(
+        noticiasList,
+        noticiasOrdenadas,
+        noticiasVisiveis,
+        'Nenhum artigo corresponde à sua pesquisa.'
+      );
+      renderizarListaNoticias(
+        noticiasDigiList,
+        filtrarNoticiasPorCategoria(noticiasOrdenadas, 'DIGI'),
+        SECONDARY_TAB_LIMIT,
+        'Sem artigos DIGI para mostrar neste momento.'
+      );
+      renderizarListaNoticias(
+        noticiasTelecomList,
+        filtrarNoticiasPorCategoria(noticiasOrdenadas, 'Telecom'),
+        SECONDARY_TAB_LIMIT,
+        'Sem artigos Telecom para mostrar neste momento.'
+      );
+
+      atualizarBotaoVerMais();
+    }
 
     function calcularRelevanciaPesquisa(noticia, termo) {
       const titulo = normalizeText(noticia.titulo);
@@ -3038,10 +3353,7 @@ fetchNoticiasAgendadas("data/noticias.json")
         searchDropdown.innerHTML = '<div class="search-no-results">❌ Nenhum artigo encontrado</div>';
         searchDropdown.classList.add('active');
         searchResults.innerHTML = '<span style="color: #cc0000;">❌ Nenhum artigo encontrado</span>';
-        noticiasList.innerHTML = '<p style="text-align:center;padding:40px;color:#5a6b7f;">Nenhum artigo corresponde à sua pesquisa.</p>';
-        noticiasAtuais = [];
-        noticiasVisiveis = NEWS_BATCH_SIZE;
-        atualizarBotaoVerMais();
+        renderizarNoticias(resultados, true);
       } else {
         // Criar HTML da dropdown
         const dropdownHTML = resultados.map(n => {
@@ -3098,52 +3410,7 @@ fetchNoticiasAgendadas("data/noticias.json")
       const noticiasOrdenadas = [...noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
       noticiasAtuais = noticiasOrdenadas;
 
-      const noticiasParaMostrar = noticiasOrdenadas.slice(0, noticiasVisiveis);
-      noticiasList.innerHTML = '';
-      
-      noticiasParaMostrar.forEach((n) => {
-        const isRead = articleReadTracker.isRead(n.id);
-        const videoId = extrairVideoId(n.video);
-        const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
-        const thumbnailMarkup = thumbnailUrl
-          ? `
-            <a href="${buildArticleUrl(n)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${n.titulo}">
-              <div class="noticia-thumb">
-                <img src="${thumbnailUrl}" alt="Miniatura do vídeo ${n.titulo}" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}">
-                <span class="noticia-thumb-play"><i class="fas fa-play"></i></span>
-              </div>
-            </a>
-          `
-          : `
-            <a href="${buildArticleUrl(n)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${n.titulo}">
-              <div class="noticia-thumb">
-                <div class="noticia-thumb-fallback">
-                  <i class="fas fa-newspaper"></i>
-                  <span>Sem miniatura</span>
-                </div>
-              </div>
-            </a>
-          `;
-
-        const article = document.createElement("article");
-        article.className = `noticia-item ${isRead ? 'read' : ''}`;
-        article.innerHTML = `
-          ${thumbnailMarkup}
-          <div class="noticia-conteudo">
-            <div class="noticia-meta-badge">
-              <span class="noticia-categoria">${n.categoria}</span>
-              <span class="noticia-data">📅 ${n.data}</span>
-            </div>
-            <h3>${n.titulo}</h3>
-            <p>${n.resumo}</p>
-            <a href="${buildArticleUrl(n)}" class="noticia-link">Ver mais →</a>
-          </div>
-          <button class="noticia-read-btn ${isRead ? 'read' : ''}" data-article-id="${n.id}" onclick="toggleArticleRead(event, '${n.id}')">✓</button>
-        `;
-        noticiasList.appendChild(article);
-      });
-
-      atualizarBotaoVerMais();
+      renderizarNoticiasSecoes(noticiasOrdenadas);
     }
     
     // Mostrar notÃ­cia em destaque: escolher a mais recente por data
