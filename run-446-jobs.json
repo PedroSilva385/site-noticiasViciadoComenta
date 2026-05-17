@@ -1,0 +1,121 @@
+﻿{
+    "total_count":  1,
+    "jobs":  [
+                 {
+                     "id":  76430438629,
+                     "run_id":  26003331078,
+                     "workflow_name":  "Deploy com Firebase Config Seguro",
+                     "head_branch":  "main",
+                     "run_url":  "https://api.github.com/repos/PedroSilva385/site-noticiasViciadoComenta/actions/runs/26003331078",
+                     "run_attempt":  1,
+                     "node_id":  "CR_kwDORBLm1c8AAAARy5vw5Q",
+                     "head_sha":  "5d19519e86f3062d59c3e91a2826c24b4e80fba1",
+                     "url":  "https://api.github.com/repos/PedroSilva385/site-noticiasViciadoComenta/actions/jobs/76430438629",
+                     "html_url":  "https://github.com/PedroSilva385/site-noticiasViciadoComenta/actions/runs/26003331078/job/76430438629",
+                     "status":  "completed",
+                     "conclusion":  "failure",
+                     "created_at":  "2026-05-17T21:33:51Z",
+                     "started_at":  "2026-05-17T21:33:53Z",
+                     "completed_at":  "2026-05-17T21:39:19Z",
+                     "name":  "deploy",
+                     "steps":  [
+                                   {
+                                       "name":  "Set up job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  1,
+                                       "started_at":  "2026-05-17T21:33:54Z",
+                                       "completed_at":  "2026-05-17T21:33:55Z"
+                                   },
+                                   {
+                                       "name":  "Checkout",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  2,
+                                       "started_at":  "2026-05-17T21:33:55Z",
+                                       "completed_at":  "2026-05-17T21:33:56Z"
+                                   },
+                                   {
+                                       "name":  "Fallback clone",
+                                       "status":  "completed",
+                                       "conclusion":  "skipped",
+                                       "number":  3,
+                                       "started_at":  "2026-05-17T21:33:56Z",
+                                       "completed_at":  "2026-05-17T21:33:56Z"
+                                   },
+                                   {
+                                       "name":  "Criar firebase-config.js",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  4,
+                                       "started_at":  "2026-05-17T21:33:56Z",
+                                       "completed_at":  "2026-05-17T21:33:56Z"
+                                   },
+                                   {
+                                       "name":  "Gerar metadados de build",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  5,
+                                       "started_at":  "2026-05-17T21:33:56Z",
+                                       "completed_at":  "2026-05-17T21:33:56Z"
+                                   },
+                                   {
+                                       "name":  "Criar push-public-config.json",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  6,
+                                       "started_at":  "2026-05-17T21:33:56Z",
+                                       "completed_at":  "2026-05-17T21:33:56Z"
+                                   },
+                                   {
+                                       "name":  "Deploy para GitHub Pages",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  7,
+                                       "started_at":  "2026-05-17T21:33:56Z",
+                                       "completed_at":  "2026-05-17T21:33:59Z"
+                                   },
+                                   {
+                                       "name":  "Instalar dependências para Web Push",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  8,
+                                       "started_at":  "2026-05-17T21:33:59Z",
+                                       "completed_at":  "2026-05-17T21:34:05Z"
+                                   },
+                                   {
+                                       "name":  "Disparar push do artigo mais recente",
+                                       "status":  "completed",
+                                       "conclusion":  "failure",
+                                       "number":  9,
+                                       "started_at":  "2026-05-17T21:34:05Z",
+                                       "completed_at":  "2026-05-17T21:39:18Z"
+                                   },
+                                   {
+                                       "name":  "Post Checkout",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  18,
+                                       "started_at":  "2026-05-17T21:39:18Z",
+                                       "completed_at":  "2026-05-17T21:39:18Z"
+                                   },
+                                   {
+                                       "name":  "Complete job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  19,
+                                       "started_at":  "2026-05-17T21:39:18Z",
+                                       "completed_at":  "2026-05-17T21:39:18Z"
+                                   }
+                               ],
+                     "check_run_url":  "https://api.github.com/repos/PedroSilva385/site-noticiasViciadoComenta/check-runs/76430438629",
+                     "labels":  [
+                                    "ubuntu-latest"
+                                ],
+                     "runner_id":  1000003241,
+                     "runner_name":  "GitHub Actions 1000003241",
+                     "runner_group_id":  0,
+                     "runner_group_name":  "GitHub Actions"
+                 }
+             ]
+}
