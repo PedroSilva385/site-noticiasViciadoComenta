@@ -219,6 +219,29 @@
     return payload;
   }
 
+  function normalizePushError(error) {
+    if (!error || !error.message) {
+      return error instanceof Error ? error : new Error('Não foi possível ativar as notificações.');
+    }
+
+    const rawMessage = String(error.message || '');
+    const message = rawMessage.toLowerCase();
+
+    if (message.includes('push service error')) {
+      return new Error('O Brave falhou ao ligar ao serviço de push. Confirma em Brave > Definições > Privacidade e segurança que a opção de serviços Google para notificações push está ativa, e tenta fora de janela privada.');
+    }
+
+    if (message.includes('permission denied') && Notification.permission === 'granted') {
+      return new Error('O browser bloqueou o registo push. No Brave/Chrome isto acontece muitas vezes em janela privada. Tenta numa janela normal e confirma que as notificações do site não estão bloqueadas.');
+    }
+
+    if (message.includes('permission denied')) {
+      return new Error('O browser recusou a subscrição push. Confirma que as notificações do site estão permitidas e tenta novamente.');
+    }
+
+    return error instanceof Error ? error : new Error(rawMessage);
+  }
+
   async function sha256Hex(value) {
     const encoder = new TextEncoder();
     const buffer = await crypto.subtle.digest('SHA-256', encoder.encode(String(value || '').trim()));
@@ -279,29 +302,34 @@
   }
 
   async function subscribeToPush(options) {
-    const permission = Notification.permission === 'granted'
-      ? 'granted'
-      : await Notification.requestPermission();
+    try {
+      const permission = Notification.permission === 'granted'
+        ? 'granted'
+        : await Notification.requestPermission();
 
-    if (permission !== 'granted') {
-      throw new Error('Permissão de notificações não concedida.');
+      if (permission !== 'granted') {
+        throw new Error('Permissão de notificações não concedida.');
+      }
+
+      const config = await fetchPushConfig(options.configUrl);
+      const registration = await registerServiceWorkerIfNeeded();
+      let subscription = await registration.pushManager.getSubscription();
+
+      if (!subscription) {
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(config.vapidPublicKey)
+        });
+      }
+
+      await saveSubscriptionRecord(subscription.toJSON());
+      localStorage.setItem(STORAGE_KEY_PUSH_SUBSCRIBED, '1');
+      localStorage.removeItem(STORAGE_KEY_PUSH_PROMPT_DISMISSED);
+      showToast('Notificações ativadas com sucesso.');
+    } catch (error) {
+      console.warn('Falha ao subscrever notificações push:', error);
+      throw normalizePushError(error);
     }
-
-    const config = await fetchPushConfig(options.configUrl);
-    const registration = await registerServiceWorkerIfNeeded();
-    let subscription = await registration.pushManager.getSubscription();
-
-    if (!subscription) {
-      subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(config.vapidPublicKey)
-      });
-    }
-
-    await saveSubscriptionRecord(subscription.toJSON());
-    localStorage.setItem(STORAGE_KEY_PUSH_SUBSCRIBED, '1');
-    localStorage.removeItem(STORAGE_KEY_PUSH_PROMPT_DISMISSED);
-    showToast('Notificações ativadas com sucesso.');
   }
 
   async function unsubscribeFromPush(options) {
