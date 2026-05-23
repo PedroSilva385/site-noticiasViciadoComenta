@@ -832,8 +832,11 @@
   </footer>
 
   <script>
-    const database = firebase.database();
-    const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
+    const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
+    const adminFirebaseApp = (firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
+      || firebase.initializeApp(firebaseConfig, ADMIN_FIREBASE_APP_NAME);
+    const database = adminFirebaseApp.database();
+    const auth = typeof adminFirebaseApp.auth === 'function' ? adminFirebaseApp.auth() : null;
     const noticiasMap = {};
     const noticiaMetaMap = {};
     const noticiaIdBySlug = {};
