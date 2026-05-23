@@ -623,7 +623,12 @@
     }, 10000);
   }
 
+  function handleArticleRendered() {
+    initWhenReady();
+  }
+
   window.addEventListener('beforeunload', stopSpeaking);
+  document.addEventListener('vc:article-rendered', handleArticleRendered);
   speech.addEventListener('voiceschanged', function () {
     pickVoice();
   });
