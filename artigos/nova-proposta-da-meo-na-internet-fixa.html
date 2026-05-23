@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NOVA proposta da MEO na internet FIXA! - VICIADO COMENTA</title>
-<meta name="robots" content="noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
@@ -2156,7 +2156,7 @@ footer {
 <meta name="twitter:title" content="NOVA proposta da MEO na internet FIXA!">
 <meta name="twitter:description" content="MEO avan&#231;a com nova oferta comercial, na sua internet fixa. Faz todo o sentido!">
 <meta name="twitter:image" content="https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"headline":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","datePublished":"2026-04-23T00:00:00Z","dateModified":"2026-04-23T00:00:00Z","image":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video","name":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","thumbnailUrl":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"uploadDate":"2026-04-23T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/MFViU-mu3QM","contentUrl":"https://www.youtube.com/watch?v=MFViU-mu3QM","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","https://www.youtube.com/watch?v=MFViU-mu3QM"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"headline":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","datePublished":"2026-04-22T23:00:00Z","dateModified":"2026-04-22T23:00:00Z","image":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video","name":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","thumbnailUrl":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"uploadDate":"2026-04-22T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/MFViU-mu3QM","contentUrl":"https://www.youtube.com/watch?v=MFViU-mu3QM","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","https://www.youtube.com/watch?v=MFViU-mu3QM"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -3194,6 +3194,41 @@ function activateDeferredArticleImages(root) {
   deferredImages.forEach((img) => observer.observe(img));
 }
 
+function recoverBrokenArticleImages(root) {
+  if (!root) return;
+
+  const retryImage = (img) => {
+    if (!img || img.dataset.imageRetryAttempted === 'true') return;
+
+    const originalSrc = img.getAttribute('src');
+    if (!originalSrc || /^data:image\//i.test(originalSrc)) return;
+
+    img.dataset.imageRetryAttempted = 'true';
+
+    const separator = originalSrc.includes('?') ? '&' : '?';
+    img.setAttribute('src', `${originalSrc}${separator}img-retry=${Date.now()}`);
+  };
+
+  root.querySelectorAll('.artigo-conteudo img:not([data-src])').forEach((img) => {
+    img.addEventListener('error', function handleError() {
+      retryImage(img);
+    }, { once: true });
+
+    if (img.complete && img.naturalWidth === 0) {
+      retryImage(img);
+      return;
+    }
+
+    if (!img.complete) {
+      img.addEventListener('load', function handleLoad() {
+        if (img.naturalWidth === 0) {
+          retryImage(img);
+        }
+      }, { once: true });
+    }
+  });
+}
+
 function applyInlineMarkdownTypography(content) {
   if (!content) return '';
 
@@ -3951,6 +3986,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRelatedArticles(noticia, data.noticias || []);
 
         activateDeferredArticleImages(container);
+        recoverBrokenArticleImages(container);
         initArticleVideoEmbeds(container);
 
         // Modo de edição em live (?edit=1)

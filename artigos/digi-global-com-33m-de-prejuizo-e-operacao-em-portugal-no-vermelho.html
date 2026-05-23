@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIGI global com 33M de preju&#237;zo e OPERA&#199;&#195;O em PORTUGAL no VERMELHO - VICIADO COMENTA</title>
-<meta name="robots" content="noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
@@ -3194,6 +3194,41 @@ function activateDeferredArticleImages(root) {
   deferredImages.forEach((img) => observer.observe(img));
 }
 
+function recoverBrokenArticleImages(root) {
+  if (!root) return;
+
+  const retryImage = (img) => {
+    if (!img || img.dataset.imageRetryAttempted === 'true') return;
+
+    const originalSrc = img.getAttribute('src');
+    if (!originalSrc || /^data:image\//i.test(originalSrc)) return;
+
+    img.dataset.imageRetryAttempted = 'true';
+
+    const separator = originalSrc.includes('?') ? '&' : '?';
+    img.setAttribute('src', `${originalSrc}${separator}img-retry=${Date.now()}`);
+  };
+
+  root.querySelectorAll('.artigo-conteudo img:not([data-src])').forEach((img) => {
+    img.addEventListener('error', function handleError() {
+      retryImage(img);
+    }, { once: true });
+
+    if (img.complete && img.naturalWidth === 0) {
+      retryImage(img);
+      return;
+    }
+
+    if (!img.complete) {
+      img.addEventListener('load', function handleLoad() {
+        if (img.naturalWidth === 0) {
+          retryImage(img);
+        }
+      }, { once: true });
+    }
+  });
+}
+
 function applyInlineMarkdownTypography(content) {
   if (!content) return '';
 
@@ -3951,6 +3986,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRelatedArticles(noticia, data.noticias || []);
 
         activateDeferredArticleImages(container);
+        recoverBrokenArticleImages(container);
         initArticleVideoEmbeds(container);
 
         // Modo de edição em live (?edit=1)

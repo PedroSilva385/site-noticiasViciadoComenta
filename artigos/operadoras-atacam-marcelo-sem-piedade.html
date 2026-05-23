@@ -3200,6 +3200,41 @@ function activateDeferredArticleImages(root) {
   deferredImages.forEach((img) => observer.observe(img));
 }
 
+function recoverBrokenArticleImages(root) {
+  if (!root) return;
+
+  const retryImage = (img) => {
+    if (!img || img.dataset.imageRetryAttempted === 'true') return;
+
+    const originalSrc = img.getAttribute('src');
+    if (!originalSrc || /^data:image\//i.test(originalSrc)) return;
+
+    img.dataset.imageRetryAttempted = 'true';
+
+    const separator = originalSrc.includes('?') ? '&' : '?';
+    img.setAttribute('src', `${originalSrc}${separator}img-retry=${Date.now()}`);
+  };
+
+  root.querySelectorAll('.artigo-conteudo img:not([data-src])').forEach((img) => {
+    img.addEventListener('error', function handleError() {
+      retryImage(img);
+    }, { once: true });
+
+    if (img.complete && img.naturalWidth === 0) {
+      retryImage(img);
+      return;
+    }
+
+    if (!img.complete) {
+      img.addEventListener('load', function handleLoad() {
+        if (img.naturalWidth === 0) {
+          retryImage(img);
+        }
+      }, { once: true });
+    }
+  });
+}
+
 function applyInlineMarkdownTypography(content) {
   if (!content) return '';
 
@@ -3957,6 +3992,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRelatedArticles(noticia, data.noticias || []);
 
         activateDeferredArticleImages(container);
+        recoverBrokenArticleImages(container);
         initArticleVideoEmbeds(container);
 
         // Modo de edição em live (?edit=1)

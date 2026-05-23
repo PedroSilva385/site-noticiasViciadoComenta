@@ -600,11 +600,7 @@ foreach ($noticia in $noticias) {
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
 
-    $robotsContent = if ($hasExplicitSources) {
-        'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
-    } else {
-        'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
-    }
+    $robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
 
     $seoMeta = @"
     <link rel="canonical" id="canonicalLink" href="$safeUrl">
