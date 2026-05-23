@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia - VICIADO COMENTA</title>
 <meta name="description" content="Leia notícias e artigos completos no VICIADO COMENTA, com foco em telecomunicações, tecnologia, gaming e temas de atualidade.">
-<meta name="robots" content="noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">
 <meta property="og:type" content="article">
@@ -3010,6 +3010,41 @@ function activateDeferredArticleImages(root) {
   deferredImages.forEach((img) => observer.observe(img));
 }
 
+function recoverBrokenArticleImages(root) {
+  if (!root) return;
+
+  const retryImage = (img) => {
+    if (!img || img.dataset.imageRetryAttempted === 'true') return;
+
+    const originalSrc = img.getAttribute('src');
+    if (!originalSrc || /^data:image\//i.test(originalSrc)) return;
+
+    img.dataset.imageRetryAttempted = 'true';
+
+    const separator = originalSrc.includes('?') ? '&' : '?';
+    img.setAttribute('src', `${originalSrc}${separator}img-retry=${Date.now()}`);
+  };
+
+  root.querySelectorAll('.artigo-conteudo img:not([data-src])').forEach((img) => {
+    img.addEventListener('error', function handleError() {
+      retryImage(img);
+    }, { once: true });
+
+    if (img.complete && img.naturalWidth === 0) {
+      retryImage(img);
+      return;
+    }
+
+    if (!img.complete) {
+      img.addEventListener('load', function handleLoad() {
+        if (img.naturalWidth === 0) {
+          retryImage(img);
+        }
+      }, { once: true });
+    }
+  });
+}
+
 function applyInlineMarkdownTypography(content) {
   if (!content) return '';
 
@@ -3840,6 +3875,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initArticleVideoEmbeds(container);
 
         activateDeferredArticleImages(container);
+        recoverBrokenArticleImages(container);
 
         // Modo de edição em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');

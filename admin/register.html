@@ -237,8 +237,10 @@ const firebaseConfig = {
   appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
+const adminFirebaseApp = (firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
+  || firebase.initializeApp(firebaseConfig, ADMIN_FIREBASE_APP_NAME);
+const auth = adminFirebaseApp.auth();
 
 const registerForm = document.getElementById('registerForm');
 const emailInput = document.getElementById('email');

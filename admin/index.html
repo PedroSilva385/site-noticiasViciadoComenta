@@ -1374,9 +1374,11 @@ const firebaseConfig = {
 };
 
 // Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
+const adminFirebaseApp = (firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
+  || firebase.initializeApp(firebaseConfig, ADMIN_FIREBASE_APP_NAME);
+const auth = adminFirebaseApp.auth();
+const db = adminFirebaseApp.database();
 
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
