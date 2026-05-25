@@ -3942,13 +3942,6 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <div class="artigo-actions">
             <button class="artigo-like-btn" id="likeBtn" onclick="toggleLike('${noticiaIdResolvido}')">
-
-        document.dispatchEvent(new CustomEvent('vc:article-rendered', {
-          detail: {
-            articleId: noticiaIdResolvido,
-            source: 'artigos.html'
-          }
-        }));
               <i class="fas fa-heart"></i>
               <span id="likeCount">0</span> Gosto
             </button>
@@ -3978,6 +3971,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
+
+        document.dispatchEvent(new CustomEvent('vc:article-rendered', {
+          detail: {
+            articleId: noticiaIdResolvido,
+            source: 'artigos.html'
+          }
+        }));
         
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);

@@ -2156,7 +2156,7 @@ footer {
 <meta name="twitter:title" content="NOVA proposta da MEO na internet FIXA!">
 <meta name="twitter:description" content="MEO avan&#231;a com nova oferta comercial, na sua internet fixa. Faz todo o sentido!">
 <meta name="twitter:image" content="https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"headline":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","datePublished":"2026-04-23T00:00:00Z","dateModified":"2026-04-23T00:00:00Z","image":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video","name":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","thumbnailUrl":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"uploadDate":"2026-04-23T00:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/MFViU-mu3QM","contentUrl":"https://www.youtube.com/watch?v=MFViU-mu3QM","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","https://www.youtube.com/watch?v=MFViU-mu3QM"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"headline":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","datePublished":"2026-04-22T23:00:00Z","dateModified":"2026-04-22T23:00:00Z","image":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT","hasPart":{"@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video"}},{"@type":"VideoObject","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html#video","name":"NOVA proposta da MEO na internet FIXA!","description":"MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!","thumbnailUrl":["https://img.youtube.com/vi/MFViU-mu3QM/hqdefault.jpg"],"uploadDate":"2026-04-22T23:00:00Z","url":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html"},"embedUrl":"https://www.youtube-nocookie.com/embed/MFViU-mu3QM","contentUrl":"https://www.youtube.com/watch?v=MFViU-mu3QM","potentialAction":{"@type":"WatchAction","target":["https://www.viciadocomenta.pt/artigos/nova-proposta-da-meo-na-internet-fixa.html","https://www.youtube.com/watch?v=MFViU-mu3QM"]},"isFamilyFriendly":true,"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -3942,13 +3942,6 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <div class="artigo-actions">
             <button class="artigo-like-btn" id="likeBtn" onclick="toggleLike('${noticiaIdResolvido}')">
-
-        document.dispatchEvent(new CustomEvent('vc:article-rendered', {
-          detail: {
-            articleId: noticiaIdResolvido,
-            source: 'artigos.html'
-          }
-        }));
               <i class="fas fa-heart"></i>
               <span id="likeCount">0</span> Gosto
             </button>
@@ -3978,6 +3971,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <section class="artigos-relacionados" id="artigosRelacionados"></section>
         `;
+
+        document.dispatchEvent(new CustomEvent('vc:article-rendered', {
+          detail: {
+            articleId: noticiaIdResolvido,
+            source: 'artigos.html'
+          }
+        }));
         
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
