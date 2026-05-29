@@ -1365,13 +1365,7 @@ button {
 <script>
 const adminFirebaseConfig = window.firebaseConfig;
 const invalidFirebaseConfigValue = '__FIREBASE_API_KEY_FROM_SECRET__';
-const localBootstrapHost = String(window.location.hostname || '').toLowerCase();
-const canUseLocalBootstrapFallback = localBootstrapHost === 'localhost' || localBootstrapHost === '127.0.0.1';
 const hasValidFirebaseConfig = !!(adminFirebaseConfig && adminFirebaseConfig.apiKey && adminFirebaseConfig.apiKey !== invalidFirebaseConfigValue);
-
-if (!hasValidFirebaseConfig && !canUseLocalBootstrapFallback) {
-  throw new Error('firebase-config.js nao foi gerado com uma API key valida.');
-}
 
 function createLocalBootstrapAuth() {
   return {
@@ -1564,10 +1558,6 @@ async function fetchLocalStudio(path, options = {}) {
 }
 
 async function tryEnterLocalStudioMode(email) {
-  if (!isLocalStudioHost()) {
-    return false;
-  }
-
   await resolveLocalStudioBaseUrl();
   stopAuthKeepAlive();
   applyAuthenticatedUiState({
