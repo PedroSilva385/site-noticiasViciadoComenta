@@ -8,8 +8,8 @@
 // - HTTP Referrers restritos a: viciadocomenta.pt
 // - APIs restritas a: Identity Toolkit, Token Service, Firebase Realtime Database
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+window.firebaseConfig = {
+  apiKey: "__FIREBASE_API_KEY_FROM_SECRET__",
   authDomain: "chat-viciadocomenta.firebaseapp.com",
   databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "chat-viciadocomenta",
@@ -17,6 +17,8 @@ const firebaseConfig = {
   messagingSenderId: "183684670526",
   appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
 };
+
+const firebaseConfig = window.firebaseConfig;
 
 const ANALYTICS_CONFIG = {
   ipEndpoints: [
@@ -883,6 +885,11 @@ async function initializeDeferredFirebaseWork() {
 
 // Inicializar Firebase
 function initializeFirebaseApp() {
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === '__FIREBASE_API_KEY_FROM_SECRET__') {
+    console.error('firebase-config.js nao foi gerado com uma API key valida.');
+    return;
+  }
+
   if (typeof firebase === 'undefined') {
     console.log('⏳ Aguardando Firebase SDK carregar...');
     setTimeout(initializeFirebaseApp, 50);

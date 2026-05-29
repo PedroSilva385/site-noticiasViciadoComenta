@@ -47,8 +47,8 @@ jobs:
       shell: bash
       run: |
         mkdir -p assets
-        cat > assets/firebase-config.js << 'EOF'
-        const firebaseConfig = {
+        cat > firebase-config.js << 'EOF'
+        window.firebaseConfig = {
           apiKey: "${{ secrets.FIREBASE_API_KEY }}",
           authDomain: "chat-viciadocomenta.firebaseapp.com",
           databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
@@ -57,6 +57,30 @@ jobs:
           messagingSenderId: "183684670526",
           appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
         };
+        EOF
+        cat > firebase-config.json << 'EOF'
+        {
+          "apiKey": "${{ secrets.FIREBASE_API_KEY }}",
+          "authDomain": "chat-viciadocomenta.firebaseapp.com",
+          "databaseURL": "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+          "projectId": "chat-viciadocomenta",
+          "storageBucket": "chat-viciadocomenta.firebasestorage.app",
+          "messagingSenderId": "183684670526",
+          "appId": "1:183684670526:web:64b1f62cf80e05d4781d6f"
+        }
+        EOF
+        cat > assets/firebase-config.js << 'EOF'
+        window.firebaseConfig = {
+          apiKey: "${{ secrets.FIREBASE_API_KEY }}",
+          authDomain: "chat-viciadocomenta.firebaseapp.com",
+          databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "chat-viciadocomenta",
+          storageBucket: "chat-viciadocomenta.firebasestorage.app",
+          messagingSenderId: "183684670526",
+          appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+        };
+
+        const firebaseConfig = window.firebaseConfig;
         EOF
 
     - name: Sincronizar noticias do Firebase

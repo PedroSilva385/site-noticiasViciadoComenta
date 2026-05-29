@@ -28,10 +28,32 @@ jobs:
         rm -rf "$GITHUB_WORKSPACE"/*
         git clone --depth 1 "https://github.com/${{ github.repository }}.git" "$GITHUB_WORKSPACE"
     
-    # Criar arquivo firebase-config.js com secrets
+    # Criar arquivos firebase-config com secrets
     - name: Criar firebase-config.js
       run: |
         mkdir -p assets
+        cat > firebase-config.js << 'EOF'
+        window.firebaseConfig = {
+          apiKey: "${{ secrets.FIREBASE_API_KEY }}",
+          authDomain: "chat-viciadocomenta.firebaseapp.com",
+          databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "chat-viciadocomenta",
+          storageBucket: "chat-viciadocomenta.firebasestorage.app",
+          messagingSenderId: "183684670526",
+          appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
+        };
+        EOF
+        cat > firebase-config.json << 'EOF'
+        {
+          "apiKey": "${{ secrets.FIREBASE_API_KEY }}",
+          "authDomain": "chat-viciadocomenta.firebaseapp.com",
+          "databaseURL": "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
+          "projectId": "chat-viciadocomenta",
+          "storageBucket": "chat-viciadocomenta.firebasestorage.app",
+          "messagingSenderId": "183684670526",
+          "appId": "1:183684670526:web:64b1f62cf80e05d4781d6f"
+        }
+        EOF
         cat > assets/firebase-config.js << 'EOF'
         // ✅ CONFIGURAÇÃO FIREBASE SEGURA (Gerada automaticamente)
         // Data: $(date)
@@ -41,7 +63,7 @@ jobs:
         // - HTTP Referrers restritos a: viciadocomenta.pt
         // - APIs restritas a: Identity Toolkit, Token Service, Firebase Realtime Database
 
-        const firebaseConfig = {
+        window.firebaseConfig = {
           apiKey: "${{ secrets.FIREBASE_API_KEY }}",
           authDomain: "chat-viciadocomenta.firebaseapp.com",
           databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
@@ -50,6 +72,8 @@ jobs:
           messagingSenderId: "183684670526",
           appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
         };
+
+        const firebaseConfig = window.firebaseConfig;
 
         // Inicializar Firebase
         function initializeFirebaseApp() {

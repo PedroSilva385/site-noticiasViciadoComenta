@@ -226,16 +226,14 @@ button:disabled {
 <!-- Firebase SDK (Compat version for compatibility) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="../firebase-config.js?v=20260525-security"></script>
 
 <script>
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
-  authDomain: "chat-viciadocomenta.firebaseapp.com",
-  projectId: "chat-viciadocomenta",
-  messagingSenderId: "183684670526",
-  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
-};
+const firebaseConfig = window.firebaseConfig;
+
+if (!firebaseConfig || !firebaseConfig.apiKey || firebaseConfig.apiKey === '__FIREBASE_API_KEY_FROM_SECRET__') {
+  throw new Error('firebase-config.js nao foi gerado com uma API key valida.');
+}
 
 const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
 const adminFirebaseApp = (firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
