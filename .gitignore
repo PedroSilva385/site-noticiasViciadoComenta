@@ -15,10 +15,9 @@
 ../private-config/
 ../private-config/**
 
-# Configuração Firebase privada - firebase-config.js DEVE ser deployado em produção
-firebase-config.js
-assets/firebase-config.js
-firebase-config.json
+# Configuração Firebase pública do frontend.
+# A Web API key do Firebase já é pública por natureza e fica restringida por referrer.
+# Estes ficheiros precisam de ficar versionados para o GitHub Pages servir a configuração correta.
 /docs/FIREBASE-SETUP.txt
 /docs/FIREBASE-REGRAS-SEGURAS.json
 /docs/CONFIG-PRIVADA.md
