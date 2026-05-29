@@ -33,16 +33,13 @@ button:disabled { background:#1d4ed8; opacity:.6; cursor:not-allowed; }
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="../firebase-config.js?v=20260525-security"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
-  authDomain: "chat-viciadocomenta.firebaseapp.com",
-  databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "chat-viciadocomenta",
-  storageBucket: "chat-viciadocomenta.firebasestorage.app",
-  messagingSenderId: "183684670526",
-  appId: "1:183684670526:web:64b1f62cf80e05d4781d6f"
-};
+const firebaseConfig = window.firebaseConfig;
+
+if (!firebaseConfig || !firebaseConfig.apiKey || firebaseConfig.apiKey === '__FIREBASE_API_KEY_FROM_SECRET__') {
+  throw new Error('firebase-config.js nao foi gerado com uma API key valida.');
+}
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();

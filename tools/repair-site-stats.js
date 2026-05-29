@@ -5,9 +5,13 @@ const configPath = path.join(__dirname, '..', 'assets', 'firebase-config.js');
 const configSource = fs.readFileSync(configPath, 'utf8');
 
 const DEFAULT_FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI',
-  databaseURL: 'https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app'
+  apiKey: String(process.env.FIREBASE_API_KEY || '').trim(),
+  databaseURL: String(process.env.FIREBASE_DATABASE_URL || '').trim()
 };
+
+function isGeneratedPlaceholder(value) {
+  return !value || value === '__FIREBASE_API_KEY_FROM_SECRET__' || value === '__FIREBASE_DATABASE_URL_FROM_SECRET__';
+}
 
 function extractConfigValue(key) {
   const patterns = {
@@ -17,11 +21,11 @@ function extractConfigValue(key) {
 
   const pattern = patterns[key];
   const match = pattern ? configSource.match(pattern) : null;
-  if (match && match[1]) {
+  if (match && match[1] && !isGeneratedPlaceholder(match[1])) {
     return match[1];
   }
 
-  if (DEFAULT_FIREBASE_CONFIG[key]) {
+  if (DEFAULT_FIREBASE_CONFIG[key] && !isGeneratedPlaceholder(DEFAULT_FIREBASE_CONFIG[key])) {
     return DEFAULT_FIREBASE_CONFIG[key];
   }
 

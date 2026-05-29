@@ -9,7 +9,7 @@
 // - APIs restritas a: Identity Toolkit, Token Service, Firebase Realtime Database
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCrWyoW7qjHHsF2lP9LzLs21AtPEa-r8NI",
+  apiKey: "__FIREBASE_API_KEY_FROM_SECRET__",
   authDomain: "chat-viciadocomenta.firebaseapp.com",
   databaseURL: "https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "chat-viciadocomenta",
