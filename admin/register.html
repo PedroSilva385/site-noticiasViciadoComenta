@@ -229,15 +229,15 @@ button:disabled {
 <script src="../assets/firebase-config.js?v=20260529-admin-fix"></script>
 
 <script>
-const firebaseConfig = window.firebaseConfig;
+const adminFirebaseConfig = window.firebaseConfig;
 
-if (!firebaseConfig || !firebaseConfig.apiKey || firebaseConfig.apiKey === '__FIREBASE_API_KEY_FROM_SECRET__') {
+if (!adminFirebaseConfig || !adminFirebaseConfig.apiKey || adminFirebaseConfig.apiKey === '__FIREBASE_API_KEY_FROM_SECRET__') {
   throw new Error('firebase-config.js nao foi gerado com uma API key valida.');
 }
 
 const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
 const adminFirebaseApp = (firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
-  || firebase.initializeApp(firebaseConfig, ADMIN_FIREBASE_APP_NAME);
+  || firebase.initializeApp(adminFirebaseConfig, ADMIN_FIREBASE_APP_NAME);
 const auth = adminFirebaseApp.auth();
 
 const registerForm = document.getElementById('registerForm');
