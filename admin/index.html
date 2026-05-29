@@ -1363,26 +1363,59 @@ button {
 <script src="../assets/firebase-config.js?v=20260529-admin-fix"></script>
 
 <script>
-const firebaseConfig = window.firebaseConfig;
+const adminFirebaseConfig = window.firebaseConfig;
+const invalidFirebaseConfigValue = '__FIREBASE_API_KEY_FROM_SECRET__';
+const localBootstrapHost = String(window.location.hostname || '').toLowerCase();
+const canUseLocalBootstrapFallback = localBootstrapHost === 'localhost' || localBootstrapHost === '127.0.0.1';
+const hasValidFirebaseConfig = !!(adminFirebaseConfig && adminFirebaseConfig.apiKey && adminFirebaseConfig.apiKey !== invalidFirebaseConfigValue);
 
-if (!firebaseConfig || !firebaseConfig.apiKey || firebaseConfig.apiKey === '__FIREBASE_API_KEY_FROM_SECRET__') {
+if (!hasValidFirebaseConfig && !canUseLocalBootstrapFallback) {
   throw new Error('firebase-config.js nao foi gerado com uma API key valida.');
+}
+
+function createLocalBootstrapAuth() {
+  return {
+    currentUser: null,
+    setPersistence() {
+      return Promise.resolve();
+    },
+    signInWithEmailAndPassword() {
+      return Promise.reject({
+        code: 'auth/app-not-authorized',
+        message: 'Modo local ativo sem Firebase config público.'
+      });
+    },
+    onAuthStateChanged(callback) {
+      if (typeof callback === 'function') {
+        setTimeout(() => callback(null), 0);
+      }
+      return () => {};
+    },
+    signOut() {
+      this.currentUser = null;
+      return Promise.resolve();
+    }
+  };
 }
 
 // Inicializar Firebase
 const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
-const adminFirebaseApp = (firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
-  || firebase.initializeApp(firebaseConfig, ADMIN_FIREBASE_APP_NAME);
-const auth = adminFirebaseApp.auth();
-const db = adminFirebaseApp.database();
+const adminFirebaseApp = hasValidFirebaseConfig
+  ? ((firebase.apps || []).find((app) => app && app.name === ADMIN_FIREBASE_APP_NAME)
+    || firebase.initializeApp(adminFirebaseConfig, ADMIN_FIREBASE_APP_NAME))
+  : null;
+const auth = adminFirebaseApp ? adminFirebaseApp.auth() : createLocalBootstrapAuth();
+const db = adminFirebaseApp ? adminFirebaseApp.database() : null;
 
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
 let persistenceReady = false;
 
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
-  console.warn('Não foi possível configurar persistência LOCAL:', error);
-});
+if (adminFirebaseApp) {
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
+    console.warn('Não foi possível configurar persistência LOCAL:', error);
+  });
+}
 
 async function ensureAuthPersistence() {
   if (persistenceReady) return;
