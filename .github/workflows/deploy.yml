@@ -159,6 +159,20 @@ jobs:
           "vapidPublicKey": "${WEB_PUSH_VAPID_PUBLIC_KEY}"
         }
         EOF
+
+    - name: Preparar ficheiros para publicação
+      run: |
+        rm -rf .publish
+        mkdir -p .publish
+
+        git ls-files -z | rsync -a --from0 --files-from=- ./ .publish/
+
+        for file in firebase-config.js firebase-config.json assets/firebase-config.js data/build-version.json data/push-public-config.json; do
+          if [ -f "$file" ]; then
+            mkdir -p ".publish/$(dirname "$file")"
+            cp "$file" ".publish/$file"
+          fi
+        done
     
     # Deploy para GitHub Pages
     - name: Deploy para GitHub Pages
@@ -166,7 +180,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: .
+        publish_dir: .publish
         cname: viciadocomenta.pt
 
     - name: Instalar dependências para Web Push
