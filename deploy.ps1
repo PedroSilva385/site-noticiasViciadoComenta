@@ -61,6 +61,8 @@ Write-Host "`nPreparando ficheiros para commit..." -ForegroundColor Yellow
 $filesToNormalize = @(
     'index.html',
     'admin/index.html',
+    'admin/docs/README.md',
+    'admin/docs/SETUP.md',
     'todas-noticias.html',
     'noticias.html',
     '404.html',
@@ -68,9 +70,12 @@ $filesToNormalize = @(
     'sitemap.xml',
     'robots.txt',
     'sobre-nos.html',
+    '.github/workflows/deploy.yml',
+    '.github/workflows/rebuild-artigos.yml',
     'package.json',
     'package-lock.json',
     'tools/content-store.js',
+    'tools/noticias-studio-server.ps1',
     'data/noticias.json',
     'data/viciado-comenta-videos.json',
     'data/viciado-ponto-critico-videos.json',
@@ -97,15 +102,20 @@ if (Test-Path 'content') {
 git add index.html
 git add .gitattributes
 git add deploy.ps1
+git add .github/workflows/deploy.yml
+git add .github/workflows/rebuild-artigos.yml
 git add package.json
 git add package-lock.json
 git add admin/index.html
+git add admin/docs/README.md
+git add admin/docs/SETUP.md
 git add todas-noticias.html
 git add noticias.html
 git add assets/news-scheduler.js
 git add tools/artigo-estatico.cmd
 git add tools/gerar-artigos-espelho.ps1
 git add tools/content-store.js
+git add tools/noticias-studio-server.ps1
 git add 404.html
 git add firebase.json
 git add sitemap.xml

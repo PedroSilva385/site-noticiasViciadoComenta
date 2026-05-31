@@ -160,6 +160,12 @@ jobs:
         }
         EOF
 
+    - name: Instalar dependências do content engine
+      run: npm ci
+
+    - name: Gerar noticias.json a partir do Markdown
+      run: node ./tools/content-store.js export-json > /dev/null
+
     - name: Preparar ficheiros para publicação
       run: |
         rm -rf .publish

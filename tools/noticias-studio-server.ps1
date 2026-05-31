@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $toolsDir = Join-Path $root 'tools'
 $jsonPath = Join-Path $root 'data/noticias.json'
+$contentStoreScript = Join-Path $toolsDir 'content-store.js'
 $gerarArtigosScript = Join-Path $toolsDir 'gerar-artigos-espelho.ps1'
 $videosDataDir = Join-Path $root 'data'
 $deployScript = Join-Path $root 'deploy.ps1'
@@ -95,6 +96,35 @@ function Get-RequestBody {
     } finally {
         $reader.Dispose()
     }
+}
+
+function Invoke-ContentStore {
+    param(
+        [Parameter(Mandatory = $true)] [string] $Command,
+        [Parameter(Mandatory = $false)] [string] $PayloadPath
+    )
+
+    if (-not (Test-Path $contentStoreScript)) {
+        throw "Content store não encontrado em: $contentStoreScript"
+    }
+
+    $arguments = @($contentStoreScript, $Command)
+    if (-not [string]::IsNullOrWhiteSpace($PayloadPath)) {
+        $arguments += $PayloadPath
+    }
+
+    $output = & node @arguments 2>&1
+    $exitCode = $LASTEXITCODE
+    if ($exitCode -ne 0) {
+        throw "Falha no content store ($Command): $($output -join "`n")"
+    }
+
+    $jsonText = ($output -join "`n").Trim()
+    if ([string]::IsNullOrWhiteSpace($jsonText)) {
+        throw "Content store ($Command) não devolveu payload JSON."
+    }
+
+    return ($jsonText | ConvertFrom-Json)
 }
 
 function Get-SafeSlug {
@@ -294,13 +324,19 @@ try {
             }
 
             if ($method -eq 'GET' -and $path -eq 'api/noticias') {
-                if (-not (Test-Path $jsonPath)) {
-                    Write-JsonResponse -Response $response -StatusCode 404 -Payload @{ ok = $false; error = 'noticias.json não encontrado.' }
+                $data = if (Test-Path $contentStoreScript) {
+                    Invoke-ContentStore -Command 'load-json'
+                } elseif (Test-Path $jsonPath) {
+                    (Get-Content -Path $jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json)
+                } else {
+                    $null
+                }
+
+                if (-not $data) {
+                    Write-JsonResponse -Response $response -StatusCode 404 -Payload @{ ok = $false; error = 'Fonte de notícias não encontrada.' }
                     continue
                 }
 
-                $raw = Get-Content -Path $jsonPath -Raw -Encoding UTF8
-                $data = $raw | ConvertFrom-Json
                 Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; data = $data }
                 continue
             }
@@ -320,10 +356,22 @@ try {
 
                 Sync-NoticiasLinks -Payload $payload
 
-                $jsonOut = $payload | ConvertTo-Json -Depth 100
-                [System.IO.File]::WriteAllText($jsonPath, $jsonOut, [System.Text.UTF8Encoding]::new($false))
-
-                Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; message = 'noticias.json guardado com sucesso.' }
+                if (Test-Path $contentStoreScript) {
+                    $tempPayloadPath = Join-Path ([System.IO.Path]::GetTempPath()) ("vc-noticias-{0}.json" -f ([guid]::NewGuid().ToString('N')))
+                    try {
+                        [System.IO.File]::WriteAllText($tempPayloadPath, ($payload | ConvertTo-Json -Depth 100), [System.Text.UTF8Encoding]::new($false))
+                        $savedPayload = Invoke-ContentStore -Command 'save-payload' -PayloadPath $tempPayloadPath
+                        Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; message = 'Conteúdo Markdown guardado e noticias.json regenerado com sucesso.'; data = $savedPayload }
+                    } finally {
+                        if (Test-Path $tempPayloadPath) {
+                            Remove-Item -Path $tempPayloadPath -Force -ErrorAction SilentlyContinue
+                        }
+                    }
+                } else {
+                    $jsonOut = $payload | ConvertTo-Json -Depth 100
+                    [System.IO.File]::WriteAllText($jsonPath, $jsonOut, [System.Text.UTF8Encoding]::new($false))
+                    Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; message = 'noticias.json guardado com sucesso.' }
+                }
                 continue
             }
 

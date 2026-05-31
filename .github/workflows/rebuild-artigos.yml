@@ -83,9 +83,13 @@ jobs:
         const firebaseConfig = window.firebaseConfig;
         EOF
 
-    - name: Sincronizar noticias do Firebase
-      shell: pwsh
-      run: ./tools/sync-noticias-firebase.ps1
+    - name: Instalar dependências do content engine
+      shell: bash
+      run: npm ci
+
+    - name: Gerar noticias.json a partir do Markdown
+      shell: bash
+      run: node ./tools/content-store.js export-json > /dev/null
 
     - name: Regenerar artigos espelho e sitemap
       shell: pwsh

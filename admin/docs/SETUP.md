@@ -61,9 +61,9 @@ Depois de fazer deploy para GitHub:
 
 ## 🔄 Sincronização
 
-- **Firebase Realtime Database**: As notícias são guardadas aqui
-- **JSON Local**: Também tenta sincronizar com `data/noticias.json`
-- **Automático**: Não precisa de fazer mais nada!
+- **Markdown Local**: As notícias são guardadas em `content/artigos/*.md`
+- **JSON Gerado**: `data/noticias.json` é regenerado automaticamente para compatibilidade
+- **Automático**: O rebuild recria também `/artigos/` e `sitemap.xml`
 
 ---
 
