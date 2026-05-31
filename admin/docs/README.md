@@ -132,28 +132,28 @@ Clique no botão **"Sair"** (canto superior direito)
 **Fluxo de dados:**
 1. Você entra no `/admin/`
 2. Autentica com Firebase
-3. O painel carrega as notícias da Realtime DB
+3. Em modo local, o painel usa o Noticias Studio para carregar o conteúdo
 4. Você cria/edita/deleta
-5. Tudo é guardado no Firebase
-6. Em localhost, o painel continua a sincronizar `data/noticias.json` e a regenerar `/artigos/`
-7. Em qualquer computador, o painel dispara uma regeneração remota no GitHub Actions para atualizar `/artigos/` e `sitemap.xml`
+5. O Noticias Studio guarda em `content/artigos/*.md`
+6. `data/noticias.json` é regenerado automaticamente como artefacto compatível
+7. `/artigos/` e `sitemap.xml` são regenerados a partir desse conteúdo estático
 
 ---
 
-## 🔁 Regeneração Remota dos Artigos
+## 🔁 Regeneração dos Artigos
 
-O botão **"💾 Guardar"** passou a acionar o fluxo remoto de atualização dos ficheiros estáticos da pasta `/artigos/`, mesmo quando estiver a editar a partir de outro computador.
+O fluxo suportado para publicação editorial passa pelo **Noticias Studio local**, mantendo o site público estático e com o mesmo formato final já consumido pelas páginas.
 
 ### Como funciona neste projeto
 
-1. A notícia fica guardada imediatamente no Firebase
-2. O workflow `rebuild-artigos.yml` corre automaticamente no GitHub Actions de 5 em 5 minutos
-3. O workflow sincroniza `data/noticias.json`, regenera `/artigos/` e atualiza `sitemap.xml`
-4. Se houver alterações, faz commit para `main` e o deploy normal do site continua a partir daí
+1. A notícia é guardada em `content/artigos/*.md`
+2. O content engine regenera `data/noticias.json`
+3. O gerador estático recria `/artigos/` e `sitemap.xml`
+4. O deploy publica os artefactos gerados e o conteúdo Markdown
 
 ### Nota importante
 
-O disparo imediato via Firebase Functions ficou preparado no código, mas exige plano Blaze no Firebase. Enquanto o projeto estiver sem Blaze, o modo suportado é o agendamento automático por GitHub Actions, com atraso normal até cerca de 5 minutos.
+O modo remoto baseado em Firebase deixou de ser a fonte de verdade para o conteúdo editorial. Para publicar alterações no site estático, use o fluxo local do Noticias Studio.
 
 ---
 
@@ -189,17 +189,17 @@ Aceda a `/admin/`, faça login, e comece a gerenciar!
 **P: Posso criar múltiplas contas?**  
 R: Sim! Cada email pode ter sua própria conta. Simplesmente adicione no Firebase Console.
 
-**P: As änderungen aparecem imediatamente no site?**  
-R: Sim! O painel sincroniza em tempo real com Realtime DB e o site lê de lá.
+**P: As alterações aparecem imediatamente no site?**  
+R: No fluxo suportado, sim após guardar, regenerar e publicar pelo Noticias Studio local.
 
 **P: Preciso estar no meu computador para editar?**  
-R: Não! Aceda de qualquer lugar com `https://seu-site/admin/`
+R: Para o fluxo estático suportado, precisa do ambiente local com o Noticias Studio.
 
 **P: O que acontece se eu delegar a alguém?**  
 R: Crie uma conta no Firebase para essa pessoa. Ela poderá entrar só com email/senha.
 
 **P: Como faço backup das notícias?**  
-R: Firebase faz backup automático. Também pode exportar o JSON em `data/noticias.json`.
+R: O backup principal está em `content/artigos/*.md`. `data/noticias.json` continua disponível como artefacto gerado.
 
 ---
 

@@ -377,10 +377,19 @@ function Get-StaticArticleHtml {
 }
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
+$contentStoreScript = Join-Path $root 'tools/content-store.js'
 $jsonPath = Join-Path $root 'data/noticias.json'
 $templatePath = Join-Path $root 'artigos.html'
 $artigosDir = Join-Path $root 'artigos'
 $sitemapPath = Join-Path $root 'sitemap.xml'
+
+if (Test-Path $contentStoreScript) {
+    Write-Host 'A regenerar data/noticias.json a partir de content/artigos/*.md...' -ForegroundColor Yellow
+    $contentExportOutput = & node $contentStoreScript export-json 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Falha ao exportar conteúdo Markdown: $($contentExportOutput -join "`n")"
+    }
+}
 
 if (-not (Test-Path $jsonPath)) { throw "Ficheiro não encontrado: $jsonPath" }
 if (-not (Test-Path $templatePath)) { throw "Template não encontrado: $templatePath" }
@@ -402,6 +411,7 @@ $noticias = @(
 $now = Get-Date
 $usedSlugs = @{}
 $generatedArticles = @()
+$generatedFileCount = 0
 $jsonUpdated = $false
 $legacyArticleLinkLookup = @{}
 
@@ -688,6 +698,7 @@ foreach ($noticia in $noticias) {
 
     $outPath = Join-Path $artigosDir "$slug.html"
     [System.IO.File]::WriteAllText($outPath, (Convert-ToLfText -Text $content), [System.Text.UTF8Encoding]::new($false))
+    $generatedFileCount++
 
     if ($noticia.PSObject.Properties.Name -contains 'aliases' -and $noticia.aliases) {
         $aliases = @($noticia.aliases)
@@ -756,7 +767,8 @@ if ($jsonUpdated) {
     [System.IO.File]::WriteAllText($jsonPath, $updatedJson, [System.Text.UTF8Encoding]::new($false))
 }
 
-Write-Output "Artigos espelho gerados: $($generatedArticles.Count)"
+Write-Output "Artigos espelho gerados: $generatedFileCount"
+Write-Output "Artigos incluídos no sitemap: $($generatedArticles.Count)"
 Write-Output "Diretório: $artigosDir"
 Write-Output "Sitemap atualizado: $sitemapPath"
 if ($jsonUpdated) {
