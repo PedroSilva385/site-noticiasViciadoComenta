@@ -83,7 +83,6 @@ git add deploy.ps1
 git add admin/index.html
 git add todas-noticias.html
 git add noticias.html
-git add assets/firebase-config.js
 git add assets/news-scheduler.js
 git add tools/artigo-estatico.cmd
 git add tools/gerar-artigos-espelho.ps1

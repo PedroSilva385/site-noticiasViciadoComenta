@@ -6,6 +6,5 @@ Disallow: /tools/
 Disallow: /backups/
 Disallow: /data/
 Disallow: /functions/
-Disallow: /TEST-DEPLOY.txt
 
 Sitemap: https://www.viciadocomenta.pt/sitemap.xml

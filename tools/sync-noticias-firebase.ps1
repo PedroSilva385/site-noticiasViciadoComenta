@@ -1,22 +1,42 @@
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
-$configPath = Join-Path $projectRoot 'assets/firebase-config.js'
+$configCandidates = @(
+    (Join-Path $projectRoot 'assets/firebase-config.local.js'),
+    (Join-Path $projectRoot 'assets/firebase-config.js'),
+    (Join-Path $projectRoot 'firebase-config.local.json'),
+    (Join-Path $projectRoot 'firebase-config.json')
+)
 $targetPath = Join-Path $projectRoot 'data/noticias.json'
 $backupPath = Join-Path $projectRoot 'data/noticias.json.backup'
 
-if (-not (Test-Path $configPath)) {
-    throw "Configuracao Firebase nao encontrada em: $configPath"
+$databaseUrl = $env:FIREBASE_DATABASE_URL
+
+foreach ($candidate in $configCandidates) {
+    if ($databaseUrl) {
+        break
+    }
+
+    if (-not (Test-Path $candidate)) {
+        continue
+    }
+
+    $configContent = Get-Content -Path $candidate -Raw -Encoding UTF8
+    $databaseUrlMatch = [regex]::Match($configContent, 'databaseURL(?:"|)\s*:\s*"(?<url>https://[^"]+)"')
+
+    if ($databaseUrlMatch.Success) {
+        $candidateValue = $databaseUrlMatch.Groups['url'].Value.Trim()
+        if ($candidateValue -and $candidateValue -ne '__FIREBASE_DATABASE_URL_FROM_SECRET__') {
+            $databaseUrl = $candidateValue
+        }
+    }
 }
 
-$configContent = Get-Content -Path $configPath -Raw -Encoding UTF8
-$databaseUrlMatch = [regex]::Match($configContent, 'databaseURL:\s*"(?<url>https://[^"]+)"')
-
-if (-not $databaseUrlMatch.Success) {
-    throw 'Nao foi possivel obter databaseURL de assets/firebase-config.js'
+if (-not $databaseUrl) {
+    throw 'Nao foi possivel obter databaseURL. Define FIREBASE_DATABASE_URL ou cria firebase-config.local.{js,json} fora do Git.'
 }
 
-$databaseUrl = $databaseUrlMatch.Groups['url'].Value.TrimEnd('/')
+$databaseUrl = $databaseUrl.TrimEnd('/')
 $noticiasUrl = "$databaseUrl/noticias.json"
 
 Write-Output "A sincronizar noticias a partir de: $noticiasUrl"
