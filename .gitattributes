@@ -1,6 +1,14 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 .gitattributes text eol=lf
+*.cmd text eol=crlf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.ps1 text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
 *.xml text eol=lf
 *.html text eol=lf
 data/*.json text eol=lf
