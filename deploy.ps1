@@ -23,16 +23,24 @@ function Convert-FileToLf {
 
 Write-Host "Iniciando deploy..." -ForegroundColor Cyan
 
-# 1) Sincronizar noticias locais com a fonte real no Firebase (opcional)
+# 1) Regenerar noticias locais a partir da fonte de conteudo em Markdown
+$contentStoreScript = "tools/content-store.js"
 $syncScript = "tools/sync-noticias-firebase.ps1"
-if ($SkipFirebaseSync) {
+if (Test-Path $contentStoreScript) {
+    Write-Host "`nA gerar noticias locais a partir de content/artigos/*.md..." -ForegroundColor Yellow
+    $contentExportOutput = & node $contentStoreScript export-json 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Falha ao gerar data/noticias.json a partir do Markdown: $($contentExportOutput -join "`n")"
+    }
+    Write-Host "Snapshot local de noticias atualizado a partir do Markdown." -ForegroundColor Green
+} elseif ($SkipFirebaseSync) {
     Write-Host "`nSincronizacao a partir do Firebase ignorada para preservar alteracoes locais." -ForegroundColor Yellow
 } elseif (Test-Path $syncScript) {
     Write-Host "`nA sincronizar noticias locais a partir do Firebase..." -ForegroundColor Yellow
     & powershell -ExecutionPolicy Bypass -File $syncScript
     Write-Host "Snapshot local de noticias atualizado." -ForegroundColor Green
 } else {
-    Write-Host "`nScript de sincronizacao nao encontrado: $syncScript" -ForegroundColor Yellow
+    Write-Host "`nNenhuma fonte de conteudo encontrada para sincronizacao de noticias." -ForegroundColor Yellow
 }
 
 # 2) Gerar paginas /artigos com template espelho e atualizar sitemap
@@ -60,6 +68,9 @@ $filesToNormalize = @(
     'sitemap.xml',
     'robots.txt',
     'sobre-nos.html',
+    'package.json',
+    'package-lock.json',
+    'tools/content-store.js',
     'data/noticias.json',
     'data/viciado-comenta-videos.json',
     'data/viciado-ponto-critico-videos.json',
@@ -77,15 +88,24 @@ if (Test-Path 'artigos') {
     }
 }
 
+if (Test-Path 'content') {
+    Get-ChildItem -Path 'content' -Filter '*.md' -File -Recurse | ForEach-Object {
+        Convert-FileToLf -Path $_.FullName
+    }
+}
+
 git add index.html
 git add .gitattributes
 git add deploy.ps1
+git add package.json
+git add package-lock.json
 git add admin/index.html
 git add todas-noticias.html
 git add noticias.html
 git add assets/news-scheduler.js
 git add tools/artigo-estatico.cmd
 git add tools/gerar-artigos-espelho.ps1
+git add tools/content-store.js
 git add 404.html
 git add firebase.json
 git add sitemap.xml
@@ -96,6 +116,9 @@ git add data/viciado-comenta-videos.json
 git add data/viciado-ponto-critico-videos.json
 git add data/metin2-videos.json
 git add data/featured-video.json
+if (Test-Path 'content') {
+    git add content
+}
 if (Test-Path "assets/imagens") {
     git add assets/imagens
 }
