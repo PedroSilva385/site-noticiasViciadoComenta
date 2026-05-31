@@ -858,8 +858,8 @@ async function verificarOuLigarServidor() {
     setStatus('Servidor online. Podes guardar e publicar normalmente.', 'ok');
     return;
   } catch (error) {
-    setStatus('Servidor offline. Executa iniciar-noticias-studio.cmd e depois volta a clicar em Verificar.', 'err');
-    document.getElementById('logSaida').value = 'Servidor offline. Para ligar, executa o ficheiro iniciar-noticias-studio.cmd na raiz do projeto.';
+    setStatus('Servidor offline. Executa tools\\launchers\\iniciar-noticias-studio.cmd e depois volta a clicar em Verificar.', 'err');
+    document.getElementById('logSaida').value = 'Servidor offline. Para ligar, executa o ficheiro tools\\launchers\\iniciar-noticias-studio.cmd.';
   }
 }
 

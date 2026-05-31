@@ -1,6 +1,6 @@
 @echo off
 setlocal
-cd /d "%~dp0"
+cd /d "%~dp0\..\.."
 
 set "VIDEOS_STUDIO_URL=http://localhost:8787/tools/videos-studio.html"
 

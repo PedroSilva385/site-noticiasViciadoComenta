@@ -12,9 +12,10 @@ Na pasta `/admin/` você encontra:
 admin/
 ├── index.html              ← 🔐 Painel principal (COM AUTENTICAÇÃO)
 ├── register.html           ← 📝 Página de registro de contas
-├── SETUP.md               ← ⚙️ Guia de configuração inicial
-├── FIREBASE-SETUP.md      ← 🔑 Como ativar autenticação Firebase
-└── README.md              ← Este ficheiro
+└── docs/
+   ├── SETUP.md            ← ⚙️ Guia de configuração inicial
+   ├── FIREBASE-SETUP.md   ← 🔑 Como ativar autenticação Firebase
+   └── README.md           ← Este ficheiro
 ```
 
 ---
@@ -215,8 +216,8 @@ Se algo não funcionar, leia nesta ordem:
 
 - `/index.html` - Painel principal
 - `/register.html` - Página de registro (opcional)
-- `/SETUP.md` - Guia de configuração
-- `/FIREBASE-SETUP.md` - Configurar Firebase
+- `/docs/SETUP.md` - Guia de configuração
+- `/docs/FIREBASE-SETUP.md` - Configurar Firebase
 
 ---
 

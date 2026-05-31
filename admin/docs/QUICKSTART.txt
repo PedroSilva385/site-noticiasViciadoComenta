@@ -12,7 +12,7 @@
 ✅ SETUP INICIAL (faça UMA VEZ):
 
   1. [ ] Ativar autenticação Firebase
-      └─ Leia: admin/FIREBASE-SETUP.md (5 minutos)
+     └─ Leia: admin/docs/FIREBASE-SETUP.md (5 minutos)
       └─ Resume: Firebase Console → Authentication → Email/Password → Enable
 
   2. [ ] Criar conta de acesso
@@ -51,7 +51,7 @@
      → Crie a conta no Firebase Console (Step 1, Opção A)
 
   ❌ "Erro ao fazer login"
-     → Verifique que autenticou o Firebase (admin/FIREBASE-SETUP.md)
+     → Verifique que autenticou o Firebase (admin/docs/FIREBASE-SETUP.md)
 
   ❌ "Erro ao guardar notícia"
      → Verifique conexão à internet
@@ -74,7 +74,7 @@
 
 🚀 PRÓXIMOS PASSOS:
 
-  1. Leia: admin/FIREBASE-SETUP.md
+   1. Leia: admin/docs/FIREBASE-SETUP.md
   2. Ative autenticação no Firebase
   3. Crie sua conta
   4. Faça git push
@@ -83,9 +83,9 @@
 ───────────────────────────────────────────────────────────────────────────────
 
 📚 LEIA TAMBÉM:
-   • admin/README.md        → Guia completo
-   • admin/SETUP.md         → Setup detalhado
-   • admin/FIREBASE-SETUP.md → Como configurar Firebase
+   • admin/docs/README.md        → Guia completo
+   • admin/docs/SETUP.md         → Setup detalhado
+   • admin/docs/FIREBASE-SETUP.md → Como configurar Firebase
 
 ═══════════════════════════════════════════════════════════════════════════════
 

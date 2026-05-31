@@ -1,5 +1,5 @@
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0\..\.."
 
 set "STUDIO_URL=http://localhost:8787/tools/noticias-studio.html"
 
