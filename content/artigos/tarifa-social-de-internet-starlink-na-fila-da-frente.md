@@ -10,47 +10,47 @@ resumo: >-
   Internet.
 video: 'https://youtu.be/4sA-nw5zGXg'
 ---
-A Tarifa Social de Internet foi criada em 2021, atrav?�s do Decreto-Lei n.?? 66/2021, que a estabeleceu. O objetivo era claro: as operadoras teriam de fornecer um servi?�o m?�nimo, com custos reduzidos, que cumprisse um conjunto de requisitos pr?�-estabelecidos.
+A Tarifa Social de Internet foi criada em 2021, através do Decreto-Lei n.º 66/2021, que a estabeleceu. O objetivo era claro: as operadoras teriam de fornecer um serviço mínimo, com custos reduzidos, que cumprisse um conjunto de requisitos pré-estabelecidos.
 
-**Foram designados os seguintes �ǣservi?�os m?�nimos���:**
+**Foram designados os seguintes “serviços mínimos”:**
 
--   a) Correio eletr??nico;
--   b) Motores de pesquisa que permitam procurar e consultar todos os tipos de informa?�?�o;
--   c) Ferramentas de forma?�?�o e educa?�?�o de base em linha;
--   d) Jornais ou not?�cias em linha;
--   e) Compra ou encomenda de bens ou servi?�os em linha;
--   f) Procura de emprego e instrumentos de apoio ?� procura de emprego;
--   g) Liga?�?�o em rede a n?�vel profissional;
--   h) Servi?�os banc?�rios via Internet;
--   i) Utiliza?�?�o de servi?�os da Administra?�?�o P??blica em linha;
--   j) Utiliza?�?�o de redes sociais e mensagens instant?�neas;
--   k) Chamadas e videochamadas (com qualidade padr?�o).
+-   a) Correio eletrónico;
+-   b) Motores de pesquisa que permitam procurar e consultar todos os tipos de informação;
+-   c) Ferramentas de formação e educação de base em linha;
+-   d) Jornais ou notícias em linha;
+-   e) Compra ou encomenda de bens ou serviços em linha;
+-   f) Procura de emprego e instrumentos de apoio à procura de emprego;
+-   g) Ligação em rede a nível profissional;
+-   h) Serviços bancários via Internet;
+-   i) Utilização de serviços da Administração Pública em linha;
+-   j) Utilização de redes sociais e mensagens instantâneas;
+-   k) Chamadas e videochamadas (com qualidade padrão).
 
-O servi?�o abrangido pela Tarifa Social de Internet teria de garantir o funcionamento destes servi?�os, tendo sido esse o mote dado ?� ANACOM para a defini?�?�o da largura de banda m?�nima necess?�ria para o efeito.
+O serviço abrangido pela Tarifa Social de Internet teria de garantir o funcionamento destes serviços, tendo sido esse o mote dado à ANACOM para a definição da largura de banda mínima necessária para o efeito.
 
-Assim, ap??s decis?�o da ANACOM, o servi?�o ficou definido com os seguintes par?�metros:
+Assim, após decisão da ANACOM, o serviço ficou definido com os seguintes parâmetros:
 
-**12 Mbps de download, 2 Mbps de upload e 15 gigabytes de tr?�fego mensal.**
+**12 Mbps de download, 2 Mbps de upload e 15 gigabytes de tráfego mensal.**
 
-Com um **custo de 5 �� + IVA por m?�s** e um valor ??nico de **ativa?�?�o/equipamento fixado nos 21,45 �� + IVA**, ficou criada esta oferta para quem dela necessitar, visando a democratiza?�?�o do acesso ?� Internet.
+Com um **custo de 5 € + IVA por mês** e um valor único de **ativação/equipamento fixado nos 21,45 € + IVA**, ficou criada esta oferta para quem dela necessitar, visando a democratização do acesso à Internet.
 
-**Para ter acesso, ?� necess?�rio estar numa das seguintes situa?�?�es:**
+**Para ter acesso, é necessário estar numa das seguintes situações:**
 
--   Pessoas que recebem o Complemento Solid?�rio para Idosos;
--   Benefici?�rios do Rendimento Social de Inser?�?�o;
--   Quem recebe presta?�?�es de desemprego;
--   Benefici?�rios do Abono de Fam?�lia;
--   Pessoas que recebem a Pens?�o Social de Velhice;
--   Quem beneficia da Pens?�o Social de Invalidez, do Regime Especial de Prote?�?�o na Invalidez ou do Complemento da Presta?�?�o Social para a Inclus?�o;
--   Agregados familiares com rendimentos anuais at?� 5 808 ��, aos quais se acrescentam 50% por cada membro do agregado sem qualquer rendimento, incluindo o pr??prio, at?� ao limite de 10 pessoas;
--   Estudantes universit?�rios que estudam fora do seu munic?�pio e pertencem aos agregados familiares mencionados no ponto anterior.
+-   Pessoas que recebem o Complemento Solidário para Idosos;
+-   Beneficiários do Rendimento Social de Inserção;
+-   Quem recebe prestações de desemprego;
+-   Beneficiários do Abono de Família;
+-   Pessoas que recebem a Pensão Social de Velhice;
+-   Quem beneficia da Pensão Social de Invalidez, do Regime Especial de Proteção na Invalidez ou do Complemento da Prestação Social para a Inclusão;
+-   Agregados familiares com rendimentos anuais até 5 808 €, aos quais se acrescentam 50% por cada membro do agregado sem qualquer rendimento, incluindo o próprio, até ao limite de 10 pessoas;
+-   Estudantes universitários que estudam fora do seu município e pertencem aos agregados familiares mencionados no ponto anterior.
 
-Dito isto, em 2026, fomos tentar perceber se existia alguma diferen?�a neste �ǣsegmento��� entre as v?�rias operadoras, e foi aqui que descobrimos algo muito relevante: a Starlink ?� diferente das demais.
+Dito isto, em 2026, fomos tentar perceber se existia alguma diferença neste “segmento” entre as várias operadoras, e foi aqui que descobrimos algo muito relevante: a Starlink é diferente das demais.
 
-MEO, NOS, Vodafone, DIGI e LigaT cumprem os crit?�rios definidos pelo Decreto-Lei n.?? 66/2021, de 30 de julho. A Starlink, por sua vez, vai mais longe.
+MEO, NOS, Vodafone, DIGI e LigaT cumprem os critérios definidos pelo Decreto-Lei n.º 66/2021, de 30 de julho. A Starlink, por sua vez, vai mais longe.
 
-Garantindo as velocidades m?�nimas definidas, o pre?�o mensal e o custo de instala?�?�o, a **Starlink** n?�o cumpre o limite de tr?�fego de 15 gigabytes, permitindo aos seus clientes **navega?�?�o ilimitada**. E isto ?� um enorme diferencial.
+Garantindo as velocidades mínimas definidas, o preço mensal e o custo de instalação, a **Starlink** não cumpre o limite de tráfego de 15 gigabytes, permitindo aos seus clientes **navegação ilimitada**. E isto é um enorme diferencial.
 
 ![Starlink](/assets/imagens/Starlink.png)
 
-Se est?�s numa situa?�?�o em que podes aderir ?� TSI, isto pode mudar tudo. Tendo em conta a limita?�?�o dos 15 gigabytes das demais e a limita?�?�o da cobertura em zonas rurais, a Starlink coloca-se na fila da frente das escolhas mais l??gicas para quem pretenda aderir a esta solu?�?�o.
+Se estás numa situação em que podes aderir à TSI, isto pode mudar tudo. Tendo em conta a limitação dos 15 gigabytes das demais e a limitação da cobertura em zonas rurais, a Starlink coloca-se na fila da frente das escolhas mais lógicas para quem pretenda aderir a esta solução.

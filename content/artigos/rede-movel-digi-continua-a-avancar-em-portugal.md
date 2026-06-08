@@ -1,40 +1,40 @@
 ---
 id: '47'
-titulo: Rede M??vel DIGI continua a avan?�ar em Portugal
+titulo: Rede Móvel DIGI continua a avançar em Portugal
 slug: rede-movel-digi-continua-a-avancar-em-portugal
 data: 01/05/2026
 categoria: DIGI
 autor: Pedro Silva
 resumo: >-
-  Desde Novembro de 2024 que o servi?�o m??vel da DIGI tem estado debaixo de
-  fogo. Num mercado amadurecido, uma nova entrante MNO enfrenta um desafio
-  gigante: garantir uma rede m??vel est?�vel em tempo recorde!
+  Desde Novembro de 2024 que o serviço móvel da DIGI tem estado debaixo de fogo.
+  Num mercado amadurecido, uma nova entrante MNO enfrenta um desafio gigante:
+  garantir uma rede móvel estável em tempo recorde!
 video: 'https://youtu.be/f78uBdUKbUw'
 ---
-Desde o lan?�amento dos servi?�os da DIGI, aqui no Viciado Comenta temos acompanhado de perto a evolu?�?�o da operadora em Portugal. Um dos segmentos que mereceu particular aten?�?�o foi o servi?�o m??vel.
+Desde o lançamento dos serviços da DIGI, aqui no Viciado Comenta temos acompanhado de perto a evolução da operadora em Portugal. Um dos segmentos que mereceu particular atenção foi o serviço móvel.
 
-De acordo com os relat??rios da ANACOM, a DIGI representa atualmente cerca de 3% da quota de mercado no segmento m??vel em Portugal. Este foi, ali?�s, o servi?�o que registou o crescimento mais expressivo desde a entrada da operadora, beneficiando tamb?�m da migra?�?�o massiva de clientes da NOWO, na sequ?�ncia da sua aquisi?�?�o pela DIGI.
+De acordo com os relatórios da ANACOM, a DIGI representa atualmente cerca de 3% da quota de mercado no segmento móvel em Portugal. Este foi, aliás, o serviço que registou o crescimento mais expressivo desde a entrada da operadora, beneficiando também da migração massiva de clientes da NOWO, na sequência da sua aquisição pela DIGI.
 
-Entre novembro de 2024 e maio de 2026 muito aconteceu. Ainda assim, mais do que isolar momentos-chave, importa olhar para o panorama global ��� e ?� precisamente esse o exerc?�cio que hoje proponho.
+Entre novembro de 2024 e maio de 2026 muito aconteceu. Ainda assim, mais do que isolar momentos-chave, importa olhar para o panorama global — e é precisamente esse o exercício que hoje proponho.
 
-Com recurso ?� ferramenta [Geo.ANACOM](https://geo.anacom.pt/), procurei comparar a evolu?�?�o da rede m??vel da DIGI entre julho de 2025 e maio de 2026.
+Com recurso à ferramenta [Geo.ANACOM](https://geo.anacom.pt/), procurei comparar a evolução da rede móvel da DIGI entre julho de 2025 e maio de 2026.
 
 ![1](/assets/imagens/DIGI1.jpg)
 
 **Julho de 2025:**
 
-Com apenas oito meses de desenvolvimento, n?�o seriam de esperar milagres. Numa an?�lise direta, era evidente que a rede se encontrava mais consolidada nas ?�reas metropolitanas e no sul do pa?�s, numa fase inicial. Existiam ainda muitas zonas onde a experi?�ncia do utilizador ficava aqu?�m das expectativas, sobretudo devido ?� falta de cobertura. Nessa altura, bastava uma viagem de autom??vel pelo interior ou centro do pa?�s para, com alguma frequ?�ncia, perder sinal durante v?�rios quil??metros. A este cen?�rio juntou-se o conhecido �ǣproblema das chamadas��� que marcou esse ver?�o, contribuindo para um aumento significativo das reclama?�?�es dirigidas ?� operadora low-cost.
+Com apenas oito meses de desenvolvimento, não seriam de esperar milagres. Numa análise direta, era evidente que a rede se encontrava mais consolidada nas áreas metropolitanas e no sul do país, numa fase inicial. Existiam ainda muitas zonas onde a experiência do utilizador ficava aquém das expectativas, sobretudo devido à falta de cobertura. Nessa altura, bastava uma viagem de automóvel pelo interior ou centro do país para, com alguma frequência, perder sinal durante vários quilómetros. A este cenário juntou-se o conhecido “problema das chamadas” que marcou esse verão, contribuindo para um aumento significativo das reclamações dirigidas à operadora low-cost.
 
 ![2](/assets/imagens/DIGI2.jpg)
 
 **Maio de 2026:**
 
-Dez meses depois, voltamos a analisar o estado da rede m??vel. Importa ressalvar que o Geo.ANACOM n?�o ?� uma ferramenta infal?�vel, devendo ser utilizada numa perspetiva de an?�lise geral e n?�o excessivamente detalhada. Ainda assim, os dados permitem perceber uma evolu?�?�o positiva em praticamente todos os indicadores. A rede 2G apresenta j?� uma redu?�?�o significativa das zonas com cobertura limitada ou inexistente. No 4G, destaca-se o aumento das ?�reas classificadas como �ǣverdes��� face ?�s �ǣamarelas���, indicando velocidades expect?�veis de ���100 Mbps, em compara?�?�o com os anteriores ���30 Mbps. J?� no 5G, observa-se algum refor?�o, embora ��� ?� semelhan?�a das restantes operadoras ��� ainda esteja longe de alcan?�ar uma cobertura massiva do territ??rio nacional.
+Dez meses depois, voltamos a analisar o estado da rede móvel. Importa ressalvar que o Geo.ANACOM não é uma ferramenta infalível, devendo ser utilizada numa perspetiva de análise geral e não excessivamente detalhada. Ainda assim, os dados permitem perceber uma evolução positiva em praticamente todos os indicadores. A rede 2G apresenta já uma redução significativa das zonas com cobertura limitada ou inexistente. No 4G, destaca-se o aumento das áreas classificadas como “verdes” face às “amarelas”, indicando velocidades expectáveis de ≥100 Mbps, em comparação com os anteriores ≥30 Mbps. Já no 5G, observa-se algum reforço, embora — à semelhança das restantes operadoras — ainda esteja longe de alcançar uma cobertura massiva do território nacional.
 
 ![3](/assets/imagens/DIGI3.jpg)
 
-Numa compara?�?�o direta, os avan?�os no desenvolvimento da rede da DIGI s?�o claros. ?� expect?�vel que, ao longo dos pr??ximos anos, continuemos a assistir a um refor?�o gradual da cobertura e da resili?�ncia da infraestrutura.
+Numa comparação direta, os avanços no desenvolvimento da rede da DIGI são claros. É expectável que, ao longo dos próximos anos, continuemos a assistir a um reforço gradual da cobertura e da resiliência da infraestrutura.
 
-A DIGI, como qualquer novo operador m??vel (MNO) a entrar no mercado portugu?�s, enfrenta um desafio exigente: oferecer, em tempo recorde, um servi?�o equipar?�vel ao das operadoras j?� estabelecidas. Num mercado maduro como o nacional, muitos consumidores j?� n?�o se recordam das limita?�?�es que marcaram as fases iniciais das redes m??veis em Portugal. Habituados a um servi?�o est?�vel, nem todos estar?�o dispostos a aceitar as incertezas inerentes a uma rede ainda em desenvolvimento.
+A DIGI, como qualquer novo operador móvel (MNO) a entrar no mercado português, enfrenta um desafio exigente: oferecer, em tempo recorde, um serviço equiparável ao das operadoras já estabelecidas. Num mercado maduro como o nacional, muitos consumidores já não se recordam das limitações que marcaram as fases iniciais das redes móveis em Portugal. Habituados a um serviço estável, nem todos estarão dispostos a aceitar as incertezas inerentes a uma rede ainda em desenvolvimento.
 
-Em suma, a DIGI continua a trilhar o seu caminho. Resta saber se, com o tempo, conseguir?� responder ?� quest?�o que persiste entre os mais c?�ticos: ser?� poss?�vel oferecer um servi?�o premium a pre?�os low-cost?
+Em suma, a DIGI continua a trilhar o seu caminho. Resta saber se, com o tempo, conseguirá responder à questão que persiste entre os mais céticos: será possível oferecer um serviço premium a preços low-cost?

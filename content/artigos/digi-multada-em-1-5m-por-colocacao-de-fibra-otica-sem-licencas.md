@@ -1,29 +1,29 @@
 ---
 id: '51'
-titulo: 'DIGI multada em at?� 1,5M�� por coloca?�?�o de Fibra ?�tica sem licen?�as!'
+titulo: 'DIGI multada em até 1,5M€ por colocação de Fibra Ótica sem licenças!'
 slug: digi-multada-em-1-5m-por-colocacao-de-fibra-otica-sem-licencas
 data: 12/05/2026
 categoria: DIGI
 autor: Pedro Silva
 resumo: >-
-  DIGI multada em at?� 1,5M��, por instala?�?�o de fibra ??tica em Bruxelas sem
-  as devidas autoriza?�?�es legalmente exigidas.
+  DIGI multada em até 1,5M€, por instalação de fibra ótica em Bruxelas sem as
+  devidas autorizações legalmente exigidas.
 video: 'https://youtu.be/gQPhLno5m3s'
 ---
-Aqui no Viciado Comenta procuramos analisar n?�o apenas o panorama nacional, mas tamb?�m o internacional. Nesse sentido, ao longo dos ??ltimos meses, temos vindo a alargar o nosso campo de vis?�o e a perceber o que a DIGI vai fazendo noutras latitudes.
+Aqui no Viciado Comenta procuramos analisar não apenas o panorama nacional, mas também o internacional. Nesse sentido, ao longo dos últimos meses, temos vindo a alargar o nosso campo de visão e a perceber o que a DIGI vai fazendo noutras latitudes.
 
-A mais recente not?�cia chega-nos da B?�lgica, [conforme noticia o The Brussels Times](https://www.brusselstimes.com/2121520/digi-lacked-permits-for-part-of-its-brussels-network-court-rules). Segundo uma decis?�o do Brussels Court of Appeal, a DIGI foi acusada de proceder ?� instala?�?�o de fibra em Bruxelas sem as devidas licen?�as urban?�sticas.
+A mais recente notícia chega-nos da Bélgica, [conforme noticia o The Brussels Times](https://www.brusselstimes.com/2121520/digi-lacked-permits-for-part-of-its-brussels-network-court-rules). Segundo uma decisão do Brussels Court of Appeal, a DIGI foi acusada de proceder à instalação de fibra em Bruxelas sem as devidas licenças urbanísticas.
 
-Durante o ver?�o de 2025, o **Brussels Business Court deu raz?�o ?� queixa da Proximus**, alegando que a instala?�?�o da fibra n?�o respeitava as regras, nomeadamente pela falta de sinaliza?�?�o nas zonas de constru?�?�o e pela inexist?�ncia de permiss?�es para a instala?�?�o de cabos a?�reos.
+Durante o verão de 2025, o **Brussels Business Court deu razão à queixa da Proximus**, alegando que a instalação da fibra não respeitava as regras, nomeadamente pela falta de sinalização nas zonas de construção e pela inexistência de permissões para a instalação de cabos aéreos.
 
-Devido a essa condena?�?�o, a DIGI B?�lgica foi **proibida de fornecer servi?�os a clientes atrav?�s das infraestruturas n?�o licenciadas**. Caso contr?�rio, ficaria **sujeita ao pagamento de 3.000�� por infra?�?�o, at?� um limite m?�ximo de 1,5 milh?�es de euros.**
+Devido a essa condenação, a DIGI Bélgica foi **proibida de fornecer serviços a clientes através das infraestruturas não licenciadas**. Caso contrário, ficaria **sujeita ao pagamento de 3.000€ por infração, até um limite máximo de 1,5 milhões de euros.**
 
-O **Brussels Court of Appeal vem agora confirmar a decis?�o anterior**, tornando oficial que a DIGI n?�o detinha, de facto, as licen?�as e autoriza?�?�es necess?�rias para a constru?�?�o da sua rede de fibra em Bruxelas.
+O **Brussels Court of Appeal vem agora confirmar a decisão anterior**, tornando oficial que a DIGI não detinha, de facto, as licenças e autorizações necessárias para a construção da sua rede de fibra em Bruxelas.
 
-Jeroen Degadt, CEO da DIGI B?�lgica, afirmou que ir?� analisar a decis?�o do tribunal, garantindo aos clientes que uma **interrup?�?�o no fornecimento dos servi?�os seria altamente improv?�vel**, uma vez que as redes j?� tinham sido regularizadas entretanto.
+Jeroen Degadt, CEO da DIGI Bélgica, afirmou que irá analisar a decisão do tribunal, garantindo aos clientes que uma **interrupção no fornecimento dos serviços seria altamente improvável**, uma vez que as redes já tinham sido regularizadas entretanto.
 
-**Conclus?�o**
+**Conclusão**
 
-A DIGI parece ter resolvido o problema, mas a verdade ?� que, quando se ?� um novo operador no mercado, n?�o se pode abrir espa?�o para este n?�vel de falhas, tendo em conta o elevado n?�vel de escrut?�nio que as operadoras incumbentes ir?�o exercer com o objetivo de atrasar ao m?�ximo o desenvolvimento da nova concorrente.
+A DIGI parece ter resolvido o problema, mas a verdade é que, quando se é um novo operador no mercado, não se pode abrir espaço para este nível de falhas, tendo em conta o elevado nível de escrutínio que as operadoras incumbentes irão exercer com o objetivo de atrasar ao máximo o desenvolvimento da nova concorrente.
 
-Resta agora perceber se o sucedido aconteceu por desconhecimento da legisla?�?�o ou por uma decis?�o deliberada, como forma de acelerar a expans?�o da rede, aceitando posteriormente as consequ?�ncias da legaliza?�?�o das infraestruturas em causa.
+Resta agora perceber se o sucedido aconteceu por desconhecimento da legislação ou por uma decisão deliberada, como forma de acelerar a expansão da rede, aceitando posteriormente as consequências da legalização das infraestruturas em causa.
