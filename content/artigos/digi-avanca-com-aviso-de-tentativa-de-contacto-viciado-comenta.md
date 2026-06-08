@@ -1,54 +1,54 @@
 ---
 id: '54'
-titulo: DIGI avan?�a com aviso de tentativa de contacto! | VICIADO COMENTA
+titulo: DIGI avança com aviso de tentativa de contacto! | VICIADO COMENTA
 slug: digi-avanca-com-aviso-de-tentativa-de-contacto-viciado-comenta
 data: 18/05/2026
 categoria: DIGI
 autor: Pedro Silva
 resumo: >-
-  Ap??s meses de espera a DIGI resolveu um dos problemas mais chatos da sua rede
-  m??vel: SMS de aviso de tentativa de chamada finalmente ativos!
+  Após meses de espera a DIGI resolveu um dos problemas mais chatos da sua rede
+  móvel: SMS de aviso de tentativa de chamada finalmente ativos!
 video: 'https://www.youtube.com/watch?v=GJ2ID-S6v4k'
 ---
-A espera parece ter terminado. Mais de um ano e meio ap??s o lan?�amento do servi?�o m??vel, a operadora romena resolveu finalmente um problema que afetava os seus clientes: agora, recebes um SMS a informar que tentaram contactar-te enquanto estiveste indispon?�vel.
+A espera parece ter terminado. Mais de um ano e meio após o lançamento do serviço móvel, a operadora romena resolveu finalmente um problema que afetava os seus clientes: agora, recebes um SMS a informar que tentaram contactar-te enquanto estiveste indisponível.
 
 ![2](/assets/imagens/AvisoDIGI.jpg)
 
-Em 2026, este ?� um servi?�o no m?�nimo �ǣbanal���, mas, fruto da juventude da rede da DIGI, esta funcionalidade ainda n?�o estava dispon?�vel.
+Em 2026, este é um serviço no mínimo “banal”, mas, fruto da juventude da rede da DIGI, esta funcionalidade ainda não estava disponível.
 
-**Import?�ncia deste SMS na rede DIGI**
+**Importância deste SMS na rede DIGI**
 
-Na DIGI, este servi?�o ganha ainda mais relev?�ncia do que nas operadoras concorrentes. Numa rede m??vel ainda em constru?�?�o, cuja indisponibilidade continua a acontecer em alguns locais ��� como interiores de centros comerciais ou parques de estacionamento subterr?�neos ���, uma fun?�?�o destas torna o servi?�o muito mais aceit?�vel.
+Na DIGI, este serviço ganha ainda mais relevância do que nas operadoras concorrentes. Numa rede móvel ainda em construção, cuja indisponibilidade continua a acontecer em alguns locais — como interiores de centros comerciais ou parques de estacionamento subterrâneos —, uma função destas torna o serviço muito mais aceitável.
 
 Pior do que perder a rede e, consequentemente, uma chamada importante, era nem sequer ter conhecimento de que essa chamada aconteceu. Felizmente, isso acabou.
 
-**Alguns clientes ainda n?�o disp?�em do servi?�o**
+**Alguns clientes ainda não dispõem do serviço**
 
-O servi?�o de aviso de tentativa de contacto parece ainda n?�o ter chegado a todos os clientes. A funcionalidade est?� a ser implementada gradualmente, pelo que ?� esperado que, ao longo das pr??ximas semanas, todos j?� a tenham dispon?�vel.
+O serviço de aviso de tentativa de contacto parece ainda não ter chegado a todos os clientes. A funcionalidade está a ser implementada gradualmente, pelo que é esperado que, ao longo das próximas semanas, todos já a tenham disponível.
 
 No entanto, existe algo que podes fazer para a ativar imediatamente.
 
-**Solu?�?�o**
+**Solução**
 
 ![1](/assets/imagens/DIGISMS.jpg)
 
-Configura manualmente o reencaminhamento de chamadas para o n??mero 923300760. Para alguns clientes, este n??mero j?� aparece automaticamente, mas, se n?�o for esse o teu caso, basta defini-lo nas op?�?�es:
+Configura manualmente o reencaminhamento de chamadas para o número 923300760. Para alguns clientes, este número já aparece automaticamente, mas, se não for esse o teu caso, basta defini-lo nas opções:
 
-�ǣQuando Ocupado���
+“Quando Ocupado”
 
-�ǣQuando N?�o Atende���
+“Quando Não Atende”
 
-�ǣQuando Inacess?�vel���
+“Quando Inacessível”
 
-Depois disso, o servi?�o de aviso de tentativa de contacto ficar?� imediatamente ativo.
+Depois disso, o serviço de aviso de tentativa de contacto ficará imediatamente ativo.
 
-Esta ?� uma informa?�?�o que o nosso amigo Ricardo Saraiva partilhou, e que aqui divulgo para os leitores do Viciado Comenta.
+Esta é uma informação que o nosso amigo Ricardo Saraiva partilhou, e que aqui divulgo para os leitores do Viciado Comenta.
 
-**Conclus?�o**
+**Conclusão**
 
-Chega assim ao fim uma longa �ǣnovela��� que criava uma limita?�?�o s?�ria no servi?�o m??vel da DIGI. Durante meses, os clientes enfrentaram problemas como a c?�lebre �ǣcrise das chamadas��� no ver?�o de 2025, muitas vezes sem qualquer no?�?�o de que estavam a perder chamadas.
+Chega assim ao fim uma longa “novela” que criava uma limitação séria no serviço móvel da DIGI. Durante meses, os clientes enfrentaram problemas como a célebre “crise das chamadas” no verão de 2025, muitas vezes sem qualquer noção de que estavam a perder chamadas.
 
-Mesmo ap??s a recupera?�?�o do sinal, permanecia sempre a d??vida: ter?� algu?�m tentado contactar durante esse per?�odo?
+Mesmo após a recuperação do sinal, permanecia sempre a dúvida: terá alguém tentado contactar durante esse período?
 
 O mesmo ainda acontece hoje, especialmente em ambientes indoor, mas esta novidade reduz significativamente esse problema.
 

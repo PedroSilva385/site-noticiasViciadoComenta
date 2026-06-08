@@ -1,31 +1,31 @@
 ---
 id: '35'
-titulo: 'DIGI responde a AMIGO, UZO e WOO na luta de pre?�os!'
+titulo: 'DIGI responde a AMIGO, UZO e WOO na luta de preços!'
 slug: digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos
 data: 09/04/2026
 categoria: DIGI
 autor: Pedro Silva
 resumo: >-
-  A DIGI respondeu ?�s press?�es das marcas brancas das operadoras incumbentes,
-  com uma melhoria dos tarif?�rios m??veis! +GB e -pre?�o, ?� a f??rmula de
-  sucesso da operadora romena.
+  A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes,
+  com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso
+  da operadora romena.
 video: 'https://youtu.be/l9UQllxCMuE'
 ---
-Durante os ??ltimos meses, temos acompanhado as sucessivas respostas das marcas �ǣlow-cost��� da **MEO, NOS e Vodafone** aos pre?�os praticados pela **DIGI** no mercado nacional. De �ǣpromo?�?�o��� em �ǣpromo?�?�o���, as operadoras **Amigo, Uzo e WOO** t?�m vindo a aproximar - e, mais recentemente, at?� a igualar - as suas propostas ?�s da operadora romena. Desta vez, foi a **DIGI** a responder a estas movimenta?�?�es, refor?�ando ainda mais as suas ofertas m??veis, com o objetivo de intensificar a concorr?�ncia face ?�s operadoras incumbentes. **A DIGI passa agora a disponibilizar quatro tarif?�rios m??veis distintos:**
+Durante os últimos meses, temos acompanhado as sucessivas respostas das marcas “low-cost” da **MEO, NOS e Vodafone** aos preços praticados pela **DIGI** no mercado nacional. De “promoção” em “promoção”, as operadoras **Amigo, Uzo e WOO** têm vindo a aproximar - e, mais recentemente, até a igualar - as suas propostas às da operadora romena. Desta vez, foi a **DIGI** a responder a estas movimentações, reforçando ainda mais as suas ofertas móveis, com o objetivo de intensificar a concorrência face às operadoras incumbentes. **A DIGI passa agora a disponibilizar quatro tarifários móveis distintos:**
 
--   50 GB ��� 4��/m?�s
--   150 GB ��� 5��/m?�s (um aumento de 50 GB face ?� oferta anterior)
--   200 GB ��� 7��/m?�s (inclui 400 minutos internacionais)
--   Ilimitado ��� 6��/m?�s\*
+-   50 GB — 4€/mês
+-   150 GB — 5€/mês (um aumento de 50 GB face à oferta anterior)
+-   200 GB — 7€/mês (inclui 400 minutos internacionais)
+-   Ilimitado — 6€/mês\*
 
-\* No caso dos tarif?�rios ilimitados, existem fatores que podem reduzir ainda mais o pre?�o, como a subscri?�?�o de v?�rios n??meros ou a ades?�o ao servi?�o de internet fixa da DIGI.  
+\* No caso dos tarifários ilimitados, existem fatores que podem reduzir ainda mais o preço, como a subscrição de vários números ou a adesão ao serviço de internet fixa da DIGI.  
   
-Para um **cart?�o ilimitado, o valor ?� de 6��/m?�s**. Ao contratar **dois cart?�es, o pre?�o desce para 5,5��/m?�s por cart?�o**, e, no caso de **tr?�s cart?�es, reduz para 5��/m?�s cada**. J?� **ao aderir ao servi?�o de internet fixa da DIGI, os pre?�os passam a ser de 5��, 4,5�� e 4��**, respetivamente.  
+Para um **cartão ilimitado, o valor é de 6€/mês**. Ao contratar **dois cartões, o preço desce para 5,5€/mês por cartão**, e, no caso de **três cartões, reduz para 5€/mês cada**. Já **ao aderir ao serviço de internet fixa da DIGI, os preços passam a ser de 5€, 4,5€ e 4€**, respetivamente.  
   
-Os tarif?�rios **pr?�-pagos tamb?�m foram abrangidos** por estas altera?�?�es: atualmente, **o plano de 100 GB passou a incluir 150 GB** de dados.  
+Os tarifários **pré-pagos também foram abrangidos** por estas alterações: atualmente, **o plano de 100 GB passou a incluir 150 GB** de dados.  
   
-Tudo isto dever?� aumentar ainda mais a press?�o sobre as operadoras incumbentes, que ter?�o agora de reagir a estas novas ofertas. Ou acompanham esta tend?�ncia, ou arriscam-se a tornar-se a op?�?�o mais cara neste segmento.  
+Tudo isto deverá aumentar ainda mais a pressão sobre as operadoras incumbentes, que terão agora de reagir a estas novas ofertas. Ou acompanham esta tendência, ou arriscam-se a tornar-se a opção mais cara neste segmento.  
 **  
-Ser?� que estes novos pre?�os s?�o o impulso que faltava para a DIGI ganhar ainda mais tra?�?�o no mercado nacional?  
+Será que estes novos preços são o impulso que faltava para a DIGI ganhar ainda mais tração no mercado nacional?  
   
-**Continuaremos a acompanhar a evolu?�?�o da situa?�?�o nos pr??ximos relat??rios trimestrais da ANACOM.
+**Continuaremos a acompanhar a evolução da situação nos próximos relatórios trimestrais da ANACOM.

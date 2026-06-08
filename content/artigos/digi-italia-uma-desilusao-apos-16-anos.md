@@ -1,26 +1,26 @@
 ---
 id: '4'
-titulo: DIGI IT?�LIA uma DESILUS?�O ap??s 16 ANOS
+titulo: DIGI ITÁLIA uma DESILUSÃO após 16 ANOS
 slug: digi-italia-uma-desilusao-apos-16-anos
 data: 03/02/2026
 categoria: DIGI
 autor: Pedro Silva
 resumo: >-
-  Anteriormente tivemos oportunidade de analisar a opera?�?�o da DIGI na casa
-  m?�e, a Rom?�nia. Hoje vamos olhar para a subsidi?�ria da digi em it?�lia,
-  onde ap??s 16 anos, n?�o convence.
+  Anteriormente tivemos oportunidade de analisar a operação da DIGI na casa mãe,
+  a Roménia. Hoje vamos olhar para a subsidiária da digi em itália, onde após 16
+  anos, não convence.
 video: 'https://youtu.be/TBJe7C-5pEI'
 ---
-?� amplamente conhecido que a DIGI opera em v?�rios pa?�ses e que, em muitos deles, a sua estrat?�gia passou por entrar no mercado como MVNO. Esta abordagem permitiu acelerar o processo de entrada e, ao mesmo tempo, garantir um n?�vel de qualidade aceit?�vel no servi?�o, pelo menos numa fase inicial.
+É amplamente conhecido que a DIGI opera em vários países e que, em muitos deles, a sua estratégia passou por entrar no mercado como MVNO. Esta abordagem permitiu acelerar o processo de entrada e, ao mesmo tempo, garantir um nível de qualidade aceitável no serviço, pelo menos numa fase inicial.
 
-O caso de Espanha ilustra bem esta l??gica. A DIGI entrou como MVNO, recorrendo ?� rede da Telef??nica, e s?? mais tarde, j?� com uma quota de mercado relevante no segmento m??vel, iniciou a constru?�?�o da sua pr??pria rede. Ainda assim, manteve o acesso ?� infraestrutura da Telef??nica durante o per?�odo de transi?�?�o, assegurando continuidade e qualidade de servi?�o enquanto desenvolvia a sua rede.
+O caso de Espanha ilustra bem esta lógica. A DIGI entrou como MVNO, recorrendo à rede da Telefónica, e só mais tarde, já com uma quota de mercado relevante no segmento móvel, iniciou a construção da sua própria rede. Ainda assim, manteve o acesso à infraestrutura da Telefónica durante o período de transição, assegurando continuidade e qualidade de serviço enquanto desenvolvia a sua rede.
 
-Olhando agora com mais aten?�?�o para a opera?�?�o em It?�lia, o cen?�rio ?� bastante diferente. A DIGI entrou neste mercado em 2010, tamb?�m como MVNO, e, passados 16 anos, continua exatamente nesse modelo, utilizando a infraestrutura da Vodafone. No entanto, a sua presen?�a no mercado italiano nunca conseguiu ganhar tra?�?�o.
+Olhando agora com mais atenção para a operação em Itália, o cenário é bastante diferente. A DIGI entrou neste mercado em 2010, também como MVNO, e, passados 16 anos, continua exatamente nesse modelo, utilizando a infraestrutura da Vodafone. No entanto, a sua presença no mercado italiano nunca conseguiu ganhar tração.
 
-Com uma quota de mercado a rondar apenas os 0,5%, a DIGI est?� longe de ter uma opera?�?�o significativa em It?�lia. Na tentativa de inverter este cen?�rio, a operadora iniciou, em 2023, a constru?�?�o de rede de fibra na regi?�o de Turim. Ainda assim, a cobertura atual continua a ser bastante limitada.
+Com uma quota de mercado a rondar apenas os 0,5%, a DIGI está longe de ter uma operação significativa em Itália. Na tentativa de inverter este cenário, a operadora iniciou, em 2023, a construção de rede de fibra na região de Turim. Ainda assim, a cobertura atual continua a ser bastante limitada.
 
-Mesmo com estes resultados modestos, este movimento demonstra que a operadora romena n?�o abandonou o mercado italiano e procura refor?�ar a sua posi?�?�o, apostando em servi?�os mais completos e de maior qualidade para os seus clientes.
+Mesmo com estes resultados modestos, este movimento demonstra que a operadora romena não abandonou o mercado italiano e procura reforçar a sua posição, apostando em serviços mais completos e de maior qualidade para os seus clientes.
 
-Este exemplo torna-se particularmente interessante quando comparado com o caso portugu?�s. Em Portugal, a DIGI optou por entrar diretamente com servi?�os assentes em infraestrutura pr??pria, o que lhe permite controlar custos e apresentar uma proposta de pre?�os verdadeiramente agressiva. Em It?�lia, pelo contr?�rio, enfrenta a concorr?�ncia de pelo menos quatro outros MVNOs, todos em condi?�?�es muito semelhantes, o que dificulta que a DIGI se destaque como l?�der nos pre?�os mais baixos.
+Este exemplo torna-se particularmente interessante quando comparado com o caso português. Em Portugal, a DIGI optou por entrar diretamente com serviços assentes em infraestrutura própria, o que lhe permite controlar custos e apresentar uma proposta de preços verdadeiramente agressiva. Em Itália, pelo contrário, enfrenta a concorrência de pelo menos quatro outros MVNOs, todos em condições muito semelhantes, o que dificulta que a DIGI se destaque como líder nos preços mais baixos.
 
-Perante este contexto, fica a quest?�o: achas que a DIGI vai conseguir conquistar uma quota de mercado mais relevante nos pr??ximos anos?
+Perante este contexto, fica a questão: achas que a DIGI vai conseguir conquistar uma quota de mercado mais relevante nos próximos anos?

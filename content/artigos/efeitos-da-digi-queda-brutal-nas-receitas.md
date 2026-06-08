@@ -6,41 +6,41 @@ data: 20/03/2026
 categoria: DIGI
 autor: Pedro Silva
 resumo: >-
-  Os gastos m?�dios por utilizador est?�o a reduzir em 2 pa?�ses, Portugal e
-  Espanha. ?� o resultado do crescimento da operadora low-cost DIGI?
+  Os gastos médios por utilizador estão a reduzir em 2 países, Portugal e
+  Espanha. É o resultado do crescimento da operadora low-cost DIGI?
 video: 'https://youtu.be/S7MAnqb1kCY'
 ---
-?� sabido que a entrada de um novo operador num mercado provoca efeitos imediatos nos pre?�os. Esse impacto ?� ainda mais significativo quando se trata de um operador low-cost, como a DIGI. Com uma pol?�tica de pre?�os baixos, a operadora romena desafia mercados tradicionalmente caracterizados por pre?�os elevados e por uma concorr?�ncia reduzida ou quase inexistente.  
+É sabido que a entrada de um novo operador num mercado provoca efeitos imediatos nos preços. Esse impacto é ainda mais significativo quando se trata de um operador low-cost, como a DIGI. Com uma política de preços baixos, a operadora romena desafia mercados tradicionalmente caracterizados por preços elevados e por uma concorrência reduzida ou quase inexistente.  
   
-Enquanto consumidores, tivemos a oportunidade de assistir a esse fen??meno no mercado nacional. Com a entrada da DIGI, o custo dos servi?�os diminuiu, tanto na componente fixa como na m??vel. Como resultado, os gastos m?�dios por utilizador com o servi?�o de internet fixa registaram quedas significativas em Portugal, impulsionadas pela entrada da DIGI e pelas novas ofertas low-cost das operadoras incumbentes.  
+Enquanto consumidores, tivemos a oportunidade de assistir a esse fenómeno no mercado nacional. Com a entrada da DIGI, o custo dos serviços diminuiu, tanto na componente fixa como na móvel. Como resultado, os gastos médios por utilizador com o serviço de internet fixa registaram quedas significativas em Portugal, impulsionadas pela entrada da DIGI e pelas novas ofertas low-cost das operadoras incumbentes.  
   
-Deste modo, a receita m?�dia por utilizador associada aos servi?�os de internet fixa apresentou valores negativos quando comparamos o terceiro trimestre de 2023 com o de 2025.  
+Deste modo, a receita média por utilizador associada aos serviços de internet fixa apresentou valores negativos quando comparamos o terceiro trimestre de 2023 com o de 2025.  
   
 ![](https://www.viciadocomenta.pt/assets/imagens/1.png)  
   
-**Mas ser?� que isto aconteceu apenas em Portugal?**  
+**Mas será que isto aconteceu apenas em Portugal?**  
   
-N?�o. Os dados analisados mostram que o efeito DIGI se fez sentir em todos os mercados onde a operadora entrou como MNO. **Espanha** e **Portugal** s?�o os casos mais evidentes, com uma evolu?�?�o negativa da ASPU (gasto m?�dio por utilizador).  
+Não. Os dados analisados mostram que o efeito DIGI se fez sentir em todos os mercados onde a operadora entrou como MNO. **Espanha** e **Portugal** são os casos mais evidentes, com uma evolução negativa da ASPU (gasto médio por utilizador).  
   
-Noutro mercado onde a DIGI est?� presente, a **B?�lgica**, apesar de n?�o se ter verificado uma redu?�?�o, registou-se uma das menores subidas.  
-Cada mercado tem as suas particularidades, pelo que n?�o podemos atribuir este comportamento exclusivamente ?� DIGI. Ainda assim, a tend?�ncia ?� consistente: a entrada ou expans?�o da operadora est?� associada ?� redu?�?�o da ASPU na internet fixa.  
+Noutro mercado onde a DIGI está presente, a **Bélgica**, apesar de não se ter verificado uma redução, registou-se uma das menores subidas.  
+Cada mercado tem as suas particularidades, pelo que não podemos atribuir este comportamento exclusivamente à DIGI. Ainda assim, a tendência é consistente: a entrada ou expansão da operadora está associada à redução da ASPU na internet fixa.  
   
-Olhando para **It?�lia**, onde a DIGI opera atualmente como MVNO m??vel e ainda n?�o tem uma oferta relevante de internet fixa (apesar de j?� estar em fase inicial de expans?�o), ser?� interessante analisar no futuro se o crescimento da operadora conseguir?� inverter a tend?�ncia de subida da ASPU neste segmento.  
+Olhando para **Itália**, onde a DIGI opera atualmente como MVNO móvel e ainda não tem uma oferta relevante de internet fixa (apesar de já estar em fase inicial de expansão), será interessante analisar no futuro se o crescimento da operadora conseguirá inverter a tendência de subida da ASPU neste segmento.  
   
-**Isto ?� positivo?**  
-Numa fase inicial, sim. A entrada de novos concorrentes tende a reduzir os pre?�os, devido ?� disputa por quota de mercado. A diminui?�?�o da ASPU ?� uma consequ?�ncia natural dessa press?�o competitiva, beneficiando diretamente os consumidores, que passam a pagar menos por melhores condi?�?�es de servi?�o.  
+**Isto é positivo?**  
+Numa fase inicial, sim. A entrada de novos concorrentes tende a reduzir os preços, devido à disputa por quota de mercado. A diminuição da ASPU é uma consequência natural dessa pressão competitiva, beneficiando diretamente os consumidores, que passam a pagar menos por melhores condições de serviço.  
   
-No entanto, a longo prazo, poder?� deixar de ser uma boa not?�cia. Uma redu?�?�o cont?�nua deste indicador pode traduzir-se em menor investimento nas redes, devido ?� press?�o sobre as margens provocada pela guerra de pre?�os.  
+No entanto, a longo prazo, poderá deixar de ser uma boa notícia. Uma redução contínua deste indicador pode traduzir-se em menor investimento nas redes, devido à pressão sobre as margens provocada pela guerra de preços.  
   
-No mercado portugu?�s, grande parte do investimento em FTTH j?� foi realizado. Estamos, por isso, numa fase de rentabiliza?�?�o das infraestruturas existentes. Isso permite aos operadores, que durante d?�cadas beneficiaram de margens elevadas e de baixa press?�o concorrencial, reduzir essas margens mantendo a viabilidade das suas opera?�?�es.  
+No mercado português, grande parte do investimento em FTTH já foi realizado. Estamos, por isso, numa fase de rentabilização das infraestruturas existentes. Isso permite aos operadores, que durante décadas beneficiaram de margens elevadas e de baixa pressão concorrencial, reduzir essas margens mantendo a viabilidade das suas operações.  
   
-No caso da DIGI, a empresa j?� opera com uma l??gica de baixas margens, compensadas por um elevado volume de clientes.  
+No caso da DIGI, a empresa já opera com uma lógica de baixas margens, compensadas por um elevado volume de clientes.  
   
-Em suma, n?�o se trata de um problema no curto ou m?�dio prazo. Mesmo em Espanha, onde a queda foi mais acentuada, n?�o se verificou uma degrada?�?�o do servi?�o. Pelo contr?�rio, tem-se registado um aumento da cobertura de redes FTTH no pa?�s.  
+Em suma, não se trata de um problema no curto ou médio prazo. Mesmo em Espanha, onde a queda foi mais acentuada, não se verificou uma degradação do serviço. Pelo contrário, tem-se registado um aumento da cobertura de redes FTTH no país.  
   
-**O pre?�o baixou, e o servi?�o piorou?**  
+**O preço baixou, e o serviço piorou?**  
   
-Antes pelo contr?�rio! Como temos oportunidade de ver, em 6 anos o servi?�o manteve-se em termos de velocidades, e em alguns casos baixou 50% o pre?�o! ?� caso para dizer, que bem que faz a concorr?�ncia!  
+Antes pelo contrário! Como temos oportunidade de ver, em 6 anos o serviço manteve-se em termos de velocidades, e em alguns casos baixou 50% o preço! É caso para dizer, que bem que faz a concorrência!  
   
 ![](https://www.viciadocomenta.pt/assets/imagens/2.png)  
-Este ?� mais um ?�ngulo de an?�lise a acompanhar nos pr??ximos anos.
+Este é mais um ângulo de análise a acompanhar nos próximos anos.
