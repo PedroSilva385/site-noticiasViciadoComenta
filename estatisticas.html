@@ -258,6 +258,21 @@
       font-size: 0.92em;
     }
 
+    .journey-link-btn {
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #3730a3;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .journey-link-btn:hover {
+      background: #e0e7ff;
+    }
+
     body.dark .history-toggle {
       background: #111827;
       border-color: #475569;
@@ -271,6 +286,12 @@
     body.dark .history-detail-row td {
       background: #111827;
       color: #cbd5e1;
+    }
+
+    body.dark .journey-link-btn {
+      background: rgba(59, 130, 246, 0.16);
+      border-color: #60a5fa;
+      color: #bfdbfe;
     }
 
     footer {
@@ -529,6 +550,7 @@
       <button class="tab-btn" data-tab="cliques">🖱️ Cliques</button>
       <button class="tab-btn" data-tab="fontes">🌐 Fontes</button>
       <button class="tab-btn" data-tab="historico">📋 Histórico</button>
+      <button class="tab-btn" data-tab="percursos">👣 Artigos por utilizador</button>
     </div>
 
     <section class="tab-panel active" id="tab-resumo">
@@ -814,6 +836,51 @@
         <div class="status" id="historicoStatus">A carregar...</div>
       </section>
     </section>
+
+    <section class="tab-panel" id="tab-percursos">
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Sessões com artigos</div>
+          <div class="card-value" id="articleJourneySessionsCount">-</div>
+          <div class="card-subvalue" id="articleJourneySessionsMeta">Sem sessões com leitura de artigos.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Leituras de artigos</div>
+          <div class="card-value" id="articleJourneyViewsCount">-</div>
+          <div class="card-subvalue" id="articleJourneyViewsMeta">Sem eventos de leitura disponíveis.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Artigos únicos visitados</div>
+          <div class="card-value" id="articleJourneyUniqueArticlesCount">-</div>
+          <div class="card-subvalue" id="articleJourneyUniqueArticlesMeta">A aguardar dados do histórico.</div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h2>👥 Sessões com navegação em artigos</h2>
+        <table>
+          <thead>
+            <tr><th>Sessão</th><th>Último artigo</th><th>Artigos únicos</th><th>Leituras</th><th></th></tr>
+          </thead>
+          <tbody id="articleJourneySessionsBody"></tbody>
+        </table>
+      </section>
+
+      <section class="panel" style="margin-top:16px;">
+        <h2>📚 Percurso detalhado por utilizador</h2>
+        <div class="inline-controls">
+          <label for="articleJourneySessionSelect">Sessão:</label>
+          <select id="articleJourneySessionSelect" aria-label="Selecionar sessão com artigos"></select>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Quando</th><th>Artigo</th><th>Página</th></tr>
+          </thead>
+          <tbody id="articleJourneyDetailBody"></tbody>
+        </table>
+        <div class="status" id="articleJourneyStatus">A carregar...</div>
+      </section>
+    </section>
   </div>
 
   <footer>
@@ -851,6 +918,7 @@
       activeUsers: [],
       activeUsersUnique: 0,
       activeUsersHourly: [],
+      articleJourneySessions: [],
       sessions: [],
       historyRows: []
     };
@@ -911,6 +979,7 @@
       initTheme();
       initTabs();
       initPastHourlySelector();
+      initArticleJourneyControls();
       carregarNoticiasMap().finally(() => {
         carregarEstatisticasCompleto();
         carregarComentariosRecentes();
@@ -1184,6 +1253,7 @@
       const hasClicks = getClickEntries(dashboardState.clickTargets || {}).length > 0;
       const hasComments = (dashboardState.commentRows || []).length > 0;
       const hasLikes = (dashboardState.likeRows || []).length > 0;
+      const hasArticleJourneys = (dashboardState.articleJourneySessions || []).length > 0;
       const hasHistory = (dashboardState.historyRows || []).length > 0
         || (dashboardState.activeUsers || []).length > 0
         || (dashboardState.activeUsersHourly || []).length > 0;
@@ -1196,8 +1266,9 @@
       setTabVisibility('cliques', hasClicks);
       setTabVisibility('fontes', hasTrafficSources);
       setTabVisibility('historico', hasHistory);
+      setTabVisibility('percursos', hasHistory || hasArticleJourneys);
 
-      if (!hasSummaryData && !hasVisitsData && !hasComments && !hasLikes && !hasHistory && !hasTrafficSources && !hasClicks && pageEntries.length === 0) {
+      if (!hasSummaryData && !hasVisitsData && !hasComments && !hasLikes && !hasHistory && !hasTrafficSources && !hasClicks && !hasArticleJourneys && pageEntries.length === 0) {
         setTabVisibility('resumo', true);
       }
 
@@ -1217,6 +1288,49 @@
       if (!key) return 'Artigo';
       const noticiaId = noticiaIdBySlug[key];
       return noticiaId ? getNoticiaTitle(noticiaId) : key.replace(/-/g, ' ');
+    }
+
+    function isArticlePath(pagePath) {
+      return /^\/artigos\/.+\.html$/i.test(String(pagePath || '').trim());
+    }
+
+    function getArticleSlugFromPath(pagePath) {
+      const match = String(pagePath || '').trim().match(/^\/artigos\/(.+)\.html$/i);
+      return match ? match[1] : '';
+    }
+
+    function getArticleTitleFromPath(pagePath) {
+      const slug = getArticleSlugFromPath(pagePath);
+      if (!slug) return String(pagePath || '/');
+      return getNoticiaTitleBySlug(slug);
+    }
+
+    function buildArticleJourneySessions(sessions) {
+      return (sessions || [])
+        .map((session) => {
+          const articleEvents = (session.events || [])
+            .filter((event) => isArticlePath(event.page));
+
+          if (!articleEvents.length) {
+            return null;
+          }
+
+          const orderedEvents = articleEvents.slice().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+          const uniqueArticlePaths = new Set(articleEvents.map((event) => event.page || '').filter(Boolean));
+          const latestArticleEvent = articleEvents[0] || orderedEvents[orderedEvents.length - 1] || null;
+
+          return {
+            sessionId: session.sessionId,
+            lastTimestamp: latestArticleEvent ? latestArticleEvent.timestamp : session.lastTimestamp,
+            latestArticlePath: latestArticleEvent ? latestArticleEvent.page : '/',
+            latestArticleTitle: getArticleTitleFromPath(latestArticleEvent ? latestArticleEvent.page : '/'),
+            totalArticleViews: articleEvents.length,
+            uniqueArticleCount: uniqueArticlePaths.size,
+            articleEvents: orderedEvents
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => (b.lastTimestamp || 0) - (a.lastTimestamp || 0));
     }
 
     async function carregarNoticiasMap() {
@@ -1887,6 +2001,150 @@
       select.addEventListener('change', renderPastHourlySelectedDay);
     }
 
+    function renderArticleJourneyDetail(sessionId) {
+      const rows = dashboardState.articleJourneySessions || [];
+      const selectedSession = rows.find((row) => row.sessionId === sessionId);
+
+      if (!selectedSession) {
+        renderEmptyRow('articleJourneyDetailBody', 'Selecione uma sessão com leituras de artigos.', 3);
+        setText('articleJourneyStatus', 'Sem sessão selecionada.');
+        return;
+      }
+
+      const tbody = document.getElementById('articleJourneyDetailBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      selectedSession.articleEvents.forEach((event) => {
+        const tr = document.createElement('tr');
+
+        const whenCell = document.createElement('td');
+        whenCell.textContent = event.timestamp ? formatDateTime(event.timestamp) : '-';
+
+        const articleCell = document.createElement('td');
+        articleCell.textContent = getArticleTitleFromPath(event.page);
+
+        const pathCell = document.createElement('td');
+        pathCell.textContent = event.page || '/';
+
+        tr.appendChild(whenCell);
+        tr.appendChild(articleCell);
+        tr.appendChild(pathCell);
+        tbody.appendChild(tr);
+      });
+
+      setText(
+        'articleJourneyStatus',
+        `${getSessionLabel(selectedSession.sessionId)} • ${selectedSession.totalArticleViews.toLocaleString('pt-PT')} leitura(s) de artigo em ${selectedSession.uniqueArticleCount.toLocaleString('pt-PT')} artigo(s).`
+      );
+    }
+
+    function renderArticleJourneyTab() {
+      const rows = buildArticleJourneySessions(_historicoSessions);
+      dashboardState.articleJourneySessions = rows;
+
+      const totalViews = rows.reduce((sum, row) => sum + safeNumber(row.totalArticleViews), 0);
+      const allArticles = new Set();
+      rows.forEach((row) => {
+        row.articleEvents.forEach((event) => {
+          if (event.page) allArticles.add(event.page);
+        });
+      });
+
+      setText('articleJourneySessionsCount', rows.length.toLocaleString('pt-PT'));
+      setText('articleJourneySessionsMeta', rows.length ? 'Sessões das últimas 24h com pelo menos um artigo visitado.' : 'Sem sessões com leitura de artigos nas últimas 24h.');
+      setText('articleJourneyViewsCount', totalViews.toLocaleString('pt-PT'));
+      setText('articleJourneyViewsMeta', totalViews ? 'Total de eventos em páginas de artigo no histórico recente.' : 'Sem eventos de leitura disponíveis.');
+      setText('articleJourneyUniqueArticlesCount', allArticles.size.toLocaleString('pt-PT'));
+      setText('articleJourneyUniqueArticlesMeta', allArticles.size ? 'Artigos diferentes visitados nas últimas 24h.' : 'A aguardar dados do histórico.');
+
+      const sessionsBody = document.getElementById('articleJourneySessionsBody');
+      if (sessionsBody) {
+        sessionsBody.innerHTML = '';
+
+        if (!rows.length) {
+          renderEmptyRow('articleJourneySessionsBody', 'Nenhuma sessão visitou artigos nas últimas 24 horas.', 5);
+        } else {
+          rows.forEach((row) => {
+            const tr = document.createElement('tr');
+
+            const sessionCell = document.createElement('td');
+            sessionCell.textContent = getSessionLabel(row.sessionId);
+            const sessionMeta = document.createElement('div');
+            sessionMeta.className = 'meta';
+            sessionMeta.textContent = row.lastTimestamp ? formatDateTime(row.lastTimestamp) : '-';
+            sessionCell.appendChild(sessionMeta);
+
+            const latestArticleCell = document.createElement('td');
+            latestArticleCell.textContent = row.latestArticleTitle;
+            const latestMeta = document.createElement('div');
+            latestMeta.className = 'meta';
+            latestMeta.textContent = row.latestArticlePath || '/';
+            latestArticleCell.appendChild(latestMeta);
+
+            const uniqueArticlesCell = document.createElement('td');
+            uniqueArticlesCell.textContent = row.uniqueArticleCount.toLocaleString('pt-PT');
+
+            const totalViewsCell = document.createElement('td');
+            totalViewsCell.textContent = row.totalArticleViews.toLocaleString('pt-PT');
+
+            const actionCell = document.createElement('td');
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'journey-link-btn';
+            button.textContent = 'Ver percurso';
+            button.addEventListener('click', () => {
+              const select = document.getElementById('articleJourneySessionSelect');
+              if (select) {
+                select.value = row.sessionId;
+              }
+              renderArticleJourneyDetail(row.sessionId);
+            });
+            actionCell.appendChild(button);
+
+            tr.appendChild(sessionCell);
+            tr.appendChild(latestArticleCell);
+            tr.appendChild(uniqueArticlesCell);
+            tr.appendChild(totalViewsCell);
+            tr.appendChild(actionCell);
+            sessionsBody.appendChild(tr);
+          });
+        }
+      }
+
+      const select = document.getElementById('articleJourneySessionSelect');
+      if (select) {
+        const previousValue = select.value;
+        select.innerHTML = '';
+
+        if (!rows.length) {
+          const option = document.createElement('option');
+          option.value = '';
+          option.textContent = 'Sem sessões com artigos';
+          select.appendChild(option);
+          select.disabled = true;
+          renderArticleJourneyDetail('');
+        } else {
+          select.disabled = false;
+          rows.forEach((row) => {
+            const option = document.createElement('option');
+            option.value = row.sessionId;
+            option.textContent = `${getSessionLabel(row.sessionId)} • ${row.uniqueArticleCount} artigo(s) únicos`;
+            select.appendChild(option);
+          });
+
+          select.value = rows.some((row) => row.sessionId === previousValue) ? previousValue : rows[0].sessionId;
+          renderArticleJourneyDetail(select.value);
+        }
+      }
+    }
+
+    function initArticleJourneyControls() {
+      const select = document.getElementById('articleJourneySessionSelect');
+      if (!select) return;
+      select.addEventListener('change', () => renderArticleJourneyDetail(select.value));
+    }
+
     function carregarComentariosRecentes() {
       database.ref('comentarios').on('value', (snapshot) => {
         const rows = [];
@@ -2524,6 +2782,7 @@
 
         dashboardState.historyRows = recentRows;
         dashboardState.sessions = _historicoSessions;
+  dashboardState.articleJourneySessions = buildArticleJourneySessions(_historicoSessions);
 
         const hourlyMap = new Map();
         recentRows.forEach((row) => {
@@ -2564,6 +2823,7 @@
         const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
         renderHistoricoRows(filtro);
         renderHourlyHistoryRows(hourlyRows);
+        renderArticleJourneyTab();
         renderSummaryOverview();
         setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${recentRows.length} atividade(s) nas últimas 24h`);
         setText('historicoHourlyStatus', hourlyRows.length ? `Últimas ${hourlyRows.length} hora(s) com atividade registada.` : 'Sem histórico horário disponível.');
