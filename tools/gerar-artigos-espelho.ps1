@@ -64,16 +64,6 @@ function Get-MetaDescription {
     return ($plain.Substring(0, 177).Trim() + '...')
 }
 
-function Test-ArticleHasExplicitSources {
-    param([object]$Noticia)
-
-    $summaryText = if ($Noticia.PSObject.Properties.Name -contains 'resumo') { [string]$Noticia.resumo } else { '' }
-    $bodyText = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
-    $combinedText = "$summaryText $bodyText"
-
-    return [regex]::IsMatch($combinedText, 'fontes consultadas\s*:', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-}
-
 function ConvertTo-HtmlEntities {
     param([string]$Text)
 
@@ -185,6 +175,32 @@ function Format-StaticArticleContent {
     }
 
     return Format-PlainTextArticleContent -Text $content
+}
+
+function Split-ArticleLeadContent {
+    param([string]$Html, [int]$LeadParagraphCount = 2)
+
+    $normalizedHtml = if ($null -eq $Html) { '' } else { [string]$Html }
+
+    $result = @{
+        LeadHtml = ''
+        RemainingHtml = $normalizedHtml.Trim()
+    }
+
+    if ([string]::IsNullOrWhiteSpace($normalizedHtml)) {
+        return $result
+    }
+
+    $matches = [regex]::Matches($normalizedHtml, '<p\b[^>]*>.*?</p>', [System.Text.RegularExpressions.RegexOptions]::Singleline -bor [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if ($matches.Count -eq 0) {
+        return $result
+    }
+
+    $paragraphCount = [Math]::Min([Math]::Max($LeadParagraphCount, 1), $matches.Count)
+    $leadEnd = $matches[$paragraphCount - 1].Index + $matches[$paragraphCount - 1].Length
+    $result.LeadHtml = $normalizedHtml.Substring(0, $leadEnd).Trim()
+    $result.RemainingHtml = $normalizedHtml.Substring($leadEnd).Trim()
+    return $result
 }
 
 function Get-RedirectHtml {
@@ -312,6 +328,7 @@ function Get-StaticArticleHtml {
     $resumo    = if ($Noticia.PSObject.Properties.Name -contains 'resumo')   { [string]$Noticia.resumo }   else { '' }
     $conteudoRaw = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
     $conteudo  = Format-StaticArticleContent -Text $conteudoRaw
+    $contentParts = Split-ArticleLeadContent -Html $conteudo
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
     $wordCount  = [Math]::Max(1, (Get-PlainTextFromHtml -Text "$resumo $conteudoRaw").Trim().Split([char[]]' ', [System.StringSplitOptions]::RemoveEmptyEntries).Count)
@@ -366,10 +383,12 @@ function Get-StaticArticleHtml {
               <span>&#9997;&#65039; $autor</span>
               <span class="tempo-leitura">&#9201;&#65039; $tempoTexto de leitura</span>
             </div>
-          </div>$videoSection
+                    </div>
           <div class="artigo-conteudo">
             <p><strong>$resumo</strong></p>
-            <div id="artigoConteudoBody">$conteudo</div>
+                        $($contentParts.LeadHtml)
+                        $videoSection
+                        <div id="artigoConteudoBody">$($contentParts.RemainingHtml)</div>
                                                 $trustBoxSection
                         $authorBioSection
           </div>
@@ -525,15 +544,11 @@ foreach ($noticia in $noticias) {
     }
     $modifiedDateIso = $publishedDateIso
 
-    $hasExplicitSources = Test-ArticleHasExplicitSources -Noticia $noticia
-
     $safeTitle = ConvertTo-HtmlEntities -Text $rawTitle
     $safeDescription = ConvertTo-HtmlEntities -Text $metaDescription
     $safeUrl = ConvertTo-HtmlEntities -Text $articleUrl
     $contentImageUrl = Get-FirstContentImageUrl -Noticia $noticia
-    $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($videoId)) {
-        "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
-    } elseif (-not [string]::IsNullOrWhiteSpace($contentImageUrl)) {
+    $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($contentImageUrl)) {
         $contentImageUrl
     } else {
         'https://www.viciadocomenta.pt/assets/perfil.png'
@@ -570,42 +585,9 @@ foreach ($noticia in $noticias) {
         inLanguage = 'pt-PT'
     }
 
-    $jsonLdGraph = @($articleJsonLdObject)
-
-    if (-not [string]::IsNullOrWhiteSpace($videoId)) {
-        $watchUrl = "https://www.youtube.com/watch?v=$videoId"
-        $videoJsonLdObject = [ordered]@{
-            '@type' = 'VideoObject'
-            '@id' = "$articleUrl#video"
-            name = $rawTitle
-            description = $metaDescription
-            thumbnailUrl = @($socialImageUrl)
-            uploadDate = $publishedDateIso
-            url = $articleUrl
-            mainEntityOfPage = [ordered]@{
-                '@type' = 'WebPage'
-                '@id' = $articleUrl
-            }
-            embedUrl = "https://www.youtube-nocookie.com/embed/$videoId"
-            contentUrl = $watchUrl
-            potentialAction = [ordered]@{
-                '@type' = 'WatchAction'
-                target = @($articleUrl, $watchUrl)
-            }
-            isFamilyFriendly = $true
-            inLanguage = 'pt-PT'
-        }
-
-        $articleJsonLdObject['hasPart'] = [ordered]@{
-            '@id' = "$articleUrl#video"
-        }
-
-        $jsonLdGraph += $videoJsonLdObject
-    }
-
     $jsonLdObject = [ordered]@{
         '@context' = 'https://schema.org'
-        '@graph' = $jsonLdGraph
+        '@graph' = @($articleJsonLdObject)
     }
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
@@ -738,8 +720,8 @@ $baseUrls = @(
     'https://www.viciadocomenta.pt/noticias.html',
     'https://www.viciadocomenta.pt/artigos.html',
     'https://www.viciadocomenta.pt/todas-noticias.html',
-    'https://www.viciadocomenta.pt/livestreams.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
+    'https://www.viciadocomenta.pt/contacto.html',
     'https://www.viciadocomenta.pt/politica-privacidade.html',
     'https://www.viciadocomenta.pt/termos-servico.html'
 )
