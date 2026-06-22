@@ -29,6 +29,43 @@ const ANALYTICS_CONFIG = {
   activeUserHeartbeatMs: 60000
 };
 
+try {
+  if (!document.getElementById('vc-hide-content-nav-style')) {
+    const hiddenNavStyle = document.createElement('style');
+    hiddenNavStyle.id = 'vc-hide-content-nav-style';
+    hiddenNavStyle.textContent = '.nav-dropdown{display:none !important;}';
+    (document.head || document.documentElement).appendChild(hiddenNavStyle);
+  }
+} catch (_) {}
+
+function hideContentNavForReview() {
+  try {
+    const navDropdowns = document.querySelectorAll('.nav-dropdown');
+    navDropdowns.forEach((dropdown) => {
+      const trigger = dropdown.querySelector('a[href="viciado-comenta.html"]');
+      if (!trigger) {
+        return;
+      }
+
+      dropdown.hidden = true;
+      dropdown.setAttribute('aria-hidden', 'true');
+      dropdown.style.display = 'none';
+
+      dropdown.querySelectorAll('a, button').forEach((element) => {
+        element.setAttribute('tabindex', '-1');
+      });
+    });
+  } catch (error) {
+    console.warn('⚠️ Não foi possível esconder a aba Conteúdos:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', hideContentNavForReview, { once: true });
+} else {
+  hideContentNavForReview();
+}
+
 function readAnalyticsPreferenceFromUrl() {
   try {
     const params = new URLSearchParams(window.location.search || '');

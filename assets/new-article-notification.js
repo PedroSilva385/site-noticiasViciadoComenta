@@ -1,4 +1,5 @@
 (function () {
+	const ENGAGEMENT_PROMPTS_ENABLED = window.VC_ENABLE_ENGAGEMENT_PROMPTS === true;
 	const STORAGE_LAST_VISIT = 'last_visit_timestamp';
 	const STORAGE_NOTIFICATION_SHOWN = 'notification_shown_for';
 	const STORAGE_LAST_NEW_IDS = 'vc_last_new_article_ids';
@@ -271,6 +272,7 @@
 	}
 
 	function init(noticias, customOptions) {
+		if (!ENGAGEMENT_PROMPTS_ENABLED) return;
 		const normalizedNoticias = normalizeArticleList(noticias);
 		if (normalizedNoticias.length === 0) return;
 

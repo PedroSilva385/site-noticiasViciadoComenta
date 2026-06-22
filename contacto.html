@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto Editorial - VICIADO COMENTA</title>
+<meta name="description" content="Página de contacto editorial do VICIADO COMENTA com email de contacto, pedidos de correção, questões sobre conteúdo e transparência institucional.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="canonical" href="https://www.viciadocomenta.pt/contacto.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VICIADO COMENTA">
+<meta property="og:title" content="Contacto Editorial - VICIADO COMENTA">
+<meta property="og:description" content="Contactos editoriais, pedidos de correção e informação institucional do VICIADO COMENTA.">
+<meta property="og:url" content="https://www.viciadocomenta.pt/contacto.html">
+<meta property="og:locale" content="pt_PT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contacto Editorial - VICIADO COMENTA">
+<meta name="twitter:description" content="Contactos editoriais, pedidos de correção e informação institucional do VICIADO COMENTA.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": "https://www.viciadocomenta.pt/contacto.html#contact",
+      "url": "https://www.viciadocomenta.pt/contacto.html",
+      "name": "Contacto Editorial - VICIADO COMENTA",
+      "isPartOf": {
+        "@id": "https://www.viciadocomenta.pt/#website"
+      },
+      "about": {
+        "@id": "https://www.viciadocomenta.pt/#organization"
+      },
+      "inLanguage": "pt-PT"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.viciadocomenta.pt/#organization",
+      "name": "VICIADO COMENTA",
+      "url": "https://www.viciadocomenta.pt/",
+      "email": "mailto:theviciado.contactos@gmail.com",
+      "founder": {
+        "@type": "Person",
+        "name": "Pedro Silva"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "editorial",
+          "email": "theviciado.contactos@gmail.com",
+          "availableLanguage": ["pt-PT"]
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "theviciado.contactos@gmail.com",
+          "availableLanguage": ["pt-PT"]
+        }
+      ],
+      "sameAs": [
+        "https://www.youtube.com/@TheViciado",
+        "https://www.twitch.tv/theviciado13",
+        "https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN",
+        "https://discord.gg/pGxzqCdrFJ"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.viciadocomenta.pt/#website",
+      "url": "https://www.viciadocomenta.pt/",
+      "name": "VICIADO COMENTA",
+      "publisher": {
+        "@id": "https://www.viciadocomenta.pt/#organization"
+      },
+      "inLanguage": "pt-PT"
+    }
+  ]
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="assets/firebase-config.js?v=20260209"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1a1f3a;
+  line-height: 1.6;
+}
+
+body.dark {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+  color: #e5e7eb !important;
+}
+
+body.dark * { color: #e5e7eb !important; }
+body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+body.dark header, body.dark header * { color: #ffffff !important; }
+body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav a { color: #e5e7eb !important; }
+body.dark footer { background:#0b1220; color:#e5e7eb !important; }
+body.dark footer * { color:#e5e7eb !important; }
+body.dark .contact-card,
+body.dark .contact-panel,
+body.dark .contact-note { background: rgba(15,23,42,.82); border-color: #1f2937; }
+body.dark .theme-toggle { border-color: rgba(255,255,255,.2); color:#e5e7eb !important; }
+body.dark a { color: #93c5fd !important; }
+
+.theme-toggle { position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid rgba(0,0,0,.1); color: #1a1f3a; padding: 8px 10px; border-radius: 8px; cursor: pointer; z-index: 150; }
+.theme-toggle i { pointer-events: none; }
+
+header {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
+  position: relative;
+}
+
+header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.header-subtitle {
+  font-size: 0.98em;
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 300;
+}
+
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  color: #1a1f3a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 20px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+main {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.hero-panel,
+.contact-panel,
+.contact-card,
+.contact-note {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e0e8f5;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.08);
+}
+
+.hero-panel {
+  padding: 34px;
+  margin-bottom: 28px;
+}
+
+.hero-panel h2,
+.section-title,
+.contact-card h3,
+.contact-note h3 {
+  font-family: 'Outfit', sans-serif;
+}
+
+.hero-panel h2 {
+  font-size: 2em;
+  margin-bottom: 14px;
+  color: #1a1f3a;
+}
+
+.hero-panel p {
+  margin-bottom: 14px;
+  color: #324255;
+}
+
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hero-links a,
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.hero-links a.primary,
+.btn-voltar {
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.2);
+}
+
+.hero-links a.secondary {
+  background: rgba(0, 102, 204, 0.08);
+  color: #0052a3;
+}
+
+.hero-links a:hover,
+.btn-voltar:hover {
+  transform: translateY(-2px);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.contact-card {
+  padding: 24px;
+}
+
+.contact-card h3 {
+  font-size: 1.25em;
+  margin-bottom: 10px;
+  color: #1a1f3a;
+}
+
+.contact-card p,
+.contact-card li,
+.contact-note p,
+.contact-note li,
+.contact-panel p {
+  color: #324255;
+}
+
+.contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.contact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.contact-list i,
+.contact-card .icon {
+  color: #0066cc;
+  min-width: 20px;
+  margin-top: 2px;
+}
+
+.contact-panel {
+  padding: 28px;
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 1.7em;
+  margin-bottom: 14px;
+  color: #1a1f3a;
+}
+
+.contact-note {
+  padding: 24px;
+  margin-bottom: 28px;
+}
+
+.contact-note ul {
+  margin: 14px 0 0 20px;
+}
+
+footer {
+  background: #1a1f3a;
+  padding: 40px 20px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.footer-links a,
+.footer-contacts a,
+.footer-copy {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+}
+
+.footer-links a:hover,
+.footer-contacts a:hover {
+  color: #ffffff;
+}
+
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.footer-copy {
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2.2em;
+  }
+
+  nav {
+    gap: 20px;
+  }
+
+  .hero-panel,
+  .contact-panel,
+  .contact-card,
+  .contact-note {
+    padding: 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>VICIADO COMENTA</h1>
+  <p class="header-subtitle">Contacto editorial, correções e transparência institucional</p>
+</header>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="todas-noticias.html">Artigos</a>
+  <a href="sobre-nos.html">Sobre Nós</a>
+  <a href="contacto.html">Contacto</a>
+</nav>
+
+<main>
+  <section class="hero-panel">
+    <h2>Contacto público do projeto</h2>
+    <p>Esta página reúne os contactos editoriais do VICIADO COMENTA para leitores, empresas, entidades públicas e parceiros que precisem de esclarecer informação publicada, pedir correções ou entrar em contacto com a equipa editorial.</p>
+    <p>O projeto é assinado por Pedro Silva e publica conteúdos focados em telecomunicações, tecnologia, plataformas digitais, gaming e temas de atualidade com impacto em Portugal.</p>
+    <div class="hero-links">
+      <a class="primary" href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> Enviar email</a>
+      <a class="secondary" href="sobre-nos.html#correcoes">Política de correções</a>
+      <a class="secondary" href="sobre-nos.html#criterios-editoriais">Critérios editoriais</a>
+    </div>
+  </section>
+
+  <section class="contact-grid" aria-label="Canais de contacto">
+    <article class="contact-card">
+      <div class="icon"><i class="fas fa-user-edit"></i></div>
+      <h3>Responsável editorial</h3>
+      <p>Pedro Silva</p>
+      <p>Projeto editorial independente com presença pública no YouTube, Twitch, Spotify e Discord.</p>
+    </article>
+
+    <article class="contact-card">
+      <div class="icon"><i class="fas fa-envelope-open-text"></i></div>
+      <h3>Email principal</h3>
+      <p><a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a></p>
+      <p>Canal preferencial para correções, esclarecimentos, contactos institucionais e pedidos relacionados com conteúdos publicados.</p>
+    </article>
+
+    <article class="contact-card">
+      <div class="icon"><i class="fas fa-globe-europe"></i></div>
+      <h3>Âmbito do projeto</h3>
+      <p>Portugal</p>
+      <p>Cobertura editorial focada sobretudo em temas relevantes para consumidores portugueses, telecomunicações, tecnologia e mercado digital.</p>
+    </article>
+  </section>
+
+  <section class="contact-panel">
+    <h2 class="section-title">Para que assuntos usar este contacto</h2>
+    <ul class="contact-list">
+      <li><i class="fas fa-check-circle"></i><span>Pedidos de correção factual, atualização de contexto ou revisão de informação publicada.</span></li>
+      <li><i class="fas fa-check-circle"></i><span>Esclarecimentos editoriais sobre artigos, vídeos, análises, tabelas comparativas ou interpretações de mercado.</span></li>
+      <li><i class="fas fa-check-circle"></i><span>Contactos institucionais de operadoras, marcas, reguladores, assessorias ou entidades públicas.</span></li>
+      <li><i class="fas fa-check-circle"></i><span>Questões sobre privacidade, termos do site, cookies, publicidade e utilização do conteúdo.</span></li>
+    </ul>
+  </section>
+
+  <section class="contact-note">
+    <h3>Correções e atualizações editoriais</h3>
+    <p>Se detetares uma incorreção factual, um detalhe desatualizado ou contexto insuficiente, envia o link da página em causa e descreve o ponto que deve ser revisto. Sempre que a revisão alterar a compreensão do tema, o conteúdo será atualizado editorialmente.</p>
+    <p>Quando aplicável, o pedido deve incluir a fonte pública ou oficial que sustenta a correção pedida. Isto ajuda a acelerar a validação da informação.</p>
+  </section>
+
+  <section class="contact-note">
+    <h3>Transparência comercial</h3>
+    <p>O VICIADO COMENTA distingue conteúdo editorial de relações comerciais. A existência de publicidade, monetização ou contactos de marcas não altera os critérios de publicação nem a linha de análise crítica do projeto.</p>
+    <p>Se no futuro existir conteúdo patrocinado ou colaboração comercial, essa relação deverá ser identificada de forma explícita no conteúdo relevante.</p>
+  </section>
+
+  <section class="contact-note">
+    <h3>Ligações úteis</h3>
+    <ul>
+      <li><a href="sobre-nos.html">Sobre Nós</a></li>
+      <li><a href="sobre-nos.html#como-trabalhamos">Como trabalhamos</a></li>
+      <li><a href="sobre-nos.html#correcoes">Política de correções</a></li>
+      <li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+      <li><a href="termos-servico.html">Termos de Serviço</a></li>
+    </ul>
+  </section>
+
+  <a href="index.html" class="btn-voltar">← Voltar à Página Inicial</a>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="sobre-nos.html">Sobre Nós</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="politica-privacidade.html">Política de Privacidade</a>
+    <a href="termos-servico.html">Termos de Serviço</a>
+    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+  </div>
+  <div class="footer-contacts">
+    <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
+    <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
+  </div>
+  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark', isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = '<i class="fas fa-moon"></i>';
+  const headerEl = document.querySelector('header');
+  if (headerEl) headerEl.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 (function () {
+  var ENGAGEMENT_PROMPTS_ENABLED = window.VC_ENABLE_ENGAGEMENT_PROMPTS === true;
   const STORAGE_KEY_PUSH_PROMPT_DISMISSED = 'vc_push_prompt_dismissed';
   const STORAGE_KEY_PUSH_SUBSCRIBED = 'vc_push_subscribed';
   const DEFAULT_OPTIONS = {
@@ -417,6 +418,7 @@
   }
 
   async function init(config) {
+    if (!ENGAGEMENT_PROMPTS_ENABLED) return;
     if (!isPushSupported()) return;
     if (initPromise) return initPromise;
 
