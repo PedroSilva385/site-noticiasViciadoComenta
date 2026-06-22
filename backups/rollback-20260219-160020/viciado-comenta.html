@@ -105,7 +105,7 @@ header h1 {
   font-size: 1.2em;
 }
 
-/* NAVEGAÇÃO */
+/* NAVEGA��O */
 nav {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -150,7 +150,7 @@ nav a:hover {
 }
 
 .nav-dropdown > a::after {
-  content: '▼';
+  content: '?';
   font-size: 0.65em;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -354,7 +354,7 @@ body.dark .video-card.watched .video-thumbnail::before {
 }
 
 .video-thumbnail::after {
-  content: '▶';
+  content: '?';
   position: absolute;
   font-size: 48px;
   color: rgba(255, 255, 255, 0.8);
@@ -367,7 +367,7 @@ body.dark .video-card.watched .video-thumbnail::before {
 }
 
 .video-card.watched .video-thumbnail::before {
-  content: '✓';
+  content: '?';
   position: absolute;
   top: 8px;
   left: 8px;
@@ -579,7 +579,7 @@ body.dark .video-watch-btn.watched {
   font-weight: 500;
 }
 
-/* RODAPÉ */
+/* RODAP� */
 footer {
   background: #1a1f3a;
   color: #ffffff;
@@ -944,8 +944,8 @@ footer {
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
     <div class="cookie-banner__content">
       <div class="cookie-banner__text">
-        Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
-        <a href="politica-privacidade.html">Política de Privacidade</a>.
+        Usamos cookies para medir audi�ncias e melhorar a experi�ncia. Pode aceitar ou recusar. Saiba mais em
+        <a href="politica-privacidade.html">Pol�tica de Privacidade</a>.
       </div>
       <div class="cookie-banner__actions">
         <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
@@ -998,7 +998,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <header>
   <h1>VICIADO COMENTA</h1>
-  <p class="header-subtitle">Análise e crítica de notícias</p>
+  <p class="header-subtitle">An�lise e cr�tica de not�cias</p>
   
   <div class="social-media">
     <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
@@ -1020,13 +1020,13 @@ document.addEventListener('DOMContentLoaded', () => {
 </header>
 
 <nav>
-  <a href="index.html">Início</a>
+  <a href="index.html">In�cio</a>
   <a href="todas-noticias.html">Artigos</a>
   <div class="nav-dropdown">
-    <a href="#">Conteúdos</a>
+    <a href="#">Conte�dos</a>
     <div class="dropdown-menu">
       <a href="viciado-comenta.html">Viciado Comenta</a>
-      <a href="viciado-ponto-critico.html">Viciado - Ponto Crítico</a>
+      <a href="viciado-ponto-critico.html">Viciado - Ponto Cr�tico</a>
       <a href="metin2.html">Metin2</a>
       <a href="livestreams.html">Livestreams</a>
     </div>
@@ -1036,7 +1036,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <main>
   <div class="page-header">
     <h1>Viciado Comenta</h1>
-    <p>Todos os episódios num só lugar. Assite aos comentários e análises mais recentes sobre os temas do momento.</p>
+    <p>Todos os epis�dios num s� lugar. Assite aos coment�rios e an�lises mais recentes sobre os temas do momento.</p>
   </div>
 
   <div class="playlist-section">
@@ -1047,9 +1047,9 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <div class="miniaturas-section">
-    <h2 class="miniaturas-title">Últimos Vídeos</h2>
+    <h2 class="miniaturas-title">�ltimos V�deos</h2>
     <div class="miniaturas-grid" id="miniaturas-grid">
-      <!-- Vídeos carregados dinamicamente do ficheiro JSON -->
+      <!-- V�deos carregados dinamicamente do ficheiro JSON -->
     </div>
   </div>
 
@@ -1060,11 +1060,11 @@ document.addEventListener('DOMContentLoaded', () => {
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
   </div>
-  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+  <div class="footer-copy">� 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
 
 <script>
-// Sistema de vídeos vistos
+// Sistema de v�deos vistos
 class VideoWatchTracker {
   constructor() {
     this.storageKey = 'viciado_comenta_watched_videos';
@@ -1100,7 +1100,7 @@ class VideoWatchTracker {
 
 const tracker = new VideoWatchTracker();
 
-// Carregar vídeos do ficheiro JSON
+// Carregar v�deos do ficheiro JSON
 async function carregarVideos() {
   try {
     const response = await fetch('data/viciado-comenta-videos.json');
@@ -1109,7 +1109,7 @@ async function carregarVideos() {
     const grid = document.getElementById('miniaturas-grid');
     
     if (videos.length === 0) {
-      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum vídeo disponível no momento. Adiciona vídeos ao ficheiro viciado-comenta-videos.json</p>';
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#5a6b7f;">Nenhum v�deo dispon�vel no momento. Adiciona v�deos ao ficheiro viciado-comenta-videos.json</p>';
       return;
     }
     
@@ -1127,7 +1127,7 @@ async function carregarVideos() {
     grid.innerHTML = videos.map((video, index) => {
       const url = video.url || video;
       
-      // Extrair ID do vídeo do YouTube da URL
+      // Extrair ID do v�deo do YouTube da URL
       let videoId = '';
       
       // Suporta diferentes formatos de URL do YouTube
@@ -1152,7 +1152,7 @@ async function carregarVideos() {
                 <i class="fab fa-youtube"></i>
               </div>
               <button class="video-watch-btn ${isWatched ? 'watched' : ''}" data-video-id="${videoId}" onclick="toggleWatched(event, '${videoId}')">
-                ✓
+                ?
               </button>
             </div>
           </a>
@@ -1161,13 +1161,13 @@ async function carregarVideos() {
     }).join('');
     
   } catch (error) {
-    console.error('Erro ao carregar vídeos:', error);
+    console.error('Erro ao carregar v�deos:', error);
     const grid = document.getElementById('miniaturas-grid');
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar vídeos. Verifica se o ficheiro viciado-comenta-videos.json existe e está correto.</p>';
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#e74c3c;">Erro ao carregar v�deos. Verifica se o ficheiro viciado-comenta-videos.json existe e est� correto.</p>';
   }
 }
 
-// Função para marcar/desmarcar vídeo como visto
+// Fun��o para marcar/desmarcar v�deo como visto
 function toggleWatched(event, videoId) {
   event.preventDefault();
   event.stopPropagation();
@@ -1187,7 +1187,7 @@ function toggleWatched(event, videoId) {
   }
 }
 
-// Carregar vídeos quando a página carregar
+// Carregar v�deos quando a p�gina carregar
 document.addEventListener('DOMContentLoaded', carregarVideos);
 </script>
 
