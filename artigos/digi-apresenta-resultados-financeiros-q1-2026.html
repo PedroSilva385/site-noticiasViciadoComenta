@@ -2161,7 +2161,7 @@ footer {
 <meta name="twitter:title" content="DIGI apresenta RESULTADOS financeiros Q1 2026!">
 <meta name="twitter:description" content="A DIGI apresentou hoje os seus resultados relativos ao Q1 2026, e decidimos avan&#231;ar com uma compara&#231;&#227;o face ao per&#237;odo hom&#243;logo, de forma a perceber o verdadeiro estado da opera...">
 <meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/imagens/DIGIdadosQ12026.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/digi-apresenta-resultados-financeiros-q1-2026.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-apresenta-resultados-financeiros-q1-2026.html"},"headline":"DIGI apresenta RESULTADOS financeiros Q1 2026!","description":"A DIGI apresentou hoje os seus resultados relativos ao Q1 2026, e decidimos avançar com uma comparação face ao período homólogo, de forma a perceber o verdadeiro estado da opera...","datePublished":"2026-05-14T23:00:00Z","dateModified":"2026-05-14T23:00:00Z","image":["https://www.viciadocomenta.pt/assets/imagens/DIGIdadosQ12026.png"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/digi-apresenta-resultados-financeiros-q1-2026.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/digi-apresenta-resultados-financeiros-q1-2026.html"},"headline":"DIGI apresenta RESULTADOS financeiros Q1 2026!","description":"A DIGI apresentou hoje os seus resultados relativos ao Q1 2026, e decidimos avançar com uma comparação face ao período homólogo, de forma a perceber o verdadeiro estado da opera...","datePublished":"2026-05-15T00:00:00Z","dateModified":"2026-05-15T00:00:00Z","image":["https://www.viciadocomenta.pt/assets/imagens/DIGIdadosQ12026.png"],"author":{"@type":"Person","name":"Pedro Silva"},"publisher":{"@type":"Organization","name":"VICIADO COMENTA","logo":{"@type":"ImageObject","url":"https://www.viciadocomenta.pt/assets/favicon.svg"}},"inLanguage":"pt-PT"}]}</script>
 <script>
 (function () {
     window.__VC_STATIC_ARTICLE = {
@@ -2805,12 +2805,13 @@ function extractYoutubeVideoId(url) {
 
 function getRelatedCardMedia(item) {
   const videoId = extractYoutubeVideoId(item && item.video ? String(item.video) : '');
+  const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${item && item.titulo ? item.titulo : ''}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
   }
 
-  const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'A').trim().charAt(0).toUpperCase() || 'A';
+  const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
   return `<div class="relacionado-media"><div class="relacionado-media-fallback">${fallbackLetter}</div></div>`;
 }
 
@@ -2835,19 +2836,26 @@ function renderRelatedArticles(currentNoticia, noticias) {
   container.innerHTML = `
     <h3 class="relacionados-title">Artigos relacionados</h3>
     <div class="relacionados-grid">
-      ${relacionados.map((item) => `
-        <a class="relacionado-card" href="${buildRelatedArticleNavigationUrl(item)}">
+      ${relacionados.map((item) => {
+        const categoria = escapeHtmlText(String(item?.categoria || 'Atualidade').trim() || 'Atualidade');
+        const data = escapeHtmlText(String(item?.data || 'Data editorial').trim() || 'Data editorial');
+        const titulo = escapeHtmlText(String(item?.titulo || 'Artigo relacionado').trim() || 'Artigo relacionado');
+        const href = buildRelatedArticleNavigationUrl(item);
+
+        return `
+        <a class="relacionado-card" href="${href}">
           ${getRelatedCardMedia(item)}
           <div class="relacionado-body">
             <div class="relacionado-meta">
-              <span class="relacionado-categoria">${item.categoria || ''}</span>
-              <span>${item.data || ''}</span>
+              <span class="relacionado-categoria">${categoria}</span>
+              <span>${data}</span>
             </div>
-            <div class="relacionado-titulo">${item.titulo || ''}</div>
+            <div class="relacionado-titulo">${titulo}</div>
             <span class="relacionado-link">Ler artigo</span>
           </div>
         </a>
-      `).join('')}
+      `;
+      }).join('')}
     </div>
   `;
 
@@ -3864,11 +3872,21 @@ document.addEventListener('DOMContentLoaded', () => {
           return match ? match[1] : '';
         }
         
+        const categoriaNome = String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade';
+        const tituloNoticia = String(noticia?.titulo || 'Artigo').trim() || 'Artigo';
+        const resumoNoticia = String(noticia?.resumo || 'Sem resumo disponível.').trim() || 'Sem resumo disponível.';
+        const dataPublicacao = String(noticia?.data || 'Data editorial').trim() || 'Data editorial';
+        const autorNome = (typeof noticia.autor === 'string' && noticia.autor.trim()) ? noticia.autor.trim() : 'Pedro Silva';
+        const categoriaHtml = escapeHtmlText(categoriaNome);
+        const tituloHtml = escapeHtmlText(tituloNoticia);
+        const resumoHtml = escapeHtmlText(resumoNoticia);
+        const dataHtml = escapeHtmlText(dataPublicacao);
+        const autorHtml = escapeHtmlText(autorNome);
         const videoId = extrairVideoId(noticia.video);
         let videoHTML = '';
         if (videoId) {
-          videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${noticia.titulo}">
-            <iframe id="videoFrame-article" src="https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0" title="${noticia.titulo}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+          videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${tituloHtml}">
+            <iframe id="videoFrame-article" src="https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0" title="${tituloHtml}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>`;
         }
         
@@ -3894,30 +3912,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
         const qualityBlocks = buildArticleQualityBlocks(noticia);
         const trustBoxHtml = buildArticleTrustBox(noticia);
-        const autorNome = (typeof noticia.autor === 'string' && noticia.autor.trim()) ? noticia.autor.trim() : 'Pedro Silva';
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorNome}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
-              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>${autorNome}</strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
+              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>${autorHtml}</strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
             </div>
           </aside>
         `;
         
         container.innerHTML = `
           <div class="artigo-header">
-            <span class="artigo-categoria">${noticia.categoria}</span>
-            <h1 class="artigo-titulo">${noticia.titulo}</h1>
+            <span class="artigo-categoria">${categoriaHtml}</span>
+            <h1 class="artigo-titulo">${tituloHtml}</h1>
             <div class="artigo-meta">
-              <span>${noticia.data}</span>
-              <span>${autorNome}</span>
+              <span>${dataHtml}</span>
+              <span>${autorHtml}</span>
               <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
             ${qualityBlocks.qualityMetaHtml}
           </div>
           <div class="artigo-conteudo">
-            <p><strong>${noticia.resumo}</strong></p>
+            <p><strong>${resumoHtml}</strong></p>
             ${contentParts.leadHtml}
             ${videoHTML}
             <div id="artigoConteudoBody">${contentParts.remainingHtml}</div>
