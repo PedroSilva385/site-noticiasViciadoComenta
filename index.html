@@ -3322,7 +3322,7 @@ fetchNoticiasAgendadas("data/noticias.json")
         <div class="noticia-conteudo">
           <div class="noticia-meta-badge">
             <span class="noticia-categoria">${noticia.categoria}</span>
-            <span class="noticia-data">${noticia.data}</span>
+            <span class="noticia-data">${noticia.data || 'Sem data'}</span>
           </div>
           <h3>${noticia.titulo}</h3>
           <p>${noticia.resumo}</p>
