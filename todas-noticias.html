@@ -1095,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="noticia-resumo">A NOS está a fazer alterações ao seu plano de 1Gbps, passando a disponibilizar velocidade simétrica a alguns dos seus clientes residenciais.</div>
       <div class="noticia-conteudo">
         <p>Leitura editorial sobre a revisão da oferta fixa da NOS e o impacto desta mudança para clientes residenciais.</p>
-        <a href="artigos/nos-faz-alteracoes-ao-plano-de-1gbps.html" class="noticia-ver-mais">Ver Mais � </a>
+        <a href="artigos/nos-faz-alteracoes-ao-plano-de-1gbps.html" class="noticia-ver-mais">Ver mais</a>
       </div>
     </div>
     <div class="noticia-completa">
@@ -1108,7 +1108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="noticia-resumo">Desde Novembro de 2024 que o serviço móvel da DIGI tem estado debaixo de fogo, com cobertura e estabilidade sob observação constante.</div>
       <div class="noticia-conteudo">
         <p>Análise ao estado atual da rede móvel da DIGI em Portugal e aos desafios operacionais que ainda persistem.</p>
-        <a href="artigos/rede-movel-digi-continua-a-avancar-em-portugal.html" class="noticia-ver-mais">Ver Mais � </a>
+        <a href="artigos/rede-movel-digi-continua-a-avancar-em-portugal.html" class="noticia-ver-mais">Ver mais</a>
       </div>
     </div>
     <div class="noticia-completa">
@@ -1121,7 +1121,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="noticia-resumo">A pressão financeira no grupo Altice volta a colocar a operação portuguesa no centro das hipóteses de alienação.</div>
       <div class="noticia-conteudo">
         <p>Contexto e leitura editorial sobre a posição da Altice Portugal num cenário de venda de ativos.</p>
-        <a href="artigos/altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi.html" class="noticia-ver-mais">Ver Mais � </a>
+        <a href="artigos/altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi.html" class="noticia-ver-mais">Ver mais</a>
       </div>
     </div>
     <div class="noticia-completa">
@@ -1134,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="noticia-resumo">A DIGI Espanha cresce, mas enfrenta novas pressões operacionais e concorrenciais que podem travar esse ritmo.</div>
       <div class="noticia-conteudo">
         <p>Leitura editorial sobre preços baixos, qualidade de serviço e o novo contexto competitivo no mercado espanhol.</p>
-        <a href="artigos/digi-espanha-sob-pressao-precos-baixos-falhas-na-rede-e-concorrencia-agressiva.html" class="noticia-ver-mais">Ver Mais � </a>
+        <a href="artigos/digi-espanha-sob-pressao-precos-baixos-falhas-na-rede-e-concorrencia-agressiva.html" class="noticia-ver-mais">Ver mais</a>
       </div>
     </div>
   </div>
@@ -1384,21 +1384,23 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
     const conteudoPreview = conteudoTexto.length > 250 
       ? conteudoTexto.substring(0, 250) + '...' 
       : conteudoTexto;
+    const noticiaData = noticia.data || 'Sem data';
+    const noticiaAutor = noticia.autor || 'Viciado Comenta';
     
     const noticiaEl = document.createElement('div');
     noticiaEl.className = 'noticia-completa';
     noticiaEl.innerHTML = `
       <div class="noticia-meta-header">
         <span class="noticia-categoria">${noticia.categoria}</span>
-        <span class="noticia-data">{noticia.data}</span>
-        <span class="noticia-autor">{noticia.autor}</span>
+        <span class="noticia-data">${noticiaData}</span>
+        <span class="noticia-autor">${noticiaAutor}</span>
       </div>
       <h3 class="noticia-titulo">${noticia.titulo}</h3>
       <div class="noticia-resumo">${noticia.resumo}</div>
       ${videoHTML}
       <div class="noticia-conteudo">
         <p>${conteudoPreview}</p>
-        <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver Mais � </a>
+        <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver mais</a>
       </div>
       ${index < noticiasParaMostrar.length - 1 ? '<div class="noticia-divider"></div>' : ''}
     `;
