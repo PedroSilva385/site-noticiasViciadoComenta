@@ -2797,9 +2797,29 @@ function getRelatedNoticias(currentNoticia, noticias, limit = 3) {
 
 function extractYoutubeVideoId(url) {
   if (!url || typeof url !== 'string') return '';
-  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
-  const match = url.match(regex);
-  return match ? match[1] : '';
+
+  const value = String(url).trim();
+  if (!value) return '';
+
+  const directIdMatch = value.match(/^[A-Za-z0-9_-]{11}$/);
+  if (directIdMatch) {
+    return directIdMatch[0];
+  }
+
+  const patterns = [
+    /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/|youtube-nocookie\.com\/embed\/)([A-Za-z0-9_-]{11})/i,
+    /youtube\.com\/watch\?.*?[?&]v=([A-Za-z0-9_-]{11})/i,
+    /(?:^|[?&])v=([A-Za-z0-9_-]{11})/i
+  ];
+
+  for (const pattern of patterns) {
+    const match = value.match(pattern);
+    if (match) {
+      return match[1];
+    }
+  }
+
+  return '';
 }
 
 function getRelatedCardMedia(item) {
@@ -3863,14 +3883,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateArticleSeoMeta(noticia);
         
-        // Extrair ID do YouTube
-        function extrairVideoId(url) {
-          if (!url) return '';
-          const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
-          const match = url.match(regex);
-          return match ? match[1] : '';
-        }
-        
         const categoriaNome = String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade';
         const tituloNoticia = String(noticia?.titulo || 'Artigo').trim() || 'Artigo';
         const resumoNoticia = String(noticia?.resumo || 'Sem resumo disponível.').trim() || 'Sem resumo disponível.';
@@ -3881,7 +3893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resumoHtml = escapeHtmlText(resumoNoticia);
         const dataHtml = escapeHtmlText(dataPublicacao);
         const autorHtml = escapeHtmlText(autorNome);
-        const videoId = extrairVideoId(noticia.video);
+        const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
         let videoHTML = '';
         if (videoId) {
           videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${tituloHtml}">
