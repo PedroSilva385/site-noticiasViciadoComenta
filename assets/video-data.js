@@ -61,7 +61,10 @@
         try {
           if (parentWin.firebase) {
             window._vcRemoteFirebase = parentWin.firebase;
-            window._vcFirebaseApp = parentWin._vcFirebaseApp || (parentWin.firebase.apps && parentWin.firebase.apps[0]) || null;
+            // Prefer adminPanel named app in parent when present
+            const parentApps = Array.isArray(parentWin.firebase.apps) ? parentWin.firebase.apps : [];
+            const parentAdminApp = parentApps.find((a) => a && a.name === 'adminPanel');
+            window._vcFirebaseApp = parentWin._vcFirebaseApp || parentAdminApp || (parentApps.length ? parentApps[0] : null) || null;
             window._vcUsingParent = true;
             return true;
           }
@@ -86,49 +89,56 @@
   }
 
   async function waitForAuthUser(timeoutMs = 5000) {
-    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
-      return null;
-    }
+    // Prefer remote (parent) firebase auth when available
+    const remote = window._vcRemoteFirebase || null;
+    const localFirebase = (typeof firebase !== 'undefined') ? firebase : null;
 
-    const auth = firebase.auth();
-    if (!auth) {
-      return null;
-    }
+    const authFromRemote = remote && typeof remote.auth === 'function' ? remote.auth() : null;
+    const authFromLocal = localFirebase && typeof localFirebase.auth === 'function' ? localFirebase.auth() : null;
 
-    if (auth.currentUser) {
-      return auth.currentUser;
-    }
+    const checkAuth = (auth) => {
+      if (!auth) return null;
+      if (auth.currentUser) return auth.currentUser;
+      return null;
+    };
+
+    const immediate = checkAuth(authFromRemote) || checkAuth(authFromLocal);
+    if (immediate) return immediate;
 
     if (typeof window.waitForFirebaseAuthUser === 'function') {
       try {
-        return await window.waitForFirebaseAuthUser(timeoutMs);
-      } catch (_) {
-        return null;
-      }
+        const res = await window.waitForFirebaseAuthUser(timeoutMs);
+        if (res) return res;
+      } catch (_) {}
     }
 
     return new Promise((resolve) => {
       let resolved = false;
-      const timer = window.setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          resolve(auth.currentUser || null);
-        }
-      }, timeoutMs);
-
-      const unsubscribe = auth.onAuthStateChanged((user) => {
+      const finish = (user) => {
         if (resolved) return;
         resolved = true;
-        window.clearTimeout(timer);
-        unsubscribe();
+        try { if (timer) window.clearTimeout(timer); } catch(_) {}
+        try { if (unsubLocal) unsubLocal(); } catch(_) {}
+        try { if (unsubRemote) unsubRemote(); } catch(_) {}
         resolve(user || null);
-      }, () => {
-        if (resolved) return;
-        resolved = true;
-        window.clearTimeout(timer);
-        unsubscribe();
-        resolve(null);
-      });
+      };
+
+      let unsubLocal = null;
+      let unsubRemote = null;
+
+      try {
+        if (authFromRemote && typeof authFromRemote.onAuthStateChanged === 'function') {
+          unsubRemote = authFromRemote.onAuthStateChanged((user) => finish(user || null), () => finish(null));
+        }
+      } catch (_) {}
+
+      try {
+        if (authFromLocal && typeof authFromLocal.onAuthStateChanged === 'function') {
+          unsubLocal = authFromLocal.onAuthStateChanged((user) => finish(user || null), () => finish(null));
+        }
+      } catch (_) {}
+
+      const timer = window.setTimeout(() => finish((authFromRemote && authFromRemote.currentUser) || (authFromLocal && authFromLocal.currentUser) || null), timeoutMs);
     });
   }
 
@@ -330,6 +340,7 @@
     ensureFirebaseReady,
     normalizeByTarget,
     loadTarget,
-    saveTarget
+    saveTarget,
+    debugContext
   };
 })();
