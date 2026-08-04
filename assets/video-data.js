@@ -53,7 +53,83 @@
     }
 
     window.firebaseInitialized = true;
+
+    // If the tool is running inside an iframe from the same origin, prefer parent's Firebase
+    try {
+      const parentWin = window.parent && window.parent !== window ? window.parent : null;
+      if (parentWin) {
+        try {
+          if (parentWin.firebase) {
+            window._vcRemoteFirebase = parentWin.firebase;
+            window._vcFirebaseApp = parentWin._vcFirebaseApp || (parentWin.firebase.apps && parentWin.firebase.apps[0]) || null;
+            window._vcUsingParent = true;
+            return true;
+          }
+        } catch (e) {
+          // cross-origin or no access
+        }
+      }
+
+      // Prefer a named admin app in the current window when available.
+      if (Array.isArray(firebase.apps) && firebase.apps.length) {
+        const adminApp = (firebase.apps || []).find((a) => a && a.name === 'adminPanel');
+        window._vcFirebaseApp = adminApp || (firebase.apps.length ? firebase.apps[0] : null) || null;
+      } else if (typeof firebase.app === 'function') {
+        window._vcFirebaseApp = firebase.app();
+      }
+      window._vcUsingParent = false;
+    } catch (_) {
+      window._vcFirebaseApp = null;
+      window._vcUsingParent = false;
+    }
     return true;
+  }
+
+  async function waitForAuthUser(timeoutMs = 5000) {
+    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+      return null;
+    }
+
+    const auth = firebase.auth();
+    if (!auth) {
+      return null;
+    }
+
+    if (auth.currentUser) {
+      return auth.currentUser;
+    }
+
+    if (typeof window.waitForFirebaseAuthUser === 'function') {
+      try {
+        return await window.waitForFirebaseAuthUser(timeoutMs);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    return new Promise((resolve) => {
+      let resolved = false;
+      const timer = window.setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          resolve(auth.currentUser || null);
+        }
+      }, timeoutMs);
+
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        if (resolved) return;
+        resolved = true;
+        window.clearTimeout(timer);
+        unsubscribe();
+        resolve(user || null);
+      }, () => {
+        if (resolved) return;
+        resolved = true;
+        window.clearTimeout(timer);
+        unsubscribe();
+        resolve(null);
+      });
+    });
   }
 
   function normalizeArrayLike(value) {
@@ -158,7 +234,17 @@
 
   async function readTargetFromFirebase(target) {
     await ensureFirebaseReady();
-    const snapshot = await firebase.database().ref(getTargetPath(target)).once('value');
+    const remote = window._vcRemoteFirebase || null;
+    const app = window._vcFirebaseApp || (remote && remote.apps && remote.apps[0]) || (typeof firebase !== 'undefined' && firebase.apps && firebase.apps[0]) || null;
+    const db = remote ? (remote.database ? remote.database() : null) : (app && typeof app.database === 'function' ? app.database() : (typeof firebase !== 'undefined' && firebase.database ? firebase.database() : null));
+    if (!db) throw new Error('Firebase Realtime Database indisponível.');
+    try {
+      const used = remote ? 'parent.firebase' : (app && app.name ? `app:${app.name}` : 'default-firebase');
+      const auth = remote ? (remote.auth ? remote.auth() : null) : (app && typeof app.auth === 'function' ? app.auth() : (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null));
+      const email = auth && auth.currentUser ? (auth.currentUser.email || '(sem-email)') : '(sem-sessao)';
+      console.info('[VCVideoData] readTargetFromFirebase using:', used, 'currentUser:', email, 'target:', target);
+    } catch (e) {}
+    const snapshot = await db.ref(getTargetPath(target)).once('value');
     if (!snapshot.exists()) {
       return { exists: false, data: normalizeByTarget(target, null) };
     }
@@ -205,13 +291,38 @@
 
   async function saveTarget(target, data) {
     await ensureFirebaseReady();
-
-    if (typeof firebase.auth === 'function' && !firebase.auth().currentUser) {
+    const remote = window._vcRemoteFirebase || null;
+    const app = window._vcFirebaseApp || (remote && remote.apps && remote.apps[0]) || (typeof firebase !== 'undefined' && firebase.apps && firebase.apps[0]) || null;
+    const auth = remote ? (remote.auth ? remote.auth() : null) : (app && typeof app.auth === 'function' ? app.auth() : (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null));
+    const user = auth && auth.currentUser ? auth.currentUser : await waitForAuthUser(5000);
+    // Diagnostic log
+    try {
+      const used = remote ? 'parent.firebase' : (app && app.name ? `app:${app.name}` : 'default-firebase');
+      const email = user ? (user.email || '(sem-email)') : '(sem-sessao)';
+      console.info('[VCVideoData] saveTarget using:', used, 'currentUser:', email, 'target:', target);
+    } catch (e) {}
+    if (!user) {
       throw new Error('Inicie sessao no painel admin para guardar videos.');
     }
 
-    await firebase.database().ref(getTargetPath(target)).set(normalizeByTarget(target, data));
+    const db = remote ? (remote.database ? remote.database() : null) : (app && typeof app.database === 'function' ? app.database() : (firebase.database ? firebase.database() : null));
+    if (!db) throw new Error('Firebase Realtime Database indisponível.');
+
+    await db.ref(getTargetPath(target)).set(normalizeByTarget(target, data));
     return true;
+  }
+
+  // Helper para inspeção no console: `VCVideoData.debugContext()`
+  function debugContext() {
+    const remote = window._vcRemoteFirebase || null;
+    const app = window._vcFirebaseApp || (remote && remote.apps && remote.apps[0]) || (typeof firebase !== 'undefined' && firebase.apps && firebase.apps[0]) || null;
+    const auth = remote ? (remote.auth ? remote.auth() : null) : (app && typeof app.auth === 'function' ? app.auth() : (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null));
+    return {
+      usingParentFirebase: !!remote,
+      appName: app && app.name ? app.name : null,
+      hasAuth: !!auth,
+      currentUser: auth && auth.currentUser ? { uid: auth.currentUser.uid, email: auth.currentUser.email || null } : null
+    };
   }
 
   window.VCVideoData = {
