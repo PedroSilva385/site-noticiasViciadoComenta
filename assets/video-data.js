@@ -312,7 +312,31 @@
       console.info('[VCVideoData] saveTarget using:', used, 'currentUser:', email, 'target:', target);
     } catch (e) {}
     if (!user) {
-      throw new Error('Inicie sessao no painel admin para guardar videos.');
+      // Fallback: prompt for admin credentials so tools can sign in when opened standalone.
+      try {
+        if (typeof window.confirm === 'function' && !window.confirm('Sessão admin não detectada. Pretende iniciar sessão agora?')) {
+          throw new Error('Inicie sessao no painel admin para guardar videos.');
+        }
+
+        const email = typeof window.prompt === 'function' ? window.prompt('Email (admin):') : null;
+        const password = typeof window.prompt === 'function' ? window.prompt('Password:') : null;
+        if (!email || !password) throw new Error('Credenciais não fornecidas.');
+
+        if (!auth || typeof auth.signInWithEmailAndPassword !== 'function') {
+          throw new Error('Autenticação indisponível para signInWithEmailAndPassword. Abra o painel admin e inicie sessão.');
+        }
+
+        console.info('[VCVideoData] attempting signInWithEmailAndPassword for', email);
+        const credential = await auth.signInWithEmailAndPassword(email, password);
+        const newUser = (credential && credential.user) ? credential.user : auth.currentUser;
+        if (!newUser) throw new Error('Falha ao iniciar sessão com as credenciais fornecidas.');
+        // update local user variable
+        user = newUser;
+        console.info('[VCVideoData] sign-in successful, user:', user.email || '(sem-email)');
+      } catch (e) {
+        console.warn('[VCVideoData] fallback sign-in failed:', e && e.message ? e.message : e);
+        throw e;
+      }
     }
 
     const db = remote ? (remote.database ? remote.database() : null) : (app && typeof app.database === 'function' ? app.database() : (firebase.database ? firebase.database() : null));
