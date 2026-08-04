@@ -75,12 +75,17 @@ function canWriteProtectedAnalytics() {
 function waitForFirebaseAuthUser(timeoutMs = 4000) {
   return new Promise((resolve) => {
     try {
-      if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+      if (typeof firebase === 'undefined') {
         resolve(null);
         return;
       }
 
-      const auth = firebase.auth();
+      // Prefer auth from a named admin app if present (adminPanel)
+      const adminApp = Array.isArray(firebase.apps) && firebase.apps.length
+        ? (firebase.apps || []).find((a) => a && a.name === 'adminPanel')
+        : null;
+
+      const auth = adminApp && typeof adminApp.auth === 'function' ? adminApp.auth() : (typeof firebase.auth === 'function' ? firebase.auth() : null);
       if (!auth) {
         resolve(null);
         return;
@@ -93,28 +98,16 @@ function waitForFirebaseAuthUser(timeoutMs = 4000) {
 
       let resolved = false;
       const finish = (user) => {
-        if (resolved) {
-          return;
-        }
+        if (resolved) return;
         resolved = true;
-        if (typeof unsubscribe === 'function') {
-          unsubscribe();
-        }
-        if (timerId) {
-          window.clearTimeout(timerId);
-        }
+        try { if (typeof unsubscribe === 'function') unsubscribe(); } catch(_) {}
+        try { if (timerId) window.clearTimeout(timerId); } catch(_) {}
         resolve(user || null);
       };
 
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        finish(user || null);
-      }, () => {
-        finish(null);
-      });
+      const unsubscribe = auth.onAuthStateChanged((user) => finish(user || null), () => finish(null));
 
-      const timerId = window.setTimeout(() => {
-        finish(auth.currentUser || null);
-      }, timeoutMs);
+      const timerId = window.setTimeout(() => finish(auth.currentUser || null), timeoutMs);
     } catch (_) {
       resolve(null);
     }
@@ -126,15 +119,15 @@ async function ensureAnalyticsAuthUser() {
     if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
       return null;
     }
+    // Prefer adminPanel auth when available so tools/iframes reuse the same session
+    const adminApp = Array.isArray(firebase.apps) && firebase.apps.length
+      ? (firebase.apps || []).find((a) => a && a.name === 'adminPanel')
+      : null;
 
-    const auth = firebase.auth();
-    if (!auth) {
-      return null;
-    }
+    const auth = adminApp && typeof adminApp.auth === 'function' ? adminApp.auth() : (typeof firebase.auth === 'function' ? firebase.auth() : null);
+    if (!auth) return null;
 
-    if (auth.currentUser) {
-      return auth.currentUser;
-    }
+    if (auth.currentUser) return auth.currentUser;
 
     const existingUser = await waitForFirebaseAuthUser(1200);
     if (existingUser) {
@@ -788,7 +781,9 @@ async function initializeDeferredFirebaseWork() {
   deferredFirebaseWorkStarted = true;
 
   try {
-    if (shouldSkipAnalyticsTracking()) {
+    // Não executar analytics em páginas administrativas / ferramentas para evitar conflitos de sessão
+    const adminContext = (window.location.pathname || '').toLowerCase().includes('/admin') || (window.location.pathname || '').toLowerCase().includes('/tools/');
+    if (adminContext || shouldSkipAnalyticsTracking()) {
       console.log('ℹ️ Tracking de analytics desativado para este navegador/dispositivo');
       return;
     }
