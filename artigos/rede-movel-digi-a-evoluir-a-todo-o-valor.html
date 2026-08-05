@@ -2679,8 +2679,27 @@ function getFirstContentImage(noticia) {
   return getAbsoluteSiteUrl(image.getAttribute('src'));
 }
 
+function getNoticiaThumbnailUrl(noticia) {
+  const customThumbnail = noticia && typeof noticia.thumbnail === 'string' ? noticia.thumbnail.trim() : '';
+  if (customThumbnail) {
+    return getAbsoluteSiteUrl(customThumbnail);
+  }
+
+  const contentImage = getFirstContentImage(noticia);
+  if (contentImage) {
+    return contentImage;
+  }
+
+  const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
+  return 'https://www.viciadocomenta.pt/assets/news-placeholder.svg';
+}
+
 function getArticleSocialImage(noticia) {
-  return getFirstContentImage(noticia) || 'https://www.viciadocomenta.pt/assets/perfil.png';
+  return getNoticiaThumbnailUrl(noticia) || 'https://www.viciadocomenta.pt/assets/perfil.png';
 }
 
 function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, socialImageUrl) {
@@ -2822,11 +2841,11 @@ function extractYoutubeVideoId(url) {
 }
 
 function getRelatedCardMedia(item) {
-  const videoId = extractYoutubeVideoId(item && item.video ? String(item.video) : '');
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
+  const thumbnailUrl = getNoticiaThumbnailUrl(item);
 
-  if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+  if (thumbnailUrl) {
+    return `<div class="relacionado-media"><img src="${thumbnailUrl}" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy" onerror="this.onerror=null;this.src='https://www.viciadocomenta.pt/assets/news-placeholder.svg';"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
