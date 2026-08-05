@@ -1246,6 +1246,10 @@ button {
               <input type="url" id="noticiaVideo" placeholder="https://youtu.be/...">
             </div>
             <div class="form-group">
+              <label for="noticiaThumbnail">Miniatura (URL da imagem)</label>
+              <input type="url" id="noticiaThumbnail" placeholder="https://.../imagem.jpg" autocomplete="off">
+            </div>
+            <div class="form-group">
               <label for="noticiaSlug">Slug (automático)</label>
               <input type="text" id="noticiaSlug" readonly>
             </div>
@@ -1769,6 +1773,7 @@ const noticiaCategoria = document.getElementById('noticiaCategoria');
 const noticiaResumo = document.getElementById('noticiaResumo');
 const contentEditor = document.getElementById('contentEditor');
 const noticiaVideo = document.getElementById('noticiaVideo');
+const noticiaThumbnail = document.getElementById('noticiaThumbnail');
 const noticiaSlug = document.getElementById('noticiaSlug');
 const btnSave = document.getElementById('btnSave');
 const btnCancel = document.getElementById('btnCancel');
@@ -1921,6 +1926,7 @@ function queueDraftAutosave() {
       resumo: noticiaResumo.value,
       conteudo: contentEditor.innerHTML,
       video: noticiaVideo.value,
+      thumbnail: noticiaThumbnail.value,
       slug: noticiaSlug.value,
       scheduleMode: document.querySelector('input[name="scheduling"]:checked')?.value || 'immediate',
       scheduleDate: noticiaScheduleDate.value,
@@ -2612,7 +2618,7 @@ contentEditor.addEventListener('paste', () => {
   }, 0);
 });
 
-[noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaSlug].forEach((field) => {
+[noticiaTitulo, noticiaResumo, noticiaAutor, noticiaData, noticiaCategoria, noticiaVideo, noticiaThumbnail, noticiaSlug].forEach((field) => {
   field.addEventListener('input', () => {
     updateQualityHints();
     setDirty(true);
@@ -2922,6 +2928,7 @@ function selectNoticia(id) {
     noticiaResumo.value = noticia.resumo || '';
     contentEditor.innerHTML = noticia.conteudo || '';
     noticiaVideo.value = noticia.video || '';
+    noticiaThumbnail.value = noticia.thumbnail || '';
     noticiaSlug.value = noticia.slug || '';
     
     // Load scheduling info if exists
@@ -2970,6 +2977,7 @@ btnNewNoticia.addEventListener('click', () => {
   noticiaResumo.value = '';
   contentEditor.innerHTML = '';
   noticiaVideo.value = '';
+  noticiaThumbnail.value = '';
   noticiaSlug.value = '';
   
   // Reset scheduling to immediate
