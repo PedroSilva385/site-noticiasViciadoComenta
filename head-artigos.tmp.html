@@ -2628,8 +2628,27 @@ function getFirstContentImage(noticia) {
   return getAbsoluteSiteUrl(image.getAttribute('src'));
 }
 
+function getNoticiaThumbnailUrl(noticia) {
+  const customThumbnail = noticia && typeof noticia.thumbnail === 'string' ? noticia.thumbnail.trim() : '';
+  if (customThumbnail) {
+    return getAbsoluteSiteUrl(customThumbnail);
+  }
+
+  const contentImage = getFirstContentImage(noticia);
+  if (contentImage) {
+    return contentImage;
+  }
+
+  const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
+  return 'https://www.viciadocomenta.pt/assets/news-placeholder.svg';
+}
+
 function getArticleSocialImage(noticia) {
-  return getFirstContentImage(noticia) || 'https://www.viciadocomenta.pt/assets/perfil.png';
+  return getNoticiaThumbnailUrl(noticia) || 'https://www.viciadocomenta.pt/assets/perfil.png';
 }
 
 function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, socialImageUrl) {
