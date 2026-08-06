@@ -178,13 +178,6 @@ button:hover { filter: brightness(.95); }
 
       <div class="row">
         <div>
-          <label for="thumbnail">Miniatura (URL da imagem)</label>
-          <input id="thumbnail" type="text" placeholder="https://.../imagem.jpg">
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
           <label for="categoria">Categoria</label>
           <select id="categoria"></select>
         </div>
@@ -742,7 +735,6 @@ function adicionarNoticia() {
   const categoria = obterCategoriaSelecionada();
   const resumo = document.getElementById('resumo').value.trim();
   const video = document.getElementById('video').value.trim();
-  const thumbnail = document.getElementById('thumbnail').value.trim();
   const conteudoConvertido = document.getElementById('conteudoConvertido').value.trim();
 
   if ((dataPublicacaoData && !dataPublicacaoHora) || (!dataPublicacaoData && dataPublicacaoHora)) {
@@ -773,8 +765,7 @@ function adicionarNoticia() {
     categoria,
     resumo,
     conteudo: conteudoConvertido,
-    video,
-    thumbnail
+    video
   };
 
   if (dataPublicacao) {

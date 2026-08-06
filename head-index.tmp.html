@@ -3291,42 +3291,16 @@ fetchNoticiasAgendadas("data/noticias.json")
       return noticias.filter((noticia) => normalizeText(noticia.categoria) === categoriaNormalizada);
     }
 
-    function getAbsoluteSiteUrl(url) {
-      const value = String(url || '').trim();
-      if (!value) return '';
-      if (/^https?:\/\//i.test(value)) return value;
-      return new URL(value.replace(/^\.\//, '').replace(/^\.\.\//, ''), 'https://www.viciadocomenta.pt/').toString();
-    }
-
-    function getFirstContentImage(noticia) {
-      const html = `${noticia?.resumo || ''} ${noticia?.conteudo || ''}`;
-      const helper = document.createElement('div');
-      helper.innerHTML = html;
-      const image = helper.querySelector('img[src]');
-      return image ? getAbsoluteSiteUrl(image.getAttribute('src')) : '';
-    }
-
-    function getNoticiaThumbnailUrl(noticia) {
-      const customThumbnail = noticia && typeof noticia.thumbnail === 'string' ? noticia.thumbnail.trim() : '';
-      if (customThumbnail) return getAbsoluteSiteUrl(customThumbnail);
-
-      const videoId = extrairVideoId(noticia && noticia.video ? String(noticia.video) : '');
-      if (videoId) return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-
-      return '';
-    }
-
     function criarCardNoticia(noticia) {
       const isRead = articleReadTracker.isRead(noticia.id);
       const videoId = extrairVideoId(noticia.video);
-      const thumbnailUrl = getNoticiaThumbnailUrl(noticia);
-      const safeTitle = String(noticia.titulo || '').replace(/"/g, '&quot;');
+      const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
       const thumbnailMarkup = thumbnailUrl
         ? `
             <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
               <div class="noticia-thumb">
-                <img src="${thumbnailUrl}" alt="Miniatura da notícia ${safeTitle}" loading="lazy" onerror="this.onerror=null;this.src='https://www.viciadocomenta.pt/assets/news-placeholder.svg';">
-                ${videoId ? '<span class="noticia-thumb-play"><i class="fas fa-play"></i></span>' : ''}
+                <img src="${thumbnailUrl}" alt="Miniatura do vídeo ${noticia.titulo}" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}">
+                <span class="noticia-thumb-play"><i class="fas fa-play"></i></span>
               </div>
             </a>
           `
