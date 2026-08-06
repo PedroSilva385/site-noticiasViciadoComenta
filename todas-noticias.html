@@ -1374,18 +1374,8 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
     const thumbnailUrl = (() => {
       const customThumbnail = noticia && typeof noticia.thumbnail === 'string' ? noticia.thumbnail.trim() : '';
       if (customThumbnail) return customThumbnail;
-
-      const contentImage = (() => {
-        const html = `${noticia?.resumo || ''} ${noticia?.conteudo || ''}`;
-        const helper = document.createElement('div');
-        helper.innerHTML = html;
-        const image = helper.querySelector('img[src]');
-        return image ? image.getAttribute('src') : '';
-      })();
-      if (contentImage) return contentImage;
-
       if (videoId) return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-      return 'https://www.viciadocomenta.pt/assets/news-placeholder.svg';
+      return '';
     })();
 
     let videoHTML = '';
@@ -1393,10 +1383,6 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
       videoHTML = `<div class="noticia-video" id="videoContainer-${noticia.id}">
         <img src="${thumbnailUrl}" alt="Miniatura do vídeo" id="thumbnail-${noticia.id}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;" onerror="this.onerror=null;this.src='https://www.viciadocomenta.pt/assets/news-placeholder.svg';">
         <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-${noticia.id}" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
-      </div>`;
-    } else {
-      videoHTML = `<div class="noticia-video" id="videoContainer-${noticia.id}">
-        <img src="${thumbnailUrl}" alt="Miniatura da notícia" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;" onerror="this.onerror=null;this.src='https://www.viciadocomenta.pt/assets/news-placeholder.svg';">
       </div>`;
     }
     

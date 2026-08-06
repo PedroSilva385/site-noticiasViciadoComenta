@@ -3310,13 +3310,10 @@ fetchNoticiasAgendadas("data/noticias.json")
       const customThumbnail = noticia && typeof noticia.thumbnail === 'string' ? noticia.thumbnail.trim() : '';
       if (customThumbnail) return getAbsoluteSiteUrl(customThumbnail);
 
-      const contentImage = getFirstContentImage(noticia);
-      if (contentImage) return contentImage;
-
       const videoId = extrairVideoId(noticia && noticia.video ? String(noticia.video) : '');
       if (videoId) return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
-      return 'https://www.viciadocomenta.pt/assets/news-placeholder.svg';
+      return '';
     }
 
     function criarCardNoticia(noticia) {
@@ -3324,11 +3321,22 @@ fetchNoticiasAgendadas("data/noticias.json")
       const videoId = extrairVideoId(noticia.video);
       const thumbnailUrl = getNoticiaThumbnailUrl(noticia);
       const safeTitle = String(noticia.titulo || '').replace(/"/g, '&quot;');
-      const thumbnailMarkup = `
+      const thumbnailMarkup = thumbnailUrl
+        ? `
             <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
               <div class="noticia-thumb">
                 <img src="${thumbnailUrl}" alt="Miniatura da notícia ${safeTitle}" loading="lazy" onerror="this.onerror=null;this.src='https://www.viciadocomenta.pt/assets/news-placeholder.svg';">
                 ${videoId ? '<span class="noticia-thumb-play"><i class="fas fa-play"></i></span>' : ''}
+              </div>
+            </a>
+          `
+        : `
+            <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
+              <div class="noticia-thumb">
+                <div class="noticia-thumb-fallback">
+                  <i class="fas fa-newspaper"></i>
+                  <span>Sem miniatura</span>
+                </div>
               </div>
             </a>
           `;
