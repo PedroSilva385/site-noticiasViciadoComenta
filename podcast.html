@@ -39,10 +39,21 @@ main h2{margin-top:0;font-size:2em;}
 .podcast-card h3{margin-top:0;font-size:1.25em;color:#0f172a;}
 .podcast-card a{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;background:#1DB954;color:#fff;border-radius:12px;text-decoration:none;font-weight:700;margin-top:16px;}
 .podcast-card a:hover{background:#17a34a;}
-.episodes{display:grid;grid-template-columns:1fr;gap:16px;}
-.episode{background:#e2e8f0;border-radius:14px;padding:18px;}
-.episode h4{margin:0 0 8px 0;font-size:1.1em;color:#0f172a;}
-.episode p{margin:0;color:#475569;line-height:1.6;}
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin-bottom:16px}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.subscribe-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;background:#ff0000;color:#fff;border-radius:10px;text-decoration:none;font-weight:700;margin-top:8px}
+.subscribe-btn:hover{filter:brightness(0.95)}
+.episodes{display:grid;gap:24px;}
+.episode-header h2{margin:0;font-size:2em;color:#0f172a;}
+.episode-header p{margin:8px 0 0 0;color:#334155;line-height:1.75;}
+.episode-list{display:grid;gap:18px;}
+.episode-item{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:start;background:#f8fafc;border-radius:18px;padding:18px;box-shadow:0 10px 24px rgba(15,23,42,0.1);}
+.episode-thumb{width:100%;height:100%;object-fit:cover;border-radius:14px;}
+.episode-meta{display:inline-block;margin-bottom:10px;font-size:0.9em;color:#64748b;font-weight:600;}
+.episode-content h3{margin:0 0 10px 0;font-size:1.15em;color:#0f172a;}
+.episode-content p{margin:0 0 14px 0;color:#475569;line-height:1.7;}
+.episode-link{display:inline-flex;align-items:center;gap:8px;color:#007BFF;font-weight:700;text-decoration:none;}
+.episode-link:hover{text-decoration:underline;}
 footer{text-align:center;padding:24px;background:#004494;color:#fff;margin-top:40px;}
 .footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
 .footer-links a{color:#fff;text-decoration:none;font-weight:600;}
@@ -50,8 +61,8 @@ footer{text-align:center;padding:24px;background:#004494;color:#fff;margin-top:4
 .footer-contacts{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
 .footer-contacts a{color:#fff;text-decoration:none;font-weight:600;}
 .footer-contacts i{margin-right:8px;}
-@media(max-width:900px){.podcast-intro{grid-template-columns:1fr;}}
-@media(max-width:640px){header{justify-content:center;text-align:center;}header h1{font-size:1.8em;}nav{gap:12px;padding:0 12px;}main{padding:18px;}}
+@media(max-width:900px){.podcast-intro{grid-template-columns:1fr;}.episode-item{grid-template-columns:1fr;}}
+@media(max-width:640px){header{justify-content:center;text-align:center;}header h1{font-size:1.8em;}nav{gap:12px;padding:0 12px;}main{padding:18px;}.episode-item{padding:16px;}}
 </style>
 </head>
 <body>
@@ -85,17 +96,58 @@ footer{text-align:center;padding:24px;background:#004494;color:#fff;margin-top:4
       </a>
     </div>
   </div>
-  <div style="margin-bottom:32px;">
-    <iframe style="border-radius:12px;border:0;width:100%;height:232px;" src="https://open.spotify.com/embed/show/53LNJfxZySrvQkjTcuergN" allow="encrypted-media" loading="lazy"></iframe>
+  <div style="margin-bottom:28px;">
+    <h3 style="margin:0 0 12px 0;color:#0f172a">Podcast no YouTube</h3>
+    <div class="video-wrap" aria-hidden="false">
+      <iframe src="https://www.youtube.com/embed/videoseries?list=PLauNyHGhZZAk&amp;rel=0&amp;modestbranding=1" title="Playlist VICIADO COMENTA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <a class="subscribe-btn" href="https://www.youtube.com/@TheViciado" target="_blank" rel="noopener noreferrer" aria-label="Subscrever no YouTube">
+      <i class="fab fa-youtube" style="color:#fff"></i> Subscrever no YouTube
+    </a>
+  </div>
+  <div style="margin-top:18px;margin-bottom:32px;">
+    <h3 style="margin:0 0 12px 0;color:#0f172a">Também no Spotify</h3>
+    <iframe style="border-radius:12px;border:0;width:100%;height:232px;" src="https://open.spotify.com/embed/show/53LNJfxZySrvQkjTcuergN" allow="encrypted-media" loading="lazy" title="Podcast Spotify"></iframe>
   </div>
   <section class="episodes">
-    <div class="episode">
-      <h4>Episódios mais recentes</h4>
-      <p>Atualize esta secção com um breve resumo dos episódios mais recentes do podcast, temas discutidos e convidados. Se quiser, posso ajudar a estruturar a lista de episódios para este site.</p>
+    <div class="episode-header">
+      <h2>Últimos episódios</h2>
+      <p>Ouça direto no YouTube e encontre abaixo os episódios recentes com temas de telecom, gaming e atualidade.</p>
     </div>
-    <div class="episode">
-      <h4>Novidades e destaques</h4>
-      <p>Adicione aqui as últimas notícias do podcast, episódios especiais e as plataformas onde os ouvintes podem seguir o conteúdo.</p>
+    <div class="episode-list">
+      <article class="episode-item">
+        <a href="https://www.youtube.com/playlist?list=PLauNyHGhZZAk" target="_blank" rel="noopener noreferrer" class="episode-thumb-link">
+          <img src="assets/perfil.png" alt="Miniatura do Episódio 1" class="episode-thumb">
+        </a>
+        <div class="episode-content">
+          <span class="episode-meta">12 agosto 2026</span>
+          <h3>Episódio 1 — O futuro das telecom em Portugal</h3>
+          <p>Análise rápida das principais novidades nas operadoras, estratégias de preços e o que esperar do mercado até ao fim do ano.</p>
+          <a class="episode-link" href="https://www.youtube.com/playlist?list=PLauNyHGhZZAk" target="_blank" rel="noopener noreferrer">Ver no YouTube</a>
+        </div>
+      </article>
+      <article class="episode-item">
+        <a href="https://www.youtube.com/playlist?list=PLauNyHGhZZAk" target="_blank" rel="noopener noreferrer" class="episode-thumb-link">
+          <img src="assets/perfil.png" alt="Miniatura do Episódio 2" class="episode-thumb">
+        </a>
+        <div class="episode-content">
+          <span class="episode-meta">05 agosto 2026</span>
+          <h3>Episódio 2 — Gaming e gadgets que marcaram 2026</h3>
+          <p>Comentamos os lançamentos mais quentes, dispositivos essenciais e como a tecnologia está a mudar a experiência de gaming em Portugal.</p>
+          <a class="episode-link" href="https://www.youtube.com/playlist?list=PLauNyHGhZZAk" target="_blank" rel="noopener noreferrer">Ver no YouTube</a>
+        </div>
+      </article>
+      <article class="episode-item">
+        <a href="https://www.youtube.com/playlist?list=PLauNyHGhZZAk" target="_blank" rel="noopener noreferrer" class="episode-thumb-link">
+          <img src="assets/perfil.png" alt="Miniatura do Episódio 3" class="episode-thumb">
+        </a>
+        <div class="episode-content">
+          <span class="episode-meta">29 julho 2026</span>
+          <h3>Episódio 3 — Opinião: redes sociais, privacidade e streaming</h3>
+          <p>Uma conversa direta sobre privacidade digital, as melhores plataformas de streaming e como proteger-se enquanto consome conteúdo.</p>
+          <a class="episode-link" href="https://www.youtube.com/playlist?list=PLauNyHGhZZAk" target="_blank" rel="noopener noreferrer">Ver no YouTube</a>
+        </div>
+      </article>
     </div>
   </section>
 </main>
