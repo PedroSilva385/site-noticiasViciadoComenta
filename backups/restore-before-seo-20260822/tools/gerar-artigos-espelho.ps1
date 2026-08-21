@@ -254,41 +254,6 @@ function Get-PublicationDateValue {
     return $null
 }
 
-function Get-ArticleDateValue {
-    param(
-        [object]$Noticia,
-        [string[]]$PropertyNames
-    )
-
-    foreach ($propertyName in $PropertyNames) {
-        if ($Noticia.PSObject.Properties.Name -contains $propertyName) {
-            $parsed = Get-PublicationDateValue -DataStr ([string]$Noticia.$propertyName)
-            if ($parsed) {
-                return $parsed
-            }
-        }
-    }
-
-    return $null
-}
-
-function Limit-Headline {
-    param([string]$Text)
-
-    $normalized = (Get-PlainTextFromHtml -Text $Text).Trim()
-    if ($normalized.Length -le 110) {
-        return $normalized
-    }
-
-    return ($normalized.Substring(0, 107).TrimEnd() + '...')
-}
-
-function ConvertTo-RssCdata {
-    param([string]$Text)
-
-    return '<![CDATA[' + ([string]$Text -replace '\]\]>', ']]]]><![CDATA[>') + ']]>'
-}
-
 function Get-YouTubeId {
     param([string]$Url)
 
@@ -436,11 +401,6 @@ $jsonPath = Join-Path $root 'data/noticias.json'
 $templatePath = Join-Path $root 'artigos.html'
 $artigosDir = Join-Path $root 'artigos'
 $sitemapPath = Join-Path $root 'sitemap.xml'
-$rssPath = Join-Path $root 'rss.xml'
-$siteSocialImageUrl = 'https://www.viciadocomenta.pt/assets/social-card.svg'
-$publisherId = 'https://www.viciadocomenta.pt/#organization'
-$authorId = 'https://www.viciadocomenta.pt/autor/pedro-silva.html#author'
-$authorUrl = 'https://www.viciadocomenta.pt/autor/pedro-silva.html'
 
 if (Test-Path $contentStoreScript) {
     Write-Host 'A regenerar data/noticias.json a partir de content/artigos/*.md...' -ForegroundColor Yellow
@@ -566,8 +526,11 @@ foreach ($noticia in $noticias) {
     $metaDescription = Get-MetaDescription -Noticia $noticia
     $videoUrl = if ($noticia.PSObject.Properties.Name -contains 'video') { [string]$noticia.video } else { '' }
     $videoId = Get-YouTubeId -Url $videoUrl
-    $effectivePublishedDate = if ($publishDate) { $publishDate } else { Get-ArticleDateValue -Noticia $noticia -PropertyNames @('data', 'dataPublicacao') }
-    $effectiveModifiedDate = Get-ArticleDateValue -Noticia $noticia -PropertyNames @('dataAtualizacao', 'dataModificada', 'dataModified', 'dataPublicacao', 'data')
+    $effectivePublishedDate = if ($publishDate) {
+        $publishDate
+    } else {
+        Get-PublicationDateValue -DataStr ([string]$noticia.data)
+    }
     $sitemapLastMod = if ($effectivePublishedDate) {
         $effectivePublishedDate.ToString('yyyy-MM-dd')
     } else {
@@ -579,21 +542,20 @@ foreach ($noticia in $noticias) {
     } else {
         '2026-01-01T00:00:00Z'
     }
-    $modifiedDateIso = if ($effectiveModifiedDate) {
-        $effectiveModifiedDate.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
-    } else {
-        $publishedDateIso
-    }
+    $modifiedDateIso = $publishedDateIso
 
     $safeTitle = ConvertTo-HtmlEntities -Text $rawTitle
     $safeDescription = ConvertTo-HtmlEntities -Text $metaDescription
     $safeUrl = ConvertTo-HtmlEntities -Text $articleUrl
     $contentImageUrl = Get-FirstContentImageUrl -Noticia $noticia
-    $articleSocialImageUrl = $siteSocialImageUrl
-    $safeSocialImageUrl = ConvertTo-HtmlEntities -Text $articleSocialImageUrl
+    $socialImageUrl = if (-not [string]::IsNullOrWhiteSpace($contentImageUrl)) {
+        $contentImageUrl
+    } else {
+        'https://www.viciadocomenta.pt/assets/perfil.png'
+    }
+    $safeSocialImageUrl = ConvertTo-HtmlEntities -Text $socialImageUrl
 
     $authorName = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
-    $headline = Limit-Headline -Text $rawTitle
 
     $articleJsonLdObject = [ordered]@{
         '@context' = 'https://schema.org'
@@ -603,53 +565,29 @@ foreach ($noticia in $noticias) {
             '@type' = 'WebPage'
             '@id' = $articleUrl
         }
-        headline = $headline
+        headline = $rawTitle
         description = $metaDescription
         datePublished = $publishedDateIso
         dateModified = $modifiedDateIso
-        image = @($articleSocialImageUrl)
-        author = [ordered]@{ '@id' = $authorId }
-        publisher = [ordered]@{ '@id' = $publisherId }
-        inLanguage = 'pt-PT'
-    }
-
-    $organizationJsonLdObject = [ordered]@{
-        '@type' = 'Organization'
-        '@id' = $publisherId
-        name = 'VICIADO COMENTA'
-        url = 'https://www.viciadocomenta.pt/'
-        logo = [ordered]@{
-            '@type' = 'ImageObject'
-            '@id' = 'https://www.viciadocomenta.pt/assets/social-card.svg#logo'
-            url = $siteSocialImageUrl
-            contentUrl = $siteSocialImageUrl
-            width = 1200
-            height = 630
+        image = @($socialImageUrl)
+        author = [ordered]@{
+            '@type' = 'Person'
+            name = $authorName
         }
-        sameAs = @(
-            'https://www.facebook.com/Viciadoemjogospt',
-            'https://www.instagram.com/theviciado13/',
-            'https://www.youtube.com/@TheViciado',
-            'https://www.twitch.tv/theviciado13',
-            'https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN',
-            'https://discord.gg/pGxzqCdrFJ'
-        )
-    }
-
-    $authorJsonLdObject = [ordered]@{
-        '@type' = 'Person'
-        '@id' = $authorId
-        name = $authorName
-        url = $authorUrl
-        sameAs = @(
-            'https://www.facebook.com/Viciadoemjogospt',
-            'https://www.instagram.com/theviciado13/'
-        )
+        publisher = [ordered]@{
+            '@type' = 'Organization'
+            name = 'VICIADO COMENTA'
+            logo = [ordered]@{
+                '@type' = 'ImageObject'
+                url = 'https://www.viciadocomenta.pt/assets/favicon.svg'
+            }
+        }
+        inLanguage = 'pt-PT'
     }
 
     $jsonLdObject = [ordered]@{
         '@context' = 'https://schema.org'
-        '@graph' = @($articleJsonLdObject, $organizationJsonLdObject, $authorJsonLdObject)
+        '@graph' = @($articleJsonLdObject)
     }
 
     $jsonLd = $jsonLdObject | ConvertTo-Json -Depth 10 -Compress
@@ -666,9 +604,6 @@ foreach ($noticia in $noticias) {
 <meta property="og:description" content="$safeDescription">
 <meta property="og:url" content="$safeUrl">
 <meta property="og:image" content="$safeSocialImageUrl">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<link rel="alternate" type="application/rss+xml" title="VICIADO COMENTA" href="https://www.viciadocomenta.pt/rss.xml">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="$safeTitle">
 <meta name="twitter:description" content="$safeDescription">
@@ -787,7 +722,6 @@ $baseUrls = @(
     'https://www.viciadocomenta.pt/todas-noticias.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
     'https://www.viciadocomenta.pt/contacto.html',
-    'https://www.viciadocomenta.pt/autor/pedro-silva.html',
     'https://www.viciadocomenta.pt/politica-privacidade.html',
     'https://www.viciadocomenta.pt/termos-servico.html'
 )
@@ -812,48 +746,6 @@ foreach ($article in $generatedArticles) {
 $sitemapLines += '</urlset>'
 [System.IO.File]::WriteAllText($sitemapPath, ($sitemapLines -join "`n"), [System.Text.UTF8Encoding]::new($false))
 
-$rssItems = New-Object System.Collections.Generic.List[string]
-foreach ($noticia in $noticias) {
-        $published = Get-ArticleDateValue -Noticia $noticia -PropertyNames @('dataPublicacao', 'data')
-        if ($published -and $published -gt $now) { continue }
-
-        $slug = Get-Slug -InputText ([string]$noticia.slug)
-        $articleUrl = "https://www.viciadocomenta.pt/artigos/$slug.html"
-        $title = ConvertTo-RssCdata -Text ([string]$noticia.titulo)
-        $description = ConvertTo-RssCdata -Text (Get-MetaDescription -Noticia $noticia)
-        $content = ConvertTo-RssCdata -Text ([string]$noticia.conteudo)
-        $date = if ($published) { $published.ToUniversalTime().ToString('R') } else { $now.ToUniversalTime().ToString('R') }
-        $rssItems.Add(@"
-        <item>
-            <title>$title</title>
-            <link>$articleUrl</link>
-            <guid isPermaLink="true">$articleUrl</guid>
-            <pubDate>$date</pubDate>
-            <description>$description</description>
-            <content:encoded>$content</content:encoded>
-        </item>
-"@)
-}
-
-$rss = @"
-<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-    <channel>
-        <title>VICIADO COMENTA</title>
-        <link>https://www.viciadocomenta.pt/</link>
-        <description>Notícias e análise sobre telecomunicações, tecnologia, gaming e atualidade.</description>
-        <language>pt-PT</language>
-        <image>
-            <url>$siteSocialImageUrl</url>
-            <title>VICIADO COMENTA</title>
-            <link>https://www.viciadocomenta.pt/</link>
-        </image>
-$($rssItems -join "`n")
-    </channel>
-</rss>
-"@
-[System.IO.File]::WriteAllText($rssPath, $rss.TrimStart(), [System.Text.UTF8Encoding]::new($false))
-
 if ($jsonUpdated) {
     $updatedJson = $data | ConvertTo-Json -Depth 100
     [System.IO.File]::WriteAllText($jsonPath, $updatedJson, [System.Text.UTF8Encoding]::new($false))
@@ -863,7 +755,6 @@ Write-Output "Artigos espelho gerados: $generatedFileCount"
 Write-Output "Artigos incluídos no sitemap: $($generatedArticles.Count)"
 Write-Output "Diretório: $artigosDir"
 Write-Output "Sitemap atualizado: $sitemapPath"
-Write-Output "RSS atualizado: $rssPath"
 if ($jsonUpdated) {
     Write-Output "noticias.json sincronizado com slug/link editável"
 }

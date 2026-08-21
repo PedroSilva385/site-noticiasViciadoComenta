@@ -1,31 +1,36 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
-<base href="../">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EFEITOS da DIGI: Queda BRUTAL nas receitas! - VICIADO COMENTA</title>
-<meta name="description" content="Explore artigos, opinião editorial e análise aprofundada sobre telecomunicações, tecnologia, gaming e atualidade no VICIADO COMENTA.">
+<title>Not├â┬¡cias e An├â┬ílises de Telecom e Tecnologia - VICIADO COMENTA</title>
+<meta name="description" content="Leia not├â┬¡cias, contexto e an├â┬ílise editorial sobre telecomunica├â┬º├â┬Áes, tecnologia, gaming e atualidade em Portugal no VICIADO COMENTA.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<meta property="og:title" content="Artigos e Opinião sobre Telecom e Tecnologia - VICIADO COMENTA">
-<meta property="og:description" content="Artigos, opinião editorial e análise aprofundada sobre telecomunicações, tecnologia, gaming e atualidade.">
-<meta name="twitter:title" content="Artigos e Opinião sobre Telecom e Tecnologia - VICIADO COMENTA">
-<meta name="twitter:description" content="Artigos, opinião editorial e análise aprofundada sobre telecomunicações, tecnologia, gaming e atualidade.">
+<link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/noticias.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="VICIADO COMENTA">
+<meta property="og:title" content="Not├â┬¡cias e An├â┬ílises de Telecom e Tecnologia - VICIADO COMENTA">
+<meta property="og:description" content="Not├â┬¡cias, contexto e an├â┬ílise editorial sobre telecomunica├â┬º├â┬Áes, tecnologia, gaming e atualidade em Portugal.">
+<meta property="og:url" content="https://www.viciadocomenta.pt/noticias.html">
+<meta property="og:locale" content="pt_PT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Not├â┬¡cias e An├â┬ílises de Telecom e Tecnologia - VICIADO COMENTA">
+<meta name="twitter:description" content="Not├â┬¡cias, contexto e an├â┬ílise editorial sobre telecomunica├â┬º├â┬Áes, tecnologia, gaming e atualidade em Portugal.">
 <!-- Firebase Analytics -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" defer></script>
-<script src="assets/firebase-config.js?v=20260429-2" defer></script>
-
-<!-- Markdown Parser -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+<script src="assets/firebase-config.js?v=20260504-3" defer></script>
 <script src="assets/news-scheduler.js?v=20260504-videofix" defer></script>
 <script src="assets/new-article-notification.js?v=20260301" defer></script>
 <script src="assets/push-notifications.js?v=20260517-push2" defer></script>
+
+<!-- Markdown Parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
      crossorigin="anonymous"></script>
-<!-- Funções de Segurança -->
+<!-- Fun├â┬º├â┬Áes de Seguran├â┬ºa -->
 <script src="assets/security.js" defer></script>
 <script src="assets/article-tts.js?v=20260312" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -178,7 +183,7 @@ header h1 {
   font-size: 1.2em;
 }
 
-/* NAVEGAÇÃO */
+/* NAVEGA├âãÆ├óÔé¼┬í├âãÆ├åÔÇÖO */
 nav {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -223,7 +228,7 @@ nav a:hover {
 }
 
 .nav-dropdown > a::after {
-  content: '▼';
+  content: '\25BE';
   font-size: 0.65em;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -465,18 +470,12 @@ body.dark .artigo-quality-pill {
 
 .artigo-conteudo strong {
   color: #1a1f3a;
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 .artigo-conteudo b {
   color: #1a1f3a;
-  font-weight: 700 !important;
-}
-
-body.dark .artigo-conteudo strong,
-body.dark .artigo-conteudo b {
-  color: #f3f4f6 !important;
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 .artigo-conteudo em {
@@ -880,21 +879,6 @@ body.dark .artigo-conteudo.is-editing #artigoConteudoBody {
   position: relative;
 }
 
-.artigo-video img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.artigo-video iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
 .artigo-video-poster {
   position: absolute;
   inset: 0;
@@ -961,12 +945,18 @@ body.dark .artigo-conteudo.is-editing #artigoConteudoBody {
   opacity: 0.92;
 }
 
+.artigo-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 .artigo-video.is-loaded .artigo-video-trigger,
 .artigo-video.is-loaded .artigo-video-poster {
   display: none;
 }
 
-/* BOTÃO VOLTAR */
+/* BOT├âãÆ├åÔÇÖO VOLTAR */
 .btn-voltar {
   display: inline-block;
   background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
@@ -1071,7 +1061,7 @@ body.dark .contacto-item {
   font-weight: 500;
 }
 
-/* SECÇÃO DE COMENTÁRIOS */
+/* SECCAO DE COMENTARIOS */
 .comentarios-section {
   background: linear-gradient(135deg, #ffffff 0%, #f5f8fc 100%);
   border-radius: 12px;
@@ -1348,7 +1338,7 @@ body.dark .contacto-item {
   color: #5a6b7f;
 }
 
-/* Dark mode para comentários */
+/* Dark mode para comentarios */
 body.dark .comentarios-section {
   background: rgba(15, 23, 42, 0.8);
   border-color: #2d3748;
@@ -1500,7 +1490,7 @@ body.dark .comentarios-vazio {
   color: #a0aec0 !important;
 }
 
-/* NOTÍCIA NÃO ENCONTRADA */
+/* NOTICIA N├âãÆ├åÔÇÖO ENCONTRADA */
 .noticia-nao-encontrada {
   text-align: center;
   padding: 80px 20px;
@@ -1931,7 +1921,7 @@ footer {
     margin: 16px 0;
   }
 
-  /* OTIMIZAÇÕES MOBILE - Botões de Ação */
+  /* OTIMIZACOES MOBILE - Botoes de Acao */
   .artigo-actions {
     flex-direction: column;
     align-items: stretch;
@@ -1970,7 +1960,7 @@ footer {
     margin-top: 15px;
   }
 
-  /* Comentários em Mobile */
+  /* Comentarios em Mobile */
   .comentarios-section {
     margin-top: 30px;
     padding: 15px;
@@ -2056,44 +2046,27 @@ footer {
     width: 32px;
     height: 32px;
     padding: 5px 6px;
-    top: 8px;
-    left: 8px;
-    right: auto;
   }
 
   nav {
     gap: 6px;
     padding: 0 6px;
-    align-items: stretch;
   }
 
   nav a {
     padding: 8px 4px;
     font-size: 0.75em;
     min-height: 40px;
-    flex: 1 1 120px;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .nav-dropdown {
-    flex: 1 1 120px;
-    display: flex;
   }
 
   .nav-dropdown > a {
     padding: 8px 4px;
     min-height: 40px;
-    width: 100%;
-    justify-content: center;
-    text-align: center;
   }
 
   .nav-dropdown .dropdown-menu {
-    min-width: min(200px, calc(100vw - 20px));
+    min-width: 130px;
     font-size: 0.75em;
-    left: 50%;
-    transform: translate(-50%, -10px);
   }
 
   main {
@@ -2148,39 +2121,14 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-    <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html">
-<meta name="description" content="Os gastos m&#233;dios por utilizador est&#227;o a reduzir em 2 pa&#237;ses, Portugal e Espanha. &#201; o resultado do crescimento da operadora low-cost DIGI?">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="VICIADO COMENTA">
-<meta property="og:locale" content="pt_PT">
-<meta property="og:title" content="EFEITOS da DIGI: Queda BRUTAL nas receitas!">
-<meta property="og:description" content="Os gastos m&#233;dios por utilizador est&#227;o a reduzir em 2 pa&#237;ses, Portugal e Espanha. &#201; o resultado do crescimento da operadora low-cost DIGI?">
-<meta property="og:url" content="https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html">
-<meta property="og:image" content="https://www.viciadocomenta.pt/assets/social-card.svg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<link rel="alternate" type="application/rss+xml" title="VICIADO COMENTA" href="https://www.viciadocomenta.pt/rss.xml">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="EFEITOS da DIGI: Queda BRUTAL nas receitas!">
-<meta name="twitter:description" content="Os gastos m&#233;dios por utilizador est&#227;o a reduzir em 2 pa&#237;ses, Portugal e Espanha. &#201; o resultado do crescimento da operadora low-cost DIGI?">
-<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/social-card.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","@id":"https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html#article","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.viciadocomenta.pt/artigos/efeitos-da-digi-queda-brutal-nas-receitas.html"},"headline":"EFEITOS da DIGI: Queda BRUTAL nas receitas!","description":"Os gastos médios por utilizador estão a reduzir em 2 países, Portugal e Espanha. É o resultado do crescimento da operadora low-cost DIGI?","datePublished":"2026-03-20T00:00:00Z","dateModified":"2026-03-20T00:00:00Z","image":["https://www.viciadocomenta.pt/assets/social-card.svg"],"author":{"@id":"https://www.viciadocomenta.pt/autor/pedro-silva.html#author"},"publisher":{"@id":"https://www.viciadocomenta.pt/#organization"},"inLanguage":"pt-PT"},{"@type":"Organization","@id":"https://www.viciadocomenta.pt/#organization","name":"VICIADO COMENTA","url":"https://www.viciadocomenta.pt/","logo":{"@type":"ImageObject","@id":"https://www.viciadocomenta.pt/assets/social-card.svg#logo","url":"https://www.viciadocomenta.pt/assets/social-card.svg","contentUrl":"https://www.viciadocomenta.pt/assets/social-card.svg","width":1200,"height":630},"sameAs":["https://www.facebook.com/Viciadoemjogospt","https://www.instagram.com/theviciado13/","https://www.youtube.com/@TheViciado","https://www.twitch.tv/theviciado13","https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN","https://discord.gg/pGxzqCdrFJ"]},{"@type":"Person","@id":"https://www.viciadocomenta.pt/autor/pedro-silva.html#author","name":"Pedro Silva","url":"https://www.viciadocomenta.pt/autor/pedro-silva.html","sameAs":["https://www.facebook.com/Viciadoemjogospt","https://www.instagram.com/theviciado13/"]}]}</script>
-<script>
-(function () {
-    window.__VC_STATIC_ARTICLE = {
-        id: '24',
-        slug: 'efeitos-da-digi-queda-brutal-nas-receitas'
-    };
-})();
-</script>
 </head>
 
 <body>
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
     <div class="cookie-banner__content">
       <div class="cookie-banner__text">
-        Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
-        <a href="politica-privacidade.html">Política de Privacidade</a>.
+        Usamos cookies para medir audi├â┬¬ncias e melhorar a experi├â┬¬ncia. Pode aceitar ou recusar. Saiba mais em
+        <a href="politica-privacidade.html">Pol├â┬¡tica de Privacidade</a>.
       </div>
       <div class="cookie-banner__actions">
         <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
@@ -2192,7 +2140,7 @@ footer {
 
 <header>
   <h1>VICIADO COMENTA</h1>
-  <p class="header-subtitle">Análise e crítica de notícias</p>
+  <p class="header-subtitle">An├â┬ílise e cr├â┬¡tica de not├â┬¡cias</p>
   
   <div class="social-media">
     <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer">
@@ -2214,73 +2162,33 @@ footer {
 </header>
 
 <nav>
-  <a href="index.html">Início</a>
+  <a href="index.html">In├â┬¡cio</a>
   <a href="todas-noticias.html">Artigos</a>
-  <a href="sobre-nos.html">Sobre Nós</a>
-</nav>
+  <a href="sobre-nos.html">Sobre N├â┬│s</a>
+  </nav>
 
 <main>
   <article class="artigo" id="artigo">
-              <div class="artigo-header">
-            <span class="artigo-categoria">DIGI</span>
-            <h1 class="artigo-titulo">EFEITOS da DIGI: Queda BRUTAL nas receitas!</h1>
-            <div class="artigo-meta">
-              <span>&#128197; 20/03/2026</span>
-              <span>&#9997;&#65039; Pedro Silva</span>
-              <span class="tempo-leitura">&#9201;&#65039; 3 min de leitura</span>
-            </div>
-                    </div>
-          <div class="artigo-conteudo">
-            <p><strong>Os gastos médios por utilizador estão a reduzir em 2 países, Portugal e Espanha. É o resultado do crescimento da operadora low-cost DIGI?</strong></p>
-                        <p>É sabido que a entrada de um novo operador num mercado provoca efeitos imediatos nos preços. Esse impacto é ainda mais significativo quando se trata de um operador low-cost, como a DIGI. Com uma política de preços baixos, a operadora romena desafia mercados tradicionalmente caracterizados por preços elevados e por uma concorrência reduzida ou quase inexistente.  </p>
-<p>Enquanto consumidores, tivemos a oportunidade de assistir a esse fenómeno no mercado nacional. Com a entrada da DIGI, o custo dos serviços diminuiu, tanto na componente fixa como na móvel. Como resultado, os gastos médios por utilizador com o serviço de internet fixa registaram quedas significativas em Portugal, impulsionadas pela entrada da DIGI e pelas novas ofertas low-cost das operadoras incumbentes.  </p>
-                        
-                    <div class="artigo-video" data-video-id="S7MAnqb1kCY" data-video-title="EFEITOS da DIGI: Queda BRUTAL nas receitas!">
-                        <iframe src="https://www.youtube-nocookie.com/embed/S7MAnqb1kCY?modestbranding=1&amp;rel=0" title="EFEITOS da DIGI: Queda BRUTAL nas receitas!" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-          </div>
-                        <div id="artigoConteudoBody"><p>Deste modo, a receita média por utilizador associada aos serviços de internet fixa apresentou valores negativos quando comparamos o terceiro trimestre de 2023 com o de 2025.  </p>
-<p><img src="https://www.viciadocomenta.pt/assets/imagens/1.png" alt="">  </p>
-<p><strong>Mas será que isto aconteceu apenas em Portugal?</strong>  </p>
-<p>Não. Os dados analisados mostram que o efeito DIGI se fez sentir em todos os mercados onde a operadora entrou como MNO. <strong>Espanha</strong> e <strong>Portugal</strong> são os casos mais evidentes, com uma evolução negativa da ASPU (gasto médio por utilizador).  </p>
-<p>Noutro mercado onde a DIGI está presente, a <strong>Bélgica</strong>, apesar de não se ter verificado uma redução, registou-se uma das menores subidas.<br>Cada mercado tem as suas particularidades, pelo que não podemos atribuir este comportamento exclusivamente à DIGI. Ainda assim, a tendência é consistente: a entrada ou expansão da operadora está associada à redução da ASPU na internet fixa.  </p>
-<p>Olhando para <strong>Itália</strong>, onde a DIGI opera atualmente como MVNO móvel e ainda não tem uma oferta relevante de internet fixa (apesar de já estar em fase inicial de expansão), será interessante analisar no futuro se o crescimento da operadora conseguirá inverter a tendência de subida da ASPU neste segmento.  </p>
-<p><strong>Isto é positivo?</strong><br>Numa fase inicial, sim. A entrada de novos concorrentes tende a reduzir os preços, devido à disputa por quota de mercado. A diminuição da ASPU é uma consequência natural dessa pressão competitiva, beneficiando diretamente os consumidores, que passam a pagar menos por melhores condições de serviço.  </p>
-<p>No entanto, a longo prazo, poderá deixar de ser uma boa notícia. Uma redução contínua deste indicador pode traduzir-se em menor investimento nas redes, devido à pressão sobre as margens provocada pela guerra de preços.  </p>
-<p>No mercado português, grande parte do investimento em FTTH já foi realizado. Estamos, por isso, numa fase de rentabilização das infraestruturas existentes. Isso permite aos operadores, que durante décadas beneficiaram de margens elevadas e de baixa pressão concorrencial, reduzir essas margens mantendo a viabilidade das suas operações.  </p>
-<p>No caso da DIGI, a empresa já opera com uma lógica de baixas margens, compensadas por um elevado volume de clientes.  </p>
-<p>Em suma, não se trata de um problema no curto ou médio prazo. Mesmo em Espanha, onde a queda foi mais acentuada, não se verificou uma degradação do serviço. Pelo contrário, tem-se registado um aumento da cobertura de redes FTTH no país.  </p>
-<p><strong>O preço baixou, e o serviço piorou?</strong>  </p>
-<p>Antes pelo contrário! Como temos oportunidade de ver, em 6 anos o serviço manteve-se em termos de velocidades, e em alguns casos baixou 50% o preço! É caso para dizer, que bem que faz a concorrência!  </p>
-<p><img src="https://www.viciadocomenta.pt/assets/imagens/2.png" alt=""><br>Este é mais um ângulo de análise a acompanhar nos próximos anos.</p></div>
-                                                
-                    <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
-                        <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar&ecirc;ncia editorial</p>
-                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conte&uacute;do original e assinado.</strong> Este artigo integra a cobertura editorial de DIGI do VICIADO COMENTA e foi publicado com autoria identificada.</p>
-                        <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">Este artigo foi preparado com base em contexto editorial, fontes p&uacute;blicas e p&aacute;ginas oficiais quando aplic&aacute;vel ao tema.</p>
-                        <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="../sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="../sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorre&ccedil;&atilde;o factual, envia um pedido de corre&ccedil;&atilde;o para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
-                    </aside>
-                        
-                    <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
-                        <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
-                    </aside>
-          </div>
+    <div class="noticia-nao-encontrada" aria-live="polite">
+      <h2>A carregar not├â┬¡cia...</h2>
+      <p>Estamos a preparar o conte├â┬║do para si.</p>
+    </div>
   </article>
 </main>
 
 <footer>
   <div class="footer-links">
-    <a href="sobre-nos.html">Sobre Nós</a>
-    <a href="politica-privacidade.html">Política de Privacidade</a>
-    <a href="termos-servico.html">Termos de Serviço</a>
-    <a href="politica-privacidade.html#cookies">Política de Cookies</a>
+    <a href="sobre-nos.html">Sobre N├â┬│s</a>
+    <a href="politica-privacidade.html">Pol├â┬¡tica de Privacidade</a>
+    <a href="termos-servico.html">Termos de Servi├â┬ºo</a>
+    <a href="politica-privacidade.html#cookies">Pol├â┬¡tica de Cookies</a>
     <a href="contacto.html">Contacto</a>
   </div>
   <div class="footer-contacts">
     <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
     <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
   </div>
-  <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
+  <div class="footer-copy">├é┬® 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
 
 <script>
@@ -2297,7 +2205,7 @@ function initTheme() {
   applyTheme(saved);
 }
 
-// ========== FIREBASE CONFIGURAÇÃO ==========
+// ========== FIREBASE CONFIGURA├âãÆ├óÔé¼┬í├âãÆ├åÔÇÖO ==========
 // Inicializar Firebase ANTES do DOMContentLoaded
 window.database = null;
 window.firebaseReady = false;
@@ -2306,7 +2214,7 @@ window.currentUserId = null;
 window.authFailed = false;
 window.firebaseInitAttempts = 0;
 
-console.log('Aguardando configuração Firebase...');
+console.log('Aguardando configura├â┬º├â┬úo Firebase...');
 
 // Esperar Firebase carregar (inicializado em firebase-config.js)
 function initFirebase() {
@@ -2321,17 +2229,17 @@ function initFirebase() {
     
     // Verificar se Firebase foi inicializado no firebase-config.js
     if (!window.firebaseInitialized || typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
-      if (window.firebaseInitAttempts < 50) { // máximo 5 segundos
+      if (window.firebaseInitAttempts < 50) { // m├â┬íximo 5 segundos
         setTimeout(initFirebase, 100);
       } else {
-        console.error('Timeout: Firebase não inicializou após 5 segundos');
+        console.error('Timeout: Firebase n├â┬úo inicializou ap├â┬│s 5 segundos');
       }
       return;
     }
     
     console.log('Firebase App encontrado');
     
-    // Firebase já foi inicializado no firebase-config.js
+    // Firebase j├â┬í foi inicializado no firebase-config.js
     try {
       window.database = firebase.database();
       window.firebaseReady = true;
@@ -2341,48 +2249,46 @@ function initFirebase() {
       throw dbError;
     }
 
-    // Autenticação anónima para proteger writes
+    // Autentica├â┬º├â┬úo an├â┬│nima para proteger writes
     if (firebase.auth) {
       const auth = firebase.auth();
       
       auth.onAuthStateChanged((user) => {
         if (user) {
-          console.log('Usuário autenticado:', user.uid);
+          console.log('Utilizador autenticado:', user.uid);
           window.currentUserId = user.uid;
           window.authReady = true;
         } else {
-          console.log('Sem usuário autenticado');
+          console.log('Sem utilizador autenticado');
         }
       });
 
       auth.signInAnonymously()
         .then(() => {
-          console.log('Autenticação anônima bem-sucedida');
+          console.log('Autentica├â┬º├â┬úo an├â┬│nima bem-sucedida');
         })
         .catch((authError) => {
           console.error('Erro ao autenticar anonimamente:', authError);
-          console.error('Código do erro:', authError.code);
+          console.error('C├â┬│digo do erro:', authError.code);
           console.error('Mensagem:', authError.message);
           
           // Mesmo sem auth, permitir leitura
           window.authFailed = true;
           window.authReady = true;
           
-          // Gerar um ID temporário baseado em sessão
+          // Gerar um ID tempor├â┬írio baseado em sess├â┬úo
           let sessionId = sessionStorage.getItem('tempUserId');
           if (!sessionId) {
             sessionId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             sessionStorage.setItem('tempUserId', sessionId);
           }
           window.currentUserId = sessionId;
-          console.log('Usando ID temporário:', sessionId);
+          console.log('Usando ID tempor├â┬írio:', sessionId);
         });
     } else {
-      console.error('Firebase Auth não disponível');
+      console.error('Firebase Auth n├â┬úo dispon├â┬¡vel');
       window.authFailed = true;
-      window.authReady = true;
-      
-      // Gerar ID temporário
+      // Gerar ID tempor├â┬írio
       let sessionId = sessionStorage.getItem('tempUserId');
       if (!sessionId) {
         sessionId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -2394,11 +2300,11 @@ function initFirebase() {
     console.log('Firebase configurado com sucesso');
   } catch (error) {
     console.error('Erro ao inicializar Firebase:', error);
-    console.log('Sistema funcionará com funcionalidades limitadas');
+    console.log('Sistema funcionar├â┬í com funcionalidades limitadas');
   }
 }
 
-// Iniciar Firebase após um pequeno delay para garantir que firebase-config.js executou
+// Iniciar Firebase ap├â┬│s um pequeno delay para garantir que firebase-config.js executou
 setTimeout(initFirebase, 100);
 
 window.currentArticleId = null;
@@ -2429,7 +2335,6 @@ function escapeHtmlText(value) {
 }
 
 function buildArticleQualityBlocks(noticia) {
-  const autor = String(noticia?.autor || 'Redacao Viciado Comenta').trim();
   const atualizadoEm = [
     noticia?.dataAtualizacao,
     noticia?.dataPublicacao,
@@ -2441,8 +2346,7 @@ function buildArticleQualityBlocks(noticia) {
   return {
     qualityMetaHtml: `
       <div class="artigo-quality-meta">
-        <span class="artigo-quality-pill">Autor: ${escapeHtmlText(autor)}</span>
-        <span class="artigo-quality-pill">Atualizado em: ${escapeHtmlText(atualizadoEm || 'Data editorial')}</span>
+        <span class="artigo-quality-pill">├░┼©ÔÇØÔÇ× Atualizado em: ${escapeHtmlText(atualizadoEm || 'Data editorial')}</span>
       </div>
     `
   };
@@ -2452,15 +2356,15 @@ function buildArticleTrustBox(noticia) {
   const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
   const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
   const sourcingNote = hasSourcesInBody
-    ? 'Este artigo inclui uma secção explícita de fontes consultadas no corpo do texto.'
-    : 'Este artigo foi preparado com base em contexto editorial, fontes públicas e páginas oficiais quando aplicável ao tema.';
+    ? 'Este artigo inclui uma sec├â┬º├â┬úo expl├â┬¡cita de fontes consultadas no corpo do texto.'
+    : 'Este artigo foi preparado com base em contexto editorial, fontes p├â┬║blicas e p├â┬íginas oficiais quando aplic├â┬ível ao tema.';
 
   return `
     <aside class="article-trust-box" style="margin-top:24px;padding:18px;border:1px solid rgba(0,102,204,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(227,242,253,0.82));box-shadow:0 8px 20px rgba(0,102,204,0.08);">
-      <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transparência editorial</p>
-      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conteúdo original e assinado.</strong> Este artigo integra a cobertura editorial de ${categoria} do VICIADO COMENTA e foi publicado com autoria identificada.</p>
+      <p style="margin:0 0 10px;font-size:0.78em;letter-spacing:0.08em;text-transform:uppercase;color:#0052a3;font-weight:700;">Transpar├â┬¬ncia editorial</p>
+      <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;"><strong>Conte├â┬║do original e assinado.</strong> Este artigo integra a cobertura editorial de ${categoria} do VICIADO COMENTA e foi publicado com autoria identificada.</p>
       <p style="margin:0 0 10px;font-size:0.97em;line-height:1.65;">${sourcingNote}</p>
-      <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorreção factual, envia um pedido de correção para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
+      <p style="margin:0;font-size:0.97em;line-height:1.65;">Consulta a <a href="sobre-nos.html#como-trabalhamos">metodologia editorial</a>, a nossa <a href="sobre-nos.html#compromisso">linha de compromisso</a> e, se detetares alguma incorre├â┬º├â┬úo factual, envia um pedido de corre├â┬º├â┬úo para <a href="mailto:theviciado.contactos@gmail.com">theviciado.contactos@gmail.com</a>.</p>
     </aside>
   `;
 }
@@ -2492,9 +2396,7 @@ function getArticleIdentifierFromLocation() {
   let pathSlug = null;
   const pathname = String(window.location.pathname || '');
   const cleanPath = pathname.replace(/\/+$/, '');
-  const legacyMatch = cleanPath.match(/\/(?:noticias|artigos)\.html\/([^/]+)(?:\/([^/]+))?$/i);
-  const staticArticleMatch = cleanPath.match(/^\/artigos\/([^/]+?)(?:\.html)?$/i);
-  const match = legacyMatch || staticArticleMatch;
+  const match = cleanPath.match(/\/noticias\.html\/([^/]+)(?:\/([^/]+))?$/i);
 
   if (match) {
     const part1 = decodeURIComponent(match[1] || '');
@@ -2550,7 +2452,7 @@ window.addEventListener('hashchange', () => {
     return;
   }
 
-  // Mantém o fallback antigo se não for possível resolver um URL canónico.
+  // Mant├â┬®m o fallback antigo se n├â┬úo for poss├â┬¡vel resolver um URL can├â┬│nico.
   if (isArticleHashRoute(window.location.hash)) {
     window.location.reload();
   }
@@ -2566,14 +2468,14 @@ function buildArticleUrlById(noticiaId) {
     if (slug) {
       params.set('slug', slug);
     }
-    return `artigos.html?${params.toString()}`;
+    return `noticias.html?${params.toString()}`;
   }
-  return 'artigos.html';
+  return 'noticias.html';
 }
 
 function buildArticleReaderUrl(noticia) {
   if (!noticia || typeof noticia !== 'object') {
-    return 'artigos.html';
+    return 'noticias.html';
   }
 
   const hasId = typeof noticia.id !== 'undefined' && noticia.id !== null && String(noticia.id).trim() !== '';
@@ -2585,7 +2487,7 @@ function buildArticleReaderUrl(noticia) {
     if (slug) {
       params.set('slug', slug);
     }
-    return `artigos.html?${params.toString()}`;
+    return `noticias.html?${params.toString()}`;
   }
 
   if (typeof noticia.link === 'string' && noticia.link.trim()) {
@@ -2596,7 +2498,7 @@ function buildArticleReaderUrl(noticia) {
     return `artigos/${encodeURIComponent(slug)}.html`;
   }
 
-  return 'artigos.html';
+  return 'noticias.html';
 }
 
 function buildArticleUrlByData(noticia) {
@@ -2621,43 +2523,6 @@ function buildArticleMetaDescription(noticia) {
   }
 
   return `${plainText.slice(0, 177).trim()}...`;
-}
-
-function updateMetaTag(selector, attr, value) {
-  const el = document.querySelector(selector);
-  if (el && typeof value === 'string' && value.trim()) {
-    el.setAttribute(attr, value.trim());
-  }
-}
-
-function upsertStructuredDataScript(scriptId, payload) {
-  if (!payload || typeof payload !== 'object') {
-    return;
-  }
-
-  let script = document.getElementById(scriptId);
-  if (!script) {
-    script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.id = scriptId;
-    document.head.appendChild(script);
-  }
-
-  script.textContent = JSON.stringify(payload);
-}
-
-function getNoticiaPublishedIsoDate(noticia) {
-  if (!noticia || typeof noticia.data !== 'string') {
-    return '2026-01-01T00:00:00Z';
-  }
-
-  const match = noticia.data.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-  if (!match) {
-    return '2026-01-01T00:00:00Z';
-  }
-
-  const [, dia, mes, ano] = match;
-  return `${ano}-${mes}-${dia}T00:00:00Z`;
 }
 
 function getAbsoluteSiteUrl(url) {
@@ -2695,42 +2560,11 @@ function getArticleSocialImage(noticia) {
   return getFirstContentImage(noticia) || 'https://www.viciadocomenta.pt/assets/perfil.png';
 }
 
-function buildArticleStructuredData(noticia, canonicalUrl, metaDescription, socialImageUrl) {
-  const authorName = (typeof noticia.autor === 'string' && noticia.autor.trim()) ? noticia.autor.trim() : 'Viciado Comenta';
-  const publishedIso = getNoticiaPublishedIsoDate(noticia);
-  const graph = [
-    {
-      '@type': 'NewsArticle',
-      '@id': `${canonicalUrl}#article`,
-      mainEntityOfPage: {
-        '@type': 'WebPage',
-        '@id': canonicalUrl
-      },
-      headline: noticia.titulo,
-      description: metaDescription,
-      datePublished: publishedIso,
-      dateModified: publishedIso,
-      image: [socialImageUrl],
-      author: {
-        '@type': 'Person',
-        name: authorName
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: 'VICIADO COMENTA',
-        logo: {
-          '@type': 'ImageObject',
-          url: 'https://www.viciadocomenta.pt/assets/favicon.svg'
-        }
-      },
-      inLanguage: 'pt-PT'
-    }
-  ];
-
-  return {
-    '@context': 'https://schema.org',
-    '@graph': graph
-  };
+function updateMetaTag(selector, attr, value) {
+  const el = document.querySelector(selector);
+  if (el && typeof value === 'string' && value.trim()) {
+    el.setAttribute(attr, value.trim());
+  }
 }
 
 function updateArticleSeoMeta(noticia) {
@@ -2741,7 +2575,6 @@ function updateArticleSeoMeta(noticia) {
   const canonicalUrl = new URL(getCanonicalArticleUrlByData(noticia), 'https://www.viciadocomenta.pt/').toString();
   const metaDescription = buildArticleMetaDescription(noticia);
   const title = `${noticia.titulo} - VICIADO COMENTA`;
-  const socialImageUrl = getArticleSocialImage(noticia);
 
   document.title = title;
   updateMetaTag('#canonicalLink', 'href', canonicalUrl);
@@ -2749,15 +2582,10 @@ function updateArticleSeoMeta(noticia) {
   updateMetaTag('meta[property="og:title"]', 'content', title);
   updateMetaTag('meta[property="og:description"]', 'content', metaDescription);
   updateMetaTag('meta[property="og:url"]', 'content', canonicalUrl);
-  updateMetaTag('meta[property="og:image"]', 'content', socialImageUrl);
+  updateMetaTag('meta[property="og:image"]', 'content', getArticleSocialImage(noticia));
   updateMetaTag('meta[name="twitter:title"]', 'content', title);
   updateMetaTag('meta[name="twitter:description"]', 'content', metaDescription);
-  updateMetaTag('meta[name="twitter:image"]', 'content', socialImageUrl);
-
-  upsertStructuredDataScript(
-    'articleStructuredData',
-    buildArticleStructuredData(noticia, canonicalUrl, metaDescription, socialImageUrl)
-  );
+  updateMetaTag('meta[name="twitter:image"]', 'content', getArticleSocialImage(noticia));
 }
 
 function parseNoticiaDateForSort(data) {
@@ -2808,40 +2636,19 @@ function getRelatedNoticias(currentNoticia, noticias, limit = 3) {
 
 function extractYoutubeVideoId(url) {
   if (!url || typeof url !== 'string') return '';
-
-  const value = String(url).trim();
-  if (!value) return '';
-
-  const directIdMatch = value.match(/^[A-Za-z0-9_-]{11}$/);
-  if (directIdMatch) {
-    return directIdMatch[0];
-  }
-
-  const patterns = [
-    /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/|youtube-nocookie\.com\/embed\/)([A-Za-z0-9_-]{11})/i,
-    /youtube\.com\/watch\?.*?[?&]v=([A-Za-z0-9_-]{11})/i,
-    /(?:^|[?&])v=([A-Za-z0-9_-]{11})/i
-  ];
-
-  for (const pattern of patterns) {
-    const match = value.match(pattern);
-    if (match) {
-      return match[1];
-    }
-  }
-
-  return '';
+  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : '';
 }
 
 function getRelatedCardMedia(item) {
   const videoId = extractYoutubeVideoId(item && item.video ? String(item.video) : '');
-  const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${item && item.titulo ? item.titulo : ''}" loading="lazy"></div>`;
   }
 
-  const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
+  const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'A').trim().charAt(0).toUpperCase() || 'A';
   return `<div class="relacionado-media"><div class="relacionado-media-fallback">${fallbackLetter}</div></div>`;
 }
 
@@ -2866,26 +2673,19 @@ function renderRelatedArticles(currentNoticia, noticias) {
   container.innerHTML = `
     <h3 class="relacionados-title">Artigos relacionados</h3>
     <div class="relacionados-grid">
-      ${relacionados.map((item) => {
-        const categoria = escapeHtmlText(String(item?.categoria || 'Atualidade').trim() || 'Atualidade');
-        const data = escapeHtmlText(String(item?.data || 'Data editorial').trim() || 'Data editorial');
-        const titulo = escapeHtmlText(String(item?.titulo || 'Artigo relacionado').trim() || 'Artigo relacionado');
-        const href = buildRelatedArticleNavigationUrl(item);
-
-        return `
-        <a class="relacionado-card" href="${href}">
+      ${relacionados.map((item) => `
+        <a class="relacionado-card" href="${buildRelatedArticleNavigationUrl(item)}">
           ${getRelatedCardMedia(item)}
           <div class="relacionado-body">
             <div class="relacionado-meta">
-              <span class="relacionado-categoria">${categoria}</span>
-              <span>${data}</span>
+              <span class="relacionado-categoria">${item.categoria || ''}</span>
+              <span>${item.data || ''}</span>
             </div>
-            <div class="relacionado-titulo">${titulo}</div>
-            <span class="relacionado-link">Ler artigo</span>
+            <div class="relacionado-titulo">${item.titulo || ''}</div>
+            <span class="relacionado-link">Ler artigo ├óÔÇáÔÇÖ</span>
           </div>
         </a>
-      `;
-      }).join('')}
+      `).join('')}
     </div>
   `;
 
@@ -2987,7 +2787,7 @@ function sanitizeArticleInlineTypography(html) {
       }
       const face = el.getAttribute('face');
       if (face) {
-        // Ignorado para manter a tipografia padrão do site.
+        // Ignorado para manter a tipografia padr├â┬úo do site.
       }
       if (el.getAttribute('style')) {
         inlineStyles.push(el.getAttribute('style'));
@@ -3130,10 +2930,10 @@ function optimizeArticleMediaMarkup(html) {
   const assetFallbacks = {
     'assets/imagens/Lidl.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/Lidl.png',
     'assets/imagens/lidllinhas.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/lidllinhas.png',
-    'assets/imagens/tarifário.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png'
+    'assets/imagens/tarif├â┬írio.png': 'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png'
   };
   const imageStyleOverrides = {
-    'assets/imagens/tarifário.png': 'width:100%;max-width:280px;height:auto;display:block;margin-left:auto;margin-right:auto',
+    'assets/imagens/tarif├â┬írio.png': 'width:100%;max-width:280px;height:auto;display:block;margin-left:auto;margin-right:auto',
     'https://cdn.jsdelivr.net/gh/PedroSilva385/site-noticiasViciadoComenta@gh-pages/assets/imagens/tarif%C3%A1rio.png': 'width:100%;max-width:280px;height:auto;display:block;margin-left:auto;margin-right:auto'
   };
 
@@ -3143,10 +2943,6 @@ function optimizeArticleMediaMarkup(html) {
   images.forEach((img, index) => {
     const currentSrc = img.getAttribute('src') || '';
     if (!currentSrc) return;
-
-    if (/^(?:\/|\.\/|\.\.\/)?assets\/imagens\/[^./?#]+$/i.test(currentSrc)) {
-      img.setAttribute('src', `${currentSrc}.jpg`);
-    }
 
     if (assetFallbacks[currentSrc]) {
       img.setAttribute('src', assetFallbacks[currentSrc]);
@@ -3307,9 +3103,9 @@ function formatPlainTextArticleContent(rawContent) {
       return;
     }
 
-    const unorderedMatch = line.startsWith('⬢ ')
+    const unorderedMatch = line.startsWith('├óÔé¼┬ó ')
       ? [line, line.slice(2)]
-      : line.match(/^(?:\-|•)\s+(.*)$/);
+      : line.match(/^(?:\-|├óÔé¼ÔÇ£)\s+(.*)$/);
     const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
 
     if (unorderedMatch || orderedMatch) {
@@ -3338,7 +3134,6 @@ function formatArticleContent(rawContent) {
   let content = String(rawContent).replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
   const hasHtml = /<[^>]+>/.test(content);
 
-  // Se já tem HTML, apenas sanitiza
   if (hasHtml) {
     let htmlContent = sanitizeArticleInlineTypography(content);
     htmlContent = applyInlineMarkdownTypography(htmlContent);
@@ -3361,7 +3156,7 @@ function formatArticleContent(rawContent) {
 
   if (hasMarkdown) {
     try {
-      // Configurar marked com opções seguras
+      // Configurar marked com op├â┬º├â┬Áes seguras
       marked.setOptions({
         breaks: true,
         gfm: true,
@@ -3386,44 +3181,7 @@ function formatArticleContent(rawContent) {
     }
   }
 
-  // Plaintext: auto-paragraphs como antes
-  const hasExplicitBreaks = /\n/.test(content);
-  if (!hasExplicitBreaks && content.length > 500) {
-    const sentences = content
-      .split(/(?<=[.!?])\s+/)
-      .map((part) => part.trim())
-      .filter(Boolean);
-
-    if (sentences.length >= 6) {
-      const grouped = [];
-      for (let i = 0; i < sentences.length; i += 2) {
-        grouped.push(sentences.slice(i, i + 2).join(' '));
-      }
-      content = grouped.join('\n\n');
-    }
-  }
-
   return formatPlainTextArticleContent(content);
-}
-
-function splitArticleLeadContent(htmlContent, leadParagraphCount = 2) {
-  const normalizedHtml = String(htmlContent || '').trim();
-  if (!normalizedHtml) {
-    return { leadHtml: '', remainingHtml: '' };
-  }
-
-  const paragraphMatches = [...normalizedHtml.matchAll(/<p\b[^>]*>.*?<\/p>/gis)];
-  if (!paragraphMatches.length) {
-    return { leadHtml: '', remainingHtml: normalizedHtml };
-  }
-
-  const paragraphIndex = Math.min(Math.max(leadParagraphCount, 1), paragraphMatches.length) - 1;
-  const leadEnd = paragraphMatches[paragraphIndex].index + paragraphMatches[paragraphIndex][0].length;
-
-  return {
-    leadHtml: normalizedHtml.slice(0, leadEnd).trim(),
-    remainingHtml: normalizedHtml.slice(leadEnd).trim()
-  };
 }
 
 function canUseLiveEditor() {
@@ -3431,54 +3189,6 @@ function canUseLiveEditor() {
   const editEnabled = params.get('edit') === '1';
   const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
   return editEnabled && isLocalHost;
-}
-
-function loadArticleVideo(container) {
-  if (!container || container.dataset.videoLoaded === 'true') {
-    return;
-  }
-
-  const videoId = String(container.dataset.videoId || '').trim();
-  if (!videoId) {
-    return;
-  }
-
-  const iframe = document.createElement('iframe');
-  iframe.id = 'videoFrame-article';
-  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0`;
-  iframe.title = container.dataset.videoTitle || 'Vídeo do artigo';
-  iframe.loading = 'lazy';
-  iframe.allowFullscreen = true;
-  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-  iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-
-  container.appendChild(iframe);
-  container.dataset.videoLoaded = 'true';
-  container.classList.add('is-loaded');
-}
-
-function initArticleVideoEmbeds(root = document) {
-  root.querySelectorAll('.artigo-video[data-video-id]').forEach((container) => {
-    if (container.dataset.videoBound === 'true') {
-      return;
-    }
-
-    if (container.querySelector('iframe')) {
-      container.dataset.videoLoaded = 'true';
-      container.classList.add('is-loaded');
-      container.dataset.videoBound = 'true';
-      return;
-    }
-
-    const trigger = container.querySelector('[data-video-trigger]');
-    if (!trigger) {
-      return;
-    }
-
-    trigger.addEventListener('click', () => loadArticleVideo(container));
-    container.dataset.videoBound = 'true';
-  });
 }
 
 let studioApiBaseCache = null;
@@ -3496,7 +3206,7 @@ async function resolveStudioApiBase() {
   }
 
   if (!canUseLiveEditor()) {
-    throw new Error('Modo de edição disponível apenas no servidor local.');
+    throw new Error('Modo de edi├â┬º├â┬úo dispon├â┬¡vel apenas no servidor local.');
   }
 
   const candidates = [window.location.origin];
@@ -3513,18 +3223,18 @@ async function resolveStudioApiBase() {
         return base;
       }
     } catch (error) {
-      // tenta próximo candidato
+      // tenta pr├â┬│ximo candidato
     }
   }
 
-  throw new Error('Servidor de edição não encontrado. Inicie o Noticias Studio Server.');
+  throw new Error('Servidor de edi├â┬º├â┬úo n├â┬úo encontrado. Inicie o Noticias Studio Server.');
 }
 
 async function triggerRebuildOnAvailableApi(preferredBase) {
   const candidates = [preferredBase, window.location.origin]
     .filter((value, index, list) => value && list.indexOf(value) === index);
 
-  let lastErrorMessage = 'Não foi possível regenerar os artigos espelho automaticamente.';
+  let lastErrorMessage = 'N├â┬úo foi poss├â┬¡vel regenerar os artigos espelho automaticamente.';
 
   for (const base of candidates) {
     try {
@@ -3550,7 +3260,7 @@ async function triggerRebuildOnAvailableApi(preferredBase) {
         return { ok: true, base, message };
       }
 
-      lastErrorMessage = message || `Falha na regeneração em ${base}.`;
+      lastErrorMessage = message || `Falha na regenera├â┬º├â┬úo em ${base}.`;
     } catch (error) {
       lastErrorMessage = (error && error.message) ? error.message : lastErrorMessage;
     }
@@ -3573,14 +3283,14 @@ async function saveArticleContentToJson(noticiaId, html) {
 
   const loadPayload = await loadResponse.json();
   if (!loadPayload || !loadPayload.ok || !loadPayload.data || !Array.isArray(loadPayload.data.noticias)) {
-    throw new Error('Resposta inválida ao carregar notícias.');
+    throw new Error('Resposta inv├â┬ílida ao carregar not├â┬¡cias.');
   }
 
   const noticias = loadPayload.data.noticias;
   const articleIndex = noticias.findIndex((item) => String(item.id) === String(noticiaId));
 
   if (articleIndex === -1) {
-    throw new Error(`Artigo ${noticiaId} não encontrado no JSON.`);
+    throw new Error(`Artigo ${noticiaId} n├â┬úo encontrado no JSON.`);
   }
 
   noticias[articleIndex].conteudo = String(html || '').trim();
@@ -3609,7 +3319,7 @@ async function saveArticleContentToJson(noticiaId, html) {
 
   return {
     apiBase,
-    message: (savePayload && savePayload.message) || 'Conteúdo guardado no JSON.',
+    message: (savePayload && savePayload.message) || 'Conte├â┬║do guardado no JSON.',
     rebuildOk: rebuildResult.ok,
     rebuildMessage: rebuildResult.message
   };
@@ -3632,7 +3342,7 @@ function saveLiveEditedContent(noticiaId, html) {
   try {
     localStorage.setItem(getLiveEditStorageKey(noticiaId), String(html || ''));
   } catch (error) {
-    console.warn('Não foi possível guardar edição local:', error);
+    console.warn('N├â┬úo foi poss├â┬¡vel guardar edi├â┬º├â┬úo local:', error);
   }
 }
 
@@ -3640,8 +3350,49 @@ function clearLiveEditedContent(noticiaId) {
   try {
     localStorage.removeItem(getLiveEditStorageKey(noticiaId));
   } catch (error) {
-    console.warn('Não foi possível limpar edição local:', error);
+    console.warn('N├â┬úo foi poss├â┬¡vel limpar edi├â┬º├â┬úo local:', error);
   }
+}
+
+function loadArticleVideo(container) {
+  if (!container || container.dataset.videoLoaded === 'true') {
+    return;
+  }
+
+  const videoId = String(container.dataset.videoId || '').trim();
+  if (!videoId) {
+    return;
+  }
+
+  const iframe = document.createElement('iframe');
+  iframe.id = 'videoFrame-article';
+  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0`;
+  iframe.title = container.dataset.videoTitle || 'V├â┬¡deo do artigo';
+  iframe.loading = 'lazy';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+
+  container.appendChild(iframe);
+  container.dataset.videoLoaded = 'true';
+  container.classList.add('is-loaded');
+}
+
+function initArticleVideoEmbeds(root = document) {
+  root.querySelectorAll('.artigo-video[data-video-id]').forEach((container) => {
+    if (container.dataset.videoBound === 'true') {
+      return;
+    }
+
+    const trigger = container.querySelector('[data-video-trigger]');
+    if (!trigger) {
+      return;
+    }
+
+    trigger.addEventListener('click', () => loadArticleVideo(container));
+    container.dataset.videoBound = 'true';
+  });
 }
 
 function setupLiveArticleEditor(noticiaId, originalRawContent) {
@@ -3688,16 +3439,16 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
     const selectedText = selection ? String(selection.toString() || '').trim() : '';
 
     if (!selectedText) {
-      alert('Seleciona primeiro o texto onde queres aplicar a hiperligação.');
+      alert('Seleciona primeiro o texto onde queres aplicar a hiperliga├â┬º├â┬úo.');
       return;
     }
 
-    const rawUrl = window.prompt('URL da hiperligação (ex: https://exemplo.com):', 'https://');
+    const rawUrl = window.prompt('URL da hiperliga├â┬º├â┬úo (ex: https://exemplo.com):', 'https://');
     if (!rawUrl) return;
 
     const url = rawUrl.trim();
     if (!/^https?:\/\//i.test(url)) {
-      alert('Indica um link válido começado por http:// ou https://');
+      alert('Indica um link v├â┬ílido come├â┬ºado por http:// ou https://');
       return;
     }
 
@@ -3707,12 +3458,12 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
   btnSave.addEventListener('click', async () => {
     const editedHtml = String(contentBody.innerHTML || '').trim();
     if (!editedHtml) {
-      alert('O texto não pode ficar vazio.');
+      alert('O texto n├â┬úo pode ficar vazio.');
       return;
     }
 
     btnSave.disabled = true;
-    btnSave.textContent = '⏳ A guardar...';
+    btnSave.textContent = '├â┬ó├é┬Å├é┬│ A guardar...';
 
     try {
       const result = await saveArticleContentToJson(noticiaId, editedHtml);
@@ -3722,17 +3473,17 @@ function setupLiveArticleEditor(noticiaId, originalRawContent) {
       if (editNote) {
         editNote.textContent = result.rebuildOk
           ? `Guardado no JSON e artigos espelho atualizados (${result.apiBase}).`
-          : `Guardado no JSON (${result.apiBase}). ${result.rebuildMessage || 'Regen automática não disponível.'}`;
+          : `Guardado no JSON (${result.apiBase}). ${result.rebuildMessage || 'Regen autom├â┬ítica n├â┬úo dispon├â┬¡vel.'}`;
       }
     } catch (error) {
       const mensagemErro = (error && error.message) ? error.message : 'Erro ao guardar no JSON.';
       alert(`${mensagemErro}\n\nInicie a tarefa "Start Noticias Studio Server" e tente novamente.`);
       if (editNote) {
-        editNote.textContent = 'Falha ao guardar no JSON. Verifique se o servidor local está ativo.';
+        editNote.textContent = 'Falha ao guardar no JSON. Verifique se o servidor local est├â┬í ativo.';
       }
     } finally {
       btnSave.disabled = false;
-      btnSave.textContent = 'Guardar edição';
+      btnSave.textContent = '├░┼©ÔÇÖ┬¥ Guardar edi├â┬º├â┬úo';
     }
   });
 
@@ -3804,6 +3555,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const noticiaSlug = routeInfo.slug;
 
   const identificadorArtigo = noticiaId || noticiaSlug;
+  const staticArticleInfo = window.__VC_STATIC_ARTICLE || null;
+  const isStaticMirrorPage = /\/artigos\/[^/]+\.html$/i.test(String(window.location.pathname || ''));
+  const hasPreRenderedStaticArticle = !!document.querySelector('#artigo .artigo-titulo');
   let newArticleNotificationTriggered = false;
   let pushAlertsTriggered = false;
 
@@ -3838,35 +3592,126 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('Identificador da URL:', identificadorArtigo);
 
-  if (identificadorArtigo) {
+  function ensureStaticArticleActions(noticiaId) {
+    const article = document.getElementById('artigo');
+    if (!article || article.querySelector('.artigo-actions')) {
+      return;
+    }
+
+    const articleTitle = (article.querySelector('.artigo-titulo')?.textContent || document.title || 'Artigo').trim();
+    const safeTitleJs = JSON.stringify(articleTitle);
+    const safeIdJs = JSON.stringify(String(noticiaId || '').trim());
+    const actions = document.createElement('div');
+    actions.className = 'artigo-actions';
+    actions.innerHTML = `
+      <button class="artigo-like-btn" id="likeBtn" onclick="toggleLike(${safeIdJs})">
+        <i class="fas fa-heart"></i>
+        <span id="likeCount">0</span> Gosto
+      </button>
+
+      <div class="artigo-share">
+        <span class="artigo-share-label">├░┼©ÔÇ£┬ñ Partilhar:</span>
+        <button class="share-btn share-facebook" onclick="partilharFacebook(${safeTitleJs}, ${safeIdJs})" title="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </button>
+        <button class="share-btn share-twitter" onclick="partilharTwitter(${safeTitleJs}, ${safeIdJs})" title="Twitter">
+          <i class="fab fa-twitter"></i>
+        </button>
+        <button class="share-btn share-whatsapp" onclick="partilharWhatsApp(${safeTitleJs}, ${safeIdJs})" title="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </button>
+        <button class="share-btn share-telegram" onclick="partilharTelegram(${safeTitleJs}, ${safeIdJs})" title="Telegram">
+          <i class="fab fa-telegram"></i>
+        </button>
+        <button class="share-btn share-linkedin" onclick="partilharLinkedIn(${safeTitleJs}, ${safeIdJs})" title="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </button>
+        <button class="share-btn share-copy" onclick="copiarLink(${safeIdJs}, this)" title="Copiar Link">
+          <i class="fas fa-link"></i>
+        </button>
+      </div>
+    `;
+
+    article.appendChild(actions);
+  }
+
+  if (isStaticMirrorPage && hasPreRenderedStaticArticle) {
+    const staticArticleId = String(
+      noticiaId ||
+      (staticArticleInfo && staticArticleInfo.id) ||
+      ''
+    ).trim();
+
+    if (staticArticleId) {
+      window.currentArticleId = staticArticleId;
+      ensureStaticArticleActions(staticArticleId);
+
+      try {
+        updateLikeCount(staticArticleId);
+      } catch (likeError) {
+        console.warn('Falha ao atualizar likes do artigo est├â┬ítico:', likeError);
+      }
+    }
+  } else if (identificadorArtigo) {
     console.log('ID da URL:', noticiaId, '| slug da URL:', noticiaSlug);
-    fetchNoticiasAgendadas()
+    fetchNoticiasAgendadas("data/noticias.json")
       .then(data => {
-        console.log('Firebase recebido:', data);
-        console.log('Notícias carregadas:', data.noticias ? data.noticias.length : 'NENHUMA');
+        console.log('JSON recebido:', data);
+        console.log('Noticias carregadas:', data.noticias ? data.noticias.length : 'NENHUMA');
         
         if (!data.noticias || !Array.isArray(data.noticias)) {
-          throw new Error('Formato JSON inválido');
+          throw new Error('Formato JSON inv├â┬ílido');
         }
 
-        triggerNewArticleNotification(data.noticias);
-        triggerPushAlerts(data.noticias);
-        
-        data.noticias.forEach((item) => {
-          window.articleSlugById[String(item.id)] = getArticleSlug(item);
+        const noticias = data.noticias.filter((item) => {
+          if (!item || typeof item !== 'object') return false;
+          const hasId = typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '';
+          const hasSlug = typeof item.slug === 'string' && item.slug.trim() !== '';
+          return hasId || hasSlug;
         });
 
-        console.log('IDs disponíveis:', data.noticias.map(n => `${n.id} (tipo: ${typeof n.id})`));
+        if (!noticias.length) {
+          throw new Error('Nenhuma not├â┬¡cia v├â┬ílida encontrada');
+        }
+
+        try {
+          triggerNewArticleNotification(noticias);
+        } catch (notificationError) {
+          console.warn('Falha ao disparar notificacao de novo artigo:', notificationError);
+        }
+
+        try {
+          triggerPushAlerts(noticias);
+        } catch (pushAlertError) {
+          console.warn('Falha ao disparar alertas push:', pushAlertError);
+        }
+        
+        noticias.forEach((item) => {
+          if (typeof item.id !== 'undefined' && item.id !== null && String(item.id).trim() !== '') {
+            window.articleSlugById[String(item.id)] = getArticleSlug(item);
+          }
+        });
+
+        console.log('IDs dispon├â┬¡veis:', noticias.map((n) => {
+          if (!n || typeof n !== 'object') {
+            return 'inv├â┬ílido';
+          }
+          return `${n.id} (tipo: ${typeof n.id})`;
+        }));
         console.log('Procurando ID:', noticiaId, '(tipo:', typeof noticiaId, ')');
         console.log('Procurando slug:', noticiaSlug, '(tipo:', typeof noticiaSlug, ')');
         const normalizedRequestedSlug = slugifyTitulo(noticiaSlug || '');
         
-        const noticia = data.noticias.find(n => {
+        const noticia = noticias.find((n) => {
+          if (!n || typeof n !== 'object') {
+            return false;
+          }
+
           const idMatch = noticiaId && String(n.id) === String(noticiaId);
           const slugMatch = normalizedRequestedSlug && getArticleSlug(n) === normalizedRequestedSlug;
           return idMatch || slugMatch;
         });
-        console.log('Notícia encontrada:', noticia ? noticia.titulo : 'NENHUMA');
+        console.log('Not├â┬¡cia encontrada:', noticia ? noticia.titulo : 'NENHUMA');
 
       if (noticia) {
         const noticiaIdResolvido = String(noticia.id);
@@ -3894,27 +3739,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateArticleSeoMeta(noticia);
         
-        const categoriaNome = String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade';
-        const tituloNoticia = String(noticia?.titulo || 'Artigo').trim() || 'Artigo';
-        const resumoNoticia = String(noticia?.resumo || 'Sem resumo disponível.').trim() || 'Sem resumo disponível.';
-        const dataPublicacao = String(noticia?.data || 'Data editorial').trim() || 'Data editorial';
-        const autorNome = (typeof noticia.autor === 'string' && noticia.autor.trim()) ? noticia.autor.trim() : 'Pedro Silva';
-        const categoriaHtml = escapeHtmlText(categoriaNome);
-        const tituloHtml = escapeHtmlText(tituloNoticia);
-        const resumoHtml = escapeHtmlText(resumoNoticia);
-        const dataHtml = escapeHtmlText(dataPublicacao);
-        const autorHtml = escapeHtmlText(autorNome);
-        const videoId = extractYoutubeVideoId(noticia && noticia.video ? String(noticia.video) : '');
+        // Extrair ID do YouTube
+        function extrairVideoId(url) {
+          if (!url) return '';
+          const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+          const match = url.match(regex);
+          return match ? match[1] : '';
+        }
+        
+        const videoId = extrairVideoId(noticia.video);
         let videoHTML = '';
         if (videoId) {
-          videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${tituloHtml}">
-            <iframe id="videoFrame-article" src="https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0" title="${tituloHtml}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+          videoHTML = `<div class="artigo-video" id="videoContainer-article" data-video-id="${videoId}" data-video-title="${noticia.titulo}">
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do v├â┬¡deo" id="thumbnail-article" class="artigo-video-poster" loading="lazy">
+            <button type="button" class="artigo-video-trigger" data-video-trigger aria-label="Reproduzir v├â┬¡deo do artigo">
+              <span class="artigo-video-play" aria-hidden="true">&#9658;</span>
+              <span class="artigo-video-label"><strong>Ver v├â┬¡deo</strong><span>O player carrega apenas ap├â┬│s clique.</span></span>
+            </button>
           </div>`;
         }
         
         const container = document.getElementById("artigo");
         
-        // Processar conteúdo preservando HTML e corrigindo quebras artificiais de linha
+        // Processar conteudo preservando HTML e corrigindo quebras artificiais de linha
         let conteudoHTML = '';
         if (noticia.conteudo) {
           conteudoHTML = formatArticleContent(noticia.conteudo);
@@ -3924,8 +3771,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (savedLiveContent) {
           conteudoHTML = savedLiveContent;
         }
-
-        const contentParts = splitArticleLeadContent(conteudoHTML);
         
         // Calcular tempo de leitura (baseado em 200 palavras por minuto)
         const conteudoCompleto = (noticia.resumo || '') + ' ' + (noticia.conteudo || '');
@@ -3936,41 +3781,40 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
-              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>${autorHtml}</strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
+              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunica├â┬º├â┬Áes e analiso, junto da comunidade, as novidades e mudan├â┬ºas deste setor.</p>
             </div>
           </aside>
         `;
         
         container.innerHTML = `
           <div class="artigo-header">
-            <span class="artigo-categoria">${categoriaHtml}</span>
-            <h1 class="artigo-titulo">${tituloHtml}</h1>
+            <span class="artigo-categoria">${noticia.categoria}</span>
+            <h1 class="artigo-titulo">${noticia.titulo}</h1>
             <div class="artigo-meta">
-              <span>${dataHtml}</span>
-              <span>${autorHtml}</span>
-              <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
+              <span>${noticia.data || 'Sem data'}</span>
+              <span>${noticia.autor || 'Viciado Comenta'}</span>
+              <span class="tempo-leitura">├ó┬Å┬▒├»┬©┬Å ${tempoTexto} de leitura</span>
             </div>
             ${qualityBlocks.qualityMetaHtml}
           </div>
           <div class="artigo-conteudo">
-            <p><strong>${resumoHtml}</strong></p>
-            ${contentParts.leadHtml}
-            <div id="artigoConteudoBody">${contentParts.remainingHtml}</div>
+            <p><strong>${noticia.resumo}</strong></p>
+            <div id="artigoConteudoBody">${conteudoHTML}</div>
             ${trustBoxHtml}
             ${videoHTML}
             ${authorBioHtml}
             ${canUseLiveEditor() ? `
             <div class="live-edit-tools" id="liveEditTools">
-              <button class="live-edit-btn" id="btnLiveEdit" type="button">Editar texto</button>
-              <button class="live-edit-btn" id="btnLiveBold" type="button" style="display:none;">𝐁 Negrito</button>
-              <button class="live-edit-btn" id="btnLiveLink" type="button" style="display:none;">Hiperligação</button>
-              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">Guardar edição</button>
-              <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">Cancelar</button>
-              <button class="live-edit-btn" id="btnLiveReset" type="button">Repor original</button>
-              <div class="live-edit-note">Modo de edição ativo (guardar escreve no noticias.json via servidor local).</div>
+              <button class="live-edit-btn" id="btnLiveEdit" type="button">├ó┼ô┬Å├»┬©┬Å Editar texto</button>
+              <button class="live-edit-btn" id="btnLiveBold" type="button" style="display:none;">├░┬Ø┬É┬ü Negrito</button>
+              <button class="live-edit-btn" id="btnLiveLink" type="button" style="display:none;">├░┼©ÔÇØÔÇö Hiperliga├â┬º├â┬úo</button>
+              <button class="live-edit-btn primary" id="btnLiveSave" type="button" style="display:none;">├░┼©ÔÇÖ┬¥ Guardar edi├â┬º├â┬úo</button>
+              <button class="live-edit-btn" id="btnLiveCancel" type="button" style="display:none;">├óÔÇá┬®├»┬©┬Å Cancelar</button>
+              <button class="live-edit-btn" id="btnLiveReset" type="button">├░┼©┬º┬╣ Repor original</button>
+              <div class="live-edit-note">Modo de edi├â┬º├â┬úo ativo (guardar escreve no noticias.json via servidor local).</div>
             </div>
             ` : ''}
           </div>
@@ -3982,7 +3826,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
             
             <div class="artigo-share">
-              <span class="artigo-share-label">Partilhar:</span>
+              <span class="artigo-share-label">├░┼©ÔÇ£┬ñ Partilhar:</span>
               <button class="share-btn share-facebook" onclick="partilharFacebook('${noticia.titulo}', '${noticiaIdResolvido}')" title="Facebook">
                 <i class="fab fa-facebook-f"></i>
               </button>
@@ -4010,60 +3854,82 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('vc:article-rendered', {
           detail: {
             articleId: noticiaIdResolvido,
-            source: 'artigos.html'
+            source: 'noticias.html'
           }
         }));
         
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
 
-        // Secção de artigos relacionados
-        renderRelatedArticles(noticia, data.noticias || []);
+        // Sec├â┬º├â┬úo de artigos relacionados
+        renderRelatedArticles(noticia, noticias);
+        initArticleVideoEmbeds(container);
 
         activateDeferredArticleImages(container);
         recoverBrokenArticleImages(container);
-        initArticleVideoEmbeds(container);
 
-        // Modo de edição em live (?edit=1)
+        // Modo de edi├â┬º├â┬úo em live (?edit=1)
         setupLiveArticleEditor(noticiaIdResolvido, noticia.conteudo || '');
+        
+        // Ocultar miniatura quando o iframe carregar
+        if (videoId) {
+          setTimeout(() => {
+            const iframe = document.getElementById('videoFrame-article');
+            const thumbnail = document.getElementById('thumbnail-article');
+            if (iframe && thumbnail) {
+              iframe.onload = () => {
+                thumbnail.style.display = 'none';
+              };
+            }
+          }, 100);
+        }
       } else {
-        // Notícia não encontrada
+        // Not├â┬¡cia n├â┬úo encontrada
         document.getElementById('artigo').innerHTML = `
           <div style="text-align: center; padding: 40px 20px;">
-            <h2>Notícia não encontrada</h2>
-            <p>Desculpa, não conseguimos encontrar a notícia que procura.</p>
-            <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">Voltar às notícias</a>
+            <h2>├ó┬Ø┼Æ Not├â┬¡cia n├â┬úo encontrada</h2>
+            <p>Desculpa, n├â┬úo conseguimos encontrar a not├â┬¡cia que procura.</p>
+            <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">├óÔÇá┬É Voltar ├â┬ás not├â┬¡cias</a>
           </div>
         `;
       }
     })
     .catch(err => {
-      console.error("Erro ao carregar notícia:", err);
+      console.error("Erro ao carregar not├â┬¡cia:", err);
       document.getElementById('artigo').innerHTML = `
         <div style="text-align: center; padding: 40px 20px;">
-          <h2>Erro ao carregar</h2>
-          <p>Ocorreu um erro ao carregar a notícia: ${err.message}</p>
+          <h2>├ó┼í┬á├»┬©┬Å Erro ao carregar</h2>
+          <p>Ocorreu um erro ao carregar a not├â┬¡cia: ${err.message}</p>
           <p style="font-size: 0.9em; color: #666;">Verifique o console para mais detalhes</p>
-          <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">Voltar às notícias</a>
+          <a href="index.html" class="btn-voltar" style="display: inline-block; margin-top: 20px;">├óÔÇá┬É Voltar ├â┬ás not├â┬¡cias</a>
         </div>
       `;
     });
   } else {
-    // Sem ID: listar notícias em grelha
-    fetchNoticiasAgendadas()
+    // Sem ID: listar not├â┬¡cias em grelha
+    fetchNoticiasAgendadas('data/noticias.json')
       .then(data => {
-        triggerNewArticleNotification(data.noticias || []);
-        triggerPushAlerts(data.noticias || []);
+        const noticias = Array.isArray(data && data.noticias)
+          ? data.noticias.filter((item) => item && typeof item === 'object')
+          : [];
+
+        triggerNewArticleNotification(noticias);
+        triggerPushAlerts(noticias);
+
+        if (!noticias.length) {
+          throw new Error('Nenhuma not├â┬¡cia v├â┬ílida encontrada');
+        }
+
         const parseDate = (str) => {
           if (!str) return 0;
           const [dia, mes, ano] = str.split('/').map(Number);
           return new Date(ano, mes - 1, dia).getTime();
         };
-        const noticiasOrdenadas = [...data.noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
+        const noticiasOrdenadas = [...noticias].sort((a,b) => parseDate(b.data) - parseDate(a.data));
         const container = document.getElementById('artigo');
         container.innerHTML = `
           <div class="lista-header">
-            <h2 class="lista-title">Notícias</h2>
+            <h2 class="lista-title">Not├â┬¡cias</h2>
           </div>
           <div class="noticias-grid" id="noticiasGrid"></div>
         `;
@@ -4085,7 +3951,7 @@ document.addEventListener('DOMContentLoaded', () => {
           grid.appendChild(card);
         });
       })
-      .catch(err => console.error('Erro ao listar notícias:', err));
+      .catch(err => console.error('Erro ao listar not├â┬¡cias:', err));
   }
 });
 
@@ -4095,39 +3961,39 @@ function toggleLike(noticiaId, hasRetried) {
   
   // Verificar se Firebase existe
   if (typeof firebase === 'undefined') {
-    console.error('Firebase não carregado');
-    alert('Erro: Firebase não disponível. Recarregue a página.');
+    console.error('Firebase n├â┬úo carregado');
+    alert('Erro: Firebase n├â┬úo dispon├â┬¡vel. Recarregue a p├â┬ígina.');
     return;
   }
 
   if ((!firebase.apps || !firebase.apps.length) && !hasRetried) {
     if (window.ensureFirebaseInitialized) {
-      console.warn('⏳ Firebase ainda a inicializar. Aguardando...');
+      console.warn('Firebase ainda a inicializar. Aguardando...');
       window.ensureFirebaseInitialized()
         .then(() => toggleLike(noticiaId, true))
         .catch((error) => {
-          console.error('Firebase não inicializado:', error);
-          alert('Erro: Configuração do Firebase não disponível. Recarregue a página.');
+          console.error('Firebase n├â┬úo inicializado:', error);
+          alert('Erro: Configura├â┬º├â┬úo do Firebase n├â┬úo dispon├â┬¡vel. Recarregue a p├â┬ígina.');
         });
       return;
     }
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    console.error('Firebase App não inicializado');
-    alert('Erro: Firebase não inicializado. Recarregue a página.');
+    console.error('Firebase App n├â┬úo inicializado');
+    alert('Erro: Firebase n├â┬úo inicializado. Recarregue a p├â┬ígina.');
     return;
   }
   
-  // Tentar obter database diretamente se window.database não existir
+  // Tentar obter database diretamente se window.database n├â┬úo existir
   if (!window.database) {
     try {
       window.database = firebase.database();
       window.firebaseReady = true;
-      console.log('Lido Database inicializado durante o like');
+      console.log('├ó┼ôÔÇ£ Database inicializado durante o like');
     } catch (e) {
-      console.error('Erro ao obter database:', e);
-      alert('Erro ao conectar ao Firebase. Recarregue a página.');
+      console.error('├ó┬Ø┼Æ Erro ao obter database:', e);
+      alert('Erro ao conectar ao Firebase. Recarregue a p├â┬ígina.');
       return;
     }
   }
@@ -4140,16 +4006,16 @@ function toggleLike(noticiaId, hasRetried) {
     authFailed: window.authFailed
   });
 
-  // Se não tem userId, tentar obter ou criar um temporário
+  // Se n├â┬úo tem userId, tentar obter ou criar um tempor├â┬írio
   if (!window.currentUserId) {
-    // Verificar se já tem usuário autenticado
+    // Verificar se j├â┬í tem usu├â┬írio autenticado
     const currentUser = firebase.auth().currentUser;
     if (currentUser) {
       window.currentUserId = currentUser.uid;
       window.authReady = true;
-      console.log('Usuário encontrado:', currentUser.uid);
+      console.log('├ó┼ôÔÇ£ Usu├â┬írio encontrado:', currentUser.uid);
     } else {
-      // Criar ID temporário imediatamente
+      // Criar ID tempor├â┬írio imediatamente
       let sessionId = sessionStorage.getItem('tempUserId');
       if (!sessionId) {
         sessionId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -4157,11 +4023,11 @@ function toggleLike(noticiaId, hasRetried) {
       }
       window.currentUserId = sessionId;
       window.authReady = true;
-      console.log('Usando ID temporário:', sessionId);
+      console.log('├ó┼í┬á├»┬©┬Å Usando ID tempor├â┬írio:', sessionId);
     }
   }
   
-  // SEGURANÇA: Rate limiting (máximo 10 likes por minuto)
+  // SEGURAN├âÔÇíA: Rate limiting (m├â┬íximo 10 likes por minuto)
   const rateCheck = window.SecurityUtils.checkRateLimit('like', 10, 60000);
   if (!rateCheck.allowed) {
     alert(`Aguarde ${rateCheck.waitTime} segundos.`);
@@ -4176,7 +4042,7 @@ function toggleLike(noticiaId, hasRetried) {
   try {
     const likesRef = window.database.ref(`likes/${noticiaId}/${userId}`);
     
-    // Verificar se já deu like
+    // Verificar se j├â┬í deu like
     likesRef.once('value', (snapshot) => {
       const currentLike = snapshot.val();
       console.log('currentLike:', currentLike);
@@ -4209,7 +4075,7 @@ function updateLikeCount(noticiaId) {
   
   if (!window.database) {
     if (likeCount) {
-      likeCount.textContent = '⬦';
+      likeCount.textContent = '...';
     }
     if (!window.firebaseReady) {
       setTimeout(() => updateLikeCount(noticiaId), 300);
@@ -4232,7 +4098,7 @@ function updateLikeCount(noticiaId) {
     
     likeCount.textContent = totalLikes;
 
-    // Atualizar estado do botão apenas quando auth estiver pronta
+    // Atualizar estado do bot├â┬úo apenas quando auth estiver pronta
     if (window.authReady && window.currentUserId) {
       const userId = window.currentUserId;
       const likeValue = likes[userId];
@@ -4292,7 +4158,7 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
   );
 }
 
-// ========== FUNÇÕES DE PARTILHA SOCIAL ==========
+// ========== FUN├âÔÇí├âÔÇóES DE PARTILHA SOCIAL ==========
 function getArticleURL(noticiaId) {
   const articlePath = buildArticleUrlById(noticiaId);
   return new URL(articlePath, `${window.location.origin}/`).toString();
@@ -4361,7 +4227,7 @@ function copiarLink(noticiaId, triggerEl) {
       fallbackCopyLink(url, triggerEl);
     });
   } else {
-    // Fallback para navegadores que não suportam Clipboard API
+    // Fallback para navegadores que n├â┬úo suportam Clipboard API
     fallbackCopyLink(url, triggerEl);
   }
 }
@@ -4379,29 +4245,29 @@ function fallbackCopyLink(url, triggerEl) {
     return;
   }
 
-  alert('Link copiado para a área de transferência!');
+  alert('Link copiado para a ├â┬írea de transfer├â┬¬ncia!');
 }
 
-// Funções para gerenciar comentários com Firebase
+// Funcoes para gerenciar comentarios com Firebase
 function carregarComentarios(noticiaId) {
   const comentariosList = document.getElementById('comentariosList');
   
   // Aguardar database estar pronto
   if (!window.database) {
     if (!window.firebaseReady) {
-      comentariosList.innerHTML = '<div class="comentarios-vazio">⏳ Aguardando conexão...</div>';
+      comentariosList.innerHTML = '<div class="comentarios-vazio">├ó┬Å┬│ Aguardando conex├â┬úo...</div>';
       setTimeout(() => carregarComentarios(noticiaId), 500);
       return;
     } else {
-      comentariosList.innerHTML = '<div class="comentarios-vazio">Sistema de comentários em manutenção.</div>';
+      comentariosList.innerHTML = '<div class="comentarios-vazio">├░┼©ÔÇÖ┬¼ Sistema de coment├â┬írios em manuten├â┬º├â┬úo.</div>';
       return;
     }
   }
   
-  comentariosList.innerHTML = '<div class="comentarios-vazio">⏳ Carregando comentários...</div>';
+  comentariosList.innerHTML = '<div class="comentarios-vazio">├ó┬Å┬│ Carregando coment├â┬írios...</div>';
   
   try {
-    // Buscar comentários do Firebase em tempo real
+    // Buscar comentarios do Firebase em tempo real
     const comentariosRef = window.database.ref(`comentarios/${noticiaId}`);
     
     comentariosRef.on('value', (snapshot) => {
@@ -4416,7 +4282,7 @@ function carregarComentarios(noticiaId) {
       comentariosList.innerHTML = '';
       
       if (comentarios.length === 0) {
-        comentariosList.innerHTML = '<div class="comentarios-vazio">Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
+        comentariosList.innerHTML = '<div class="comentarios-vazio">├░┼©ÔÇÖ┬¡ Nenhum coment├â┬írio ainda. Seja o primeiro a comentar!</div>';
         return;
       }
       
@@ -4490,7 +4356,7 @@ function carregarComentarios(noticiaId) {
           respostaTexto.className = 'resposta-texto';
           respostaTexto.textContent = resposta.texto || '';
 
-          // Adicionar botão de responder também nas respostas
+          // Adicionar bot├â┬úo de responder tamb├â┬®m nas respostas
           const respostaActions = document.createElement('div');
           respostaActions.className = 'resposta-actions';
           const respostaReplyBtn = document.createElement('button');
@@ -4517,7 +4383,7 @@ function carregarComentarios(noticiaId) {
             <button type="button" class="btn-responder-reply" data-comment-id="${comentario.id}" data-reply-id="${resposta.id}">Enviar</button>
           `;
 
-          // Renderizar respostas aninhadas (respostas às respostas)
+          // Renderizar respostas aninhadas (respostas ├âãÆ├é┬ás respostas)
           const respostasAninhadasDiv = document.createElement('div');
           respostasAninhadasDiv.className = 'respostas-aninhadas';
 
@@ -4573,28 +4439,28 @@ function carregarComentarios(noticiaId) {
         comentariosList.appendChild(div);
       });
   }, (error) => {
-    console.error('Erro ao carregar comentários:', error);
-    comentariosList.innerHTML = '<div class="comentarios-vazio">Erro ao carregar comentários. Tente novamente.</div>';
+    console.error('Erro ao carregar coment├â┬írios:', error);
+    comentariosList.innerHTML = '<div class="comentarios-vazio">├ó┬Ø┼Æ Erro ao carregar coment├â┬írios. Tente novamente.</div>';
   });
   } catch (error) {
-    console.error('Erro ao configurar listener de comentários:', error);
-    comentariosList.innerHTML = '<div class="comentarios-vazio">Erro ao carregar comentários.</div>';
+    console.error('Erro ao configurar listener de coment├â┬írios:', error);
+    comentariosList.innerHTML = '<div class="comentarios-vazio">├ó┬Ø┼Æ Erro ao carregar coment├â┬írios.</div>';
   }
 }
 
 function adicionarComentario(noticiaId, nome, texto) {
   if (!window.database) {
-    alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
+    alert('Sistema de coment├â┬írios n├â┬úo configurado. Configure o Firebase primeiro.');
     return;
   }
   
-  // SEGURANÇA: Validar e sanitizar inputs
+  // SEGURAN├âãÆ├óÔé¼┬íA: Validar e sanitizar inputs
   if (!nome || !texto) {
     alert('Por favor preencha todos os campos.');
     return;
   }
   
-  // Verificar rate limiting (máximo 3 comentários por minuto)
+  // Verificar rate limiting (maximo 3 comentarios por minuto)
   const rateCheck = window.SecurityUtils.checkRateLimit('comment', 3, 60000);
   if (!rateCheck.allowed) {
     alert(`Aguarde ${rateCheck.waitTime} segundos antes de comentar novamente.`);
@@ -4603,10 +4469,10 @@ function adicionarComentario(noticiaId, nome, texto) {
 
   if (!window.authReady || !window.currentUserId) {
     if (window.authFailed) {
-      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      alert('Autentica├â┬º├â┬úo indispon├â┬¡vel. Ative o login an├â┬│nimo no Firebase.');
       return;
     }
-    alert('Aguarde a autenticação para comentar. Tente novamente em alguns segundos.');
+    alert('Aguarde a autentica├â┬º├â┬úo para comentar. Tente novamente em alguns segundos.');
     return;
   }
   
@@ -4614,19 +4480,19 @@ function adicionarComentario(noticiaId, nome, texto) {
   const nomeSanitizado = window.SecurityUtils.sanitizeName(nome);
   const textoSanitizado = window.SecurityUtils.sanitizeComment(texto);
   
-  // Verificar conteúdo malicioso
+  // Verificar conteudo malicioso
   if (window.SecurityUtils.containsMaliciousCode(nome) || window.SecurityUtils.containsMaliciousCode(texto)) {
-    alert('Conteúdo inválido detectado.');
+    alert('Conte├â┬║do inv├â┬ílido detectado.');
     return;
   }
   
   if (!nomeSanitizado || !textoSanitizado) {
-    alert('Nome ou comentário inválido.');
+    alert('Nome ou coment├â┬írio inv├â┬ílido.');
     return;
   }
   
   const agora = new Date();
-  const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+  const data = agora.toLocaleDateString('pt-PT') + ' ├â┬ás ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
   const comentariosRef = window.database.ref(`comentarios/${noticiaId}`);
   
@@ -4637,17 +4503,17 @@ function adicionarComentario(noticiaId, nome, texto) {
     timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
-    console.log('Lido Comentário adicionado com sucesso');
+    console.log('Coment├â┬írio adicionado com sucesso');
   })
   .catch((error) => {
-    console.error('Erro ao adicionar comentário:', error);
-    alert('Erro ao enviar comentário. Tente novamente.');
+    console.error('Erro ao adicionar coment├â┬írio:', error);
+    alert('Erro ao enviar coment├â┬írio. Tente novamente.');
   });
 }
 
 function adicionarResposta(noticiaId, comentarioId, nome, texto) {
   if (!window.database) {
-    alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
+    alert('Sistema de coment├â┬írios n├â┬úo configurado. Configure o Firebase primeiro.');
     return;
   }
 
@@ -4664,10 +4530,10 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
 
   if (!window.authReady || !window.currentUserId) {
     if (window.authFailed) {
-      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      alert('Autentica├â┬º├â┬úo indispon├â┬¡vel. Ative o login an├â┬│nimo no Firebase.');
       return;
     }
-    alert('Aguarde a autenticação para responder. Tente novamente em alguns segundos.');
+    alert('Aguarde a autentica├â┬º├â┬úo para responder. Tente novamente em alguns segundos.');
     return;
   }
 
@@ -4675,17 +4541,17 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
   const textoSanitizado = window.SecurityUtils.sanitizeComment(texto);
 
   if (window.SecurityUtils.containsMaliciousCode(nome) || window.SecurityUtils.containsMaliciousCode(texto)) {
-    alert('Conteúdo inválido detectado.');
+    alert('Conte├â┬║do inv├â┬ílido detectado.');
     return;
   }
 
   if (!nomeSanitizado || !textoSanitizado) {
-    alert('Nome ou resposta inválida.');
+    alert('Nome ou resposta inv├â┬ílida.');
     return;
   }
 
   const agora = new Date();
-  const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+  const data = agora.toLocaleDateString('pt-PT') + ' ├â┬ás ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
   const respostasRef = window.database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas`);
 
@@ -4696,7 +4562,7 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
     timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
-    console.log('Lido Resposta adicionada com sucesso');
+    console.log('Resposta adicionada com sucesso');
   })
   .catch((error) => {
     console.error('Erro ao adicionar resposta:', error);
@@ -4706,7 +4572,7 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
 
 function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto) {
   if (!window.database) {
-    alert('Sistema de comentários não configurado. Configure o Firebase primeiro.');
+    alert('Sistema de coment├â┬írios n├â┬úo configurado. Configure o Firebase primeiro.');
     return;
   }
 
@@ -4723,10 +4589,10 @@ function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto
 
   if (!window.authReady || !window.currentUserId) {
     if (window.authFailed) {
-      alert('Autenticação indisponível. Ative o login anónimo no Firebase.');
+      alert('Autentica├â┬º├â┬úo indispon├â┬¡vel. Ative o login an├â┬│nimo no Firebase.');
       return;
     }
-    alert('Aguarde a autenticação para responder. Tente novamente em alguns segundos.');
+    alert('Aguarde a autentica├â┬º├â┬úo para responder. Tente novamente em alguns segundos.');
     return;
   }
 
@@ -4734,17 +4600,17 @@ function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto
   const textoSanitizado = window.SecurityUtils.sanitizeComment(texto);
 
   if (window.SecurityUtils.containsMaliciousCode(nome) || window.SecurityUtils.containsMaliciousCode(texto)) {
-    alert('Conteúdo inválido detectado.');
+    alert('Conte├â┬║do inv├â┬ílido detectado.');
     return;
   }
 
   if (!nomeSanitizado || !textoSanitizado) {
-    alert('Nome ou resposta inválida.');
+    alert('Nome ou resposta inv├â┬ílida.');
     return;
   }
 
   const agora = new Date();
-  const data = agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+  const data = agora.toLocaleDateString('pt-PT') + ' ├â┬ás ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
   const respostasAninhadasRef = window.database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas/${replyId}/respostas`);
 
@@ -4755,7 +4621,7 @@ function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto
     timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
-    console.log('Lido Resposta aninhada adicionada com sucesso');
+    console.log('Resposta aninhada adicionada com sucesso');
   })
   .catch((error) => {
     console.error('Erro ao adicionar resposta aninhada:', error);
@@ -4780,13 +4646,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         adicionarComentario(noticiaId, nome, texto);
         
-        // Limpar formulário
+        // Limpar formul├â┬írio
         form.reset();
         
         // Mostrar mensagem de sucesso
         const btn = form.querySelector('.btn-enviar');
         const textoOriginal = btn.textContent;
-        btn.textContent = 'Lido Comentário enviado!';
+        btn.textContent = '├ó┼ôÔÇ£ Coment├â┬írio enviado!';
         setTimeout(() => {
           btn.textContent = textoOriginal;
         }, 2000);
@@ -4796,7 +4662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (comentariosList) {
     comentariosList.addEventListener('click', (e) => {
-      // Botão responder para comentários principais
+      // Botao responder para comentarios principais
       const replyBtn = e.target.closest('.comentario-reply-btn');
       if (replyBtn) {
         const commentId = replyBtn.dataset.commentId;
@@ -4807,7 +4673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Botão responder para respostas (nested)
+      // Bot├â┬úo responder para respostas (nested)
       const respostaReplyBtn = e.target.closest('.resposta-reply-btn');
       if (respostaReplyBtn) {
         const commentId = respostaReplyBtn.dataset.commentId;
@@ -4819,7 +4685,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Enviar resposta ao comentário principal
+      // Enviar resposta ao comentario principal
       const sendBtn = e.target.closest('.btn-responder');
       if (sendBtn) {
         const params = new URLSearchParams(window.location.search);
@@ -4840,7 +4706,7 @@ document.addEventListener('DOMContentLoaded', () => {
         replyForm.classList.remove('active');
       }
 
-      // Enviar resposta à resposta (nested)
+      // Enviar resposta ├âãÆ├é┬á resposta (nested)
       const sendReplyBtn = e.target.closest('.btn-responder-reply');
       if (sendReplyBtn) {
         const params = new URLSearchParams(window.location.search);
