@@ -391,7 +391,7 @@ function Get-StaticArticleHtml {
 
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
                         <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
-                        <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>Pedro Silva</strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
+                        <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
 "@
 
@@ -415,7 +415,7 @@ function Get-StaticArticleHtml {
             <h1 class="artigo-titulo">$titulo</h1>
             <div class="artigo-meta">
               <span>&#128197; $dataStr</span>
-              <span>&#9997;&#65039; $autor</span>
+              <span>&#9997;&#65039; <a href="../autor/pedro-silva.html">$autor</a></span>
               <span class="tempo-leitura">&#9201;&#65039; $tempoTexto de leitura</span>
             </div>
                     </div>
