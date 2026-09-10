@@ -48,8 +48,8 @@ button:hover { filter: brightness(.95); }
 </head>
 <body>
 <div class="container">
-  <h1>🎬 Vídeos e Links Studio</h1>
-  <p class="subtitle">Gerir o vídeo em destaque e os links principais das páginas da aba Conteúdos no mesmo painel.</p>
+  <h1>🎙️ Podcast, Vídeos e Links Studio</h1>
+  <p class="subtitle">Adicionar episódios de Sentido Improvável de Decisão e gerir os vídeos e links principais do site.</p>
 
   <div class="notice">
     Funciona diretamente no site publicado e no painel admin.<br>
@@ -63,7 +63,7 @@ button:hover { filter: brightness(.95); }
       <div>
         <label for="targetSelect">Destino</label>
         <select id="targetSelect">
-          <option value="viciado-comenta">Viciado Comenta (lista por data)</option>
+          <option value="viciado-comenta">Sentido Improvável de Decisão (Podcast)</option>
           <option value="viciado-ponto-critico">Viciado Ponto Crítico (lista por data)</option>
           <option value="metin2">Metin2 (séries)</option>
           <option value="featured">Vídeo em destaque (único)</option>
@@ -461,11 +461,26 @@ function renderList() {
   });
 }
 
+async function carregarPodcastDoServidorLocal() {
+  try {
+    const response = await fetch('/api/videos/load?target=viciado-comenta', { cache: 'no-store' });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const data = payload && payload.data ? payload.data : null;
+    return data && Array.isArray(data.value) ? data.value : (Array.isArray(data) ? data : null);
+  } catch (error) {
+    return null;
+  }
+}
+
 async function carregarDestino() {
   currentTarget = document.getElementById('targetSelect').value;
   setStatus('A carregar dados de vídeos...', 'info');
 
-  videosData = await window.VCVideoData.loadTarget(currentTarget, { fallbackUrl: getFallbackUrl(currentTarget) });
+  const localPodcastData = currentTarget === 'viciado-comenta'
+    ? await carregarPodcastDoServidorLocal()
+    : null;
+  videosData = localPodcastData || await window.VCVideoData.loadTarget(currentTarget, { fallbackUrl: getFallbackUrl(currentTarget) });
   updateTargetUI();
   if (currentTarget === 'featured') {
     preencherFeaturedForm(videosData);
@@ -568,11 +583,33 @@ async function guardarDestino() {
     currentTarget = selectedTarget;
   }
 
+  if (selectedTarget === 'viciado-comenta') {
+    const localSaved = await guardarPodcastNoServidorLocal(videosData);
+    if (localSaved) {
+      document.getElementById('logSaida').value = 'Episódios guardados com sucesso.\nDestino: data/viciado-comenta-videos.json\nOrigem: servidor local';
+      setStatus('Episódios do podcast guardados no catálogo local.', 'ok');
+      return;
+    }
+  }
+
   setStatus('A guardar vídeos no Firebase...', 'info');
   await window.VCVideoData.saveTarget(selectedTarget, videosData);
 
   document.getElementById('logSaida').value = `Vídeos guardados com sucesso.\nDestino: ${selectedTarget}\nOrigem: Firebase Realtime Database`;
   setStatus('Vídeos guardados e publicados no site.', 'ok');
+}
+
+async function guardarPodcastNoServidorLocal(data) {
+  try {
+    const response = await fetch(`/api/videos/save?target=viciado-comenta`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
 }
 
 async function publicar() {
