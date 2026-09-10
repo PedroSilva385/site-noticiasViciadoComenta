@@ -137,6 +137,11 @@ button:hover { filter: brightness(.95); }
         </div>
       </div>
 
+      <div id="podcastMetaFields" style="display:none; margin-top:10px;">
+        <label for="nextEpisodeDate">Próximo programa (data)</label>
+        <input id="nextEpisodeDate" type="date">
+      </div>
+
       <div class="actions">
         <button class="btn-secondary" id="btnVerificar">🟢 Verificar Firebase</button>
         <button class="btn-primary" id="btnRecarregar">🔃 Recarregar destino</button>
@@ -168,6 +173,7 @@ button:hover { filter: brightness(.95); }
 <script>
 let currentTarget = 'viciado-comenta';
 let videosData = null;
+let podcastMeta = { nextEpisodeDate: '' };
 const FALLBACK_FILES = {
   'featured': '../data/featured-video.json',
   'viciado-comenta': '../data/viciado-comenta-videos.json',
@@ -313,9 +319,11 @@ function updateTargetUI() {
   const isFeatured = target === 'featured';
   const isMetin2 = target === 'metin2';
   const isContentLinks = target === 'content-links';
+  const isPodcast = target === 'viciado-comenta';
 
   document.getElementById('featuredFields').style.display = isFeatured ? 'block' : 'none';
   document.getElementById('contentLinksFields').style.display = isContentLinks ? 'block' : 'none';
+  document.getElementById('podcastMetaFields').style.display = isPodcast ? 'block' : 'none';
   document.getElementById('serieWrap').style.display = isMetin2 ? 'block' : 'none';
 
   document.getElementById('videoUrl').disabled = isContentLinks;
@@ -473,6 +481,29 @@ async function carregarPodcastDoServidorLocal() {
   }
 }
 
+async function carregarPodcastMeta() {
+  try {
+    const response = await fetch('/api/podcast-meta', { cache: 'no-store' });
+    if (!response.ok) return;
+    const payload = await response.json();
+    podcastMeta = payload.data || { nextEpisodeDate: '' };
+    document.getElementById('nextEpisodeDate').value = podcastMeta.nextEpisodeDate || '';
+  } catch (error) {}
+}
+
+async function guardarPodcastMeta() {
+  try {
+    const response = await fetch('/api/podcast-meta', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nextEpisodeDate: document.getElementById('nextEpisodeDate').value })
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+
 async function carregarDestino() {
   currentTarget = document.getElementById('targetSelect').value;
   setStatus('A carregar dados de vídeos...', 'info');
@@ -480,6 +511,7 @@ async function carregarDestino() {
   const localPodcastData = currentTarget === 'viciado-comenta'
     ? await carregarPodcastDoServidorLocal()
     : null;
+  if (currentTarget === 'viciado-comenta') await carregarPodcastMeta();
   videosData = localPodcastData || await window.VCVideoData.loadTarget(currentTarget, { fallbackUrl: getFallbackUrl(currentTarget) });
   updateTargetUI();
   if (currentTarget === 'featured') {
@@ -584,6 +616,7 @@ async function guardarDestino() {
   }
 
   if (selectedTarget === 'viciado-comenta') {
+    await guardarPodcastMeta();
     const localSaved = await guardarPodcastNoServidorLocal(videosData);
     if (localSaved) {
       document.getElementById('logSaida').value = 'Episódios guardados com sucesso.\nDestino: data/viciado-comenta-videos.json\nOrigem: servidor local';

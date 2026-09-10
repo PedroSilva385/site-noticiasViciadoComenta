@@ -23,21 +23,25 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/video-data.js?v=20260402"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Sora',sans-serif;background:linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%);color:#1a1f3a;line-height:1.6;min-height:100vh;}
-header{background:#0056b3;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
-header h1{font-family:'Outfit',sans-serif;font-size:3em;font-weight:700;color:#fff;margin:0;text-align:center;width:100%;}
-.redes-sociais{display:flex;gap:10px;position:absolute;right:20px;}
-.redes-sociais a img{width:32px;height:32px;transition:transform .2s;}
-.redes-sociais a img:hover{transform:scale(1.2);}
+header{background:#0056b3;color:#fff;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+.podcast-logo{position:absolute;top:50%;left:20px;width:180px;height:180px;object-fit:contain;transform:translateY(-50%);}
+header h1{font-family:'Outfit',sans-serif;font-size:2.8em;font-weight:700;color:#fff;margin:0;text-align:center;width:100%;padding:0 200px;letter-spacing:-.5px;}
+.social-media{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:16px;}
+.social-media a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.2);border-radius:8px;color:#fff;text-decoration:none;transition:all .3s cubic-bezier(.4,0,.2,1);border:1px solid rgba(255,255,255,.3);}
+.social-media a:hover{background:rgba(255,255,255,.3);transform:translateY(-3px);box-shadow:0 8px 16px rgba(0,0,0,.2);}
+.social-media i{font-size:1.2em;}
 nav{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,102,204,.1);padding:0 20px;display:flex;gap:40px;max-width:1200px;margin:0 auto;justify-content:center;flex-wrap:wrap;position:sticky;top:0;z-index:100;}
 nav a{color:#1a1f3a;text-decoration:none;font-weight:600;font-size:.95em;padding:20px 0;border-bottom:3px solid transparent;transition:all .3s cubic-bezier(.4,0,.2,1);}
 nav a:hover{color:#0066cc;border-bottom-color:#0066cc;}
 main{max-width:980px;margin:20px auto;padding:20px;background:rgba(255,255,255,.95);border-radius:16px;color:#1a1f3a;}
 main h2{margin-top:0;font-size:2em;}
 .latest-episode{margin-bottom:32px;}
+.next-episode-date{margin:0 0 18px;padding:12px 16px;border-left:4px solid #0066cc;background:#eff6ff;color:#1e3a8a;font-weight:700;border-radius:8px;}
 .latest-episode h2{margin:0 0 14px;color:#0f172a;}
 .latest-card{overflow:hidden;background:#0f172a;border-radius:18px;box-shadow:0 14px 32px rgba(15,23,42,.2);}
 .latest-thumb-link{display:block;position:relative;aspect-ratio:16/9;background:#020617;overflow:hidden;}
@@ -72,17 +76,20 @@ footer{background:#1a1f3a;padding:40px 20px;margin-top:80px;font-size:.9em;color
 .footer-links a{color:rgba(255,255,255,.7);font-size:.9em;text-decoration:none;transition:color .3s;}
 .footer-links a:hover{color:#fff;text-decoration:underline;}
 .footer-copy{color:rgba(255,255,255,.85);text-align:center;width:100%;}
-@media(max-width:768px){header{padding:20px 15px 72px;}header h1{font-size:2em;}.redes-sociais{right:0;bottom:20px;width:100%;justify-content:center;}nav{gap:12px;padding:0 12px;}nav a{padding:12px 8px;font-size:.9em;}.latest-thumb-link{aspect-ratio:16/9;}.latest-info{align-items:flex-start;flex-direction:column;padding:18px;}.latest-info h3{font-size:1.2rem;}.episode-list{grid-template-columns:1fr;}}
-@media(max-width:480px){header{padding:15px 10px 64px;}header h1{font-size:1.6em;}.redes-sociais{bottom:15px;gap:8px;}}
+@media(max-width:768px){header{padding:20px 15px;}header h1{font-size:2em;}.podcast-logo{width:115px;height:115px;left:10px;}nav{gap:12px;padding:0 12px;}nav a{padding:12px 8px;font-size:.9em;}.latest-thumb-link{aspect-ratio:16/9;}.latest-info{align-items:flex-start;flex-direction:column;padding:18px;}.latest-info h3{font-size:1.2rem;}.episode-list{grid-template-columns:1fr;}}
+@media(max-width:480px){header{padding:15px 10px;}header h1{font-size:1.6em;padding:0 92px 0 86px;}.podcast-logo{left:10px;width:90px;height:90px;}.social-media{gap:8px;}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Sentido Improvável de Decisão</h1>
-  <div class="redes-sociais">
-    <a href="https://www.youtube.com/@TheViciado" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube"></a>
-    <a href="https://www.instagram.com/theviciado13/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram"></a>
-    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+  <img class="podcast-logo" src="assets/imagens/logo-podcast-transparente.png" alt="Logo do podcast Sentido Improvável de Decisão">
+  <h1>SENTIDO IMPROVÁVEL DE DECISÃO</h1>
+  <div class="social-media">
+    <a href="https://www.youtube.com/@TheViciado" target="_blank" title="YouTube" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+    <a href="https://www.instagram.com/theviciado13/" target="_blank" title="Instagram" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.facebook.com/Viciadoemjogospt" target="_blank" title="Facebook" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+    <a href="https://www.twitch.tv/theviciado13" target="_blank" title="Twitch" rel="noopener noreferrer"><i class="fab fa-twitch"></i></a>
+    <a href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN?si=r_1iN8MzTY2-plfAwKmopA" target="_blank" title="Spotify" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
   </div>
 </header>
 <nav>
@@ -92,6 +99,7 @@ footer{background:#1a1f3a;padding:40px 20px;margin-top:80px;font-size:.9em;color
   <a href="sobre-nos.html">Sobre Nós</a>
 </nav>
 <main>
+  <p class="next-episode-date" id="next-episode-date" hidden></p>
   <section class="latest-episode" id="latest-episode">
     <h2>Episódio mais recente</h2>
     <p class="episode-state">A carregar o episódio mais recente...</p>
@@ -140,6 +148,21 @@ async function carregarEpisodios() {
   const list = document.getElementById('episode-list');
   const latest = document.getElementById('latest-episode');
   try {
+    try {
+      const metaResponse = await fetch('data/podcast-meta.json', { cache: 'no-store' });
+      if (metaResponse.ok) {
+        const meta = await metaResponse.json();
+        if (meta.nextEpisodeDate) {
+          const nextDate = new Date(`${meta.nextEpisodeDate}T12:00:00`);
+          if (!Number.isNaN(nextDate.getTime())) {
+            const dateLabel = nextDate.toLocaleDateString('pt-PT', { day: '2-digit', month: 'long', year: 'numeric' });
+            const nextDateElement = document.getElementById('next-episode-date');
+            nextDateElement.textContent = `Próximo programa: ${dateLabel}`;
+            nextDateElement.hidden = false;
+          }
+        }
+      }
+    } catch (metaError) {}
     const response = await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Falha ao carregar episódios (${response.status}).`);
     const data = await response.json();
@@ -156,7 +179,7 @@ async function carregarEpisodios() {
     }
 
     const recent = episodes[0];
-    const recentUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(recent.id)}`;
+    const recentUrl = escaparHtml(String(recent.url || `https://www.youtube.com/watch?v=${encodeURIComponent(recent.id)}`));
     latest.innerHTML = `
       <h2>Episódio mais recente</h2>
       <article class="latest-card">
@@ -170,7 +193,7 @@ async function carregarEpisodios() {
       </article>`;
 
     list.innerHTML = episodes.slice(1).map((episode, index) => {
-      const watchUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.id)}`;
+      const watchUrl = escaparHtml(String(episode.url || `https://www.youtube.com/watch?v=${encodeURIComponent(episode.id)}`));
       const title = `Episódio ${episodes.length - index - 1}`;
       return `
         <article class="episode-item">
