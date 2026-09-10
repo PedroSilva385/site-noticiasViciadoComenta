@@ -78,6 +78,7 @@ $filesToNormalize = @(
     'tools/noticias-studio-server.ps1',
     'data/noticias.json',
     'data/viciado-comenta-videos.json',
+    'data/podcast-meta.json',
     'data/viciado-ponto-critico-videos.json',
     'data/metin2-videos.json',
     'data/featured-video.json'

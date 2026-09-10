@@ -1068,7 +1068,8 @@ body.dark .artigo-mais-lido-meta {
 }
 
 .podcast-promo-copy { max-width: 460px; }
-.podcast-promo-kicker { margin: 0 0 8px; color: #bae6fd; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; }
+.podcast-promo-kicker { margin: 0 0 4px; color: #bae6fd; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; }
+.podcast-promo-episode { margin: 0 0 8px; color: #ffffff; font-size: .85rem; font-weight: 700; }
 .podcast-promo-copy h2 { margin: 0 0 10px; color: #ffffff; font-family: 'Outfit', sans-serif; font-size: 2rem; line-height: 1.15; }
 .podcast-promo-copy p:not(.podcast-promo-kicker) { margin: 0 0 20px; color: rgba(255,255,255,.82); line-height: 1.7; }
 .podcast-promo-link { display: inline-flex; align-items: center; gap: 8px; color: #ffffff; font-weight: 700; text-decoration: none; }
@@ -2746,6 +2747,7 @@ footer {
       </a>
       <div class="podcast-promo-copy">
         <p class="podcast-promo-kicker">Podcast</p>
+        <p id="podcastPromoEpisode" class="podcast-promo-episode">Episódio 3</p>
         <h2 id="podcastPromoTitle">Sentido Improvável de Decisão</h2>
         <p>Opinião e análise em vídeo sobre telecomunicações, tecnologia e atualidade.</p>
         <a id="podcastPromoLink" class="podcast-promo-link" href="podcast.html">Ver episódios <i class="fas fa-arrow-right"></i></a>
@@ -2757,15 +2759,19 @@ footer {
           const response = await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' });
           if (!response.ok) return;
           const episodes = await response.json();
-          const latestUrl = Array.isArray(episodes) && episodes[0] && episodes[0].url;
+          const orderedEpisodes = (Array.isArray(episodes) ? episodes : [])
+            .filter((episode) => episode && episode.url)
+            .sort((first, second) => String(second.data || '').localeCompare(String(first.data || '')));
+          const latestUrl = orderedEpisodes[0] && orderedEpisodes[0].url;
           if (!latestUrl) return;
           const parsed = new URL(latestUrl, window.location.href);
           const videoId = parsed.searchParams.get('v') || parsed.pathname.split('/').filter(Boolean).pop();
           if (!videoId) return;
-          const watchUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+          const watchUrl = latestUrl;
           document.getElementById('podcastPromoThumbnail').src = `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/maxresdefault.jpg`;
           document.getElementById('podcastPromoMedia').href = watchUrl;
           document.getElementById('podcastPromoLink').href = watchUrl;
+          document.getElementById('podcastPromoEpisode').textContent = `Episódio ${orderedEpisodes.length}`;
         } catch (error) {}
       })();
     </script>

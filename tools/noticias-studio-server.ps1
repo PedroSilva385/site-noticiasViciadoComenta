@@ -6,6 +6,7 @@ $jsonPath = Join-Path $root 'data/noticias.json'
 $contentStoreScript = Join-Path $toolsDir 'content-store.js'
 $gerarArtigosScript = Join-Path $toolsDir 'gerar-artigos-espelho.ps1'
 $videosDataDir = Join-Path $root 'data'
+$podcastMetaPath = Join-Path $videosDataDir 'podcast-meta.json'
 $deployScript = Join-Path $root 'deploy.ps1'
 $imagesDir = Join-Path $root 'assets/imagens'
 
@@ -407,6 +408,37 @@ try {
 
                 $savedImage = Convert-DataUrlToImageFile -DataUrl ([string]$payload.dataUrl) -FileName ([string]$payload.fileName)
                 Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; url = $savedImage.publicUrl; file = $savedImage.fileName }
+                continue
+            }
+
+            if ($method -eq 'GET' -and $path -eq 'api/podcast-meta') {
+                if (-not (Test-Path $podcastMetaPath)) {
+                    Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; data = @{ nextEpisodeDate = '' } }
+                    continue
+                }
+
+                $meta = Get-Content -Path $podcastMetaPath -Raw -Encoding UTF8 | ConvertFrom-Json
+                Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; data = $meta }
+                continue
+            }
+
+            if ($method -eq 'POST' -and $path -eq 'api/podcast-meta') {
+                $body = Get-RequestBody -Request $request
+                if ([string]::IsNullOrWhiteSpace($body)) {
+                    Write-JsonResponse -Response $response -StatusCode 400 -Payload @{ ok = $false; error = 'Body vazio.' }
+                    continue
+                }
+
+                $payload = $body | ConvertFrom-Json
+                $nextEpisodeDate = if ($payload -and $payload.nextEpisodeDate) { [string]$payload.nextEpisodeDate } else { '' }
+                if ($nextEpisodeDate -and $nextEpisodeDate -notmatch '^\d{4}-\d{2}-\d{2}$') {
+                    Write-JsonResponse -Response $response -StatusCode 400 -Payload @{ ok = $false; error = 'Data inválida. Use AAAA-MM-DD.' }
+                    continue
+                }
+
+                $metaOut = @{ nextEpisodeDate = $nextEpisodeDate } | ConvertTo-Json -Depth 10
+                [System.IO.File]::WriteAllText($podcastMetaPath, $metaOut, [System.Text.UTF8Encoding]::new($false))
+                Write-JsonResponse -Response $response -StatusCode 200 -Payload @{ ok = $true; data = @{ nextEpisodeDate = $nextEpisodeDate } }
                 continue
             }
 
