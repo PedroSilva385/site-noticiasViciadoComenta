@@ -87,6 +87,18 @@ jobs:
       shell: bash
       run: npm ci
 
+    # O painel admin escreve no Firebase; estes dois passos trazem as noticias
+    # para o repositorio antes de gerar artigos/sitemap/RSS.
+    - name: Sincronizar noticias do Firebase
+      shell: pwsh
+      env:
+        FIREBASE_DATABASE_URL: https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app
+      run: ./tools/sync-noticias-firebase.ps1
+
+    - name: Importar noticias para Markdown (content/artigos)
+      shell: bash
+      run: node ./tools/content-store.js import-json > /dev/null
+
     - name: Gerar noticias.json a partir do Markdown
       shell: bash
       run: node ./tools/content-store.js export-json > /dev/null
@@ -98,13 +110,13 @@ jobs:
     - name: Commit e push se houver alteracoes
       shell: bash
       run: |
-        if [ -z "$(git status --porcelain -- data/noticias.json sitemap.xml artigos)" ]; then
+        if [ -z "$(git status --porcelain -- data/noticias.json content/artigos rss.xml sitemap.xml artigos)" ]; then
           echo "Sem alteracoes para publicar."
           exit 0
         fi
 
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add data/noticias.json sitemap.xml artigos
+        git add data/noticias.json content/artigos rss.xml sitemap.xml artigos
         git commit -m "chore: regenerar artigos espelho"
         git push
