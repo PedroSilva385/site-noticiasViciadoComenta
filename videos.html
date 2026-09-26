@@ -21,11 +21,11 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260209"></script>
 <script src="assets/video-data.js?v=20260926-admin-session"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body{font-family:'Poppins',sans-serif;margin:0;padding:0;background:#007BFF;color:#fff;}
-header{background:#0056b3;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
+body{font-family:'Sora',sans-serif;margin:0;padding:0;background:linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%);color:#1a1f3a;}
+header{background:linear-gradient(135deg,#0066cc 0%,#0052a3 100%);color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
 .foto-perfil{width:100px;height:100px;overflow:hidden;flex-shrink:0;}
 .foto-perfil img{width:100%;height:100%;object-fit:cover;}
 .redes-sociais{display:flex;gap:10px;}
@@ -37,18 +37,18 @@ nav a{color:#1a1f3a;text-decoration:none;font-weight:600;font-size:0.95em;paddin
 nav a:hover{color:#0066cc;border-bottom-color:#0066cc;}
 .nav-dropdown{position:relative;display:inline-block;}
 .nav-dropdown>a{display:inline-flex;align-items:center;gap:6px;}
-.nav-dropdown>a::after{content:'��';font-size:.65em;transition:transform .3s cubic-bezier(0.4,0,0.2,1);}
+.nav-dropdown>a::after{content:'▼';font-size:.65em;transition:transform .3s cubic-bezier(0.4,0,0.2,1);}
 .dropdown-menu{position:absolute;top:100%;left:0;background:#ffffff;border-radius:8px;border:1px solid rgba(0,102,204,0.15);box-shadow:0 8px 24px rgba(0,102,204,0.15);min-width:160px;padding:12px 0;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s cubic-bezier(0.4,0,0.2,1);z-index:1000;}
 .nav-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
 .nav-dropdown:hover>a::after{transform:rotate(180deg);}
 .dropdown-menu a{display:block;padding:12px 20px;color:#1a1f3a;text-decoration:none;font-weight:500;font-size:.9em;border-bottom:none;transition:all .2s cubic-bezier(0.4,0,0.2,1);}
 .dropdown-menu a:hover{background:#e3f2fd;color:#0066cc;padding-left:24px;}
-main{max-width:1000px;margin:20px auto;padding:20px;background:rgba(0,0,0,0.3);border-radius:10px;min-height:400px;text-align:center;}
+main{max-width:1000px;margin:20px auto;padding:20px;background:rgba(255,255,255,0.95);border-radius:10px;min-height:400px;text-align:center;color:#1a1f3a;}
 .video-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-.video-item{background:rgba(0,86,179,0.8);border-radius:8px;overflow:hidden;text-align:center;padding:10px;transition:transform 0.2s;}
+.video-item{background:#ffffff;border:1px solid #e0e8f5;border-radius:8px;overflow:hidden;text-align:center;padding:10px;transition:transform 0.2s;box-shadow:0 2px 8px rgba(0,102,204,0.06);}
 .video-item:hover{transform:translateY(-3px);}
 .video-item iframe{width:100%;height:180px;}
-.video-item p{margin:10px 0 0 0;font-weight:600;color:#ffdd57;}
+.video-item p{margin:10px 0 0 0;font-weight:600;color:#1a1f3a;}
 footer{text-align:center;padding:20px;background:#004494;color:#fff;margin-top:40px}
 .footer-copy{text-align:center;width:100%}
 .footer-contacts{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
@@ -65,13 +65,15 @@ body.dark .dropdown-menu{background:#1a2332;border-color:rgba(96,165,250,0.2);bo
 body.dark .dropdown-menu a{color:#d1d5db}
 body.dark .dropdown-menu a:hover{background:rgba(96,165,250,0.2);color:#60a5fa;padding-left:24px}
 body.dark main{background:rgba(15,23,42,.5);color:#e5e7eb !important}
+body.dark .video-item{background:#1a222f;border-color:#2d3748}
+body.dark .video-item p{color:#e5e7eb !important}
 body.dark h2{color:#e5e7eb !important}
 body.dark footer{background:#0b1220;color:#e5e7eb !important}
 body.dark footer *{color:#e5e7eb !important}
 body.dark .theme-toggle{border-color:rgba(255,255,255,.2);color:#e5e7eb !important}
 body.dark p{color:#e5e7eb !important}
 body.dark span{color:#e5e7eb !important}
-.theme-toggle{position:absolute;top:16px;right:16px;background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;z-index:150}
+.theme-toggle{position:absolute;top:16px;right:16px;background:transparent;border:1px solid rgba(0,0,0,.1);color:#1a1f3a;padding:8px 10px;border-radius:8px;cursor:pointer;z-index:150}
 .theme-toggle i{pointer-events:none}
 @media (max-width: 1024px) {
   .video-grid {
@@ -265,6 +267,8 @@ body.dark span{color:#e5e7eb !important}
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
+  <script src="assets/site-shell.js?v=20260926" defer></script>
 </head>
 <body>
 
@@ -288,7 +292,7 @@ function initTheme(){const saved=localStorage.getItem('theme')||'light';applyThe
 document.addEventListener('DOMContentLoaded',()=>{initTheme();const btn=document.createElement('button');btn.id='themeToggle';btn.className='theme-toggle';btn.title='Alternar tema';btn.innerHTML='<i class="fas fa-moon"></i>';const headerEl=document.querySelector('header');if(headerEl)headerEl.appendChild(btn);btn.addEventListener('click',()=>{const next=document.body.classList.contains('dark')?'light':'dark';localStorage.setItem('theme',next);applyTheme(next)})});
 </script>
 <header>
-  <div class="foto-perfil"><img src="Made with insMind-Screenshot 2025-08-06 16-11-05.png" alt="Foto Perfil"></div>
+  <div class="foto-perfil"><img src="assets/perfil.png" alt="Foto Perfil"></div>
   <h1>VICIADO COMENTA</h1>
   <div class="redes-sociais">
     <a href="https://www.youtube.com/@TheViciado" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube"></a>
@@ -299,11 +303,12 @@ document.addEventListener('DOMContentLoaded',()=>{initTheme();const btn=document
 <nav>
   <a href="index.html">Início</a>
   <a href="todas-noticias.html">Artigos</a>
+  <a href="podcast.html">Podcast</a>
   <a href="sobre-nos.html">Sobre Nós</a>
-  </nav>
+</nav>
 <main>
   <h2 style="text-align:center; margin-bottom:8px;">Vídeos Recentes</h2>
-  <p style="text-align:center; margin-bottom:24px; color:rgba(255,255,255,0.85); font-size:0.95em;">Os vídeos mais recentes de todos os canais � Viciado Comenta, Viciado Ponto Crítico e Metin2.</p>
+  <p style="text-align:center; margin-bottom:24px; color:#5a6b7f; font-size:0.95em;">Os vídeos mais recentes de todos os canais — Viciado Comenta, Viciado Ponto Crítico e Metin2.</p>
   <div class="video-grid" id="videos-grid">
     <p style="grid-column:1/-1; text-align:center; padding:40px; opacity:0.8;">A carregar vídeos...</p>
   </div>
@@ -370,7 +375,7 @@ async function carregarTodosVideos() {
             <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;border-radius:6px;overflow:hidden;">
               <img src="${thumb}" alt="Vídeo YouTube" loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
               <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);">
-                <span style="font-size:2.5em;opacity:0.9;">��</span>
+                <span style="font-size:2.5em;opacity:0.9;">▶️</span>
               </div>
             </div>
           </a>

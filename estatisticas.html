@@ -35,6 +35,30 @@
     }
     .header h1 { font-family: 'Outfit', sans-serif; font-size: 2.1em; margin-bottom: 8px; }
 
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px 24px;
+      flex-wrap: wrap;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(0, 102, 204, 0.12);
+      border-radius: 12px;
+    }
+    nav a {
+      color: #1a1f3a;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95em;
+      padding: 6px 2px;
+      border-bottom: 2px solid transparent;
+    }
+    nav a:hover { color: #0066cc; border-bottom-color: #0066cc; }
+    body.dark nav { background: rgba(17, 24, 39, 0.92); border-color: rgba(255, 255, 255, 0.1); }
+    body.dark nav a { color: #e5e7eb; }
+    body.dark nav a:hover { color: #60a5fa; border-bottom-color: #60a5fa; }
+
     .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
     .btn {
       border: none;
@@ -509,6 +533,8 @@
     }
   </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
+  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
+  <script src="assets/site-shell.js?v=20260926" defer></script>
 </head>
 <body>
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
@@ -531,9 +557,15 @@
       <p>Controlo de acessos por sessão, hora a hora e atividade recente.</p>
     </div>
 
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="todas-noticias.html">Artigos</a>
+      <a href="podcast.html">Podcast</a>
+      <a href="sobre-nos.html">Sobre Nós</a>
+    </nav>
+
     <div class="toolbar">
       <a href="index.html" class="btn btn-secondary">← Voltar ao início</a>
-      <button class="btn btn-secondary" id="themeBtn">🌙 Tema</button>
       <button class="btn btn-danger" id="resetBtn">🔄 Resetar estatísticas</button>
     </div>
 
@@ -995,7 +1027,6 @@
       statsInitialized = true;
 
       document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
-      initTheme();
       initTabs();
       initPastHourlySelector();
       initArticleJourneyControls();
@@ -2311,19 +2342,6 @@
       });
     }
 
-    function initTheme() {
-      const body = document.body;
-      if (localStorage.getItem('theme') === 'dark') body.classList.add('dark');
-
-      const btn = document.getElementById('themeBtn');
-      if (btn) {
-        btn.addEventListener('click', () => {
-          body.classList.toggle('dark');
-          localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
-        });
-      }
-    }
-
     function initTabs() {
       const buttons = Array.from(document.querySelectorAll('.tab-btn'));
       const panels = Array.from(document.querySelectorAll('.tab-panel'));
@@ -2866,7 +2884,6 @@
       }
     }
 
-    initTheme();
     setStatsAccessState(false, 'Inicie sessão no painel admin para consultar as estatísticas.');
 
     if (!auth) {

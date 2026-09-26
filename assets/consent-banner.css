@@ -71,3 +71,35 @@
     width: 420px;
   }
 }
+
+/* Mobile: banner compacto e botões com alvo de toque ≥44px */
+@media (max-width: 600px) {
+  .cookie-banner {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .cookie-banner__content {
+    gap: 10px;
+  }
+
+  .cookie-banner__text {
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
+  .cookie-banner__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .cookie-banner__button {
+    min-height: 44px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+}

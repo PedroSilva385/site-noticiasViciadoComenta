@@ -435,10 +435,11 @@ body.dark .theme-toggle:hover {
   }
 }
 </style>
+  <link rel="stylesheet" href="assets/consent-banner.css">
+  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
+  <script src="assets/site-shell.js?v=20260926" defer></script>
 </head>
 <body>
-
-<button class="theme-toggle" id="themeToggle">🌙</button>
 
 <header>
   <h1>🔒 Termos de Serviço</h1>
@@ -449,8 +450,8 @@ body.dark .theme-toggle:hover {
   <ul>
     <li><a href="index.html">Início</a></li>
     <li><a href="todas-noticias.html">Artigos</a></li>
+    <li><a href="podcast.html">Podcast</a></li>
     <li><a href="sobre-nos.html">Sobre Nós</a></li>
-    <li><a href="politica-privacidade.html">Privacidade</a></li>
   </ul>
 </nav>
 
@@ -603,24 +604,6 @@ body.dark .theme-toggle:hover {
 </footer>
 
 <script>
-// Dark mode toggle
-const themeToggle = document.getElementById('themeToggle');
-const htmlElement = document.documentElement;
-
-// Load theme preference
-const savedTheme = localStorage.getItem('theme') || 'light';
-if (savedTheme === 'dark') {
-  document.body.classList.add('dark');
-  themeToggle.textContent = '☀️';
-}
-
-themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  const isDark = document.body.classList.contains('dark');
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  themeToggle.textContent = isDark ? '☀️' : '🌙';
-});
-
 // Google Analytics
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -628,5 +611,18 @@ gtag('js', new Date());
 gtag('config', 'G-XJ3P1K6694');
 </script>
 
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
+  <div class="cookie-banner__content">
+    <div class="cookie-banner__text">
+      Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
+      <a href="politica-privacidade.html">Política de Privacidade</a>.
+    </div>
+    <div class="cookie-banner__actions">
+      <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
+      <button id="cookie-reject" class="cookie-banner__button cookie-banner__button--reject">Recusar</button>
+    </div>
+  </div>
+</div>
+<script src="assets/consent-banner.js" defer></script>
 </body>
 </html>
