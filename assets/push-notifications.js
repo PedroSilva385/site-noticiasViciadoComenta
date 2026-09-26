@@ -193,6 +193,22 @@
     return firebase.database();
   }
 
+  // As regras da base de dados exigem um utilizador autenticado (mesmo que anónimo)
+  // para gravar ou remover subscrições push.
+  async function ensurePushAuthUser() {
+    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+      throw new Error('Firebase Auth não está disponível.');
+    }
+
+    const auth = firebase.auth();
+    if (auth.currentUser) {
+      return auth.currentUser;
+    }
+
+    const credential = await auth.signInAnonymously();
+    return credential && credential.user ? credential.user : auth.currentUser;
+  }
+
   function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -264,6 +280,11 @@
       throw new Error('Subscription Web Push inválida.');
     }
 
+    const authUser = await ensurePushAuthUser();
+    if (!authUser) {
+      throw new Error('Não foi possível autenticar o dispositivo para ativar as notificações.');
+    }
+
     const database = getDatabaseInstance();
     const subscriptionId = await sha256Hex(subscription.endpoint);
     const now = Date.now();
@@ -294,6 +315,11 @@
     if (!subscription || !subscription.endpoint) {
       localStorage.removeItem(STORAGE_KEY_PUSH_SUBSCRIBED);
       return null;
+    }
+
+    const authUser = await ensurePushAuthUser();
+    if (!authUser) {
+      throw new Error('Não foi possível autenticar o dispositivo para remover as notificações.');
     }
 
     const database = getDatabaseInstance();

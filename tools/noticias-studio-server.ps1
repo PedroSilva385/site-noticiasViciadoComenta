@@ -10,6 +10,21 @@ $podcastMetaPath = Join-Path $videosDataDir 'podcast-meta.json'
 $deployScript = Join-Path $root 'deploy.ps1'
 $imagesDir = Join-Path $root 'assets/imagens'
 
+# Origens autorizadas a comunicar com o servidor local (studio local + painel admin publicado).
+$allowedCorsOrigins = @(
+    'http://localhost:8787',
+    'http://localhost:8788',
+    'https://viciadocomenta.pt',
+    'https://www.viciadocomenta.pt',
+    'https://pedrosilva385.github.io'
+)
+
+# Origens autorizadas a executar o deploy (apenas o studio local).
+$publishAllowedOrigins = @(
+    'http://localhost:8787',
+    'http://localhost:8788'
+)
+
 $preferredPorts = @(8787, 8788)
 $prefix = $null
 $listener = $null
@@ -40,12 +55,35 @@ if (-not $listener -or -not $prefix) {
     throw 'Não foi possível iniciar o servidor Noticias Studio em nenhuma porta disponível.'
 }
 
+function Get-RequestOrigin {
+    param([Parameter(Mandatory = $true)] $Request)
+
+    $origin = ''
+    if ($null -ne $Request.Headers['Origin']) {
+        $origin = [string]$Request.Headers['Origin']
+    }
+
+    return $origin.Trim().TrimEnd('/')
+}
+
+function Test-AllowedCorsOrigin {
+    param([Parameter(Mandatory = $true)] [string] $Origin)
+
+    return ($allowedCorsOrigins -contains $Origin)
+}
+
 function Add-CorsHeaders {
     param([Parameter(Mandatory = $true)] $Response)
 
-    $Response.Headers['Access-Control-Allow-Origin'] = '*'
-    $Response.Headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-    $Response.Headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    # Só devolve cabeçalhos CORS a origens autorizadas (evita exposição a sites externos).
+    $origin = [string]$script:RequestOrigin
+    if (-not [string]::IsNullOrWhiteSpace($origin) -and (Test-AllowedCorsOrigin -Origin $origin)) {
+        $Response.Headers['Access-Control-Allow-Origin'] = $origin
+        $Response.Headers['Vary'] = 'Origin'
+        $Response.Headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        $Response.Headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    }
+
     $Response.Headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     $Response.Headers['Pragma'] = 'no-cache'
     $Response.Headers['Expires'] = '0'
@@ -265,6 +303,7 @@ function Sync-NoticiasLinks {
 }
 
 try {
+    $script:RequestOrigin = ''
     Write-Host "Noticias Studio ativo em $prefix" -ForegroundColor Green
     Write-Host "Abrir no browser: ${prefix}tools/noticias-studio.html" -ForegroundColor Yellow
     Write-Host "Para terminar: Ctrl+C" -ForegroundColor Yellow
@@ -287,7 +326,24 @@ try {
             }
             $method = $rawMethod.ToUpperInvariant()
 
+            $script:RequestOrigin = Get-RequestOrigin -Request $request
+            $originAllowed = $true
+            if (-not [string]::IsNullOrWhiteSpace($script:RequestOrigin)) {
+                $originAllowed = Test-AllowedCorsOrigin -Origin $script:RequestOrigin
+            }
+
+            # Proteção CSRF: bloqueia operações de escrita de origens externas não autorizadas.
+            if (-not $originAllowed -and $method -ne 'GET' -and $method -ne 'HEAD' -and $method -ne 'OPTIONS') {
+                Write-JsonResponse -Response $response -StatusCode 403 -Payload @{ ok = $false; error = 'Origem não autorizada para operações de escrita. Abre o studio/admin via http://localhost:8787.' }
+                continue
+            }
+
             if ($method -eq 'OPTIONS') {
+                if (-not $originAllowed) {
+                    Write-JsonResponse -Response $response -StatusCode 403 -Payload @{ ok = $false; error = 'Origem não autorizada.' }
+                    continue
+                }
+
                 Add-CorsHeaders -Response $response
                 $response.StatusCode = 204
                 $response.Close()
@@ -515,6 +571,12 @@ try {
             }
 
             if ($method -eq 'POST' -and $path -eq 'api/publish') {
+                # Deploy só a partir do studio local (localhost).
+                if (-not [string]::IsNullOrWhiteSpace($script:RequestOrigin) -and ($publishAllowedOrigins -notcontains $script:RequestOrigin)) {
+                    Write-JsonResponse -Response $response -StatusCode 403 -Payload @{ ok = $false; error = 'Publicação permitida apenas a partir do studio local (http://localhost:8787).' }
+                    continue
+                }
+
                 if (-not (Test-Path $deployScript)) {
                     Write-JsonResponse -Response $response -StatusCode 500 -Payload @{ ok = $false; error = 'deploy.ps1 não encontrado.' }
                     continue
@@ -532,12 +594,21 @@ try {
             }
 
             # Static file handler
+            # Nunca servir ficheiros ocultos (.env, .git, .tmp) nem node_modules.
+            $hasBlockedSegment = $false
+            foreach ($segment in ($path -split '/')) {
+                if ($segment -like '.*' -or $segment -eq 'node_modules') {
+                    $hasBlockedSegment = $true
+                    break
+                }
+            }
+
             $staticFilePath = Join-Path $root ($path -replace '/', [System.IO.Path]::DirectorySeparatorChar)
             $resolvedRoot = [System.IO.Path]::GetFullPath($root)
             $resolvedFile = $null
             try { $resolvedFile = [System.IO.Path]::GetFullPath($staticFilePath) } catch { }
 
-            if ($resolvedFile -and $resolvedFile.StartsWith($resolvedRoot + [System.IO.Path]::DirectorySeparatorChar) -and (Test-Path $resolvedFile -PathType Leaf)) {
+            if (-not $hasBlockedSegment -and $resolvedFile -and $resolvedFile.StartsWith($resolvedRoot + [System.IO.Path]::DirectorySeparatorChar) -and (Test-Path $resolvedFile -PathType Leaf)) {
                 $ext = [System.IO.Path]::GetExtension($resolvedFile).ToLowerInvariant()
                 $mimeType = switch ($ext) {
                     '.html'  { 'text/html; charset=utf-8' }

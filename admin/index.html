@@ -1404,6 +1404,7 @@ const db = adminFirebaseApp ? adminFirebaseApp.database() : null;
 const AUTH_LAST_EMAIL_KEY = 'admin-last-email';
 let authKeepAliveTimer = null;
 let persistenceReady = false;
+let adminAccessGranted = null;
 
 if (adminFirebaseApp) {
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
@@ -1526,11 +1527,50 @@ function applyAuthenticatedUiState(user) {
   authScreen.style.display = 'none';
   dashboard.classList.add('active');
   setAdminView('noticias');
+  void verifyAdminAccess(user);
   loadNoticias();
   setTimeout(() => {
     updateQualityHints();
     updatePreviewContent();
   }, 50);
+}
+
+// A lista de administradores vive em /admins no Realtime Database.
+// Enquanto essa lista estiver vazia, a primeira conta email/password que entrar
+// fica registada como administradora (arranque inicial). Depois disso, só os UIDs
+// presentes na lista conseguem escrever notícias, vídeos e ver dados privados.
+async function verifyAdminAccess(user) {
+  if (!user || user.isLocalStudio) {
+    adminAccessGranted = true;
+    return true;
+  }
+
+  if (!db) {
+    adminAccessGranted = false;
+    return false;
+  }
+
+  try {
+    const snapshot = await db.ref(`admins/${user.uid}`).once('value');
+    if (snapshot.val() === true) {
+      adminAccessGranted = true;
+      return true;
+    }
+  } catch (error) {
+    console.warn('Falha ao verificar a lista de administradores:', error);
+  }
+
+  try {
+    await db.ref(`admins/${user.uid}`).set(true);
+    adminAccessGranted = true;
+    showStatus('Conta registada como administradora nesta primeira entrada.', 'success');
+    return true;
+  } catch (error) {
+    adminAccessGranted = false;
+    console.warn('Conta sem permissões de administrador:', error);
+    showStatus('Esta conta não tem permissões de administrador, por isso as alterações não podem ser guardadas.', 'error');
+    return false;
+  }
 }
 
 async function resolveLocalStudioBaseUrl() {
@@ -1747,7 +1787,7 @@ async function loadPushSubscriptionsStats(forceReload) {
     pushSubscriptionsBody.innerHTML = '<tr><td colspan="5" class="muted">Não foi possível carregar as subscrições push.</td></tr>';
 
     const message = error && error.code === 'PERMISSION_DENIED'
-      ? 'Sem permissão para ler push_subscriptions. Confirma as regras do Realtime Database e faz login no admin com uma conta válida.'
+      ? 'Sem permissão para ler push_subscriptions. Confirma que esta conta está na lista de administradores (admins) do Realtime Database.'
       : (error && error.message ? error.message : 'Erro ao carregar as subscrições push.');
     setPushStatsStatus(message, 'error');
   }
@@ -3271,9 +3311,9 @@ async function saveNoticia() {
       errorMsg = 'Sessão expirada. Faça login novamente.';
       applySignedOutUiState();
     } else if (error.code === 'PERMISSION_DENIED') {
-      errorMsg = 'Erro de permissão no Firebase ao guardar notícias. Se continuar, é necessário permitir escrita em /noticias nas regras do Realtime Database.';
+      errorMsg = 'Sem permissão para guardar notícias. Só contas na lista de administradores (admins) do Realtime Database podem escrever em /noticias.';
     } else if (error.message && error.message.includes('permission')) {
-      errorMsg = 'Erro de permissão no Firebase ao guardar notícias. Verifique as regras de escrita de /noticias.';
+      errorMsg = 'Sem permissão no Firebase ao guardar notícias. Confirme que esta conta está registada como administradora.';
     } else if (error.message) {
       errorMsg = `Erro: ${error.message}`;
     }

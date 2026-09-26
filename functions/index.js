@@ -1,9 +1,12 @@
 const { initializeApp } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth');
+const { getDatabase } = require('firebase-admin/database');
 const { defineSecret } = require('firebase-functions/params');
 const { onRequest } = require('firebase-functions/v2/https');
 
-initializeApp();
+const DATABASE_URL = 'https://chat-viciadocomenta-default-rtdb.europe-west1.firebasedatabase.app';
+
+initializeApp({ databaseURL: DATABASE_URL });
 
 const githubTriggerToken = defineSecret('GITHUB_ACTIONS_TRIGGER_TOKEN');
 
@@ -12,11 +15,41 @@ const GITHUB_REPO = 'site-noticiasViciadoComenta';
 const GITHUB_WORKFLOW_ID = 'rebuild-artigos.yml';
 const GITHUB_REF = 'main';
 
-function applyCorsHeaders(response) {
-	response.set('Access-Control-Allow-Origin', '*');
-	response.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+// Apenas os domínios oficiais do site (e ambiente local de desenvolvimento) podem invocar este endpoint a partir do browser.
+const ALLOWED_ORIGINS = new Set([
+	'https://viciadocomenta.pt',
+	'https://www.viciadocomenta.pt',
+	'https://pedrosilva385.github.io'
+]);
+
+const LOCAL_ORIGIN_PATTERN = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+
+const ALLOWED_ACTIONS = new Set(['save', 'create', 'update', 'delete', 'manual', 'publish']);
+
+const SLUG_PATTERN = /^[a-z0-9-]*$/;
+const NOTICIA_ID_PATTERN = /^[a-zA-Z0-9_-]*$/;
+
+function resolveAllowedOrigin(request) {
+	const origin = String(request.get('origin') || '').trim().toLowerCase();
+	if (!origin) {
+		return '';
+	}
+
+	return (ALLOWED_ORIGINS.has(origin) || LOCAL_ORIGIN_PATTERN.test(origin)) ? origin : '';
+}
+
+function applyCorsHeaders(request, response) {
+	const origin = resolveAllowedOrigin(request);
+	if (!origin) {
+		return false;
+	}
+
+	response.set('Access-Control-Allow-Origin', origin);
+	response.set('Vary', 'Origin');
+	response.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
 	response.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
 	response.set('Access-Control-Max-Age', '3600');
+	return true;
 }
 
 function setJsonContentType(response) {
@@ -54,18 +87,18 @@ function sendJson(response, statusCode, payload) {
 	response.status(statusCode).json(payload);
 }
 
-function assertMethod(request, response, allowedMethods) {
-	if (request.method === 'OPTIONS') {
-		response.status(204).send('');
+async function isAdminUser(uid) {
+	if (!uid) {
 		return false;
 	}
 
-	if (!allowedMethods.includes(request.method)) {
-		sendJson(response, 405, { ok: false, error: 'Method not allowed.' });
+	try {
+		const snapshot = await getDatabase().ref(`admins/${uid}`).get();
+		return snapshot.exists() && snapshot.val() === true;
+	} catch (error) {
+		console.error('Failed to read admin allowlist:', error);
 		return false;
 	}
-
-	return true;
 }
 
 exports.triggerArticlesRebuild = onRequest(
@@ -75,21 +108,26 @@ exports.triggerArticlesRebuild = onRequest(
 		secrets: [githubTriggerToken]
 	},
 	async (request, response) => {
-		applyCorsHeaders(response);
+		const originAllowed = applyCorsHeaders(request, response);
 
 		if (request.method === 'OPTIONS') {
-			response.status(204).send('');
+			response.status(originAllowed ? 204 : 403).send('');
 			return;
 		}
 
 		if (request.method !== 'POST') {
-			response.status(405).json({ ok: false, error: 'Method not allowed.' });
+			sendJson(response, 405, { ok: false, error: 'Method not allowed.' });
+			return;
+		}
+
+		if (!originAllowed) {
+			sendJson(response, 403, { ok: false, error: 'Origin not allowed.' });
 			return;
 		}
 
 		const idToken = getBearerToken(request);
 		if (!idToken) {
-			response.status(401).json({ ok: false, error: 'Missing Firebase ID token.' });
+			sendJson(response, 401, { ok: false, error: 'Missing Firebase ID token.' });
 			return;
 		}
 
@@ -98,20 +136,38 @@ exports.triggerArticlesRebuild = onRequest(
 			decodedToken = await getAuth().verifyIdToken(idToken, true);
 		} catch (error) {
 			console.error('Failed to verify Firebase ID token:', error);
-			response.status(401).json({ ok: false, error: 'Invalid Firebase ID token.' });
+			sendJson(response, 401, { ok: false, error: 'Invalid Firebase ID token.' });
 			return;
 		}
 
 		const signInProvider = decodedToken && decodedToken.firebase ? decodedToken.firebase.sign_in_provider : '';
 		if (!decodedToken || !decodedToken.uid || signInProvider === 'anonymous') {
-			response.status(403).json({ ok: false, error: 'Authenticated admin user required.' });
+			sendJson(response, 403, { ok: false, error: 'Authenticated admin user required.' });
+			return;
+		}
+
+		const isAdmin = await isAdminUser(decodedToken.uid);
+		if (!isAdmin) {
+			console.warn('Rejected rebuild trigger from non-admin uid:', decodedToken.uid);
+			sendJson(response, 403, { ok: false, error: 'Admin privileges required.' });
 			return;
 		}
 
 		const body = normalizeRequestBody(request.body);
-		const slug = String(body.slug || '').trim().slice(0, 160);
+		const slug = String(body.slug || '').trim().toLowerCase().slice(0, 160);
 		const noticiaId = String(body.noticiaId || '').trim().slice(0, 80);
-		const action = String(body.action || 'save').trim().slice(0, 40);
+		const rawAction = String(body.action || 'save').trim().toLowerCase().slice(0, 40);
+		const action = ALLOWED_ACTIONS.has(rawAction) ? rawAction : 'save';
+
+		if (slug && !SLUG_PATTERN.test(slug)) {
+			sendJson(response, 400, { ok: false, error: 'Invalid slug.' });
+			return;
+		}
+
+		if (noticiaId && !NOTICIA_ID_PATTERN.test(noticiaId)) {
+			sendJson(response, 400, { ok: false, error: 'Invalid noticiaId.' });
+			return;
+		}
 
 		const workflowDispatchPayload = {
 			ref: GITHUB_REF,
@@ -141,22 +197,21 @@ exports.triggerArticlesRebuild = onRequest(
 			);
 		} catch (error) {
 			console.error('Failed to call GitHub Actions dispatch API:', error);
-			response.status(502).json({ ok: false, error: 'Failed to contact GitHub Actions.' });
+			sendJson(response, 502, { ok: false, error: 'Failed to contact GitHub Actions.' });
 			return;
 		}
 
 		if (!githubResponse.ok) {
 			const errorText = await githubResponse.text();
 			console.error('GitHub Actions dispatch API returned an error:', githubResponse.status, errorText);
-			response.status(502).json({
+			sendJson(response, 502, {
 				ok: false,
-				error: `GitHub Actions dispatch failed (${githubResponse.status}).`,
-				details: errorText.slice(0, 1000)
+				error: `GitHub Actions dispatch failed (${githubResponse.status}).`
 			});
 			return;
 		}
 
-		response.status(200).json({
+		sendJson(response, 200, {
 			ok: true,
 			message: 'Remote rebuild workflow dispatched successfully.',
 			workflow: GITHUB_WORKFLOW_ID,
@@ -166,4 +221,3 @@ exports.triggerArticlesRebuild = onRequest(
 		});
 	}
 );
-

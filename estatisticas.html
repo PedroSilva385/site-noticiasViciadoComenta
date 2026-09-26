@@ -933,9 +933,28 @@
     const ACTIVE_USER_LIVE_WINDOW_MS = 5 * 60 * 1000;
     const ACTIVE_USER_STALE_CLEANUP_MS = 24 * 60 * 60 * 1000;
     let statsInitialized = false;
+    let statsAdminAccessGranted = null;
 
     function isStatsAdminUser(user) {
-      return !!(user && !user.isAnonymous);
+      // Acesso só depois de verificar a lista admins/{uid} no Realtime Database.
+      return !!(user && !user.isAnonymous && statsAdminAccessGranted === true);
+    }
+
+    async function verifyStatsAdminAccess(user) {
+      if (!user || user.isAnonymous) {
+        statsAdminAccessGranted = false;
+        return false;
+      }
+
+      try {
+        const snapshot = await database.ref(`admins/${user.uid}`).once('value');
+        statsAdminAccessGranted = snapshot.val() === true;
+      } catch (error) {
+        console.warn('Falha ao verificar a lista de administradores:', error);
+        statsAdminAccessGranted = false;
+      }
+
+      return statsAdminAccessGranted;
     }
 
     function setStatsAccessState(hasAccess, message = '') {
@@ -2854,9 +2873,16 @@
       setStatsAccessState(false, 'O módulo de autenticação do Firebase não está disponível nesta página.');
       setTimeout(redirectToAdminLogin, 1200);
     } else {
-      auth.onAuthStateChanged((user) => {
-        if (!isStatsAdminUser(user)) {
+      auth.onAuthStateChanged(async (user) => {
+        if (!user || user.isAnonymous) {
           setStatsAccessState(false, 'Inicie sessão no painel admin com uma conta administrativa para consultar as estatísticas.');
+          setTimeout(redirectToAdminLogin, 1200);
+          return;
+        }
+
+        const hasAdminAccess = await verifyStatsAdminAccess(user);
+        if (!hasAdminAccess) {
+          setStatsAccessState(false, 'Esta conta não está autorizada como administradora. Adicione o UID a /admins no Realtime Database para consultar as estatísticas.');
           setTimeout(redirectToAdminLogin, 1200);
           return;
         }
