@@ -2756,9 +2756,9 @@ footer {
     <script>
       (async function atualizarPromocaoPodcast() {
         try {
-          const response = await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' });
-          if (!response.ok) return;
-          const episodes = await response.json();
+          const episodes = (window.VCVideoData && typeof window.VCVideoData.loadTarget === 'function')
+            ? await window.VCVideoData.loadTarget('viciado-comenta', { fallbackUrl: 'data/viciado-comenta-videos.json' })
+            : await (await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' })).json();
           const orderedEpisodes = (Array.isArray(episodes) ? episodes : [])
             .filter((episode) => episode && episode.url)
             .sort((first, second) => String(second.data || '').localeCompare(String(first.data || '')));
