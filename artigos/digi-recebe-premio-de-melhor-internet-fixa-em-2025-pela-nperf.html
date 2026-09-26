@@ -4623,6 +4623,7 @@ function adicionarComentario(noticiaId, nome, texto) {
   const comentariosRef = window.database.ref(`comentarios/${noticiaId}`);
   
   comentariosRef.push({
+    uid: window.currentUserId,
     nome: nomeSanitizado,
     texto: textoSanitizado,
     data: data,
@@ -4682,6 +4683,7 @@ function adicionarResposta(noticiaId, comentarioId, nome, texto) {
   const respostasRef = window.database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas`);
 
   respostasRef.push({
+    uid: window.currentUserId,
     nome: nomeSanitizado,
     texto: textoSanitizado,
     data: data,
@@ -4741,6 +4743,7 @@ function adicionarRespostaAninhada(noticiaId, comentarioId, replyId, nome, texto
   const respostasAninhadasRef = window.database.ref(`comentarios/${noticiaId}/${comentarioId}/respostas/${replyId}/respostas`);
 
   respostasAninhadasRef.push({
+    uid: window.currentUserId,
     nome: nomeSanitizado,
     texto: textoSanitizado,
     data: data,
