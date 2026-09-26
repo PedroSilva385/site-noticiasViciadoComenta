@@ -16,28 +16,29 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VICIADO COMENTA - Gaming">
 <meta name="twitter:description" content="Vídeos e conteúdos de gaming com opinião, atualidade e comunidade.">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', 'Segoe UI', Tahoma, sans-serif;
   margin: 0;
   padding: 0;
-  background: #007BFF;
-  color: #fff;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1a1f3a;
+  min-height: 100vh;
 }
 
 /* Dark mode */
-body.dark { background: #0f172a; color: #e5e7eb !important; }
+body.dark { background: linear-gradient(135deg, #0b1220 0%, #0f172a 100%); color: #e5e7eb !important; }
 body.dark * { color: #e5e7eb !important; }
-body.dark header { background: #0369a1; }
+body.dark header { background: linear-gradient(135deg, #334155 0%, #1e293b 100%); }
 body.dark header, body.dark header * { color: #ffffff !important; }
 body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); color: #e5e7eb !important; }
 body.dark nav a { color: #d1d5db !important; }
 body.dark .dropdown-menu { background: #1a2332; border-color: rgba(96,165,250,0.2); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
 body.dark .dropdown-menu a { color: #d1d5db; }
 body.dark .dropdown-menu a:hover { background: rgba(96,165,250,0.2); color: #60a5fa; padding-left: 24px; }
-body.dark main { background: rgba(15,23,42,.5); color: #e5e7eb !important; }
+body.dark main { background: rgba(15,23,42,.88); color: #e5e7eb !important; }
 body.dark h2 { color: #e5e7eb !important; }
 body.dark footer { background: #0b1220; color: #e5e7eb !important; }
 body.dark footer * { color: #e5e7eb !important; }
@@ -48,7 +49,7 @@ body.dark span { color: #e5e7eb !important; }
 .theme-toggle { position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; padding: 8px 10px; border-radius: 8px; cursor: pointer; z-index: 150; }
 .theme-toggle i { pointer-events: none; }
 header {
-  background: #0056b3;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
   color: #fff;
   padding: 20px;
   display: flex;
@@ -82,6 +83,7 @@ header {
 header h1 {
   margin: 0;
   font-size: 3em;
+  font-family: 'Outfit', 'Sora', sans-serif;
   text-align: center;
   flex-grow: 1;
 }
@@ -126,7 +128,7 @@ nav a:hover {
 }
 
 .nav-dropdown > a::after {
-  content: '��';
+  content: '▼';
   font-size: 0.65em;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -178,10 +180,16 @@ main {
   max-width: 1000px;
   margin: 20px auto;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   min-height: 400px;
   text-align: center;
+  color: #1a1f3a;
+}
+main h2 {
+  font-family: 'Outfit', 'Sora', sans-serif;
+  color: #1a1f3a;
+  margin-top: 0;
 }
 .twitch-container {
   width: 100%;
@@ -200,10 +208,13 @@ main {
 footer {
   text-align: center;
   padding: 20px;
-  background: #004494;
+  background: #1a1f3a;
   color: #fff;
   margin-top: 40px;
 }
+.footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.footer-links a{color:#fff;text-decoration:none;font-weight:500;opacity:.9}
+.footer-links a:hover{opacity:1;text-decoration:underline}
 .footer-copy {
   text-align: center;
   width: 100%;
@@ -391,6 +402,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
+  <script src="assets/site-shell.js?v=20260926" defer></script>
 </head>
 <body>
 
@@ -440,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <header>
   <div class="foto-perfil">
-    <img src="foto-perfil.png" alt="Foto Perfil">
+    <img src="assets/perfil.png" alt="Foto Perfil">
   </div>
   <h1>VICIADO COMENTA</h1>
   <div class="redes-sociais">

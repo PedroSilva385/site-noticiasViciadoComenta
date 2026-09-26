@@ -28,7 +28,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Sora',sans-serif;background:linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%);color:#1a1f3a;line-height:1.6;min-height:100vh;}
-header{background:#0056b3;color:#fff;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+header{background:linear-gradient(135deg,#0066cc 0%,#0052a3 100%);color:#fff;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
 .podcast-logo{position:absolute;top:50%;left:20px;width:180px;height:180px;object-fit:contain;transform:translateY(-50%);}
 header h1{font-family:'Outfit',sans-serif;font-size:2.8em;font-weight:700;color:#fff;margin:0;text-align:center;width:100%;padding:0 200px;letter-spacing:-.5px;}
 .social-media{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:16px;}
@@ -76,9 +76,28 @@ footer{background:#1a1f3a;padding:40px 20px;margin-top:80px;font-size:.9em;color
 .footer-links a{color:rgba(255,255,255,.7);font-size:.9em;text-decoration:none;transition:color .3s;}
 .footer-links a:hover{color:#fff;text-decoration:underline;}
 .footer-copy{color:rgba(255,255,255,.85);text-align:center;width:100%;}
+body.dark{background:linear-gradient(135deg,#0f172a 0%,#111827 100%);color:#e5e7eb;}
+body.dark nav{background:rgba(17,24,39,.95);border-bottom-color:rgba(255,255,255,.08);}
+body.dark nav a{color:#e5e7eb;}
+body.dark nav a:hover{color:#60a5fa;border-bottom-color:#60a5fa;}
+body.dark main{background:rgba(15,23,42,.88);color:#e5e7eb;}
+body.dark .next-episode-date{background:rgba(30,58,138,.35);color:#bfdbfe;border-left-color:#60a5fa;}
+body.dark .latest-episode h2{color:#f3f4f6;}
+body.dark .episode-item{background:#0f172a;box-shadow:0 10px 24px rgba(0,0,0,.4);}
+body.dark .episode-content h3{color:#f3f4f6;}
+body.dark .episode-meta{color:#94a3b8;}
+body.dark .episode-link{color:#60a5fa;}
+body.dark .episode-header h2{color:#f3f4f6;}
+body.dark .episode-header p{color:#cbd5e1;}
+body.dark .episode-state{background:rgba(15,23,42,.7);color:#cbd5e1;}
+body.dark footer{background:#0b1220;color:#e5e7eb;}
+body.dark footer *{color:#e5e7eb;}
 @media(max-width:768px){header{padding:20px 15px;}header h1{font-size:2em;}.podcast-logo{width:115px;height:115px;left:10px;}nav{gap:12px;padding:0 12px;}nav a{padding:12px 8px;font-size:.9em;}.latest-thumb-link{aspect-ratio:16/9;}.latest-info{align-items:flex-start;flex-direction:column;padding:18px;}.latest-info h3{font-size:1.2rem;}.episode-list{grid-template-columns:1fr;}}
 @media(max-width:480px){header{padding:15px 10px;}header h1{font-size:1.6em;padding:0 92px 0 86px;}.podcast-logo{left:10px;width:90px;height:90px;}.social-media{gap:8px;}}
 </style>
+  <link rel="stylesheet" href="assets/consent-banner.css">
+  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
+  <script src="assets/site-shell.js?v=20260926" defer></script>
 </head>
 <body>
 <header>
@@ -237,5 +256,18 @@ document.addEventListener('DOMContentLoaded', carregarEpisodios);
   </div>
   <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
+  <div class="cookie-banner__content">
+    <div class="cookie-banner__text">
+      Usamos cookies para medir audiências e melhorar a experiência. Pode aceitar ou recusar. Saiba mais em
+      <a href="politica-privacidade.html">Política de Privacidade</a>.
+    </div>
+    <div class="cookie-banner__actions">
+      <button id="cookie-accept" class="cookie-banner__button cookie-banner__button--accept">Aceitar</button>
+      <button id="cookie-reject" class="cookie-banner__button cookie-banner__button--reject">Recusar</button>
+    </div>
+  </div>
+</div>
+<script src="assets/consent-banner.js" defer></script>
 </body>
 </html>
