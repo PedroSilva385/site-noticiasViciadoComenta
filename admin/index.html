@@ -1521,18 +1521,44 @@ function isLocalStudioSession() {
   return !!(currentUser && currentUser.isLocalStudio);
 }
 
-function applyAuthenticatedUiState(user) {
-  currentUser = user;
-  userEmail.textContent = (user && user.email) ? user.email : 'Modo local';
+function revealAdminDashboard() {
   authScreen.style.display = 'none';
   dashboard.classList.add('active');
   setAdminView('noticias');
-  void verifyAdminAccess(user);
   loadNoticias();
   setTimeout(() => {
     updateQualityHints();
     updatePreviewContent();
   }, 50);
+}
+
+function applyAuthenticatedUiState(user) {
+  currentUser = user;
+  userEmail.textContent = (user && user.email) ? user.email : 'Modo local';
+
+  if (!user || user.isLocalStudio) {
+    adminAccessGranted = true;
+    revealAdminDashboard();
+    return;
+  }
+
+  // O painel só é revelado depois de confirmar que o UID está em /admins.
+  // Contas sem permissões são desconectadas e nunca chegam a ver o dashboard.
+  void (async () => {
+    const allowed = await verifyAdminAccess(user);
+    if (allowed) {
+      revealAdminDashboard();
+      return;
+    }
+
+    adminAccessGranted = false;
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.warn('Falha ao terminar sessão sem permissões:', error);
+    }
+    showAuthError('Esta conta não tem permissões de administrador. O acesso ao painel foi bloqueado.');
+  })();
 }
 
 // A lista de administradores vive em /admins no Realtime Database.

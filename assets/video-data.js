@@ -35,110 +35,93 @@
     return path;
   }
 
+  function getAppList(fbScope) {
+    try {
+      return fbScope && Array.isArray(fbScope.apps) ? fbScope.apps : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
   async function ensureFirebaseReady() {
+    // 1) Garantir o SDK e a app default inicializados (comportamento original).
     if (typeof window.ensureFirebaseInitialized === 'function') {
       await window.ensureFirebaseInitialized();
-      return true;
-    }
-
-    if (typeof firebase === 'undefined') {
-      throw new Error('Firebase SDK nao carregado.');
-    }
-
-    if (!firebase.apps || !firebase.apps.length) {
-      if (typeof firebaseConfig === 'undefined') {
-        throw new Error('Configuracao Firebase indisponivel.');
+    } else {
+      if (typeof firebase === 'undefined') {
+        throw new Error('Firebase SDK nao carregado.');
       }
-      firebase.initializeApp(firebaseConfig);
+
+      if (!firebase.apps || !firebase.apps.length) {
+        if (typeof firebaseConfig === 'undefined') {
+          throw new Error('Configuracao Firebase indisponivel.');
+        }
+        firebase.initializeApp(firebaseConfig);
+      }
+
+      window.firebaseInitialized = true;
     }
 
-    window.firebaseInitialized = true;
+    // 2) Detetar sempre a app 'adminPanel' (mesma sessão do painel admin),
+    //    inclusive quando ensureFirebaseInitialized já inicializou a app default.
+    window._vcRemoteFirebase = null;
+    window._vcFirebaseApp = null;
+    window._vcUsingParent = false;
 
-    // If the tool is running inside an iframe from the same origin, prefer parent's Firebase
     try {
       const parentWin = window.parent && window.parent !== window ? window.parent : null;
-      if (parentWin) {
-        try {
-          if (parentWin.firebase) {
-            window._vcRemoteFirebase = parentWin.firebase;
-            // Prefer adminPanel named app in parent when present
-            const parentApps = Array.isArray(parentWin.firebase.apps) ? parentWin.firebase.apps : [];
-            const parentAdminApp = parentApps.find((a) => a && a.name === 'adminPanel');
-            window._vcFirebaseApp = parentWin._vcFirebaseApp || parentAdminApp || (parentApps.length ? parentApps[0] : null) || null;
-            window._vcUsingParent = true;
-            return true;
-          }
-        } catch (e) {
-          // cross-origin or no access
-        }
+      if (parentWin && parentWin.firebase) {
+        window._vcRemoteFirebase = parentWin.firebase;
+        window._vcUsingParent = true;
       }
-
-      // Prefer a named admin app in the current window when available.
-      if (Array.isArray(firebase.apps) && firebase.apps.length) {
-        const adminApp = (firebase.apps || []).find((a) => a && a.name === 'adminPanel');
-        window._vcFirebaseApp = adminApp || (firebase.apps.length ? firebase.apps[0] : null) || null;
-      } else if (typeof firebase.app === 'function') {
-        window._vcFirebaseApp = firebase.app();
-      }
-      window._vcUsingParent = false;
     } catch (_) {
-      window._vcFirebaseApp = null;
-      window._vcUsingParent = false;
+      // cross-origin or no access
     }
+
+    const fbScope = window._vcRemoteFirebase || (typeof firebase !== 'undefined' ? firebase : null);
+    window._vcFirebaseApp = getAppList(fbScope).find((a) => a && a.name === 'adminPanel') || null;
+
     return true;
   }
 
-  async function waitForAuthUser(timeoutMs = 5000) {
-    // Prefer remote (parent) firebase auth when available
+  async function waitForAuthUser(timeoutMs = 5000, preferredAuth = null) {
+    const auths = [];
+    if (preferredAuth) auths.push(preferredAuth);
+
     const remote = window._vcRemoteFirebase || null;
-    const localFirebase = (typeof firebase !== 'undefined') ? firebase : null;
+    try { if (remote && typeof remote.auth === 'function') auths.push(remote.auth()); } catch (_) {}
+    try { if (typeof firebase !== 'undefined' && typeof firebase.auth === 'function') auths.push(firebase.auth()); } catch (_) {}
 
-    const authFromRemote = remote && typeof remote.auth === 'function' ? remote.auth() : null;
-    const authFromLocal = localFirebase && typeof localFirebase.auth === 'function' ? localFirebase.auth() : null;
-
-    const checkAuth = (auth) => {
-      if (!auth) return null;
-      if (auth.currentUser) return auth.currentUser;
-      return null;
-    };
-
-    const immediate = checkAuth(authFromRemote) || checkAuth(authFromLocal);
-    if (immediate) return immediate;
-
-    if (typeof window.waitForFirebaseAuthUser === 'function') {
-      try {
-        const res = await window.waitForFirebaseAuthUser(timeoutMs);
-        if (res) return res;
-      } catch (_) {}
-    }
+    const authWithUser = auths.find((instance) => instance && instance.currentUser);
+    if (authWithUser) return authWithUser.currentUser;
 
     return new Promise((resolve) => {
       let resolved = false;
+      let timer = null;
+      const unsubscribers = [];
+
       const finish = (user) => {
         if (resolved) return;
         resolved = true;
-        try { if (timer) window.clearTimeout(timer); } catch(_) {}
-        try { if (unsubLocal) unsubLocal(); } catch(_) {}
-        try { if (unsubRemote) unsubRemote(); } catch(_) {}
+        unsubscribers.forEach((unsubscribe) => {
+          try { unsubscribe(); } catch (_) {}
+        });
+        try { window.clearTimeout(timer); } catch (_) {}
         resolve(user || null);
       };
 
-      let unsubLocal = null;
-      let unsubRemote = null;
+      // Só resolve com um utilizador real; sem sessão resolvemos por timeout.
+      auths.forEach((instance) => {
+        try {
+          if (instance && typeof instance.onAuthStateChanged === 'function') {
+            unsubscribers.push(instance.onAuthStateChanged((user) => {
+              if (user) finish(user);
+            }, () => {}));
+          }
+        } catch (_) {}
+      });
 
-      try {
-        if (authFromRemote && typeof authFromRemote.onAuthStateChanged === 'function') {
-          unsubRemote = authFromRemote.onAuthStateChanged((user) => finish(user || null), () => finish(null));
-        }
-      } catch (_) {}
-
-      try {
-        if (authFromLocal && typeof authFromLocal.onAuthStateChanged === 'function') {
-          unsubLocal = authFromLocal.onAuthStateChanged((user) => finish(user || null), () => finish(null));
-        }
-      } catch (_) {}
-
-      const timer = window.setTimeout(() => finish((authFromRemote && authFromRemote.currentUser) || (authFromLocal && authFromLocal.currentUser) || null), timeoutMs);
+      timer = window.setTimeout(() => finish(null), timeoutMs);
     });
   }
 
@@ -299,20 +282,66 @@
     return normalizeByTarget(target, null);
   }
 
+  function resolveWriteContext(createAdminApp = true) {
+    const remote = window._vcRemoteFirebase || null;
+    const localFirebase = (typeof firebase !== 'undefined') ? firebase : null;
+
+    // Preferir a app 'adminPanel' (mesma sessão do painel admin) para a escrita,
+    // começando pela janela-mãe quando a ferramenta corre dentro do painel (iframe).
+    let app = window._vcFirebaseApp
+      || getAppList(remote).find((a) => a && a.name === 'adminPanel')
+      || getAppList(localFirebase).find((a) => a && a.name === 'adminPanel')
+      || null;
+
+    // Numa aba autónoma ainda não existe a app 'adminPanel';
+    // criá-la reutiliza a sessão admin persistida (a persistência é por nome de app).
+    if (!app && createAdminApp && localFirebase && typeof localFirebase.initializeApp === 'function' && typeof firebaseConfig !== 'undefined') {
+      try {
+        app = localFirebase.initializeApp(firebaseConfig, 'adminPanel');
+      } catch (_) {
+        app = null;
+      }
+    }
+
+    const fbScope = remote || localFirebase;
+
+    let auth = null;
+    let db = null;
+
+    try {
+      auth = (app && typeof app.auth === 'function')
+        ? app.auth()
+        : (fbScope && typeof fbScope.auth === 'function' ? fbScope.auth() : null);
+    } catch (_) {
+      auth = null;
+    }
+
+    try {
+      db = (app && typeof app.database === 'function')
+        ? app.database()
+        : (fbScope && typeof fbScope.database === 'function' ? fbScope.database() : null);
+    } catch (_) {
+      db = null;
+    }
+
+    return { app, auth, db, remote };
+  }
+
   async function saveTarget(target, data) {
     await ensureFirebaseReady();
-    const remote = window._vcRemoteFirebase || null;
-    const app = window._vcFirebaseApp || (remote && remote.apps && remote.apps[0]) || (typeof firebase !== 'undefined' && firebase.apps && firebase.apps[0]) || null;
-    const auth = remote ? (remote.auth ? remote.auth() : null) : (app && typeof app.auth === 'function' ? app.auth() : (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null));
-    const user = auth && auth.currentUser ? auth.currentUser : await waitForAuthUser(5000);
-    // Diagnostic log
-    try {
-      const used = remote ? 'parent.firebase' : (app && app.name ? `app:${app.name}` : 'default-firebase');
-      const email = user ? (user.email || '(sem-email)') : '(sem-sessao)';
-      console.info('[VCVideoData] saveTarget using:', used, 'currentUser:', email, 'target:', target);
-    } catch (e) {}
-    if (!user) {
-      // Fallback: prompt for admin credentials so tools can sign in when opened standalone.
+    const { app, auth, db } = resolveWriteContext();
+
+    if (!db) throw new Error('Firebase Realtime Database indisponível.');
+
+    let user = (auth && auth.currentUser) ? auth.currentUser : null;
+    const hasUsableAdminSession = !!(user && !user.isAnonymous);
+
+    if (!hasUsableAdminSession) {
+      user = await waitForAuthUser(5000, auth);
+    }
+
+    if (!user || user.isAnonymous) {
+      // Fallback: pedir credenciais para ferramentas abertas fora do painel admin.
       try {
         if (typeof window.confirm === 'function' && !window.confirm('Sessão admin não detectada. Pretende iniciar sessão agora?')) {
           throw new Error('Inicie sessao no painel admin para guardar videos.');
@@ -328,34 +357,37 @@
 
         console.info('[VCVideoData] attempting signInWithEmailAndPassword for', email);
         const credential = await auth.signInWithEmailAndPassword(email, password);
-        const newUser = (credential && credential.user) ? credential.user : auth.currentUser;
-        if (!newUser) throw new Error('Falha ao iniciar sessão com as credenciais fornecidas.');
-        // update local user variable
-        user = newUser;
+        user = (credential && credential.user) ? credential.user : auth.currentUser;
+        if (!user) throw new Error('Falha ao iniciar sessão com as credenciais fornecidas.');
         console.info('[VCVideoData] sign-in successful, user:', user.email || '(sem-email)');
-      } catch (e) {
-        console.warn('[VCVideoData] fallback sign-in failed:', e && e.message ? e.message : e);
-        throw e;
+      } catch (signInError) {
+        console.warn('[VCVideoData] fallback sign-in failed:', signInError && signInError.message ? signInError.message : signInError);
+        throw signInError;
       }
     }
 
-    const db = remote ? (remote.database ? remote.database() : null) : (app && typeof app.database === 'function' ? app.database() : (firebase.database ? firebase.database() : null));
-    if (!db) throw new Error('Firebase Realtime Database indisponível.');
+    try {
+      const used = app && app.name ? `app:${app.name}` : 'default-firebase';
+      console.info('[VCVideoData] saveTarget using:', used, 'currentUser:', user.email || (user.isAnonymous ? '(anonimo)' : '(sem-email)'), 'target:', target);
+      await db.ref(getTargetPath(target)).set(normalizeByTarget(target, data));
+    } catch (error) {
+      if (typeof window.isFirebasePermissionDenied === 'function' && window.isFirebasePermissionDenied(error)) {
+        throw new Error('Sem permissão para guardar (PERMISSION_DENIED). Confirme que a conta autenticada está na lista /admins do Realtime Database.');
+      }
+      throw error;
+    }
 
-    await db.ref(getTargetPath(target)).set(normalizeByTarget(target, data));
     return true;
   }
 
   // Helper para inspeção no console: `VCVideoData.debugContext()`
   function debugContext() {
-    const remote = window._vcRemoteFirebase || null;
-    const app = window._vcFirebaseApp || (remote && remote.apps && remote.apps[0]) || (typeof firebase !== 'undefined' && firebase.apps && firebase.apps[0]) || null;
-    const auth = remote ? (remote.auth ? remote.auth() : null) : (app && typeof app.auth === 'function' ? app.auth() : (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null));
+    const { app, auth, remote } = resolveWriteContext(false);
     return {
       usingParentFirebase: !!remote,
       appName: app && app.name ? app.name : null,
       hasAuth: !!auth,
-      currentUser: auth && auth.currentUser ? { uid: auth.currentUser.uid, email: auth.currentUser.email || null } : null
+      currentUser: auth && auth.currentUser ? { uid: auth.currentUser.uid, email: auth.currentUser.email || null, isAnonymous: !!auth.currentUser.isAnonymous } : null
     };
   }
 
