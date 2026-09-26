@@ -163,9 +163,16 @@ async function carregarEpisodios() {
         }
       }
     } catch (metaError) {}
-    const response = await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Falha ao carregar episódios (${response.status}).`);
-    const data = await response.json();
+    let data;
+    if (window.VCVideoData && typeof window.VCVideoData.loadTarget === 'function') {
+      // Firebase primeiro (episódios guardados no studio ficam logo visíveis);
+      // o JSON estático serve de fallback quando o Firebase não responde.
+      data = await window.VCVideoData.loadTarget('viciado-comenta', { fallbackUrl: 'data/viciado-comenta-videos.json' });
+    } else {
+      const response = await fetch('data/viciado-comenta-videos.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Falha ao carregar episódios (${response.status}).`);
+      data = await response.json();
+    }
     const episodes = (Array.isArray(data) ? data : [])
       .map((episode) => typeof episode === 'string' ? { url: episode, data: '' } : episode)
       .map((episode) => ({ ...episode, id: extrairYouTubeId(episode.url) }))
