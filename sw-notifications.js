@@ -25,8 +25,8 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
-      icon: payload.icon || '/assets/favicon.svg',
-      badge: payload.badge || '/assets/favicon.svg',
+      icon: payload.icon || '/assets/logo.png',
+      badge: payload.badge || '/assets/logo.png',
       tag: payload.articleKey || url,
       data: {
         url
