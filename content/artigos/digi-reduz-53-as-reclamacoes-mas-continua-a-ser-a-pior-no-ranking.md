@@ -49,7 +49,7 @@ A campeã de queixas foi a NOS, com 34%, seguida pela MEO, com 32%, pela Vodafon
 
 Ainda assim, o número de reclamações caiu 12% face ao mesmo período do ano anterior.
 
-![3](/assets/imagens/lisboa.png)
+![](/assets/imagens/lisboa.ong)![3](/assets/imagens/lisboa.png)
 
 **CONCLUSÃO**
 
