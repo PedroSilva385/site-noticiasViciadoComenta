@@ -62,8 +62,8 @@ function buildPushPayload(body) {
     url: String(body.url || 'https://www.viciadocomenta.pt/artigos.html').trim().slice(0, 500),
     topic: String(body.topic || 'all').trim().toLowerCase() || 'all',
     articleKey: String(body.articleKey || '').trim().slice(0, 180),
-    icon: '/assets/favicon.svg',
-    badge: '/assets/favicon.svg'
+    icon: '/assets/logo.png',
+    badge: '/assets/logo.png'
   };
 }
 

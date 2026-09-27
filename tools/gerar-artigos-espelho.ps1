@@ -437,7 +437,8 @@ $templatePath = Join-Path $root 'artigos.html'
 $artigosDir = Join-Path $root 'artigos'
 $sitemapPath = Join-Path $root 'sitemap.xml'
 $rssPath = Join-Path $root 'rss.xml'
-$siteSocialImageUrl = 'https://www.viciadocomenta.pt/assets/social-card.svg'
+$siteSocialImageUrl = 'https://www.viciadocomenta.pt/assets/social-card.png'
+$siteLogoUrl = 'https://www.viciadocomenta.pt/assets/logo.png'
 $publisherId = 'https://www.viciadocomenta.pt/#organization'
 $authorId = 'https://www.viciadocomenta.pt/autor/pedro-silva.html#author'
 $authorUrl = 'https://www.viciadocomenta.pt/autor/pedro-silva.html'
@@ -620,11 +621,11 @@ foreach ($noticia in $noticias) {
         url = 'https://www.viciadocomenta.pt/'
         logo = [ordered]@{
             '@type' = 'ImageObject'
-            '@id' = 'https://www.viciadocomenta.pt/assets/social-card.svg#logo'
-            url = $siteSocialImageUrl
-            contentUrl = $siteSocialImageUrl
-            width = 1200
-            height = 630
+            '@id' = "$siteLogoUrl#logo"
+            url = $siteLogoUrl
+            contentUrl = $siteLogoUrl
+            width = 512
+            height = 512
         }
         sameAs = @(
             'https://www.facebook.com/Viciadoemjogospt',
@@ -691,12 +692,12 @@ foreach ($noticia in $noticias) {
         '<meta property="og:title" content="Notícia - VICIADO COMENTA">',
         '<meta property="og:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">',
         '<meta property="og:url" content="https://www.viciadocomenta.pt/noticias.html">',
-        '<meta property="og:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">',
+        '<meta property="og:image" content="https://www.viciadocomenta.pt/assets/social-card.png">',
         '<meta property="og:locale" content="pt_PT">',
         '<meta name="twitter:card" content="summary_large_image">',
         '<meta name="twitter:title" content="Notícia - VICIADO COMENTA">',
         '<meta name="twitter:description" content="Notícias e artigos completos com análise editorial sobre tecnologia, telecom e gaming.">',
-        '<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/favicon.svg">'
+        '<meta name="twitter:image" content="https://www.viciadocomenta.pt/assets/social-card.png">'
     )
 
     foreach ($line in $genericMetaLines) {
@@ -785,6 +786,7 @@ $baseUrls = @(
     'https://www.viciadocomenta.pt/noticias.html',
     'https://www.viciadocomenta.pt/artigos.html',
     'https://www.viciadocomenta.pt/todas-noticias.html',
+    'https://www.viciadocomenta.pt/podcast.html',
     'https://www.viciadocomenta.pt/sobre-nos.html',
     'https://www.viciadocomenta.pt/contacto.html',
     'https://www.viciadocomenta.pt/autor/pedro-silva.html',

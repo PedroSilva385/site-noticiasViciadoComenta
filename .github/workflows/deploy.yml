@@ -173,6 +173,9 @@ jobs:
 
         git ls-files -z | rsync -a --from0 --files-from=- ./ .publish/
 
+        # Ferramentas internas de trabalho (studio, conversores, scripts) não são publicadas no site
+        rm -rf .publish/tools
+
         for file in firebase-config.js firebase-config.json assets/firebase-config.js data/build-version.json data/push-public-config.json; do
           if [ -f "$file" ]; then
             mkdir -p ".publish/$(dirname "$file")"

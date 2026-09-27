@@ -44,9 +44,41 @@ button:hover { filter: brightness(.95); }
   .grid { grid-template-columns: 1fr; }
   .row { grid-template-columns: 1fr; }
 }
+.studio-gate { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+html.studio-needs-auth .studio-gate { display: flex; }
+html.studio-needs-auth .container { display: none; }
+.studio-gate-box { width: 100%; max-width: 420px; background: #fff; border-radius: 14px; box-shadow: 0 25px 60px rgba(0,0,0,.4); padding: 26px 24px; }
+.studio-gate-box h2 { font-size: 1.35rem; margin-bottom: 6px; color: #111827; }
+.studio-gate-box p { color: #4b5563; font-size: .92rem; margin-bottom: 16px; }
+.studio-gate-box .btn-primary { width: 100%; margin-top: 6px; }
+.studio-gate-msg { min-height: 20px; margin-top: 10px; font-size: .88rem; color: #4b5563; }
+.studio-gate-msg.err { color: #b91c1c; font-weight: 600; }
 </style>
+<script>
+(function () {
+  try {
+    var host = location.hostname || '';
+    var isLocalHost = location.protocol === 'file:' || host === 'localhost' || host === '127.0.0.1';
+    if (!isLocalHost) { document.documentElement.classList.add('studio-needs-auth'); }
+  } catch (_) {}
+})();
+</script>
 </head>
 <body>
+<div class="studio-gate" id="studioGate" role="dialog" aria-modal="true" aria-labelledby="studioGateTitle">
+  <div class="studio-gate-box">
+    <h2 id="studioGateTitle">🔒 Acesso restrito</h2>
+    <p>Esta ferramenta é exclusiva para administradores do VICIADO COMENTA. Inicia sessão para continuar.</p>
+    <form id="studioGateForm">
+      <label for="gateEmail">Email</label>
+      <input id="gateEmail" type="email" autocomplete="username" required>
+      <label for="gatePassword">Password</label>
+      <input id="gatePassword" type="password" autocomplete="current-password" required>
+      <button class="btn-primary" type="submit">Entrar</button>
+    </form>
+    <div class="studio-gate-msg" id="studioGateMsg"></div>
+  </div>
+</div>
 <div class="container">
   <h1>🎙️ Podcast, Vídeos e Links Studio</h1>
   <p class="subtitle">Adicionar episódios de Sentido Improvável de Decisão e gerir os vídeos e links principais do site.</p>
@@ -169,6 +201,78 @@ button:hover { filter: brightness(.95); }
 
   <div id="status" class="status info">A iniciar...</div>
 </div>
+
+<script>
+(function () {
+  var isLocalHost = location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  if (isLocalHost) { return; }
+
+  var form = document.getElementById('studioGateForm');
+  var msg = document.getElementById('studioGateMsg');
+  var root = document.documentElement;
+  var adminAuth = null;
+  var adminDb = null;
+
+  function setMessage(text, isError) {
+    msg.textContent = text || '';
+    msg.classList.toggle('err', !!isError);
+  }
+
+  function getAdminContext() {
+    if (typeof firebase === 'undefined' || typeof firebaseConfig === 'undefined') { return null; }
+    var apps = (firebase && Array.isArray(firebase.apps)) ? firebase.apps : [];
+    var app = apps.find(function (a) { return a && a.name === 'adminPanel'; }) || firebase.initializeApp(firebaseConfig, 'adminPanel');
+    return { auth: app.auth(), db: app.database() };
+  }
+
+  function isAdminUser(user) {
+    if (!user || user.isAnonymous || !adminDb) { return Promise.resolve(false); }
+    return adminDb.ref('admins/' + user.uid).once('value').then(function (snapshot) {
+      return snapshot.val() === true;
+    }).catch(function () { return false; });
+  }
+
+  var context = getAdminContext();
+  if (!context) {
+    setMessage('Não foi possível ligar ao serviço de autenticação. Recarrega a página.', true);
+    return;
+  }
+  adminAuth = context.auth;
+  adminDb = context.db;
+
+  adminAuth.onAuthStateChanged(function (user) {
+    isAdminUser(user).then(function (allowed) {
+      if (allowed) {
+        root.classList.remove('studio-needs-auth');
+        setMessage('', false);
+      } else {
+        root.classList.add('studio-needs-auth');
+        if (user) { setMessage('A conta autenticada não tem permissões de administrador.', true); }
+      }
+    });
+  });
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var email = document.getElementById('gateEmail').value.trim();
+    var password = document.getElementById('gatePassword').value;
+    if (!email || !password) { return; }
+    setMessage('A validar credenciais...', false);
+    adminAuth.signInWithEmailAndPassword(email, password).then(function (credential) {
+      return isAdminUser(credential && credential.user).then(function (allowed) {
+        if (!allowed) {
+          setMessage('A conta autenticada não tem permissões de administrador.', true);
+          return adminAuth.signOut();
+        }
+        document.getElementById('gatePassword').value = '';
+        return null;
+      });
+    }).catch(function () {
+      setMessage('Falha no início de sessão. Confirma o email e a password.', true);
+    });
+  });
+})();
+</script>
 
 <script>
 let currentTarget = 'viciado-comenta';
