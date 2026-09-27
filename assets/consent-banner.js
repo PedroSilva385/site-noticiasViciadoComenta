@@ -1,5 +1,7 @@
 (function () {
   var CONSENT_KEY = 'vc_consent_v1';
+  var CLARITY_TAG = 'yolt837er6';
+  var clarityLoaded = false;
   var banner = document.getElementById('cookie-banner');
   if (!banner) return;
 
@@ -21,6 +23,20 @@
     }
   }
 
+  // Load Microsoft Clarity only after the visitor accepts cookies (RGPD).
+  function loadClarity() {
+    if (clarityLoaded) return;
+    clarityLoaded = true;
+    window.clarity = window.clarity || function () {
+      (window.clarity.q = window.clarity.q || []).push(arguments);
+    };
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.clarity.ms/tag/' + CLARITY_TAG;
+    var firstScript = document.getElementsByTagName('script')[0];
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
   function setConsent(value) {
     try {
       localStorage.setItem(CONSENT_KEY, value);
@@ -28,6 +44,9 @@
       // ignore storage errors
     }
     updateGtagConsent(value === 'granted');
+    if (value === 'granted') {
+      loadClarity();
+    }
     banner.hidden = true;
   }
 
@@ -42,6 +61,7 @@
     if (stored === 'granted') {
       banner.hidden = true;
       updateGtagConsent(true);
+      loadClarity();
       return;
     }
 
