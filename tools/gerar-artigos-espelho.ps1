@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 
 function Remove-Diacritics {
     param([string]$Text)
@@ -68,7 +68,26 @@ function ConvertTo-HtmlEntities {
     param([string]$Text)
 
     if ($null -eq $Text) { return '' }
-    return [System.Net.WebUtility]::HtmlEncode($Text)
+    $encoded = [System.Net.WebUtility]::HtmlEncode($Text)
+    if ([string]::IsNullOrEmpty($encoded)) { return $encoded }
+
+    # O HtmlEncode do .NET Framework (Windows PowerShell 5.1) não converte emojis
+    # (pares de surrogates) em entidades numéricas; o .NET Core usado no runner do CI
+    # já o faz. Normalizamos aqui para garantir output idêntico em ambos.
+    if ($encoded -notmatch '[\uD800-\uDBFF]') { return $encoded }
+
+    $builder = New-Object System.Text.StringBuilder
+    for ($i = 0; $i -lt $encoded.Length; $i++) {
+        $ch = $encoded[$i]
+        if ([char]::IsHighSurrogate($ch) -and ($i + 1) -lt $encoded.Length -and [char]::IsLowSurrogate($encoded[$i + 1])) {
+            [void]$builder.Append('&#' + [char]::ConvertToUtf32($ch, $encoded[$i + 1]) + ';')
+            $i++
+        } else {
+            [void]$builder.Append($ch)
+        }
+    }
+
+    return $builder.ToString()
 }
 
 function Convert-ToLfText {
@@ -242,7 +261,10 @@ function Get-PublicationDateValue {
 
     $formats = @('dd/MM/yyyy HH:mm', 'dd/MM/yyyy')
     $culture = [Globalization.CultureInfo]::GetCultureInfo('pt-PT')
-    $style = [Globalization.DateTimeStyles]::AssumeLocal
+    # As datas dos artigos são interpretadas como UTC fixo (e não como hora local da
+    # máquina que gera): a conversão para ISO/RFC 822 fica determinística e não oscila
+    # entre a geração local (UTC+1) e o runner do CI (UTC).
+    $style = [Globalization.DateTimeStyles]::AssumeUniversal -bor [Globalization.DateTimeStyles]::AdjustToUniversal
 
     foreach ($format in $formats) {
         $parsed = [datetime]::MinValue
@@ -468,7 +490,8 @@ $noticias = @(
         -not [string]::IsNullOrWhiteSpace([string]$_.titulo)
     }
 )
-$now = Get-Date
+# Referência temporal em UTC, na mesma escala das datas dos artigos (ver Get-PublicationDateValue).
+$now = (Get-Date).ToUniversalTime()
 $usedSlugs = @{}
 $generatedArticles = @()
 $generatedFileCount = 0
@@ -572,7 +595,7 @@ foreach ($noticia in $noticias) {
     $sitemapLastMod = if ($effectivePublishedDate) {
         $effectivePublishedDate.ToString('yyyy-MM-dd')
     } else {
-        (Get-Date).ToString('yyyy-MM-dd')
+        $now.ToString('yyyy-MM-dd')
     }
 
     $publishedDateIso = if ($effectivePublishedDate) {
