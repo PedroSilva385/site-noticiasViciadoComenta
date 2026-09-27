@@ -375,6 +375,33 @@ function Get-FirstContentImageUrl {
     return Get-AbsoluteSiteUrl -Url $match.Groups['src'].Value
 }
 
+function Resolve-ArticleSocialImageUrl {
+    param(
+        [string]$ContentImageUrl,
+        [string]$FallbackUrl
+    )
+
+    if ([string]::IsNullOrWhiteSpace($ContentImageUrl)) { return $FallbackUrl }
+    if ($ContentImageUrl -notmatch '^https?://') { return $FallbackUrl }
+    # O og:image deve ser raster: SVG não é aceite pelo Google News e é mal suportado em partilhas.
+    if ($ContentImageUrl -match '\.svg([?#]|$)') { return $FallbackUrl }
+
+    if ($ContentImageUrl.StartsWith('https://www.viciadocomenta.pt/')) {
+        # Usar a imagem local apenas se existir no repositório, com comparação case-exata
+        # (o GitHub Pages é case-sensitive): um nome com capitalização diferente cai no
+        # fallback e o resultado fica idêntico no Windows e no runner Linux.
+        $relativePath = ($ContentImageUrl.Substring('https://www.viciadocomenta.pt/'.Length) -split '[?#]')[0]
+        $localPath = Join-Path $script:root ($relativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+        $directory = Split-Path -Path $localPath -Parent
+        $fileName = Split-Path -Path $localPath -Leaf
+        $found = (Test-Path -LiteralPath $directory) -and (@(Get-ChildItem -LiteralPath $directory -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -ceq $fileName }).Count -gt 0)
+        if ($found) { return $ContentImageUrl }
+        return $FallbackUrl
+    }
+
+    return $ContentImageUrl
+}
+
 function Get-StaticArticleHtml {
     param([object]$Noticia)
 
@@ -613,7 +640,7 @@ foreach ($noticia in $noticias) {
     $safeDescription = ConvertTo-HtmlEntities -Text $metaDescription
     $safeUrl = ConvertTo-HtmlEntities -Text $articleUrl
     $contentImageUrl = Get-FirstContentImageUrl -Noticia $noticia
-    $articleSocialImageUrl = $siteSocialImageUrl
+    $articleSocialImageUrl = Resolve-ArticleSocialImageUrl -ContentImageUrl $contentImageUrl -FallbackUrl $siteSocialImageUrl
     $safeSocialImageUrl = ConvertTo-HtmlEntities -Text $articleSocialImageUrl
 
     $authorName = if ([string]::IsNullOrWhiteSpace([string]$noticia.autor)) { 'Viciado Comenta' } else { [string]$noticia.autor }
