@@ -120,8 +120,19 @@ git add tools/noticias-studio-server.ps1
 git add 404.html
 git add firebase.json
 git add sitemap.xml
+git add rss.xml
 git add robots.txt
 git add sobre-nos.html
+# Paginas e assets complementares (template dos espelhos, paginas com marcadores de versao)
+git add artigos.html
+git add assets/site-shell.css
+git add assets/article-thumb-fallback.svg
+git add contacto.html
+git add estatisticas.html
+git add podcast.html
+git add politica-privacidade.html
+git add termos-servico.html
+git add autor
 git add data/noticias.json
 git add data/viciado-comenta-videos.json
 git add data/viciado-ponto-critico-videos.json

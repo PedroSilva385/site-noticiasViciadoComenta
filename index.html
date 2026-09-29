@@ -92,10 +92,19 @@ body {
   display: none !important;
 }
 
+:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+body.dark :focus-visible {
+  outline-color: #60a5fa;
+}
+
 /* HEADER */
 header {
   background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-  padding: 40px 20px;
+  padding: 28px 20px;
   text-align: center;
   box-shadow: 0 2px 20px rgba(0, 102, 204, 0.15);
   position: relative;
@@ -106,8 +115,8 @@ header {
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 170px;
   border-radius: 0;
   margin: 0;
   border: none;
@@ -123,7 +132,7 @@ header {
 
 header h1 {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.8em;
+  font-size: 2.5em;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 8px;
@@ -134,7 +143,7 @@ header h1 {
   font-size: 0.95em;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 300;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 /* REDES SOCIAIS */
@@ -185,7 +194,7 @@ header h1 {
 .stat-counter {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
-  padding: 10px 16px;
+  padding: 8px 14px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
@@ -193,7 +202,7 @@ header h1 {
   gap: 10px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-width: 180px;
+  min-width: 164px;
 }
 
 .stat-counter:hover {
@@ -241,9 +250,8 @@ header h1 {
 
 /* NAVEGAÇÃO */
 nav {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 102, 204, 0.12);
   padding: 0 20px;
   display: flex;
   gap: 40px;
@@ -1088,7 +1096,7 @@ body.dark header { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)
 body.dark header, body.dark header * { color: #ffffff !important; }
 body.dark .stat-counter { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3); }
 body.dark .stat-counter:hover { background: rgba(255, 255, 255, 0.3); }
-body.dark nav { background: rgba(17,24,39,.95); border-bottom-color: rgba(255,255,255,.08); }
+body.dark nav { background: #111827; border-bottom-color: rgba(255,255,255,.08); }
 body.dark nav a { color: #d1d5db !important; }
 body.dark .highlight-video-section { background: #0f172a; border-color: rgba(96, 165, 250, 0.2); box-shadow: 0 12px 28px rgba(2,6,23,.6); }
 body.dark .highlight-video-header h2 { color: #f3f4f6 !important; }
@@ -1100,7 +1108,7 @@ body.dark .featured-section { box-shadow: 0 8px 32px rgba(2,6,23,.6); }
 body.dark .featured-content { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
 body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color:#f3f4f6 !important; }
 body.dark .featured-titulo { color: #ffffff !important; }
-body.dark .featured-link { color: #60a5fa !important; }
+body.dark .featured-link { background: #ffffff !important; color: #0369a1 !important; }
 body.dark .noticia-item { background:#1a222f; border-color:#2d3748; }
 body.dark .noticia-item:hover { box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25); }
 body.dark .noticia-conteudo h3 { color: #ffffff !important; }
@@ -1140,20 +1148,21 @@ body.dark span { color: #e5e7eb !important; }
 
 .featured-link {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: #ffffff;
+  color: #0052a3;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   padding: 12px 24px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: fit-content;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .featured-link:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: #e3f2fd;
+  border-color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -1333,11 +1342,11 @@ body.dark span { color: #e5e7eb !important; }
 }
 
 .noticia-item.read {
-  opacity: 0.78;
+  opacity: 0.85;
 }
 
 .noticia-item.read .noticia-thumb::before {
-  content: 'Lido';
+  content: '\2713';
   position: absolute;
   top: 8px;
   left: 8px;
@@ -1349,6 +1358,7 @@ body.dark span { color: #e5e7eb !important; }
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 0.95em;
   font-weight: 700;
   z-index: 20;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -1382,6 +1392,14 @@ body.dark span { color: #e5e7eb !important; }
 .noticia-read-btn.read {
   background: #22c55e;
   color: #ffffff;
+}
+
+.noticia-item.compacto {
+  padding-bottom: 16px;
+}
+
+.noticia-item.compacto .noticia-conteudo {
+  gap: 8px;
 }
 
 .noticia-thumb img {
@@ -1478,6 +1496,10 @@ body.dark .noticia-item {
   color: #1a1f3a;
   line-height: 1.35;
   font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .noticia-conteudo p {
@@ -2092,6 +2114,48 @@ footer {
   }
 
   .sidebar {
+    display: flex;
+    flex-direction: row;
+    order: 5;
+    gap: 12px;
+    position: static;
+    overflow-x: auto;
+    padding: 4px 2px 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sidebar > .sidebar-title,
+  .sidebar .social-widget p {
+    display: none;
+  }
+
+  .sidebar-right {
+    position: static;
+  }
+
+  .social-widget {
+    flex: 0 0 auto;
+    width: calc((100% - 24px) / 3);
+    padding: 12px 8px;
+  }
+
+  .social-widget-icon {
+    font-size: 1.6em;
+    margin-bottom: 6px;
+  }
+
+  .social-widget h3 {
+    font-size: 0.95em;
+    margin-bottom: 6px;
+  }
+
+  .social-widget-btn {
+    padding: 10px 5px;
+    font-size: 0.8em;
+    min-height: 44px;
+  }
+
+  .social-widget-btn i {
     display: none;
   }
 
@@ -2220,11 +2284,22 @@ footer {
   }
 
   .footer-links {
-    gap: 15px;
+    gap: 10px 15px;
+  }
+
+  .footer-links a,
+  .footer-contacts a,
+  .editorial-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .footer-contacts {
-    gap: 12px;
+    gap: 10px 12px;
     font-size: 0.85em;
   }
 }
@@ -2604,8 +2679,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260927">
-  <script src="assets/site-shell.js?v=20260927" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
+  <script src="assets/site-shell.js?v=20260926" defer></script>
 </head>
 
 <body>
@@ -2676,7 +2751,7 @@ footer {
 
 <div class="search-section">
   <div class="search-container">
-    <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar artigos por título, categoria ou conteúdo...">
+    <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar artigos por título, categoria ou conteúdo..." aria-label="Pesquisar artigos por título, categoria ou conteúdo" autocomplete="off">
     <i class="fas fa-search search-icon"></i>
     <div class="search-dropdown" id="searchDropdown"></div>
   </div>
@@ -2721,6 +2796,8 @@ footer {
   </aside>
 
   <div class="main-content">
+    <div class="featured-section" id="featured"></div>
+
     <section class="highlight-video-section" id="videoDestaque">
       <div class="highlight-video-header">
         <h2><span class="highlight-video-title">Vídeo em Destaque</span></h2>
@@ -2778,8 +2855,6 @@ footer {
       })();
     </script>
 
-    <div class="featured-section" id="featured"></div>
-
     <section class="article-spotlight-stack" aria-labelledby="homeArticlesTitle">
       <div class="article-spotlight-grid">
         <section class="article-spotlight-section">
@@ -2787,7 +2862,7 @@ footer {
             <div class="article-spotlight-copy">
               <p class="article-spotlight-kicker">Leitura por tema</p>
               <h2 id="homeArticlesTitle">Últimos Artigos</h2>
-              <p class="article-spotlight-subtitle">O feed principal fica como antes, com os artigos mais recentes em destaque logo no topo desta área.</p>
+              <p class="article-spotlight-subtitle">Acompanha as notícias mais recentes sobre telecomunicações, mercado digital e tecnologia em Portugal, com atualização regular.</p>
             </div>
           </div>
           <section class="noticias-list" id="noticiasList"></section>
@@ -2800,7 +2875,7 @@ footer {
           <div class="article-spotlight-lead">
             <div>
               <strong id="homeDigiTitle">Conteúdos DIGI</strong>
-              <p>Os 4 artigos mais recentes sobre a operadora, expansão de rede, preços e impacto no mercado.</p>
+              <p>Os artigos mais recentes sobre a operadora: expansão de rede, preços e impacto no mercado.</p>
             </div>
           </div>
           <section class="noticias-list" id="noticiasDigiList"></section>
@@ -2813,7 +2888,7 @@ footer {
           <div class="article-spotlight-lead">
             <div>
               <strong id="homeTelecomTitle">Conteúdos Telecom</strong>
-              <p>Quatro leituras rápidas sobre operadoras, mercado português, reguladores e movimentos estratégicos.</p>
+              <p>Leituras rápidas sobre operadoras, mercado português, reguladores e movimentos estratégicos.</p>
             </div>
           </div>
           <section class="noticias-list" id="noticiasTelecomList"></section>
@@ -3299,7 +3374,10 @@ fetchNoticiasAgendadas("data/noticias.json")
 
       if (btn) {
         btn.classList.toggle('read', isReadNow);
-        btn.textContent = 'Lido';
+        const label = isReadNow ? 'Marcar como não lido' : 'Marcar como lido';
+        btn.setAttribute('aria-pressed', isReadNow ? 'true' : 'false');
+        btn.setAttribute('aria-label', label);
+        btn.setAttribute('title', label);
       }
 
       if (card) {
@@ -3326,16 +3404,17 @@ fetchNoticiasAgendadas("data/noticias.json")
       digi: 'digi',
       telecom: 'telecom'
     };
+    const NEWS_INITIAL_VISIBLE = {
+      [ARTICLE_SECTION_KEYS.latest]: 5,
+      [ARTICLE_SECTION_KEYS.digi]: 3,
+      [ARTICLE_SECTION_KEYS.telecom]: 3
+    };
     const articleSectionButtons = {
       [ARTICLE_SECTION_KEYS.latest]: noticiasLoadMore,
       [ARTICLE_SECTION_KEYS.digi]: noticiasDigiLoadMore,
       [ARTICLE_SECTION_KEYS.telecom]: noticiasTelecomLoadMore
     };
-    let noticiasVisiveis = {
-      [ARTICLE_SECTION_KEYS.latest]: NEWS_BATCH_SIZE,
-      [ARTICLE_SECTION_KEYS.digi]: NEWS_BATCH_SIZE,
-      [ARTICLE_SECTION_KEYS.telecom]: NEWS_BATCH_SIZE
-    };
+    let noticiasVisiveis = { ...NEWS_INITIAL_VISIBLE };
     let noticiasAtuais = [];
     let noticiasAtuaisPorSecao = {
       [ARTICLE_SECTION_KEYS.latest]: [],
@@ -3387,7 +3466,7 @@ fetchNoticiasAgendadas("data/noticias.json")
       return noticias.filter((noticia) => normalizeText(noticia.categoria) === categoriaNormalizada);
     }
 
-    function criarCardNoticia(noticia) {
+    function criarCardNoticia(noticia, opcoes = {}) {
       const isRead = articleReadTracker.isRead(noticia.id);
       const videoId = extrairVideoId(noticia.video);
       const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
@@ -3403,16 +3482,14 @@ fetchNoticiasAgendadas("data/noticias.json")
         : `
             <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
               <div class="noticia-thumb">
-                <div class="noticia-thumb-fallback">
-                  <i class="fas fa-newspaper"></i>
-                  <span>Sem miniatura</span>
-                </div>
+                <img src="assets/article-thumb-fallback.svg" alt="Imagem de capa do artigo: ${noticia.titulo}" loading="lazy">
               </div>
             </a>
           `;
 
+      const readLabel = isRead ? 'Marcar como não lido' : 'Marcar como lido';
       const article = document.createElement('article');
-      article.className = `noticia-item ${isRead ? 'read' : ''}`;
+      article.className = `noticia-item ${opcoes.compacto ? 'compacto ' : ''}${isRead ? 'read' : ''}`.trim();
       article.innerHTML = `
         ${thumbnailMarkup}
         <div class="noticia-conteudo">
@@ -3421,16 +3498,16 @@ fetchNoticiasAgendadas("data/noticias.json")
             <span class="noticia-data">${noticia.data || 'Sem data'}</span>
           </div>
           <h3>${noticia.titulo}</h3>
-          <p>${noticia.resumo}</p>
+          ${opcoes.compacto ? '' : `<p>${noticia.resumo}</p>`}
           <a href="${buildArticleUrl(noticia)}" class="noticia-link">Ver mais</a>
         </div>
-        <button class="noticia-read-btn ${isRead ? 'read' : ''}" data-article-id="${noticia.id}" onclick="toggleArticleRead(event, '${noticia.id}')">Lido</button>
+        <button class="noticia-read-btn ${isRead ? 'read' : ''}" data-article-id="${noticia.id}" aria-pressed="${isRead ? 'true' : 'false'}" aria-label="${readLabel}" title="${readLabel}" onclick="toggleArticleRead(event, '${noticia.id}')"><i class="fas fa-check" aria-hidden="true"></i></button>
       `;
 
       return article;
     }
 
-    function renderizarListaNoticias(container, noticias, limite, mensagemVazia) {
+    function renderizarListaNoticias(container, noticias, limite, mensagemVazia, opcoes = {}) {
       if (!container) return;
 
       container.innerHTML = '';
@@ -3442,13 +3519,19 @@ fetchNoticiasAgendadas("data/noticias.json")
       }
 
       noticiasParaMostrar.forEach((noticia) => {
-        container.appendChild(criarCardNoticia(noticia));
+        container.appendChild(criarCardNoticia(noticia, opcoes));
       });
     }
 
     function renderizarNoticiasSecoes(noticiasOrdenadas) {
-      const noticiasDigi = filtrarNoticiasPorCategoria(noticiasOrdenadas, 'DIGI');
-      const noticiasTelecom = filtrarNoticiasPorCategoria(noticiasOrdenadas, 'Telecom');
+      const idsJaVisiveisNoFeed = new Set(
+        noticiasOrdenadas
+          .slice(0, noticiasVisiveis[ARTICLE_SECTION_KEYS.latest] || NEWS_BATCH_SIZE)
+          .map((noticia) => String(noticia.id))
+      );
+      const excluirDoFeedPrincipal = (noticia) => !idsJaVisiveisNoFeed.has(String(noticia.id));
+      const noticiasDigi = filtrarNoticiasPorCategoria(noticiasOrdenadas, 'DIGI').filter(excluirDoFeedPrincipal);
+      const noticiasTelecom = filtrarNoticiasPorCategoria(noticiasOrdenadas, 'Telecom').filter(excluirDoFeedPrincipal);
 
       noticiasAtuaisPorSecao = {
         [ARTICLE_SECTION_KEYS.latest]: noticiasOrdenadas,
@@ -3466,13 +3549,15 @@ fetchNoticiasAgendadas("data/noticias.json")
         noticiasDigiList,
         noticiasDigi,
         noticiasVisiveis[ARTICLE_SECTION_KEYS.digi],
-        'Sem artigos DIGI para mostrar neste momento.'
+        'Sem artigos DIGI para mostrar neste momento.',
+        { compacto: true }
       );
       renderizarListaNoticias(
         noticiasTelecomList,
         noticiasTelecom,
         noticiasVisiveis[ARTICLE_SECTION_KEYS.telecom],
-        'Sem artigos Telecom para mostrar neste momento.'
+        'Sem artigos Telecom para mostrar neste momento.',
+        { compacto: true }
       );
 
       atualizarBotaoVerMais(ARTICLE_SECTION_KEYS.latest);
@@ -3613,11 +3698,7 @@ fetchNoticiasAgendadas("data/noticias.json")
       };
       
       if (resetVisiveis) {
-        noticiasVisiveis = {
-          [ARTICLE_SECTION_KEYS.latest]: NEWS_BATCH_SIZE,
-          [ARTICLE_SECTION_KEYS.digi]: NEWS_BATCH_SIZE,
-          [ARTICLE_SECTION_KEYS.telecom]: NEWS_BATCH_SIZE
-        };
+        noticiasVisiveis = { ...NEWS_INITIAL_VISIBLE };
       }
 
       const noticiasOrdenadas = [...noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
