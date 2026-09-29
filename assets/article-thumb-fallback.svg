@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Imagem de capa padrão">
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e3f2fd"/>
+      <stop offset="100%" stop-color="#bbdefb"/>
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0066cc"/>
+      <stop offset="100%" stop-color="#0052a3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bgGradient)"/>
+  <circle cx="1075" cy="95" r="170" fill="#90caf9" opacity="0.35"/>
+  <circle cx="130" cy="610" r="200" fill="#90caf9" opacity="0.3"/>
+  <g transform="translate(600 337)">
+    <rect x="-160" y="-118" width="320" height="236" rx="20" fill="#ffffff" stroke="#90caf9" stroke-width="6"/>
+    <rect x="-126" y="-84" width="158" height="20" rx="10" fill="url(#accentGradient)"/>
+    <rect x="-126" y="-42" width="252" height="13" rx="6.5" fill="#c3d9f0"/>
+    <rect x="-126" y="-12" width="252" height="13" rx="6.5" fill="#c3d9f0"/>
+    <rect x="-126" y="18" width="188" height="13" rx="6.5" fill="#c3d9f0"/>
+    <rect x="-126" y="56" width="118" height="28" rx="14" fill="url(#accentGradient)" opacity="0.9"/>
+    <rect x="18" y="56" width="108" height="28" rx="14" fill="#dbeafe"/>
+  </g>
+</svg>
