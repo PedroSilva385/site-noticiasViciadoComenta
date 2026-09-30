@@ -329,6 +329,10 @@ function Get-AbsoluteSiteUrl {
 
     if ([string]::IsNullOrWhiteSpace($Url)) { return '' }
     if ($Url -match '^https?://') { return $Url }
+    # URIs com outro esquema (ex: data:, blob:, mailto:) não são caminhos do site e não
+    # devem ser prefixados com o domínio; sem isto, um data URI gigante seguia para as
+    # verificações de ficheiros e quebrava a geração no runner (pwsh 7, Linux).
+    if ($Url -match '^[a-zA-Z][a-zA-Z0-9+.\-]*:') { return $Url }
 
     $normalized = $Url.Trim() -replace '\\', '/'
     $normalized = $normalized -replace '^\./', ''
@@ -390,11 +394,17 @@ function Resolve-ArticleSocialImageUrl {
         # Usar a imagem local apenas se existir no repositório, com comparação case-exata
         # (o GitHub Pages é case-sensitive): um nome com capitalização diferente cai no
         # fallback e o resultado fica idêntico no Windows e no runner Linux.
-        $relativePath = ($ContentImageUrl.Substring('https://www.viciadocomenta.pt/'.Length) -split '[?#]')[0]
-        $localPath = Join-Path $script:root ($relativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
-        $directory = Split-Path -Path $localPath -Parent
-        $fileName = Split-Path -Path $localPath -Leaf
-        $found = (Test-Path -LiteralPath $directory) -and (@(Get-ChildItem -LiteralPath $directory -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -ceq $fileName }).Count -gt 0)
+        $found = $false
+        try {
+            $relativePath = ($ContentImageUrl.Substring('https://www.viciadocomenta.pt/'.Length) -split '[?#]')[0]
+            $localPath = Join-Path $script:root ($relativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+            $directory = Split-Path -Path $localPath -Parent
+            $fileName = Split-Path -Path $localPath -Leaf
+            $found = (Test-Path -LiteralPath $directory -ErrorAction Stop) -and (@(Get-ChildItem -LiteralPath $directory -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -ceq $fileName }).Count -gt 0)
+        } catch {
+            # Caminho inválido ou demasiado longo cai no fallback em vez de quebrar a geração
+            $found = $false
+        }
         if ($found) { return $ContentImageUrl }
         return $FallbackUrl
     }
