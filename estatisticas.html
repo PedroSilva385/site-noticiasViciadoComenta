@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estatísticas - VICIADO COMENTA</title>
-  <meta name="description" content="Painel interno de estatísticas e gestão do VICIADO COMENTA.">
+  <meta name="description" content="Painel interno de estatísticas do VICIADO COMENTA.">
   <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="canonical" href="https://www.viciadocomenta.pt/estatisticas.html">
@@ -13,7 +13,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
   <script src="assets/firebase-config.js?v=20260301"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -25,41 +24,19 @@
     }
     body.dark { background: #0f1419; color: #e5e7eb; }
     .container { max-width: 1200px; margin: 0 auto; }
+
     .header {
       background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
       color: #fff;
       border-radius: 12px;
-      padding: 28px 22px;
-      margin-bottom: 24px;
+      padding: 24px 22px;
+      margin-bottom: 18px;
       box-shadow: 0 8px 24px rgba(0, 102, 204, 0.18);
     }
-    .header h1 { font-family: 'Outfit', sans-serif; font-size: 2.1em; margin-bottom: 8px; }
+    .header h1 { font-family: 'Outfit', sans-serif; font-size: 1.9em; margin-bottom: 6px; }
+    .header p { font-size: 0.92em; opacity: 0.92; }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 8px 24px;
-      flex-wrap: wrap;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(0, 102, 204, 0.12);
-      border-radius: 12px;
-    }
-    nav a {
-      color: #1a1f3a;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95em;
-      padding: 6px 2px;
-      border-bottom: 2px solid transparent;
-    }
-    nav a:hover { color: #0066cc; border-bottom-color: #0066cc; }
-    body.dark nav { background: rgba(17, 24, 39, 0.92); border-color: rgba(255, 255, 255, 0.1); }
-    body.dark nav a { color: #e5e7eb; }
-    body.dark nav a:hover { color: #60a5fa; border-bottom-color: #60a5fa; }
-
-    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
     .btn {
       border: none;
       border-radius: 10px;
@@ -70,466 +47,101 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-    }
-    .btn-danger { background: #dc2626; color: #fff; }
-    .btn-secondary { background: #fff; color: #0066cc; border: 2px solid #0066cc; }
-    body.dark .btn-secondary { background: #1f2937; color: #60a5fa; border-color: #60a5fa; }
-
-    .tabs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-    .tab-btn {
-      border: 2px solid #0066cc;
-      background: #ffffff;
-      color: #0066cc;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-    .tab-btn.active {
-      background: #0066cc;
-      color: #fff;
-    }
-    body.dark .tab-btn {
-      background: #1f2937;
-      border-color: #60a5fa;
-      color: #60a5fa;
-    }
-    body.dark .tab-btn.active {
-      background: #2563eb;
-      color: #fff;
-    }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-    body.dark .card { background: #1f2937; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-    .card-label { font-size: 0.85em; color: #6b7280; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
-    body.dark .card-label { color: #9ca3af; }
-    .card-value { font-family: 'Outfit', sans-serif; font-size: 2em; font-weight: 700; }
-    .card-subvalue {
-      margin-top: 8px;
-      font-size: 0.92em;
-      color: #6b7280;
-      line-height: 1.4;
-    }
-    body.dark .card-subvalue { color: #9ca3af; }
-    .card-value--compact {
-      font-size: 1.3em;
-      line-height: 1.3;
-    }
-    .insight-list {
-      display: grid;
-      gap: 12px;
-    }
-    .insight-item {
-      border: 1px solid #dbeafe;
-      border-radius: 12px;
-      padding: 14px;
-      background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
-    }
-    .insight-item strong {
-      display: block;
-      margin-bottom: 6px;
-      color: #0f3d91;
-      font-size: 0.92em;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .insight-item span {
-      display: block;
-      line-height: 1.5;
-    }
-    body.dark .insight-item {
-      border-color: #1d4ed8;
-      background: linear-gradient(135deg, rgba(30,64,175,.28) 0%, rgba(15,23,42,.72) 100%);
-    }
-    body.dark .insight-item strong {
-      color: #bfdbfe;
-    }
-    .metric-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.88em;
-      font-weight: 700;
-    }
-    .metric-chip.positive { background: #dcfce7; color: #166534; }
-    .metric-chip.negative { background: #fee2e2; color: #991b1b; }
-    .metric-chip.neutral { background: #dbeafe; color: #1d4ed8; }
-    body.dark .metric-chip.positive { background: rgba(34,197,94,.18); color: #86efac; }
-    body.dark .metric-chip.negative { background: rgba(239,68,68,.18); color: #fca5a5; }
-    body.dark .metric-chip.neutral { background: rgba(59,130,246,.18); color: #93c5fd; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    @media (min-width: 1024px) {
-      .grid { grid-template-columns: 1.2fr .8fr; }
-    }
-
-    .panel {
-      background: #fff;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-    body.dark .panel { background: #1f2937; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-    .panel h2 { font-family: 'Outfit', sans-serif; margin-bottom: 12px; font-size: 1.35em; }
-
-    table { width: 100%; border-collapse: collapse; }
-    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
-    body.dark th, body.dark td { border-bottom-color: #374151; }
-    th { font-size: .88em; color: #6b7280; text-transform: uppercase; letter-spacing: .6px; }
-    body.dark th { color: #9ca3af; }
-
-    .status { margin-top: 12px; font-size: 0.92em; color: #6b7280; }
-    body.dark .status { color: #9ca3af; }
-
-    .inline-controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-    .inline-controls label {
-      font-size: 0.92em;
-      color: #6b7280;
-      font-weight: 600;
-    }
-    body.dark .inline-controls label { color: #9ca3af; }
-    .inline-controls select {
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 7px 10px;
       font-family: inherit;
-      background: #fff;
-      color: #1a1f3a;
+      font-size: 0.92em;
     }
-    body.dark .inline-controls select {
-      border-color: #4b5563;
-      background: #111827;
-      color: #e5e7eb;
-    }
+    .btn-primary { background: #0066cc; color: #fff; }
+    .btn-secondary { background: #fff; color: #0066cc; border: 2px solid #0066cc; }
+    .btn:disabled { opacity: 0.6; cursor: wait; }
+    body.dark .btn-secondary { background: #1f2937; color: #60a5fa; border-color: #60a5fa; }
+    .updated-at { font-size: 0.8em; color: #51607a; }
+    body.dark .updated-at { color: #9ca3af; }
 
-    .empty {
-      padding: 16px;
-      border-radius: 10px;
-      background: #f8fafc;
-      color: #6b7280;
-    }
-    body.dark .empty { background: #111827; color: #9ca3af; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .card { background: #fff; border-radius: 12px; padding: 14px 16px; box-shadow: 0 4px 14px rgba(26, 31, 58, 0.08); }
+    body.dark .card { background: #1f2937; }
+    .card-label { font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.04em; color: #51607a; font-weight: 600; margin-bottom: 6px; }
+    body.dark .card-label { color: #9ca3af; }
+    .card-value { font-family: 'Outfit', sans-serif; font-size: 1.7em; font-weight: 700; color: #0066cc; line-height: 1.15; }
+    body.dark .card-value { color: #60a5fa; }
+    .card-subvalue { font-size: 0.76em; color: #66738c; margin-top: 5px; }
+    body.dark .card-subvalue { color: #9ca3af; }
 
-    .meta {
-      font-size: .88em;
-      color: #6b7280;
-      margin-bottom: 4px;
-    }
-    body.dark .meta { color: #9ca3af; }
+    .grid-panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+    .panel { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 4px 14px rgba(26, 31, 58, 0.08); }
+    body.dark .panel { background: #1f2937; }
+    .panel h2 { font-family: 'Outfit', sans-serif; font-size: 1.05em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
-    .history-toggle {
+    .inline-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 0.85em; }
+    .inline-controls select {
+      font-family: inherit;
+      padding: 6px 8px;
+      border-radius: 8px;
       border: 1px solid #cbd5e1;
       background: #fff;
-      color: #1e3a8a;
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 8px;
-      padding: 0;
-      font-size: 0.85rem;
-      vertical-align: middle;
+      color: inherit;
+      max-width: 100%;
     }
+    body.dark .inline-controls select { background: #111827; border-color: #374151; }
 
-    .history-toggle:disabled {
-      opacity: 0.45;
-      cursor: default;
-    }
+    .scroll-area { max-height: 380px; overflow-y: auto; }
 
-    .history-session-summary {
-      display: inline-flex;
-      align-items: center;
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left;
+      font-size: 0.72em;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #51607a;
       font-weight: 700;
-      color: #0f172a;
+      padding: 6px 8px;
+      border-bottom: 2px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      background: #fff;
     }
+    body.dark th { color: #9ca3af; border-color: #374151; background: #1f2937; }
+    td { padding: 7px 8px; font-size: 0.86em; border-bottom: 1px solid #eef2f7; vertical-align: middle; }
+    body.dark td { border-color: #374151; }
+    tr:last-child td { border-bottom: none; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .meta { font-size: 0.74em; color: #66738c; margin-top: 2px; }
+    body.dark .meta { color: #9ca3af; }
 
-    .history-detail-row td {
-      background: #f8fafc;
-      color: #475569;
-      font-size: 0.92em;
-    }
+    .bar { background: #e5eaf3; border-radius: 99px; height: 8px; min-width: 60px; overflow: hidden; }
+    body.dark .bar { background: #374151; }
+    .bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #3b82f6, #0066cc); }
+    .bar-cell { width: 34%; }
 
-    .journey-link-btn {
-      border: 1px solid #c7d2fe;
-      background: #eef2ff;
-      color: #3730a3;
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
+    .empty { color: #66738c; font-style: italic; text-align: center; padding: 14px 8px; }
+    body.dark .empty { color: #9ca3af; }
+    .status { margin-top: 10px; font-size: 0.78em; color: #66738c; }
+    body.dark .status { color: #9ca3af; }
 
-    .journey-link-btn:hover {
-      background: #e0e7ff;
-    }
-
-    body.dark .history-toggle {
-      background: #111827;
-      border-color: #475569;
-      color: #93c5fd;
-    }
-
-    body.dark .history-session-summary {
-      color: #e5e7eb;
-    }
-
-    body.dark .history-detail-row td {
-      background: #111827;
-      color: #cbd5e1;
-    }
-
-    body.dark .journey-link-btn {
-      background: rgba(59, 130, 246, 0.16);
-      border-color: #60a5fa;
-      color: #bfdbfe;
-    }
-
-    footer {
-      background: #1a1f3a;
-      color: #ffffff;
-      text-align: center;
-      padding: 40px 20px;
-      margin-top: 60px;
-      font-size: 0.9em;
-    }
-
-    footer a {
-      color: #ffffff;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    footer a:hover {
-      color: #dbeafe;
-      text-decoration: underline;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .footer-links a {
-      font-weight: 600;
-    }
-
-    .footer-contacts {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .footer-contacts a {
-      font-weight: 600;
-    }
-
-    .footer-contacts i {
-      margin-right: 8px;
-    }
-
-    .footer-copy {
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 12px;
-      }
-
-      .header {
-        padding: 22px 16px;
-      }
-
-      .header h1 {
-        font-size: 1.8em;
-      }
-
-      .toolbar .btn {
-        min-height: 44px;
-      }
-
-      .tabs {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .tab-btn {
-        width: 100%;
-        min-height: 44px;
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .panel {
-        padding: 14px;
-        overflow-x: auto;
-      }
-
-      table {
-        min-width: 560px;
-      }
-
-      footer {
-        padding: 20px 12px;
-        font-size: 0.85em;
-      }
-
-      .footer-links {
-        gap: 15px;
-      }
-
-      .footer-contacts {
-        gap: 12px;
-        font-size: 0.85em;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 8px;
-      }
-
-      .header {
-        padding: 18px 14px;
-      }
-
-      .header h1 {
-        font-size: 1.55em;
-      }
-
-      .toolbar {
-        flex-direction: column;
-      }
-
-      .toolbar .btn {
-        width: 100%;
-      }
-
-      .tabs {
-        grid-template-columns: 1fr;
-      }
-
-      .tab-btn {
-        padding: 10px 12px;
-      }
-
-      .panel {
-        padding: 12px;
-      }
-
-      .panel h2 {
-        font-size: 1.15em;
-      }
-
-      table {
-        min-width: 500px;
-      }
-
-      footer {
-        padding: 15px 10px;
-        font-size: 0.75em;
-      }
-
-      .footer-links {
-        gap: 10px;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-      }
-
-      .footer-contacts {
-        gap: 8px;
-        margin-bottom: 8px;
-        font-size: 0.75em;
-      }
-
-      .footer-copy {
-        font-size: 0.75em;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .header h1 {
-        font-size: 1.35em;
-      }
-
-      .panel {
-        padding: 10px;
-      }
-
-      table {
-        min-width: 460px;
-      }
-
-      footer {
-        padding: 12px 8px;
-        font-size: 0.7em;
-      }
-
-      .footer-links {
-        gap: 8px;
-      }
-
-      .footer-contacts {
-        font-size: 0.7em;
-      }
-    }
+    .dot-live { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #22c55e; animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
     .access-notice {
-      margin-bottom: 18px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
       border-left: 4px solid #dc2626;
+      box-shadow: 0 4px 14px rgba(26, 31, 58, 0.08);
     }
+    .access-notice strong { display: block; margin-bottom: 8px; color: #991b1b; }
+    body.dark .access-notice { background: #1f2937; }
+    body.dark .access-notice strong { color: #fca5a5; }
 
-    .access-notice strong {
-      display: block;
-      margin-bottom: 8px;
-      color: #991b1b;
-    }
+    footer { text-align: center; margin-top: 24px; padding: 14px; font-size: 0.78em; color: #51607a; }
+    body.dark footer { color: #9ca3af; }
 
-    body.dark .access-notice strong {
-      color: #fca5a5;
+    @media (max-width: 640px) {
+      body { padding: 12px; }
+      .header h1 { font-size: 1.5em; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .grid-panels { grid-template-columns: 1fr; }
+      .bar-cell { width: 26%; }
+      td { font-size: 0.8em; }
     }
   </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
@@ -554,381 +166,160 @@
   <div class="container">
     <div class="header">
       <h1>📊 Estatísticas do Site</h1>
-      <p>Controlo de acessos por sessão, hora a hora e atividade recente.</p>
+      <p>Dados concretos de audiência e interação, lidos diretamente do Firebase.</p>
     </div>
-
-    <nav>
-      <a href="index.html">Início</a>
-      <a href="todas-noticias.html">Artigos</a>
-      <a href="podcast.html">Podcast</a>
-      <a href="sobre-nos.html">Sobre Nós</a>
-    </nav>
 
     <div class="toolbar">
-      <a href="index.html" class="btn btn-secondary">← Voltar ao início</a>
-      <button class="btn btn-danger" id="resetBtn">🔄 Resetar estatísticas</button>
+      <button class="btn btn-primary" id="btnRefresh">🔄 Atualizar dados</button>
+      <a href="admin/" class="btn btn-secondary">← Voltar ao painel</a>
+      <span class="updated-at" id="statsUpdatedAt">A carregar...</span>
     </div>
 
-    <section class="panel access-notice" id="statsAccessNotice" hidden>
+    <section class="access-notice" id="statsAccessNotice" hidden>
       <strong>Acesso restrito</strong>
-      <div>As estatísticas detalhadas só estão disponíveis para administradores autenticados.</div>
+      <div>As estatísticas só estão disponíveis para administradores autenticados.</div>
     </section>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="resumo">🧭 Resumo</button>
-      <button class="tab-btn" data-tab="visitas">📈 Visitas</button>
-      <button class="tab-btn" data-tab="likes">❤️ Likes recentes</button>
-      <button class="tab-btn" data-tab="paginas">📄 Páginas</button>
-      <button class="tab-btn" data-tab="cliques">🖱️ Cliques</button>
-      <button class="tab-btn" data-tab="fontes">🌐 Fontes</button>
-      <button class="tab-btn" data-tab="historico">📋 Histórico</button>
-      <button class="tab-btn" data-tab="percursos">👣 Artigos por utilizador</button>
-    </div>
-
-    <section class="tab-panel active" id="tab-resumo">
+    <div id="statsContent" hidden>
       <div class="cards">
-        <div class="card" id="cardSummaryWeekVisits">
+        <div class="card">
+          <div class="card-label">Visitas totais</div>
+          <div class="card-value" id="cardTotalVisits">-</div>
+          <div class="card-subvalue" id="cardTotalVisitsMeta">A carregar...</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Visitas hoje</div>
+          <div class="card-value" id="cardTodayVisits">-</div>
+          <div class="card-subvalue" id="cardTodayVisitsMeta">A carregar...</div>
+        </div>
+        <div class="card">
           <div class="card-label">Últimos 7 dias</div>
-          <div class="card-value" id="summaryWeekVisits">-</div>
-          <div class="card-subvalue" id="summaryWeekVisitsMeta">Comparação semanal indisponível.</div>
+          <div class="card-value" id="cardWeekVisits">-</div>
+          <div class="card-subvalue" id="cardWeekVisitsMeta">A carregar...</div>
         </div>
-        <div class="card" id="cardSummaryWeekUnique">
-          <div class="card-label">IPs únicos em 7 dias</div>
-          <div class="card-value" id="summaryWeekUnique">-</div>
-          <div class="card-subvalue" id="summaryWeekUniqueMeta">A calcular recorrência.</div>
+        <div class="card">
+          <div class="card-label">Este mês</div>
+          <div class="card-value" id="cardMonthVisits">-</div>
+          <div class="card-subvalue" id="cardMonthVisitsMeta">A carregar...</div>
         </div>
-        <div class="card" id="cardSummaryWeekTrend">
-          <div class="card-label">Tendência semanal</div>
-          <div class="card-value card-value--compact" id="summaryWeekTrend">-</div>
-          <div class="card-subvalue" id="summaryWeekTrendMeta">Sem base comparativa.</div>
+        <div class="card">
+          <div class="card-label">Artigos lidos</div>
+          <div class="card-value" id="cardArticleReads">-</div>
+          <div class="card-subvalue" id="cardArticleReadsMeta">A carregar...</div>
         </div>
-        <div class="card" id="cardSummaryDirectShare">
-          <div class="card-label">Tráfego direto</div>
-          <div class="card-value" id="summaryDirectShare">-</div>
-          <div class="card-subvalue" id="summaryDirectShareMeta">Sem fontes registadas.</div>
+        <div class="card">
+          <div class="card-label">Likes</div>
+          <div class="card-value" id="cardLikes">-</div>
+          <div class="card-subvalue" id="cardLikesMeta">A carregar...</div>
         </div>
-        <div class="card" id="cardSummaryEngagement">
-          <div class="card-label">Engagement acumulado</div>
-          <div class="card-value" id="summaryEngagement">-</div>
-          <div class="card-subvalue" id="summaryEngagementMeta">Likes e comentários acumulados.</div>
+        <div class="card">
+          <div class="card-label">Comentários</div>
+          <div class="card-value" id="cardComments">-</div>
+          <div class="card-subvalue" id="cardCommentsMeta">A carregar...</div>
         </div>
-        <div class="card" id="cardSummarySessionDepth">
-          <div class="card-label">Profundidade de sessão (24h)</div>
-          <div class="card-value" id="summarySessionDepth">-</div>
-          <div class="card-subvalue" id="summarySessionDepthMeta">Sem atividade recente.</div>
+        <div class="card">
+          <div class="card-label">Notificações push</div>
+          <div class="card-value" id="cardPush">-</div>
+          <div class="card-subvalue" id="cardPushMeta">A carregar...</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Ativos agora</div>
+          <div class="card-value" id="cardActiveNow">-</div>
+          <div class="card-subvalue" id="cardActiveNowMeta">À espera de dados em tempo real.</div>
         </div>
       </div>
 
-      <div class="grid">
-        <section class="panel" id="summaryInsightsPanel" hidden>
-          <h2>🧠 Resumo executivo</h2>
-          <div class="insight-list" id="summaryInsightsList"></div>
+      <div class="grid-panels">
+        <section class="panel">
+          <h2>📅 Visitas por dia</h2>
+          <div class="scroll-area">
+            <table>
+              <thead><tr><th>Dia</th><th class="num">Visitas</th><th class="bar-cell">Proporção</th></tr></thead>
+              <tbody id="dailyBody"></tbody>
+            </table>
+          </div>
+          <div class="status" id="dailyStatus">A carregar...</div>
         </section>
 
-        <section class="panel" id="summaryTrendPanel">
-          <h2>📊 Tendência dos últimos 7 dias</h2>
+        <section class="panel">
+          <h2>🗓️ Visitas por mês</h2>
           <table>
-            <thead>
-              <tr><th>Métrica</th><th>Últimos 7 dias</th><th>7 dias anteriores</th><th>Variação</th></tr>
-            </thead>
-            <tbody id="summaryTrendBody"></tbody>
+            <thead><tr><th>Mês</th><th class="num">Visitas</th><th class="bar-cell">Proporção</th></tr></thead>
+            <tbody id="monthlyBody"></tbody>
           </table>
+          <div class="status" id="monthlyStatus">A carregar...</div>
         </section>
 
-        <section class="panel" id="summaryTrafficPanel">
-          <h2>🌐 Saúde do tráfego</h2>
+        <section class="panel">
+          <h2>🕒 Visitas por hora</h2>
+          <div class="inline-controls">
+            <label for="hourlyDaySelect">Dia:</label>
+            <select id="hourlyDaySelect"></select>
+          </div>
           <table>
-            <thead>
-              <tr><th>Indicador</th><th>Valor</th></tr>
-            </thead>
-            <tbody id="summaryTrafficBody"></tbody>
-          </table>
-        </section>
-
-        <section class="panel" id="summaryEngagementPanel">
-          <h2>🔥 Conteúdo com mais engagement</h2>
-          <table>
-            <thead>
-              <tr><th>Conteúdo</th><th>Leituras</th><th>Likes</th><th>Comentários</th><th>Score</th></tr>
-            </thead>
-            <tbody id="summaryEngagementBody"></tbody>
-          </table>
-        </section>
-
-        <section class="panel" id="summarySessionPanel">
-          <h2>👥 Sessões mais ativas nas últimas 24h</h2>
-          <table>
-            <thead>
-              <tr><th>Sessão</th><th>Páginas</th><th>Última página</th><th>Última atividade</th></tr>
-            </thead>
-            <tbody id="summarySessionBody"></tbody>
-          </table>
-        </section>
-      </div>
-    </section>
-
-    <section class="tab-panel" id="tab-visitas">
-      <div class="cards">
-        <div class="card">
-          <div class="card-label">Acessos hoje (total)</div>
-          <div class="card-value" id="todayTotal">-</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Acessos hoje (IPs únicos)</div>
-          <div class="card-value" id="todayUnique">-</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Acessos totais (histórico)</div>
-          <div class="card-value" id="allTotal">-</div>
-        </div>
-        <div class="card">
-          <div class="card-label">IPs únicos totais</div>
-          <div class="card-value" id="allUnique">-</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Hora atual (acessos)</div>
-          <div class="card-value" id="currentHourCount">-</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Última atualização</div>
-          <div class="card-value" id="lastUpdate" style="font-size:1.15em;">-</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <section class="panel" id="visitsHourlyPanel">
-          <h2>🕒 Acessos de Hoje por Hora</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Hora</th>
-                <th>Acessos totais</th>
-                <th>IPs únicos</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Hora</th><th class="num">Visitas</th><th class="bar-cell">Proporção</th></tr></thead>
             <tbody id="hourlyBody"></tbody>
           </table>
           <div class="status" id="hourlyStatus">A carregar...</div>
         </section>
 
-        <section class="panel" id="visitsPastHourlyPanel">
-          <h2>🗂️ Acessos por Hora (Até 5 Dias Anteriores)</h2>
-          <div class="inline-controls">
-            <label for="pastDaySelect">Dia:</label>
-            <select id="pastDaySelect" aria-label="Selecionar dia anterior"></select>
+        <section class="panel">
+          <h2>📄 Páginas mais visitadas</h2>
+          <div class="scroll-area">
+            <table>
+              <thead><tr><th>Página</th><th class="num">Visitas</th><th class="bar-cell">Proporção</th></tr></thead>
+              <tbody id="pagesBody"></tbody>
+            </table>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>Hora</th>
-                <th>Acessos totais</th>
-                <th>IPs únicos</th>
-              </tr>
-            </thead>
-            <tbody id="pastHourlyBody"></tbody>
-          </table>
-          <div class="status" id="pastHourlyStatus">A carregar...</div>
+          <div class="status" id="pagesStatus">A carregar...</div>
         </section>
 
-        <section class="panel" id="visitsDailyUniquePanel">
-          <h2>📅 Totais Diários (IPs Únicos)</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>IPs únicos</th>
-              </tr>
-            </thead>
-            <tbody id="dailyUniqueBody"></tbody>
-          </table>
+        <section class="panel">
+          <h2>📰 Artigos mais lidos</h2>
+          <div class="scroll-area">
+            <table>
+              <thead><tr><th>Artigo</th><th class="num">Leituras</th><th class="num">Likes</th><th class="num">Coment.</th></tr></thead>
+              <tbody id="articlesBody"></tbody>
+            </table>
+          </div>
+          <div class="status" id="articlesStatus">A carregar...</div>
         </section>
 
-        <section class="panel" id="visitsDailyTotalPanel">
-          <h2>📈 Totais Diários (Acessos)</h2>
+        <section class="panel">
+          <h2>🖱️ Links e botões mais clicados</h2>
+          <div class="scroll-area">
+            <table>
+              <thead><tr><th>Elemento</th><th class="num">Cliques</th><th class="bar-cell">Proporção</th></tr></thead>
+              <tbody id="clicksBody"></tbody>
+            </table>
+          </div>
+          <div class="status" id="clicksStatus">A carregar...</div>
+        </section>
+
+        <section class="panel">
+          <h2>🌐 Fontes de tráfego</h2>
+          <div class="scroll-area">
+            <table>
+              <thead><tr><th>Origem</th><th class="num">Visitas</th><th class="bar-cell">Proporção</th></tr></thead>
+              <tbody id="referrersBody"></tbody>
+            </table>
+          </div>
+          <div class="status" id="referrersStatus">A carregar...</div>
+        </section>
+
+        <section class="panel">
+          <h2><span class="dot-live"></span>Utilizadores ativos agora</h2>
           <table>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Acessos</th>
-              </tr>
-            </thead>
-            <tbody id="dailyTotalBody"></tbody>
+            <thead><tr><th>Sessão</th><th>Página</th><th>Último sinal</th></tr></thead>
+            <tbody id="activeBody"></tbody>
           </table>
+          <div class="status" id="activeStatus">À espera de dados em tempo real.</div>
         </section>
       </div>
-    </section>
-
-    <section class="tab-panel" id="tab-likes">
-      <section class="panel">
-        <h2>❤️ Likes mais recentes</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Quando</th>
-              <th>Notícia</th>
-              <th>Origem</th>
-            </tr>
-          </thead>
-          <tbody id="likesRecentBody"></tbody>
-        </table>
-      </section>
-    </section>
-
-    <section class="tab-panel" id="tab-paginas">
-      <section class="panel">
-        <h2>📄 Páginas e Artigos Mais Visitados</h2>
-        <table>
-          <thead>
-            <tr><th>Destino</th><th>Tipo</th><th>Visitas</th></tr>
-          </thead>
-          <tbody id="paginasBody"></tbody>
-        </table>
-      </section>
-    </section>
-
-    <section class="tab-panel" id="tab-cliques">
-      <section class="panel">
-        <h2>🖱️ Elementos Mais Clicados</h2>
-        <table>
-          <thead>
-            <tr><th>Elemento / Destino</th><th>Cliques</th></tr>
-          </thead>
-          <tbody id="cliquesBody"></tbody>
-        </table>
-      </section>
-    </section>
-
-    <section class="tab-panel" id="tab-fontes">
-      <section class="panel">
-        <h2>🌐 Fontes de Tráfego</h2>
-        <p class="meta" style="margin-bottom:10px;">Os dados acumulam a partir do momento desta atualização.</p>
-        <table>
-          <thead>
-            <tr><th>Origem</th><th>Visitas</th></tr>
-          </thead>
-          <tbody id="fontesBody"></tbody>
-        </table>
-      </section>
-    </section>
-
-    <section class="tab-panel" id="tab-historico">
-      <div class="cards">
-        <div class="card">
-          <div class="card-label">Utilizadores ativos agora</div>
-          <div class="card-value" id="historicoAtivosAgora">-</div>
-          <div class="card-subvalue" id="historicoAtivosAgoraMeta">A aguardar dados em tempo real.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Sessões ativas agora</div>
-          <div class="card-value" id="historicoSessoesAtivas">-</div>
-          <div class="card-subvalue" id="historicoSessoesAtivasMeta">Sessões únicas atualmente ligadas.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Entradas registadas</div>
-          <div class="card-value" id="historicoTotal">-</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Sessões únicas</div>
-          <div class="card-value" id="historicoSessoes">-</div>
-        </div>
-      </div>
-      <section class="panel" id="activeUsersPanel">
-        <h2>🟢 Utilizadores ativos em tempo real</h2>
-        <table>
-          <thead>
-            <tr><th>Último sinal</th><th>Sessão</th><th>Página</th></tr>
-          </thead>
-          <tbody id="activeUsersBody"></tbody>
-        </table>
-        <div class="status" id="activeUsersStatus">A carregar...</div>
-      </section>
-      <section class="panel" id="historicoHourlyPanel" style="margin-top:16px;">
-        <h2>🕒 Histórico por Hora (últimas 24h)</h2>
-        <table>
-          <thead>
-            <tr><th>Hora</th><th>Atividades</th><th>Sessões únicas</th></tr>
-          </thead>
-          <tbody id="historicoHourlyBody"></tbody>
-        </table>
-        <div class="status" id="historicoHourlyStatus">A carregar...</div>
-      </section>
-      <section class="panel">
-        <h2>📋 Histórico de Atividade (últimas 24h)</h2>
-        <div class="inline-controls">
-          <label for="historicoFiltro">Filtrar sessão:</label>
-          <input id="historicoFiltro" type="text" placeholder="número da sessão ou sess_xxx" style="border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-family:inherit;background:#fff;color:#1a1f3a;" />
-          <button class="btn btn-secondary" id="historicoClear" style="padding:7px 12px;font-size:.9em;">Limpar filtro</button>
-        </div>
-        <table>
-          <thead>
-            <tr><th>Última atividade</th><th>Sessão</th><th>Resumo / páginas</th></tr>
-          </thead>
-          <tbody id="historicoBody"></tbody>
-        </table>
-        <div class="status" id="historicoStatus">A carregar...</div>
-      </section>
-    </section>
-
-    <section class="tab-panel" id="tab-percursos">
-      <div class="cards">
-        <div class="card">
-          <div class="card-label">Sessões com artigos</div>
-          <div class="card-value" id="articleJourneySessionsCount">-</div>
-          <div class="card-subvalue" id="articleJourneySessionsMeta">Sem sessões com leitura de artigos.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Leituras de artigos</div>
-          <div class="card-value" id="articleJourneyViewsCount">-</div>
-          <div class="card-subvalue" id="articleJourneyViewsMeta">Sem eventos de leitura disponíveis.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Artigos únicos visitados</div>
-          <div class="card-value" id="articleJourneyUniqueArticlesCount">-</div>
-          <div class="card-subvalue" id="articleJourneyUniqueArticlesMeta">A aguardar dados do histórico.</div>
-        </div>
-      </div>
-
-      <section class="panel">
-        <h2>👥 Sessões com navegação em artigos</h2>
-        <table>
-          <thead>
-            <tr><th>Sessão</th><th>Último artigo</th><th>Artigos únicos</th><th>Leituras</th><th></th></tr>
-          </thead>
-          <tbody id="articleJourneySessionsBody"></tbody>
-        </table>
-      </section>
-
-      <section class="panel" style="margin-top:16px;">
-        <h2>📚 Percurso detalhado por utilizador</h2>
-        <div class="inline-controls">
-          <label for="articleJourneySessionSelect">Sessão:</label>
-          <select id="articleJourneySessionSelect" aria-label="Selecionar sessão com artigos"></select>
-        </div>
-        <table>
-          <thead>
-            <tr><th>Quando</th><th>Artigo</th><th>Página</th></tr>
-          </thead>
-          <tbody id="articleJourneyDetailBody"></tbody>
-        </table>
-        <div class="status" id="articleJourneyStatus">A carregar...</div>
-      </section>
-    </section>
+    </div>
   </div>
 
-  <footer>
-    <div class="footer-links">
-      <a href="sobre-nos.html">Sobre Nós</a>
-      <a href="politica-privacidade.html">Política de Privacidade</a>
-      <a href="termos-servico.html">Termos de Serviço</a>
-      <a href="politica-privacidade.html#cookies">Política de Cookies</a>
-      <a href="contacto.html">Contacto</a>
-    </div>
-    <div class="footer-contacts">
-      <a href="mailto:theviciado.contactos@gmail.com"><i class="fas fa-envelope"></i> theviciado.contactos@gmail.com</a>
-      <a href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> Discord</a>
-    </div>
-    <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
-  </footer>
+  <footer>Painel interno • © 2026 Viciado Comenta. Todos os direitos reservados.</footer>
 
   <script>
     const ADMIN_FIREBASE_APP_NAME = 'adminPanel';
@@ -936,48 +327,50 @@
       || firebase.initializeApp(firebaseConfig, ADMIN_FIREBASE_APP_NAME);
     const database = adminFirebaseApp.database();
     const auth = typeof adminFirebaseApp.auth === 'function' ? adminFirebaseApp.auth() : null;
-    const noticiasMap = {};
-    const noticiaMetaMap = {};
-    const noticiaIdBySlug = {};
-    const dashboardState = {
-      stats: null,
-      commentRows: [],
-      commentCountsByArticle: {},
-      likeRows: [],
-      likeCountsByArticle: {},
-      articleReads: {},
-      clickTargets: {},
-      activeUsers: [],
-      activeUsersUnique: 0,
-      activeUsersHourly: [],
-      articleJourneySessions: [],
-      sessions: [],
-      historyRows: []
-    };
-    let hourlyTotalsByDate = {};
-    let hourlyUniqueByDate = {};
-    let latestArticleReads = {};
-    let _sessionNumberMap = new Map();
-    let _nextSessionNumber = 1;
-    let _historicoSessions = [];
-    const expandedHistorySessions = new Set();
-    const activeUserCleanupInFlight = new Set();
+
     const ACTIVE_USER_LIVE_WINDOW_MS = 5 * 60 * 1000;
-    const ACTIVE_USER_STALE_CLEANUP_MS = 24 * 60 * 60 * 1000;
-    let statsInitialized = false;
+
+    const FRIENDLY_PAGE_NAMES = {
+      'index': 'Página inicial',
+      'noticias': 'Notícias',
+      'artigos': 'Listagem de artigos',
+      'todas-noticias': 'Todas as notícias',
+      'videos': 'Vídeos',
+      'gaming': 'Gaming',
+      'metin2': 'Metin2',
+      'livestreams': 'Livestreams',
+      'viciado-comenta': 'Viciado Comenta',
+      'viciado-ponto-critico': 'Viciado Ponto Crítico',
+      'sobre-nos': 'Sobre Nós',
+      'contacto': 'Contacto',
+      'podcast': 'Podcast',
+      'politica-privacidade': 'Política de Privacidade',
+      'termos-servico': 'Termos de Serviço',
+      'estatisticas': 'Estatísticas'
+    };
+
+    const CLICK_NOISE_PATTERNS = [
+      /^\d+\s*gosto$/i,
+      /nova not[ií]cia/i,
+      /^abrir artigo\s*:/i,
+      /guardar e publicar/i,
+      /^publicar$/i
+    ];
+
+    const noticiasMap = {};
+    const noticiaIdBySlug = {};
+    const state = { stats: null, reads: null, likes: null, comments: null, push: null };
     let statsAdminAccessGranted = null;
+    let statsInitialized = false;
+    let selectedHourlyDate = '';
+    let lastHourlyDatesKey = '';
 
-    function isStatsAdminUser(user) {
-      // Acesso só depois de verificar a lista admins/{uid} no Realtime Database.
-      return !!(user && !user.isAnonymous && statsAdminAccessGranted === true);
-    }
-
+    // ---------- Acesso administrativo ----------
     async function verifyStatsAdminAccess(user) {
       if (!user || user.isAnonymous) {
         statsAdminAccessGranted = false;
         return false;
       }
-
       try {
         const snapshot = await database.ref(`admins/${user.uid}`).once('value');
         statsAdminAccessGranted = snapshot.val() === true;
@@ -985,100 +378,39 @@
         console.warn('Falha ao verificar a lista de administradores:', error);
         statsAdminAccessGranted = false;
       }
-
       return statsAdminAccessGranted;
     }
 
     function setStatsAccessState(hasAccess, message = '') {
-      const accessNotice = document.getElementById('statsAccessNotice');
-      const tabs = document.querySelector('.tabs');
-      const panels = document.querySelectorAll('.tab-panel');
-      const resetBtn = document.getElementById('resetBtn');
+      const notice = document.getElementById('statsAccessNotice');
+      const content = document.getElementById('statsContent');
+      const refreshBtn = document.getElementById('btnRefresh');
+      const updatedAt = document.getElementById('statsUpdatedAt');
 
-      if (accessNotice) {
-        accessNotice.hidden = hasAccess;
+      if (notice) {
+        notice.hidden = hasAccess;
         if (message) {
-          accessNotice.querySelector('div').textContent = message;
+          const noticeBody = notice.querySelector('div');
+          if (noticeBody) noticeBody.textContent = message;
         }
       }
-
-      if (tabs) {
-        tabs.style.display = hasAccess ? '' : 'none';
-      }
-
-      if (resetBtn) {
-        resetBtn.style.display = hasAccess ? '' : 'none';
-      }
-
-      panels.forEach((panel) => {
-        panel.style.display = hasAccess ? '' : 'none';
-      });
+      if (content) content.hidden = !hasAccess;
+      if (refreshBtn) refreshBtn.style.display = hasAccess ? '' : 'none';
+      if (updatedAt) updatedAt.style.display = hasAccess ? '' : 'none';
     }
 
     function redirectToAdminLogin() {
       window.location.replace('admin/');
     }
 
-    function initializeStatsDashboard() {
-      if (statsInitialized) {
-        return;
-      }
-
-      statsInitialized = true;
-
-      document.getElementById('resetBtn').addEventListener('click', resetarEstatisticas);
-      initTabs();
-      initPastHourlySelector();
-      initArticleJourneyControls();
-      carregarNoticiasMap().finally(() => {
-        carregarEstatisticasCompleto();
-        carregarComentariosRecentes();
-        carregarLikesRecentes();
-        carregarMetricasArtigos();
-        carregarTopCliques();
-        carregarUtilizadoresAtivos();
-        carregarHistorico();
-      });
-    }
-
-    function getSessionNumber(sessionId) {
-      const key = String(sessionId || '').trim();
-      if (!key) return null;
-      if (!_sessionNumberMap.has(key)) {
-        _sessionNumberMap.set(key, _nextSessionNumber);
-        _nextSessionNumber += 1;
-      }
-      return _sessionNumberMap.get(key);
-    }
-
-    function getSessionLabel(sessionId) {
-      const num = getSessionNumber(sessionId);
-      return num ? `Sessão ${num}` : 'Sessão -';
-    }
-
-    function rebuildSessionNumbering(rows) {
-      const ordered = (rows || []).slice().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-      _sessionNumberMap = new Map();
-      _nextSessionNumber = 1;
-      ordered.forEach((row) => {
-        if (row && row.sessionId) getSessionNumber(row.sessionId);
-      });
-    }
-
+    // ---------- Helpers de formatação ----------
     function safeNumber(value) {
       const num = Number(value);
       return Number.isFinite(num) ? num : 0;
     }
 
-    function getReliableTotalVisits(stats) {
-      const directTotal = safeNumber(stats && stats.total_visits);
-      const dailyTotal = Object.values((stats && stats.daily) || {}).reduce((sum, value) => sum + safeNumber(value), 0);
-
-      if (dailyTotal > 0) {
-        return Math.max(directTotal, dailyTotal);
-      }
-
-      return directTotal;
+    function formatNumber(value) {
+      return safeNumber(value).toLocaleString('pt-PT');
     }
 
     function formatLocalDateKey(date = new Date()) {
@@ -1089,8 +421,8 @@
     }
 
     function formatDateLabel(dateKey) {
-      const [year, month, day] = dateKey.split('-').map(Number);
-      if (!year || !month || !day) return dateKey;
+      const [year, month, day] = String(dateKey).split('-').map(Number);
+      if (!year || !month || !day) return String(dateKey);
       return new Date(year, month - 1, day).toLocaleDateString('pt-PT', {
         weekday: 'short',
         day: '2-digit',
@@ -1099,30 +431,11 @@
       });
     }
 
-    function formatDateTime(value) {
-      if (!value) return 'sem data';
-      if (typeof value === 'number') {
-        return new Date(value).toLocaleString('pt-PT');
-      }
-      const maybeDate = new Date(value);
-      if (!Number.isNaN(maybeDate.getTime())) {
-        return maybeDate.toLocaleString('pt-PT');
-      }
-      return String(value);
-    }
-
-    function formatHourBucketLabel(bucketKey) {
-      const match = String(bucketKey || '').match(/^(\d{4}-\d{2}-\d{2})T(\d{2})$/);
-      if (!match) return String(bucketKey || '-');
-      const [, dateKey, hourKey] = match;
-      return `${formatDateLabel(dateKey)} • ${hourKey}:00-${hourKey}:59`;
-    }
-
-    function getHourBucketKeyFromTimestamp(timestamp) {
-      if (!timestamp) return '';
-      const date = new Date(timestamp);
-      if (Number.isNaN(date.getTime())) return '';
-      return `${formatLocalDateKey(date)}T${String(date.getHours()).padStart(2, '0')}`;
+    function formatMonthLabel(monthKey) {
+      const [year, month] = String(monthKey).split('-').map(Number);
+      if (!year || !month) return String(monthKey);
+      const label = new Date(year, month - 1, 1).toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' });
+      return label.charAt(0).toUpperCase() + label.slice(1);
     }
 
     function setText(id, value) {
@@ -1134,13 +447,11 @@
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const keys = [];
-
       for (let index = offset; index < offset + days; index += 1) {
-        const targetDate = new Date(today);
-        targetDate.setDate(today.getDate() - index);
-        keys.push(formatLocalDateKey(targetDate));
+        const target = new Date(today);
+        target.setDate(today.getDate() - index);
+        keys.push(formatLocalDateKey(target));
       }
-
       return keys;
     }
 
@@ -1148,39 +459,35 @@
       return (keys || []).reduce((total, key) => total + safeNumber((source || {})[key]), 0);
     }
 
-    function formatPercent(value, decimals = 1) {
-      if (!Number.isFinite(value)) return '-';
-      return `${value.toFixed(decimals).replace('.', ',')}%`;
+    function makeCell(text, className = '') {
+      const cell = document.createElement('td');
+      cell.textContent = text;
+      if (className) cell.className = className;
+      return cell;
     }
 
-    function getTrendDescriptor(currentValue, previousValue) {
-      if (previousValue <= 0) {
-        if (currentValue > 0) {
-          return {
-            text: 'Novo tráfego',
-            detail: 'Não existe base útil para comparar a semana anterior.',
-            tone: 'neutral'
-          };
-        }
-
-        return {
-          text: 'Sem movimento',
-          detail: 'Ainda não existem dados suficientes para comparação.',
-          tone: 'neutral'
-        };
-      }
-
-      const delta = ((currentValue - previousValue) / previousValue) * 100;
-      const rounded = `${delta > 0 ? '+' : ''}${delta.toFixed(1).replace('.', ',')}%`;
-      return {
-        text: rounded,
-        detail: `${currentValue.toLocaleString('pt-PT')} vs ${previousValue.toLocaleString('pt-PT')}`,
-        tone: delta > 3 ? 'positive' : delta < -3 ? 'negative' : 'neutral'
-      };
+    function makeBarCell(value, max) {
+      const td = document.createElement('td');
+      td.className = 'bar-cell';
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      const fill = document.createElement('div');
+      fill.className = 'bar-fill';
+      const pct = max > 0 ? Math.round((safeNumber(value) / max) * 100) : 0;
+      fill.style.width = value > 0 ? `${Math.max(2, pct)}%` : '0%';
+      bar.appendChild(fill);
+      td.appendChild(bar);
+      return td;
     }
 
-    function renderEmptyRow(bodyId, text, colSpan = 3) {
-      const tbody = document.getElementById(bodyId);
+    function appendRow(tbody, cells) {
+      const tr = document.createElement('tr');
+      cells.forEach((cell) => tr.appendChild(cell));
+      tbody.appendChild(tr);
+    }
+
+    function renderEmptyRow(tbodyId, text, colSpan) {
+      const tbody = document.getElementById(tbodyId);
       if (!tbody) return;
       tbody.innerHTML = '';
       const tr = document.createElement('tr');
@@ -1192,1696 +499,534 @@
       tbody.appendChild(tr);
     }
 
-    function setHidden(id, hidden) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.hidden = !!hidden;
-      }
-    }
-
-    function hasPositiveCount(obj, getValue) {
-      return Object.values(obj || {}).some((item) => {
-        const value = getValue ? getValue(item) : item;
-        return safeNumber(value) > 0;
-      });
-    }
-
-    function getTrafficSourceEntries(referrersObj) {
-      return Object.entries(referrersObj || {})
-        .map(([key, count]) => ({
-          key,
-          label: key === 'direct' ? '🔗 Acesso direto' : key,
-          count: safeNumber(count)
-        }))
-        .filter((entry) => entry.count > 0)
-        .sort((a, b) => b.count - a.count);
-    }
-
-    function getClickEntries(data) {
-      return Object.values(data || {})
-        .map((item) => ({
-          label: (item.label || item.href || 'desconhecido').slice(0, 120),
-          count: safeNumber(item && item.count)
-        }))
-        .filter((item) => item.count > 0)
-        .sort((a, b) => b.count - a.count);
-    }
-
-    function getEngagementRows(limit = 10) {
-      const ids = new Set([
-        ...Object.keys(dashboardState.articleReads || {}),
-        ...Object.keys(dashboardState.likeCountsByArticle || {}),
-        ...Object.keys(dashboardState.commentCountsByArticle || {})
-      ]);
-
-      return Array.from(ids)
-        .map((id) => {
-          const reads = safeNumber((dashboardState.articleReads || {})[id]);
-          const likes = safeNumber((dashboardState.likeCountsByArticle || {})[id]);
-          const comments = safeNumber((dashboardState.commentCountsByArticle || {})[id]);
-          return {
-            title: getNoticiaTitle(id),
-            reads,
-            likes,
-            comments,
-            score: (likes * 3) + (comments * 2) + reads
-          };
-        })
-        .filter((row) => row.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, limit);
-    }
-
-    function setTabVisibility(tabName, visible) {
-      const button = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-      const panel = document.getElementById(`tab-${tabName}`);
-
-      if (button) {
-        button.hidden = !visible;
-        if (!visible) {
-          button.classList.remove('active');
-        }
-      }
-
-      if (panel) {
-        panel.hidden = !visible;
-        if (!visible) {
-          panel.classList.remove('active');
-        }
-      }
-    }
-
-    function ensureVisibleActiveTab() {
-      const currentActive = document.querySelector('.tab-btn.active:not([hidden])');
-      if (currentActive) {
-        return;
-      }
-
-      const firstVisible = document.querySelector('.tab-btn:not([hidden])');
-      if (!firstVisible) {
-        return;
-      }
-
-      const targetTab = firstVisible.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach((button) => button.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach((panel) => panel.classList.remove('active'));
-      firstVisible.classList.add('active');
-      const targetPanel = document.getElementById(`tab-${targetTab}`);
-      if (targetPanel) {
-        targetPanel.classList.add('active');
-      }
-    }
-
-    function updateDashboardVisibility() {
-      const stats = dashboardState.stats || {};
-      const hasVisitsData = getReliableTotalVisits(stats) > 0
-        || hasPositiveCount(stats.daily)
-        || hasPositiveCount(stats.unique_daily)
-        || hasPositiveCount(stats.hourly, (dayMap) => Object.values(dayMap || {}).reduce((sum, value) => sum + safeNumber(value), 0));
-      const pageEntries = buildTopPageEntries(stats.pages || {}, dashboardState.articleReads).filter((entry) => entry.count > 0);
-      const hasTrafficSources = getTrafficSourceEntries(stats.referrers || {}).length > 0;
-      const hasClicks = getClickEntries(dashboardState.clickTargets || {}).length > 0;
-      const hasComments = (dashboardState.commentRows || []).length > 0;
-      const hasLikes = (dashboardState.likeRows || []).length > 0;
-      const hasArticleJourneys = (dashboardState.articleJourneySessions || []).length > 0;
-      const hasHistory = (dashboardState.historyRows || []).length > 0
-        || (dashboardState.activeUsers || []).length > 0
-        || (dashboardState.activeUsersHourly || []).length > 0;
-      const hasSummaryData = hasVisitsData || hasComments || hasLikes || hasHistory || hasTrafficSources || hasClicks || pageEntries.length > 0;
-
-      setTabVisibility('resumo', hasSummaryData);
-      setTabVisibility('visitas', hasVisitsData);
-      setTabVisibility('likes', hasLikes);
-      setTabVisibility('paginas', pageEntries.length > 0);
-      setTabVisibility('cliques', hasClicks);
-      setTabVisibility('fontes', hasTrafficSources);
-      setTabVisibility('historico', hasHistory);
-      setTabVisibility('percursos', hasHistory || hasArticleJourneys);
-
-      if (!hasSummaryData && !hasVisitsData && !hasComments && !hasLikes && !hasHistory && !hasTrafficSources && !hasClicks && !hasArticleJourneys && pageEntries.length === 0) {
-        setTabVisibility('resumo', true);
-      }
-
-      ensureVisibleActiveTab();
-    }
-
-    function getNoticiaTitle(noticiaId) {
-      return noticiasMap[String(noticiaId)] || `Notícia ${noticiaId}`;
-    }
-
-    function getNoticiaMeta(noticiaId) {
-      return noticiaMetaMap[String(noticiaId)] || null;
-    }
-
-    function getNoticiaTitleBySlug(slug) {
-      const key = String(slug || '').trim();
-      if (!key) return 'Artigo';
-      const noticiaId = noticiaIdBySlug[key];
-      return noticiaId ? getNoticiaTitle(noticiaId) : key.replace(/-/g, ' ');
-    }
-
-    function isArticlePath(pagePath) {
-      return /^\/artigos\/.+\.html$/i.test(String(pagePath || '').trim());
-    }
-
-    function getArticleSlugFromPath(pagePath) {
-      const match = String(pagePath || '').trim().match(/^\/artigos\/(.+)\.html$/i);
-      return match ? match[1] : '';
-    }
-
-    function getArticleTitleFromPath(pagePath) {
-      const slug = getArticleSlugFromPath(pagePath);
-      if (!slug) return String(pagePath || '/');
-      return getNoticiaTitleBySlug(slug);
-    }
-
-    function buildArticleJourneySessions(sessions) {
-      return (sessions || [])
-        .map((session) => {
-          const articleEvents = (session.events || [])
-            .filter((event) => isArticlePath(event.page));
-
-          if (!articleEvents.length) {
-            return null;
-          }
-
-          const orderedEvents = articleEvents.slice().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-          const uniqueArticlePaths = new Set(articleEvents.map((event) => event.page || '').filter(Boolean));
-          const latestArticleEvent = articleEvents[0] || orderedEvents[orderedEvents.length - 1] || null;
-
-          return {
-            sessionId: session.sessionId,
-            lastTimestamp: latestArticleEvent ? latestArticleEvent.timestamp : session.lastTimestamp,
-            latestArticlePath: latestArticleEvent ? latestArticleEvent.page : '/',
-            latestArticleTitle: getArticleTitleFromPath(latestArticleEvent ? latestArticleEvent.page : '/'),
-            totalArticleViews: articleEvents.length,
-            uniqueArticleCount: uniqueArticlePaths.size,
-            articleEvents: orderedEvents
-          };
-        })
-        .filter(Boolean)
-        .sort((a, b) => (b.lastTimestamp || 0) - (a.lastTimestamp || 0));
-    }
-
+    // ---------- Notícias ----------
     async function carregarNoticiasMap() {
       try {
         const snapshot = await database.ref('noticias').once('value');
         const rawNoticias = snapshot.val();
-        const noticias = Array.isArray(rawNoticias)
-          ? rawNoticias
-          : Object.values(rawNoticias || {});
-
-        if (!Array.isArray(noticias)) return;
-
+        const noticias = Array.isArray(rawNoticias) ? rawNoticias : Object.values(rawNoticias || {});
         noticias.forEach((item) => {
+          if (!item) return;
           const id = String(item.id);
-          const titulo = item.titulo || `Notícia ${item.id}`;
+          noticiasMap[id] = item.titulo || `Notícia ${item.id}`;
           const slug = String(item.slug || '').trim();
-
-          noticiasMap[id] = titulo;
-          noticiaMetaMap[id] = { titulo, slug };
-
-          if (slug) {
-            noticiaIdBySlug[slug] = id;
-          }
+          if (slug) noticiaIdBySlug[slug] = id;
         });
       } catch (error) {
-        console.warn('Não foi possível carregar mapa de notícias:', error);
+        console.warn('Não foi possível carregar o mapa de notícias:', error);
       }
     }
 
-    function getFriendlyTopLevelPageLabel(name) {
-      const labels = {
-        'index': 'Página inicial',
-        'noticias': 'Notícias',
-        'artigos': 'Artigos',
-        'todas-noticias': 'Todas as notícias',
-        'videos': 'Vídeos',
-        'gaming': 'Gaming',
-        'metin2': 'Metin2',
-        'livestreams': 'Livestreams',
-        'viciado-comenta': 'Viciado Comenta',
-        'viciado-ponto-critico': 'Viciado Ponto Crítico',
-        'sobre-nos': 'Sobre nós',
-        'politica-privacidade': 'Política de privacidade',
-        'termos-servico': 'Termos de serviço',
-        'estatisticas': 'Estatísticas'
-      };
-
-      return labels[name] || `/${name}.html`;
+    function getNoticiaTitle(id) {
+      return noticiasMap[String(id)] || `Notícia ${id}`;
     }
 
-    function decodeStatsPageKey(rawKey) {
-      const key = String(rawKey || '').trim();
+    function getNoticiaTitleBySlug(slug) {
+      const id = noticiaIdBySlug[slug];
+      if (id && noticiasMap[id]) return noticiasMap[id];
+      return String(slug || '').replace(/-/g, ' ');
+    }
 
+    function getFriendlyPageName(name) {
+      const key = String(name || '').toLowerCase();
+      return FRIENDLY_PAGE_NAMES[key] || null;
+    }
+
+    function isDevPageKey(rawKey) {
+      const key = String(rawKey || '').toLowerCase();
+      return key.includes('d:_site') || key.includes('site-noticiasviciadocomenta') || key.includes('c:_users');
+    }
+
+    function decodePageKey(rawKey) {
+      const key = String(rawKey || '').trim();
       if (!key || key === '_' || key === '_index_html') {
-        return {
-          rowKey: 'page:/',
-          label: 'Página inicial',
-          path: '/',
-          type: 'Página'
-        };
+        return { label: 'Página inicial', type: 'Página' };
       }
 
       const articleMatch = key.match(/^_artigos_(.+)_html$/i);
       if (articleMatch) {
-        const slug = articleMatch[1];
-        const noticiaId = noticiaIdBySlug[slug] || '';
-
-        return {
-          rowKey: noticiaId ? `article:${noticiaId}` : `article-slug:${slug}`,
-          label: getNoticiaTitleBySlug(slug),
-          path: `/artigos/${slug}.html`,
-          type: 'Artigo'
-        };
+        return { label: getNoticiaTitleBySlug(articleMatch[1]), type: 'Artigo' };
       }
 
       const topLevelMatch = key.match(/^_([a-z0-9-]+)_html$/i);
       if (topLevelMatch) {
-        const pageName = topLevelMatch[1];
-        return {
-          rowKey: `page:/${pageName}.html`,
-          label: getFriendlyTopLevelPageLabel(pageName),
-          path: `/${pageName}.html`,
-          type: 'Página'
+        const name = topLevelMatch[1].toLowerCase();
+        return { label: getFriendlyPageName(name) || name, type: 'Página' };
+      }
+
+      const clean = key.replace(/^_+/, '').replace(/_+$/, '').replace(/_html$/i, '');
+      if (!clean) return null;
+      return { label: getFriendlyPageName(clean) || clean.replace(/_/g, ' '), type: 'Outro' };
+    }
+
+    // ---------- Carregamento de dados ----------
+    async function fetchPath(path) {
+      const snapshot = await database.ref(path).once('value');
+      return snapshot.val();
+    }
+
+    async function loadAllData() {
+      try {
+        const [stats, reads, likes, comments, push] = await Promise.all([
+          fetchPath('site_stats'),
+          fetchPath('article_reads'),
+          fetchPath('likes'),
+          fetchPath('comentarios'),
+          fetchPath('push_subscriptions')
+        ]);
+        state.stats = stats || {};
+        state.reads = reads || [];
+        state.likes = likes || {};
+        state.comments = comments || {};
+        state.push = push || {};
+        renderAll();
+        setText('statsUpdatedAt', `Dados lidos às ${new Date().toLocaleTimeString('pt-PT')}.`);
+      } catch (error) {
+        console.error('Erro ao carregar dados das estatísticas:', error);
+        setText('statsUpdatedAt', 'Erro ao carregar dados.');
+      }
+    }
+
+    function countLikesForArticle(likesEntry) {
+      if (!likesEntry) return 0;
+      return Object.keys(likesEntry).filter((key) => likesEntry[key]).length;
+    }
+
+    function countCommentsForArticle(commentsEntry) {
+      let total = 0;
+      const walk = (node) => {
+        Object.values(node || {}).forEach((item) => {
+          if (!item || typeof item !== 'object') return;
+          total += 1;
+          if (item.respostas) walk(item.respostas);
+        });
+      };
+      walk(commentsEntry);
+      return total;
+    }
+
+    function getReadsById() {
+      const reads = Array.isArray(state.reads) ? state.reads : Object.values(state.reads || {});
+      const byId = {};
+      reads.forEach((value, index) => {
+        const count = safeNumber(value);
+        if (count > 0) byId[String(index)] = count;
+      });
+      return byId;
+    }
+
+    // ---------- Renderização ----------
+    function renderAll() {
+      renderResumoCards();
+      renderDaily();
+      renderMonthly();
+      renderHourly();
+      renderPages();
+      renderArticles();
+      renderClicks();
+      renderReferrers();
+    }
+
+    function renderResumoCards() {
+      const stats = state.stats || {};
+      const daily = stats.daily || {};
+      const monthly = stats.monthly || {};
+      const dailyKeys = Object.keys(daily);
+
+      const totalVisits = dailyKeys.reduce((sum, key) => sum + safeNumber(daily[key]), 0);
+      setText('cardTotalVisits', formatNumber(totalVisits));
+      setText(
+        'cardTotalVisitsMeta',
+        dailyKeys.length
+          ? `${dailyKeys.length} dias com registos desde ${formatDateLabel(dailyKeys.slice().sort()[0])}`
+          : 'Sem registos diários.'
+      );
+
+      const todayKey = formatLocalDateKey();
+      setText('cardTodayVisits', formatNumber(daily[todayKey]));
+      const hourNow = String(new Date().getHours()).padStart(2, '0');
+      const todayHourly = (stats.hourly || {})[todayKey] || {};
+      setText('cardTodayVisitsMeta', `${formatNumber(todayHourly[hourNow])} na hora atual`);
+
+      const weekVisits = sumValuesForKeys(daily, getRecentDateKeys(7));
+      const previousWeekVisits = sumValuesForKeys(daily, getRecentDateKeys(7, 7));
+      setText('cardWeekVisits', formatNumber(weekVisits));
+      if (previousWeekVisits > 0) {
+        const delta = ((weekVisits - previousWeekVisits) / previousWeekVisits) * 100;
+        setText(
+          'cardWeekVisitsMeta',
+          `${formatNumber(previousWeekVisits)} nos 7 dias anteriores (${delta > 0 ? '+' : ''}${delta.toFixed(0)}%)`
+        );
+      } else {
+        setText('cardWeekVisitsMeta', 'Sem base de comparação anterior.');
+      }
+
+      const monthKey = todayKey.slice(0, 7);
+      const [yearNow, monthNow] = monthKey.split('-').map(Number);
+      const prevMonthDate = new Date(yearNow, monthNow - 2, 1);
+      const prevMonthKey = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth() + 1).padStart(2, '0')}`;
+      setText('cardMonthVisits', formatNumber(monthly[monthKey]));
+      setText('cardMonthVisitsMeta', `${formatMonthLabel(prevMonthKey)}: ${formatNumber(monthly[prevMonthKey])}`);
+
+      const readsById = getReadsById();
+      const readsTotal = Object.values(readsById).reduce((sum, value) => sum + value, 0);
+      setText('cardArticleReads', formatNumber(readsTotal));
+      setText('cardArticleReadsMeta', `${Object.keys(readsById).length} artigos com leituras`);
+
+      const likes = state.likes || {};
+      let likesTotal = 0;
+      let likedArticles = 0;
+      Object.values(likes).forEach((entry) => {
+        const count = countLikesForArticle(entry);
+        if (count > 0) {
+          likesTotal += count;
+          likedArticles += 1;
+        }
+      });
+      setText('cardLikes', formatNumber(likesTotal));
+      setText('cardLikesMeta', `${likedArticles} artigos com likes`);
+
+      const comments = state.comments || {};
+      let commentsTotal = 0;
+      let commentedArticles = 0;
+      Object.values(comments).forEach((entry) => {
+        const count = countCommentsForArticle(entry);
+        if (count > 0) {
+          commentsTotal += count;
+          commentedArticles += 1;
+        }
+      });
+      setText('cardComments', formatNumber(commentsTotal));
+      setText('cardCommentsMeta', `${commentedArticles} artigos com comentários`);
+
+      const push = state.push || {};
+      const pushEntries = Object.values(push);
+      const pushActive = pushEntries.filter((entry) => entry && entry.status === 'active').length;
+      setText('cardPush', formatNumber(pushActive));
+      setText('cardPushMeta', `${pushEntries.length} registos totais`);
+    }
+
+    function renderDaily() {
+      const tbody = document.getElementById('dailyBody');
+      if (!tbody) return;
+      const daily = (state.stats || {}).daily || {};
+      const entries = Object.entries(daily)
+        .map(([key, value]) => ({ key, count: safeNumber(value) }))
+        .filter((entry) => entry.count > 0)
+        .sort((a, b) => b.key.localeCompare(a.key));
+
+      if (!entries.length) {
+        renderEmptyRow('dailyBody', 'Sem registos diários.', 3);
+        setText('dailyStatus', 'Sem dados.');
+        return;
+      }
+
+      const max = Math.max(...entries.map((entry) => entry.count));
+      const total = entries.reduce((sum, entry) => sum + entry.count, 0);
+      tbody.innerHTML = '';
+      entries.forEach((entry) => {
+        appendRow(tbody, [
+          makeCell(formatDateLabel(entry.key)),
+          makeCell(formatNumber(entry.count), 'num'),
+          makeBarCell(entry.count, max)
+        ]);
+      });
+      setText('dailyStatus', `${entries.length} dias com registos • ${formatNumber(total)} visitas no total.`);
+    }
+
+    function renderMonthly() {
+      const tbody = document.getElementById('monthlyBody');
+      if (!tbody) return;
+      const monthly = (state.stats || {}).monthly || {};
+      const entries = Object.entries(monthly)
+        .map(([key, value]) => ({ key, count: safeNumber(value) }))
+        .filter((entry) => entry.count > 0)
+        .sort((a, b) => b.key.localeCompare(a.key));
+
+      if (!entries.length) {
+        renderEmptyRow('monthlyBody', 'Sem registos mensais.', 3);
+        setText('monthlyStatus', 'Sem dados.');
+        return;
+      }
+
+      const max = Math.max(...entries.map((entry) => entry.count));
+      const total = entries.reduce((sum, entry) => sum + entry.count, 0);
+      tbody.innerHTML = '';
+      entries.forEach((entry) => {
+        appendRow(tbody, [
+          makeCell(formatMonthLabel(entry.key)),
+          makeCell(formatNumber(entry.count), 'num'),
+          makeBarCell(entry.count, max)
+        ]);
+      });
+      setText('monthlyStatus', `${entries.length} meses • ${formatNumber(total)} visitas no total.`);
+    }
+
+    function renderHourly() {
+      const tbody = document.getElementById('hourlyBody');
+      if (!tbody) return;
+      const hourly = (state.stats || {}).hourly || {};
+      const dates = Object.keys(hourly).slice().sort().reverse();
+
+      if (!dates.length) {
+        renderEmptyRow('hourlyBody', 'Sem dados horários.', 3);
+        setText('hourlyStatus', 'Sem dados.');
+        return;
+      }
+
+      if (!selectedHourlyDate || !hourly[selectedHourlyDate]) {
+        selectedHourlyDate = dates[0];
+      }
+
+      const select = document.getElementById('hourlyDaySelect');
+      const datesKey = dates.join(',');
+      if (select && datesKey !== lastHourlyDatesKey) {
+        lastHourlyDatesKey = datesKey;
+        select.innerHTML = '';
+        dates.forEach((dateKey) => {
+          const option = document.createElement('option');
+          option.value = dateKey;
+          option.textContent = formatDateLabel(dateKey);
+          select.appendChild(option);
+        });
+        select.value = selectedHourlyDate;
+        select.onchange = () => {
+          selectedHourlyDate = select.value;
+          renderHourly();
         };
       }
 
-      const genericPath = `/${key.replace(/^_+/, '').replace(/_html$/i, '.html')}`;
-      return {
-        rowKey: `page:${genericPath}`,
-        label: genericPath,
-        path: genericPath,
-        type: 'Página'
-      };
-    }
+      const dayData = hourly[selectedHourlyDate] || {};
+      const rows = [];
+      for (let hour = 0; hour < 24; hour += 1) {
+        rows.push({ hour: String(hour).padStart(2, '0'), count: safeNumber(dayData[String(hour).padStart(2, '0')]) });
+      }
 
-    function buildTopPageEntries(pagesObj, articleReadsObj = latestArticleReads) {
-      const entriesMap = new Map();
-
-      const upsertEntry = (entry, preferCount = false) => {
-        const existing = entriesMap.get(entry.rowKey);
-        if (!existing) {
-          entriesMap.set(entry.rowKey, entry);
-          return;
-        }
-
-        existing.label = entry.label || existing.label;
-        existing.path = entry.path || existing.path;
-        existing.type = entry.type || existing.type;
-        existing.count = preferCount ? entry.count : Math.max(existing.count, entry.count);
-      };
-
-      Object.entries(pagesObj || {}).forEach(([key, count]) => {
-        const decoded = decodeStatsPageKey(key);
-        upsertEntry({
-          rowKey: decoded.rowKey,
-          label: decoded.label,
-          path: decoded.path,
-          type: decoded.type,
-          count: Number(count) || 0
-        });
-      });
-
-      Object.entries(articleReadsObj || {}).forEach(([id, count]) => {
-        const meta = getNoticiaMeta(id);
-        const articlePath = meta && meta.slug ? `/artigos/${meta.slug}.html` : `Artigo ${id}`;
-        upsertEntry({
-          rowKey: `article:${id}`,
-          label: getNoticiaTitle(id),
-          path: articlePath,
-          type: 'Artigo',
-          count: Number(count) || 0
-        }, true);
-      });
-
-      return Array.from(entriesMap.values()).sort((a, b) => b.count - a.count);
-    }
-
-    function renderSummaryTwoColumnTable(bodyId, rows, emptyText) {
-      const tbody = document.getElementById(bodyId);
-      if (!tbody) return;
+      const total = rows.reduce((sum, row) => sum + row.count, 0);
+      const max = Math.max(...rows.map((row) => row.count), 1);
       tbody.innerHTML = '';
+      rows.forEach((row) => {
+        appendRow(tbody, [
+          makeCell(`${row.hour}:00`),
+          makeCell(formatNumber(row.count), 'num'),
+          makeBarCell(row.count, max)
+        ]);
+      });
+      setText('hourlyStatus', `${formatDateLabel(selectedHourlyDate)} • ${formatNumber(total)} visitas no dia.`);
+    }
 
-      if (!rows.length) {
-        renderEmptyRow(bodyId, emptyText, 2);
+    function renderPages() {
+      const tbody = document.getElementById('pagesBody');
+      if (!tbody) return;
+      const pages = (state.stats || {}).pages || {};
+      const entries = Object.entries(pages)
+        .filter(([key]) => !isDevPageKey(key))
+        .map(([key, value]) => {
+          const decoded = decodePageKey(key);
+          return decoded ? { ...decoded, count: safeNumber(value) } : null;
+        })
+        .filter((entry) => entry && entry.count > 0)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 25);
+
+      if (!entries.length) {
+        renderEmptyRow('pagesBody', 'Sem registos de páginas.', 3);
+        setText('pagesStatus', 'Sem dados.');
         return;
       }
 
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        const labelCell = document.createElement('td');
-        labelCell.textContent = row.label;
-        const valueCell = document.createElement('td');
-        valueCell.textContent = row.value;
-        tr.appendChild(labelCell);
-        tr.appendChild(valueCell);
-        tbody.appendChild(tr);
+      const max = entries[0].count;
+      tbody.innerHTML = '';
+      entries.forEach((entry) => {
+        const labelCell = makeCell(entry.label);
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = entry.type;
+        labelCell.appendChild(meta);
+        appendRow(tbody, [labelCell, makeCell(formatNumber(entry.count), 'num'), makeBarCell(entry.count, max)]);
       });
+      setText('pagesStatus', `Top ${entries.length} de ${Object.keys(pages).length} páginas registadas.`);
     }
 
-    function renderSummaryTrendTable(stats) {
-      const tbody = document.getElementById('summaryTrendBody');
+    function renderArticles() {
+      const tbody = document.getElementById('articlesBody');
       if (!tbody) return;
-      tbody.innerHTML = '';
-
-      const dailyTotals = stats.daily || {};
-      const dailyUnique = stats.unique_daily || {};
-      const last7Keys = getRecentDateKeys(7, 0);
-      const prev7Keys = getRecentDateKeys(7, 7);
-
-      const last7Visits = sumValuesForKeys(dailyTotals, last7Keys);
-      const prev7Visits = sumValuesForKeys(dailyTotals, prev7Keys);
-      const last7Unique = sumValuesForKeys(dailyUnique, last7Keys);
-      const prev7Unique = sumValuesForKeys(dailyUnique, prev7Keys);
-      const visitsPerUniqueNow = last7Unique > 0 ? last7Visits / last7Unique : 0;
-      const visitsPerUniquePrev = prev7Unique > 0 ? prev7Visits / prev7Unique : 0;
-
-      if ((last7Visits + prev7Visits + last7Unique + prev7Unique) === 0) {
-        renderEmptyRow('summaryTrendBody', 'Sem dados suficientes para tendência semanal.', 4);
-        return 0;
-      }
-
-      const rows = [
-        { label: 'Visitas', current: last7Visits.toLocaleString('pt-PT'), previous: prev7Visits.toLocaleString('pt-PT'), trend: getTrendDescriptor(last7Visits, prev7Visits) },
-        { label: 'IPs únicos', current: last7Unique.toLocaleString('pt-PT'), previous: prev7Unique.toLocaleString('pt-PT'), trend: getTrendDescriptor(last7Unique, prev7Unique) },
-        { label: 'Visitas por IP', current: visitsPerUniqueNow ? visitsPerUniqueNow.toFixed(2).replace('.', ',') : '0,00', previous: visitsPerUniquePrev ? visitsPerUniquePrev.toFixed(2).replace('.', ',') : '0,00', trend: getTrendDescriptor(visitsPerUniqueNow, visitsPerUniquePrev) }
-      ];
-
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        const labelCell = document.createElement('td');
-        labelCell.textContent = row.label;
-        const currentCell = document.createElement('td');
-        currentCell.textContent = row.current;
-        const previousCell = document.createElement('td');
-        previousCell.textContent = row.previous;
-        const trendCell = document.createElement('td');
-        const chip = document.createElement('span');
-        chip.className = `metric-chip ${row.trend.tone}`;
-        chip.textContent = row.trend.text;
-        trendCell.appendChild(chip);
-        tr.appendChild(labelCell);
-        tr.appendChild(currentCell);
-        tr.appendChild(previousCell);
-        tr.appendChild(trendCell);
-        tbody.appendChild(tr);
-      });
-
-      return rows.length;
-    }
-
-    function renderSummaryTrafficTable(stats) {
-      const sourceEntries = getTrafficSourceEntries(stats.referrers || {});
-      const totalReferrals = sourceEntries.reduce((sum, entry) => sum + entry.count, 0);
-      const direct = sourceEntries.find((entry) => entry.key === 'direct')?.count || 0;
-      const referralOnly = Math.max(totalReferrals - direct, 0);
-      const directShare = totalReferrals > 0 ? (direct / totalReferrals) * 100 : 0;
-      const trackedPages = buildTopPageEntries(stats.pages || {}, dashboardState.articleReads).length;
-      const clickEntries = getClickEntries(dashboardState.clickTargets || {});
-      const trackedClicks = clickEntries.reduce((sum, item) => sum + item.count, 0);
-      const topSource = sourceEntries[0];
-      const rows = [];
-
-      if (totalReferrals > 0) {
-        rows.push(
-          { label: 'Quota de tráfego direto', value: formatPercent(directShare) },
-          { label: 'Visitas diretas registadas', value: direct.toLocaleString('pt-PT') },
-          { label: 'Visitas com origem identificada', value: referralOnly.toLocaleString('pt-PT') },
-          { label: 'Origem líder', value: `${topSource.label} (${topSource.count.toLocaleString('pt-PT')})` }
-        );
-      }
-
-      if (trackedPages > 0) {
-        rows.push({ label: 'Páginas/artigos com tráfego', value: trackedPages.toLocaleString('pt-PT') });
-      }
-
-      if (trackedClicks > 0) {
-        rows.push({ label: 'Cliques rastreados', value: trackedClicks.toLocaleString('pt-PT') });
-      }
-
-      renderSummaryTwoColumnTable('summaryTrafficBody', rows, 'Sem dados de qualidade de tráfego ainda.');
-      return rows.length;
-    }
-
-    function renderSummaryEngagementTable() {
-      const tbody = document.getElementById('summaryEngagementBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      const rows = getEngagementRows();
-
-      if (!rows.length) {
-        renderEmptyRow('summaryEngagementBody', 'Sem dados de engagement ainda.', 5);
-        return 0;
-      }
-
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        const titleCell = document.createElement('td');
-        titleCell.textContent = row.title;
-        const readsCell = document.createElement('td');
-        readsCell.textContent = row.reads.toLocaleString('pt-PT');
-        const likesCell = document.createElement('td');
-        likesCell.textContent = row.likes.toLocaleString('pt-PT');
-        const commentsCell = document.createElement('td');
-        commentsCell.textContent = row.comments.toLocaleString('pt-PT');
-        const scoreCell = document.createElement('td');
-        scoreCell.textContent = row.score.toLocaleString('pt-PT');
-        tr.appendChild(titleCell);
-        tr.appendChild(readsCell);
-        tr.appendChild(likesCell);
-        tr.appendChild(commentsCell);
-        tr.appendChild(scoreCell);
-        tbody.appendChild(tr);
-      });
-
-      return rows.length;
-    }
-
-    function renderSummarySessionTable() {
-      const tbody = document.getElementById('summarySessionBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      const rows = (dashboardState.sessions || []).slice(0, 8);
-      if (!rows.length) {
-        renderEmptyRow('summarySessionBody', 'Sem sessões recentes nas últimas 24 horas.', 4);
-        return 0;
-      }
-
-      rows.forEach((session) => {
-        const tr = document.createElement('tr');
-        const sessionCell = document.createElement('td');
-        sessionCell.textContent = getSessionLabel(session.sessionId);
-        const pageCountCell = document.createElement('td');
-        pageCountCell.textContent = safeNumber(session.events.length).toLocaleString('pt-PT');
-        const latestPageCell = document.createElement('td');
-        latestPageCell.textContent = session.latestPage || '/';
-        const whenCell = document.createElement('td');
-        whenCell.textContent = session.lastTimestamp ? formatDateTime(session.lastTimestamp) : '-';
-        tr.appendChild(sessionCell);
-        tr.appendChild(pageCountCell);
-        tr.appendChild(latestPageCell);
-        tr.appendChild(whenCell);
-        tbody.appendChild(tr);
-      });
-
-      return rows.length;
-    }
-
-    function renderSummaryInsights() {
-      const container = document.getElementById('summaryInsightsList');
-      if (!container) return 0;
-      container.innerHTML = '';
-
-      const stats = dashboardState.stats || {};
-      const dailyTotals = stats.daily || {};
-      const dailyUnique = stats.unique_daily || {};
-      const last7Keys = getRecentDateKeys(7, 0);
-      const prev7Keys = getRecentDateKeys(7, 7);
-      const last7Visits = sumValuesForKeys(dailyTotals, last7Keys);
-      const prev7Visits = sumValuesForKeys(dailyTotals, prev7Keys);
-      const last7Unique = sumValuesForKeys(dailyUnique, last7Keys);
-      const sourceEntries = getTrafficSourceEntries(stats.referrers || {});
-      const pageEntries = buildTopPageEntries(stats.pages || {}, dashboardState.articleReads).filter((entry) => entry.count > 0);
-      const clickEntries = getClickEntries(dashboardState.clickTargets || {});
-      const engagementRows = getEngagementRows(1);
-      const sessions = dashboardState.sessions || [];
-      const historyRows = dashboardState.historyRows || [];
-      const insights = [];
-
-      if (last7Visits > 0) {
-        const trend = getTrendDescriptor(last7Visits, prev7Visits);
-        insights.push({
-          kicker: 'Visibilidade semanal',
-          text: `O site somou ${last7Visits.toLocaleString('pt-PT')} acessos nos últimos 7 dias${prev7Visits > 0 ? `, com variação ${trend.text} face ao período anterior.` : '.'}`
-        });
-      }
-
-      if (last7Unique > 0 && last7Visits > 0) {
-        const visitsPerUnique = last7Visits / last7Unique;
-        insights.push({
-          kicker: 'Recorrência',
-          text: `Cada visitante gerou em média ${visitsPerUnique.toFixed(2).replace('.', ',')} páginas por IP nos últimos 7 dias.`
-        });
-      }
-
-      if (sourceEntries.length > 0) {
-        const topSource = sourceEntries[0];
-        const totalSources = sourceEntries.reduce((sum, entry) => sum + entry.count, 0);
-        insights.push({
-          kicker: 'Aquisição',
-          text: `${topSource.label} lidera as origens com ${topSource.count.toLocaleString('pt-PT')} visitas, ${formatPercent((topSource.count / totalSources) * 100)} do tráfego identificado.`
-        });
-      }
-
-      if (pageEntries.length > 0) {
-        const leader = pageEntries[0];
-        insights.push({
-          kicker: 'Conteúdo líder',
-          text: `${leader.label} está à frente com ${leader.count.toLocaleString('pt-PT')} visitas acumuladas.`
-        });
-      }
-
-      if (engagementRows.length > 0) {
-        const leader = engagementRows[0];
-        insights.push({
-          kicker: 'Engagement',
-          text: `${leader.title} lidera interação com score ${leader.score.toLocaleString('pt-PT')}, suportado por ${leader.likes.toLocaleString('pt-PT')} likes e ${leader.comments.toLocaleString('pt-PT')} comentários.`
-        });
-      }
-
-      if (clickEntries.length > 0) {
-        const topClick = clickEntries[0];
-        insights.push({
-          kicker: 'Cliques',
-          text: `${topClick.label} concentra ${topClick.count.toLocaleString('pt-PT')} cliques, o melhor sinal de interação rastreada.`
-        });
-      }
-
-      if (sessions.length > 0 && historyRows.length > 0) {
-        insights.push({
-          kicker: 'Atividade recente',
-          text: `${sessions.length.toLocaleString('pt-PT')} sessões geraram ${historyRows.length.toLocaleString('pt-PT')} ações nas últimas 24 horas.`
-        });
-      }
-
-      insights.slice(0, 6).forEach((item) => {
-        const block = document.createElement('div');
-        block.className = 'insight-item';
-
-        const kicker = document.createElement('strong');
-        kicker.textContent = item.kicker;
-
-        const text = document.createElement('span');
-        text.textContent = item.text;
-
-        block.appendChild(kicker);
-        block.appendChild(text);
-        container.appendChild(block);
-      });
-
-      return Math.min(insights.length, 6);
-    }
-
-    function renderSummaryOverview() {
-      const stats = dashboardState.stats || {};
-      const dailyTotals = stats.daily || {};
-      const dailyUnique = stats.unique_daily || {};
-      const last7Keys = getRecentDateKeys(7, 0);
-      const prev7Keys = getRecentDateKeys(7, 7);
-      const last7Visits = sumValuesForKeys(dailyTotals, last7Keys);
-      const prev7Visits = sumValuesForKeys(dailyTotals, prev7Keys);
-      const last7Unique = sumValuesForKeys(dailyUnique, last7Keys);
-      const prev7Unique = sumValuesForKeys(dailyUnique, prev7Keys);
-      const weekTrend = getTrendDescriptor(last7Visits, prev7Visits);
-      const uniqueTrend = getTrendDescriptor(last7Unique, prev7Unique);
-      const referrers = stats.referrers || {};
-      const totalReferrals = Object.values(referrers).reduce((sum, value) => sum + safeNumber(value), 0);
-      const direct = safeNumber(referrers.direct);
-      const directShare = totalReferrals > 0 ? (direct / totalReferrals) * 100 : 0;
-      const totalLikes = Object.values(dashboardState.likeCountsByArticle || {}).reduce((sum, value) => sum + safeNumber(value), 0);
-      const totalComments = Object.values(dashboardState.commentCountsByArticle || {}).reduce((sum, value) => sum + safeNumber(value), 0);
-      const historyRows = dashboardState.historyRows || [];
-      const sessions = dashboardState.sessions || [];
-      const avgPagesPerSession = sessions.length ? historyRows.length / sessions.length : 0;
-      const hasWeekTraffic = last7Visits > 0 || prev7Visits > 0;
-      const hasWeekUnique = last7Unique > 0 || prev7Unique > 0;
-      const hasDirectTraffic = totalReferrals > 0;
-      const hasEngagement = totalLikes > 0 || totalComments > 0;
-      const hasSessions = sessions.length > 0;
-
-      setText('summaryWeekVisits', last7Visits.toLocaleString('pt-PT'));
-      setText('summaryWeekVisitsMeta', `Semana anterior: ${prev7Visits.toLocaleString('pt-PT')} acessos.`);
-      setText('summaryWeekUnique', last7Unique.toLocaleString('pt-PT'));
-      setText('summaryWeekUniqueMeta', uniqueTrend.detail);
-      setText('summaryWeekTrend', weekTrend.text);
-      setText('summaryWeekTrendMeta', weekTrend.detail);
-      setText('summaryDirectShare', formatPercent(directShare));
-      setText('summaryDirectShareMeta', `${direct.toLocaleString('pt-PT')} visitas diretas em ${totalReferrals.toLocaleString('pt-PT')} origens registadas.`);
-      setText('summaryEngagement', (totalLikes + totalComments).toLocaleString('pt-PT'));
-      setText('summaryEngagementMeta', `${totalLikes.toLocaleString('pt-PT')} likes e ${totalComments.toLocaleString('pt-PT')} comentários/respostas.`);
-      setText('summarySessionDepth', sessions.length ? avgPagesPerSession.toFixed(2).replace('.', ',') : '-');
-      setText('summarySessionDepthMeta', sessions.length ? `${sessions.length.toLocaleString('pt-PT')} sessões e ${historyRows.length.toLocaleString('pt-PT')} atividades nas últimas 24h.` : 'Sem atividade recente.');
-
-      setHidden('cardSummaryWeekVisits', !hasWeekTraffic);
-      setHidden('cardSummaryWeekUnique', !hasWeekUnique);
-      setHidden('cardSummaryWeekTrend', !hasWeekTraffic);
-      setHidden('cardSummaryDirectShare', !hasDirectTraffic);
-      setHidden('cardSummaryEngagement', !hasEngagement);
-      setHidden('cardSummarySessionDepth', !hasSessions);
-
-      const insightCount = renderSummaryInsights();
-      const trendCount = renderSummaryTrendTable(stats);
-      const trafficCount = renderSummaryTrafficTable(stats);
-      const engagementCount = renderSummaryEngagementTable();
-      const sessionCount = renderSummarySessionTable();
-
-      setHidden('summaryInsightsPanel', insightCount === 0);
-      setHidden('summaryTrendPanel', trendCount === 0);
-      setHidden('summaryTrafficPanel', trafficCount === 0);
-      setHidden('summaryEngagementPanel', engagementCount === 0);
-      setHidden('summarySessionPanel', sessionCount === 0);
-      updateDashboardVisibility();
-    }
-
-    function renderHourlyRowsToBody(bodyId, hourlyTotals = {}, hourlyUnique = {}, highlightedHour = '') {
-      const tbody = document.getElementById(bodyId);
-      if (!tbody) return 0;
-      tbody.innerHTML = '';
-
-      let sum = 0;
-
-      for (let hour = 0; hour < 24; hour += 1) {
-        const hourKey = String(hour).padStart(2, '0');
-        const total = safeNumber(hourlyTotals[hourKey]);
-        const unique = safeNumber(hourlyUnique[hourKey]);
-        sum += total;
-
-        const tr = document.createElement('tr');
-        if (highlightedHour && hourKey === highlightedHour) tr.style.fontWeight = '700';
-
-        const hourCell = document.createElement('td');
-        hourCell.textContent = `${hourKey}:00-${hourKey}:59`;
-
-        const totalCell = document.createElement('td');
-        totalCell.textContent = total.toLocaleString('pt-PT');
-
-        const uniqueCell = document.createElement('td');
-        uniqueCell.textContent = unique.toLocaleString('pt-PT');
-
-        tr.appendChild(hourCell);
-        tr.appendChild(totalCell);
-        tr.appendChild(uniqueCell);
-        tbody.appendChild(tr);
-      }
-
-      return sum;
-    }
-
-    function renderHourlyRows(hourlyTotals = {}, hourlyUnique = {}) {
-      const currentHour = String(new Date().getHours()).padStart(2, '0');
-      const sum = renderHourlyRowsToBody('hourlyBody', hourlyTotals, hourlyUnique, currentHour);
-
-      setText('currentHourCount', safeNumber(hourlyTotals[currentHour]).toLocaleString('pt-PT'));
-      return sum;
-    }
-
-    function getPastDateKeys(todayKey, limit = 5) {
-      const keySet = new Set([
-        ...Object.keys(hourlyTotalsByDate || {}),
-        ...Object.keys(hourlyUniqueByDate || {})
+      const readsById = getReadsById();
+      const likes = state.likes || {};
+      const comments = state.comments || {};
+      const ids = new Set([
+        ...Object.keys(readsById),
+        ...Object.keys(likes).filter((id) => countLikesForArticle(likes[id]) > 0),
+        ...Object.keys(comments).filter((id) => countCommentsForArticle(comments[id]) > 0)
       ]);
 
-      return Array.from(keySet)
-        .filter((key) => key && key !== todayKey)
-        .sort((a, b) => b.localeCompare(a))
-        .slice(0, limit);
-    }
-
-    function updatePastDayOptions(dayKeys) {
-      const select = document.getElementById('pastDaySelect');
-      if (!select) return '';
-
-      const previousValue = select.value;
-      select.innerHTML = '';
-
-      if (!dayKeys.length) {
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'Sem dias anteriores com dados';
-        select.appendChild(option);
-        select.disabled = true;
-        return '';
-      }
-
-      select.disabled = false;
-      dayKeys.forEach((dayKey) => {
-        const option = document.createElement('option');
-        option.value = dayKey;
-        option.textContent = formatDateLabel(dayKey);
-        select.appendChild(option);
-      });
-
-      const selected = dayKeys.includes(previousValue) ? previousValue : dayKeys[0];
-      select.value = selected;
-      return selected;
-    }
-
-    function renderPastHourlySelectedDay() {
-      const select = document.getElementById('pastDaySelect');
-      if (!select) return;
-
-      const dayKey = select.value;
-      if (!dayKey) {
-        renderEmptyRow('pastHourlyBody', 'Sem dados horários para dias anteriores.', 3);
-        setText('pastHourlyStatus', 'Sem dados disponíveis.');
-        return;
-      }
-
-      const totals = (hourlyTotalsByDate && hourlyTotalsByDate[dayKey]) || {};
-      const unique = (hourlyUniqueByDate && hourlyUniqueByDate[dayKey]) || {};
-      const totalAcessos = renderHourlyRowsToBody('pastHourlyBody', totals, unique);
-
-      setText('pastHourlyStatus', `${formatDateLabel(dayKey)} • ${totalAcessos.toLocaleString('pt-PT')} acessos totais.`);
-    }
-
-    function renderDailyTable(bodyId, entries) {
-      const tbody = document.getElementById(bodyId);
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      if (!entries.length) {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = 2;
-        td.className = 'empty';
-        td.textContent = 'Sem dados disponíveis.';
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-        return;
-      }
-
-      entries.forEach(([dateKey, count]) => {
-        const tr = document.createElement('tr');
-        const dateCell = document.createElement('td');
-        dateCell.textContent = formatDateLabel(dateKey);
-
-        const countCell = document.createElement('td');
-        countCell.textContent = safeNumber(count).toLocaleString('pt-PT');
-
-        tr.appendChild(dateCell);
-        tr.appendChild(countCell);
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderRecentTable(bodyId, rows, emptyText, createCells) {
-      const tbody = document.getElementById(bodyId);
-      if (!tbody) return;
-      tbody.innerHTML = '';
+      const rows = Array.from(ids)
+        .map((id) => ({
+          id,
+          reads: safeNumber(readsById[id]),
+          likes: countLikesForArticle(likes[id]),
+          comments: countCommentsForArticle(comments[id])
+        }))
+        .sort((a, b) => (b.reads - a.reads) || (b.likes - a.likes))
+        .slice(0, 25);
 
       if (!rows.length) {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = 3;
-        td.className = 'empty';
-        td.textContent = emptyText;
-        tr.appendChild(td);
-        tbody.appendChild(tr);
+        renderEmptyRow('articlesBody', 'Sem leituras de artigos registadas.', 4);
+        setText('articlesStatus', 'Sem dados.');
         return;
       }
 
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        const cells = createCells(row);
-        cells.forEach((cell) => tr.appendChild(cell));
-        tbody.appendChild(tr);
-      });
-    }
-
-    function carregarEstatisticas() {
-      database.ref('site_stats').on('value', (snapshot) => {
-        const stats = snapshot.val() || {};
-        const todayKey = formatLocalDateKey(new Date());
-
-        const dailyTotals = stats.daily || {};
-        const dailyUnique = stats.unique_daily || {};
-        hourlyTotalsByDate = stats.hourly || {};
-        hourlyUniqueByDate = stats.unique_hourly || {};
-
-        const hourlyAllMap = hourlyTotalsByDate[todayKey] || {};
-        const hourlyUniqueMap = hourlyUniqueByDate[todayKey] || {};
-
-        const sumFromHourly = renderHourlyRows(hourlyAllMap, hourlyUniqueMap);
-        const todayTotal = safeNumber(dailyTotals[todayKey]) || sumFromHourly;
-
-        setText('todayTotal', todayTotal.toLocaleString('pt-PT'));
-        setText('todayUnique', safeNumber(dailyUnique[todayKey]).toLocaleString('pt-PT'));
-        setText('allTotal', getReliableTotalVisits(stats).toLocaleString('pt-PT'));
-        setText('allUnique', safeNumber(stats.unique_total).toLocaleString('pt-PT'));
-        setText('lastUpdate', stats.last_updated ? new Date(stats.last_updated).toLocaleString('pt-PT') : '-');
-
-        const dailyUniqueEntries = Object.entries(dailyUnique).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
-        const dailyTotalEntries = Object.entries(dailyTotals).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
-        const pastDayKeys = getPastDateKeys(todayKey, 5);
-        const selectedDay = updatePastDayOptions(pastDayKeys);
-
-        if (!selectedDay) {
-          renderEmptyRow('pastHourlyBody', 'Sem dados horários para dias anteriores.', 3);
-          setText('pastHourlyStatus', 'Sem dados disponíveis.');
-        } else {
-          renderPastHourlySelectedDay();
-        }
-
-        renderDailyTable('dailyUniqueBody', dailyUniqueEntries);
-        renderDailyTable('dailyTotalBody', dailyTotalEntries);
-        setText('hourlyStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
-      }, (error) => {
-        console.error('Erro ao carregar estatísticas:', error);
-        setText('hourlyStatus', 'Erro ao carregar dados do Firebase.');
-        setText('pastHourlyStatus', 'Erro ao carregar dados do Firebase.');
-      });
-    }
-
-    function initPastHourlySelector() {
-      const select = document.getElementById('pastDaySelect');
-      if (!select) return;
-      select.addEventListener('change', renderPastHourlySelectedDay);
-    }
-
-    function renderArticleJourneyDetail(sessionId) {
-      const rows = dashboardState.articleJourneySessions || [];
-      const selectedSession = rows.find((row) => row.sessionId === sessionId);
-
-      if (!selectedSession) {
-        renderEmptyRow('articleJourneyDetailBody', 'Selecione uma sessão com leituras de artigos.', 3);
-        setText('articleJourneyStatus', 'Sem sessão selecionada.');
-        return;
-      }
-
-      const tbody = document.getElementById('articleJourneyDetailBody');
-      if (!tbody) return;
       tbody.innerHTML = '';
-
-      selectedSession.articleEvents.forEach((event) => {
-        const tr = document.createElement('tr');
-
-        const whenCell = document.createElement('td');
-        whenCell.textContent = event.timestamp ? formatDateTime(event.timestamp) : '-';
-
-        const articleCell = document.createElement('td');
-        articleCell.textContent = getArticleTitleFromPath(event.page);
-
-        const pathCell = document.createElement('td');
-        pathCell.textContent = event.page || '/';
-
-        tr.appendChild(whenCell);
-        tr.appendChild(articleCell);
-        tr.appendChild(pathCell);
-        tbody.appendChild(tr);
-      });
-
-      setText(
-        'articleJourneyStatus',
-        `${getSessionLabel(selectedSession.sessionId)} • ${selectedSession.totalArticleViews.toLocaleString('pt-PT')} leitura(s) de artigo em ${selectedSession.uniqueArticleCount.toLocaleString('pt-PT')} artigo(s).`
-      );
-    }
-
-    function renderArticleJourneyTab() {
-      const rows = buildArticleJourneySessions(_historicoSessions);
-      dashboardState.articleJourneySessions = rows;
-
-      const totalViews = rows.reduce((sum, row) => sum + safeNumber(row.totalArticleViews), 0);
-      const allArticles = new Set();
       rows.forEach((row) => {
-        row.articleEvents.forEach((event) => {
-          if (event.page) allArticles.add(event.page);
-        });
+        appendRow(tbody, [
+          makeCell(getNoticiaTitle(row.id)),
+          makeCell(formatNumber(row.reads), 'num'),
+          makeCell(formatNumber(row.likes), 'num'),
+          makeCell(formatNumber(row.comments), 'num')
+        ]);
       });
-
-      setText('articleJourneySessionsCount', rows.length.toLocaleString('pt-PT'));
-      setText('articleJourneySessionsMeta', rows.length ? 'Sessões das últimas 24h com pelo menos um artigo visitado.' : 'Sem sessões com leitura de artigos nas últimas 24h.');
-      setText('articleJourneyViewsCount', totalViews.toLocaleString('pt-PT'));
-      setText('articleJourneyViewsMeta', totalViews ? 'Total de eventos em páginas de artigo no histórico recente.' : 'Sem eventos de leitura disponíveis.');
-      setText('articleJourneyUniqueArticlesCount', allArticles.size.toLocaleString('pt-PT'));
-      setText('articleJourneyUniqueArticlesMeta', allArticles.size ? 'Artigos diferentes visitados nas últimas 24h.' : 'A aguardar dados do histórico.');
-
-      const sessionsBody = document.getElementById('articleJourneySessionsBody');
-      if (sessionsBody) {
-        sessionsBody.innerHTML = '';
-
-        if (!rows.length) {
-          renderEmptyRow('articleJourneySessionsBody', 'Nenhuma sessão visitou artigos nas últimas 24 horas.', 5);
-        } else {
-          rows.forEach((row) => {
-            const tr = document.createElement('tr');
-
-            const sessionCell = document.createElement('td');
-            sessionCell.textContent = getSessionLabel(row.sessionId);
-            const sessionMeta = document.createElement('div');
-            sessionMeta.className = 'meta';
-            sessionMeta.textContent = row.lastTimestamp ? formatDateTime(row.lastTimestamp) : '-';
-            sessionCell.appendChild(sessionMeta);
-
-            const latestArticleCell = document.createElement('td');
-            latestArticleCell.textContent = row.latestArticleTitle;
-            const latestMeta = document.createElement('div');
-            latestMeta.className = 'meta';
-            latestMeta.textContent = row.latestArticlePath || '/';
-            latestArticleCell.appendChild(latestMeta);
-
-            const uniqueArticlesCell = document.createElement('td');
-            uniqueArticlesCell.textContent = row.uniqueArticleCount.toLocaleString('pt-PT');
-
-            const totalViewsCell = document.createElement('td');
-            totalViewsCell.textContent = row.totalArticleViews.toLocaleString('pt-PT');
-
-            const actionCell = document.createElement('td');
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'journey-link-btn';
-            button.textContent = 'Ver percurso';
-            button.addEventListener('click', () => {
-              const select = document.getElementById('articleJourneySessionSelect');
-              if (select) {
-                select.value = row.sessionId;
-              }
-              renderArticleJourneyDetail(row.sessionId);
-            });
-            actionCell.appendChild(button);
-
-            tr.appendChild(sessionCell);
-            tr.appendChild(latestArticleCell);
-            tr.appendChild(uniqueArticlesCell);
-            tr.appendChild(totalViewsCell);
-            tr.appendChild(actionCell);
-            sessionsBody.appendChild(tr);
-          });
-        }
-      }
-
-      const select = document.getElementById('articleJourneySessionSelect');
-      if (select) {
-        const previousValue = select.value;
-        select.innerHTML = '';
-
-        if (!rows.length) {
-          const option = document.createElement('option');
-          option.value = '';
-          option.textContent = 'Sem sessões com artigos';
-          select.appendChild(option);
-          select.disabled = true;
-          renderArticleJourneyDetail('');
-        } else {
-          select.disabled = false;
-          rows.forEach((row) => {
-            const option = document.createElement('option');
-            option.value = row.sessionId;
-            option.textContent = `${getSessionLabel(row.sessionId)} • ${row.uniqueArticleCount} artigo(s) únicos`;
-            select.appendChild(option);
-          });
-
-          select.value = rows.some((row) => row.sessionId === previousValue) ? previousValue : rows[0].sessionId;
-          renderArticleJourneyDetail(select.value);
-        }
-      }
+      setText('articlesStatus', `Top ${rows.length} de ${ids.size} artigos com atividade registada.`);
     }
 
-    function initArticleJourneyControls() {
-      const select = document.getElementById('articleJourneySessionSelect');
-      if (!select) return;
-      select.addEventListener('change', () => renderArticleJourneyDetail(select.value));
+    function isClickNoise(label) {
+      return CLICK_NOISE_PATTERNS.some((pattern) => pattern.test(label));
     }
 
-    function carregarComentariosRecentes() {
-      database.ref('comentarios').on('value', (snapshot) => {
-        const rows = [];
-
-        snapshot.forEach((noticiaSnap) => {
-          const noticiaId = noticiaSnap.key;
-          noticiaSnap.forEach((comentarioSnap) => {
-            const comentario = comentarioSnap.val() || {};
-            rows.push({
-              noticiaId,
-              nome: comentario.nome || 'Anónimo',
-              texto: comentario.texto || '',
-              timestamp: safeNumber(comentario.timestamp),
-              data: comentario.data || '',
-              tipo: 'Comentário'
-            });
-
-            const respostas = comentario.respostas || {};
-            Object.keys(respostas).forEach((replyId) => {
-              const resposta = respostas[replyId] || {};
-              rows.push({
-                noticiaId,
-                nome: resposta.nome || 'Anónimo',
-                texto: resposta.texto || '',
-                timestamp: safeNumber(resposta.timestamp),
-                data: resposta.data || '',
-                tipo: 'Resposta'
-              });
-
-              const nested = resposta.respostas || {};
-              Object.keys(nested).forEach((nestedId) => {
-                const nestedReply = nested[nestedId] || {};
-                rows.push({
-                  noticiaId,
-                  nome: nestedReply.nome || 'Anónimo',
-                  texto: nestedReply.texto || '',
-                  timestamp: safeNumber(nestedReply.timestamp),
-                  data: nestedReply.data || '',
-                  tipo: 'Resposta aninhada'
-                });
-              });
-            });
-          });
-        });
-
-        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        const limited = rows.slice(0, 80);
-        const countsByArticle = {};
-        rows.forEach((row) => {
-          countsByArticle[row.noticiaId] = (countsByArticle[row.noticiaId] || 0) + 1;
-        });
-        dashboardState.commentRows = rows;
-        dashboardState.commentCountsByArticle = countsByArticle;
-        renderSummaryOverview();
-
-        renderRecentTable('commentsRecentBody', limited, 'Sem comentários recentes.', (item) => {
-          const when = document.createElement('td');
-          when.textContent = item.timestamp ? formatDateTime(item.timestamp) : formatDateTime(item.data);
-
-          const news = document.createElement('td');
-          news.textContent = getNoticiaTitle(item.noticiaId);
-
-          const content = document.createElement('td');
-          const meta = document.createElement('div');
-          meta.className = 'meta';
-          meta.textContent = `${item.tipo} • ${item.nome}`;
-          const text = document.createElement('div');
-          text.textContent = item.texto;
-          content.appendChild(meta);
-          content.appendChild(text);
-
-          return [when, news, content];
-        });
-      }, (error) => {
-        console.error('Erro ao carregar comentários recentes:', error);
-      });
-    }
-
-    function carregarLikesRecentes() {
-      database.ref('likes').on('value', (snapshot) => {
-        const rows = [];
-
-        snapshot.forEach((noticiaSnap) => {
-          const noticiaId = noticiaSnap.key;
-          noticiaSnap.forEach((likeSnap) => {
-            const likeVal = likeSnap.val();
-            const timestamp = likeVal && typeof likeVal === 'object' ? safeNumber(likeVal.timestamp) : 0;
-            rows.push({
-              noticiaId,
-              source: likeSnap.key || 'utilizador',
-              timestamp
-            });
-          });
-        });
-
-        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        const limited = rows.slice(0, 80);
-        const countsByArticle = {};
-        rows.forEach((row) => {
-          countsByArticle[row.noticiaId] = (countsByArticle[row.noticiaId] || 0) + 1;
-        });
-        dashboardState.likeRows = rows;
-        dashboardState.likeCountsByArticle = countsByArticle;
-        renderSummaryOverview();
-
-        renderRecentTable('likesRecentBody', limited, 'Sem likes recentes.', (item) => {
-          const when = document.createElement('td');
-          when.textContent = item.timestamp ? formatDateTime(item.timestamp) : 'sem timestamp';
-
-          const news = document.createElement('td');
-          news.textContent = getNoticiaTitle(item.noticiaId);
-
-          const source = document.createElement('td');
-          source.textContent = item.source;
-
-          return [when, news, source];
-        });
-      }, (error) => {
-        console.error('Erro ao carregar likes recentes:', error);
-      });
-    }
-
-    function resetarEstatisticas() {
-      if (!confirm('⚠️ Confirmar reset completo das estatísticas?')) return;
-
-      Promise.all([
-        database.ref('site_stats').set({
-          total_visits: 0,
-          daily: {},
-          monthly: {},
-          hourly: {},
-          unique_total: 0,
-          unique_daily: {},
-          unique_monthly: {},
-          unique_hourly: {},
-          pages: {},
-          last_updated: new Date().toISOString()
-        }),
-        database.ref('site_unique_views').remove(),
-        database.ref('click_stats').remove()
-      ]).then(() => {
-        alert('✅ Estatísticas resetadas.');
-      }).catch((error) => {
-        alert(`❌ Erro ao resetar: ${error.message}`);
-      });
-    }
-
-    function initTabs() {
-      const buttons = Array.from(document.querySelectorAll('.tab-btn'));
-      const panels = Array.from(document.querySelectorAll('.tab-panel'));
-
-      buttons.forEach((button) => {
-        button.addEventListener('click', () => {
-          if (button.hidden) return;
-          const tab = button.dataset.tab;
-          buttons.forEach((item) => item.classList.remove('active'));
-          panels.forEach((panel) => panel.classList.remove('active'));
-          button.classList.add('active');
-          const target = document.getElementById(`tab-${tab}`);
-          if (target) target.classList.add('active');
-        });
-      });
-    }
-
-    function renderTopPaginas(pagesObj, articleReadsObj = latestArticleReads) {
-      const tbody = document.getElementById('paginasBody');
+    function renderClicks() {
+      const tbody = document.getElementById('clicksBody');
       if (!tbody) return;
-      tbody.innerHTML = '';
-      const entries = buildTopPageEntries(pagesObj, articleReadsObj)
+      const targets = (state.stats || {}).click_targets || {};
+      const grouped = new Map();
+
+      Object.values(targets).forEach((item) => {
+        const label = String((item && item.label) || '').replace(/\s+/g, ' ').trim();
+        if (!label || isClickNoise(label)) return;
+        const key = label.toLowerCase();
+        const current = grouped.get(key) || { label, count: 0 };
+        current.count += safeNumber(item.count);
+        grouped.set(key, current);
+      });
+
+      const entries = Array.from(grouped.values())
         .filter((entry) => entry.count > 0)
-        .slice(0, 40);
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 25);
 
       if (!entries.length) {
-        renderEmptyRow('paginasBody', 'Sem dados de páginas ou artigos.', 3);
+        renderEmptyRow('clicksBody', 'Sem cliques registados.', 3);
+        setText('clicksStatus', 'Sem dados.');
         return;
       }
 
-      entries.forEach((entry) => {
-        const tr = document.createElement('tr');
-
-        const destinationCell = document.createElement('td');
-        const titleLine = document.createElement('div');
-        titleLine.textContent = entry.label;
-        const metaLine = document.createElement('div');
-        metaLine.className = 'meta';
-        metaLine.textContent = entry.path;
-        destinationCell.appendChild(titleLine);
-        destinationCell.appendChild(metaLine);
-
-        const typeCell = document.createElement('td');
-        typeCell.textContent = entry.type;
-
-        const countCell = document.createElement('td');
-        countCell.textContent = entry.count.toLocaleString('pt-PT');
-
-        tr.appendChild(destinationCell);
-        tr.appendChild(typeCell);
-        tr.appendChild(countCell);
-        tbody.appendChild(tr);
-      });
-    }
-
-    function carregarMetricasArtigos() {
-      database.ref('article_reads').on('value', (snapshot) => {
-        latestArticleReads = snapshot.val() || {};
-        dashboardState.articleReads = latestArticleReads;
-        renderTopPaginas(undefined, latestArticleReads);
-        renderSummaryOverview();
-      }, (error) => {
-        console.error('Erro ao carregar métricas de artigos:', error);
-      });
-    }
-
-    function carregarTopCliques() {
-      const renderClickEntries = (data) => {
-        const tbody = document.getElementById('cliquesBody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        dashboardState.clickTargets = data || {};
-        renderSummaryOverview();
-
-        const entries = getClickEntries(data || {})
-          .slice(0, 50);
-
-        if (!entries.length) {
-          renderEmptyRow('cliquesBody', 'Sem dados de cliques ainda.', 2);
-          return;
-        }
-
-        entries.forEach((item) => {
-          const tr = document.createElement('tr');
-          const labelCell = document.createElement('td');
-          labelCell.textContent = item.label;
-          const countCell = document.createElement('td');
-          countCell.textContent = item.count.toLocaleString('pt-PT');
-          tr.appendChild(labelCell);
-          tr.appendChild(countCell);
-          tbody.appendChild(tr);
-        });
-      };
-
-      database.ref('site_stats/click_targets').on('value', (snapshot) => {
-        const primaryData = snapshot.val() || {};
-        if (Object.keys(primaryData).length > 0) {
-          renderClickEntries(primaryData);
-          return;
-        }
-
-        database.ref('click_stats/targets').on('value', (legacySnapshot) => {
-          renderClickEntries(legacySnapshot.val() || {});
-        }, (legacyError) => {
-          console.error('Erro ao carregar cliques (legacy):', legacyError);
-        });
-      }, (error) => {
-        console.error('Erro ao carregar cliques:', error);
-      });
-    }
-
-    function renderFontes(referrersObj) {
-      const tbody = document.getElementById('fontesBody');
-      if (!tbody) return;
+      const max = entries[0].count;
       tbody.innerHTML = '';
+      entries.forEach((entry) => {
+        const label = entry.label.length > 110 ? `${entry.label.slice(0, 110)}…` : entry.label;
+        appendRow(tbody, [makeCell(label), makeCell(formatNumber(entry.count), 'num'), makeBarCell(entry.count, max)]);
+      });
+      setText('clicksStatus', `${entries.length} elementos • cliques de likes e do painel admin excluídos.`);
+    }
 
-      const entries = getTrafficSourceEntries(referrersObj || {})
-        .slice(0, 30);
+    function formatReferrerLabel(key) {
+      const raw = String(key || '');
+      if (raw === 'direct') return 'Acesso direto';
+      if (raw === 'www_viciadocomenta_pt') return 'www.viciadocomenta.pt (interno)';
+      return raw.replace(/_/g, '.');
+    }
+
+    function renderReferrers() {
+      const tbody = document.getElementById('referrersBody');
+      if (!tbody) return;
+      const referrers = (state.stats || {}).referrers || {};
+      const entries = Object.entries(referrers)
+        .filter(([key]) => key !== '127_0_0_1')
+        .map(([key, value]) => ({ label: formatReferrerLabel(key), count: safeNumber(value) }))
+        .filter((entry) => entry.count > 0)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 25);
 
       if (!entries.length) {
-        renderEmptyRow('fontesBody', 'Sem dados de fontes ainda. A acumular nas próximas visitas.', 2);
+        renderEmptyRow('referrersBody', 'Sem fontes de tráfego registadas.', 3);
+        setText('referrersStatus', 'Sem dados.');
         return;
       }
 
+      const max = entries[0].count;
+      tbody.innerHTML = '';
       entries.forEach((entry) => {
-        const tr = document.createElement('tr');
-        const sourceCell = document.createElement('td');
-        sourceCell.textContent = entry.label;
-        const countCell = document.createElement('td');
-        countCell.textContent = entry.count.toLocaleString('pt-PT');
-        tr.appendChild(sourceCell);
-        tr.appendChild(countCell);
-        tbody.appendChild(tr);
+        appendRow(tbody, [makeCell(entry.label), makeCell(formatNumber(entry.count), 'num'), makeBarCell(entry.count, max)]);
       });
+      setText('referrersStatus', `Top ${entries.length} de ${Object.keys(referrers).length} origens registadas.`);
     }
 
-    // Extensão de carregarEstatisticas para também alimentar as tabs de páginas e fontes
-    function carregarEstatisticasCompleto() {
-      database.ref('site_stats').on('value', (snapshot) => {
-        const stats = snapshot.val() || {};
-        dashboardState.stats = stats;
-        const todayKey = formatLocalDateKey(new Date());
-
-        const dailyTotals = stats.daily || {};
-        const dailyUnique = stats.unique_daily || {};
-        hourlyTotalsByDate = stats.hourly || {};
-        hourlyUniqueByDate = stats.unique_hourly || {};
-
-        const hourlyAllMap = hourlyTotalsByDate[todayKey] || {};
-        const hourlyUniqueMap = hourlyUniqueByDate[todayKey] || {};
-
-        const sumFromHourly = renderHourlyRows(hourlyAllMap, hourlyUniqueMap);
-        const todayTotal = safeNumber(dailyTotals[todayKey]) || sumFromHourly;
-
-        setText('todayTotal', todayTotal.toLocaleString('pt-PT'));
-        setText('todayUnique', safeNumber(dailyUnique[todayKey]).toLocaleString('pt-PT'));
-        setText('allTotal', getReliableTotalVisits(stats).toLocaleString('pt-PT'));
-        setText('allUnique', safeNumber(stats.unique_total).toLocaleString('pt-PT'));
-        setText('lastUpdate', stats.last_updated ? new Date(stats.last_updated).toLocaleString('pt-PT') : '-');
-
-        const dailyUniqueEntries = Object.entries(dailyUnique).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
-        const dailyTotalEntries = Object.entries(dailyTotals).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 45);
-        const pastDayKeys = getPastDateKeys(todayKey, 5);
-        const selectedDay = updatePastDayOptions(pastDayKeys);
-
-        if (!selectedDay) {
-          renderEmptyRow('pastHourlyBody', 'Sem dados horários para dias anteriores.', 3);
-          setText('pastHourlyStatus', 'Sem dados disponíveis.');
-        } else {
-          renderPastHourlySelectedDay();
-        }
-
-        renderDailyTable('dailyUniqueBody', dailyUniqueEntries);
-        renderDailyTable('dailyTotalBody', dailyTotalEntries);
-        setText('hourlyStatus', `Atualizado em ${new Date().toLocaleTimeString('pt-PT')}.`);
-        setHidden('visitsHourlyPanel', sumFromHourly === 0 && todayTotal === 0);
-        setHidden('visitsPastHourlyPanel', !selectedDay);
-        setHidden('visitsDailyUniquePanel', dailyUniqueEntries.length === 0);
-        setHidden('visitsDailyTotalPanel', dailyTotalEntries.length === 0);
-
-        // Alimentar tabs adicionais
-        renderTopPaginas(stats.pages || {}, latestArticleReads);
-        renderFontes(stats.referrers || {});
-        renderSummaryOverview();
-      }, (error) => {
-        console.error('Erro ao carregar estatísticas:', error);
-        setText('hourlyStatus', 'Erro ao carregar dados do Firebase.');
-        setText('pastHourlyStatus', 'Erro ao carregar dados do Firebase.');
-      });
-    }
-
-    function renderHistoricoRows(filtro) {
-      const tbody = document.getElementById('historicoBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      const rawFilter = String(filtro || '').trim();
-      const numberFilter = /^\d+$/.test(rawFilter) ? Number(rawFilter) : null;
-      const sessions = rawFilter
-        ? _historicoSessions.filter((session) => {
-          if (!session.sessionId) return false;
-          if (numberFilter !== null) {
-            return getSessionNumber(session.sessionId) === numberFilter;
-          }
-          return session.sessionId.toLowerCase().includes(rawFilter.toLowerCase());
-        })
-        : _historicoSessions;
-
-      if (!sessions.length) {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = 3;
-        td.className = 'empty';
-        td.textContent = filtro ? 'Nenhuma entrada para esta sessão.' : 'Sem histórico ainda.';
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-        return;
-      }
-
-      sessions.forEach((session) => {
-        const tr = document.createElement('tr');
-
-        const whenCell = document.createElement('td');
-        whenCell.textContent = session.lastTimestamp ? formatDateTime(session.lastTimestamp) : '-';
-
-        const sessCell = document.createElement('td');
-        const toggleBtn = document.createElement('button');
-        toggleBtn.type = 'button';
-        toggleBtn.className = 'history-toggle';
-        toggleBtn.textContent = expandedHistorySessions.has(session.sessionId) ? '▾' : '▸';
-        toggleBtn.disabled = session.events.length <= 1;
-        toggleBtn.title = session.events.length > 1 ? 'Expandir/fechar logs da sessão' : 'Sessão com uma única atividade';
-        toggleBtn.addEventListener('click', () => {
-          if (expandedHistorySessions.has(session.sessionId)) {
-            expandedHistorySessions.delete(session.sessionId);
-          } else {
-            expandedHistorySessions.add(session.sessionId);
-          }
-          renderHistoricoRows((document.getElementById('historicoFiltro') || {}).value || '');
-        });
-
-        const summary = document.createElement('span');
-        summary.className = 'history-session-summary';
-        summary.textContent = getSessionLabel(session.sessionId);
-        sessCell.appendChild(toggleBtn);
-        sessCell.appendChild(summary);
-
-        const sessionMeta = document.createElement('div');
-        sessionMeta.className = 'meta';
-        sessionMeta.textContent = `${session.events.length} atividade(s) • ID real: ${session.sessionId || '-'}`;
-        sessCell.appendChild(sessionMeta);
-
-        const pageCell = document.createElement('td');
-        const pageTitle = document.createElement('div');
-        pageTitle.textContent = session.latestPage || '/';
-        const pageMeta = document.createElement('div');
-        pageMeta.className = 'meta';
-        pageMeta.textContent = session.events.length > 1
-          ? `Última página registada • ${session.events.length - 1} registo(s) adicional(is) disponíveis na sessão`
-          : 'Único registo da sessão nas últimas 24 horas';
-        pageCell.appendChild(pageTitle);
-        pageCell.appendChild(pageMeta);
-
-        tr.appendChild(whenCell);
-        tr.appendChild(sessCell);
-        tr.appendChild(pageCell);
-        tbody.appendChild(tr);
-
-        if (!expandedHistorySessions.has(session.sessionId)) {
-          return;
-        }
-
-        session.events.slice(1).forEach((event) => {
-          const detailRow = document.createElement('tr');
-          detailRow.className = 'history-detail-row';
-
-          const detailWhen = document.createElement('td');
-          detailWhen.textContent = event.timestamp ? formatDateTime(event.timestamp) : '-';
-
-          const detailSession = document.createElement('td');
-          detailSession.textContent = '↳ Continuação';
-
-          const detailPage = document.createElement('td');
-          detailPage.textContent = event.page || '/';
-
-          detailRow.appendChild(detailWhen);
-          detailRow.appendChild(detailSession);
-          detailRow.appendChild(detailPage);
-          tbody.appendChild(detailRow);
-        });
-      });
-    }
-
-    function renderActiveUsersRows(rows) {
-      const tbody = document.getElementById('activeUsersBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      if (!rows.length) {
-        renderEmptyRow('activeUsersBody', 'Sem utilizadores ativos neste momento.', 3);
-        return;
-      }
-
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-
-        const whenCell = document.createElement('td');
-        whenCell.textContent = row.timestamp ? formatDateTime(row.timestamp) : '-';
-
-        const sessionCell = document.createElement('td');
-        sessionCell.textContent = row.sessionId ? getSessionLabel(row.sessionId) : 'Ligação sem sessão';
-        if (row.sessionId) {
-          const meta = document.createElement('div');
-          meta.className = 'meta';
-          meta.textContent = row.sessionId;
-          sessionCell.appendChild(meta);
-        }
-
-        const pageCell = document.createElement('td');
-        pageCell.textContent = row.page || '/';
-
-        tr.appendChild(whenCell);
-        tr.appendChild(sessionCell);
-        tr.appendChild(pageCell);
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderHourlyHistoryRows(rows) {
-      const tbody = document.getElementById('historicoHourlyBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      if (!rows.length) {
-        renderEmptyRow('historicoHourlyBody', 'Sem histórico horário nas últimas 24 horas.', 3);
-        return;
-      }
-
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-
-        const hourCell = document.createElement('td');
-        hourCell.textContent = formatHourBucketLabel(row.bucketKey);
-
-        const totalCell = document.createElement('td');
-        totalCell.textContent = safeNumber(row.total).toLocaleString('pt-PT');
-
-        const uniqueCell = document.createElement('td');
-        uniqueCell.textContent = safeNumber(row.uniqueSessions).toLocaleString('pt-PT');
-
-        tr.appendChild(hourCell);
-        tr.appendChild(totalCell);
-        tr.appendChild(uniqueCell);
-        tbody.appendChild(tr);
-      });
-    }
-
-    function carregarUtilizadoresAtivos() {
+    function setupActiveUsersLive() {
       database.ref('active_users').on('value', (snapshot) => {
-        const rows = [];
-
-        snapshot.forEach((activeSnap) => {
-          const value = activeSnap.val() || {};
-          rows.push({
-            sessionId: value.sessionId || '',
+        const now = Date.now();
+        const liveRows = [];
+        snapshot.forEach((child) => {
+          const value = child.val() || {};
+          const timestamp = safeNumber(value.timestamp);
+          if (timestamp < now - ACTIVE_USER_LIVE_WINDOW_MS) return;
+          liveRows.push({
+            sessionId: String(value.sessionId || ''),
             page: value.page || '/',
-            timestamp: typeof value.timestamp === 'number' ? value.timestamp : 0,
-            connectionId: activeSnap.key || ''
+            timestamp
           });
         });
+        liveRows.sort((a, b) => b.timestamp - a.timestamp);
 
-        rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        const now = Date.now();
-        const liveRows = rows.filter((row) => (row.timestamp || 0) >= (now - ACTIVE_USER_LIVE_WINDOW_MS));
-        const staleRows = rows.filter((row) => (row.timestamp || 0) > 0 && (row.timestamp || 0) < (now - ACTIVE_USER_LIVE_WINDOW_MS));
-        const cleanupRows = rows.filter((row) => (row.timestamp || 0) > 0 && (row.timestamp || 0) < (now - ACTIVE_USER_STALE_CLEANUP_MS) && row.connectionId);
-        const uniqueSessions = new Set(liveRows.map((row) => row.sessionId || row.connectionId).filter(Boolean));
+        setText('cardActiveNow', formatNumber(liveRows.length));
+        setText('cardActiveNowMeta', `Sinal nos últimos 5 minutos • ${new Date().toLocaleTimeString('pt-PT')}`);
 
-        dashboardState.activeUsers = liveRows;
-        dashboardState.activeUsersUnique = uniqueSessions.size;
+        const tbody = document.getElementById('activeBody');
+        if (!tbody) return;
+        if (!liveRows.length) {
+          renderEmptyRow('activeBody', 'Sem atividade nos últimos 5 minutos.', 3);
+          setText('activeStatus', 'Sem utilizadores ativos de momento.');
+          return;
+        }
 
-        setText('historicoAtivosAgora', liveRows.length.toLocaleString('pt-PT'));
-        setText('historicoAtivosAgoraMeta', liveRows.length ? `Sinal nos últimos 5 minutos • atualizado em ${new Date().toLocaleTimeString('pt-PT')}.` : 'Sem presença ativa recente.');
-        setText('historicoSessoesAtivas', uniqueSessions.size.toLocaleString('pt-PT'));
-        setText('historicoSessoesAtivasMeta', uniqueSessions.size ? `${uniqueSessions.size.toLocaleString('pt-PT')} sessão(ões) com ligação aberta.` : 'Nenhuma sessão ativa detetada.');
-        setText(
-          'activeUsersStatus',
-          liveRows.length
-            ? `Atualizado em ${new Date().toLocaleTimeString('pt-PT')} • ${liveRows.length} ligação(ões) com sinal nos últimos 5 minutos.${staleRows.length ? ` ${staleRows.length} registo(s) antigo(s) ignorado(s).` : ''}`
-            : (staleRows.length ? `${staleRows.length} registo(s) antigo(s) ignorado(s); sem utilizadores ativos recentes.` : 'Sem utilizadores ativos neste momento.')
-        );
-
-        renderActiveUsersRows(liveRows);
-
-        cleanupRows.forEach((row) => {
-          if (!row.connectionId || activeUserCleanupInFlight.has(row.connectionId) || !auth || !isStatsAdminUser(auth.currentUser)) {
-            return;
-          }
-
-          activeUserCleanupInFlight.add(row.connectionId);
-          database.ref(`active_users/${row.connectionId}`).remove()
-            .catch((error) => {
-              console.error('Erro ao limpar registo antigo de active_users:', error);
-            })
-            .finally(() => {
-              activeUserCleanupInFlight.delete(row.connectionId);
-            });
+        tbody.innerHTML = '';
+        liveRows.forEach((row) => {
+          const minutes = Math.max(0, Math.round((now - row.timestamp) / 60000));
+          appendRow(tbody, [
+            makeCell(row.sessionId ? `sessão …${row.sessionId.slice(-6)}` : 'sem sessão'),
+            makeCell(String(row.page)),
+            makeCell(minutes <= 0 ? 'agora mesmo' : `há ${minutes} min`)
+          ]);
         });
-
-        updateDashboardVisibility();
+        setText('activeStatus', `${liveRows.length} ligação(ões) ativas • atualizado às ${new Date().toLocaleTimeString('pt-PT')}.`);
       }, (error) => {
         console.error('Erro ao carregar utilizadores ativos:', error);
-        setText('activeUsersStatus', 'Erro ao carregar utilizadores ativos.');
+        setText('activeStatus', 'Erro ao carregar utilizadores ativos.');
       });
     }
 
-    function carregarHistorico() {
-      database.ref('active_users_history').on('value', (snapshot) => {
-        const rows = [];
-        snapshot.forEach((sessionSnap) => {
-          const sessionKey = sessionSnap.key || '';
-          const sessionVal = sessionSnap.val() || {};
+    // ---------- Inicialização ----------
+    async function refreshData() {
+      const refreshBtn = document.getElementById('btnRefresh');
+      if (refreshBtn) {
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = '⏳ A atualizar...';
+      }
+      await Promise.all([carregarNoticiasMap(), loadAllData()]);
+      if (refreshBtn) {
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = '🔄 Atualizar dados';
+      }
+    }
 
-          // Formato novo: chave única por visita + campo sessionId
-          if (sessionVal.sessionId || sessionVal.page || sessionVal.timestamp) {
-            rows.push({
-              sessionId: sessionVal.sessionId || sessionKey.replace(/_\d+$/, ''),
-              page: sessionVal.page || '/',
-              timestamp: typeof sessionVal.timestamp === 'number' ? sessionVal.timestamp : 0
-            });
-          }
+    function initializeStatsDashboard() {
+      if (statsInitialized) return;
+      statsInitialized = true;
 
-          // Compatibilidade com formato intermédio (events por sessão)
-          const events = sessionVal.events || {};
-          Object.keys(events).forEach((eventId) => {
-            const eventVal = events[eventId] || {};
-            rows.push({
-              sessionId: sessionVal.sessionId || sessionKey,
-              page: eventVal.page || '/',
-              timestamp: typeof eventVal.timestamp === 'number' ? eventVal.timestamp : 0
-            });
-          });
-        });
+      const refreshBtn = document.getElementById('btnRefresh');
+      if (refreshBtn) refreshBtn.addEventListener('click', refreshData);
 
-        const cutoffTimestamp = Date.now() - (24 * 60 * 60 * 1000);
-        const recentRows = rows
-          .filter((row) => (row.timestamp || 0) >= cutoffTimestamp)
-          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-        rebuildSessionNumbering(recentRows);
-
-        const groupedSessions = new Map();
-        recentRows.forEach((row) => {
-          const sessionId = row.sessionId || 'sessao-desconhecida';
-          if (!groupedSessions.has(sessionId)) {
-            groupedSessions.set(sessionId, {
-              sessionId,
-              lastTimestamp: 0,
-              latestPage: '/',
-              events: []
-            });
-          }
-
-          groupedSessions.get(sessionId).events.push(row);
-        });
-
-        _historicoSessions = Array.from(groupedSessions.values())
-          .map((session) => {
-            session.events.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-            session.lastTimestamp = session.events[0] ? session.events[0].timestamp : 0;
-            session.latestPage = session.events[0] ? session.events[0].page : '/';
-            return session;
-          })
-          .sort((a, b) => (b.lastTimestamp || 0) - (a.lastTimestamp || 0));
-
-        dashboardState.historyRows = recentRows;
-        dashboardState.sessions = _historicoSessions;
-  dashboardState.articleJourneySessions = buildArticleJourneySessions(_historicoSessions);
-
-        const hourlyMap = new Map();
-        recentRows.forEach((row) => {
-          const bucketKey = getHourBucketKeyFromTimestamp(row.timestamp);
-          if (!bucketKey) {
-            return;
-          }
-
-          if (!hourlyMap.has(bucketKey)) {
-            hourlyMap.set(bucketKey, {
-              bucketKey,
-              total: 0,
-              sessionIds: new Set()
-            });
-          }
-
-          const bucket = hourlyMap.get(bucketKey);
-          bucket.total += 1;
-          if (row.sessionId) {
-            bucket.sessionIds.add(row.sessionId);
-          }
-        });
-
-        const hourlyRows = Array.from(hourlyMap.values())
-          .map((bucket) => ({
-            bucketKey: bucket.bucketKey,
-            total: bucket.total,
-            uniqueSessions: bucket.sessionIds.size
-          }))
-          .sort((a, b) => b.bucketKey.localeCompare(a.bucketKey))
-          .slice(0, 24);
-
-        dashboardState.activeUsersHourly = hourlyRows;
-
-        setText('historicoTotal', recentRows.length.toLocaleString('pt-PT'));
-        setText('historicoSessoes', _historicoSessions.length.toLocaleString('pt-PT'));
-
-        const filtro = (document.getElementById('historicoFiltro') || {}).value || '';
-        renderHistoricoRows(filtro);
-        renderHourlyHistoryRows(hourlyRows);
-        renderArticleJourneyTab();
-        renderSummaryOverview();
-        setText('historicoStatus', `Última atualização: ${new Date().toLocaleTimeString('pt-PT')} • ${recentRows.length} atividade(s) nas últimas 24h`);
-        setText('historicoHourlyStatus', hourlyRows.length ? `Últimas ${hourlyRows.length} hora(s) com atividade registada.` : 'Sem histórico horário disponível.');
-        updateDashboardVisibility();
-      }, (error) => {
-        console.error('Erro ao carregar histórico:', error);
-        setText('historicoStatus', 'Erro ao carregar dados.');
-        setText('historicoHourlyStatus', 'Erro ao carregar histórico horário.');
+      carregarNoticiasMap().finally(() => {
+        loadAllData();
       });
-
-      const filtroInput = document.getElementById('historicoFiltro');
-      if (filtroInput) {
-        filtroInput.addEventListener('input', () => renderHistoricoRows(filtroInput.value));
-      }
-      const clearBtn = document.getElementById('historicoClear');
-      if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-          if (filtroInput) filtroInput.value = '';
-          renderHistoricoRows('');
-        });
-      }
+      setupActiveUsersLive();
     }
 
     setStatsAccessState(false, 'Inicie sessão no painel admin para consultar as estatísticas.');
