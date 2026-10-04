@@ -2384,6 +2384,24 @@ footer {
                     </aside>
           </div>
   </article>
+
+  <section class="comentarios-section" id="comentariosSection" style="display: none;">
+    <h3>Comentários</h3>
+    <form class="comentario-form" id="comentarioForm">
+      <div class="form-group">
+        <label for="nomeComentario">Nome</label>
+        <input type="text" id="nomeComentario" name="nomeComentario" placeholder="O teu nome" maxlength="50" autocomplete="nickname" required>
+      </div>
+      <div class="form-group">
+        <label for="textoComentario">Comentário</label>
+        <textarea id="textoComentario" name="textoComentario" placeholder="Escreve o teu comentário..." rows="4" maxlength="1000" required></textarea>
+      </div>
+      <button type="submit" class="btn-enviar">Enviar comentário</button>
+    </form>
+    <div class="comentarios-lista" id="comentariosList">
+      <div class="comentarios-vazio">A carregar comentários...</div>
+    </div>
+  </section>
 </main>
 
 <footer>
@@ -4135,6 +4153,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Atualizar contador de likes
         updateLikeCount(noticiaIdResolvido);
 
+        // Secção de comentários
+        const secaoComentarios = document.getElementById('comentariosSection');
+        if (secaoComentarios) {
+          secaoComentarios.style.display = '';
+          carregarComentarios(noticiaIdResolvido);
+        }
+
         // Secção de artigos relacionados
         renderRelatedArticles(noticia, data.noticias || []);
 
@@ -4501,6 +4526,12 @@ function fallbackCopyLink(url, triggerEl) {
 }
 
 // Funções para gerenciar comentários com Firebase
+function decodeCommentEntities(value) {
+  return String(value || '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
 function carregarComentarios(noticiaId) {
   const comentariosList = document.getElementById('comentariosList');
   
@@ -4555,7 +4586,7 @@ function carregarComentarios(noticiaId) {
 
         const texto = document.createElement('div');
         texto.className = 'comentario-texto';
-        texto.textContent = comentario.texto || '';
+        texto.textContent = decodeCommentEntities(comentario.texto);
 
         const actions = document.createElement('div');
         actions.className = 'comentario-actions';
@@ -4606,7 +4637,7 @@ function carregarComentarios(noticiaId) {
 
           const respostaTexto = document.createElement('div');
           respostaTexto.className = 'resposta-texto';
-          respostaTexto.textContent = resposta.texto || '';
+          respostaTexto.textContent = decodeCommentEntities(resposta.texto);
 
           // Adicionar botão de responder também nas respostas
           const respostaActions = document.createElement('div');
@@ -4661,7 +4692,7 @@ function carregarComentarios(noticiaId) {
 
             const respostaAninhadaTexto = document.createElement('div');
             respostaAninhadaTexto.className = 'resposta-texto';
-            respostaAninhadaTexto.textContent = respostaAninhada.texto || '';
+            respostaAninhadaTexto.textContent = decodeCommentEntities(respostaAninhada.texto);
 
             respostaAninhadaItem.appendChild(respostaAninhadaAutor);
             respostaAninhadaItem.appendChild(respostaAninhadaData);
