@@ -307,35 +307,55 @@ async function registerVisitMetrics(db, visitorHash, countSessionVisit = true) {
     return;
   }
 
-  const uniqueVisitRef = db.ref(`site_unique_views/daily/${today}/${visitorHash}`);
-  let isUniqueForDay = false;
+  // site_unique_views tem leitura restrita a admins (o hash do visitante e
+  // derivado do IP e nao pode ser exposto). Transacoes exigem leitura previa e
+  // falhavam sempre com permission_denied; usamos set() condicionado por marcas
+  // locais por visitante.
+  const uniqueDayKey = `vc_unique_day_${visitorHash}`;
+  const uniqueSeenKey = `vc_unique_seen_${visitorHash}`;
+  let isUniqueForDay = true;
+  let isUniqueGlobal = true;
 
-  await uniqueVisitRef.transaction((currentValue) => {
-    if (currentValue) {
-      return currentValue;
-    }
-
+  try {
+    isUniqueForDay = localStorage.getItem(uniqueDayKey) !== today;
+    isUniqueGlobal = localStorage.getItem(uniqueSeenKey) !== '1';
+  } catch (_) {
     isUniqueForDay = true;
-    return {
-      timestamp: firebase.database.ServerValue.TIMESTAMP,
-      page: pagePath
-    };
-  });
+    isUniqueGlobal = true;
+  }
 
-  const uniqueAllRef = db.ref(`site_unique_views/all/${visitorHash}`);
-  let isUniqueGlobal = false;
-
-  await uniqueAllRef.transaction((currentValue) => {
-    if (currentValue) {
-      return currentValue;
+  try {
+    if (isUniqueForDay) {
+      await db.ref(`site_unique_views/daily/${today}/${visitorHash}`).set({
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        page: pagePath
+      });
     }
 
-    isUniqueGlobal = true;
-    return {
-      first_seen: firebase.database.ServerValue.TIMESTAMP,
-      last_page: pagePath
-    };
-  });
+    if (isUniqueGlobal) {
+      await db.ref(`site_unique_views/all/${visitorHash}`).set({
+        first_seen: firebase.database.ServerValue.TIMESTAMP,
+        last_page: pagePath
+      });
+    }
+  } catch (error) {
+    if (!isFirebasePermissionDenied(error)) {
+      throw error;
+    }
+
+    return;
+  }
+
+  try {
+    if (isUniqueForDay) {
+      localStorage.setItem(uniqueDayKey, today);
+    }
+    if (isUniqueGlobal) {
+      localStorage.setItem(uniqueSeenKey, '1');
+    }
+  } catch (_) {
+    // storage indisponivel: marcas locais nao persistem, sem impacto funcional
+  }
 
   if (!isUniqueForDay && !isUniqueGlobal) {
     return;
