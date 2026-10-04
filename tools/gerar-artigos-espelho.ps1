@@ -294,6 +294,36 @@ function Get-ArticleDateValue {
     return $null
 }
 
+function Get-EffectivePublicationDateValue {
+    param([object]$Noticia)
+
+    # O campo canónico é dataPublicacao; agendamentos gravados antes da sua
+    # introdução no painel ficaram apenas com scheduleDate (yyyy-MM-dd) + scheduleTime (HH:mm).
+    $dataPublicacao = if ($Noticia.PSObject.Properties.Name -contains 'dataPublicacao') { [string]$Noticia.dataPublicacao } else { '' }
+    $parsedDataPublicacao = Get-PublicationDateValue -DataStr $dataPublicacao
+    if ($parsedDataPublicacao) {
+        return $parsedDataPublicacao
+    }
+
+    $scheduleDate = if ($Noticia.PSObject.Properties.Name -contains 'scheduleDate') { [string]$Noticia.scheduleDate } else { '' }
+    $scheduleTime = if ($Noticia.PSObject.Properties.Name -contains 'scheduleTime') { [string]$Noticia.scheduleTime } else { '' }
+
+    if ($scheduleDate -match '^(\d{4})-(\d{2})-(\d{2})') {
+        # $Matches e reescrito por qualquer -match/-notmatch seguinte; guardar
+        # os grupos antes de testar a hora.
+        $scheduleYear = $Matches[1]
+        $scheduleMonth = $Matches[2]
+        $scheduleDay = $Matches[3]
+
+        if ($scheduleTime -notmatch '^\d{1,2}:\d{2}') {
+            $scheduleTime = '00:00'
+        }
+        return Get-PublicationDateValue -DataStr "$scheduleDay/$scheduleMonth/$scheduleYear $scheduleTime"
+    }
+
+    return $null
+}
+
 function Limit-Headline {
     param([string]$Text)
 
@@ -545,7 +575,7 @@ foreach ($item in $noticias) {
 }
 
 foreach ($noticia in $noticias) {
-    $publishDate = Get-PublicationDateValue -DataStr $noticia.dataPublicacao
+    $publishDate = Get-EffectivePublicationDateValue -Noticia $noticia
     $isPublished = (-not $publishDate) -or ($publishDate -le $now)
 
     $id = [string]$noticia.id
@@ -876,7 +906,10 @@ $sitemapLines += '</urlset>'
 
 $rssItems = New-Object System.Collections.Generic.List[string]
 foreach ($noticia in $noticias) {
-        $published = Get-ArticleDateValue -Noticia $noticia -PropertyNames @('dataPublicacao', 'data')
+        $published = Get-EffectivePublicationDateValue -Noticia $noticia
+        if (-not $published) {
+            $published = Get-ArticleDateValue -Noticia $noticia -PropertyNames @('data')
+        }
         if ($published -and $published -gt $now) { continue }
 
         $slug = Get-Slug -InputText ([string]$noticia.slug)

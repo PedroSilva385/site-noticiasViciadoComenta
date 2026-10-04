@@ -1758,6 +1758,32 @@ const schedulingFields = document.getElementById('schedulingFields');
 const noticiaScheduleDate = document.getElementById('noticiaScheduleDate');
 const noticiaScheduleTime = document.getElementById('noticiaScheduleTime');
 
+// O campo dataPublicacao ("DD/MM/YYYY HH:MM") e o que o site publico e o
+// gerador de artigos/sitemap consomem; scheduleDate/scheduleTime servem para
+// repor o formulario de agendamento ao editar.
+function formatScheduleToDataPublicacao(scheduleDate, scheduleTime) {
+  const dateMatch = String(scheduleDate || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const timeMatch = String(scheduleTime || '').trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!dateMatch || !timeMatch) {
+    return '';
+  }
+
+  const hora = timeMatch[1].padStart(2, '0');
+  return `${dateMatch[3]}/${dateMatch[2]}/${dateMatch[1]} ${hora}:${timeMatch[2]}`;
+}
+
+function extractScheduleFromDataPublicacao(dataPublicacao) {
+  const match = String(dataPublicacao || '').trim().match(/^(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{1,2}:\d{2}))?$/);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    date: `${match[3]}-${match[2]}-${match[1]}`,
+    time: match[4] || '00:00'
+  };
+}
+
 // Editor de conteúdo (Quill 2)
 const imageUploadInput = document.getElementById('imageUploadInput');
 const editorLayout = document.getElementById('editorLayout');
@@ -2860,12 +2886,17 @@ function selectNoticia(id) {
     noticiaVideo.value = noticia.video || '';
     noticiaSlug.value = noticia.slug || '';
     
-    // Load scheduling info if exists
-    if (noticia.scheduleDate && noticia.scheduleTime) {
+    // Load scheduling info if exists (scheduleDate/scheduleTime, ou dataPublicacao
+    // de artigos gravados antes de esses dois campos existirem)
+    const scheduleFromPublicacao = extractScheduleFromDataPublicacao(noticia.dataPublicacao);
+    const scheduleDateValue = noticia.scheduleDate || (scheduleFromPublicacao && scheduleFromPublicacao.date) || '';
+    const scheduleTimeValue = noticia.scheduleTime || (scheduleFromPublicacao && scheduleFromPublicacao.time) || '';
+
+    if (scheduleDateValue && scheduleTimeValue) {
       document.querySelector('input[name="scheduling"][value="scheduled"]').checked = true;
       schedulingFields.classList.add('active');
-      noticiaScheduleDate.value = noticia.scheduleDate;
-      noticiaScheduleTime.value = noticia.scheduleTime;
+      noticiaScheduleDate.value = scheduleDateValue;
+      noticiaScheduleTime.value = scheduleTimeValue;
     } else {
       document.querySelector('input[name="scheduling"][value="immediate"]').checked = true;
       schedulingFields.classList.remove('active');
@@ -3133,11 +3164,20 @@ async function saveNoticia() {
     slug: noticiaSlug.value.trim() || generateSlug(noticiaTitulo.value)
   };
 
-  // Add scheduling info if scheduled
+  // Agendamento: dataPublicacao e o campo consumido pelo site publico e pelo
+  // gerador de artigos/sitemap. Publicar imediatamente nao define nenhum destes
+  // campos, o que remove um agendamento anterior ao guardar.
   const schedulingMode = document.querySelector('input[name="scheduling"]:checked').value;
-  if (schedulingMode === 'scheduled' && noticiaScheduleDate.value && noticiaScheduleTime.value) {
+  if (schedulingMode === 'scheduled') {
+    const dataPublicacao = formatScheduleToDataPublicacao(noticiaScheduleDate.value, noticiaScheduleTime.value);
+    if (!dataPublicacao) {
+      showStatus('Escolhe uma data e hora validas para agendar (ou muda para "Publicar imediatamente").', 'error');
+      return;
+    }
+
     noticiaObj.scheduleDate = noticiaScheduleDate.value;
     noticiaObj.scheduleTime = noticiaScheduleTime.value;
+    noticiaObj.dataPublicacao = dataPublicacao;
   }
 
   try {

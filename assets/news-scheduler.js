@@ -1,6 +1,31 @@
 // ========== SISTEMA DE AGENDAMENTO DE NOTÍCIAS ==========
 
 /**
+ * Devolve a data de publicação efetiva da notícia em "DD/MM/YYYY HH:MM".
+ * O campo canónico é dataPublicacao; artigos gravados antes da sua introdução
+ * no painel ficaram apenas com scheduleDate (YYYY-MM-DD) + scheduleTime (HH:MM).
+ * @param {object} noticia - Notícia
+ * @returns {string|null} - Data de publicação ou null sem agendamento
+ */
+function obterDataPublicacaoEfetiva(noticia) {
+  if (!noticia || typeof noticia !== 'object') return null;
+
+  if (typeof noticia.dataPublicacao === 'string' && noticia.dataPublicacao.trim()) {
+    return noticia.dataPublicacao.trim();
+  }
+
+  const scheduleDate = typeof noticia.scheduleDate === 'string' ? noticia.scheduleDate.trim() : '';
+  const scheduleDateMatch = scheduleDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!scheduleDateMatch) return null;
+
+  const scheduleTime = typeof noticia.scheduleTime === 'string' && /^\d{1,2}:\d{2}$/.test(noticia.scheduleTime.trim())
+    ? noticia.scheduleTime.trim()
+    : '00:00';
+
+  return `${scheduleDateMatch[3]}/${scheduleDateMatch[2]}/${scheduleDateMatch[1]} ${scheduleTime}`;
+}
+
+/**
  * Filtra notícias baseado na data de publicação agendada
  * @param {Array} noticias - Array de notícias
  * @returns {Array} - Notícias que já podem ser publicadas
@@ -13,11 +38,12 @@ function filtrarNoticiasPublicadas(noticias) {
   return noticias.filter(noticia => {
     if (!noticia || typeof noticia !== 'object') return false;
 
-    // Se não tem dataPublicacao definida, mostra imediatamente
-    if (!noticia.dataPublicacao) return true;
+    // Se não tem agendamento definido, mostra imediatamente
+    const dataEfetiva = obterDataPublicacaoEfetiva(noticia);
+    if (!dataEfetiva) return true;
     
-    // Converte a dataPublicacao (formato: "DD/MM/YYYY HH:MM") para Date
-    const dataPublicacao = parseDataPublicacao(noticia.dataPublicacao);
+    // Converte a data de publicação (formato: "DD/MM/YYYY HH:MM") para Date
+    const dataPublicacao = parseDataPublicacao(dataEfetiva);
     
     // Se a data for inválida, mostra a notícia (fallback seguro)
     if (!dataPublicacao) return true;
@@ -124,8 +150,8 @@ function parseDataPublicacao(dataStr) {
  */
 function ordenarNoticiasPorData(noticias) {
   return noticias.sort((a, b) => {
-    const dataA = parseDataPublicacao(a.dataPublicacao || a.data);
-    const dataB = parseDataPublicacao(b.dataPublicacao || b.data);
+    const dataA = parseDataPublicacao(obterDataPublicacaoEfetiva(a) || (a && a.data));
+    const dataB = parseDataPublicacao(obterDataPublicacaoEfetiva(b) || (b && b.data));
     
     if (!dataA && !dataB) return 0;
     if (!dataA) return 1;
@@ -365,6 +391,7 @@ async function fetchNoticiasAgendadas(url) {
 
 // Exporta para uso global
 window.filtrarNoticiasPublicadas = filtrarNoticiasPublicadas;
+window.obterDataPublicacaoEfetiva = obterDataPublicacaoEfetiva;
 window.parseDataPublicacao = parseDataPublicacao;
 window.ordenarNoticiasPorData = ordenarNoticiasPorData;
 window.fetchNoticiasAgendadas = fetchNoticiasAgendadas;
