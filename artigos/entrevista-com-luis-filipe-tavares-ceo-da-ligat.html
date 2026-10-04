@@ -4380,10 +4380,19 @@ function incrementArticleReadCount(noticiaId, attempt = 0) {
     console.warn('Nao foi possivel obter Firebase database para leituras:', error);
   }
 
-  if (!window.database) {
-    if (attempt < 8) {
-      setTimeout(() => incrementArticleReadCount(noticiaId, attempt + 1), 350);
-    }
+  // A regra de article_reads exige auth != null. O render pode ocorrer antes de a
+  // sessao anonima estar pronta; sem espera a transacao dava permission_denied
+  // (warning na consola) e a contagem perdia-se. Aguardar auth com retry.
+  const uidAtual = window.currentUserId ? String(window.currentUserId) : '';
+  const temSessaoAutenticada = window.authReady === true && uidAtual.length > 0 && uidAtual.indexOf('temp_') !== 0;
+  const semAuthPossivel = window.authFailed === true && !temSessaoAutenticada;
+
+  if ((!window.database || !temSessaoAutenticada) && !semAuthPossivel && attempt < 24) {
+    setTimeout(() => incrementArticleReadCount(noticiaId, attempt + 1), 350);
+    return;
+  }
+
+  if (!window.database || !temSessaoAutenticada) {
     return;
   }
 
