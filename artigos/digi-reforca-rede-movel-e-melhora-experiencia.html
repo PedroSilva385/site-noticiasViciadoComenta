@@ -434,27 +434,6 @@ main {
   gap: 6px;
 }
 
-.artigo-quality-meta {
-  margin-top: 14px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.artigo-quality-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: #eef5ff;
-  border: 1px solid #d5e6ff;
-  color: #1e3a8a;
-  font-size: 0.84em;
-  font-weight: 600;
-}
-
-
 .artigo-conteudo {
   font-size: 1.2em;
   line-height: 1.9;
@@ -537,12 +516,6 @@ main {
   gap: 6px;
   color: #0066cc;
   font-weight: 600;
-}
-
-body.dark .artigo-quality-pill {
-  background: rgba(30, 64, 175, 0.2);
-  border-color: rgba(96, 165, 250, 0.35);
-  color: #bfdbfe;
 }
 
 
@@ -2537,26 +2510,6 @@ function escapeHtmlText(value) {
   return div.innerHTML;
 }
 
-function buildArticleQualityBlocks(noticia) {
-  const autor = String(noticia?.autor || 'Redacao Viciado Comenta').trim();
-  const atualizadoEm = [
-    noticia?.dataAtualizacao,
-    noticia?.dataPublicacao,
-    noticia?.updatedAt,
-    noticia?.atualizadoEm,
-    noticia?.data
-  ].find((value) => typeof value === 'string' && value.trim()) || '';
-
-  return {
-    qualityMetaHtml: `
-      <div class="artigo-quality-meta">
-        <span class="artigo-quality-pill">Autor: ${escapeHtmlText(autor)}</span>
-        <span class="artigo-quality-pill">Atualizado em: ${escapeHtmlText(atualizadoEm || 'Data editorial')}</span>
-      </div>
-    `
-  };
-}
-
 function buildArticleTrustBox(noticia) {
   const categoria = escapeHtmlText(String(noticia?.categoria || 'Atualidade').trim() || 'Atualidade');
   const hasSourcesInBody = /fontes consultadas\s*:/i.test(`${noticia?.resumo || ''} ${noticia?.conteudo || ''}`);
@@ -4041,14 +3994,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const numeroPalavras = conteudoCompleto.trim().split(/\s+/).length;
         const tempoLeitura = Math.max(1, Math.ceil(numeroPalavras / 200));
         const tempoTexto = tempoLeitura === 1 ? '1 min' : `${tempoLeitura} min`;
-        const qualityBlocks = buildArticleQualityBlocks(noticia);
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
             <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
-              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong>${autorHtml}</strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
+              <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
             </div>
           </aside>
         `;
@@ -4058,11 +4010,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="artigo-categoria">${categoriaHtml}</span>
             <h1 class="artigo-titulo">${tituloHtml}</h1>
             <div class="artigo-meta">
-              <span>${dataHtml}</span>
-              <span>${autorHtml}</span>
+              <span>📅 ${dataHtml}</span>
+              <span>✏️ <a href="autor/pedro-silva.html">${autorHtml}</a></span>
               <span class="tempo-leitura">⏱️ ${tempoTexto} de leitura</span>
             </div>
-            ${qualityBlocks.qualityMetaHtml}
           </div>
           <div class="artigo-conteudo">
             <p><strong>${resumoHtml}</strong></p>

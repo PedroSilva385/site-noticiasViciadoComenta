@@ -119,10 +119,26 @@ body.dark .btn-secondary{background:#0f172a;border-color:rgba(96,165,250,.2);col
   .btn{justify-content:center;min-height:44px;width:100%;}
   footer{padding:20px 12px;font-size:.85em;}
 }
+.author-articles{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.author-article{display:block;padding:14px 16px;border:1px solid rgba(0,102,204,.15);border-radius:12px;background:rgba(255,255,255,.75);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s;}
+.author-article:hover{border-color:#0066cc;box-shadow:0 8px 18px rgba(0,102,204,.12);transform:translateY(-1px);}
+.author-article-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:.8em;color:#5a6b7f;font-weight:600;margin-bottom:4px;}
+.author-article-titulo{display:block;font-family:'Outfit',sans-serif;font-size:1.05em;font-weight:600;color:#10213a;line-height:1.4;}
+.author-article-resumo{display:block;margin-top:6px;font-size:.92em;color:#334155;}
+body.dark .author-article{background:rgba(15,23,42,.72);border-color:#1f2937;}
+body.dark .author-article:hover{border-color:#60a5fa;}
+body.dark .author-article-meta{color:#94a3b8;}
+body.dark .author-article-titulo{color:#f3f4f6;}
+body.dark .author-article-resumo{color:#cbd5e1;}
 </style>
   <link rel="stylesheet" href="../assets/consent-banner.css">
   <link rel="stylesheet" href="../assets/site-shell.css?v=20260926">
   <script src="../assets/site-shell.js?v=20260926" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" defer></script>
+  <script src="../assets/firebase-config.js?v=20260504-3" defer></script>
+  <script src="../assets/news-scheduler.js?v=20261004-agendamento" defer></script>
 </head>
 <body>
 
@@ -148,6 +164,12 @@ body.dark .btn-secondary{background:#0f172a;border-color:rgba(96,165,250,.2);col
       <a class="btn btn-primary" href="../todas-noticias.html"><i class="fas fa-newspaper"></i> Ver todos os artigos</a>
       <a class="btn btn-secondary" href="../index.html"><i class="fas fa-arrow-left"></i> Voltar ao VICIADO COMENTA</a>
     </div>
+  </section>
+
+  <section class="card">
+    <h2>Artigos publicados</h2>
+    <p id="autorArtigosEstado">A carregar artigos…</p>
+    <div id="autorArtigosLista" class="author-articles" hidden></div>
   </section>
 </main>
 
@@ -179,6 +201,121 @@ body.dark .btn-secondary{background:#0f172a;border-color:rgba(96,165,250,.2);col
   </div>
   <div class="footer-copy">© 2026 Viciado Comenta. Todos os direitos reservados.</div>
 </footer>
+
+<script>
+(function () {
+  var AUTOR_NOME = 'Pedro Silva';
+
+  function slugifyTitulo(titulo) {
+    if (!titulo || typeof titulo !== 'string') return '';
+    return titulo
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/-{2,}/g, '-');
+  }
+
+  function getArticleSlug(noticia) {
+    if (noticia && typeof noticia.slug === 'string' && noticia.slug.trim()) {
+      return slugifyTitulo(noticia.slug.trim());
+    }
+    return slugifyTitulo((noticia && noticia.titulo) || '');
+  }
+
+  function parseDataPublicacao(valor) {
+    var match = String(valor || '').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!match) return 0;
+    return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1])).getTime() || 0;
+  }
+
+  function normalizarNomeAutor(valor) {
+    var nome = String(valor || '').trim();
+    return nome || AUTOR_NOME;
+  }
+
+  function filtrarArtigosDoAutor(noticias) {
+    return (Array.isArray(noticias) ? noticias : [])
+      .filter(function (noticia) {
+        return noticia && normalizarNomeAutor(noticia.autor) === AUTOR_NOME;
+      })
+      .sort(function (a, b) {
+        return parseDataPublicacao(b.data) - parseDataPublicacao(a.data);
+      });
+  }
+
+  function criarCardArtigo(noticia) {
+    var card = document.createElement('a');
+    card.className = 'author-article';
+    card.href = '../artigos/' + encodeURIComponent(getArticleSlug(noticia)) + '.html';
+
+    var meta = document.createElement('span');
+    meta.className = 'author-article-meta';
+    var categoria = document.createElement('span');
+    categoria.textContent = String(noticia.categoria || 'Atualidade');
+    var data = document.createElement('span');
+    data.textContent = String(noticia.data || '');
+    meta.appendChild(categoria);
+    if (data.textContent) {
+      meta.appendChild(data);
+    }
+
+    var titulo = document.createElement('span');
+    titulo.className = 'author-article-titulo';
+    titulo.textContent = String(noticia.titulo || 'Artigo');
+
+    card.appendChild(meta);
+    card.appendChild(titulo);
+
+    var resumo = String(noticia.resumo || '').trim();
+    if (resumo) {
+      var resumoEl = document.createElement('span');
+      resumoEl.className = 'author-article-resumo';
+      resumoEl.textContent = resumo;
+      card.appendChild(resumoEl);
+    }
+
+    return card;
+  }
+
+  function init() {
+    var lista = document.getElementById('autorArtigosLista');
+    var estado = document.getElementById('autorArtigosEstado');
+    if (!lista || !estado) return;
+
+    if (typeof window.fetchNoticiasAgendadas !== 'function') {
+      estado.textContent = 'Não foi possível carregar os artigos. Tente novamente mais tarde.';
+      return;
+    }
+
+    window.fetchNoticiasAgendadas()
+      .then(function (data) {
+        var artigos = filtrarArtigosDoAutor(data && data.noticias);
+        if (artigos.length === 0) {
+          estado.textContent = 'Ainda não há artigos publicados.';
+          return;
+        }
+
+        estado.textContent = artigos.length === 1 ? '1 artigo publicado:' : artigos.length + ' artigos publicados:';
+        artigos.forEach(function (noticia) {
+          lista.appendChild(criarCardArtigo(noticia));
+        });
+        lista.hidden = false;
+      })
+      .catch(function (erro) {
+        console.error('Erro ao carregar artigos do autor:', erro);
+        estado.textContent = 'Não foi possível carregar os artigos. Tente novamente mais tarde.';
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 
 </body>
 </html>
