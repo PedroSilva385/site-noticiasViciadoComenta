@@ -254,6 +254,9 @@
               "timestamp": {
                 ".validate": "!newData.exists() || (newData.isNumber() && newData.val() > 0 && newData.val() <= now + 300000)"
               },
+              "parentId": {
+                ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0 && newData.val().length <= 128 && newData.val() != $respostaId)"
+              },
               "respostas": {
                 ".read": true,
                 "$respostaAninhadaId": {

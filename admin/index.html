@@ -521,6 +521,85 @@ body {
   cursor: wait;
 }
 
+.btn-reply-comment {
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  color: #4338ca;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-reply-comment:hover {
+  background: #e0e7ff;
+}
+
+.comment-reply-form {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.comment-reply-form.active {
+  display: flex;
+}
+
+.comment-reply-form input,
+.comment-reply-form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  background: white;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.comment-reply-form textarea {
+  resize: vertical;
+  min-height: 56px;
+}
+
+.comment-reply-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-send-reply {
+  border: none;
+  background: #4f46e5;
+  color: white;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-send-reply:hover {
+  background: #4338ca;
+}
+
+.btn-send-reply:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.comment-reply-form-hint {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
 .comment-replies {
   display: flex;
   flex-direction: column;
@@ -1396,7 +1475,7 @@ button {
           <div class="push-stats-header">
             <div>
               <h3 id="commentsStatsHeading">Moderação de Comentários</h3>
-              <p>Os comentários de todos os artigos, do mais recente para o mais antigo. Apagar é imediato e não pode ser revertido.</p>
+              <p>Os comentários de todos os artigos, do mais recente para o mais antigo. Podes responder a qualquer nível da conversa e apagar comentários; as alterações são imediatas e não podem ser revertidas.</p>
             </div>
             <button type="button" class="btn-inline" id="btnReloadComments">Atualizar comentários</button>
           </div>
@@ -1953,9 +2032,20 @@ async function loadPushSubscriptionsStats(forceReload) {
 
 // ===== MODERACAO DE COMENTARIOS =====
 // Estrutura em /comentarios: { noticiaId: { comentarioId: { nome, texto, data, timestamp, uid, respostas } } }.
-// As respostas podem aninhar-se (respostas/{id}/respostas/{id}) ate 3 niveis, como no site.
+// As respostas vivem todas em respostas/{id} (formato plano). O campo opcional parentId aponta para a
+// resposta-mae; sem parentId e uma resposta direta ao comentario. O formato antigo aninhado
+// (respostas/{id}/respostas/{id}) continua a ser lido, mostrado e apagavel.
 const COMMENTS_DB_PATH = 'comentarios';
+const COMMENTS_ADMIN_NAME_KEY = 'vc-admin-comment-name';
 let commentsModerationRequestId = 0;
+
+function getCommentsAdminName() {
+  try {
+    return String(localStorage.getItem(COMMENTS_ADMIN_NAME_KEY) || '').trim();
+  } catch (_) {
+    return '';
+  }
+}
 let commentsModerationItems = [];
 let commentsModerationArticles = null;
 
@@ -2061,21 +2151,121 @@ function formatCommentTimestamp(item) {
   return 'Sem data';
 }
 
-function renderCommentRepliesHtml(respostas, basePath, nivel) {
-  if (!respostas || typeof respostas !== 'object') return '';
+// Reconstroi a arvore de respostas (formato plano com parentId ou formato antigo
+// aninhado) e calcula o path real de cada no, para que apagar continue a funcionar.
+function buildCommentRepliesView(respostas, basePath) {
+  const porId = new Map();
+  const nos = [];
 
-  const ordenadas = Object.entries(respostas)
-    .filter(([, resposta]) => resposta && typeof resposta === 'object')
-    .sort((a, b) => Number(a[1].timestamp || 0) - Number(b[1].timestamp || 0));
+  const registar = (id, dados, parentIdHerdado, nodePath) => {
+    if (!id || porId.has(id)) return;
+    const parentIdExplicito = (typeof dados.parentId === 'string' && dados.parentId.trim()) ? dados.parentId.trim() : null;
+    const no = {
+      id: id,
+      parentId: parentIdExplicito || parentIdHerdado || null,
+      path: nodePath,
+      nome: dados.nome || '',
+      texto: dados.texto || '',
+      data: dados.data || '',
+      timestamp: Number(dados.timestamp) || 0,
+      filhos: []
+    };
+    nos.push(no);
+    porId.set(id, no);
+  };
 
-  if (!ordenadas.length) return '';
+  const percorrer = (obj, parentId, parentPath) => {
+    Object.keys(obj || {}).forEach((key) => {
+      const dados = obj[key];
+      if (!dados || typeof dados !== 'object') return;
+      const nodePath = parentPath ? `${parentPath}/respostas/${key}` : `${basePath}/respostas/${key}`;
+      registar(key, dados, parentId, nodePath);
+      if (dados.respostas && typeof dados.respostas === 'object') {
+        percorrer(dados.respostas, key, nodePath);
+      }
+    });
+  };
+  percorrer(respostas, null, null);
 
-  const html = ordenadas.map(([replyId, resposta]) => {
-    const path = `${basePath}/respostas/${replyId}`;
-    const nome = escapeHtml(resposta.nome || 'Anónimo');
-    const data = escapeHtml(formatCommentTimestamp(resposta));
-    const texto = escapeHtml(decodeCommentEntitiesAdmin(resposta.texto));
-    const nested = renderCommentRepliesHtml(resposta.respostas, path, nivel + 1);
+  const raizes = [];
+  nos.forEach((no) => {
+    if (no.parentId && no.parentId !== no.id && porId.has(no.parentId)) {
+      const pai = porId.get(no.parentId);
+      no._pai = pai;
+      pai.filhos.push(no);
+    } else {
+      no.parentId = null;
+      raizes.push(no);
+    }
+  });
+
+  // Seguranca: se os parentIds formarem ciclos, promove os nos presos a raizes.
+  const alcancaveis = new Set();
+  const marcar = (no) => {
+    if (alcancaveis.has(no)) return;
+    alcancaveis.add(no);
+    no.filhos.forEach(marcar);
+  };
+  raizes.forEach(marcar);
+
+  nos.forEach((no) => {
+    if (alcancaveis.has(no)) return;
+    if (no._pai) {
+      const idx = no._pai.filhos.indexOf(no);
+      if (idx >= 0) no._pai.filhos.splice(idx, 1);
+      no._pai = null;
+    }
+    raizes.push(no);
+    marcar(no);
+  });
+
+  const ordenar = (lista) => {
+    lista.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    lista.forEach((no) => ordenar(no.filhos));
+  };
+  ordenar(raizes);
+
+  nos.forEach((no) => { delete no._pai; });
+
+  return raizes;
+}
+
+function renderCommentReplyForm(contexto) {
+  const articleId = escapeHtml(String(contexto.articleId || ''));
+  const commentId = escapeHtml(String(contexto.commentId || ''));
+  const parentId = escapeHtml(String(contexto.parentId || ''));
+  const nomeGuardado = escapeHtml(contexto.nomeGuardado || '');
+  return `
+    <div class="comment-reply-form">
+      <input type="text" class="comment-reply-name" placeholder="Nome a mostrar (ex.: Administracao)" maxlength="100" value="${nomeGuardado}">
+      <textarea class="comment-reply-text" placeholder="Escrever resposta..." maxlength="5000" rows="2"></textarea>
+      <div class="comment-reply-form-actions">
+        <button type="button" class="btn-send-reply" data-article-id="${articleId}" data-comment-id="${commentId}" data-parent-id="${parentId}">Enviar resposta</button>
+        <span class="comment-reply-form-hint">A resposta fica visivel no site imediatamente.</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderCommentRepliesHtml(respostas, basePath, contexto) {
+  const raizes = buildCommentRepliesView(respostas, basePath);
+  return renderCommentReplyCards(raizes, contexto);
+}
+
+function renderCommentReplyCards(nos, contexto) {
+  if (!nos || !nos.length) return '';
+
+  return nos.map((no) => {
+    const nome = escapeHtml(no.nome || 'Anónimo');
+    const data = escapeHtml(formatCommentTimestamp(no));
+    const texto = escapeHtml(decodeCommentEntitiesAdmin(no.texto));
+    const nested = renderCommentReplyCards(no.filhos, contexto);
+    const replyForm = contexto ? renderCommentReplyForm({
+      articleId: contexto.articleId,
+      commentId: contexto.commentId,
+      parentId: no.id,
+      nomeGuardado: getCommentsAdminName()
+    }) : '';
 
     return `
       <div class="reply-card">
@@ -2085,14 +2275,14 @@ function renderCommentRepliesHtml(respostas, basePath, nivel) {
         </div>
         <div class="comment-text">${texto}</div>
         <div class="comment-actions-row">
-          <button type="button" class="btn-delete-comment" data-comment-path="${escapeHtml(path)}" data-comment-label="${nome} (resposta)">🗑️ Apagar resposta</button>
+          <button type="button" class="btn-reply-comment" data-reply-toggle="1">💬 Responder</button>
+          <button type="button" class="btn-delete-comment" data-comment-path="${escapeHtml(no.path)}" data-comment-label="${nome} (resposta)">🗑️ Apagar resposta</button>
         </div>
+        ${replyForm}
         ${nested ? `<div class="comment-replies">${nested}</div>` : ''}
       </div>
     `;
   }).join('');
-
-  return html;
 }
 
 function getCommentsModerationView() {
@@ -2130,7 +2320,14 @@ function renderCommentsModeration() {
     const artigoTitulo = escapeHtml(commentsArticleLabel(item.articleId));
     const totalRespostas = countCommentTree(item.respostas);
     const linkArtigo = `../artigos.html?id=${encodeURIComponent(item.articleId)}`;
-    const respostasHtml = renderCommentRepliesHtml(item.respostas, item.path, 0);
+    const contextoRespostas = { articleId: item.articleId, commentId: item.id };
+    const respostasHtml = renderCommentRepliesHtml(item.respostas, item.path, contextoRespostas);
+    const replyFormHtml = renderCommentReplyForm({
+      articleId: item.articleId,
+      commentId: item.id,
+      parentId: '',
+      nomeGuardado: getCommentsAdminName()
+    });
 
     return `
       <article class="comment-card">
@@ -2142,8 +2339,10 @@ function renderCommentsModeration() {
         <div class="comment-text">${texto}</div>
         <div class="comment-actions-row">
           ${totalRespostas ? `<span class="comment-replies-badge">${totalRespostas} resposta${totalRespostas === 1 ? '' : 's'}</span>` : ''}
+          <button type="button" class="btn-reply-comment" data-reply-toggle="1">💬 Responder</button>
           <button type="button" class="btn-delete-comment" data-comment-path="${escapeHtml(item.path)}" data-comment-label="${nome}">🗑️ Apagar comentário</button>
         </div>
+        ${replyFormHtml}
         ${respostasHtml ? `<div class="comment-replies">${respostasHtml}</div>` : ''}
       </article>
     `;
@@ -2263,6 +2462,78 @@ async function deleteCommentFromModeration(path, label) {
   }
 }
 
+async function submitCommentReply(sendBtn) {
+  if (!db || !sendBtn) return;
+
+  if (isLocalStudioSession()) {
+    setCommentsStatus('Responder a comentários só está disponível no painel autenticado com Firebase.', 'error');
+    return;
+  }
+
+  if (!currentUser || !currentUser.uid) {
+    setCommentsStatus('Sessão de administrador indisponível. Inicia sessão novamente.', 'error');
+    return;
+  }
+
+  const articleId = sendBtn.getAttribute('data-article-id') || '';
+  const commentId = sendBtn.getAttribute('data-comment-id') || '';
+  const parentId = sendBtn.getAttribute('data-parent-id') || '';
+  const card = sendBtn.closest('.comment-card, .reply-card');
+  const form = card ? card.querySelector('.comment-reply-form') : null;
+
+  if (!articleId || !commentId || !form) return;
+
+  const nomeInput = form.querySelector('.comment-reply-name');
+  const textoInput = form.querySelector('.comment-reply-text');
+  const nomeBruto = nomeInput ? nomeInput.value.trim() : '';
+  const textoBruto = textoInput ? textoInput.value.trim() : '';
+
+  if (!textoBruto) {
+    setCommentsStatus('Escreve o texto da resposta antes de enviar.', 'error');
+    return;
+  }
+
+  // Sanitização local: nome sem tags e texto com < > escapados (igual ao site).
+  const nomeSanitizado = (nomeBruto.replace(/[<>"'`]/g, '').trim() || 'Administração').slice(0, 100);
+  const textoSanitizado = textoBruto.replace(/</g, '&lt;').replace(/>/g, '&gt;').slice(0, 5000);
+
+  const agora = new Date();
+  const payload = {
+    uid: currentUser.uid,
+    nome: nomeSanitizado,
+    texto: textoSanitizado,
+    data: agora.toLocaleDateString('pt-PT') + ' às ' + agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }),
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+  };
+
+  if (parentId) {
+    payload.parentId = parentId;
+  }
+
+  sendBtn.disabled = true;
+  setCommentsStatus('A enviar resposta...', null);
+
+  try {
+    await db.ref(`${COMMENTS_DB_PATH}/${articleId}/${commentId}/respostas`).push(payload);
+    try {
+      localStorage.setItem(COMMENTS_ADMIN_NAME_KEY, nomeSanitizado);
+    } catch (_) {}
+
+    const recarregou = await loadCommentsModeration();
+    setCommentsStatus(
+      recarregou ? 'Resposta enviada com sucesso.' : 'Resposta enviada, mas a lista não pôde ser atualizada.',
+      recarregou ? 'success' : 'error'
+    );
+  } catch (error) {
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para responder. Confirma que a conta está na lista de administradores (admins) do Realtime Database.'
+      : (error && error.message ? error.message : 'Erro ao enviar a resposta.');
+    setCommentsStatus(message, 'error');
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
 commentsSearch.addEventListener('input', () => {
   commentsFilterState.search = commentsSearch.value;
   renderCommentsModeration();
@@ -2279,6 +2550,20 @@ commentsSort.addEventListener('change', () => {
 });
 
 commentsList.addEventListener('click', (event) => {
+  const toggleBtn = event.target.closest('[data-reply-toggle]');
+  if (toggleBtn) {
+    const card = toggleBtn.closest('.comment-card, .reply-card');
+    const form = card ? card.querySelector('.comment-reply-form') : null;
+    if (form) form.classList.toggle('active');
+    return;
+  }
+
+  const sendBtn = event.target.closest('.btn-send-reply');
+  if (sendBtn) {
+    void submitCommentReply(sendBtn);
+    return;
+  }
+
   const botao = event.target.closest('.btn-delete-comment');
   if (!botao) return;
 
