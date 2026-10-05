@@ -408,6 +408,148 @@ body {
   color: #475569;
 }
 
+/* ===== Moderação de comentários ===== */
+.comments-toolbar {
+  display: grid;
+  grid-template-columns: minmax(200px, 2fr) minmax(160px, 1fr) minmax(160px, 1fr);
+  gap: 10px;
+}
+
+.comments-toolbar input[type="search"],
+.comments-toolbar select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  background: white;
+  color: #111827;
+}
+
+.comments-toolbar input[type="search"]:focus,
+.comments-toolbar select:focus {
+  outline: 2px solid #c7d2fe;
+  border-color: #4f46e5;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.comment-author {
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.92rem;
+}
+
+.comment-date {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.comment-article-link {
+  margin-left: auto;
+  color: #4f46e5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.comment-article-link:hover {
+  text-decoration: underline;
+}
+
+.comment-text {
+  color: #1f2937;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.comment-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.comment-replies-badge {
+  color: #6b7280;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.btn-delete-comment {
+  margin-left: auto;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-delete-comment:hover {
+  background: #fee2e2;
+}
+
+.btn-delete-comment:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.comment-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 3px solid #e5e7eb;
+  padding-left: 12px;
+  margin-left: 4px;
+}
+
+.reply-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.comments-empty {
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 24px 12px;
+  border: 1px dashed #d1d5db;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
 .sidebar {
   width: 280px;
   background: white;
@@ -954,6 +1096,10 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .comments-toolbar {
+    grid-template-columns: 1fr;
+  }
+
   .form-row, .form-row-3 {
     grid-template-columns: 1fr;
   }
@@ -1027,6 +1173,7 @@ button {
         <button type="button" class="admin-tab-btn" id="adminTabVideos" role="tab" aria-selected="false" aria-controls="videosView">🎙️ Podcast e Vídeos</button>
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
         <button type="button" class="admin-tab-btn" id="adminTabPushSubscriptions" role="tab" aria-selected="false" aria-controls="pushView">🔔 Subscrições Push</button>
+        <button type="button" class="admin-tab-btn" id="adminTabComments" role="tab" aria-selected="false" aria-controls="commentsView">💬 Comentários</button>
       </div>
       <button type="button" class="btn-publish-site" id="btnPublishSite" title="Executa o deploy manual via servidor local">🚀 Publicar site</button>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
@@ -1242,6 +1389,52 @@ button {
     </div>
   </div>
 
+  <div class="panel-view" id="commentsView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <section class="push-stats-panel" aria-labelledby="commentsStatsHeading">
+          <div class="push-stats-header">
+            <div>
+              <h3 id="commentsStatsHeading">Moderação de Comentários</h3>
+              <p>Os comentários de todos os artigos, do mais recente para o mais antigo. Apagar é imediato e não pode ser revertido.</p>
+            </div>
+            <button type="button" class="btn-inline" id="btnReloadComments">Atualizar comentários</button>
+          </div>
+          <div class="push-stats-grid">
+            <article class="push-stat-card">
+              <div class="label">Comentários</div>
+              <div class="value" id="commentsTotalCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Respostas</div>
+              <div class="value" id="commentsRepliesCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Artigos com comentários</div>
+              <div class="value" id="commentsArticlesCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Últimos 7 dias</div>
+              <div class="value" id="commentsRecentCount">0</div>
+            </article>
+          </div>
+          <div class="comments-toolbar">
+            <input type="search" id="commentsSearch" placeholder="Pesquisar por nome ou texto..." aria-label="Pesquisar comentários">
+            <select id="commentsArticleFilter" aria-label="Filtrar por artigo">
+              <option value="">Todos os artigos</option>
+            </select>
+            <select id="commentsSort" aria-label="Ordenação dos comentários">
+              <option value="recent">Mais recentes primeiro</option>
+              <option value="old">Mais antigos primeiro</option>
+            </select>
+          </div>
+          <div class="push-stats-status" id="commentsStatus">A carregar comentários...</div>
+          <div class="comments-list" id="commentsList"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <div class="panel-view" id="videosView" aria-hidden="true">
     <div class="container" style="padding-top: 0;">
       <div class="stats-shell">
@@ -1401,10 +1594,22 @@ const adminTabNoticias = document.getElementById('adminTabNoticias');
 const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
 const adminTabPushSubscriptions = document.getElementById('adminTabPushSubscriptions');
+const adminTabComments = document.getElementById('adminTabComments');
 const newsView = document.getElementById('newsView');
 const videosView = document.getElementById('videosView');
 const statsView = document.getElementById('statsView');
 const pushView = document.getElementById('pushView');
+const commentsView = document.getElementById('commentsView');
+const commentsTotalCount = document.getElementById('commentsTotalCount');
+const commentsRepliesCount = document.getElementById('commentsRepliesCount');
+const commentsArticlesCount = document.getElementById('commentsArticlesCount');
+const commentsRecentCount = document.getElementById('commentsRecentCount');
+const commentsSearch = document.getElementById('commentsSearch');
+const commentsArticleFilter = document.getElementById('commentsArticleFilter');
+const commentsSort = document.getElementById('commentsSort');
+const commentsStatus = document.getElementById('commentsStatus');
+const commentsList = document.getElementById('commentsList');
+const btnReloadComments = document.getElementById('btnReloadComments');
 const videosStudioFrame = document.getElementById('videosStudioFrame');
 const statsFrame = document.getElementById('statsFrame');
 const btnReloadVideosStudio = document.getElementById('btnReloadVideosStudio');
@@ -1556,26 +1761,35 @@ function setAdminView(viewName) {
   const showVideos = viewName === 'videos';
   const showStats = viewName === 'estatisticas';
   const showPushSubscriptions = viewName === 'push-subscriptions';
+  const showComments = viewName === 'comentarios';
 
   adminTabNoticias.classList.toggle('active', showNoticias);
   adminTabVideos.classList.toggle('active', showVideos);
   adminTabEstatisticas.classList.toggle('active', showStats);
   adminTabPushSubscriptions.classList.toggle('active', showPushSubscriptions);
+  adminTabComments.classList.toggle('active', showComments);
   adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
   adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
   adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
   adminTabPushSubscriptions.setAttribute('aria-selected', showPushSubscriptions ? 'true' : 'false');
+  adminTabComments.setAttribute('aria-selected', showComments ? 'true' : 'false');
 
   newsView.classList.toggle('active', showNoticias);
   videosView.classList.toggle('active', showVideos);
   statsView.classList.toggle('active', showStats);
   pushView.classList.toggle('active', showPushSubscriptions);
+  commentsView.classList.toggle('active', showComments);
   videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
   pushView.setAttribute('aria-hidden', showPushSubscriptions ? 'false' : 'true');
+  commentsView.setAttribute('aria-hidden', showComments ? 'false' : 'true');
 
   if (showPushSubscriptions) {
     loadPushSubscriptionsStats();
+  }
+
+  if (showComments) {
+    void loadCommentsModeration();
   }
 }
 
@@ -1593,6 +1807,14 @@ adminTabEstatisticas.addEventListener('click', () => {
 
 adminTabPushSubscriptions.addEventListener('click', () => {
   setAdminView('push-subscriptions');
+});
+
+adminTabComments.addEventListener('click', () => {
+  setAdminView('comentarios');
+});
+
+btnReloadComments.addEventListener('click', () => {
+  void loadCommentsModeration();
 });
 
 btnReloadVideosStudio.addEventListener('click', () => {
@@ -1728,6 +1950,342 @@ async function loadPushSubscriptionsStats(forceReload) {
     setPushStatsStatus(message, 'error');
   }
 }
+
+// ===== MODERACAO DE COMENTARIOS =====
+// Estrutura em /comentarios: { noticiaId: { comentarioId: { nome, texto, data, timestamp, uid, respostas } } }.
+// As respostas podem aninhar-se (respostas/{id}/respostas/{id}) ate 3 niveis, como no site.
+const COMMENTS_DB_PATH = 'comentarios';
+let commentsModerationRequestId = 0;
+let commentsModerationItems = [];
+let commentsModerationArticles = null;
+
+const commentsFilterState = {
+  search: '',
+  articleId: '',
+  sort: 'recent'
+};
+
+function normalizeCommentsSearchText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function decodeCommentEntitiesAdmin(value) {
+  return String(value || '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function countCommentTree(respostas) {
+  if (!respostas || typeof respostas !== 'object') return 0;
+  return Object.values(respostas).reduce((acc, resposta) => {
+    if (!resposta || typeof resposta !== 'object') return acc;
+    return acc + 1 + countCommentTree(resposta.respostas);
+  }, 0);
+}
+
+function flattenCommentsForModeration(comentariosPorArtigo) {
+  const items = [];
+
+  for (const [articleId, comentarios] of Object.entries(comentariosPorArtigo || {})) {
+    if (!comentarios || typeof comentarios !== 'object') continue;
+
+    for (const [commentId, comentario] of Object.entries(comentarios)) {
+      if (!comentario || typeof comentario !== 'object') continue;
+
+      items.push({
+        articleId: String(articleId),
+        id: commentId,
+        path: `${COMMENTS_DB_PATH}/${articleId}/${commentId}`,
+        nome: comentario.nome || '',
+        texto: comentario.texto || '',
+        data: comentario.data || '',
+        timestamp: Number(comentario.timestamp || 0),
+        respostas: comentario.respostas || null
+      });
+    }
+  }
+
+  return items;
+}
+
+async function loadCommentsModerationArticles() {
+  if (commentsModerationArticles) return commentsModerationArticles;
+
+  const mapa = {};
+  try {
+    const snapshot = await db.ref('noticias').once('value');
+    const raw = snapshot.val();
+    const lista = Array.isArray(raw) ? raw : Object.values(raw || {});
+    for (const noticia of lista) {
+      if (!noticia || typeof noticia !== 'object') continue;
+      if (noticia.id === undefined || noticia.id === null) continue;
+      mapa[String(noticia.id)] = {
+        titulo: String(noticia.titulo || '').trim(),
+        slug: String(noticia.slug || '').trim()
+      };
+    }
+  } catch (error) {
+    console.warn('Não foi possível carregar os títulos das notícias para a moderação:', error);
+  }
+
+  commentsModerationArticles = mapa;
+  return mapa;
+}
+
+function setCommentsStatus(message, tone) {
+  if (!commentsStatus) return;
+  commentsStatus.textContent = message;
+  commentsStatus.className = 'push-stats-status';
+  if (tone) {
+    commentsStatus.classList.add(tone);
+  }
+}
+
+function commentsArticleLabel(articleId) {
+  const info = commentsModerationArticles && commentsModerationArticles[String(articleId)];
+  const titulo = info && info.titulo ? info.titulo : '';
+  return titulo || `Artigo #${articleId}`;
+}
+
+function formatCommentTimestamp(item) {
+  const dataOriginal = String(item.data || '').trim();
+  if (dataOriginal) return dataOriginal;
+  if (Number(item.timestamp) > 0) {
+    try {
+      return new Date(Number(item.timestamp)).toLocaleString('pt-PT');
+    } catch (_) {}
+  }
+  return 'Sem data';
+}
+
+function renderCommentRepliesHtml(respostas, basePath, nivel) {
+  if (!respostas || typeof respostas !== 'object') return '';
+
+  const ordenadas = Object.entries(respostas)
+    .filter(([, resposta]) => resposta && typeof resposta === 'object')
+    .sort((a, b) => Number(a[1].timestamp || 0) - Number(b[1].timestamp || 0));
+
+  if (!ordenadas.length) return '';
+
+  const html = ordenadas.map(([replyId, resposta]) => {
+    const path = `${basePath}/respostas/${replyId}`;
+    const nome = escapeHtml(resposta.nome || 'Anónimo');
+    const data = escapeHtml(formatCommentTimestamp(resposta));
+    const texto = escapeHtml(decodeCommentEntitiesAdmin(resposta.texto));
+    const nested = renderCommentRepliesHtml(resposta.respostas, path, nivel + 1);
+
+    return `
+      <div class="reply-card">
+        <div class="comment-head">
+          <span class="comment-author">${nome}</span>
+          <span class="comment-date">${data}</span>
+        </div>
+        <div class="comment-text">${texto}</div>
+        <div class="comment-actions-row">
+          <button type="button" class="btn-delete-comment" data-comment-path="${escapeHtml(path)}" data-comment-label="${nome} (resposta)">🗑️ Apagar resposta</button>
+        </div>
+        ${nested ? `<div class="comment-replies">${nested}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return html;
+}
+
+function getCommentsModerationView() {
+  const search = normalizeCommentsSearchText(commentsFilterState.search.trim());
+  const articleId = commentsFilterState.articleId;
+
+  const items = commentsModerationItems.filter((item) => {
+    if (articleId && String(item.articleId) !== String(articleId)) return false;
+    if (!search) return true;
+    const haystack = normalizeCommentsSearchText(`${item.nome} ${decodeCommentEntitiesAdmin(item.texto)}`);
+    return haystack.includes(search);
+  });
+
+  return items.sort((a, b) => (commentsFilterState.sort === 'old'
+    ? a.timestamp - b.timestamp
+    : b.timestamp - a.timestamp));
+}
+
+function renderCommentsModeration() {
+  if (!commentsList) return;
+
+  const items = getCommentsModerationView();
+
+  if (!items.length) {
+    commentsList.innerHTML = commentsModerationItems.length
+      ? '<div class="comments-empty">Nenhum comentário corresponde aos filtros escolhidos.</div>'
+      : '<div class="comments-empty">Ainda não existem comentários no site.</div>';
+    return;
+  }
+
+  commentsList.innerHTML = items.map((item) => {
+    const nome = escapeHtml(item.nome || 'Anónimo');
+    const data = escapeHtml(formatCommentTimestamp(item));
+    const texto = escapeHtml(decodeCommentEntitiesAdmin(item.texto));
+    const artigoTitulo = escapeHtml(commentsArticleLabel(item.articleId));
+    const totalRespostas = countCommentTree(item.respostas);
+    const linkArtigo = `../artigos.html?id=${encodeURIComponent(item.articleId)}`;
+    const respostasHtml = renderCommentRepliesHtml(item.respostas, item.path, 0);
+
+    return `
+      <article class="comment-card">
+        <div class="comment-head">
+          <span class="comment-author">${nome}</span>
+          <span class="comment-date">${data}</span>
+          <a class="comment-article-link" href="${linkArtigo}" target="_blank" rel="noopener noreferrer">${artigoTitulo} ↗</a>
+        </div>
+        <div class="comment-text">${texto}</div>
+        <div class="comment-actions-row">
+          ${totalRespostas ? `<span class="comment-replies-badge">${totalRespostas} resposta${totalRespostas === 1 ? '' : 's'}</span>` : ''}
+          <button type="button" class="btn-delete-comment" data-comment-path="${escapeHtml(item.path)}" data-comment-label="${nome}">🗑️ Apagar comentário</button>
+        </div>
+        ${respostasHtml ? `<div class="comment-replies">${respostasHtml}</div>` : ''}
+      </article>
+    `;
+  }).join('');
+}
+
+function updateCommentsStats() {
+  const total = commentsModerationItems.length;
+  const respostas = commentsModerationItems.reduce((acc, item) => acc + countCommentTree(item.respostas), 0);
+  const artigos = new Set(commentsModerationItems.map((item) => String(item.articleId))).size;
+  const limite = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const recentes = commentsModerationItems.filter((item) => item.timestamp >= limite).length;
+
+  if (commentsTotalCount) commentsTotalCount.textContent = String(total);
+  if (commentsRepliesCount) commentsRepliesCount.textContent = String(respostas);
+  if (commentsArticlesCount) commentsArticlesCount.textContent = String(artigos);
+  if (commentsRecentCount) commentsRecentCount.textContent = String(recentes);
+}
+
+function renderCommentsArticleFilterOptions() {
+  if (!commentsArticleFilter) return;
+
+  const contagem = new Map();
+  for (const item of commentsModerationItems) {
+    const key = String(item.articleId);
+    contagem.set(key, (contagem.get(key) || 0) + 1);
+  }
+
+  const opcoes = Array.from(contagem.entries())
+    .map(([articleId, total]) => ({
+      articleId,
+      total,
+      label: commentsArticleLabel(articleId)
+    }))
+    .sort((a, b) => b.total - a.total || a.label.localeCompare(b.label, 'pt'));
+
+  commentsArticleFilter.innerHTML = ['<option value="">Todos os artigos</option>']
+    .concat(opcoes.map((opcao) => `<option value="${escapeHtml(opcao.articleId)}">${escapeHtml(opcao.label)} (${opcao.total})</option>`))
+    .join('');
+
+  if (commentsFilterState.articleId && contagem.has(String(commentsFilterState.articleId))) {
+    commentsArticleFilter.value = String(commentsFilterState.articleId);
+  } else {
+    commentsFilterState.articleId = '';
+    commentsArticleFilter.value = '';
+  }
+}
+
+async function loadCommentsModeration() {
+  if (!commentsList || !commentsStatus) return false;
+
+  if (isLocalStudioSession()) {
+    setCommentsStatus('A moderação de comentários só está disponível no painel autenticado com Firebase.', 'error');
+    return false;
+  }
+
+  if (!db) {
+    setCommentsStatus('Base de dados indisponível.', 'error');
+    return false;
+  }
+
+  const requestId = ++commentsModerationRequestId;
+  setCommentsStatus('A carregar comentários...', null);
+
+  try {
+    const snapshot = await db.ref(COMMENTS_DB_PATH).once('value');
+    await loadCommentsModerationArticles();
+
+    if (commentsModerationRequestId !== requestId) return false;
+
+    const comentariosPorArtigo = snapshot.val() || {};
+    commentsModerationItems = flattenCommentsForModeration(comentariosPorArtigo);
+
+    updateCommentsStats();
+    renderCommentsArticleFilterOptions();
+    renderCommentsModeration();
+
+    const totalRespostas = commentsModerationItems.reduce((acc, item) => acc + countCommentTree(item.respostas), 0);
+    setCommentsStatus(`Comentários carregados: ${commentsModerationItems.length} comentário(s) e ${totalRespostas} resposta(s).`, 'success');
+    return true;
+  } catch (error) {
+    if (commentsModerationRequestId !== requestId) return false;
+
+    commentsModerationItems = [];
+    updateCommentsStats();
+    renderCommentsArticleFilterOptions();
+    renderCommentsModeration();
+
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para ler comentários. Confirma que esta conta está na lista de administradores (admins) do Realtime Database.'
+      : (error && error.message ? error.message : 'Erro ao carregar os comentários.');
+    setCommentsStatus(message, 'error');
+    return false;
+  }
+}
+
+async function deleteCommentFromModeration(path, label) {
+  if (!db || !path) return;
+
+  const confirmado = window.confirm(`Apagar "${label}"? Esta ação é imediata e não pode ser revertida.`);
+  if (!confirmado) return;
+
+  setCommentsStatus('A apagar comentário...', null);
+
+  try {
+    await db.ref(path).remove();
+    const recarregou = await loadCommentsModeration();
+    setCommentsStatus(
+      recarregou ? 'Comentário apagado com sucesso.' : 'Comentário apagado, mas a lista não pôde ser atualizada.',
+      recarregou ? 'success' : 'error'
+    );
+  } catch (error) {
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para apagar este comentário. Confirma que a conta está na lista de administradores (admins).'
+      : (error && error.message ? error.message : 'Erro ao apagar o comentário.');
+    setCommentsStatus(message, 'error');
+  }
+}
+
+commentsSearch.addEventListener('input', () => {
+  commentsFilterState.search = commentsSearch.value;
+  renderCommentsModeration();
+});
+
+commentsArticleFilter.addEventListener('change', () => {
+  commentsFilterState.articleId = commentsArticleFilter.value;
+  renderCommentsModeration();
+});
+
+commentsSort.addEventListener('change', () => {
+  commentsFilterState.sort = commentsSort.value === 'old' ? 'old' : 'recent';
+  renderCommentsModeration();
+});
+
+commentsList.addEventListener('click', (event) => {
+  const botao = event.target.closest('.btn-delete-comment');
+  if (!botao) return;
+
+  const path = botao.getAttribute('data-comment-path') || '';
+  const label = botao.getAttribute('data-comment-label') || 'este comentário';
+  void deleteCommentFromModeration(path, label);
+});
 
 try {
   const rememberedEmail = localStorage.getItem(AUTH_LAST_EMAIL_KEY);
