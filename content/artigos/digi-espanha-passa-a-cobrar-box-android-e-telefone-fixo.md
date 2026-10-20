@@ -29,6 +29,8 @@ Os equipamentos que passam a ser pagos são:
 -   **Box Android Deco 4K:** 1,50 €/mês
 -   **Telefone Fixo:** 0,50 €/mês
 
+![1](/assets/imagens/digiespanha.png)
+
 ### **Vai fazer diferença na imagem da marca?**
 
 É sabido que nenhuma operadora consegue manter os preços inalterados para sempre. O contexto atual do mercado tem pressionado seriamente as margens de lucro de todo o setor, sobretudo no que toca ao aumento dos custos com equipamentos, logística e energia.
