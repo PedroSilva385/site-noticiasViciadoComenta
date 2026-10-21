@@ -623,6 +623,224 @@ body.dark .date-sort-select option {
   color: #e5e7eb;
 }
 
+/* GRELHA DE ARTIGOS POR CATEGORIA */
+.cat-section {
+  margin-bottom: 44px;
+}
+
+.cat-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(0, 102, 204, 0.15);
+}
+
+.cat-section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #0f2350;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cat-section-title .cat-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0066cc, #0052a3);
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.cat-section-count {
+  font-size: 0.82em;
+  font-weight: 700;
+  color: #5a6b7f;
+  background: rgba(0, 102, 204, 0.08);
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.cat-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e0e8f5;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 102, 204, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.cat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 102, 204, 0.14);
+  border-color: rgba(0, 102, 204, 0.35);
+}
+
+.cat-card-thumb {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #e3f2fd;
+  overflow: hidden;
+}
+
+.cat-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.cat-card:hover .cat-card-thumb img {
+  transform: scale(1.05);
+}
+
+.cat-card-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-card-play i {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 102, 204, 0.85);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+}
+
+.cat-card-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.cat-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #5a6b7f;
+}
+
+.cat-card-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 102, 204, 0.1);
+  color: #0052a3;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cat-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.12em;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1a1f3a;
+  margin: 0;
+}
+
+.cat-card-resumo {
+  font-size: 0.9em;
+  color: #5a6b7f;
+  line-height: 1.55;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cat-card-more {
+  margin-top: auto;
+  color: #0066cc;
+  font-weight: 700;
+  font-size: 0.88em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-card-more:hover {
+  text-decoration: underline;
+}
+
+.cat-section-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.cat-section-more {
+  border: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0066cc, #0052a3);
+  font-weight: 700;
+  font-size: 0.9em;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.16);
+}
+
+.cat-section-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 102, 204, 0.26);
+}
+
+.cat-section-more[hidden] {
+  display: none;
+}
+
+.filter-btn-count {
+  opacity: 0.7;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Dark mode - grelha de categorias */
+body.dark .cat-section-header { border-bottom-color: rgba(96, 165, 250, 0.25); }
+body.dark .cat-section-title { color: #f3f4f6 !important; }
+body.dark .cat-section-count { background: rgba(96, 165, 250, 0.15); color: #a8c5ff !important; }
+body.dark .cat-card { background: #0f1a2e; border-color: #1f2937; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
+body.dark .cat-card:hover { border-color: #0ea5e9; }
+body.dark .cat-card-title { color: #f3f4f6 !important; }
+body.dark .cat-card-resumo { color: #b6c2d2 !important; }
+body.dark .cat-card-meta { color: #94a3b8 !important; }
+body.dark .cat-card-badge { background: rgba(96, 165, 250, 0.18); color: #93c5fd !important; }
+body.dark .cat-card-more { color: #60a5fa !important; }
+body.dark .cat-card-thumb { background: #111827; }
+body.dark .cat-section-more { background: linear-gradient(135deg, #0ea5e9, #0369a1); color: #ffffff !important; }
+
 /* FOOTER */
 footer {
   background: #1a1f3a;
@@ -1073,9 +1291,8 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="filter-section">
     <div class="filter-row">
       <span class="filter-label">Filtrar por categoria:</span>
-      <button class="filter-btn active" data-categoria="todas">Todas</button>
-      <button class="filter-btn" data-categoria="DIGI">DIGI</button>
-      <button class="filter-btn" data-categoria="Telecom">Telecom</button>
+      <button class="filter-btn active" data-categoria="todas">Todas <span class="filter-btn-count"></span></button>
+      <span id="dynamicCategoryFilters" class="filter-dynamic" style="display:contents;"></span>
     </div>
     <div class="filter-row">
       <span class="filter-label">Ordenar por data:</span>
@@ -1141,9 +1358,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
   </div>
-  <div class="noticias-more-wrap">
-    <button id="noticiasLoadMore" class="noticias-more-btn" type="button" style="display:none;">Ver mais</button>
-  </div>
 
   <section style="max-width:980px;margin:32px auto 28px;padding:24px;border-radius:18px;background:rgba(255,255,255,0.94);box-shadow:0 12px 30px rgba(0,102,204,0.10);border:1px solid rgba(0,102,204,0.08);">
     <h3 style="margin:0 0 12px;font-family:'Outfit',sans-serif;font-size:1.45em;color:#0f2350;">Arquivo editorial do VICIADO COMENTA</h3>
@@ -1186,9 +1400,11 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 // Carregar todas as notícias
 let todasAsNoticias = [];
-const ARTICLES_BATCH_SIZE = 4;
-let artigosVisiveis = ARTICLES_BATCH_SIZE;
+const CATEGORY_INITIAL = 6;
+const CATEGORY_STEP = 6;
 let noticiasFiltradasAtuais = [];
+let categoriaAtiva = 'todas';
+const categoriaVisiveis = {};
 
 function slugifyTitulo(titulo) {
   if (!titulo || typeof titulo !== 'string') return '';
@@ -1262,16 +1478,10 @@ function buildArticleUrl(noticia) {
 
 fetchNoticiasAgendadas()
   .then(data => {
-    // Ordenar por data descrescente
-    const parseDate = (str) => {
-      if (!str) return 0;
-      const [dia, mes, ano] = str.split('/').map(Number);
-      return new Date(ano, mes - 1, dia).getTime();
-    };
-    
-    todasAsNoticias = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
-    
-    // Renderizar todas as notícias inicialmente
+    todasAsNoticias = [...(data.noticias || [])].sort((a, b) => parseDataArtigo(b.data) - parseDataArtigo(a.data));
+
+    // Construir filtros de categoria dinâmicos + renderizar por categoria
+    construirFiltrosCategoria(todasAsNoticias);
     renderizarNoticias(todasAsNoticias, true);
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
@@ -1284,148 +1494,202 @@ fetchNoticiasAgendadas()
         pollIntervalMs: 120000
       });
     }
-    
-    // Adicionar event listeners aos botões de filtro
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Remover classe active de todos os botões
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        // Adicionar classe active ao botão clicado
-        btn.classList.add('active');
-        
-        aplicarFiltros();
-      });
-    });
-    
-    // Adicionar event listener para ordenação por data
-    document.getElementById('dateSort').addEventListener('change', () => {
-      aplicarFiltros();
-    });
 
-    const noticiasLoadMore = document.getElementById('noticiasLoadMore');
-    if (noticiasLoadMore) {
-      noticiasLoadMore.addEventListener('click', () => {
-        artigosVisiveis += ARTICLES_BATCH_SIZE;
-        renderizarNoticias(noticiasFiltradasAtuais, false);
-      });
+    // Ordenação por data
+    const dateSort = document.getElementById('dateSort');
+    if (dateSort) {
+      dateSort.addEventListener('change', () => aplicarFiltros());
     }
   })
   .catch(err => console.error('Erro ao carregar notícias:', err));
 
-// Função para aplicar filtros de categoria e ordenação
-function aplicarFiltros() {
-  const categoriaAtiva = document.querySelector('.filter-btn.active').getAttribute('data-categoria');
-  const ordenacao = document.getElementById('dateSort').value;
-  
-  let noticiasFiltrares = todasAsNoticias;
-  
-  // Filtrar por categoria
-  if (categoriaAtiva !== 'todas') {
-    noticiasFiltrares = noticiasFiltrares.filter(n => n.categoria === categoriaAtiva);
-  }
-  
-  // Ordenar por data
-  const parseDate = (str) => {
-    if (!str) return 0;
-    const [dia, mes, ano] = str.split('/').map(Number);
-    return new Date(ano, mes - 1, dia).getTime();
-  };
-  
-  noticiasFiltrares = [...noticiasFiltrares].sort((a, b) => {
-    if (ordenacao === 'desc') {
-      return parseDate(b.data) - parseDate(a.data);
-    } else {
-      return parseDate(a.data) - parseDate(b.data);
-    }
-  });
-  
-  renderizarNoticias(noticiasFiltrares, true);
+// Selecionar um botão de categoria
+function selecionarCategoria(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  aplicarFiltros();
 }
 
-// Função para renderizar as notícias
+// Gerar botões de categoria a partir dos dados reais
+function construirFiltrosCategoria(noticias) {
+  const wrap = document.getElementById('dynamicCategoryFilters');
+  if (!wrap) return;
+
+  const counts = {};
+  noticias.forEach(n => {
+    const cat = (n.categoria && String(n.categoria).trim()) || 'Outros';
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
+
+  const cats = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+  wrap.innerHTML = cats.map(cat =>
+    `<button class="filter-btn" data-categoria="${escapeHtml(cat)}">${escapeHtml(cat)} <span class="filter-btn-count">${counts[cat]}</span></button>`
+  ).join('');
+
+  const todasCount = document.querySelector('.filter-btn[data-categoria="todas"] .filter-btn-count');
+  if (todasCount) todasCount.textContent = noticias.length;
+
+  wrap.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => selecionarCategoria(btn));
+  });
+
+  const todasBtn = document.querySelector('.filter-btn[data-categoria="todas"]');
+  if (todasBtn) todasBtn.addEventListener('click', () => selecionarCategoria(todasBtn));
+}
+
+// Função para aplicar filtros de categoria e ordenação
+function aplicarFiltros() {
+  const active = document.querySelector('.filter-btn.active');
+  categoriaAtiva = active ? active.getAttribute('data-categoria') : 'todas';
+
+  let lista = todasAsNoticias;
+  if (categoriaAtiva !== 'todas') {
+    lista = lista.filter(n => ((n.categoria && String(n.categoria).trim()) || 'Outros') === categoriaAtiva);
+  }
+
+  renderizarNoticias(lista, true);
+}
+
+// Função para renderizar as notícias agrupadas por categoria
+function parseDataArtigo(str) {
+  if (!str) return 0;
+  const m = String(str).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (!m) return 0;
+  return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1])).getTime();
+}
+
+function extrairVideoId(url) {
+  if (!url) return '';
+  const m = String(url).match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|shorts\/|embed\/)([a-zA-Z0-9_-]{6,})/);
+  return m ? m[1] : '';
+}
+
+function obterPrimeiraImagemArtigo(noticia) {
+  const html = `${(noticia && noticia.resumo) || ''} ${(noticia && noticia.conteudo) || ''}`;
+  const helper = document.createElement('div');
+  helper.innerHTML = html;
+  const image = helper.querySelector('img[src]');
+  if (!image) return '';
+  const src = String(image.getAttribute('src') || '').trim();
+  return /^(https?:\/\/|\/|\.\/|\.\.\/|assets\/)/i.test(src) ? src : '';
+}
+
+function obterThumbnailArtigo(noticia) {
+  const videoId = extrairVideoId(noticia && noticia.video);
+  if (videoId) {
+    return `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+  }
+  return obterPrimeiraImagemArtigo(noticia) || 'assets/article-thumb-fallback.svg';
+}
+
+function escapeHtml(value) {
+  const div = document.createElement('div');
+  div.textContent = String(value == null ? '' : value);
+  return div.innerHTML;
+}
+
+function stripHtml(html) {
+  const div = document.createElement('div');
+  div.innerHTML = String(html || '');
+  return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+}
+
+function construirCardArtigo(noticia) {
+  const thumb = obterThumbnailArtigo(noticia).replace(/"/g, '&quot;');
+  const videoId = extrairVideoId(noticia.video);
+  const playMarkup = videoId ? '<span class="cat-card-play"><i class="fas fa-play"></i></span>' : '';
+  const imgFallback = videoId
+    ? `onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}"`
+    : `onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/article-thumb-fallback.svg';}"`;
+  const categoria = escapeHtml(noticia.categoria || 'Atualidade');
+  const titulo = escapeHtml(noticia.titulo || '');
+  const resumo = escapeHtml(stripHtml(noticia.resumo || ''));
+  const dataArtigo = escapeHtml(noticia.data || 'Sem data');
+  const url = buildArticleUrl(noticia);
+
+  return `
+    <article class="cat-card">
+      <a class="cat-card-thumb" href="${url}" aria-label="Abrir artigo: ${titulo}">
+        <img src="${thumb}" alt="Miniatura do artigo: ${titulo}" loading="lazy" ${imgFallback}>
+        ${playMarkup}
+      </a>
+      <div class="cat-card-body">
+        <div class="cat-card-meta"><span class="cat-card-badge">${categoria}</span><span>${dataArtigo}</span></div>
+        <h3 class="cat-card-title">${titulo}</h3>
+        <p class="cat-card-resumo">${resumo}</p>
+        <a class="cat-card-more" href="${url}">Ler artigo <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </article>
+  `;
+}
+
+function latestDateOf(items) {
+  return items.reduce((max, n) => Math.max(max, parseDataArtigo(n.data)), 0);
+}
+
+function sortWithinCategory(items) {
+  const dateSort = document.getElementById('dateSort');
+  const dir = dateSort ? dateSort.value : 'desc';
+  return [...items].sort((a, b) => dir === 'asc'
+    ? parseDataArtigo(a.data) - parseDataArtigo(b.data)
+    : parseDataArtigo(b.data) - parseDataArtigo(a.data));
+}
+
 function renderizarNoticias(noticias, resetVisiveis = true) {
   const container = document.getElementById('noticiasContainer');
-  const noticiasLoadMore = document.getElementById('noticiasLoadMore');
+  if (!container) return;
   container.innerHTML = '';
 
-  if (resetVisiveis) {
-    artigosVisiveis = ARTICLES_BATCH_SIZE;
-  }
-
   noticiasFiltradasAtuais = Array.isArray(noticias) ? [...noticias] : [];
-  
-  // Função para extrair ID do YouTube
-  function extrairVideoId(url) {
-    if (!url) return '';
-    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : '';
-  }
-  
-  if (noticias.length === 0) {
-    container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhuma notícia encontrada nesta categoria.</p>';
-    if (noticiasLoadMore) {
-      noticiasLoadMore.style.display = 'none';
-    }
+
+  if (noticiasFiltradasAtuais.length === 0) {
+    container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhum artigo encontrado nesta categoria.</p>';
     return;
   }
 
-  const noticiasParaMostrar = noticias.slice(0, artigosVisiveis);
-  
-  noticiasParaMostrar.forEach((noticia, index) => {
-    const videoId = extrairVideoId(noticia.video);
-    let videoHTML = '';
-    if (videoId) {
-      videoHTML = `<div class="noticia-video" id="videoContainer-${noticia.id}">
-        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do vídeo" id="thumbnail-${noticia.id}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">
-        <iframe src="https://www.youtube.com/embed/${videoId}?modestbranding=1" id="videoFrame-${noticia.id}" title="${noticia.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
-      </div>`;
-    }
-    
-    // Criar preview do conteúdo (primeiros 250 caracteres)
-    const conteudoTexto = typeof noticia.conteudo === 'string' ? noticia.conteudo : '';
-    const conteudoPreview = conteudoTexto.length > 250 
-      ? conteudoTexto.substring(0, 250) + '...' 
-      : conteudoTexto;
-    const noticiaData = noticia.data || 'Sem data';
-    const noticiaAutor = noticia.autor || 'Viciado Comenta';
-    
-    const noticiaEl = document.createElement('div');
-    noticiaEl.className = 'noticia-completa';
-    noticiaEl.innerHTML = `
-      <div class="noticia-meta-header">
-        <span class="noticia-categoria">${noticia.categoria}</span>
-        <span class="noticia-data">${noticiaData}</span>
-        <span class="noticia-autor">${noticiaAutor}</span>
-      </div>
-      <h3 class="noticia-titulo">${noticia.titulo}</h3>
-      <div class="noticia-resumo">${noticia.resumo}</div>
-      ${videoHTML}
-      <div class="noticia-conteudo">
-        <p>${conteudoPreview}</p>
-        <a href="${buildArticleUrl(noticia)}" class="noticia-ver-mais">Ver mais</a>
-      </div>
-      ${index < noticiasParaMostrar.length - 1 ? '<div class="noticia-divider"></div>' : ''}
-    `;
-    container.appendChild(noticiaEl);
-    
-    // Ocultar miniatura quando o iframe carregar
-    if (videoId) {
-      setTimeout(() => {
-        const iframe = document.getElementById(`videoFrame-${noticia.id}`);
-        const thumbnail = document.getElementById(`thumbnail-${noticia.id}`);
-        if (iframe && thumbnail) {
-          iframe.onload = () => {
-            thumbnail.style.display = 'none';
-          };
-        }
-      }, 100);
-    }
+  if (resetVisiveis) {
+    Object.keys(categoriaVisiveis).forEach(k => delete categoriaVisiveis[k]);
+  }
+
+  // Agrupar por categoria
+  const grupos = {};
+  noticiasFiltradasAtuais.forEach(n => {
+    const cat = (n.categoria && String(n.categoria).trim()) || 'Outros';
+    (grupos[cat] = grupos[cat] || []).push(n);
   });
 
-  if (noticiasLoadMore) {
-    noticiasLoadMore.style.display = noticias.length > artigosVisiveis ? 'inline-flex' : 'none';
-  }
+  // Ordenar categorias: na vista "Todas" pela mais recente; senão alfabeticamente
+  const cats = Object.keys(grupos).sort((a, b) => categoriaAtiva === 'todas'
+    ? latestDateOf(grupos[b]) - latestDateOf(grupos[a])
+    : a.localeCompare(b, 'pt'));
+
+  cats.forEach(cat => {
+    const itensOrd = sortWithinCategory(grupos[cat]);
+    const visiveis = categoriaVisiveis[cat] || CATEGORY_INITIAL;
+    const mostrar = itensOrd.slice(0, visiveis);
+
+    const section = document.createElement('section');
+    section.className = 'cat-section';
+    section.innerHTML = `
+      <div class="cat-section-header">
+        <h2 class="cat-section-title"><span class="cat-dot"></span>${escapeHtml(cat)}</h2>
+        <span class="cat-section-count">${itensOrd.length} ${itensOrd.length === 1 ? 'artigo' : 'artigos'}</span>
+      </div>
+      <div class="cat-grid">${mostrar.map(construirCardArtigo).join('')}</div>
+      <div class="cat-section-more-wrap">
+        <button type="button" class="cat-section-more" data-cat="${escapeHtml(cat)}"${mostrar.length >= itensOrd.length ? ' hidden' : ''}>Ver mais artigos</button>
+      </div>
+    `;
+    container.appendChild(section);
+  });
+
+  container.querySelectorAll('.cat-section-more').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-cat');
+      categoriaVisiveis[cat] = (categoriaVisiveis[cat] || CATEGORY_INITIAL) + CATEGORY_STEP;
+      renderizarNoticias(noticiasFiltradasAtuais, false);
+    });
+  });
 }
 </script>
 
