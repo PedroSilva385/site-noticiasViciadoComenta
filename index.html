@@ -80,7 +80,7 @@
      crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="assets/home.css?v=20261020">
+<link rel="stylesheet" href="assets/home.css?v=20261021-2">
   <link rel="stylesheet" href="assets/consent-banner.css">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XJ3P1K6694"></script>
@@ -1220,6 +1220,29 @@ fetchNoticiasAgendadas("data/noticias.json")
       }
     }
 
+    function obterPrimeiraImagemArtigo(noticia) {
+      const html = `${noticia?.resumo || ''} ${noticia?.conteudo || ''}`;
+      const helper = document.createElement('div');
+      helper.innerHTML = html;
+      const image = helper.querySelector('img[src]');
+
+      if (!image) {
+        return '';
+      }
+
+      const src = String(image.getAttribute('src') || '').trim();
+      return /^(https?:\/\/|\/|\.\/|\.\.\/|assets\/)/i.test(src) ? src : '';
+    }
+
+    function obterThumbnailArtigo(noticia) {
+      const videoId = extrairVideoId(noticia && noticia.video);
+      if (videoId) {
+        return `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/mqdefault.jpg`;
+      }
+
+      return obterPrimeiraImagemArtigo(noticia) || 'assets/article-thumb-fallback.svg';
+    }
+
     // Renderizar Artigos Mais Lidos (top 5 por leituras)
     const artigosMaisLidosSection = document.getElementById('artigosMaisLidos');
     const leiturasPorArtigo = await carregarLeiturasArtigos();
@@ -1246,12 +1269,18 @@ fetchNoticiasAgendadas("data/noticias.json")
       const link = document.createElement("a");
       link.href = buildArticleUrl(n);
       link.className = "artigo-mais-lido-item";
+      const thumbnailSrc = obterThumbnailArtigo(n).replace(/"/g, '&quot;');
       link.innerHTML = `
-        <div class="artigo-mais-lido-titulo">${n.titulo}</div>
-        <div class="artigo-mais-lido-meta">
-          <span class="artigo-categoria-badge">${n.categoria}</span>
-          <span>${n.data}</span>
-        </div>
+        <span class="artigo-mais-lido-thumb">
+          <img src="${thumbnailSrc}" alt="" loading="lazy" width="100" height="56" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='assets/article-thumb-fallback.svg';}">
+        </span>
+        <span class="artigo-mais-lido-conteudo">
+          <span class="artigo-mais-lido-titulo">${n.titulo}</span>
+          <span class="artigo-mais-lido-meta">
+            <span class="artigo-categoria-badge">${n.categoria}</span>
+            <span>${n.data}</span>
+          </span>
+        </span>
       `;
       artigosMaisLidosSection.appendChild(link);
     });
