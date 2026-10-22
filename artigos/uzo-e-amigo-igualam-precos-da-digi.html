@@ -381,10 +381,508 @@ body.dark .dropdown-menu a:hover {
 
 /* MAIN */
 main {
-  max-width: 780px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 50px 20px;
 }
+
+/* ===== SHELL DE 3 COLUNAS (rail esquerda | artigo | sidebar direita) ===== */
+.article-shell {
+  display: block;
+}
+
+.article-rail-left,
+.article-sidebar-right {
+  display: none;
+}
+
+body.article-with-sidebars .article-col-main,
+.article-col-main {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+  body.article-with-sidebars .article-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  body.article-with-sidebars .article-col-main {
+    max-width: none;
+    margin: 0;
+    min-width: 0;
+  }
+
+  body.article-with-sidebars .article-sidebar-right {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: sticky;
+    top: 90px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 102, 204, 0.32) transparent;
+  }
+}
+
+@media (min-width: 1200px) {
+  body.article-with-sidebars .article-shell {
+    grid-template-columns: 200px minmax(0, 1fr) 330px;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  body.article-with-sidebars .article-rail-left {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: sticky;
+    top: 90px;
+  }
+}
+
+/* ---- Rail esquerda: progresso + partilha vertical ---- */
+.rail-card {
+  background: #ffffff;
+  border: 1px solid #e0e8f5;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+body.dark .rail-card {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.rail-progress-label {
+  font-size: 0.72em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0052a3;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+body.dark .rail-progress-label {
+  color: #60a5fa;
+}
+
+.rail-progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #e3f2fd;
+  overflow: hidden;
+}
+
+body.dark .rail-progress-track {
+  background: #0f172a;
+}
+
+.rail-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0066cc 0%, #0ea5e9 100%);
+  transition: width 0.15s ease-out;
+}
+
+.rail-progress-percent {
+  margin-top: 6px;
+  font-size: 0.8em;
+  color: #5a6b7f;
+  text-align: right;
+}
+
+.rail-share-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rail-share .artigo-share-label {
+  display: block;
+  font-size: 0.72em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0052a3;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+body.dark .rail-share .artigo-share-label {
+  color: #60a5fa;
+}
+
+.rail-top-btn {
+  border: 1px solid #e0e8f5;
+  background: #ffffff;
+  color: #1a1f3a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.rail-top-btn:hover {
+  border-color: #0066cc;
+  color: #0066cc;
+  transform: translateY(-2px);
+}
+
+body.dark .rail-top-btn {
+  background: #1a2332;
+  border-color: #2d3748;
+  color: #d1d5db;
+}
+
+/* Barra de progresso fixa no topo (todas as resoluções >= 992px) */
+.reading-progress-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, #0066cc 0%, #0ea5e9 100%);
+  z-index: 1200;
+  transition: width 0.15s ease-out;
+  display: none;
+}
+
+body.article-with-sidebars .reading-progress-top {
+  display: block;
+}
+
+/* ---- Sidebar direita: cartões ---- */
+.sidebar-card {
+  background: #ffffff;
+  border: 1px solid #e0e8f5;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+body.dark .sidebar-card {
+  background: #1a2332;
+  border-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0052a3;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+body.dark .sidebar-card-title {
+  color: #60a5fa;
+}
+
+/* Índice do artigo (TOC) */
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toc-item {
+  display: block;
+  text-decoration: none;
+  color: #1a1f3a;
+  font-size: 0.88em;
+  line-height: 1.45;
+  padding: 7px 10px;
+  border-left: 3px solid #e0e8f5;
+  border-radius: 0 8px 8px 0;
+  transition: all 0.25s ease;
+}
+
+.toc-item:hover {
+  border-left-color: #0066cc;
+  background: rgba(0, 102, 204, 0.06);
+  color: #0066cc;
+}
+
+.toc-item.toc-level-3 {
+  padding-left: 24px;
+  font-size: 0.82em;
+  color: #5a6b7f;
+}
+
+.toc-item.toc-active {
+  border-left-color: #0066cc;
+  color: #0066cc;
+  font-weight: 600;
+  background: rgba(0, 102, 204, 0.06);
+}
+
+body.dark .toc-item {
+  color: #d1d5db;
+  border-left-color: #2d3748;
+}
+
+body.dark .toc-item.toc-level-3 {
+  color: #9ca3af;
+}
+
+body.dark .toc-item:hover,
+body.dark .toc-item.toc-active {
+  color: #60a5fa;
+  border-left-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.08);
+}
+
+/* Mais lidos na sidebar */
+.sidebar-mais-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-mais-item {
+  display: flex;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+}
+
+.sidebar-mais-item:hover {
+  border-color: rgba(0, 102, 204, 0.25);
+  background: rgba(0, 102, 204, 0.04);
+  transform: translateY(-2px);
+}
+
+.sidebar-mais-rank {
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.82em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-mais-titulo {
+  font-size: 0.88em;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #1a1f3a;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sidebar-mais-meta {
+  margin-top: 4px;
+  font-size: 0.75em;
+  color: #5a6b7f;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+body.dark .sidebar-mais-titulo {
+  color: #f3f4f6;
+}
+
+body.dark .sidebar-mais-meta {
+  color: #9ca3af;
+}
+
+/* Card do autor na sidebar */
+.sidebar-author-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.sidebar-author-head img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.sidebar-author-name {
+  font-weight: 700;
+  font-size: 0.98em;
+}
+
+.sidebar-author-name a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.sidebar-author-name a:hover {
+  text-decoration: underline;
+}
+
+body.dark .sidebar-author-name a {
+  color: #60a5fa;
+}
+
+.sidebar-author-bio {
+  font-size: 0.85em;
+  line-height: 1.5;
+  color: #5a6b7f;
+  margin: 0;
+}
+
+body.dark .sidebar-author-bio {
+  color: #9ca3af;
+}
+
+/* Card de notificações push */
+.sidebar-push-btn {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+}
+
+.sidebar-push-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+}
+
+.sidebar-push-btn.is-subscribed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  box-shadow: none;
+  cursor: default;
+}
+
+body.dark .sidebar-push-btn.is-subscribed {
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+}
+
+.sidebar-push-note {
+  margin: 8px 0 0;
+  font-size: 0.78em;
+  color: #5a6b7f;
+  line-height: 1.4;
+}
+
+body.dark .sidebar-push-note {
+  color: #9ca3af;
+}
+
+/* Card "Siga-nos" */
+.sidebar-social-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sidebar-social-stat {
+  background: rgba(0, 102, 204, 0.06);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+body.dark .sidebar-social-stat {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.sidebar-social-stat .stat-count {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.05em;
+  color: #1a1f3a;
+}
+
+body.dark .sidebar-social-stat .stat-count {
+  color: #f3f4f6;
+}
+
+.sidebar-social-stat .stat-label {
+  font-size: 0.72em;
+  color: #5a6b7f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+body.dark .sidebar-social-stat .stat-label {
+  color: #9ca3af;
+}
+
+.sidebar-social-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sidebar-social-links a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 0.95em;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.sidebar-social-links a:hover {
+  transform: translateY(-3px);
+}
+
+.social-youtube { background: #ff0000; }
+.social-twitch { background: #9146ff; }
+.social-discord { background: #5865f2; }
+.social-spotify { background: #1db954; }
+.social-facebook { background: #1877f2; }
+.social-instagram { background: linear-gradient(45deg, #feda75, #d62976, #962fbf); }
 
 /* ARTIGO */
 .artigo {
@@ -1662,8 +2160,6 @@ footer {
 @media (max-width: 1200px) {
   main {
     padding: 40px 20px;
-    max-width: 900px;
-    margin: 0 auto;
   }
 
   .artigo-titulo {
@@ -2291,9 +2787,33 @@ footer {
 <a href="sobre-nos.html">Sobre Nós</a>
 </nav>
 
+<div class="reading-progress-top" id="readingProgressTop" aria-hidden="true"></div>
+
 <main>
-  <article class="artigo" id="artigo">
-              <div class="artigo-header">
+  <div class="article-shell">
+    <aside class="article-rail-left" id="articleRailLeft" aria-label="Ferramentas de leitura">
+      <div class="rail-card rail-progress" id="railProgressCard">
+        <div class="rail-progress-label">Progresso</div>
+        <div class="rail-progress-track"><div class="rail-progress-fill" id="railProgressFill"></div></div>
+        <div class="rail-progress-percent" id="railProgressPercent">0%</div>
+      </div>
+      <div class="rail-card rail-share" id="railShareCard">
+        <span class="artigo-share-label">Partilhar:</span>
+        <div class="rail-share-list">
+          <button class="share-btn share-facebook" data-share="facebook" title="Facebook"><i class="fab fa-facebook-f"></i></button>
+          <button class="share-btn share-twitter" data-share="twitter" title="Twitter"><i class="fab fa-twitter"></i></button>
+          <button class="share-btn share-whatsapp" data-share="whatsapp" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+          <button class="share-btn share-telegram" data-share="telegram" title="Telegram"><i class="fab fa-telegram"></i></button>
+          <button class="share-btn share-linkedin" data-share="linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></button>
+          <button class="share-btn share-copy" data-share="copy" title="Copiar Link"><i class="fas fa-link"></i></button>
+        </div>
+      </div>
+      <button class="rail-top-btn" id="railBackToTop" type="button"><i class="fas fa-arrow-up"></i> Voltar ao topo</button>
+    </aside>
+
+    <div class="article-col-main">
+      <article class="artigo" id="artigo">
+                  <div class="artigo-header">
             <span class="artigo-categoria">Telecom</span>
             <h1 class="artigo-titulo">UZO e AMIGO igualam pre&#231;os da DIGI!</h1>
             <div class="artigo-meta">
@@ -2330,23 +2850,70 @@ footer {
           </div>
   </article>
 
-  <section class="comentarios-section" id="comentariosSection" style="display: none;">
-    <h3>Comentários</h3>
-    <form class="comentario-form" id="comentarioForm">
-      <div class="form-group">
-        <label for="nomeComentario">Nome</label>
-        <input type="text" id="nomeComentario" name="nomeComentario" placeholder="O teu nome" maxlength="50" autocomplete="nickname" required>
-      </div>
-      <div class="form-group">
-        <label for="textoComentario">Comentário</label>
-        <textarea id="textoComentario" name="textoComentario" placeholder="Escreve o teu comentário..." rows="4" maxlength="1000" required></textarea>
-      </div>
-      <button type="submit" class="btn-enviar">Enviar comentário</button>
-    </form>
-    <div class="comentarios-lista" id="comentariosList">
-      <div class="comentarios-vazio">A carregar comentários...</div>
+      <section class="comentarios-section" id="comentariosSection" style="display: none;">
+        <h3>Comentários</h3>
+        <form class="comentario-form" id="comentarioForm">
+          <div class="form-group">
+            <label for="nomeComentario">Nome</label>
+            <input type="text" id="nomeComentario" name="nomeComentario" placeholder="O teu nome" maxlength="50" autocomplete="nickname" required>
+          </div>
+          <div class="form-group">
+            <label for="textoComentario">Comentário</label>
+            <textarea id="textoComentario" name="textoComentario" placeholder="Escreve o teu comentário..." rows="4" maxlength="1000" required></textarea>
+          </div>
+          <button type="submit" class="btn-enviar">Enviar comentário</button>
+        </form>
+        <div class="comentarios-lista" id="comentariosList">
+          <div class="comentarios-vazio">A carregar comentários...</div>
+        </div>
+      </section>
     </div>
-  </section>
+
+    <aside class="article-sidebar-right" id="articleSidebarRight" aria-label="Conteúdo complementar">
+      <div class="sidebar-card" id="sidebarTocCard" hidden>
+        <h4 class="sidebar-card-title">Neste artigo</h4>
+        <ul class="toc-list" id="sidebarTocList"></ul>
+      </div>
+      <div class="sidebar-card" id="sidebarMaisLidosCard" hidden>
+        <h4 class="sidebar-card-title" id="sidebarMaisLidosTitle">Mais lidos</h4>
+        <div class="sidebar-mais-list" id="sidebarMaisLidosList"></div>
+      </div>
+      <div class="sidebar-card" id="sidebarAuthorCard" hidden>
+        <h4 class="sidebar-card-title">Sobre o autor</h4>
+        <div class="sidebar-author-head">
+          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
+        </div>
+        <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
+      </div>
+      <div class="sidebar-card" id="sidebarPushCard" hidden>
+        <h4 class="sidebar-card-title">Alertas de novas notícias</h4>
+        <button class="sidebar-push-btn" id="sidebarPushBtn" type="button"><i class="far fa-bell"></i> Ativar notificações</button>
+        <p class="sidebar-push-note">Recebe um aviso sempre que sair uma nova notícia no VICIADO COMENTA.</p>
+      </div>
+      <div class="sidebar-card" id="sidebarSocialCard" hidden>
+        <h4 class="sidebar-card-title">Siga-nos</h4>
+        <div class="sidebar-social-stats">
+          <div class="sidebar-social-stat">
+            <div class="stat-count" id="sidebarYoutubeCount">6.700</div>
+            <div class="stat-label"><i class="fab fa-youtube"></i> subscritores</div>
+          </div>
+          <div class="sidebar-social-stat">
+            <div class="stat-count" id="sidebarTwitchCount">4.500</div>
+            <div class="stat-label"><i class="fab fa-twitch"></i> seguidores</div>
+          </div>
+        </div>
+        <div class="sidebar-social-links">
+          <a class="social-youtube" href="https://www.youtube.com/@TheViciado" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
+          <a class="social-twitch" href="https://www.twitch.tv/theviciado13" target="_blank" rel="noopener noreferrer" title="Twitch"><i class="fab fa-twitch"></i></a>
+          <a class="social-discord" href="https://discord.gg/pGxzqCdrFJ" target="_blank" rel="noopener noreferrer" title="Discord"><i class="fab fa-discord"></i></a>
+          <a class="social-spotify" href="https://open.spotify.com/show/53LNJfxZySrvQkjTcuergN" target="_blank" rel="noopener noreferrer" title="Spotify"><i class="fab fa-spotify"></i></a>
+          <a class="social-facebook" href="https://www.facebook.com/Viciadoemjogospt" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a class="social-instagram" href="https://www.instagram.com/theviciado13/" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </aside>
+  </div>
 </main>
 
 <footer>
@@ -4086,6 +4653,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Secção de artigos relacionados
         renderRelatedArticles(noticia, data.noticias || []);
 
+        // Laterais do artigo (rail de leitura + índice + mais lidos + autor + push + social)
+        setupArticleSidebars(noticia, data.noticias || []);
+
         activateDeferredArticleImages(container);
         recoverBrokenArticleImages(container);
         initArticleVideoEmbeds(container);
@@ -4154,6 +4724,301 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => console.error('Erro ao listar notícias:', err));
   }
 });
+
+// ========== LATERAIS DOS ARTIGOS (rail esquerda + sidebar direita) ==========
+let vcSidebarsInitialized = false;
+let vcReadingProgressAttached = false;
+
+function setupArticleSidebars(noticia, noticias) {
+  window.__vcSidebarArticle = {
+    id: String((noticia && noticia.id) || ''),
+    titulo: String((noticia && noticia.titulo) || '')
+  };
+
+  document.body.classList.add('article-with-sidebars');
+
+  if (!vcSidebarsInitialized) {
+    vcSidebarsInitialized = true;
+    setupRailShare();
+    setupReadingProgress();
+    setupSidebarPush();
+    renderSidebarSocial();
+  }
+
+  const authorCard = document.getElementById('sidebarAuthorCard');
+  if (authorCard) authorCard.hidden = false;
+
+  renderArticleToc();
+  renderSidebarMaisLidos(noticia, noticias || []);
+}
+
+function renderArticleToc() {
+  const card = document.getElementById('sidebarTocCard');
+  const list = document.getElementById('sidebarTocList');
+  if (!card || !list) return;
+
+  const article = document.getElementById('artigo');
+  const headings = article
+    ? Array.from(article.querySelectorAll('.artigo-conteudo h2, .artigo-conteudo h3'))
+        .filter((h) => String(h.textContent || '').trim().length > 0)
+    : [];
+
+  if (headings.length < 2) {
+    card.hidden = true;
+    list.innerHTML = '';
+    return;
+  }
+
+  list.innerHTML = '';
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `artigo-sec-${index + 1}`;
+    }
+
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.className = 'toc-item' + (heading.tagName === 'H3' ? ' toc-level-3' : '');
+    link.textContent = String(heading.textContent || '').trim();
+    link.dataset.targetId = heading.id;
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const target = document.getElementById(heading.id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+
+    li.appendChild(link);
+    list.appendChild(li);
+  });
+
+  card.hidden = false;
+  updateTocActiveHeading();
+}
+
+function updateTocActiveHeading() {
+  const list = document.getElementById('sidebarTocList');
+  if (!list || list.children.length === 0) return;
+
+  const links = Array.from(list.querySelectorAll('.toc-item'));
+  let activeLink = links[0] || null;
+
+  links.forEach((link) => {
+    const target = document.getElementById(link.dataset.targetId || '');
+    if (target && target.getBoundingClientRect().top <= 140) {
+      activeLink = link;
+    }
+  });
+
+  links.forEach((link) => link.classList.toggle('toc-active', link === activeLink));
+}
+
+async function renderSidebarMaisLidos(noticia, noticias) {
+  const card = document.getElementById('sidebarMaisLidosCard');
+  const list = document.getElementById('sidebarMaisLidosList');
+  const title = document.getElementById('sidebarMaisLidosTitle');
+  if (!card || !list) return;
+
+  let leiturasPorArtigo = {};
+  try {
+    if (window.database && typeof window.database.ref === 'function') {
+      const snapshot = await window.database.ref('article_reads').once('value');
+      leiturasPorArtigo = snapshot.val() || {};
+    }
+  } catch (error) {
+    console.warn('Não foi possível carregar contadores de leituras:', error);
+  }
+
+  const parseDateMaisLidos = (str) => {
+    if (!str) return 0;
+    const parts = String(str).split('/').map(Number);
+    if (parts.length < 3 || parts.some(isNaN)) return 0;
+    const [dia, mes, ano] = parts;
+    return new Date(ano, mes - 1, dia).getTime();
+  };
+
+  const leiturasDe = (item) => Number(leiturasPorArtigo[String(item && item.id)] || 0);
+  const ordenarPorLeituras = (a, b) => {
+    const diff = leiturasDe(b) - leiturasDe(a);
+    if (diff !== 0) return diff;
+    return parseDateMaisLidos(b.data) - parseDateMaisLidos(a.data);
+  };
+
+  const categoriaAtual = String((noticia && noticia.categoria) || '').trim().toLowerCase();
+  const outros = (Array.isArray(noticias) ? noticias : []).filter((item) => {
+    return item && typeof item === 'object' && String(item.id) !== String(noticia && noticia.id);
+  });
+
+  const mesmaCategoria = outros
+    .filter((item) => String(item.categoria || '').trim().toLowerCase() === categoriaAtual)
+    .sort(ordenarPorLeituras);
+  const outrasCategorias = outros
+    .filter((item) => String(item.categoria || '').trim().toLowerCase() !== categoriaAtual)
+    .sort(ordenarPorLeituras);
+
+  const selecionados = mesmaCategoria.slice(0, 5);
+  if (selecionados.length < 3) {
+    outrasCategorias.slice(0, 5 - selecionados.length).forEach((item) => selecionados.push(item));
+  }
+
+  if (!selecionados.length) {
+    card.hidden = true;
+    list.innerHTML = '';
+    return;
+  }
+
+  if (title && categoriaAtual) {
+    const nomeCategoria = String((noticia && noticia.categoria) || '').trim() || 'Atualidade';
+    title.textContent = `Mais lidos em ${nomeCategoria}`;
+  }
+
+  list.innerHTML = '';
+  selecionados.forEach((item, index) => {
+    const link = document.createElement('a');
+    link.className = 'sidebar-mais-item';
+    link.href = buildArticleUrlByData(item);
+
+    const leituras = leiturasDe(item);
+    const metaParts = [escapeHtmlText(String(item.data || ''))];
+    if (leituras > 0) {
+      metaParts.push(`<i class="far fa-eye"></i> ${leituras.toLocaleString('pt-PT')}`);
+    }
+
+    link.innerHTML = `
+      <span class="sidebar-mais-rank">${index + 1}</span>
+      <span>
+        <span class="sidebar-mais-titulo">${escapeHtmlText(String(item.titulo || 'Artigo'))}</span>
+        <span class="sidebar-mais-meta">${metaParts.join(' · ')}</span>
+      </span>
+    `;
+    list.appendChild(link);
+  });
+
+  card.hidden = false;
+}
+
+function setupRailShare() {
+  const card = document.getElementById('railShareCard');
+  if (!card) return;
+
+  card.querySelectorAll('[data-share]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const artigo = window.__vcSidebarArticle || {};
+      if (!artigo.id) return;
+
+      switch (btn.dataset.share) {
+        case 'facebook': partilharFacebook(artigo.titulo, artigo.id); break;
+        case 'twitter': partilharTwitter(artigo.titulo, artigo.id); break;
+        case 'whatsapp': partilharWhatsApp(artigo.titulo, artigo.id); break;
+        case 'telegram': partilharTelegram(artigo.titulo, artigo.id); break;
+        case 'linkedin': partilharLinkedIn(artigo.titulo, artigo.id); break;
+        case 'copy': copiarLink(artigo.id, btn); break;
+      }
+    });
+  });
+}
+
+function setupReadingProgress() {
+  if (vcReadingProgressAttached) {
+    updateReadingProgress();
+    return;
+  }
+  vcReadingProgressAttached = true;
+
+  const onScroll = () => {
+    updateReadingProgress();
+    updateTocActiveHeading();
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  const backBtn = document.getElementById('railBackToTop');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  updateReadingProgress();
+}
+
+function updateReadingProgress() {
+  const article = document.getElementById('artigo');
+  if (!article) return;
+
+  const topFill = document.getElementById('readingProgressTop');
+  const railFill = document.getElementById('railProgressFill');
+  const railPercent = document.getElementById('railProgressPercent');
+
+  const rect = article.getBoundingClientRect();
+  const scrollable = article.offsetHeight - window.innerHeight;
+  let percent = 0;
+
+  if (scrollable <= 0) {
+    percent = rect.top < window.innerHeight ? 100 : 0;
+  } else {
+    const done = Math.min(Math.max(-rect.top, 0), scrollable);
+    percent = Math.round((done / scrollable) * 100);
+  }
+
+  if (topFill) topFill.style.width = `${percent}%`;
+  if (railFill) railFill.style.width = `${percent}%`;
+  if (railPercent) railPercent.textContent = `${percent}%`;
+}
+
+function setupSidebarPush() {
+  const card = document.getElementById('sidebarPushCard');
+  const btn = document.getElementById('sidebarPushBtn');
+  if (!card || !btn) return;
+
+  const pushSupported = 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+  if (!pushSupported || !window.PushArticleAlerts || typeof window.PushArticleAlerts.subscribe !== 'function') {
+    card.hidden = true;
+    return;
+  }
+
+  const renderState = () => {
+    const subscribed = localStorage.getItem('vc_push_subscribed') === '1';
+    btn.disabled = false;
+    if (subscribed) {
+      btn.classList.add('is-subscribed');
+      btn.innerHTML = '<i class="fas fa-check"></i> Notificações ativas';
+      btn.disabled = true;
+    } else {
+      btn.classList.remove('is-subscribed');
+      btn.innerHTML = '<i class="far fa-bell"></i> Ativar notificações';
+    }
+  };
+
+  renderState();
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A ativar...';
+    try {
+      await window.PushArticleAlerts.subscribe();
+    } catch (error) {
+      console.warn('Falha ao ativar notificações pela sidebar:', error);
+    }
+    renderState();
+  });
+
+  card.hidden = false;
+}
+
+function renderSidebarSocial() {
+  const card = document.getElementById('sidebarSocialCard');
+  if (!card) return;
+
+  const youtubeEl = document.getElementById('sidebarYoutubeCount');
+  const twitchEl = document.getElementById('sidebarTwitchCount');
+  const youtubeCount = parseInt(localStorage.getItem('youtube_count'), 10) || 6700;
+  const twitchCount = parseInt(localStorage.getItem('twitch_count'), 10) || 4500;
+
+  if (youtubeEl) youtubeEl.textContent = youtubeCount.toLocaleString('pt-PT');
+  if (twitchEl) twitchEl.textContent = twitchCount.toLocaleString('pt-PT');
+  card.hidden = false;
+}
 
 // ========== SISTEMA DE LIKES ==========
 function toggleLike(noticiaId, hasRetried) {
