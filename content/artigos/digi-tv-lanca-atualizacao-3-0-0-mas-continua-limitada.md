@@ -1,6 +1,6 @@
 ---
 id: '84'
-titulo: 'DIGI TV lança atualização 3.0.0, mas continua limitada...'
+titulo: 'DIGI TV lança atualização 3.0.0 mas continua limitada'
 slug: digi-tv-lanca-atualizacao-3-0-0-mas-continua-limitada
 data: 22/10/2026
 dataPublicacao: '23/10/2026 10:00'
@@ -44,3 +44,13 @@ Para um cliente que faça a migração da NOWO para a DIGI, será difícil ficar
 A aposta numa aplicação global parece estar a levar a DIGI a “ignorar” um forte ativo que herdou da NOWO. Como se costuma dizer, _em equipa que ganha não se mexe_, mas a DIGI continua, de forma teimosa, a insistir numa solução claramente inferior ao que já possuía, o que só acrescenta atrito numa operação que deveria ser o mais simples possível nesta fase.
 
 Resta-nos esperar que as próximas atualizações tragam melhorias significativas e permitam ao cliente uma experiência de qualidade, maximizando assim a retenção num dos serviços mais relevantes para a operação e rentabilidade da DIGI em Portugal.
+
+## O Comentário do Viciado
+
+Esta atualização confirmou-me um receio que venho a ter desde a aquisição da NOWO: a DIGI está a otimizar para a escala global e a perder qualidade local. O exemplo da aplicação é o mais honesto de todos — quando uma equipa de engenharia responde a um mercado de milhões com uma app única para vários países, as particularidades do utilizador português acabam por ficar na cauda da lista de prioridades.
+
+É a mesma lógica que [exploro ao comparar a DIGI portuguesa com a espanhola](/artigos/pode-a-digi-importar-novidades-de-espanha-para-portugal.html): o que funciona em Roma não funciona necessariamente aqui, e a operadora ainda está a aprender essa diferença à custa dos primeiros clientes. A NOWO tinha um ativo real nesta área; deitar isso fora por uma solução “de prateleira” é o tipo de decisão que só se entende quando se lê o relatório de custos, nunca quando se abre a box ao sábado à noite.
+
+O detalhe que me preocupa é a retenção: [num mercado a caminho do milhão de serviços](/artigos/digi-a-beira-de-1-000-000-de-servicos-em-portugal.html), a televisão é uma das razões que ainda segura os clientes que não usam o serviço. Uma app instável não é uma inconveniência menor — é a rachadura por onde as campanhas dos rivais vão entrar.
+
+*Fontes: comunicado oficial no blog da DIGI (blog.digi.pt), teste próprio da versão 3.0.0 e acompanhamento editorial do Viciado Comenta (outubro de 2026).*

@@ -1,10 +1,7 @@
 ---
 id: '83'
-titulo: >-
-  MINISTRO PINTO LUZ arrasa ANACOM e CRÍTICA entrada da DIGI em PORTUGAL |
-  VICIADO COMENTA
-slug: >-
-  ministro-pinto-luz-arrasa-anacom-e-critica-entrada-da-digi-em-portugal-viciado-comenta
+titulo: 'Ministro Pinto Luz critica a ANACOM e a entrada da DIGI em Portugal'
+slug: ministro-pinto-luz-arrasa-anacom-e-critica-entrada-da-digi-em-portugal-viciado-comenta
 data: 22/10/2026
 categoria: Telecom
 autor: Pedro Silva
@@ -69,3 +66,13 @@ Há vários pontos que terão de ficar claros nos próximos meses:
 1.  **Autoridade do regulador:** A ANACOM tem de demonstrar que a atual administração não permitirá que os regulados ditem as regras do jogo.
 2.  **Definição de estratégia:** O regulador deve clarificar o seu rumo: vai criar um quadro que assegure a sobrevivência da DIGI ou permitir mais uma "falência na secretaria" por falta de coragem política e regulatória?
 3.  **Plano de ação:** Assumindo que a ANACOM não se vai esquivar a essa responsabilidade, que caminho escolherá? Vai redistribuir espectro, garantindo as essenciais bandas baixas para reforço de cobertura dos novos entrantes, ou vai impor condições que garantam o acesso transparente e justo às infraestruturas já existentes?
+
+## O Comentário do Viciado
+
+O que mais me disse nesta entrevista não foi o conteúdo — foi o emissor. Um governante eleger como alvo o regulador que abriu o mercado, e não o cartel que durante vinte anos o manteve fechado, mostra até que ponto o debate português das telecomunicações foi sempre escrito de dentro para fora. [Já tinha tratado dessa captura na análise à falha brutal de regulação](/artigos/falha-brutal-de-regulacao-nas-telecom-em-portugal.html); aqui temos a confirmação política dela.
+
+Pinto Luz lamenta, no essencial, que a ANACOM tenha permitido que a rentabilidade dos incumbentes baixasse. Só que essa “rentabilidade” tinha um nome simples do lado do consumidor: preços a subir acima da média europeia, sem um quarto operador a sério. [Foi a mesma lógica que matou a OniWay](/artigos/oniway-o-quarto-operador-que-nunca-chegou-a-existir.html) — não por falha de mercado, mas por recusa de quem já estava cá dentro em partilhar a infraestrutura.
+
+Honestamente, não espero que um ministro defenda os consumidores contra os operadores; espero que não ataque quem os defendeu. A Europa [já mudou o enquadramento nessa direção](/artigos/mudancas-para-as-telecom-na-europa.html) e o trabalho da ANACOM foi antecipar esse sentido. Cabe agora ao Governo não deixar o regulador sozinho na parte difícil: garantir que a DIGI, com espectro e rede a meio-gás, não é a próxima a ficar para a história como um fracasso que ninguém quis acabar.
+
+*Fontes: entrevista a Miguel Pinto Luz no jornal Expresso, atas e deliberações da ANACOM sobre o leilão 5G e DUER, comunicados da Autoridade da Concorrência, e análise editorial do Viciado Comenta (outubro de 2026).*
