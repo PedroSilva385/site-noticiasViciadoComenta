@@ -796,12 +796,15 @@ foreach ($noticia in $noticias) {
         $content = $content.Replace($line, '')
     }
 
-    $content = [regex]::Replace($content, '(?m)^\s*<meta name="description" content="Leia .*?VICIADO COMENTA.*?">\s*\r?\n?', '')
-    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
-    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:description" content="Not.*?gaming\.">\s*\r?\n?', '')
+    # Remover TODAS as meta tags genericas do template (o conteudo exato varia entre versoes),
+    # pois as especificas do artigo sao injetadas mais abaixo. Sem isto, ficariam duplicadas
+    # no <head> e os crawlers/AdSense leriam a generica (1a ocorrencia).
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="description" content=".*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:title" content=".*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:description" content=".*?">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta property="og:image" content=".*?">\s*\r?\n?', '')
-    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:title" content="Not.*?VICIADO COMENTA">\s*\r?\n?', '')
-    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:description" content="Not.*?gaming\.">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:title" content=".*?">\s*\r?\n?', '')
+    $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:description" content=".*?">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<meta name="twitter:image" content=".*?">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<link rel="canonical" id="canonicalLink" href=".*?">\s*\r?\n?', '')
     $content = [regex]::Replace($content, '(?m)^\s*<link rel="canonical" id="canonicalLink" href="https://www\.viciadocomenta\.pt/artigos\.html">\s*\r?\n?', '')
