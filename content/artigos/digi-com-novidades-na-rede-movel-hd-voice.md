@@ -1,11 +1,11 @@
 ---
 id: '27'
-titulo: DIGI com NOVIDADES na rede MÓVEL! HD Voice+
+titulo: 'DIGI traz novidades à rede móvel com HD Voice+'
 slug: digi-com-novidades-na-rede-movel-hd-voice
 data: 25/03/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: DIGI com NOVIDADES na rede MÓVEL! HD Voice+ disponível!
+resumo: A DIGI está a reforçar a rede 2G nos 1800 MHz e a introduzir o HD Voice+ nas chamadas LTE e 5G, sinais de uma nova fase de investimento na sua rede móvel.
 video: 'https://youtu.be/OKf1STwJr6k'
 ---
 Após um ano de 2025 particularmente desafiante para a DIGI, marcado por diversos problemas na sua rede móvel — como falhas de cobertura em centros comerciais e no metro de Lisboa, o mediático apagão e dificuldades nas chamadas durante o verão, entre outros — a operadora romena parece querer iniciar 2026 com uma nova abordagem.
@@ -27,3 +27,11 @@ Exemplo de chamada NOS -» DIGI com HD+:
 ![Chamada NOS -» DIGI com HD+](assets/imagens/digi-com-novidades-na-rede-movel-hd-voice-hd-plus.jpg)
 
 **Resta agora aguardar pelas próximas novidades.**
+
+## O Comentário do Viciado
+
+Há aqui duas notícias e a mais interessante nem é a que o título destaca. O HD Voice+ é bem-vindo, mas é quase uma reparação histórica: qualidade de voz em LTE já era o mínimo em qualquer operador europeu. O que me diz mais sobre a DIGI em 2026 é o reforço da banda 2G nos 1800 MHz, porque é a humildade de preparar a rede para quando o VoLTE falha, o Wi-Fi Calling não pega e o elevador não tem sinal. Resiliência é o que separa um operador novo de um operador fiável.
+
+Acho também estranho manter o 2G sem o codec AMR-WB enquanto se moderniza o resto. Se a aposta é robustez, porque deixar o GSM na qualidade antiga? Fica a sensação de uma prioridade bem pensada no topo e meio esquecida na base. E o foco na Margem Sul confirma: estão a otimizar onde a herança da NOWO pesa mais.
+
+*Fontes: análise de Ricardo José Saraiva às alterações nas bandas 2G/4G da DIGI e medições independentes da rede.*

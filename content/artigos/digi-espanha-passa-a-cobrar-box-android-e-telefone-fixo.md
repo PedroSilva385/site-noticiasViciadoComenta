@@ -1,6 +1,6 @@
 ---
 id: '82'
-titulo: DIGI Espanha passa a cobrar Box Android e Telefone Fixo!
+titulo: 'DIGI Espanha passa a cobrar a Box Android e o telefone fixo'
 slug: digi-espanha-passa-a-cobrar-box-android-e-telefone-fixo
 data: 19/10/2026
 dataPublicacao: '20/10/2026 10:00'
@@ -44,3 +44,13 @@ O forte marketing da DIGI (focado precisamente na transparência e na estabilida
 No Viciado Comenta, procuramos sempre manter uma abordagem imparcial. Se, por um lado, compreendemos a necessidade de gerar receita perante a subida dos custos operacionais, por outro, é justo admitir que a DIGI em Espanha pode ter atingido o limite do seu modelo de pressão _low-cost_. A empresa precisa agora de margem para encurtar o tempo de retorno dos fortes investimentos realizados no país vizinho.
 
 Resta saber se nos próximos tempos teremos novidades semelhantes em Portugal. Por agora, em território nacional, a DIGI mantém a oferta da Box Android e do equipamento de telefone fixo.
+
+## O Comentário do Viciado
+
+Um euro e cinquenta pela box não é uma história de dinheiro — não paga o dispositivo nem de perto. É uma história de promessa quebrada: a marca construiu-se com o discurso do preço que não mexe, e cada taxa nova, por pequena que seja, obriga o cliente a voltar a somar a fatura. Quem escolheu a DIGI para nunca mais fazer contas não vai gostar de voltar a fazê-las.
+
+Se me pedissem a alternativa mais honesta, diria que era mais limpo subir uma vez a mensalidade base e explicá-lo do que fatiar o preço em pequenas cobranças que parecem esquecidas de propósito. A segunda poupa o anúncio; a primeira poupa a confiança.
+
+Quanto a Portugal, não apostaria em ficar de fora muito tempo: a pressão de custos é a mesma dos dois lados da fronteira, e uma ARPU de 6,4€ não deixa margem para cortesias indefinidas. Quando cá chegar, prefiro que venha com a mesma clareza com que foi anunciada em Espanha.
+
+*Fontes: comunicação oficial da DIGI Espanha sobre novas mensalidades de equipamentos (outubro de 2026).*

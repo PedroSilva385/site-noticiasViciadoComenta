@@ -1,6 +1,6 @@
 ---
 id: '54'
-titulo: DIGI avança com aviso de tentativa de contacto! | VICIADO COMENTA
+titulo: 'DIGI ativa o aviso de tentativa de contacto na rede móvel'
 slug: digi-avanca-com-aviso-de-tentativa-de-contacto-viciado-comenta
 data: 18/05/2026
 categoria: DIGI
@@ -53,3 +53,11 @@ Mesmo após a recuperação do sinal, permanecia sempre a dúvida: terá alguém
 O mesmo ainda acontece hoje, especialmente em ambientes indoor, mas esta novidade reduz significativamente esse problema.
 
 Uma rede em crescimento que passa agora a ter menos uma falha importante por resolver.
+
+## O Comentário do Viciado
+
+O detalhe que quero sublinhar é o que esta novidade confessa. Um aviso de chamada perdida é tão básico que nenhum operador fala disso, e a razão de a DIGI só agora o ter é a mesma pela qual tantas funcionalidades chegam tarde: construir uma rede do zero é uma fila de prioridades sem fim, e o essencial anda atrás do possível. Ainda assim, numa rede em construção, este é um daqueles serviços mínimos que valem muito, porque a falha de sinal ainda é realidade em caves e centros comerciais.
+
+Já a ativação manual para o número de reencaminhamento diz-me outra coisa: a implementação ainda não é uniforme, e há quem tenha de se desenrascar com um tutorial. É um pormenor, mas é o tipo de pormenor que separa um serviço lançado de um serviço chegado a todos. Fico satisfeito por quem já o tem; lamento por quem ainda o tem de inventar nas definições.
+
+*Fontes: informação partilhada por Ricardo Saraiva e implementação gradual do aviso de tentativa de contacto na rede DIGI.*

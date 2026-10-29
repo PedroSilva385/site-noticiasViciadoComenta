@@ -1,6 +1,6 @@
 ---
 id: '72'
-titulo: 'DIGI reduz 53% as reclamações, mas continua a ser a pior no RANKING!'
+titulo: 'DIGI reduz 53% as reclamações, mas continua com a pior taxa entre os operadores'
 slug: digi-reduz-53-as-reclamacoes-mas-continua-a-ser-a-pior-no-ranking
 data: 02/09/2026
 categoria: DIGI
@@ -54,3 +54,13 @@ Ainda assim, o número de reclamações caiu 12% face ao mesmo período do ano a
 **CONCLUSÃO**
 
 Em suma, e apesar da grande subida registada pela MEO, pode dizer-se que as taxas se mantêm relativamente estáveis entre as operadoras históricas. Já no caso da DIGI, o valor parece agora alinhar-se com os restantes operadores, o que deverá fazer suspirar de alívio os responsáveis pela operadora recém-chegada, que passou por momentos muito complicados em território nacional.
+
+## O Comentário do Viciado
+
+Prefiro dividir este resultado em duas notas separadas, porque misturá-las seria desonesto. A trajectória é excelente: cair de 5,9 para 2,2 reclamações por mil clientes num ano é trabalho sério de arranjo de casa. Mas a posição continua má: 2,2 ainda é o valor mais alto dos quatro, e um quarto operador não pode viver de elogios à melhoria quando os concorrentes estão parados no mesmo sítio.
+
+Há também o efeito diluição, que não quero ignorar: com a base a crescer a este ritmo, a taxa desce por matemática pura, porque cada incidente passa a pesar percentualmente menos. O verdadeiro teste virá quando o crescimento abrandar e só restar a qualidade do serviço para segurar o número.
+
+E um último reparo, porque também conta: o aumento de 177% nas reclamações de Leiria lembra que basta um temporal para pôr à prova não a rede, mas o apoio que lhe fica por trás. É nesses dias, e não nos gráficos trimestrais, que se vê de que fibra é feito um operador.
+
+*Fontes: dados de reclamações do 2.º trimestre de 2026 divulgados pela ANACOM (setembro de 2026).*

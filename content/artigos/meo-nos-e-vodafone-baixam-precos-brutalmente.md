@@ -1,6 +1,6 @@
 ---
 id: '70'
-titulo: 'MEO, NOS e Vodafone baixam preços BRUTALMENTE!'
+titulo: 'MEO, NOS e Vodafone baixam preços de forma agressiva nas marcas premium'
 slug: meo-nos-e-vodafone-baixam-precos-brutalmente
 data: 31/08/2026
 categoria: Telecom
@@ -55,3 +55,13 @@ Recordar que, em 2024, MEO, NOS e Vodafone comercializavam, por exemplo, tarifá
 Nesta fase o plano é simples: criar diferenças óbvias entre as low-cost e as premium, de modo a justificar o preço mais elevado e assim tentar desacelerar o ritmo de queda da receita média por utilizador.
 
 E tu, até onde achas que vão os preços no nosso mercado?
+
+## O Comentário do Viciado
+
+Respondo à pergunta com o único método que conheço: o limite dos preços não o define a boa vontade das incumbentes, define-o a estrutura de custos da DIGI. Enquanto a romena operar com margens mínimas e rede a meio construir, terá sempre folga para descer primeiro — e as outras terão de a seguir para não perderem mais quota.
+
+O que me parece genuinamente novo neste agosto de 2026 é a confissão implícita: baixar a marca premium é admitir que a muralha low-cost não segurou. Depois de dois anos a tentar travar a sangria com réplicas da própria marca, chegaram à mesma conclusão a que todos os mercados chegam quando entra um quarto operador sério — o preço é a única mensagem que o cliente lê sem esforço.
+
+Da minha parte, deixo desde já a pergunta que vai interessar em 2027: com as mensalidades todas iguais ou próximas, o que é que a premium vai mostrar ao cliente para justificar ser premium? Se a resposta for apenas o logótipo e o apoio telefónico, a queda continua — e o que é bom para o bolso merece vir.
+
+*Fontes: tabelas de preços publicadas por MEO, NOS e Vodafone em 2026; declarações de Miguel Almeida sobre a quota da WOO; histórico de preços analisado no Viciado Comenta.*

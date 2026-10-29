@@ -1,6 +1,6 @@
 ---
 id: '63'
-titulo: CNMC abre discussão sobre fim do MARCo. Preços podem subir 110%!
+titulo: 'CNMC discute fim da regulação do MARCo em Espanha com subidas de preços até 110%'
 slug: cnmc-abre-discussao-sobre-fim-do-marco-precos-podem-subir-110
 data: 10/07/2026
 categoria: Telecom
@@ -46,3 +46,13 @@ Naturalmente, operadoras como a DIGI veem com dificuldade a absorção destes cu
 Nada está decidido. Trata-se apenas de uma fase de auscultação do mercado, no sentido de perceber prós e contras de uma medida como esta. Ainda assim, o aviso está dado à navegação, e esse aviso deve ser ouvido e interpretado em terras lusas também.
 
 "Pendurar-se" excessivamente na infraestrutura da incumbente regulada pode trazer dissabores a longo prazo. O que é uma medida fundamental numa fase de abertura de um mercado, com vista a estimular a concorrência, pode tornar-se uma bomba atómica nas contas das novas entrantes a longo prazo, por via dos aumentos de preço aquando do aligeirar das políticas regulatórias.
+
+## O Comentário do Viciado
+
+Este caso espanhol parece distante, mas é exatamente o género de armadilha que me tira o sono quando olho para o nosso mercado. Há uma assimetria cruel em crescer por cima da rede de outra empresa: enquanto se é pequeno, a regulação protege e o acesso é barato; quando se torna grande e dependente, essa mesma dependência passa a ser alavanca de quem é dono da infraestrutura.
+
+É por isso que vejo com bons olhos a teimosia da DIGI em construir fibra própria, mesmo quando custa prejuízo. Um operador que aluga a rede aluga também a sua própria competitividade; um que é dono dela pode errar, mas decide o seu destino.
+
+O detalhe mais revelador é o timing: a revisão aparece precisamente quando os dependentes do MARCo já não conseguem voltar atrás. Fica o aviso para Portugal — infraestrutura que se compra é cara, mas infraestrutura de que se fica refém pode sair muito mais cara.
+
+*Fontes: documentação de consulta pública da CNMC sobre a oferta MARCo (julho de 2026).*

@@ -57,3 +57,13 @@ A entrada em bolsa fica assim em stand-by até existir um cenário mais favoráv
 A DIGI conseguiu ganhar uma posição relevante no mercado espanhol em pouco tempo — mas isso trouxe também novos desafios.
 
 Entre pressões regulatórias, problemas técnicos e uma concorrência cada vez mais agressiva, a operadora entra agora numa fase decisiva. O grande teste será conseguir manter o crescimento e consolidar a sua posição num mercado onde os rivais não vão facilitar.
+
+## O Comentário do Viciado
+
+Há uma inversão de papéis nesta notícia que vale a pena nomear sem medo: a arma preferida dos incumbentes espanhóis deixou de ser o preço e passou a ser a denúncia. Acusar a DIGI de vender demasiado barato é, no fundo, admitir que já não se ganha no terreno — e para quem passou décadas a queixar-se da regulação, invocar o regulador contra um concorrente pequeno tem um travo de hipocrisia que não me passa ao lado.
+
+Agora, a crítica que faço à DIGI é minha e é dura: subir a penalização de rescisão de 60€ para 100€ é copiar o manual que a marca prometeu abolir. Uma operadora que prende clientes por contrato em vez de os prender por serviço está a confessar medo — e o medo, nesta fase, é mais perigoso que a multa.
+
+Quanto aos apagões da transição de MVNO para MNO: são a portagem que todos os que constroem rede própria pagam. O que decide o resultado não é a ausência de falhas, é o que a marca faz durante elas — e aí, apoio ao cliente continua a ser o calcanhar de Aquiles da DIGI em qualquer mercado.
+
+*Fontes: queixa da Acutelan apresentada à CNMC; declarações do CEO da DIGI Espanha, Marius Varzaru (abril de 2026).*

@@ -1,6 +1,6 @@
 ---
 id: '3'
-titulo: DIGI recebe prémio de MELHOR INTERNET FIXA em 2025 pela nPerf
+titulo: DIGI eleita melhor internet fixa de 2025 no barómetro da nPerf
 slug: digi-recebe-premio-de-melhor-internet-fixa-em-2025-pela-nperf
 data: 29/01/2026
 categoria: DIGI
@@ -23,3 +23,9 @@ Se a DIGI mantiver consistência operacional e qualidade de instalação, tem ma
 Fontes consultadas: barómetro nPerf 2025, páginas de oferta comercial dos operadores e dados públicos setoriais.
 
 E tu, dás mais peso aos testes independentes ou à experiência prática na tua zona?
+
+## O Comentário do Viciado
+
+O que este prémio diz de mais importante não é sobre a DIGI, é sobre os outros três. Uma operadora com apenas dois anos de casa a bater as médias históricas de MEO, NOS e Vodafone retira-lhes o argumento com que justificam o preço premium: que a diferença se paga em qualidade medida. A partir de agora, essa conta fica mais difícil de apresentar.
+
+Dito isto, sou o primeiro a desconfiar de medalhas de laboratório. Amostras assimétricas e portefólios de velocidades diferentes distorcem as médias, e já o expliquei acima. A DIGI merece o reconhecimento; o cliente merece não escolher um tarifário com base num barómetro. Usa o prémio como sinal de que o canhoto deixou de ser o patinho feio, e depois testa na tua morada. Seja como for, um pódio medido por terceiros é sempre melhor do que um pódio atribuído por nós próprios.

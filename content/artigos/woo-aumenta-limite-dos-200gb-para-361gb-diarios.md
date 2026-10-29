@@ -45,3 +45,15 @@ Infelizmente, este é um desses casos. Apesar da fortíssima contestação dos u
 A nossa contestação, neste caso, deve ser dirigida à ANACOM, e não às operadoras. É tempo de o regulador assumir um papel mais interventivo neste mercado, que desde há vários anos entrou em "roda livre", o que leva a este tipo de situações agora descritas.
 
 Enquanto consumidor e autor deste texto, o que pretendo transmitir é que, por mais que o assunto vos pareça bastante evidente e de fácil resolução, o problema é mais profundo, e a solução requer uma mudança estrutural.
+
+## O Comentário do Viciado
+
+Subir de 200 para 361 GB diários parece uma vitória de quem se queixou. Eu leio o contrário: é a confissão mais elegante possível. Uma operadora que altera um limiar por decreto comunicacional, sem engenharia nova nem anúncio de investimento, está a dizer-nos que o número antigo não vinha da rede — vinha do receio da má fama.
+
+Escrevi [uma semana antes que a PUA da WOO estava dentro das regras](/artigos/woo-ilimitado-tem-pua-aos-200-gb-diarios-motivo-de-alarme.html), e mantendo cada palavra. O que mudou não foi a minha leitura; foi a posição de partida da NOS, que passou de “cumprimos” para “cumprimos com folga”. Isto prova que a contestação funciona — só que funciona ao nível do marketing, não da regulação.
+
+Há um paralelo que não posso ignorar: [a Vodafone aplica cortes mensais desde 2020 com o selo de “todo o tráfego incluído”](/artigos/vodafone-finta-anacom-em-pleno-2026.html) e nunca mexeu numa vírgula. Porque umas operadoras sobem fasquias numa semana e outras deixam tarifários intactos seis anos? Porque a intensidade do holofote público é, hoje, o único mecanismo de fiscalização que efectivamente funciona.
+
+É por isso que este artigo termina apontado à ANACOM e não à NOS. [O caso UZO provou que o regulador só acorda quando o caso é mediático](/artigos/uzo-nega-tudo-e-estala-polemica.html) — e um mercado onde a única sanção real é o artigo de blog não é um mercado regulado, é um mercado a torcer.
+
+*Fontes: comunicação da WOO aos clientes, fórum ZWAME, orientações ANACOM de 2014 sobre uso de PUR, e análise editorial do Viciado Comenta (junho de 2026).*

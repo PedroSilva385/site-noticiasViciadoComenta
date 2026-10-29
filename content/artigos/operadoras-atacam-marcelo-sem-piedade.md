@@ -1,6 +1,6 @@
 ---
 id: '7'
-titulo: OPERADORAS atacam MARCELO sem PIEDADE!
+titulo: Operadoras respondem às críticas do Presidente sobre a atuação na depressão Kristin
 slug: operadoras-atacam-marcelo-sem-piedade
 data: 09/02/2026
 dataPublicacao: '09/02/2026 19:00'
@@ -24,3 +24,9 @@ Conclusão: há espaço para exigir mais preparação, mas também é necessári
 Fontes consultadas: comunicados públicos das operadoras/associações, informação divulgada por entidades institucionais e cobertura jornalística nacional sobre a depressão Kristin.
 
 E tu, que indicadores consideras mais justos para avaliar a resposta das operadoras numa crise destas?
+
+## O Comentário do Viciado
+
+Do lado em que me colo, fica a mesma incompreensão: este debate ficou preso ao “quem tem culpa” e nunca chegou ao que realmente interessa, que é “o que muda para a próxima”. Ninguém sai a ganhar disso, nem o cidadão, nem as operadoras.
+
+Não creio que o Presidente estivesse errado em exigir respostas, mas um pedido de contas sem métricas é uma manchete, não uma política. O que falta é banal e decisivo: tempos médios de reposição por região, quantos sites tinham backup funcional, quanto tempo demorou a comunicar com o cliente. E, sobretudo, uma coisa em que o setor falhou: em plena crise, o silêncio informativo foi tão danoso como a avaria. Reposição técnica sem reposição de informação é meio trabalho feito. Sem isso, mudamos de manchete e não de realidade, e a próxima tempestade apanha-nos exatamente onde a Kristin nos apanhou.

@@ -37,3 +37,15 @@ A WOO faz diferente: a restrição é temporária, dura algumas horas, e o servi
 É um tema que vai fazer correr muita tinta, mas a verdade é simples: à luz da regulação da ANACOM, a NOS está a cumprir. Por mais que custe aceitar, quem pretenda consumir 200 GB por dia em dados móveis precisa de repensar a solução que está a usar. A banda larga móvel não foi concebida para esse nível de utilização.
 
 "Ilimitado deve ser ilimitado" — concordo. Mas 200 GB diários antes de qualquer restrição temporária é, na prática, ilimitado para 99,9% dos utilizadores.
+
+## O Comentário do Viciado
+
+Gosto deste caso porque obriga a dizer o que é impopular: a WOO não infringiu nada. Uma limitação que dispara aos 200 GB num único dia e se desfaz no dia seguinte é, à letra da orientação de 2014, proteção de rede — não limite disfarçado.
+
+O problema está no banner. “Dados móveis ilimitados sem restrição de velocidade” convive no mesmo site com um PDF que diz o contrário, e é essa coexistência que torna o caso incómodo. [A UZO, ao contrário, apagou a promessa em silêncio quando a polémica estalou](/artigos/uzo-nega-tudo-e-estala-polemica.html) — o que, na prática, é uma confissão a meio-gás. A WOO escolheu deixar a promessa lá, com o PDF ao lado. São dois estilos de má postura: um esconde, o outro zela pela letra enquanto vende o contrário.
+
+Relembro o outro lado do espectro: [a Vodafone mantém desde 2020 redução de velocidade após 200 GB mensais até ao fim do ciclo](/artigos/vodafone-finta-anacom-em-pleno-2026.html), e ninguém acordou para isso. É esse contraste que me interessa: a linha entre PUA legítima e limite disfarçado não passa pela tecnologia, passa pela visibilidade da contestação.
+
+No dia seguinte ao alarme, a NOS fez o que qualquer argumento racional aconselharia — [subiu a fasquia para 361 GB](/artigos/woo-aumenta-limite-dos-200gb-para-361gb-diarios.html) — e provou, sem querer, que os 200 GB nunca vieram da engenharia.
+
+*Fontes: documento PUA publicado no site da WOO, orientações da ANACOM de 2014 sobre tarifários ilimitados, relatos do fórum ZWAME (maio de 2026).*

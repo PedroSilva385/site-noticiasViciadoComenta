@@ -1,6 +1,6 @@
 ---
 id: '9'
-titulo: POLÉMICA com os tarifários da UZO!
+titulo: Tarifários da UZO com limitações levantam polémica entre clientes
 slug: polemica-com-os-tarifarios-da-uzo
 data: 15/02/2026
 dataPublicacao: '15/02/2026 19:00'
@@ -39,3 +39,13 @@ Faturas coloridas = tarifário com restrições;
 Durante algum tempo considerei que isto seria mito, mas os testes agora realizados por um cliente mostram claramente esta diferença.  
   
 A pergunta que resta fazer é a seguinte: trata-se de uma descriminação propositada da UZO, ou é apenas algo transitório numa fase onde todos os tarifários estão a ser migrados para a nova plataforma?
+
+## O Comentário do Viciado
+
+O que mais me preocupa nisto não é a limitação em si, é a assimetria de informação. Quando dois clientes pagam o mesmo preço e recebem serviços diferentes, e a única forma de o descobrir é olhar para a cor da fatura, estamos perante um problema de transparência, não de tecnologia.
+
+Eu próprio demorei a acreditar que isto não seria mito. É precisamente esse o sinal de alarme: um operador low-cost vive da confiança de quem quer poupar sem surpresas. Ao esconder diferenças de serviço num pormenor visual, a UZO ganha tempo na migração, mas gasta credibilidade junto de quem a escolheu pela simplicidade.
+
+Espero que seja apenas transitório, como a justificação da plataforma nova sugere. Mas, até haver uma comunicação clara da MEO sobre o que cada tarifário inclui, a dúvida fica no ar — e, neste segmento, a dúvida custa clientes.
+
+*Fontes: testes de clientes partilhados por Ricardo José Saraiva; comunicação institucional da MEO / UZO (fevereiro de 2026).*

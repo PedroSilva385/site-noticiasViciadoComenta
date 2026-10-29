@@ -1,6 +1,6 @@
 ---
 id: '34'
-titulo: Comissão Europeia dá luz verde à ANCOM para regular DIGI na Roménia!
+titulo: 'Comissão Europeia dá luz verde à ANCOM para regular a DIGI em zonas sem concorrência na Roménia'
 slug: comissao-europeia-da-luz-verde-a-ancom-para-regular-digi-na-romenia
 data: 07/04/2026
 categoria: DIGI
@@ -39,3 +39,13 @@ Esta medida poderá, de forma concreta, reduzir a posição dominante da DIGI ne
 
   
 Tendo em conta que este continua a ser o principal mercado da DIGI em termos de receitas globais, acreditas que uma medida destas poderá influenciar a expansão da marca noutros países nos próximos anos?
+
+## O Comentário do Viciado
+
+Respondendo à pergunta que deixo no fim: sim, acredito que influencia, e não da forma que se possa pensar. O sinal mais interessante deste caso não é o castigo, é a promoção. A DIGI deixou de ser tratada como a pequena que precisa de proteção para entrar no mercado e passou a ser regulada como aquele que já domina — é o rito de passagem de disruptiva a incumbente.
+
+Há uma ironia que não me escapa: a mesma lógica que obrigou a Telefónica e a MEO a abrir as suas redes aplica-se agora à DIGI. Quem combateu a posição dominante durante anos passa, do outro lado, a ser o exemplo de manual de mercado onde só existe um operador.
+
+O que me deixa a pensar no impacto da expansão é o bolso: sendo a Roménia o maior gerador de receitas do grupo, impor preços grossistas acessíveis naquele território corta margem exatamente onde ela nasce. Menos lucro em casa significa menos combustível para financiar guerras de preço lá fora — e é aí que esta medida, aparentemente local, pode doer de verdade.
+
+*Fontes: projeto de medida da ANCOM; parecer do BEREC; deliberação da Comissão Europeia (abril de 2026).*

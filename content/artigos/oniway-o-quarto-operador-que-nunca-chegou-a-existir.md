@@ -1,6 +1,6 @@
 ---
 id: '75'
-titulo: 'OniWay, o QUARTO OPERADOR que NUNCA chegou a EXISTIR!'
+titulo: 'OniWay, o quarto operador que nunca chegou a existir'
 slug: oniway-o-quarto-operador-que-nunca-chegou-a-existir
 data: 12/09/2026
 categoria: Telecom
@@ -71,3 +71,15 @@ O ponto sensível hoje é outro: o roaming nacional. É o que acontece quando um
 Mesmo assim, não é tudo perfeito: a DIGI, por exemplo, nunca fechou qualquer acordo de roaming nacional com nenhuma das três operadoras (MEO, NOS, Vodafone), alegando que as ofertas recebidas não eram satisfatórias.
 
 A OniWay ficou para a história como um dos maiores fracassos das telecomunicações portuguesas: um operador totalmente licenciado, com espectro, com rede pronta e sem um único cliente. Vítima do boicote de interligação dos concorrentes e da indecisão do seu próprio acionista maioritário. As perdas ultrapassaram os 350 milhões de euros, e o espectro e as licenças acabaram tudo nas mãos dos três operadores que hoje continuam a dominar o mercado móvel português.
+
+## O Comentário do Viciado
+
+Escrevi este artigo com um desconforto constante: a história da OniWay não é só um episódio de arqueologia regulatória, é um manual que ainda hoje está em uso.
+
+Quando li as declarações do presidente da OniWay — “um problema caricato, surrealista e único na Europa” — lembrei-me imediatamente de [como a DIGI nunca fechou roaming nacional com ninguém](/artigos/digi-no-metro-de-lisboa-uma-novela-antiga.html), alegando ofertas insatisfatórias por parte das incumbentes. Mudaram as tecnologias e os nomes, mas a geometria do poder é a mesma: quem está cá dentro controla as portas de entrada, e quem chega de fora passa os primeiros anos a empurrá-las.
+
+A diferença é que hoje existe um regulador que impõe a interligação por deliberação, algo que em 2002 se traduziu em três decisões ignoradas e um recurso aos tribunais. É pouco? É. Mas foi o pouco que permitiu à DIGI chegar a um milhão de serviços sem acabar vendida aos próprios concorrentes, como acabou a OniWay — comprada por 161 milhões de euros pelas mesmas três empresas que lhe recusaram um simples acordo de interligação.
+
+Fico sempre com a mesma sensação ao escrever sobre entrantes em Portugal: o mercado não falha por falta de concorrência permitida, falha por excesso de concorrência tolerada. A OniWay teve licença, espectro e rede; faltou-lhe o direito de ser ouvida pelo outro lado da linha.
+
+*Fontes: arquivo ANACOM/ICP, relatórios anuais da EDP e Portugal Telecom (2000–2003), imprensa económica da época, e análise editorial do Viciado Comenta (setembro de 2026).*

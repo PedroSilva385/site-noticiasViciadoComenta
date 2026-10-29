@@ -38,3 +38,15 @@ Numa comparação direta, os avanços no desenvolvimento da rede da DIGI são cl
 A DIGI, como qualquer novo operador móvel (MNO) a entrar no mercado português, enfrenta um desafio exigente: oferecer, em tempo recorde, um serviço equiparável ao das operadoras já estabelecidas. Num mercado maduro como o nacional, muitos consumidores já não se recordam das limitações que marcaram as fases iniciais das redes móveis em Portugal. Habituados a um serviço estável, nem todos estarão dispostos a aceitar as incertezas inerentes a uma rede ainda em desenvolvimento.
 
 Em suma, a DIGI continua a trilhar o seu caminho. Resta saber se, com o tempo, conseguirá responder à questão que persiste entre os mais céticos: será possível oferecer um serviço premium a preços low-cost?
+
+## O Comentário do Viciado
+
+Há uma distância que me persegue desde novembro de 2024: a que existe entre a rede que os mapas mostram e a rede que os leitores sentem. Quando abri o Geo.ANACOM para comparar julho de 2025 com maio de 2026, esperava encontrar melhoria — o que não esperava era que fosse tão visível a ponto de se contar em megahertz e áreas “verdes”.
+
+O que estes dados me dizem é que a DIGI está a fazer o trabalho sujo que nenhum operador novo gosta de admitir: construir rede onde ninguém constrói, primeiro no interior e nas zonas de menor retorno, ao contrário do guião clássico de densificar as cidades e abrir depois. É uma inversão de prioridades que só [faz sentido à luz do que tem acontecido no metro de Lisboa](/artigos/digi-no-metro-de-lisboa-uma-novela-antiga.html): o problema nunca foi só de engenharia, foi de geografia económica.
+
+Resta a questão que deixo há dois anos e que estes mapas ainda não respondem: a evolução técnica chega ao serviço percebido? As reclamações caíram, [como mostro na análise ao ranking da ANACOM](/artigos/digi-reduz-53-as-reclamacoes-mas-continua-a-ser-a-pior-no-ranking.html), mas continuarem a cair é a única métrica que interessa a quem paga 5 € por mês e espera que o elevador não seja uma zona morta.
+
+No próximo relatório voltarei a estas capturas. Se as áreas “amarelas” estiverem a ficar “verdes” tão depressa como as reclamações a ficar azuis, então a DIGI terá feito em dois anos aquilo que [a OniWay não conseguiu em três décadas](/artigos/oniway-o-quarto-operador-que-nunca-chegou-a-existir.html): ficar.
+
+*Fontes: Geo.ANACOM, relatórios de indicadores da ANACOM (2025–2026), e análise editorial do Viciado Comenta (maio de 2026).*

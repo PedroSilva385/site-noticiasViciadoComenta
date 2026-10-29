@@ -1,8 +1,6 @@
 ---
 id: '15'
-titulo: >-
-  Chegou a resposta da NOS às suas concorrentes, através das sub-marcas WOO e
-  WTF!
+titulo: 'NOS responde à concorrência com as sub-marcas WOO e WTF'
 slug: chegou-a-resposta-da-nos-as-suas-concorrentes-atraves-das-sub-marcas-woo-e-wtf
 data: 01/03/2026
 dataPublicacao: '01/03/2026 19:00'
@@ -47,3 +45,13 @@ Móvel Ilimitado + Internet Fibra 1Gbps (download) / 400Mbps (upload) – 35€ 
 O grande diferencial nestes preços são as parcerias que, quando utilizadas, podem permitir poupanças significativas no valor mensal do serviço, já que os descontos devem ser considerados no custo final. Uma ida ao cinema pode significar uma poupança de 8€ num bilhete, uma taxa de entrega gratuita na Uber Eats ou um desconto na FlixBus podem também fazer a diferença. Cabe a cada utilizador avaliar se estas vantagens são ou não relevantes para o seu perfil de utilização.  
   
 Em suma, trata-se de um novo rumo para estas marcas jovens, que contribuirá para o aumento da oferta de serviços e para dar resposta aos movimentos de saída para a operadora DIGI, quarto operador do mercado, que cresceu 0,4% nos pacotes de serviços ao longo de 2025 e promete continuar a corroer as quotas da MEO, NOS e Vodafone.
+
+## O Comentário do Viciado
+
+O que me salta à vista neste movimento não é a baixa de preço, é a perda de identidade. A WTF e a Yorn nasceram para falar com uma faixa etária muito concreta; ao subirem o teto dos 25 para os 35 anos e ao meterem fibra e TV ao barulho, deixaram de ser marcas jovens para passarem a ser simplesmente um terceiro andar de preços do mesmo grupo.
+
+E é aí que a jogada se torna interessante de observar. A guerra deixou de ser travada no tarifário móvel isolado e passou para o pacote de casa: fibra, TV e telemóvel embrulhados num só valor mensal. Quem prende o cliente ao agregado prende-o muito mais do que quem lhe vende apenas dados.
+
+Fico na dúvida sobre quem sai a ganhar. Para a DIGI, que vive do argumento mais simples — preço baixo sem amarras —, ter de competir contra pacotes cheios pode ser o verdadeiro teste. E para o cliente, tantas camadas de marcas do mesmo dono tornam cada vez mais difícil comparar o que é realmente barato.
+
+*Fontes: comunicações oficiais da NOS sobre WOO e WTF; preços publicados nas páginas das marcas em março de 2026.*

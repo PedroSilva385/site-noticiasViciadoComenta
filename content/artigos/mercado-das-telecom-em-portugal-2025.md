@@ -72,3 +72,13 @@ DIGI/NOWO – 10% das reclamações – 6,5 mil – 18,7/1000 clientes. 
 DIGI – 8% das reclamações – 1,2 mil – 5,2/1000 clientes.  
   
 Aqui fica uma visão sobre o mercado das telecomunicações ao longo do ano de 2025, que servirá como base para análise ao longo dos próximos anos.
+
+## O Comentário do Viciado
+
+Destes números todos, escolho três para guardar como referência do ano. O primeiro: -18,7% na banda larga — nunca vi um indicador de preço mover-se assim num mercado que se dizia competitivo, e moveu-se porque finalmente deixou de se poder fingir.
+
+O segundo é técnico, mas diz tudo: a NOWO ficou em 0,2% e a DIGI subiu para 3,1%. Acabou a neblina estatística; a partir de agora, cada décima que a DIGI ganhar é orgânica, e cada décima que as incumbentes perderem terá dono visível. O teste verdadeiro começa agora, sem herança da NOWO a emprestar números.
+
+O terceiro é o que me dói ler: 18,7 reclamações por mil clientes no grupo DIGI/NOWO. Não uso este número para apontar o dedo à entrante — usei-o durante meses como alarme para que acordasse para o apoio ao cliente, e os dados recentes mostram que acordou. Uso-o agora como régua: é este o patamar que tem de descer até ao nível das outras, e não há preço baixo que dispense esse trabalho.
+
+*Fontes: relatório de atividades e estatísticas do 4.º trimestre de 2025 e anuais, ANACOM (março de 2026).*

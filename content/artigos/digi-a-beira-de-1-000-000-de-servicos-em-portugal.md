@@ -1,6 +1,6 @@
 ---
 id: '68'
-titulo: DIGI à beira de 1.000.000 de serviços em PORTUGAL!
+titulo: 'DIGI aproxima-se de 1.000.000 de serviços ativos em Portugal'
 slug: digi-a-beira-de-1-000-000-de-servicos-em-portugal
 data: 14/08/2026
 categoria: DIGI
@@ -37,3 +37,13 @@ No H1 2025, a DIGI apresentava cerca de 789k de serviços ativos, o que denota u
 Apesar dos crescimentos fortes em todos os segmentos, a DIGI enfrenta uma redução da ARPU que caiu 9,9% em Portugal, para 6,4€, o que continua a mostrar que a política de baixos preços se faz sentir até nas contas da operadora romena.
 
 Enquanto grupo, a DIGI declarou prejuízos na ordem dos 46 milhões de euros nos primeiros seis meses do ano, algo que não surpreende face aos elevados volumes de investimento feitos pelo operador em vários países em simultâneo e onde as operações ainda estão em fase inicial de implantação.
+
+## O Comentário do Viciado
+
+Gosto de celebrar marcos, mas prefiro ler o que está por baixo deles. O milhão de serviços é a manchete; o número que realmente me interessa é a ARPU a cair 9,9% para 6,4€. São duas faces da mesma decisão: a DIGI está a comprar quota com preço, e cada novo cliente chega disposto a pagar menos do que a média do mercado.
+
+Isto não é necessariamente um problema — num operador em expansão, crescer barato é o plano. A questão é saber até quando o equilíbrio aguenta. Prejuízo a investir faz sentido; prejuízo estrutural, quando a rede já estiver madura, já não faz.
+
+Vejo também no televisor o elo mais frágil. Com a aplicação ainda verde e uma grelha curta, a DIGI TV é o serviço que menos prende o cliente ao pacote — e numa estratégia de casa toda, é precisamente o que deveria segurar as pessoas quando a fibra chega. Fechar o milhão é fácil de anunciar; torná-lo rentável é o trabalho real.
+
+*Fontes: resultados semestrais (H1 2026) divulgados pela DIGI; dados de serviços ativos e ARPU por mercado (agosto de 2026).*

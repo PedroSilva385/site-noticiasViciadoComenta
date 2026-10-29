@@ -1,6 +1,6 @@
 ---
 id: '39'
-titulo: LOW-COST causam uma AVALANCHE de RECLAMAÇÕES em PORTUGAL?
+titulo: 'As low-cost causam uma avalanche de reclamações em Portugal?'
 slug: low-cost-causam-uma-avalanche-de-reclamacoes-em-portugal
 data: 16/04/2026
 categoria: Telecom
@@ -56,3 +56,13 @@ Sem grande surpresa, abril de 2025 foi o mês com mais reclamações. Com um aum
 **Conclusão**
 
 Os dados não são particularmente surpreendentes. 2025 foi um ano de mudanças profundas num setor que estava estagnado há bastante tempo. À medida que o mercado entra no segundo ano após esta transformação, espera-se que 2026 traga maior estabilidade, tanto para as operadoras como para os clientes.
+
+## O Comentário do Viciado
+
+Prefiro ler este barómetro com duas lentes em vez de uma, porque a história mais incómoda não está na DIGI. Os 74,9% de insatisfação dentro do segmento low-cost são um facto e não os vou maquiar — mas o segmento premium também subiu 14% em reclamações. Quando todos pioram ao mesmo tempo, o problema já não é o operador novo: é o setor a descobrir que cortar custos no apoio se paga com juros.
+
+É aqui que o TOBI da Vodafone me parece o sintoma mais claro de todos: a inteligência artificial aplicada ao atendimento não está a tornar o suporte melhor, está a torná-lo mais barato. São objectivos diferentes, e os clientes sentem a diferença logo à primeira conversa que não resolve nada.
+
+Fico com uma certeza para 2026: o preço baixo só é sustentável quando o apoio que o acompanha também é. Uma marca que cobra sete euros e atende em três minutos é barata; uma que cobra sete euros e desaparece quando a rede cai está apenas a adiar a fatura — e quem a paga, como sempre, é o cliente.
+
+*Fontes: Barómetro Anual 2025 da Consumers Trust sobre o estado das telecomunicações em Portugal (abril de 2026).*

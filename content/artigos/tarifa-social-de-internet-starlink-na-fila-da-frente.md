@@ -1,6 +1,6 @@
 ---
 id: '49'
-titulo: 'Tarifa Social de Internet, Starlink na fila da frente!'
+titulo: 'Tarifa Social de Internet coloca Starlink na fila da frente'
 slug: tarifa-social-de-internet-starlink-na-fila-da-frente
 data: 06/05/2026
 categoria: Telecom
@@ -54,3 +54,13 @@ Garantindo as velocidades mínimas definidas, o preço mensal e o custo de insta
 ![Starlink](/assets/imagens/Starlink.png)
 
 Se estás numa situação em que podes aderir à TSI, isto pode mudar tudo. Tendo em conta a limitação dos 15 gigabytes das demais e a limitação da cobertura em zonas rurais, a Starlink coloca-se na fila da frente das escolhas mais lógicas para quem pretenda aderir a esta solução.
+
+## O Comentário do Viciado
+
+Há aqui um paradoxo que vale a pena segurar: a operadora que escrevi recentemente estar a disparar nos preços [no plano comercial](/artigos/starlink-corta-velocidade-e-dispara-precos.html) é a mesma que, na Tarifa Social, oferece tráfego ilimitado a 5 € + IVA. Não é generosidade — é aritmética: numa família elegível, 15 GB por mês são hoje uma semana de navegação razoável, e o custo marginal de dar mais gigabytes por satélite é baixo quando o cliente não está a exigir baixa latência urbana.
+
+Vejo nisto duas leituras. A primeira é a boa notícia: uma família no interior sem fibra pode hoje ter internet ilimitada pelo preço de um café por semana, algo que o Decreto-Lei n.º 66/2021 nem sonhava quando fixou os 12 Mbps. A segunda é incómoda: se as incumbentes cumpriram o mínimo legal à risca — 15 GB e nem mais um — enquanto a recém-chegada por satélite fez da obrigatoriedade um argumento de venda, então a régua ficou baixa para uns e negociável para outras.
+
+Fico com a sensação de que a TSI precisava de uma revisão de parâmetros — os 12 Mbps e os 15 GB de 2021 não reconhecem um 2026 em que 4K, videochamada e teletrabalho são o básico. E fica a pergunta que gostava de ver respondida ao regulador: porque pode um serviço por satélite ilimitado custar 5 € e um serviço terrestre ilimitado custar 35 €?
+
+*Fontes: Decreto-Lei n.º 66/2021, decisões da ANACOM sobre a Tarifa Social de Internet, páginas oficiais das operadoras (maio de 2026).*

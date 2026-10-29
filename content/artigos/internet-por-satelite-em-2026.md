@@ -1,6 +1,6 @@
 ---
 id: '8'
-titulo: INTERNET por SATÉLITE em 2026!
+titulo: 'Internet por satélite em 2026: as opções disponíveis em Portugal'
 slug: internet-por-satelite-em-2026
 data: 13/02/2026
 dataPublicacao: '13/02/2026 19:00'
@@ -32,3 +32,13 @@ Mas existem algumas outras alternativas, como a Viasat ou a skyDSL.
 Na minha opinião estes sistemas deveria de ser tornados obrigatórios em edifícios identificados como essenciais (CM, Juntas...), em momentos de calamidade, de modo a permitir a manutenção nas comunicações durante qualquer situação.
 
 Para nós, particulares, diria que vai da escolha e da necessidade de cada um. Se trabalhas remotamente, ou não consegues viver sem estar ligado à internet, um sistema de satélite, juntamente com uma fonte de energia alternativa, pode estar no teu kit de sobrevivência nerd de 2026!
+
+## O Comentário do Viciado
+
+A lição que o SIRESP nos deixou, e que prefiro não repetir, é incómoda de tão simples: redundância construída no mesmo sítio que pode cair não é redundância — é o mesmo ovo em duas tigelas. Centenas de milhões não compram física: se o posto emissor fica sem luz ou sem fibra, tudo o que depende dele cai em cascata.
+
+O satélite é hoje a única camada de conectividade que não partilha modo de falha com a infraestrutura terrestre, e é por isso que a sugestão do artigo — obrigá-lo em edifícios essenciais — me parece barata comparada com o custo de um único dia sem comunicações num município.
+
+Prefiro, no entanto, não vender ilusões ao contrário: satélite não substitui fibra no uso diário — latência, congestionamento e limites de tráfego existem. É um seguro, não um plano. E como todos os seguros, só se descobre o seu valor no dia em que deixa de ser opcional.
+
+*Fontes: ofertas públicas de Starlink, Viasat e skyDSL para o mercado português (fevereiro de 2026).*

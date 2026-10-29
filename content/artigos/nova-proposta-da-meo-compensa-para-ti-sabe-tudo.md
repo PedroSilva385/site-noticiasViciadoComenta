@@ -1,6 +1,6 @@
 ---
 id: '33'
-titulo: NOVA PROPOSTA da MEO compensa para ti? SABE TUDO!
+titulo: 'Vale a pena combinar telecomunicações e energia na nova proposta da MEO?'
 slug: nova-proposta-da-meo-compensa-para-ti-sabe-tudo
 data: 06/04/2026
 categoria: Telecom
@@ -38,3 +38,11 @@ Nas duas simulações que realizei, a **MEO Energia não surge sequer no top 10 
 Ainda assim, o objetivo não é desencorajar a adesão, mas sim dar-vos ferramentas para analisarem cada proposta com dados concretos. A partir daí, poderão escolher de forma consciente.  
   
 No Viciado Comenta, estaremos sempre do lado do consumidor, com foco em partilhar conhecimento que ajude a poupar.
+
+## O Comentário do Viciado
+
+Concordo com a conclusão do artigo e quero acrescentar-lhe o contexto maior. A MEO passar a vender eletricidade não é uma visão energética; é um sintoma de ARPU espremida. Quando um operador precisa de vender kWh para justificar um pacote a quase 57€, o problema deixou de ser criatividade comercial e passou a ser a margem nas telecomunicações a secar. A energia entra como cola, para tornar a fatura menos odiosa.
+
+Dito isto, diverjo num ponto: conveniência não é irracional. Para quem quer uma fatura única e um interlocutor único, pagar um pouco mais pode ser um serviço, não uma asneira. O meu aviso é só para quem se deixa deslumbrar pelo “ilimitado” e pelos “MEOS a dobrar”, que são os ornamentos da oferta, e depois se esquece de simular o kWh no site da ERSE. É na simulação que a promessa se desfaz, e foi exatamente isso que vi nos meus dois cenários: longe do top dez de preço.
+
+*Fontes: página oficial da MEO Energia e simulações realizadas no simulador de preços da ERSE.*

@@ -1,6 +1,6 @@
 ---
 id: '64'
-titulo: DIGI reforça REDE MÓVEL e melhora EXPERIÊNCIA
+titulo: 'DIGI reforça a rede móvel 4G e melhora a experiência'
 slug: digi-reforca-rede-movel-e-melhora-experiencia
 data: 13/07/2026
 categoria: DIGI
@@ -29,3 +29,13 @@ Um dos destaques é o aumento de capacidade na banda dos 900 MHz, bem como a sua
 A DIGI continua a trabalhar para garantir uma robustez de rede que dê ao cliente a garantia de que tem um serviço que funciona em qualquer circunstância. Muito foi feito ao longo destes 18 meses, e estas informações vão precisamente no sentido de que a rede continua a melhorar todos os dias. O caminho é longo, e não será a curto prazo que teremos oportunidade de ver a DIGI ao nível das incumbentes — mas, para uma operadora MNO a operar com preços low-cost, tem sido um percurso positivo aquele que a operadora romena tem feito em terras lusas.
 
 E o próximo passo já está identificado: as melhorias no 5G deverão ser sentidas a curto prazo, estando a DIGI apenas a aguardar luz verde por parte da ANACOM para o pedido feito relativo à detenção dos 80 MHz contíguos na faixa dos 3,6 GHz. Para quem usa a DIGI no dia a dia, a mensagem é simples: a rede está a ficar mais forte, mesmo sem alarido.
+
+## O Comentário do Viciado
+
+Gosto destes temas porque mostram a diferença entre marketing e engenharia. O marketing vende 5G; a engenharia sabe que o cliente não reclama por não ter alcançado os 800 Mbps — reclama porque não apanha rede nenhuma na sala de estar de um prédio antigo. É exactamente esse o problema que a banda dos 900 MHz resolve, e foi isso que a DIGI foi reforçar.
+
+Há uma disciplina estratégica nisto que merece ser notada: em vez de perseguir o brilho da tecnologia nova, a operadora foi tapar o buraco que gera reclamações silenciosas — as dos clientes que simplesmente desistem sem dizer nada.
+
+Ligo este movimento ao da faixa dos 3,6 GHz e vejo o desenho completo: primeiro a base de cobertura, depois a capacidade de pico. Numa empresa que não tem margem para errar duas vezes, escolher por esta ordem é das melhores notícias que um cliente pode receber.
+
+*Fontes: análise técnica de Ricardo José Saraiva à rede 4G da DIGI (julho de 2026).*

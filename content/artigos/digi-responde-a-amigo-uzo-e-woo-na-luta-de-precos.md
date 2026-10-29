@@ -1,6 +1,6 @@
 ---
 id: '35'
-titulo: 'DIGI responde a AMIGO, UZO e WOO na luta de preços!'
+titulo: 'DIGI volta a descer os preços móveis e responde às marcas brancas'
 slug: digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos
 data: 09/04/2026
 categoria: DIGI
@@ -28,4 +28,12 @@ Tudo isto deverá aumentar ainda mais a pressão sobre as operadoras incumbentes
 **  
 Será que estes novos preços são o impulso que faltava para a DIGI ganhar ainda mais tração no mercado nacional?  
   
-**Continuaremos a acompanhar a evolução da situação nos próximos relatórios trimestrais da ANACOM.
+**Continuaremos a acompanhar a evolução da situação nos próximos relatórios trimestrais da ANACOM.**
+
+## O Comentário do Viciado
+
+O que me salta à vista nesta jogada é a inversão de papéis. Durante um ano foi a DIGI a correr atrás das marcas brancas; agora é ela a ditar o preço de entrada e a obrigá-las a responder. Um ilimitado a 6€ não é uma promoção, é uma âncora psicológica que faz qualquer tarifário acima parecer caro, seja qual for a marca.
+
+Tenho, porém, uma dúvida que ninguém parece querer assumir: com a NOWO ainda a ser integrada e o ARPU a descer, até que ponto é que a DIGI consegue sustentar esta guerra de margens sem comprometer o investimento em rede? Baixar o preço é fácil; baixá-lo e continuar a instalar fibra ao mesmo ritmo é outra coisa. Se a empresa conseguir as duas, o problema passa a ser das incumbentes. Se não, estamos simplesmente a ver o pico antes da queda.
+
+*Fontes: novos tarifários móveis publicados no site da DIGI Portugal (abril de 2026) e histórico de campanhas das marcas Amigo, UZO e WOO.*

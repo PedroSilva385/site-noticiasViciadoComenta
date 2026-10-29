@@ -1,6 +1,6 @@
 ---
 id: '29'
-titulo: STARLINK corta VELOCIDADE e DISPARA preços!
+titulo: 'Starlink corta velocidade e dispara nos preços'
 slug: starlink-corta-velocidade-e-dispara-precos
 data: 30/03/2026
 categoria: Telecom
@@ -61,3 +61,15 @@ A Amazon prepara a entrada no setor com o seu projeto de internet por satélite,
 Aqui no <span style="font-style:italic">Viciado Comenta</span>, acreditamos que a concorrência é essencial, especialmente no setor das telecomunicações. É esse o principal motor para preços mais justos e evolução tecnológica acelerada.
 
 Continuaremos a acompanhar este assunto.
+
+## O Comentário do Viciado
+
+Vi esta reestruturação como quem vê um monopolista a testar a elasticidade do preço. A Starlink chegou a Portugal com duas verdades — “chega a qualquer ponto” e “custa o mesmo em qualquer ponto” — e foi precisamente nos meses em que os incêndios e as depressões mostraram que a fibra não sobrevive a um poste partido que ela ganhou argumento para cobrar mais.
+
+O que me salta à atenção no detalhe não é o aumento em si, é o recuo de velocidade: os antigos 250 e 400 Mbps dão agora lugar a um leque de 100, 200 e “o máximo possível”, com o topo a custar 59 €. É segmentação de luxo aplicada a um serviço que se vendia como utilitário — e é o género de movimento que só uma empresa sem concorrente direto pode fazer numa terça-feira qualquer.
+
+É por isso que escrevi que “concorrência precisa-se” com mais força do que o habitual. [A entrada da Amazon LEO não vai apenas baixar preços](/artigos/internet-por-satelite-em-2026.html); vai obrigar a Starlink a voltar a justificar porque custa o que custa. Enquanto essa segunda constelação não estiver no céu português, a única alavanca que nos resta é a fibra — cada vez mais rápida, cada vez mais barata, como mostra [a guerra dos 2 Gbps entre MEO e NOS](/artigos/nos-avanca-com-novo-tarifario-de-internet-fixa-em-resposta-a-meo.html).
+
+Continua a fazer sentido como backup e como última opção em zonas sem cobertura. Deixou de fazer sentido como primeira casa.
+
+*Fontes: página oficial de planos Starlink Portugal, comparativos de fibra ótica das operadoras portuguesas, e análise editorial do Viciado Comenta (março de 2026).*

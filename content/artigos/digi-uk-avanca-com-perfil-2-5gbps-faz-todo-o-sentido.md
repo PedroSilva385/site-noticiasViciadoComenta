@@ -1,6 +1,6 @@
 ---
 id: '52'
-titulo: 'DIGI UK, avança com perfil 2,5Gbps! Faz todo o sentido!'
+titulo: 'DIGI Reino Unido lança perfil intermédio de 2,5 Gbps'
 slug: digi-uk-avanca-com-perfil-2-5gbps-faz-todo-o-sentido
 data: 12/05/2026
 categoria: DIGI
@@ -30,3 +30,11 @@ Com três propostas de internet por fibra, a DIGI UK passará a disponibilizar p
 A existência de um perfil de 2,5 Gbps em Portugal deixou, atualmente, de fazer sentido, tendo em conta a proximidade de preço entre os serviços de 1 Gbps e 10 Gbps, pelo que seria altamente improvável a chegada dessa proposta ao nosso território.
 
 Ainda assim, é relevante compreender que a DIGI percebe que um meio-termo pode — e deve — existir no seu “menu” de serviços de internet por fibra, precisamente porque, em 2026, os 10 Gbps continuam a ser excessivos face às necessidades da maioria dos seus clientes.
+
+## O Comentário do Viciado
+
+Uso este caso como prova de que a lacuna portuguesa não é desconhecimento: é decisão. Se a DIGI UK conseguiu três degraus bem espaçados, a casa-mãe sabe perfeitamente como se desenha um menu de velocidades. A razão de Portugal ter ficado com o abismo entre 1 e 10 Gbps chama-se custo de terminal — manter um único ONT barato para toda a base dói menos do que oferecer um meio-termo a 2,5 Gbps.
+
+O que me preocupa é o efeito colateral: quando um operador só tem 1 ou 10, o cliente médio que precisaria de mais acaba empurrado para 10 Gbps que não usa, ou travado em 1 que lhe chega a custo. Um perfil intermédio não serve o entusiasta, serve exatamente quem hoje não tem para onde ir. No Reino Unido faz sentido; cá também faria.
+
+*Fontes: portefólio de fibra da DIGI Reino Unido (2026) e análise anterior sobre o novo perfil de 2 Gbps da MEO.*

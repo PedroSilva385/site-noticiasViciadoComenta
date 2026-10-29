@@ -1,8 +1,6 @@
 ---
 id: '65'
-titulo: >-
-  ANACOM aprova 80MHz contíguos na faixa 3,6GHz à DIGI e débitos PASSAM dos
-  1GBPs no 5G!
+titulo: 'ANACOM aprova 80 MHz contíguos à DIGI e o 5G já passa de 1 Gbps'
 slug: >-
   anacom-aprova-80mhz-contiguos-na-faixa-3-6ghz-a-digi-e-debitos-passam-dos-1gbps-no-5g
 data: 23/07/2026
@@ -34,3 +32,13 @@ Foi igualmente possível verificar que a DIGI optou por colocar todo o tráfego 
 Numa altura em que a DIGI pretende continuar a expandir o seu serviço móvel e avançou também para o lançamento da NET FIXA 5G, esta é uma excelente notícia para a operadora romena, que vê agora reforçada a sua capacidade nesta faixa, permitindo melhorar a experiência aos seus clientes móveis e também acomodar de forma mais robusta os serviços de NET FIXA 5G nos seus sites.
 
 Continuaremos como sempre a acompanhar todas as novidades sobre a DIGI, aqui no Viciado Comenta.
+
+## O Comentário do Viciado
+
+Este desfecho fecha o ciclo que tinha aberto quando a DIGI pediu a alteração na faixa dos 3,6GHz. O que está em causa não é só burocracia regulatória: é espetro contíguo, e isso é ganho físico de rede, não de marketing.
+
+Com os 80 MHz seguidos na banda N78, a operadora deixa de depender de agregações complicadas para chegar a débitos altos, e isso traduz-se em estabilidade real nos sites mais congestionados. O teste do Ricardo, acima de 1 Gbps em Murtal, é a prova de que a teoria se passou na prática.
+
+Prefiro, no entanto, ser honesto: um débito de pico medido num site bom não é a média que cada cliente sentirá à hora de ponta. Ainda assim, ganho de capacidade nesta faixa é sempre bem-vindo — e sustenta tanto o móvel como a NET FIXA 5G, que depende dessa mesma robustez.
+
+*Fontes: deliberação do Conselho de Administração da ANACOM de 14 de julho de 2026; testes de débito de Ricardo José Saraiva (banda N78, Murtal-Cascais).*

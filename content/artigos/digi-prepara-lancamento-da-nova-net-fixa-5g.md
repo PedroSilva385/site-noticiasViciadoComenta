@@ -39,3 +39,13 @@ Embora a DIGI ainda não tenha oficializado o lançamento da NET FIXA 5G, a oper
 Nos próximos dias deverão surgir mais detalhes sobre a disponibilidade e condições finais do serviço. Caso as informações atualmente conhecidas se confirmem, esta poderá ser uma das medidas mais importantes da DIGI desde a sua entrada no mercado português, permitindo conquistar novos clientes e reduzir a pressão nas zonas onde a fibra ainda não chegou.
 
 O que acham desta novidade? Os 50 Mbps são suficientes para substituir uma ligação fixa tradicional ou esperavam velocidades mais elevadas?
+
+## O Comentário do Viciado
+
+Vou responder à pergunta com honestidade: 50 Mbps não substituem a fibra de 1 Gbps, mas também nunca foi esse o adversário deste produto. O concorrente real da NET FIXA 5G é o DSL vergonhoso e o nada absoluto de quem vive fora do raio de expansão. Para essa gente, 50 Mbps por 5 € não é uma alternativa pobre — é a primeira vez que têm onde escolher.
+
+Há um detalhe no desenho do serviço que merecia ser sublinhado: atá-lo à morada. À partida é limitativo, mas prefiro ler aí honestidade técnica — uma rede móvel partilhada não aguenta um router ilimitado a viajar pelo país todo, e fingir o contrário seria vender humo que rebentaria na primeira hora de ponta.
+
+Ligando este lançamento ao intervalo na expansão de fibra que a DIGI anunciou, o retrato fica completo: a operadora sabe que não chega a todo o lado ao mesmo tempo, e em vez de pedir paciência aos clientes, empresta-lhes o 5G enquanto a obra decorre. É das raras vezes em que uma limitação de rede se transformou num argumento de venda.
+
+*Fontes: informação confirmada pelo Viciado Comenta; secção de perguntas frequentes do site da DIGI Portugal (junho de 2026).*

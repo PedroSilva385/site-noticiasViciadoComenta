@@ -1,13 +1,11 @@
 ---
 id: '36'
-titulo: 'ANACOM, EVOMEDIA, UN2… QUEM fala sobre este ESCÂNDALO?'
+titulo: 'Caso UN2: sete meses depois, o silêncio de ANACOM, EVOMEDIA e NOS'
 slug: anacom-evomedia-un2-quem-fala-sobre-este-escandalo
 data: 12/04/2026
 categoria: Telecom
 autor: Pedro Silva
-resumo: >-
-  O caso da UN2 foi dos mais estranhos que passou por Portugal. 7 meses depois,
-  o que se sabe?
+resumo: A operadora UN2 desapareceu após denúncias de revenda irregular de serviços. Sete meses depois, clientes continuam sem respostas e o caso arrasta-se em silêncio.
 video: 'https://youtu.be/4jBtfLF7nGQ'
 ---
 Aqui no Viciado Comenta estamos sempre atentos às novidades no mercado das telecomunicações e, por isso, durante o ano de 2025 tivemos oportunidade de [acompanhar o lançamento da operadora UN2 (Unidos)](https://youtu.be/BAuLlIQJXi0) no mercado nacional.
@@ -46,3 +44,15 @@ Há um silêncio generalizado sobre este caso em Portugal. Uma operadora grossis
 
   
 À medida que o tempo passa, esta situação torna-se cada vez mais difícil de compreender e aparenta ser um daqueles casos que se arrastará durante muitos anos em tribunal.
+
+## O Comentário do Viciado
+
+O que me preocupa neste caso não é só o que aconteceu — é o que deixou de acontecer depois. Uma operadora nasceu, captou clientes, desapareceu e ninguém assumiu publicamente uma única palavra sobre os milhares de pessoas que ficaram sem serviço. Sete meses de silêncio, de uma marca que mudou de nome pelo caminho, é tempo mais do que suficiente para perceber que aqui não há narrativa em curso: há um dossiê esquecido com vítimas bem identificadas.
+
+Enquanto regulador, a ANACOM tem aqui o teste mais incómodo dos últimos anos. Deu luz verde a um modelo grossista que alegadamente não era legítimo e, mesmo assim, não encontramos qualquer comunicação sobre medidas tomadas, coimas abertas ou recomendações publicadas. Compreendo que o segredo de justiça limite o que se pode dizer em tribunal; não limita, porém, o dever de explicar ao mercado o que está a ser feito para proteger consumidores.
+
+Do lado da EVOMEDIA, da MEO e da NOS, o silêncio tem outra leitura: nenhuma das três quer o tema associado ao seu nome. É uma postura defensável do ponto de vista comercial e inaceitável do ponto de vista cívico — sobretudo quando falamos de infraestruturas que usam espectro e recursos públicos.
+
+Vou continuar a acompanhar este processo e a regressar a ele sempre que houver novidade. Se foste cliente da UN2 e tens informação atualizada sobre o estado do processo, deixa um comentário: é precisamente este tipo de casos que não pode cair no esquecimento.
+
+*Fontes: comunicados públicos da Masnostra (setembro de 2025) e reportagem do canal Viciado Comenta. Situação reportada até abril de 2026.*

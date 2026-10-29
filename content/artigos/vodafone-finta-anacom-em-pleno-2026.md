@@ -59,3 +59,15 @@ Em 2026, os tarifários de Banda Larga Móvel dedicados enfrentam uma procura ca
 Paradoxalmente, mesmo que a ANACOM decidisse amanhã fazer cumprir de forma rigorosa as orientações aplicáveis a este tipo de tarifários, o impacto prático seria hoje bastante reduzido, precisamente porque muitos utilizadores já abandonaram estas soluções.
 
 Ainda assim, permanece uma questão de princípio: quando uma situação potencialmente desconforme se mantém durante anos sem correção, a eventual intervenção tardia perde grande parte da sua utilidade. É difícil não lamentar uma demora tão prolongada que, na prática, acabou por tornar qualquer atuação futura muito menos relevante para os consumidores.
+
+## O Comentário do Viciado
+
+Seis anos com as mesmas condições à vista de todos não é descuido — é gestão de risco. Uma operadora que mantém “todo o tráfego incluído” com corte para 5 ou 10 Mbps após 200 GB mensais desde 2020 fez uma conta simples: a probabilidade de fiscalização multiplicada pela sanção é inferior à receita de manter o banner.
+
+O que mais me incomoda neste caso é a comparação com o que se passou noutros lados. [Quando a WOO limitou aos 200 GB diários, a tempestade mediática fez a fasquia subir para 361 GB em duas semanas](/artigos/woo-aumenta-limite-dos-200gb-para-361gb-diarios.html); aqui, com limitações que duram até ao fim do ciclo de faturação — exactamente o que a ANACOM proibiu em 2014 —, passaram seis anos sem que o sector acordasse. A diferença não está na gravidade da prática, está em quem a descobriu primeiro e com que volume de voz.
+
+É desconfortável admitir, mas o único regulador que funcionou neste país a um ritmo aceitável foi o público. [O caso UZO mostrou-nos uma marca a corrigir PDFs durante uma contestação](/artigos/uzo-nega-tudo-e-estala-polemica.html); este mostra-nos uma marca que nem precisou de corrigir seja o que for. Enquanto a fiscalização depender de fóruns e de artigos de blog, as operadoras não competem em conformidade — competem em paciência.
+
+Resta saber se a ANACOM, quando finalmente olhar para a Banda Larga Móvel dedicada, encontrará ainda alguém a quem a correção aproveite. A resposta honesta é não. E isso é o problema.
+
+*Fontes: condições contratuais dos tarifários Vodafone Go Total e Vodafone ON, orientação da ANACOM de 2014 sobre serviços ilimitados (junho de 2026).*

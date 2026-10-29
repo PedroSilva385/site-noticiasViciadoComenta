@@ -47,3 +47,13 @@ Por **34,99 €** ou **39,99 €**, os clientes podem subscrever velocidades de 
 ### **Conclusão**
 
 Dito isto, a Lazer Telecom ganha uma forte relevância na missão de garantir conectividade a clientes cujo direito ao acesso a serviços de qualidade se vê limitado pela sua localização e pela menor densidade populacional da região. Operadoras regionais como a Lazer Telecom ou a LigaT são fundamentais para preencher os vazios deixados pelas gigantes nacionais. Afinal, a democratização do acesso a uma internet rápida, fiável e de qualidade só será plenamente garantida somando os esforços de todas as operadoras que, à escala da sua dimensão, cobrem o território português.
+
+## O Comentário do Viciado
+
+Comparar os preços da Lazer com os preços da DIGI é tentador e injusto ao mesmo tempo, e vale a pena explicar porquê. A DIGI pode cobrar sete euros porque tem escala nacional a dividir os custos; a Lazer cobre um território onde cada euro investido serve dezenas de casas, não dezenas de milhares. O preço não é ganância — é geografia.
+
+O que realmente me interessa no caso algarvio é o verão: uma região que triplica a população em dois meses transforma a saturação das redes móveis em certeza anual. Enquanto os grandes vêem isso como risco de investimento, regionais como a Lazer vêem-no como negócio — e o AirFiber é exactamente a resposta certa para um problema que a fibra sozinha não resolve.
+
+Há aqui um critério simples que uso sempre nestas análises: numa zona onde a alternativa é o ADSL da incumbente, uma operadora a trinta e cinco euros não é cara — é a única concorrência que existe. E a concorrência, mesmo a três estrelas, vale sempre mais do que o monopólio a sete.
+
+*Fontes: tarifários publicados no site da Lazer Telecom (outubro de 2026); experiência de acompanhamento do mercado regional algarvio.*

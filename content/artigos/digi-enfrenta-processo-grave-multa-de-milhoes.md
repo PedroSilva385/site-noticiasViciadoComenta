@@ -1,6 +1,6 @@
 ---
 id: '31'
-titulo: DIGI enfrenta processo GRAVE! Multa de MILHÕES?
+titulo: 'DIGI investigada na Roménia por alegado abuso de posição dominante'
 slug: digi-enfrenta-processo-grave-multa-de-milhoes
 data: 01/04/2026
 categoria: DIGI
@@ -45,3 +45,13 @@ video: 'https://youtu.be/EhgbizNO4Ww'
 <span style="font-size:0.9em">Até que este processo esteja concluído, paira sobre a DIGI uma enorme incerteza, que poderá ou não influenciar o rumo da sua operação a curto prazo.</span>
 
 <span style="font-size:0.9em">Continuaremos a acompanhar todos os desenvolvimentos aqui, no Viciado Comenta.</span>
+
+## O Comentário do Viciado
+
+Confesso que reli a notícia duas vezes antes de escrever isto, e digo o que penso mesmo que doa aos fãs da marca: se aplaudimos quando o regulador obriga a Telefónica, a MEO ou a Orange a abrir as suas redes, temos de aplaudir — ou pelo menos aceitar — quando a mesma régua se aplica à DIGI. Princípios que só valem contra os outros não são princípios, são táticas.
+
+Dito isto, quero travar o alarmismo fácil. Os 10% do volume de negócios do grupo são o teto legal da multa, não a prática habitual dos reguladores, e uma investigação não é condenação. A diferença entre as duas coisas pode medir-se em anos.
+
+O que me parece realmente em jogo é a reputação. A DIGI construiu a sua marca à sombra do papel de fora-do-sistema que combate os grandes; se vier a provar-se que reproduziu em casa as práticas que denuncia nos outros, o estrago na confiança vale mais do que qualquer coima.
+
+*Fontes: investigação do Romanian Competition Council contra a DIGI (abril de 2026); nota informativa aos investidores da DIGI; notícia do site Economia Digital.*
