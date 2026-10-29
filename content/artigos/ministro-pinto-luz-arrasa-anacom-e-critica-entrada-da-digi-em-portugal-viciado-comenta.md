@@ -23,7 +23,7 @@ Pinto Luz é bastante taxativo quanto à decisão tomada pela ANACOM aquando do 
 
 A pergunta que temos de fazer é: **por que motivo teve a ANACOM de avançar para essa decisão?**
 
-Durante anos, Portugal viveu um clima perfeito para os investimentos da MEO, NOS e Vodafone: altíssima previsibilidade regulatória, um nível de concorrência controlled e preços que subiram de forma consistente acima de muitos dos restantes países da UE.
+Durante anos, Portugal viveu um clima perfeito para os investimentos da MEO, NOS e Vodafone: altíssima previsibilidade regulatória, um nível de concorrência controlada e preços que subiram de forma consistente acima de muitos dos restantes países da UE.
 
 Ao contrário de outros mercados europeus, Portugal optou sempre por fechar a porta a operadoras que pretendessem operar como MVNO (_Mobile Virtual Network Operators_), isto é, empresas que não fizessem pesados investimentos na construção de rede própria e que, em alternativa, pagassem um "aluguer" da infraestrutura existente aos operadores com rede. Essa abertura permitiu, por exemplo em Espanha, criar um gigante chamado MásMóvil ou alavancar a própria DIGI, que arrancou no país vizinho precisamente nessas condições e só agora está a fazer a transição de MVNO para MNO (_Mobile Network Operator_).
 
