@@ -1,6 +1,6 @@
 ---
 id: '43'
-titulo: 'DIGI no Metro de Lisboa, uma NOVELA antiga...'
+titulo: 'DIGI avança no Metro de Lisboa, mas a Linha Azul continua sem sinal'
 slug: digi-no-metro-de-lisboa-uma-novela-antiga
 data: 21/04/2026
 categoria: DIGI
@@ -33,3 +33,13 @@ Analisando o panorama geral, conclui-se que as operadoras incumbentes parecem te
 O Metropolitano de Lisboa transportou, em 2024, cerca de 176,7 milhões de passageiros, o que demonstra bem a relevância deste meio de transporte na capital. A ausência da DIGI de uma das linhas continua a ser um dos seus maiores pontos fracos neste momento.
 
 A chegada à Linha Azul deverá marcar o fim de um processo longo e complexo, representando também mais um passo importante no amadurecimento da rede móvel da operadora romena.
+
+## O Comentário do Viciado
+
+Este caso ensinou-me uma coisa sobre novos entrantes: a cobertura de um operador não depende só dele. A DIGI tem rede, tem tecnologia e tem vontade, mas continua dependente de terceiros para chegar ao túnel do Metro.
+
+É por isso que a Linha Azul me preocupa tanto. É das mais movimentadas da capital e, enquanto não tiver sinal, é uma mancha visível num serviço que, fora isto, já está maturado. Os débitos de 500 Mbps nos testes animam, mas de nada serve velocidade num sítio onde o cliente simplesmente não apanha rede.
+
+Vejo aqui um detalhe estrutural que vale para todo o setor: o último quilómetro, dentro de um túnel ou num prédio, raramente é questão de tecnologia — é questão de acesso à infraestrutura de quem a controla.
+
+*Fontes: análise de cobertura de Ricardo José Saraiva (abril de 2026); dados de passageiros do Metropolitano de Lisboa (2024).*

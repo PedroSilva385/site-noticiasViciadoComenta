@@ -1,6 +1,6 @@
 ---
 id: '42'
-titulo: 'MEO, NOS e Vodafone acusadas de cartel!'
+titulo: 'AdC investiga MEO, NOS e Vodafone por alegado cartel na internet das escolas'
 slug: meo-nos-e-vodafone-acusadas-de-cartel
 data: 20/04/2026
 categoria: DIGI
@@ -35,3 +35,11 @@ Nenhuma dessas tentativas se revelou frutífera, tendo o Tribunal da Relação d
 O caso ainda não está fechado, pelo que, até lá, muita água ainda pode correr por debaixo da ponte. A AdC terá aqui uma oportunidade de ouro para demonstrar a sua força num mercado que, ao longo de décadas, foi sendo controlado de forma pouco condizente com um verdadeiro mercado concorrencial.
 
 Assuntos como este deixam cada vez mais a nu o motivo pelo qual Portugal necessitava desesperadamente de um novo entrante. A presença de um concorrente fora da esfera de influência das incumbentes é a maior garantia de concorrência de que um mercado fortemente fechado, como era o nosso, necessitava.
+
+## O Comentário do Viciado
+
+Manejo isto com duas mãos e não abro mão de nenhuma. Na primeira está a presunção de inocência: há uma investigação, não uma condenação, e “alegado cartel” tem de ser dito assim até a AdC provar o contrário. Na segunda está o dado estrutural que ninguém desmente: três empresas que, durante décadas, repartiram um mercado onde os preços raramente desciam e as diferenças entre marcas eram cosméticas. Isso é um facto mesmo que o cartel não exista.
+
+O que me preocupa menos é a coima e mais o destinatário: concursos públicos de internet escolar são dinheiro público, e um preço concertado para cima paga-se com impostos e com escolas piores. E diz-me muito o timing: este caso rebenta justamente quando entra um quarto que não joga no mesmo clube. Se a AdC quiser, tem aqui a hipótese de limpar anos de suspeita. Portugal não precisava de mais um regulador a avisar; precisava de um que morda.
+
+*Fontes: investigação do Jornal Público sobre o processo da Autoridade da Concorrência (abril de 2026) e comunicações judiciais noticiadas.*

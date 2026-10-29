@@ -1,6 +1,6 @@
 ---
 id: '48'
-titulo: NOS faz alterações ao plano de 1Gbps e disponibiliza velocidade simétrica!
+titulo: NOS passa o plano de 1 Gbps a velocidade simétrica para alguns clientes
 slug: nos-faz-alteracoes-ao-plano-de-1gbps
 data: 04/05/2026
 categoria: Telecom
@@ -36,3 +36,11 @@ Apesar disso, segundo o que é descrito pelos utilizadores da NOS, parece que:
 A NOS está a avançar e deixa agora a MEO como a única das quatro operadoras que não dispõe deste perfil de velocidade 1/1 Gbps. Recorde-se que a DIGI e a Vodafone já dispõem desta simetria de velocidade há algum tempo, vindo agora a NOS a ajustar-se a esta oferta.
 
 Para o cliente comum, esta pode não ser uma alteração significativa, mas existe uma franja de consumidores que privilegia bastante uma maior capacidade de upload no seu serviço doméstico.
+
+## O Comentário do Viciado
+
+O que mais me chama a atenção nisto nem é a velocidade: é o método. A NOS mexeu nos termos e condições e deixou que os fóruns descobrissem a novidade, sem um único comunicado. É uma escolha cada vez mais comum nas incumbentes: implementar em silêncio para não ficar refém de promessas de marketing.
+
+Tenho para mim que o upload está a deixar de ser detalhe técnico para ser argumento de venda. Teletrabalho, cópias de segurança na nuvem e criação de conteúdo caseiro viraram o upload de 100 Mbps num gargalo real. Ao subir para simétrico, a NOS não está a conquistar o cliente médio, está a responder a uma franja crescente que já não perdoa essa diferença. E deixa a MEO sozinha a justificar porque ainda não acompanha.
+
+*Fontes: relatos de utilizadores no fórum ZWAME e nova redação dos termos e condições de serviço da NOS (maio de 2026).*

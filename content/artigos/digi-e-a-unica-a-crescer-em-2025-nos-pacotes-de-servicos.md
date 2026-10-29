@@ -1,6 +1,6 @@
 ---
 id: '14'
-titulo: DIGI é a única a CRESCER em 2025 nos PACOTES de SERVIÇOS!
+titulo: 'DIGI é o único operador a crescer nos pacotes de serviços em 2025'
 slug: digi-e-a-unica-a-crescer-em-2025-nos-pacotes-de-servicos
 data: 27/02/2026
 dataPublicacao: '27/02/2026 19:00'
@@ -44,3 +44,13 @@ Considero que o ano de 2025 ainda não foi um verdadeiro ano de pleno efeito da 
 **3 - redução das quotas dos três operadores principais.**  
   
 E tu, o que achas que vai acontecer?
+
+## O Comentário do Viciado
+
+Vou responder com o que os números me dizem, não com o que a torcida gostaria. As três tendências que antecipo mantêm-se, mas há um dado deste relatório que me parece o mais importante e passa ao lado das manchetes: 59,2% dos serviços móveis ainda são vendidos isolados.
+
+Ou seja, a guerra dos pacotes ainda só se trava em metade do mercado. Enquanto o móvel continuar a ser comprado como produto único, a DIGI mantém a sua arma mais simples — o preço de entrada — relevante. O dia em que os incumbentes conseguirem enrolar o móvel isolado num pacote de casa, aí sim, a vantagem da entrante começa a esfriar.
+
+Outro detalhe que sublinho: a MEO ter recuperado quota de receita sem ganhar quota de clientes diz que a batalha deixou de ser travada por número de cabeças e passou a ser travada por valor de cada uma. Não é por acaso que as operadoras insistem em TV, streaming e fidelizações: não querem mais clientes, querem clientes mais cheios.
+
+*Fontes: relatório ANACOM sobre pacotes de serviços, 4.º trimestre de 2025 (fevereiro de 2026).*

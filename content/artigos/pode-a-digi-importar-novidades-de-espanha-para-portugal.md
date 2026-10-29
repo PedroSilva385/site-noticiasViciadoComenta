@@ -1,6 +1,6 @@
 ---
 id: '28'
-titulo: PODE a DIGI importar novidades de ESPANHA para PORTUGAL?
+titulo: 'Pode a DIGI importar novidades de Espanha para Portugal?'
 slug: pode-a-digi-importar-novidades-de-espanha-para-portugal
 data: 26/03/2026
 categoria: DIGI
@@ -71,3 +71,13 @@ A DIGI continua a destacar-se pelos preços agressivos e pela qualidade da inter
 Para utilizadores mais básicos, é uma excelente opção. Para utilizadores mais exigentes, poderá ainda não ser a solução ideal.
 
 Com o tempo, é provável que muitas destas limitações venham a ser resolvidas. A grande questão é perceber se isso acontecerá com a rapidez que o mercado exige.
+
+## O Comentário do Viciado
+
+Há um erro de leitura que vejo repetir-se nas discussões sobre a DIGI em Portugal: tratar o mercado espanhol como uma loja de novidades pronta a importar. A DIGI espanhola não é a mesma empresa com outro sotaque — é uma operação madura, com escala, contratos de conteúdo fechados há anos e uma base de clientes que justifica investir em canais desportivos que cá ninguém lhe vende.
+
+O exemplo do IP público é o mais revelador. Em Espanha resolve-se com um euro por mês porque lá existe margem de endereçamento e um mercado habituado a pagar por funcionalidades. Em Portugal, com a integração dos clientes da NOWO ainda a decorrer, cada IP público é uma peça num tabuleiro que a operadora ainda está a montar. Não é recusa, é sequenciamento.
+
+É por isso que [o caso do metro de Lisboa](/artigos/digi-no-metro-de-lisboa-uma-novela-antiga.html) me interessa tanto como termómetro: mostra que a DIGI cá reproduz, com lentidão, o guião que lhe funcionou lá. Quando entendermos isto — que Portugal é o mercado onde ela ainda está a aprender a andar — percebemos também que as limitações de hoje não são defeitos de fabrico, são a factura de chegar tarde a um mercado onde [os incumbentes dominam os conteúdos desportivos](/artigos/mercado-das-telecom-em-portugal-2025.html) quase desde o início.
+
+*Fontes: sites oficiais DIGI Portugal e DIGI Espanha, informação pública sobre grelhas de canais, e análise editorial do Viciado Comenta (março de 2026).*

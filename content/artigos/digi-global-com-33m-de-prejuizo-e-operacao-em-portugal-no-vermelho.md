@@ -1,6 +1,6 @@
 ---
 id: '16'
-titulo: DIGI global com 33M de prejuízo e OPERAÇÃO em PORTUGAL no VERMELHO
+titulo: 'DIGI global com 33 milhões de prejuízo e operação em Portugal no vermelho'
 slug: digi-global-com-33m-de-prejuizo-e-operacao-em-portugal-no-vermelho
 data: 03/03/2026
 dataPublicacao: '03/03/2026 19:00'
@@ -36,3 +36,13 @@ Sendo um dos mercados num estágio de maturidade mais reduzido, é natural que a
 Ainda assim, a DIGI tem motivos para sorrir. Foram atingidas as 850 mil unidades geradoras de receita, o que compara com 676 mil em 2024. 2026 será um ano de consolidação. A DIGI já anunciou uma redução na expansão da rede de fibra em Portugal, não fechando a porta à expansão futura, mas parece ter chegado a hora de colher alguns frutos de todo este investimento feito em 2025.  
   
 **Veremos o comportamento do mercado das telecomunicações em 2026, tanto em Portugal como nos vários mercados onde a DIGI se encontra em franca expansão.**
+
+## O Comentário do Viciado
+
+Setenta e oito milhões de euros negativos em Portugal lêem-se como sentença, mas convém ler a frase toda: a operação cresceu 26% em unidades geradoras de receita e fatura já 70 milhões. Não é uma operação a afundar; é uma operação a pagar a rede à frente dos clientes, à espera que eles a reembolsem em mensalidades ao longo de anos.
+
+É essa a diferença estrutural para os incumbentes que me interessa sublinhar: quando a MEO, a NOS ou a Vodafone mostram lucro, estão também a colher infraestruturas pagas nas décadas em que quase ninguém lhes disputava nada. A DIGI faz o caminho inverso — primeiro o investimento, depois a receita — e o prejuízo de hoje é simplesmente o preço dessa ordem.
+
+O que vigiar em 2026 não é saber se o vermelho aparece, é saber se cada novo cliente chega mais depressa do que cresce a fatura do investimento. Se chegar, o equilíbrio é uma questão de calendário — e não de milagre.
+
+*Fontes: resultados financeiros preliminares do grupo DIGI referentes a 2025 (divulgados em março de 2026).*

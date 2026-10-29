@@ -1,8 +1,6 @@
 ---
 id: '57'
-titulo: >-
-  AdC acaba de aplicar uma coima no valor de 13,35 milhões de euros às empresas
-  MEO, NOS, Vodafone e Accenture!
+titulo: 'AdC aplica coima de 13,35 milhões de euros a MEO, NOS, Vodafone e Accenture'
 slug: >-
   a-adc-acaba-de-aplicar-uma-coima-no-valor-de-13-35-milhoes-de-euros-as-empresas-meo-nos-vodafone-e-accenture
 data: 06/06/2026
@@ -40,3 +38,13 @@ Não é a primeira vez que a AdC sanciona as operadoras de telecomunicações po
 Os reguladores são fundamentais num segmento que, se deixado ao sabor da "autorregulação", rapidamente se torna numa terra dominada pelos grandes operadores, sem espaço para qualquer fator disruptivo — quer em termos de serviços, quer em termos de preço — por parte de qualquer empresa com interesse em entrar no mercado.
 
 Casos como este devem fazer o consumidor sorrir, mas infelizmente, e dada a dimensão das coimas, não serão do meu ponto de vista suficientemente dissuasores de futuras práticas semelhantes.
+
+## O Comentário do Viciado
+
+O que torna este caso diferente de um cartel de preços é que a concertação não aconteceu no valor cobrado, aconteceu na qualidade entregue. Três operadores decidiram, ao mesmo tempo, encher as gravações de publicidade, sabendo que nenhum cliente teria para onde fugir. É uma forma mais difícil de apanhar, e mais difícil ainda de o consumidor notar, porque não aparece na fatura.
+
+É exatamente por isso que me preocupa tanto o parágrafo sobre as intimações dos tribunais. Uma coima paga-se e esquece-se; o que verdadeiramente assusta um operador é o nome exposto. Quando a AdC é obrigada a ocultar as visadas, retira-se à sanção o seu único dente público.
+
+Prefiro ler isto como um aviso: enquanto a informação ficar refém de estratégias jurídicas, a dissuasão depende só do valor da multa. E, neste setor, já vimos que o valor não chega.
+
+*Fontes: comunicado 10/2026 da Autoridade da Concorrência (AdC), junho de 2026.*

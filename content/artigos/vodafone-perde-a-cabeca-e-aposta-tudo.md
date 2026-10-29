@@ -1,6 +1,6 @@
 ---
 id: '41'
-titulo: VODAFONE perde a cabeça e APOSTA TUDO!
+titulo: Vodafone lança campanha Member Get Member para travar a fuga para as low-cost
 slug: vodafone-perde-a-cabeca-e-aposta-tudo
 data: 17/04/2026
 categoria: Telecom
@@ -33,3 +33,11 @@ Não existe limite ao número de angariações que podes fazer, estando apenas l
 **Conclusão:**
 
 Esta é uma campanha agressiva que visa aumentar a quota de mercado da Vodafone. Numa operadora cuja norma são 24 meses de fidelização, pretende-se, assim, fixar mais clientes através da atribuição de um desconto adicional.
+
+## O Comentário do Viciado
+
+Vale a pena não cair na tentação de ler isto como generosidade. Um Member Get Member na marca premium, com descontos faseados a 5€ por mês, é a Vodafone a admitir que já não retém clientes com serviço: retém-nos com desconto e com o desconforto de os amigos perderem o benefício se forem embora. É fidelização emocional disfarçada de campanha.
+
+O que me parece revelador é o alvo: não é conquistar gente nova, é travar a sangria para as low-cost. Uma marca que precisa que os próprios clientes façam o trabalho do departamento comercial está a confessar que a sua proposta, sozinha, já não segura ninguém. Para o consumidor, fica a leitura prática: 70€ distribuídos por catorze meses não compensam uma má experiência, mas mostram o quanto a pressão da DIGI já chegou ao topo do mercado.
+
+*Fontes: página oficial da campanha Member Get Member da Vodafone (abril de 2026).*

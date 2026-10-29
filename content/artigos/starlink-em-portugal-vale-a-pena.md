@@ -1,6 +1,6 @@
 ---
 id: '13'
-titulo: STARLINK em PORTUGAL vale a PENA?
+titulo: 'Starlink em Portugal vale a pena?'
 slug: starlink-em-portugal-vale-a-pena
 data: 26/02/2026
 dataPublicacao: '26/02/2026 19:00'
@@ -28,3 +28,13 @@ Pode custar imenso aos europeus ter de admitir, mas a verdade é que nos atrasá
 É certo que não basta apenas adquirir estes equipamentos para garantir acesso à Internet. Existe também a necessidade de ter uma fonte de alimentação que assegure as necessidades do equipamento, mesmo em momentos em que o abastecimento elétrico é posto em causa.  
   
 **E tu, vais ser mais um dos muitos que vai adquirir um Starlink para uma eventual situação de emergência?**
+
+## O Comentário do Viciado
+
+Prefiro sempre a voz de quem usa a um painel de especificações. Foi por isso que convidei o Eduardo para esta conversa: não é entusiasta de tecnologia em abstracto, é alguém que trabalha via internet, que faz live na Twitch e publica no YouTube, e em quem uma queda de upload custa audiência e dinheiro.
+
+A honestidade obriga-me a separar duas coisas que este artigo mistura de propósito. Para o Eduardo — e para milhares de portugueses em moradas sem fibra — o Starlink não é um luxo, é a única ligação decente disponível. Para quem tem fibra a 10 € no prédio, continua a ser um seguro caro contra o azar. Confundi estas duas realidades durante anos, até perceber que a pergunta “vale a pena?” depende inteiramente da morada de quem responde.
+
+Há um terceiro plano, esse mais incómodo, que desenvolvi na [análise à internet por satélite em 2026](/artigos/internet-por-satelite-em-2026.html): quando um serviço crítico de um país depende da constelação de uma empresa privada estrangeira, a discussão da soberania europeia deixa de ser abstracta. Os números do Eduardo, as latências que ele mede e as lives que ele não perdeu valem mais do que qualquer comunicado institucional.
+
+*Fontes: entrevista a Eduardo Gomes (cliente Starlink), comparativos de serviço satélite vs fibra, e análise editorial do Viciado Comenta (fevereiro de 2026).*

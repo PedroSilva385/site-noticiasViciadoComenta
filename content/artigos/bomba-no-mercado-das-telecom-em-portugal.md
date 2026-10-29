@@ -1,6 +1,6 @@
 ---
 id: '22'
-titulo: BOMBA no mercado das TELECOM em PORTUGAL!
+titulo: 'Venda da DSTelecom pode tornar-se num dos negócios mais sensíveis das telecom em Portugal'
 slug: bomba-no-mercado-das-telecom-em-portugal
 data: 14/03/2026
 categoria: DIGI
@@ -27,3 +27,13 @@ Do ponto de vista financeiro, percebe-se facilmente porque é que este ativo des
 Na minha leitura, o cenário mais natural continua a ser a entrada de outro investidor financeiro, precisamente porque é a solução que levanta menos obstáculos imediatos. Ainda assim, será difícil ignorar a possibilidade de operadores tentarem, de forma direta ou indireta, garantir algum grau de exposição a uma infraestrutura com esta capilaridade e esta relevância, sobretudo em regiões onde a presença física continua a ser uma vantagem estratégica importante. E, num mercado em transformação, também não é absurdo admitir que novos players possam olhar para este tipo de ativo como uma forma de acelerar escala, desde que o racional económico faça sentido.  
   
 No final, a possível venda da DSTelecom não deve ser lida apenas como uma transação entre acionistas. Pode vir a ser um verdadeiro teste à forma como Portugal encara a neutralidade das redes grossistas, a concorrência em zonas de baixa densidade e o controlo de infraestruturas que, embora privadas, desempenham um papel cada vez mais próximo do interesse público. É precisamente por isso que este processo, se avançar, poderá dizer muito sobre o futuro do setor das telecomunicações em Portugal.
+
+## O Comentário do Viciado
+
+Se me perguntassem porque é que um cliente normal se deve interessar pela venda de uma empresa de que nunca ouviu falar, a resposta seria simples: é desta empresa que depende teres três operadores à escolha numa terra do interior, ou ficares entregue a um só.
+
+A neutralidade grossista não é um conceito abstrato de regulador, é a diferença concreta entre a tua fatura descer ou ficar presa. Uma rede que serve todos costuma manter-se neutra enquanto o seu dono não tiver interesse em favorecê-la. Basta um comprador que também venda no retalho para esse equilíbrio se partir.
+
+É por isso que prefiro ver a DSTelecom nas mãos de um investidor financeiro sem marca própria. Não é a solução perfeita, mas é a que levanta menos tentações. E numa altura em que tantas zonas do país ainda dependem de uma única infraestrutura para estar ligada, este é dos poucos negócios em que o regulador não pode chegar tarde.
+
+*Fontes: informação pública sobre a estrutura acionista da DSTelecom; análise do caso Fibroglobal; enquadramento regulatório ANACOM e AdC (março de 2026).*

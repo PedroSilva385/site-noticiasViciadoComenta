@@ -1,6 +1,6 @@
 ---
 id: '55'
-titulo: 'NOS avança com novo tarifário de internet fixa, em resposta à MEO!'
+titulo: 'NOS avança com novo tarifário de internet fixa em resposta à MEO'
 slug: nos-avanca-com-novo-tarifario-de-internet-fixa-em-resposta-a-meo
 data: 23/05/2026
 categoria: Telecom
@@ -39,3 +39,13 @@ O perfil de 2 Gbps ganha cada vez mais relevância, numa altura em que 1 Gbps po
 Destaque também para a DIGI que, apesar de não apresentar este perfil, está na linha da frente no que diz respeito ao preço quando se fala de velocidades de topo. Com um custo de 20 € de instalação e 15 € mensais, a DIGI disponibiliza uma velocidade de 10 Gbps, juntamente com um router Wi-Fi 7.
 
 Infelizmente, tanto a DIGI como as low-cost WOO, UZO e Amigo ainda não estão disponíveis em muitas moradas, por isso, até que essa seja uma realidade, muitos consumidores ainda estarão limitados às propostas das incumbentes e, com isso, terão de aceitar os preços por elas praticados.
+
+## O Comentário do Viciado
+
+Confesso que reli a notícia duas vezes para confirmar se tinha mesmo a mesma velocidade do tarifário da MEO — e tem. Um mês de diferença, 2 Gbps simétricos de parte a parte, e um euro e noventa cêntimos a separar as duas propostas. Isto diz-me duas coisas: a lacuna entre o 1 Gbps e o 10 Gbps que apontei na análise ao plano da MEO era mesmo real, e os operadores incumbentes continuam a olhar uns para os outros antes de mexerem na tabela de preços.
+
+Acho positivo que a resposta da NOS venha pela via da substância — mesma velocidade, router idêntico ao do plano de 10 Gbps, preço ligeiramente inferior — em vez de campanhas de marketing a prometer o que a rede ainda não entrega. É o sinal de que o mercado está a copiar a DIGI a meio-gás: primeiro banalizou-se o 1 Gbps, agora todos saltaram para o degrau dos 2 Gbps.
+
+O ponto que me preocupa mantém-se: cobertura. De nada serve um tarifário atractivo se, uns quilómetros afastados da morada do leitor, o DIGI, WOO, UZO ou Amigo simplesmente não estão disponíveis. Enquanto assim for, a concorrência real acontece apenas nas grandes manchas urbanas, e no resto do país continuam três empresas a ditar as condições.
+
+*Fontes: sites oficiais MEO e NOS, e acompanhamento editorial do Viciado Comenta (maio de 2026).*

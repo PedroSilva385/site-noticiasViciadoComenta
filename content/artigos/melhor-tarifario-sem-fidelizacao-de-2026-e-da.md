@@ -1,6 +1,6 @@
 ---
 id: '1'
-titulo: MELHOR tarifário SEM FIDELIZAÇÃO de 2026 é da?...
+titulo: Lycamobile vence o Escolha do Consumidor 2026 nos tarifários sem fidelização
 slug: melhor-tarifario-sem-fidelizacao-de-2026-e-da
 data: 27/01/2026
 categoria: Telecom
@@ -23,3 +23,9 @@ Na prática, o resultado da Lycamobile reforça uma ideia central: o segmento lo
 Fontes consultadas: plataforma Escolha do Consumidor (categoria tarifários móveis sem fidelização), páginas de tarifários dos operadores e informação pública do setor em Portugal.
 
 E tu, consideras que este tipo de prémio influencia a tua escolha de operador?
+
+## O Comentário do Viciado
+
+Há aqui um detalhe que passa ao lado do prémio e que importa dizer com clareza: a Lycamobile não é dona da rede que usa. Uma MVNO vence em satisfação precisamente porque não se pode esconder atrás da infraestrutura — quando o serviço é bom, é porque a equipa o é, não porque falta alternativa ao cliente. É essa a lição incómoda para os grandes quatro.
+
+Tenho para mim que este resultado mede melhor o cansaço do consumidor com a fidelização do que a excelência absoluta de qualquer marca. O cliente sem amarras avalia mês a mês com os pés, e isso vale mais do que qualquer campanha. Para 2026, se te reconheces neste perfil, usa o prémio como ponto de partida e não como sentença: confirma a cobertura na tua morada antes de saltares. E se confirmares que a rede te serve, tens aqui um argumento que vale mais do que qualquer anúncio institucional.

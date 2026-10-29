@@ -1,6 +1,6 @@
 ---
 id: '53'
-titulo: DIGI apresenta RESULTADOS financeiros Q1 2026!
+titulo: 'DIGI apresenta resultados financeiros do 1.º trimestre de 2026'
 slug: digi-apresenta-resultados-financeiros-q1-2026
 data: 15/05/2026
 categoria: DIGI
@@ -38,3 +38,11 @@ A DIGI Global continua a reforçar as suas receitas, mas ainda não consegue evi
 O futuro em Portugal segundo a DIGI, passa pela continuação da integração dos clientes NOWO, na melhoria dos serviços atuais e no reforço da infraestrutura presente no país.
 
 Continuaremos a acompanhar a evolução da operadora nos próximos trimestres, aqui no Viciado Comenta!
+
+## O Comentário do Viciado
+
+Leio estes resultados pela ordem inversa à maioria: não começo pela quebra do ARPU, começo pelo facto de o grupo ainda não sair do vermelho. Uma receita média a descer enquanto as RGU disparam é o plano a funcionar, não o plano a falhar. A DIGI escolheu volume desde o primeiro dia e está a cumprir a promessa. O que me daria mesmo razão para franzir a sobrancelha seria o telefone fixo a perder terreno, a única linha verdadeiramente em queda, e ainda assim num serviço que quase ninguém subscreve isolado hoje em dia.
+
+Fica o que vou vigiar no próximo trimestre: se Portugal, que reforçou receitas e cortou custos, chega finalmente aos números negros. É essa a fasquia que separa uma operação que escala de uma operação que se sustenta. O grupo pode aguentar prejuízo por escolha; uma filial não devia precisar de o fazer para sempre.
+
+*Fontes: relatório e apresentação de resultados do 1.º trimestre de 2026 da DIGI Communications (digi-communications.ro).*

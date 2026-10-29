@@ -1,6 +1,6 @@
 ---
 id: '38'
-titulo: LIDL uma MVNO de sucesso?!
+titulo: 'Lidl Connect: uma MVNO de sucesso que pode chegar a Portugal'
 slug: lidl-uma-mvno-de-sucesso
 data: 14/04/2026
 categoria: Telecom
@@ -57,3 +57,13 @@ No futuro, o caminho passa por integrar os serviços da Lidl Connect dentro da L
 **Conclusão  
 **  
 O caso do Lidl demonstra que existe espaço para operações MVNO nos mercados de telecomunicações, sobretudo quando suportadas por marcas fortes e com grande presença física. Ainda assim, o sucesso depende fortemente das condições regulatórias e da dinâmica competitiva de cada país.
+
+## O Comentário do Viciado
+
+Este artigo liga-se directamente àquilo que tenho defendido cá no Viciado Comenta sobre a falha regulatória das MVNO em Portugal: o Lidl Connect tem dois milhões de clientes na Alemanha porque lá o acesso grossista é uma obrigação de quem tem a rede, não uma esmola de quem a aluga. A diferença entre os dois mercados não é o Lidl — é a régua.
+
+E há uma leitura comercial que impressiona: telecomunicações como acessório de supermercado. Um cartão à saída da caixa, com custo de aquisição de cliente quase nulo e uma marca em que a pessoa confia todas as semanas. O incumbente vê o cliente uma vez por fatura; o Lidl vê-o quatro vezes por mês com um carrinho cheio — a pergunta que faço é por que razão ninguém explorou isto cá mais cedo.
+
+Se o serviço vier, não espero milagres de preço: a DIGI já tratou de enterrar o argumento do tarifário barato. O valor de um Lidl Connect português seria outro, e não é pequeno — seria a primeira prova de que as MVNO cá só falharam por falta de quem as empurrasse.
+
+*Fontes: informação pública sobre a Lidl Connect e o mercado alemão; aquisição de participação do grupo Schwarz na 1GLOBAL (abril de 2026).*

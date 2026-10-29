@@ -1,6 +1,6 @@
 ---
 id: '77'
-titulo: NOVA operadora CHEGA A PORTUGAL em JANEIRO de 2027!
+titulo: 'Magentta Portugal chega em janeiro de 2027'
 slug: nova-operadora-chega-a-portugal-em-janeiro-de-2027
 data: 25/09/2026
 categoria: Telecom
@@ -42,3 +42,15 @@ Em nome da transparência e por considerar que ficaram muitas dúvidas relativam
 Para além dos esclarecimentos possíveis em relação à anterior operação, procuraremos também compreender de forma mais detalhada a operação da Magentta Portugal.
 
 Com isto, Portugal receberá uma nova operação, que pode ser relevante no atual contexto de mercado. Até agora não é possível avançar ainda preços e tarifários, mas a breve prazo saberá tudo aqui no nosso site!
+
+## O Comentário do Viciado
+
+Vou ser honesto: depois do que aconteceu com a UN2, já não recebo notícias de uma “nova operadora” com o mesmo entusiasmo de outrora. Aprendi — à custa de acompanhamento diário daquela operação — que prometer serviço é fácil e que o difícil é sustentar uma operação mês após mês.
+
+É por isso que olho para a Magentta com cepticismo saudável. O grupo Bialant não é um principiante qualquer, a aposta no Fibra Air e no satélite via Amazon LEO faz sentido num país com tantas zonas mal servidas pela fibra tradicional, e a inclusão de canais espanhóis mostra que há uma estratégia clara para as comunidades junto à fronteira.
+
+O que fica por provar é o essencial: preços, suporte ao cliente e capacidade de execução. [Já vimos operadores regionais nascerem com grandes promessas e definharem em silêncio](/artigos/lazer-telecom-uma-operadora-regional-a-sul-do-pais.html), e vimos a UN2 desaparecer antes de completar o ciclo. Se a Magentta quiser ser mais do que uma contagem decrescente num site, terá de mostrar nos primeiros meses aquilo que a OniWay nunca conseguiu: que chegar a Portugal é fácil, ficar é que são elas.
+
+Ficaremos a acompanhar — e a perguntar as perguntas incómodas, como aconteceu no passado.
+
+*Fontes: sala de imprensa do grupo Bialant, site magentta.pt, e acompanhamento editorial do Viciado Comenta (setembro de 2026).*

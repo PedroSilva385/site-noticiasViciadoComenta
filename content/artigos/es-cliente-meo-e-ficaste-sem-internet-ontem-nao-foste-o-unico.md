@@ -1,11 +1,11 @@
 ---
 id: '76'
-titulo: ÉS cliente MEO e ficaste sem INTERNET ontem? NÃO foste o único!
+titulo: 'Apagão da MEO a 14 de setembro afetou milhares de clientes'
 slug: es-cliente-meo-e-ficaste-sem-internet-ontem-nao-foste-o-unico
 data: 14/09/2026
 categoria: Telecom
 autor: Pedro Silva
-resumo: 'MEO sobre apagão geral, e causas ainda são desconhecidas!'
+resumo: Uma falha generalizada na rede da MEO deixou milhares de clientes sem internet fixa e móvel na madrugada de 14 de setembro de 2026. A operadora acabou por admitir um ataque em massa.
 video: 'https://www.youtube.com/live/I1sCZw5KXJk?si=NHwujuYEHch_c1qM'
 ---
 A madrugada de dia 14 de Setembro de 2026 foi particularmente complicada para os clientes da MEO. Às primeiras horas da madrugada, começaram relatos por parte de clientes de norte a sul do país, a dar conta de que estávamos perante um apagão geral na rede da maior operadora nacional, MEO.
@@ -35,3 +35,11 @@ Foram milhões os portugueses afetados por esta falha e que de alguma maneira vi
 [Em comunicado enviado à agência lusa](https://www.lusa.pt/article/47775112/meo-alvo-de-ataque-em-massa-garante-que-n%C3%A3o-houve-acesso-a-dados-de-clientes) "a MEO adiantou hoje que foi alvo de um "ataque em massa" que causou constrangimentos nos seus serviços, garantindo que conseguiu "controlar rapidamente a situação" e que a intrusão não resultou em acesso a dados de clientes".
 
 Está assim explicado um caso complicado, que ao longo das últimas 24h prejudicou consideravelmente a experiência a milhões de utilizadores em Portugal.
+
+## O Comentário do Viciado
+
+O apagão em si passa; o que fica é o silêncio. Vou ser honesto sobre a atualização tardia: saber que foi um ataque em massa, sem fuga de dados, muda o diagnóstico, mas não lava a falha de comunicação. Milhões ficaram sem internet e, durante horas, a única informação oficial foi uma página parada num episódio de janeiro. Isso foi uma escolha, não um lapso, e é o velho hábito de só falar quando a pergunta já virou manchete.
+
+Há um segundo detalhe que me inquieta: NOS e Vodafone também acusaram falhas. Se um incidente de um lado tocou os outros, estamos a falar de dependências partilhadas que ninguém quer discutir em voz alta até elas caírem. A robustez de um setor mede-se no pior dia, e o pior dia da MEO não foi a queda; foi a demora em dizer aos clientes que sabia, estava a tratar e explicava o que se passava. Isso é competência, e não se improvisa às três da manhã.
+
+*Fontes: plataforma Downdetector (14 de setembro de 2026) e comunicado da MEO enviado à agência Lusa.*

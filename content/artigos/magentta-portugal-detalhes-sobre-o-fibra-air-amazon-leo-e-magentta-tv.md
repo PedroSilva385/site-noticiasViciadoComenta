@@ -46,3 +46,13 @@ Outros canais de referência encontram-se atualmente em fase final de negociaç�
 Ao longo desta entrevista, Angel Pereiro procurou responder às dúvidas que vinham a acumular-se entre quem acompanha a cobertura do lançamento da nova operadora em Portugal, esclarecendo o modelo de operação e reforçando os planos futuros da empresa.
 
 Aqui no **ViciadoComenta.pt**, continuaremos atentos a todas as novidades. Já para **novembro**, está prometido o envio de um equipamento de teste para o nosso escritório, o que nos permitirá avaliar em detalhe a operação e trazer-vos novos conteúdos em primeira mão.
+
+## O Comentário do Viciado
+
+Saio desta entrevista com uma dúvida mais formada do que antes, e é sobre a arquitectura do Fibra Air, não sobre os canais. Um serviço que corre sobre cartões espanhóis em roaming dentro de redes das incumbentes portuguesas é, na prática, uma operadora construída sobre contratos de terceiros — e a história que já contei aqui a propósito do MARCo em Espanha mostra o que acontece quando essa dependência amadurece: quem aluga a rede aluga também a própria competitividade.
+
+O detalhe dos IPs portugueses foi, para mim, o momento mais honesto da conversa: reconheceram o problema da geolocalização e construíram-lhe por cima. É a diferença entre responder a uma pergunta difícil e evitá-la, e isso conta-me muito sobre o carácter de uma equipa fundadora.
+
+Quanto à Amazon LEO a prometer guerra de preços com a DIGI: fico à espera dos números concretos. E o router de teste prometido para novembro será a primeira peça de verdade desta operação — quando chegar, é com ele, e não com as slides de apresentação, que escreverei a análise.
+
+*Fontes: entrevista do autor a Angel Pereiro, CEO & CFO do grupo Bialant, no canal TheViciado (outubro de 2026).*

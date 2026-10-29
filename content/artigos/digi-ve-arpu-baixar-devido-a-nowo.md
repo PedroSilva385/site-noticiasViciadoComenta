@@ -1,6 +1,6 @@
 ---
 id: '69'
-titulo: DIGI vê ARPU baixar DEVIDO à NOWO!
+titulo: ARPU da DIGI cai com a migração dos clientes da NOWO
 slug: digi-ve-arpu-baixar-devido-a-nowo
 data: 29/08/2026
 categoria: DIGI
@@ -37,3 +37,11 @@ Ou seja, a DIGI, ao fazer a minha migração, perderia 10€.
 Ao longo dos próximos meses, a DIGI confirmou não estar focada em continuar a expandir a fibra para novas localidades, mas sim em concluir todas as zonas NOWO, de modo a migrar de forma massiva estes clientes para a fibra FTTH DIGI.
 
 Tendo isto em conta, o que continuaremos a ver nos próximos meses será uma perda de receita por esta via, pelo que só conseguiremos ter uma real noção do verdadeiro ARPU da DIGI aquando da migração total dos clientes NOWO para os serviços DIGI.
+
+## O Comentário do Viciado
+
+Há quem leia “ARPU a cair” como alarme, e eu leio exatamente o contrário. Uma queda de receita média causada por migrar clientes de preços inflacionados para preços honestos não é perda de negócio, é limpeza de contabilidade. Ao assumir isto, a DIGI está na prática a confessar que cobrava menos do que a NOWO cobrava antes, e isso diz mais sobre a NOWO do que sobre a DIGI.
+
+O número que quero mesmo ver só chega quando a migração estiver fechada: o ARPU estabilizado da nova base. Até lá, qualquer comparação trimestral é ruído. Fica a ideia que tenho repetido: a guerra da DIGI em Portugal deixou de ser de aquisição e passou a ser de integração, e é aí, e não na fatura média, que se joga o futuro.
+
+*Fontes: declarações de Emil Grecu, CEO da DIGI Portugal, ao Jornal de Negócios; faturas de comparação NOWO e DIGI.*

@@ -1,6 +1,6 @@
 ---
 id: '44'
-titulo: NOVA proposta da MEO na internet FIXA!
+titulo: 'MEO lança nova proposta na internet fixa'
 slug: nova-proposta-da-meo-na-internet-fixa
 data: 23/04/2026
 categoria: Telecom
@@ -59,3 +59,13 @@ Na prática, com apenas 5€ de diferença entre 1Gbps e 10Gbps — e ainda com 
 A MEO identificou uma lacuna no mercado e respondeu com uma oferta equilibrada e ajustada à realidade dos consumidores.
 
 Resta agora acompanhar a reação das restantes operadoras nos próximos meses.
+
+## O Comentário do Viciado
+
+Costumo dizer que raramente um operador incumbent dá um passo em frente por generosidade — dá-lo porque foi empurrado. A DIGI chegou a Portugal, transformou o 1 Gbps em preço de entrada e desvalorizou os 10 Gbps ao ponto de os vender por 15 €; e eis que a MEO, sem grande alarido, veio ocupar exactamente o espaço que eu próprio apontava como em branco neste mercado.
+
+O detalhe que mais gostei nesta proposta não é a velocidade, é o gesto: uma incumbente a copiar uma estrutura de oferta em vez de a tentar afogar em campanhas com fidelizações compridas. É exactamente o comportamento que [analisei a propósito do metro de Lisboa e do MARCo](/artigos/caso-do-metro-chega-ao-governo-via-chega-e-desta.html): quando o regulador e um entrante barato mudam o ponto de partida, os restantes ajustam-se mais depressa do que prometem.
+
+Fico, porém, com uma dúvida que vale a pena acompanhar: 2 Gbps simétricos a 34,99 € só fazem sentido se a rede suportar esta oferta com o mesmo à-vontude com que hoje serve o 1 Gbps. Já vimos aumentos de largura de banda na ficha técnica sem reflexo na experiência real da hora de ponta. Se a MEO entregar o que promete, abre-se aqui um terceiro caminho entre o barato da DIGI e o caro dos 10 Gbps; se não entregar, teremos marketing com fibra anexa. É o tipo de promessa que só o tempo — e os medidores dos leitores — confirmam.
+
+*Fontes: site oficial MEO, comparativo com LigaT e DIGI, e análise editorial do Viciado Comenta (abril de 2026).*

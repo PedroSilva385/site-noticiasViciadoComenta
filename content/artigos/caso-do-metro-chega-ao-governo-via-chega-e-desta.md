@@ -1,6 +1,6 @@
 ---
 id: '17'
-titulo: CASO do METRO chega ao GOVERNO via CHEGA! É desta?!
+titulo: 'Caso do Metro de Lisboa chega ao Governo através de perguntas de deputados do CHEGA'
 slug: caso-do-metro-chega-ao-governo-via-chega-e-desta
 data: 05/03/2026
 dataPublicacao: '05/03/2026 19:00'
@@ -44,3 +44,13 @@ O que pensar desta situação?
 Em suma, alguma das partes está a falhar aqui. Numa primeira fase, espero que o problema fique resolvido rapidamente, porque, no fundo, são os portugueses que escolheram a DIGI como operadora que estão a ser prejudicados. Numa segunda fase, gostaria que as entidades envolvidas contassem a sua versão dos factos, para que o contribuinte compreenda, pelo menos, as ações tomadas pelas entidades públicas envolvidas.  
   
 Que seja o último capítulo desta novela embaraçosa.
+
+## O Comentário do Viciado
+
+Há um detalhe neste caso que resume tudo o resto: a solução temporária pedida pela DIGI custa, nas palavras do próprio CEO, o equivalente a uma folha A4 e uma lâmpada. Quando o que separa o sinal do utilizador é tão pouco, cada mês de atraso deixa de ser uma limitação técnica e passa a ser uma escolha.
+
+O facto de o assunto só ter chegado ao Governo por via de perguntas de deputados também me diz muito. Um problema que se arrasta há meses em infraestrutura pública não precisava de escalada política para ser visto; precisava apenas de vontade administrativa para ser resolvido.
+
+Sinto que este é dos poucos casos em que o regulador, o Metro e os operadores incumbentes têm todos a mesma oportunidade: provar que a partilha de infraestrutura não é uma obrigação que se cumpre a contragosto, mas sim o mecanismo que mantém o mercado aberto. Se falharem aqui, falham num teste que o público já está a ver.
+
+*Fontes: respostas do gabinete do Ministro das Infraestruturas e Habitação; declarações do CEO da DIGI sobre o caso do Metro de Lisboa (março de 2026).*

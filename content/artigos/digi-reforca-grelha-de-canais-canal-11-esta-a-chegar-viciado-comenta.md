@@ -1,11 +1,11 @@
 ---
 id: '78'
-titulo: DIGI reforça GRELHA de CANAIS. CANAL 11 está a CHEGAR? | VICIADO COMENTA
+titulo: 'DIGI reforça a grelha de canais e aproxima-se do Canal 11'
 slug: digi-reforca-grelha-de-canais-canal-11-esta-a-chegar-viciado-comenta
 data: 28/09/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: CANAL 11 pode estar a chegar à grelha da DIGI TV! Como está o serviço?
+resumo: A DIGI soma os canais CineMundo e Canção Nova a uma grelha de 89 canais, mantendo o preço da DIGI TV, e o Canal 11 pode ser o próximo passo.
 video: 'https://youtu.be/i-hjXXqU3ew'
 ---
 A DIGI voltou a reforçar a sua oferta de canais, passando agora a dispor dos canais CineMundo e Canção Nova na sua grelha.
@@ -37,3 +37,11 @@ Estes são canais que têm forte controlo das operadoras históricas; por esse m
 Quem, como eu, subscreveu os serviços da DIGI logo no lançamento percebe que a operadora tem vindo a esforçar-se para entregar aos seus clientes a experiência a que já estavam habituados. Durante anos, as três operadoras do costume garantiram uma oferta de canais praticamente igual, pelo que qualquer mudança nunca representava grande alteração de serviços.
 
 Dito isto, com o passar do tempo, a DIGI vai paulatinamente aproximando as suas ofertas das históricas, pressionando ainda mais as concorrentes, que vão respondendo como podem, através das suas marcas brancas.
+
+## O Comentário do Viciado
+
+Gosto de ver canais novos, mas tenho os pés assentes: a DIGI não perde clientes por faltar o CineMundo ou a Canção Nova; perde-os por faltar o futebol. E o futebol, ao contrário da infraestrutura, não se constrói, arrenda-se a quem o detém, e quem o detém são exatamente as concorrentes que a DIGI ameaça nos preços. Por isso vejo o Canal 11 como o verdadeiro teste de negociação da marca: se o conseguir sem inflacionar a fatura, prova que consegue o quase impossível.
+
+É ainda mais inteligente, na minha leitura, a disciplina de preço. Dois anos a acrescentar canais mantendo a mesma mensalidade é uma forma silenciosa de dizer que não competem pelo truque, competem pelo valor total. Os canais desportivos das donas históricas são outra história, e ninguém devia esperar que financiassem o rival que lhes rouba clientes.
+
+*Fontes: grelha atual da DIGI TV (89 canais, 2026) e comunicações da operadora nas redes sociais sobre o Canal 11.*

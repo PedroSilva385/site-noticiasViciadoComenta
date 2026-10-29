@@ -1,6 +1,6 @@
 ---
 id: '25'
-titulo: Falha BRUTAL de REGULAÇÃO nas TELECOM em PORTUGAL
+titulo: 'A falha da regulação que travou as MVNO nas telecom em Portugal'
 slug: falha-brutal-de-regulacao-nas-telecom-em-portugal
 data: 24/03/2026
 categoria: Telecom
@@ -57,3 +57,13 @@ O problema é que este espaço, agora ocupado pelas low-cost das incumbentes, se
 **Futuro?**
 
 Num horizonte de leilão para o 6G, diria que este é um dos pontos-chave, uma vez que o regulador tende a usar esses momentos para forçar mudanças. Esperava ver evolução neste tema nessa altura.
+
+## O Comentário do Viciado
+
+O que retiro desta análise toda é uma ironia cara: a ferramenta para abrir o mercado estava à mão há quase vinte anos — bastava obrigarem as redes a negociar de facto com quem quisesse alugar capacidade — e preferiu-se importar um operador estrangeiro inteiro para obter o mesmo efeito. Saiu mais caro ao país, mas foi o caminho que se escolheu.
+
+Confesso pouca ilusão com os leilões: a história europeia mostra que essas alturas servem sobretudo para maximizar a receita do Estado, e as obrigações de abertura às MVNO entram e saem conforme a força política do momento. Se vierem, serão conquistadas, não oferecidas.
+
+E há um detalhe que me importa dizer sem rodeios: sem regulação forte no grossista, o espaço low-cost continuará a ser propriedade de quem é dono da rede. As marcas brancas das incumbentes ocupam hoje exactamente a prateleira que pertencia por direito às MVNO independentes — e isso não é coincidência, é o mercado a fechar-se sobre si mesmo.
+
+*Fontes: enquadramento regulatório da CNMC para MVNO em Espanha; histórico de decisões da ANACOM sobre acesso grossista (março de 2026).*

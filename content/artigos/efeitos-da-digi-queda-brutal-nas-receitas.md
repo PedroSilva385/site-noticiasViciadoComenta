@@ -1,6 +1,6 @@
 ---
 id: '24'
-titulo: 'EFEITOS da DIGI: Queda BRUTAL nas receitas!'
+titulo: 'Efeito DIGI: queda das receitas médias por utilizador em Portugal e Espanha'
 slug: efeitos-da-digi-queda-brutal-nas-receitas
 data: 20/03/2026
 categoria: DIGI
@@ -44,3 +44,13 @@ Antes pelo contrário! Como temos oportunidade de ver, em 6 anos o serviço mant
   
 ![](https://www.viciadocomenta.pt/assets/imagens/2.png)  
 Este é mais um ângulo de análise a acompanhar nos próximos anos.
+
+## O Comentário do Viciado
+
+Há uma frase que ouvimos há décadas sempre que um preço baixa: “isto compromete o investimento”. Já a ouvi demasiadas vezes para a aceitar sem pedir contas — e as contas, neste caso, são favoráveis ao consumidor. Seis anos depois, as velocidades mantêm-se, a cobertura FTTH cresceu e o preço chegou a cair metade. O dinheiro não desapareceu da rede; saiu da margem.
+
+É exactamente essa a descoberta incómoda que a DIGI impôs ao setor: provou que uma operadora pode funcionar com margens muito menores do que a indústria insistia serem necessárias para sobreviver. Quando o argumento “preço baixo mata investimento” vem dos que vivem de preços altos, vale o que vale.
+
+Guardo a ressalva que o próprio artigo deixa: a cautela é legítima a longo prazo. Se um dia a guerra de preços apertar tanto que ninguém tenha folga para renovar uma torre, aí teremos de voltar a discutir a teoria. Pelos números que hoje temos à frente, esse dia está longe.
+
+*Fontes: dados de ASPU/ARPU de operadores europeus analisados pelo Viciado Comenta; relatórios de resultados do setor (março de 2026).*

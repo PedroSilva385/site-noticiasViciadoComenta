@@ -1,6 +1,6 @@
 ---
 id: '4'
-titulo: DIGI ITÁLIA uma DESILUSÃO após 16 ANOS
+titulo: 'A operação da DIGI em Itália: 16 anos depois, ainda sem tração'
 slug: digi-italia-uma-desilusao-apos-16-anos
 data: 03/02/2026
 categoria: DIGI
@@ -24,3 +24,11 @@ Mesmo com estes resultados modestos, este movimento demonstra que a operadora ro
 Este exemplo torna-se particularmente interessante quando comparado com o caso português. Em Portugal, a DIGI optou por entrar diretamente com serviços assentes em infraestrutura própria, o que lhe permite controlar custos e apresentar uma proposta de preços verdadeiramente agressiva. Em Itália, pelo contrário, enfrenta a concorrência de pelo menos quatro outros MVNOs, todos em condições muito semelhantes, o que dificulta que a DIGI se destaque como líder nos preços mais baixos.
 
 Perante este contexto, fica a questão: achas que a DIGI vai conseguir conquistar uma quota de mercado mais relevante nos próximos anos?
+
+## O Comentário do Viciado
+
+Escolho este caso não por curiosidade sobre Itália, mas porque é o espelho que dá valor à aposta portuguesa. A lição de dezasseis anos quase parados é crua: ser MVNO a título permanente não é uma estratégia, é um limbo. Quando todos os concorrentes andam na mesma rede alugada, baixa-se o preço até ao teto que o dono da rede permite. E a DIGI nunca conseguiu ser a mais barata onde já havia quatro iguais a tentar sê-lo.
+
+É por isso que valorizo, mais do que o anúncio de fibra em Turim, a coerência do que se vê cá. Entrar com rede própria dói no arranque e demora a pagar, mas é a única via que dá controlo real de custo e de experiência. A operação italiana, com 0,5% de quota, prova o contrário pelo absurdo. Se a DIGI um dia desistisse de ter rede própria em Portugal, este seria o seu destino mais provável.
+
+*Fontes: dados públicos de quota de mercado das telecomunicações em Itália e histórico das operações MVNO da DIGI.*

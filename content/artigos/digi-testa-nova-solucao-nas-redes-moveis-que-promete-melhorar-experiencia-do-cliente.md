@@ -1,8 +1,6 @@
 ---
 id: '74'
-titulo: >-
-  DIGI testa NOVA solução nas REDES MÓVEIS que promete MELHORAR experiência do
-  CLIENTE!
+titulo: 'DIGI testa antenas Massive MIMO da Ericsson na rede 4G em Portugal'
 slug: >-
   digi-testa-nova-solucao-nas-redes-moveis-que-promete-melhorar-experiencia-do-cliente
 data: 12/09/2026
@@ -58,3 +56,13 @@ Na Telstra, a experiência foi igualmente positiva. Esta Massive MIMO mostrou um
 Através desta solução, a DIGI parece procurar várias coisas: 1- garantir uma maior capacidade em espremer o espectro que tem atualmente no LTE. 2- reduzir custos de energia e manutenção. 3- entregar ao cliente uma experiência muito mais robusta e satisfatória no 4G.
 
 Tudo isto deita por terra as teorias de alguns utilizadores de que a operadora DIGI veio para lançar uma operação baseada em "sucata", com o objetivo de garantir um custo mínimo na infraestrutura. O equipamento agora testado é tecnologia de ponta da Ericsson, e da nossa parte só podemos esperar que o teste se possa alargar a cada vez mais zonas nos próximos meses.
+
+## O Comentário do Viciado
+
+Há duas histórias neste artigo, e a segunda passa-me quase sempre ao lado da primeira. A descoberta foi feita por uma rede de voluntários com o CellMapper ligado, sem qualquer apoio oficial da operadora — poucos mercados podem dizer que têm clientes a fazer engenharia forense da rede por prazer de conhecer. Diz muito sobre a comunidade que esta marca formou.
+
+Depois, a escolha técnica em si. Massive MIMO no 4G é a resposta de quem tem pouco espectro e não pode desperdiçar nem um hertz: em vez de comprar mais banda, extrai mais de cada megahertz da que já tem. É a mesma lógica do motor de baixo consumo que anda ao nível dos grandes — menos combustível, mais quilómetros.
+
+E quanto à acusação de operar com sucata? Cai com o Air 3284. Equipamento caro, recente e sem precedentes em Portugal não é sobra de ninguém; é aposta. Se os resultados se confirmarem, pode inspirar mais do que uma operadora.
+
+*Fontes: investigação e testes de Ricardo José Saraiva; especificações do Ericsson AIR 3284; resultados publicados pela MTN Nigéria e Telstra.*

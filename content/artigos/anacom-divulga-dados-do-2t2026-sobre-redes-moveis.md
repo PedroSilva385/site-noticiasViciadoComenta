@@ -1,6 +1,6 @@
 ---
 id: '71'
-titulo: ANACOM divulga dados do 2T2026 sobre REDES MÓVEIS!
+titulo: 'ANACOM divulga dados do 2.º trimestre de 2026 sobre redes móveis'
 slug: anacom-divulga-dados-do-2t2026-sobre-redes-moveis
 data: 01/09/2026
 categoria: Telecom
@@ -81,3 +81,13 @@ Com estes dados agora partilhados pela ANACOM, compreendemos que a banda larga m
 No que toca à utilização de chamadas e SMS, percebe-se uma queda, algo bastante natural tendo em conta os novos modelos de comunicação que as redes sociais vieram trazer.
 
 Em suma, não houve nenhuma grande surpresa. Todos os dados mantêm as mesmas tendências dos relatórios anteriores. Chamaria apenas a atenção para um crescimento abaixo de 1% da DIGI, algo que, na minha opinião, nesta fase, é manifestamente inferior ao que se poderia esperar, dados os preços e a implementação cada vez mais estabelecida da marca em território nacional.
+
+## O Comentário do Viciado
+
+O número que me salta realmente à vista não é a quota da DIGI, é o salto de 45,8% no consumo de dados móveis. Quando cada linha passa de 15,8 para 21 gigabytes por mês, a pressão deixa de ser de preço e passa a ser de capacidade. Daqui para a frente vence quem tiver rede que aguente, não quem tiver o tarifário mais barato.
+
+Já o crescimento abaixo de 1% da DIGI no móvel diz-me outra coisa: enquanto no fixo a operadora avança com fibra própria, no móvel continua refém da cobertura que vai construindo, e casos como o do Metro de Lisboa mostram bem essa limitação. Preço baixo não chega quando o sinal ainda falha em zonas nobres.
+
+Há ainda um detalhe que acho injusto na leitura destes dados: as marcas low-cost não são divulgadas separadamente. Isso significa que a erosão das operadoras premium está, em parte, escondida dentro dos próprios números delas — e ninguém consegue medir de facto a guerra que se passou dentro de casa.
+
+*Fontes: relatório estatístico de serviços móveis do 2.º trimestre de 2026, ANACOM (1 de setembro de 2026).*

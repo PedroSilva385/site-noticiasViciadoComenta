@@ -1,6 +1,6 @@
 ---
 id: '30'
-titulo: ANTES de MUDARES de OPERADORA tens de VER ISTO!
+titulo: 'DIGI, UZO, WOO e Amigo: o que deves comparar antes de mudar de operadora'
 slug: antes-de-mudares-de-operadora-tens-de-ver-isto
 data: 31/03/2026
 categoria: DIGI
@@ -136,3 +136,13 @@ video: 'https://youtu.be/1q_8GY0v64Y'
 <span style="font-size:0.9em">Nos próximos tempos, se a DIGI continuar a melhorar os seus serviços, é expectável que as restantes operadoras acompanhem essa evolução.</span>
 
 <span style="font-size:0.9em">No fundo, é simples: quando a DIGI melhora, todo o mercado melhora.</span>
+
+## O Comentário do Viciado
+
+Depois de muitas comparações destas, fica-me uma certeza: não existe o melhor tarifário, existe o melhor tarifário para o teu uso. Quem viaja muito olha para o roaming e a UZO ganha de longe; quem só quer velocidade sem trava fica melhor servido pela DIGI; quem faz milhões de SMS tem de contar os cêntimos fora da rede.
+
+O que me chama a atenção é que o preço deixou de ser o que distingue as marcas — todas andam coladas nos cinco e nos sete euros. A verdadeira diferença migrou para as letras pequenas: limites de velocidade, funcionalidades removidas e plataformas que mudam de comportamento sem aviso. É exatamente ali, e não na mensalidade, que o cliente apanha surpresas.
+
+Por isso insisto tanto em escrever estes artigos: um tarifário barato só é barato se souberes o que estás a comprar. A guerra baixa os preços, mas é a letra miúda que decide se a poupança é real ou apenas aparente.
+
+*Fontes: condições comerciais publicadas por DIGI, MEO/UZO, NOS/WOO e Vodafone/Amigo (março de 2026).*

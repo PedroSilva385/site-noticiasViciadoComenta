@@ -1,6 +1,6 @@
 ---
 id: '62'
-titulo: DIGI resolveu polémica com o tarifário ILIMITADO!
+titulo: 'DIGI elimina o limite dos tarifários móveis ilimitados'
 slug: digi-resolveu-polemica-com-o-tarifario-ilimitado
 data: 29/06/2026
 categoria: DIGI
@@ -29,3 +29,11 @@ Neste teste é possível concluir que a DIGI alterou efetivamente a sua polític
 O teste foi dado como terminado aos 4,22 TB, não sendo possível afirmar com 100% de certeza se existe algum limite para além disso. Na prática, com 3 TB esta era uma limitação que poderia ter impacto num número reduzido de clientes — os 4,22 TB sobem ainda mais essa fasquia. No entanto, a questão de fundo era o respeito pelas normas regulatórias.
 
 Em suma, até que seja descoberto um limite real, podemos concluir que a DIGI se encontra a cumprir de forma integral as normas regulatórias impostas em Portugal quanto aos tarifários móveis ilimitados.
+
+## O Comentário do Viciado
+
+Há aqui uma vitória pequena para um utilizador comum e enorme para a ideia de regulação. Poucos consumirão 4 TB por mês, eu sei, mas o princípio de chamar “ilimitado” a algo que corta aos 3 TB é uma mentira comercial, e foi essa mentira que caiu. O que retiro do teste do Ricardo é mais simbólico do que prático: uma operadora jovem, sob pressão de clientes e do regulador, corrigiu-se em público. Não é o que costuma acontecer.
+
+Mantenho, porém, a honestidade metodológica que peço aos outros: o teste parou aos 4,22 TB, portanto não há prova de que não exista um teto mais acima. E nota-se o contraste com a NOS, onde os limites de utilização razoável continuam a ser aplicados. Se a DIGI mantiver esta régua sem truques, ganha o melhor ativo que um operador novo pode ter: crédito quando fala de “sem limites”.
+
+*Fontes: teste de consumo à rede móvel da DIGI realizado por Ricardo José Saraiva (junho de 2026) e normas da ANACOM sobre tarifários ilimitados.*

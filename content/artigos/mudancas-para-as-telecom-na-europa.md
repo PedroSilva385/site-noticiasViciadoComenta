@@ -1,6 +1,6 @@
 ---
 id: '6'
-titulo: MUDANÇAS para as TELECOM na EUROPA!
+titulo: 'O Digital Networks Act e as mudanças que trazem às telecom na Europa'
 slug: mudancas-para-as-telecom-na-europa
 data: 07/02/2026
 dataPublicacao: '07/02/2026 19:00'
@@ -40,3 +40,13 @@ A proposta dedica ainda especial atenção à transição para a fibra óptica, 
 Mesmo que esta data venha a ser adiada, o caminho parece ser o certo. A medida poderá forçar as operadoras a investir mais, sobretudo nas zonas mais afastadas dos grandes centros urbanos, garantindo o acesso à fibra ótica a toda a população.
 
 E tu, achas que este documento tem realmente hipóteses de ver a luz do dia?
+
+## O Comentário do Viciado
+
+Respondendo com realismo: o DNA inteiro, não. O espectro é poder nacional, e nenhum governo entrega voluntariamente a alavanca com que obriga as operadoras a investir onde não querem investir — o exemplo português da resiliência pós-apagão está mesmo ali para o provar. O que sobrevive à negociação final é sempre uma versão mais tímida do que a proposta.
+
+Mas há duas peças que, mesmo mutiladas, interessam muito a quem acompanha este mercado: o passaporte europeu de licença, porque é exactamente por ele que uma DIGI da vida chegou onde chegou com custos de entrada ridículos face a um incumbente; e o calendário de desligamento do cobre, porque transforma a fibra de promessa de marketing em data com força legal.
+
+Prefiro ler o DNA como o que realmente é: não uma revolução, mas a primeira tentativa séria de a Europa copiar a lição que o mercado norte-americano já sabe — a concorrência não nasce por decreto; nasce quando se abarata o custo de entrar pela porta.
+
+*Fontes: proposta Digital Networks Act da Comissão Europeia (fevereiro de 2026); enquadramento regulatório da ANACOM.*

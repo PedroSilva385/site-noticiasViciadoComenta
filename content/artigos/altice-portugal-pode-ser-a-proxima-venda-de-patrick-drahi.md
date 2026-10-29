@@ -39,3 +39,13 @@ Independentemente do caminho escolhido, é claro que a MEO representa um ativo e
 Entretanto, a MEO continua a consolidar a sua posição. A Altice Portugal foi recentemente classificada como subsidiária “sem restrições”, deixando de estar sujeita a determinadas limitações associadas a contratos de crédito. Esta alteração permite à Altice Internacional recorrer à subsidiária para financiamento, ao mesmo tempo que a afasta da esfera direta dos credores — uma decisão estratégica, mas não isenta de risco.
 
 Paralelamente, a empresa está a ajustar a sua estrutura interna. Com um programa de rescisões em curso, que poderá levar à saída de mais de mil trabalhadores entre 2025 e 2026, a MEO procura adaptar-se aos desafios futuros, aumentando a eficiência operacional e reforçando a sua competitividade num mercado em transformação.
+
+## O Comentário do Viciado
+
+Há aqui uma inversão que vale a pena sublinhar: a MEO não está à venda porque corre mal, está à venda porque o dono precisa de dinheiro. É o oposto do que normalmente vemos num setor em consolidação, e é precisamente isso que torna a operação tão atrativa — compra-se o líder, não um problema.
+
+O que me deixa atento é quem pode ficar do outro lado. Se for mais um fundo, o racional será extrair lucro de um ativo que já funciona, e isso rima mal com investimento em rede. Se for uma operadora, ganhamos escala mas perdemos um concorrente, num mercado que só agora aprendeu o que é ter escolha.
+
+Nada disto se resolve em dias, e a história recente mostra que Drahi já tentou e não conseguiu o preço que queria. Fico com a sensação de que a Altice Portugal é das peças mais valiosas do tabuleiro — e é justamente por isso que ninguém tem pressa de a vender barato.
+
+*Fontes: informação divulgada sobre a venda da Altice France ao consórcio Bouygues, Free-Iliad e Orange; comunicados do grupo Altice (abril de 2026).*

@@ -1,6 +1,6 @@
 ---
 id: '40'
-titulo: MARCAS BRANCAS já responderam ao ATAQUE da DIGI!
+titulo: 'Marcas brancas não acompanham a nova descida de preços da DIGI'
 slug: marcas-brancas-ja-responderam-ao-ataque-da-digi
 data: 17/04/2026
 categoria: Telecom
@@ -29,3 +29,11 @@ Teremos de esperar pelos próximos meses para retirar esse tipo de conclusões. 
 **Conclusão:**
 
 Até ao próximo dia 15 de maio, os clientes que pretendam maximizar a poupança têm uma escolha óbvia: a DIGI. As marcas brancas posicionam-se ligeiramente acima, confiantes de que a reduzida diferença financeira será desvalorizada face à perceção de maior estabilidade, numa altura em que a infraestrutura da DIGI ainda se encontra em amadurecimento.
+
+## O Comentário do Viciado
+
+A tentação é ler o “não acompanham” como medo, mas acho que é outra coisa: é disciplina. Amigo, UZO e WOO perceberam que perseguir cada cêntimo da DIGI as arrastaria para uma guerra que não ganham em margem, e escolheram gastar o que pouparam em rede e em marca própria. Não baixar o preço não é fraqueza; é admitir que competem num terreno diferente.
+
+O risco, e é aqui que discordo da postura cómoda, é o tempo. Cada mês com a fasquia da DIGI mais baixa habitua o consumidor a esse patamar, e a diferença de um ou dois euros passa a parecer absurda. Quando as marcas brancas quiserem reagir, já não estarão a comparar preços, estarão a justificar por que custam mais. Até lá, o silêncio é uma estratégia legítima e, ao mesmo tempo, desgastante.
+
+*Fontes: páginas oficiais das marcas Amigo, UZO e WOO e prolongamento das campanhas comerciais até 15 de maio de 2026.*

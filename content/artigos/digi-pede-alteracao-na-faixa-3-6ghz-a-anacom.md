@@ -42,3 +42,11 @@ A proposta encontra-se agora em consulta pública por um período de 30 dias. Os
 
   
 Após este período, e considerando os contributos recebidos, a decisão final será então aprovada.
+
+## O Comentário do Viciado
+
+Dos poucos assuntos mais técnicos que cobrimos, este é dos que mais impacto real terão na tua experiência, mesmo que nunca vejas a palavra “contíguo” numa fatura. Espectro partido em dois blocos obriga a gestão extra e desperdiça capacidade; juntá-lo é um ganho de desempenho quase grátis, sem uma única antena nova. Gosto destes avanços discretos precisamente porque não dependem de promessas de marketing.
+
+Há ainda um detalhe que valorizo: esta janela abriu-se porque a Dense Air perdeu o direito de usar o espectro por não operar. É o regulador a fazer o que devia fazer sempre — o espectro não é propriedade, é um bem que se usa ou se devolve. Que esse bloco vago sirva agora para arrumar a DIGI, em vez de ficar parado à espera de um leilão, é um bom sinal para todo o mercado.
+
+*Fontes: deliberação da ANACOM (24 de março de 2026) e consulta pública sobre a reorganização da faixa dos 3,6 GHz.*

@@ -1,8 +1,6 @@
 ---
 id: '73'
-titulo: >-
-  ANACOM divulga dados sobre INTERNET FIXA no 2T2026! MEO, NOS, Vodafone e DIGI
-  disputam QUOTAS!
+titulo: 'ANACOM divulga dados da internet fixa no 2.º trimestre: MEO, NOS, Vodafone e DIGI disputam quotas'
 slug: >-
   anacom-divulga-dados-sobre-internet-fixa-no-2t2026-meo-nos-vodafone-e-digi-disputam-quotas
 data: 07/09/2026
@@ -61,3 +59,13 @@ No que toca ao tráfego, o valor continua em subida, representando agora +16% fa
 Em conclusão, podemos aferir destes dados que a tendência de crescimento do consumo de internet em Portugal se mantém, tanto nas redes móveis como nas redes fixas. MEO, NOS e Vodafone passaram a ter de lutar neste segmento com um forte candidato, a DIGI, que em pouco tempo já começou a mostrar que está interessada em ter uma fatia cada vez maior deste bolo.
 
 É natural que, numa primeira fase, os números da DIGI se misturem com o que representava a NOWO, mas os dados agora analisados permitem perceber que a DIGI está a crescer acima dos valores de queda da NOWO, o que nos dá uma noção de que o crescimento da DIGI não se faz somente à boleia da migração de clientes, mas também pela redução das quotas de mercado das restantes operadoras.
+
+## O Comentário do Viciado
+
+Há dois números neste relatório que valem mais do que as quotas à superfície. O primeiro é a subida das velocidades acima de 1 Gbps de 29% para 47,4%: o gigabit deixou de ser artigo de luxo e passou a ser a entrada na mesa. Quando quase metade dos acessos já é ultrarrápido, a conversa do “tenho 100 mega” perde completamente o sentido.
+
+O segundo é o domínio da MEO no não residencial, com 53,9%. Enquanto toda a gente olha para o residencial, é aqui que a incumbente segura o verdadeiro poder: empresas, prédios e serviços críticos. A DIGI cresce na sala de estar, mas ainda quase não existe no escritório.
+
+E o satélite, a crescer 147% mas de 12 mil para 29 mil ligações, confirma o que sempre defendi: em baixa densidade a Starlink é uma opção real, mas ainda é um nicho que não abala o quadro. O jogo continua a passar-se na fibra.
+
+*Fontes: relatório estatístico de internet em local fixo do 2.º trimestre de 2026, ANACOM (7 de setembro de 2026).*

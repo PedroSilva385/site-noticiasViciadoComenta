@@ -1,6 +1,6 @@
 ---
 id: '20'
-titulo: CONHECE as NOVAS propostas da YORN - MOCHE - WTF
+titulo: 'As novas propostas das marcas jovens YORN, MOCHE e WTF'
 slug: conhece-as-novas-propostas-da-yorn-moche-wtf
 data: 12/03/2026
 categoria: Telecom
@@ -55,3 +55,13 @@ Eu diria que não. O cliente DIGI é um cliente muito específico. Apesar de pro
 O principal inimigo da DIGI será a própria DIGI. Digo isto porque a não resposta a muitos problemas que os clientes vão apontando, aliada a alguma incapacidade na formação dos seus profissionais, leva, em muitos casos, a que mesmo os adeptos mais fervorosos se tenham de render aos serviços de outras operadoras, quando confrontados com falhas persistentes e níveis de suporte técnico abaixo dos mínimos olímpicos.  
   
 **2026 será um grande ano para as telecomunicações. Estaremos cá para analisar tudo aqui no ViciadoComenta!**
+
+## O Comentário do Viciado
+
+Escreço comparadores de tarifários há tempo suficiente para saber o que estas manobras fazem ao leitor: confundem. Quando cada grupo tem três ou quatro marcas, com idades, fidelizações e parcerias diferentes, já ninguém consegue dizer onde está o preço justo — e a confusão, convenhamos, favorece sempre quem tem mais opções para mostrar.
+
+Este multiplicar de submarcas é uma competição de montra, não de valor. Não se ganha o cliente por oferecer melhor serviço, ganha-se por ocupar o espaço todo da prateleira para que a DIGI não caiba em nenhum.
+
+O que me interessa mesmo é o que nada disto resolve: o apoio ao cliente. Enquanto incumbentes e entrante gastam energia a lançar mais uma marca, continua por responder a pergunta que separa um operador bom de um mediano — o que acontece quando algo corre mal e o cliente liga para a linha de apoio? É ali, e não no logótipo novo, que 2026 se vai ganhar ou perder.
+
+*Fontes: páginas oficiais das marcas YORN, MOCHE e WTF; relatórios de reclamações da ANACOM e da DECO (março de 2026).*

@@ -1,6 +1,6 @@
 ---
 id: '50'
-titulo: "FIZ upgrade para o serviço DIGI PRO! 10Gbps \U0001F525"
+titulo: 'Fiz upgrade para o DIGI Pro de 10 Gbps — valeu a pena?'
 slug: fiz-upgrade-para-o-servico-digi-pro-10gbps
 data: 11/05/2026
 categoria: DIGI
@@ -37,3 +37,13 @@ Ainda me encontro em fase de testes, de forma a compreender qual a melhor config
 Ao contrário do que se possa pensar, este upgrade pode fazer sentido mesmo para quem não pretende usufruir da totalidade da velocidade disponível. A melhoria do equipamento, sobretudo ao nível do Wi-Fi, é significativa face ao anterior. Seja no patamar dos 2,5 Gbps ou dos 5 Gbps, estamos sempre a falar de melhorias de 2,5x ou 5x na velocidade de internet num único equipamento.
 
 Brevemente darei conta dos meus testes do dia a dia aqui no Viciado Comenta!
+
+## O Comentário do Viciado
+
+Vou ser honesto sobre o que me surpreendeu neste processo, porque não foi a velocidade — confesso que nenhum equipamento lá de casa a aproveita por inteiro. O que me surpreendeu foi serem eles a avisar-me dos 20 € de instalação e das limitações de hardware antes de eu gastar um cêntimo. É pequeno, mas é exactamente o tipo de conversa que separa um tarifário honesto de um formulário de adesão.
+
+Depois, o quadro maior: quinze euros por mês por 10 Gbps com Wi-Fi 7 dentro do preço é a confirmação de que a corrida deixou de ser entre gigabits e passou a ser entre equipamentos. O que estou mesmo a comprar neste upgrade não são dez gigabits — é o router que os meus aparelhos todos ainda vão usar melhor do que antes.
+
+Valeu a pena? Para quem precisa dos 10 Gbps, a resposta é óbvia. Para quem não precisa — o meu caso — vale pelos cinco ou 2,5 gigabits que o hardware novo liberta e pela sensação de estar a pagar preço low-cost por material de topo. Os testes do dia a dia dirão se a teoria se mantém quando a rede encher.
+
+*Fontes: experiência própria de upgrade para o DIGI Pro (maio de 2026); especificações dos equipamentos ZTE F8748 e Zyxel EX3301-T0.*

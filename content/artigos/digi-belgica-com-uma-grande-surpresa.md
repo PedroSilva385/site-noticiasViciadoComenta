@@ -1,6 +1,6 @@
 ---
 id: '11'
-titulo: DIGI BÉLGICA com uma GRANDE surpresa!
+titulo: 'DIGI Bélgica surpreende com internet fixa através do 5G a 7 €'
 slug: digi-belgica-com-uma-grande-surpresa
 data: 21/02/2026
 dataPublicacao: '21/02/2026 19:00'
@@ -36,3 +36,13 @@ Destaque ainda para os dados móveis disponíveis, sendo que a oferta máxima es
 É um mercado interessante, onde a DIGI é jovem e para o qual continuarei a olhar com bastante atenção nos próximos anos.  
   
 E tu, achas que a DIGI vai chegar ao pódio em breve?
+
+## O Comentário do Viciado
+
+Respondendo à pergunta do título: vou ser prudente. A Bélgica mostra uma DIGI ainda a aprender — 40 GB como oferta máxima num mercado onde Portugal tem dados ilimitados prova que preço baixo não existe no vazio, existe em troca de alguma coisa.
+
+Mas há uma ideia belga que merece atenção aqui em Portugal: o 5G Home Internet resolve precisamente o problema que a expansão da fibra não resolve. Aquelas mesmas zonas onde a DIGI admite que a fibra não é viável podem, com um router e um cartão 5G, ter internet de casa sem esperar anos por uma obra. É o complemento natural do intervalo de investimento.
+
+Os 7 € mensais não escondem segundas intenções: é o preço de quem quer encher a base antes de ter rede própria madura. Se a DIGI Portugal copiar esta parte da casa belga, ganha um argumento que nenhum dos incumbentes consegue igualar em preço — e os leitores do interior agradecem.
+
+*Fontes: oferta comercial publicada pela DIGI Bélgica (fevereiro de 2026).*

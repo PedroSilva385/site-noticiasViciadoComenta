@@ -1,6 +1,6 @@
 ---
 id: '18'
-titulo: DIGI anuncia redução na EXPANSÃO em PORTUGAL
+titulo: 'DIGI anuncia redução do investimento na expansão em Portugal'
 slug: digi-anuncia-reducao-na-expansao-em-portugal
 data: 09/03/2026
 dataPublicacao: '09/03/2026 19:00'
@@ -28,3 +28,13 @@ Ao longo dos últimos anos temos acompanhado a expansão, sobretudo das redes de
 Diria que a DIGI ainda terá uma fatia muito substancial de regiões que pretende cobrir. Outras deverão ficar de fora, uma vez que os baixos preços dos serviços comercializados não permitem grandes aventuras com contratos de aluguer de infraestruturas a outras empresas.  
   
 Em suma, a DIGI vai agora fazer os seus 15 minutos de intervalo e esperar que a operação cresça em RGU’s ao longo de 2026, ganhando assim um novo fôlego para o segundo tempo.
+
+## O Comentário do Viciado
+
+Prefiro ler esta pausa sem dramatismo: nenhum investidor faz sentido continuar a construir onde o dinheiro não regressa, e a DIGI não é excepção. Reduzir investimento onde a densidade não paga a fibra é disciplina financeira, não recuo.
+
+Mas também não quero amaciar a outra face: para quem aguarda a cobertura, “não é viável” traduz-se em exclusão sem prazo. A cada intervalo de expansão, há famílias que continuam fora do mercado que dizem defendê-las, e é nessas zonas que a concorrência nem sequer existe para baixar preços.
+
+O pormenor que acho mais revelador está no crescimento por RGUs dentro da base já coberta: sem novas moradas, a operação só cresce vendendo mais serviços a quem já cá está — TV, móvel, segundo contrato. É exactamente o cenário que explica a ARPU em queda: o segundo tempo não se ganha com alargamento de rede, mas com profundidade de pacote.
+
+*Fontes: declarações do CEO da DIGI, Serghei Bulgac, ao Jornal de Negócios; resultados da DIGI divulgados em 2026.*
