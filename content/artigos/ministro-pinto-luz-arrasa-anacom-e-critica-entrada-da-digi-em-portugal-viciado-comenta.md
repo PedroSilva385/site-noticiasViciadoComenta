@@ -1,7 +1,8 @@
 ---
 id: '83'
-titulo: 'Ministro Pinto Luz critica a ANACOM e a entrada da DIGI em Portugal'
-slug: ministro-pinto-luz-arrasa-anacom-e-critica-entrada-da-digi-em-portugal-viciado-comenta
+titulo: Ministro Pinto Luz critica a ANACOM e a entrada da DIGI em Portugal
+slug: >-
+  ministro-pinto-luz-arrasa-anacom-e-critica-entrada-da-digi-em-portugal-viciado-comenta
 data: 22/10/2026
 categoria: Telecom
 autor: Pedro Silva

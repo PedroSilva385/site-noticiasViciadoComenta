@@ -1,11 +1,13 @@
 ---
 id: '78'
-titulo: 'DIGI reforça a grelha de canais e aproxima-se do Canal 11'
+titulo: DIGI reforça a grelha de canais e aproxima-se do Canal 11
 slug: digi-reforca-grelha-de-canais-canal-11-esta-a-chegar-viciado-comenta
 data: 28/09/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: A DIGI soma os canais CineMundo e Canção Nova a uma grelha de 89 canais, mantendo o preço da DIGI TV, e o Canal 11 pode ser o próximo passo.
+resumo: >-
+  A DIGI soma os canais CineMundo e Canção Nova a uma grelha de 89 canais,
+  mantendo o preço da DIGI TV, e o Canal 11 pode ser o próximo passo.
 video: 'https://youtu.be/i-hjXXqU3ew'
 ---
 A DIGI voltou a reforçar a sua oferta de canais, passando agora a dispor dos canais CineMundo e Canção Nova na sua grelha.

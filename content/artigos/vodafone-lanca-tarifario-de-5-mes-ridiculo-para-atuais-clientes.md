@@ -1,11 +1,16 @@
 ---
 id: '67'
-titulo: A proposta de 5€/mês da Vodafone a clientes atuais face aos 100GB da AMIGO pelo mesmo preço
+titulo: >-
+  A proposta de 5€/mês da Vodafone a clientes atuais face aos 100GB da AMIGO
+  pelo mesmo preço
 slug: vodafone-lanca-tarifario-de-5-mes-ridiculo-para-atuais-clientes
 data: 14/08/2026
 categoria: Telecom
 autor: Pedro Silva
-resumo: Uma proposta "exclusiva" da Vodafone enviada a clientes atuais oferece 15GB por 5€/mês com 24 meses de fidelização — menos de um sétimo do que a marca AMIGO dá pelo mesmo valor.
+resumo: >-
+  Uma proposta "exclusiva" da Vodafone enviada a clientes atuais oferece 15GB
+  por 5€/mês com 24 meses de fidelização — menos de um sétimo do que a marca
+  AMIGO dá pelo mesmo valor.
 video: 'https://youtu.be/eTPgWeFzqvk'
 ---
 Recentemente o nosso amigo Ricardo José Saraiva teve oportunidade de partilhar connosco uma proposta que havia recebido por parte da Vodafone. Proposta essa "exclusiva" para ele, que por ser cliente Vodafone, dizemos nós, deveria merecer mais respeito por parte da operadora.

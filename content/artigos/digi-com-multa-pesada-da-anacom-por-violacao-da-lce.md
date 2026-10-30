@@ -5,7 +5,10 @@ slug: digi-com-multa-pesada-da-anacom-por-violacao-da-lce
 data: 06/08/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: A ANACOM aplicou à DIGI uma contraordenação de 228.000€, suspensa por 24 meses, por violação da obrigação de utilização eficiente do espectro. A empresa recorreu para o tribunal da concorrência.
+resumo: >-
+  A ANACOM aplicou à DIGI uma contraordenação de 228.000€, suspensa por 24
+  meses, por violação da obrigação de utilização eficiente do espectro. A
+  empresa recorreu para o tribunal da concorrência.
 video: 'https://youtu.be/hyPvkcWm1uM'
 ---
 [Conforme informação publicada no site da ANACOM no passado dia 4 de agosto](https://www.anacom.pt/render.jsp?contentId=1853669), a DIGI Portugal, Lda, foi alvo de uma contraordenação do regulador no valor de 228.000€, suspensa pelo período de 24 meses, pela violação da obrigação de utilização eficiente de espectro de radiofrequências.

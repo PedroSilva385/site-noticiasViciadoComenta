@@ -1,6 +1,6 @@
 ---
 id: '29'
-titulo: 'Starlink corta velocidade e dispara nos preços'
+titulo: Starlink corta velocidade e dispara nos preços
 slug: starlink-corta-velocidade-e-dispara-precos
 data: 30/03/2026
 categoria: Telecom

@@ -1,6 +1,6 @@
 ---
 id: '31'
-titulo: 'DIGI investigada na Roménia por alegado abuso de posição dominante'
+titulo: DIGI investigada na Roménia por alegado abuso de posição dominante
 slug: digi-enfrenta-processo-grave-multa-de-milhoes
 data: 01/04/2026
 categoria: DIGI

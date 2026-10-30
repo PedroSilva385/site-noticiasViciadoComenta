@@ -1,6 +1,8 @@
 ---
 id: '34'
-titulo: 'Comissão Europeia dá luz verde à ANCOM para regular a DIGI em zonas sem concorrência na Roménia'
+titulo: >-
+  Comissão Europeia dá luz verde à ANCOM para regular a DIGI em zonas sem
+  concorrência na Roménia
 slug: comissao-europeia-da-luz-verde-a-ancom-para-regular-digi-na-romenia
 data: 07/04/2026
 categoria: DIGI

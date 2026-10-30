@@ -1,6 +1,6 @@
 ---
 id: '23'
-titulo: 'UZO nega as acusações e estala a polémica'
+titulo: UZO nega as acusações e estala a polémica
 slug: uzo-nega-tudo-e-estala-polemica
 data: 19/03/2026
 categoria: Telecom

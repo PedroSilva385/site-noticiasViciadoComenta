@@ -1,6 +1,6 @@
 ---
 id: '50'
-titulo: 'Fiz upgrade para o DIGI Pro de 10 Gbps — valeu a pena?'
+titulo: Fiz upgrade para o DIGI Pro de 10 Gbps — valeu a pena?
 slug: fiz-upgrade-para-o-servico-digi-pro-10gbps
 data: 11/05/2026
 categoria: DIGI

@@ -1,6 +1,6 @@
 ---
 id: '18'
-titulo: 'DIGI anuncia redução do investimento na expansão em Portugal'
+titulo: DIGI anuncia redução do investimento na expansão em Portugal
 slug: digi-anuncia-reducao-na-expansao-em-portugal
 data: 09/03/2026
 dataPublicacao: '09/03/2026 19:00'

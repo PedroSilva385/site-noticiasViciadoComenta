@@ -1,6 +1,6 @@
 ---
 id: '74'
-titulo: 'DIGI testa antenas Massive MIMO da Ericsson na rede 4G em Portugal'
+titulo: DIGI testa antenas Massive MIMO da Ericsson na rede 4G em Portugal
 slug: >-
   digi-testa-nova-solucao-nas-redes-moveis-que-promete-melhorar-experiencia-do-cliente
 data: 12/09/2026

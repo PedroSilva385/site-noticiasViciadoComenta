@@ -1,6 +1,8 @@
 ---
 id: '7'
-titulo: Operadoras respondem às críticas do Presidente sobre a atuação na depressão Kristin
+titulo: >-
+  Operadoras respondem às críticas do Presidente sobre a atuação na depressão
+  Kristin
 slug: operadoras-atacam-marcelo-sem-piedade
 data: 09/02/2026
 dataPublicacao: '09/02/2026 19:00'

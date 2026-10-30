@@ -1,6 +1,6 @@
 ---
 id: '62'
-titulo: 'DIGI elimina o limite dos tarifários móveis ilimitados'
+titulo: DIGI elimina o limite dos tarifários móveis ilimitados
 slug: digi-resolveu-polemica-com-o-tarifario-ilimitado
 data: 29/06/2026
 categoria: DIGI

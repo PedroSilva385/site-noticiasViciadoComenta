@@ -1,6 +1,8 @@
 ---
 id: '17'
-titulo: 'Caso do Metro de Lisboa chega ao Governo através de perguntas de deputados do CHEGA'
+titulo: >-
+  Caso do Metro de Lisboa chega ao Governo através de perguntas de deputados do
+  CHEGA
 slug: caso-do-metro-chega-ao-governo-via-chega-e-desta
 data: 05/03/2026
 dataPublicacao: '05/03/2026 19:00'

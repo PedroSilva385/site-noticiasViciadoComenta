@@ -5,7 +5,10 @@ slug: anacom-evomedia-un2-quem-fala-sobre-este-escandalo
 data: 12/04/2026
 categoria: Telecom
 autor: Pedro Silva
-resumo: A operadora UN2 desapareceu após denúncias de revenda irregular de serviços. Sete meses depois, clientes continuam sem respostas e o caso arrasta-se em silêncio.
+resumo: >-
+  A operadora UN2 desapareceu após denúncias de revenda irregular de serviços.
+  Sete meses depois, clientes continuam sem respostas e o caso arrasta-se em
+  silêncio.
 video: 'https://youtu.be/4jBtfLF7nGQ'
 ---
 Aqui no Viciado Comenta estamos sempre atentos às novidades no mercado das telecomunicações e, por isso, durante o ano de 2025 tivemos oportunidade de [acompanhar o lançamento da operadora UN2 (Unidos)](https://youtu.be/BAuLlIQJXi0) no mercado nacional.

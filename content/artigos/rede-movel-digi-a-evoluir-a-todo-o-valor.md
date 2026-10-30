@@ -1,6 +1,6 @@
 ---
 id: '37'
-titulo: 'Rede móvel da DIGI a evoluir a todo o valor'
+titulo: Rede móvel da DIGI a evoluir a todo o valor
 slug: rede-movel-digi-a-evoluir-a-todo-o-valor
 data: 12/04/2026
 categoria: DIGI

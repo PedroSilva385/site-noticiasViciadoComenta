@@ -1,6 +1,6 @@
 ---
 id: '61'
-titulo: Starlink a 6,15€ com a Tarifa Social de Internet para zonas elegíveis
+titulo: 'Starlink a 6,15€ com a Tarifa Social de Internet para zonas elegíveis'
 slug: starlink-com-tsi-a-oferta-imbativel-de-baixo-custo
 data: 23/06/2026
 categoria: Telecom

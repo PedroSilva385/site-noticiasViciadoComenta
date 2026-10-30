@@ -1,6 +1,8 @@
 ---
 id: '22'
-titulo: 'Venda da DSTelecom pode tornar-se num dos negócios mais sensíveis das telecom em Portugal'
+titulo: >-
+  Venda da DSTelecom pode tornar-se num dos negócios mais sensíveis das telecom
+  em Portugal
 slug: bomba-no-mercado-das-telecom-em-portugal
 data: 14/03/2026
 categoria: DIGI

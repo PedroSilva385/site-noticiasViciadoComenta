@@ -1,11 +1,13 @@
 ---
 id: '27'
-titulo: 'DIGI traz novidades à rede móvel com HD Voice+'
+titulo: DIGI traz novidades à rede móvel com HD Voice+
 slug: digi-com-novidades-na-rede-movel-hd-voice
 data: 25/03/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: A DIGI está a reforçar a rede 2G nos 1800 MHz e a introduzir o HD Voice+ nas chamadas LTE e 5G, sinais de uma nova fase de investimento na sua rede móvel.
+resumo: >-
+  A DIGI está a reforçar a rede 2G nos 1800 MHz e a introduzir o HD Voice+ nas
+  chamadas LTE e 5G, sinais de uma nova fase de investimento na sua rede móvel.
 video: 'https://youtu.be/OKf1STwJr6k'
 ---
 Após um ano de 2025 particularmente desafiante para a DIGI, marcado por diversos problemas na sua rede móvel — como falhas de cobertura em centros comerciais e no metro de Lisboa, o mediático apagão e dificuldades nas chamadas durante o verão, entre outros — a operadora romena parece querer iniciar 2026 com uma nova abordagem.

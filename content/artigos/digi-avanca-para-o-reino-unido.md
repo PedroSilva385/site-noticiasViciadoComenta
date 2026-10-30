@@ -1,11 +1,13 @@
 ---
 id: '26'
-titulo: 'DIGI entra no Reino Unido com a aquisição de 51% da WhyFiber'
+titulo: DIGI entra no Reino Unido com a aquisição de 51% da WhyFiber
 slug: digi-avanca-para-o-reino-unido
 data: 25/03/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: 'DIGI expande a operação e entra no Reino Unido ao comprar 51% da empresa de fibra WhyFiber, através da subsidiária Fiber One Limited.'
+resumo: >-
+  DIGI expande a operação e entra no Reino Unido ao comprar 51% da empresa de
+  fibra WhyFiber, através da subsidiária Fiber One Limited.
 video: 'https://youtu.be/NoUOyo3rByo'
 ---
 Depois de marcar presença na Roménia, Itália, Países Baixos, Bélgica, Espanha e Portugal, a DIGI prepara-se agora para dar um novo passo na sua expansão internacional: o Reino Unido.

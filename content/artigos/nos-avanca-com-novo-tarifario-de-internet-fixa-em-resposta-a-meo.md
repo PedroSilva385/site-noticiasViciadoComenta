@@ -1,6 +1,6 @@
 ---
 id: '55'
-titulo: 'NOS avança com novo tarifário de internet fixa em resposta à MEO'
+titulo: NOS avança com novo tarifário de internet fixa em resposta à MEO
 slug: nos-avanca-com-novo-tarifario-de-internet-fixa-em-resposta-a-meo
 data: 23/05/2026
 categoria: Telecom

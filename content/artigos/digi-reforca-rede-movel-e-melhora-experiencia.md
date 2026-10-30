@@ -1,6 +1,6 @@
 ---
 id: '64'
-titulo: 'DIGI reforça a rede móvel 4G e melhora a experiência'
+titulo: DIGI reforça a rede móvel 4G e melhora a experiência
 slug: digi-reforca-rede-movel-e-melhora-experiencia
 data: 13/07/2026
 categoria: DIGI

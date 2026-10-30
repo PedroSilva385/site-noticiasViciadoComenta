@@ -1,6 +1,6 @@
 ---
 id: '54'
-titulo: 'DIGI ativa o aviso de tentativa de contacto na rede móvel'
+titulo: DIGI ativa o aviso de tentativa de contacto na rede móvel
 slug: digi-avanca-com-aviso-de-tentativa-de-contacto-viciado-comenta
 data: 18/05/2026
 categoria: DIGI

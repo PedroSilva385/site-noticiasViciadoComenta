@@ -1,6 +1,6 @@
 ---
 id: '28'
-titulo: 'Pode a DIGI importar novidades de Espanha para Portugal?'
+titulo: Pode a DIGI importar novidades de Espanha para Portugal?
 slug: pode-a-digi-importar-novidades-de-espanha-para-portugal
 data: 26/03/2026
 categoria: DIGI

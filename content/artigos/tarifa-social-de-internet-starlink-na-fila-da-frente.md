@@ -1,6 +1,6 @@
 ---
 id: '49'
-titulo: 'Tarifa Social de Internet coloca Starlink na fila da frente'
+titulo: Tarifa Social de Internet coloca Starlink na fila da frente
 slug: tarifa-social-de-internet-starlink-na-fila-da-frente
 data: 06/05/2026
 categoria: Telecom

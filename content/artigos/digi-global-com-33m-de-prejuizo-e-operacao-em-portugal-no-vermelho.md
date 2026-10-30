@@ -1,6 +1,6 @@
 ---
 id: '16'
-titulo: 'DIGI global com 33 milhões de prejuízo e operação em Portugal no vermelho'
+titulo: DIGI global com 33 milhões de prejuízo e operação em Portugal no vermelho
 slug: digi-global-com-33m-de-prejuizo-e-operacao-em-portugal-no-vermelho
 data: 03/03/2026
 dataPublicacao: '03/03/2026 19:00'

@@ -1,6 +1,6 @@
 ---
 id: '77'
-titulo: 'Magentta Portugal chega em janeiro de 2027'
+titulo: Magentta Portugal chega em janeiro de 2027
 slug: nova-operadora-chega-a-portugal-em-janeiro-de-2027
 data: 25/09/2026
 categoria: Telecom

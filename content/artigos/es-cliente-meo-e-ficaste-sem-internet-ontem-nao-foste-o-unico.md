@@ -1,11 +1,14 @@
 ---
 id: '76'
-titulo: 'Apagão da MEO a 14 de setembro afetou milhares de clientes'
+titulo: Apagão da MEO a 14 de setembro afetou milhares de clientes
 slug: es-cliente-meo-e-ficaste-sem-internet-ontem-nao-foste-o-unico
 data: 14/09/2026
 categoria: Telecom
 autor: Pedro Silva
-resumo: Uma falha generalizada na rede da MEO deixou milhares de clientes sem internet fixa e móvel na madrugada de 14 de setembro de 2026. A operadora acabou por admitir um ataque em massa.
+resumo: >-
+  Uma falha generalizada na rede da MEO deixou milhares de clientes sem internet
+  fixa e móvel na madrugada de 14 de setembro de 2026. A operadora acabou por
+  admitir um ataque em massa.
 video: 'https://www.youtube.com/live/I1sCZw5KXJk?si=NHwujuYEHch_c1qM'
 ---
 A madrugada de dia 14 de Setembro de 2026 foi particularmente complicada para os clientes da MEO. Às primeiras horas da madrugada, começaram relatos por parte de clientes de norte a sul do país, a dar conta de que estávamos perante um apagão geral na rede da maior operadora nacional, MEO.

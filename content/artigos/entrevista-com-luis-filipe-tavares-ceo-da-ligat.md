@@ -1,11 +1,16 @@
 ---
 id: '21'
-titulo: Entrevista a Luís Filipe Tavares, CEO da LigaT, sobre a operadora e o mercado português
+titulo: >-
+  Entrevista a Luís Filipe Tavares, CEO da LigaT, sobre a operadora e o mercado
+  português
 slug: entrevista-com-luis-filipe-tavares-ceo-da-ligat
 data: 13/03/2026
 categoria: Telecom
 autor: Pedro Silva
-resumo: Uma conversa de 1h30 com o CEO da LigaT, Luís Filipe Tavares, sobre o modelo disruptivo da operadora, o contrato vitalício de preço fixo e o estado das telecomunicações em Portugal.
+resumo: >-
+  Uma conversa de 1h30 com o CEO da LigaT, Luís Filipe Tavares, sobre o modelo
+  disruptivo da operadora, o contrato vitalício de preço fixo e o estado das
+  telecomunicações em Portugal.
 video: 'https://youtu.be/IJlHSnP9DXo'
 ---
 Uma conversa com **Luís Filipe Tavares**, CEO da operadora **LigaT**, que sendo um profundo conhecedor do mundo das Telecom em Portugal, embarcou neste projeto disruptivo denominado de LigaT.  
