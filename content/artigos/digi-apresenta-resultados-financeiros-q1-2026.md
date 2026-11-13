@@ -1,6 +1,6 @@
 ---
 id: '53'
-titulo: 'DIGI apresenta resultados financeiros do 1.º trimestre de 2026'
+titulo: DIGI apresenta resultados financeiros do 1.º trimestre de 2026
 slug: digi-apresenta-resultados-financeiros-q1-2026
 data: 15/05/2026
 categoria: DIGI

@@ -1,6 +1,6 @@
 ---
 id: '40'
-titulo: 'Marcas brancas não acompanham a nova descida de preços da DIGI'
+titulo: Marcas brancas não acompanham a nova descida de preços da DIGI
 slug: marcas-brancas-ja-responderam-ao-ataque-da-digi
 data: 17/04/2026
 categoria: Telecom

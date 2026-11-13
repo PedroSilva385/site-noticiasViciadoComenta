@@ -1,6 +1,6 @@
 ---
 id: '71'
-titulo: 'ANACOM divulga dados do 2.º trimestre de 2026 sobre redes móveis'
+titulo: ANACOM divulga dados do 2.º trimestre de 2026 sobre redes móveis
 slug: anacom-divulga-dados-do-2t2026-sobre-redes-moveis
 data: 01/09/2026
 categoria: Telecom

@@ -73,7 +73,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="assets/firebase-config.js?v=20260504-3"></script>
 <script src="assets/video-data.js?v=20260926-admin-session"></script>
-<script src="assets/news-scheduler.js?v=20261004-agendamento"></script>
+<script src="assets/news-scheduler.js?v=20261104-fastpaint"></script>
 <script src="assets/new-article-notification.js?v=20260301"></script>
 <script src="assets/push-notifications.js?v=20260517-push2"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3224074175860060"
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-fetchNoticiasAgendadas("data/noticias.json")
+fetchNoticiasAgendadas("data/noticias.json", { fastPaint: true })
   .then(async data => {
     const slugifyTitulo = (titulo) => {
       if (!titulo || typeof titulo !== 'string') return '';
@@ -1127,7 +1127,8 @@ fetchNoticiasAgendadas("data/noticias.json")
     }
     
     // Mostrar notÒ­cia em destaque: escolher a mais recente por data
-    if (data.noticias.length > 0) {
+    function renderizarDestaque(noticiasArr) {
+      if (!Array.isArray(noticiasArr) || noticiasArr.length === 0) return;
       const parseDate = (str) => {
         if (!str) return 0;
         const parts = str.split("/").map(Number);
@@ -1136,7 +1137,7 @@ fetchNoticiasAgendadas("data/noticias.json")
         return new Date(ano, mes - 1, dia).getTime();
       };
 
-      const noticiasOrdenadas = [...data.noticias].sort((a, b) => parseDate(b.data) - parseDate(a.data));
+      const noticiasOrdenadas = [...noticiasArr].sort((a, b) => parseDate(b.data) - parseDate(a.data));
       const featured = noticiasOrdenadas[0];
       const videoId = extrairVideoId(featured.video);
       window.featuredVideoId = videoId;
@@ -1185,7 +1186,7 @@ fetchNoticiasAgendadas("data/noticias.json")
     }
     
     // Mostrar lista de notÒ­cias inicial (todas, ordenadas por data)
-    renderizarNoticias(data.noticias, true);
+    // (render inicial da lista feito em aplicarNoticiasHome)
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
       window.NewArticleNotification.init(data.noticias);
@@ -1245,7 +1246,7 @@ fetchNoticiasAgendadas("data/noticias.json")
 
     // Renderizar Artigos Mais Lidos (top 5 por leituras)
     const artigosMaisLidosSection = document.getElementById('artigosMaisLidos');
-    const leiturasPorArtigo = await carregarLeiturasArtigos();
+    let leiturasPorArtigo = {};
     const parseDateMaisLidos = (str) => {
       if (!str) return 0;
       const parts = str.split('/').map(Number);
@@ -1254,8 +1255,13 @@ fetchNoticiasAgendadas("data/noticias.json")
       return new Date(ano, mes - 1, dia).getTime();
     };
 
-    const artigosMaisLidos = [...data.noticias]
-      .sort((a, b) => {
+    function renderizarMaisLidos(noticiasArr) {
+      if (!artigosMaisLidosSection || !Array.isArray(noticiasArr)) return;
+
+      artigosMaisLidosSection.innerHTML = '';
+
+      const artigosMaisLidos = [...noticiasArr]
+        .sort((a, b) => {
         const leiturasA = Number(leiturasPorArtigo[String(a.id)] || 0);
         const leiturasB = Number(leiturasPorArtigo[String(b.id)] || 0);
         if (leiturasB !== leiturasA) {
@@ -1283,6 +1289,31 @@ fetchNoticiasAgendadas("data/noticias.json")
         </span>
       `;
       artigosMaisLidosSection.appendChild(link);
+    });
+    }
+
+    function aplicarNoticiasHome(dataHome) {
+      const noticias = (dataHome && Array.isArray(dataHome.noticias)) ? dataHome.noticias : [];
+      window.todasNoticias = noticias;
+      renderizarDestaque(noticias);
+      renderizarNoticias(noticias, true);
+      renderizarMaisLidos(noticias);
+    }
+
+    // Primeira pintura imediata com cache/JSON local (sem esperar pelo Firebase).
+    aplicarNoticiasHome(data);
+
+    // Contagem de leituras corre em background e refina a sidebar quando chegar.
+    carregarLeiturasArtigos()
+      .then((leituras) => {
+        leiturasPorArtigo = leituras || {};
+        renderizarMaisLidos(window.todasNoticias || []);
+      })
+      .catch(() => {});
+
+    // Enriquecimento assíncrono: re-render quando o Firebase trouxer novidades.
+    document.addEventListener('vc:noticias-updated', (event) => {
+      aplicarNoticiasHome(event.detail);
     });
   })
   .catch(err => console.error("Erro ao carregar notícias:", err));

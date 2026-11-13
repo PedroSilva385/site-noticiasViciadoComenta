@@ -1,6 +1,6 @@
 ---
 id: '68'
-titulo: 'DIGI aproxima-se de 1.000.000 de serviços ativos em Portugal'
+titulo: DIGI aproxima-se de 1.000.000 de serviços ativos em Portugal
 slug: digi-a-beira-de-1-000-000-de-servicos-em-portugal
 data: 14/08/2026
 categoria: DIGI

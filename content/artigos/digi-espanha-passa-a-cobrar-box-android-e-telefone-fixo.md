@@ -1,6 +1,6 @@
 ---
 id: '82'
-titulo: 'DIGI Espanha passa a cobrar a Box Android e o telefone fixo'
+titulo: DIGI Espanha passa a cobrar a Box Android e o telefone fixo
 slug: digi-espanha-passa-a-cobrar-box-android-e-telefone-fixo
 data: 19/10/2026
 dataPublicacao: '20/10/2026 10:00'

@@ -2411,5 +2411,51 @@ Estes são apenas alguns dos constrangimentos que afetaram (e em alguns casos co
 <p>O detalhe que me preocupa é a retenção: <a href="/artigos/digi-a-beira-de-1-000-000-de-servicos-em-portugal.html">num mercado a caminho do milhão de serviços</a>, a televisão é uma das razões que ainda segura os clientes que não usam o serviço. Uma app instável não é uma inconveniência menor — é a rachadura por onde as campanhas dos rivais vão entrar.</p>
 <p><em>Fontes: comunicado oficial no blog da DIGI (blog.digi.pt), teste próprio da versão 3.0.0 e acompanhamento editorial do Viciado Comenta (outubro de 2026).</em></p>]]></content:encoded>
         </item>
+        <item>
+            <title><![CDATA[A guerra do espectro: a resposta afiada da DIGI à APRITEL e os riscos que a ANACOM não pode ignorar]]></title>
+            <link>https://www.viciadocomenta.pt/artigos/a-guerra-do-espectro-a-resposta-afiada-da-digi-a-apritel-e-os-riscos-que-a-anacom-nao-pode-ignorar.html</link>
+            <guid isPermaLink="true">https://www.viciadocomenta.pt/artigos/a-guerra-do-espectro-a-resposta-afiada-da-digi-a-apritel-e-os-riscos-que-a-anacom-nao-pode-ignorar.html</guid>
+            <pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[A DIGI desmontou a carta aberta da APRITEL sobre a renovação dos DUER, escancarando a falta de espectro sub-1GHz e a urgência de uma intervenção da ANACOM contra o bloqueio das...]]></description>
+            <content:encoded><![CDATA[<p>Conforme temos vindo a acompanhar aqui no <em><a href="https://www.youtube.com/watch?v=c3C7Chk8jUQ&t=1872s">Viciado Comenta</a></em>, a DIGI está ativamente empenhada em fazer ver ao regulador (ANACOM) a necessidade urgente de alterar a sua posição sobre a renovação dos Direitos de Utilização de Frequências (DUER). Desta vez, a operadora viu-se obrigada a vir a público dar conta da sua posição sobre os factos trazidos pela APRITEL para cima da mesa.</p>
+<p>Numa <a href="https://blog.digi.pt/carta-aberta-resposta-da-digi-aos-comentarios-da-apritel-sobre-o-projeto-de-decisao-da-anacom-de-prorrogacao-dos-direitos-de-utilizacao-de-espetro/">carta aberta</a> cirúrgica, a DIGI expõe ponto por ponto a sua objeção ao argumentário estendido pela associação das operadoras incumbentes.</p>
+<h2><strong>A questão de fundo: O calcanhar de Aquiles das bandas baixas</strong></h2>
+<p>Existe uma insuficiência clara de espectro sub-1GHz na &quot;carteira&quot; da DIGI. Isto não só reduz drasticamente a capacidade de propagação do sinal da rede móvel da operadora, como contribui para um custo operacional e de infraestruturas muito superior na construção da referida rede. Com menos espectro de banda baixa, são necessários muitos mais <em>sites</em> a operar em bandas médias e altas para cobrir as mesmas zonas que as operadoras históricas cobrem com menos antenas, valendo-se precisamente da vantagem das bandas baixas.</p>
+<p>Para além desta necessidade estrutural, a propagação do sinal <em>indoor</em> é também severamente afetada, fruto da menor capacidade de penetração em edifícios das bandas médias ou altas.</p>
+<p>Dito isto, existem apenas duas alternativas viáveis em cima da mesa:</p>
+<ol>
+<li>Ou a ANACOM realiza um leilão para que algumas das bandas baixas (que agora quer renovar) fiquem disponíveis para a DIGI as poder adquirir;</li>
+<li>Ou a ANACOM atribui o que ainda está disponível (os preciosos 2x5MHz na faixa dos 700 MHz) à DIGI e reforça a atual regulação, garantindo que as incumbentes não possam limitar o acesso através de barreiras de preço.</li>
+</ol>
+<h2><strong>A narrativa da APRITEL e o alarme social</strong></h2>
+<p>Sabendo o leitor quem a APRITEL representa, não surpreende que a sua posição esteja umbilicalmente ligada às vontades dos operadores históricos. Deste modo, convém relembrar quais são as suas propostas &quot;alternativas&quot; ao que tinha sido pedido pela DIGI:</p>
+<ul>
+<li>O espectro &quot;previsível&quot; para o começo da década de 600 MHz e a faixa de segurança atualmente disponível nos 700 MHz;</li>
+<li>Os 40MHz que pertenciam à Dense Air, na faixa dos 3,5 GHz;</li>
+<li>O uso da banda dos 2300 MHz para serviços móveis terrestres;</li>
+<li>A banda dos 26 GHz.</li>
+</ul>
+<p>De todas estas &quot;soluções&quot;, nenhuma resolveria no imediato o problema crítico: a falta de bandas baixas que garantam cobertura eficiente e sustentabilidade na construção da rede móvel da DIGI.</p>
+<p>A DIGI começa por ripostar contra a afirmação da APRITEL de que a não renovação destas licenças aos operadores históricos nos levaria a um &quot;caos nas redes&quot;. Aqui no <em>Viciado Comenta</em>, eu já tive oportunidade de falar sobre isto. Tendo em conta que estamos a pouco mais de 5 meses do fim das licenças, concordo que seria demasiado tarde para se avançar com uma não renovação total às três operadoras históricas.</p>
+<p>Neste sentido, compreendendo essa realidade temporal, a DIGI relembra a existência de um instrumento regulatório que permite renovar as licenças de forma curta, salvaguardando assim o tempo estritamente necessário para a organização de um leilão dedicado ao referido espectro.</p>
+<p>Considerar a posição da DIGI como &quot;alarmista&quot;, vindo da APRITEL — que, como todos sabemos, bebe diretamente daquele que é o espírito de Miguel Almeida, o eterno arauto da desgraça e dos cenários dantescos —, não surpreende ninguém.</p>
+<h2><strong>Desmontar as &quot;alternativas&quot; técnicas</strong></h2>
+<p>Sobre as supostas alternativas anunciadas pela APRITEL, a DIGI desmonta a teoria com mestria:</p>
+<ul>
+<li><strong>Primeiro:</strong> a DIGI pretende e precisa de mais espectro de bandas baixas; a sua substituição forçada por bandas médias ou altas simplesmente não resolve o problema físico de propagação.</li>
+<li><strong>Segundo:</strong> sobre os 600 MHz, a faixa estará em uso até pelo menos 2031, não sendo minimamente possível prever uma data viável para a sua utilização nas redes móveis atuais.</li>
+<li><strong>Terceiro:</strong> o intervalo <em>duplex</em> dos 700 MHz está limitado ao uso em <em>Supplemental Downlink</em> (SDL), o que não permite tráfego em <em>upload</em>, tornando obrigatório o seu uso ancorado a outra faixa sub-1GHz.</li>
+</ul>
+<p>A DIGI esclarece também o porquê de não ter comprado mais espectro sub-1GHz no leilão de 2021. A decisão não teve a ver com falta de apetite financeiro — provando-o o facto de ter pago mais 56,2% pelo espectro adquirido na faixa dos 900 MHz. Conforme tive oportunidade de comentar anteriormente, parece-me evidente que a decisão foi puramente ditada pelas obrigações de cobertura associadas ao lote.</p>
+<p>Adicionalmente, a operadora romena alega que esperava conseguir regressar ao mercado em 2027 e 2033 precisamente para reforçar a sua carteira de espectro na faixa dos 900 MHz, onde já detém um lote e onde a aquisição seria operacionalmente mais eficiente.</p>
+<p>Algo que a operadora aponta igualmente é que, sem condições específicas para um novo entrante — nomeadamente através da reserva de espectro ou da imposição de limites de compra às históricas —, será quase impossível que um novo operador vença licitações em pé de igualdade. As históricas, com os seus bolsos fundos, tenderão a licitar até onde for necessário estritamente como forma de bloqueio de mercado.</p>
+<p>É ainda arrasada a teoria de que existiram outras operações cuja viabilidade não foi posta em causa, mesmo operando com baixas quantidades de bandas baixas. A resposta é curta e clara: as operadoras em questão tiveram acesso a <strong>roaming nacional</strong>.</p>
+<p>E é aqui que a DIGI reforça o que já temos dito exaustivamente aqui no espaço de opinião: as operadoras incumbentes <strong>não vão negociar qualquer acordo de roaming nacional</strong>, a menos que a ANACOM defina um preço máximo e regras claras. A ilusão da &quot;autorregulação&quot; nunca funcionará num contexto de concorrência feroz, onde a decisão lesa diretamente quem a tem de tomar.</p>
+<h2><strong>Conclusão</strong></h2>
+<p>É uma verdadeira lufada de ar fresco ter uma operadora como a DIGI em Portugal. Se por um lado era exatamente disto que precisávamos para obrigar a uma correção nos preços absurdos a que fomos sujeitos durante décadas, por outro precisávamos de uma voz corajosa que fizesse frente ao <em>status quo</em> instalado e o denunciasse publicamente.</p>
+<p>Foi com elevado entusiasmo que li esta carta aberta, que ponto por ponto desmontou categoricamente a narrativa criada à medida pela APRITEL. A opinião pública tem o direito de aceder a todos os lados da história para formular um juízo crítico fundamentado em factos reais, e não em cenários &quot;martelados&quot; para proteger os interesses dos suspeitos do costume.</p>
+<p>Aqui no <em>Viciado Comenta</em>, espero que a ANACOM seja capaz de enfrentar este problema de frente e honrar a decisão corajosa tomada em 2021 de trazer um novo operador para o mercado nacional. Só assim se garantem as condições necessárias para o desenvolvimento do setor, assente numa competitividade real e longe dos arranjinhos do passado.</p>
+<p>Que não se cometa o erro histórico que já custou a Portugal uma 4ª operadora, com todos os pesados custos financeiros e reputacionais que tal descalabro acarretou.</p>]]></content:encoded>
+        </item>
     </channel>
 </rss>

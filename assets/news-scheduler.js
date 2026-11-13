@@ -346,13 +346,48 @@ function initDelegatedArticleVideoEmbeds() {
 }
 
 /**
+ * Assinatura estável para detetar mudanças entre duas listas de notícias.
+ * Comparada por id/slug/titulo/data para apanhar novas publicações e
+ * edições de datas sem falsos positivos dovados a reordenação.
+ */
+function signatureNoticias(noticias) {
+  return (Array.isArray(noticias) ? noticias : [])
+    .map((noticia) => {
+      if (!noticia || typeof noticia !== 'object') return '';
+      const id = noticia.id != null ? String(noticia.id) : '';
+      const slug = typeof noticia.slug === 'string' ? noticia.slug : '';
+      const titulo = typeof noticia.titulo === 'string' ? noticia.titulo : '';
+      const data = typeof noticia.data === 'string' ? noticia.data : '';
+      return `${id}|${slug}|${titulo}|${data}`;
+    })
+    .join(';');
+}
+
+function noticiasDiferem(noticiasA, noticiasB) {
+  return signatureNoticias(noticiasA) !== signatureNoticias(noticiasB);
+}
+
+/**
  * Wrapper do fetch que aplica filtro de agendamento automaticamente.
  * Junta o JSON estático com o Firebase e dá prioridade ao Firebase para
  * refletir artigos acabados de guardar antes da regeneração estática.
  * @param {string} url - Ignorado (mantido por compatibilidade)
+ * @param {object} [options] - Opções de carregamento
+ * @param {boolean} [options.fastPaint] - Quando true, resolve imediatamente com
+ *   a cache local ou o JSON estático e lê o Firebase em segundo plano, emitindo
+ *   o evento 'vc:noticias-updated' se houver conteúdo novo. Evita bloquear o
+ *   primeiro paint da página inicial pela descarga do nó completo 'noticias'.
  * @returns {Promise} - Promise com as notícias filtradas e ordenadas
  */
-async function fetchNoticiasAgendadas(url) {
+async function fetchNoticiasAgendadas(url, options) {
+  const opts = options || {};
+  if (opts.fastPaint) {
+    return fetchNoticiasFastPaint();
+  }
+  return fetchNoticiasBloqueante();
+}
+
+async function fetchNoticiasBloqueante() {
   const [localJsonResult, firebaseResult] = await Promise.allSettled([
     lerNoticiasDoJsonLocal(),
     (async () => {
@@ -387,6 +422,79 @@ async function fetchNoticiasAgendadas(url) {
   }
 
   throw lastError || new Error('Nao foi possivel carregar as noticias.');
+}
+
+async function fetchNoticiasFastPaint() {
+  // O Firebase é lido em segundo plano e nunca bloqueia o primeiro paint.
+  const firebasePromise = (async () => {
+    await garantirAcessoNoticiasFirebase();
+    return lerNoticiasDoFirebase();
+  })();
+
+  let fastRawNoticias = null;
+  let fastData = null;
+
+  const cached = readNoticiasCache();
+  if (cached && Array.isArray(cached.noticias)) {
+    fastRawNoticias = cached.noticias;
+    fastData = normalizeNoticiasResponse(cached);
+  }
+
+  if (!fastData || fastData.noticias.length === 0) {
+    try {
+      const localJsonData = await lerNoticiasDoJsonLocal();
+      fastRawNoticias = localJsonData && Array.isArray(localJsonData.noticias)
+        ? localJsonData.noticias
+        : [];
+      fastData = normalizeNoticiasResponse(localJsonData);
+    } catch (localError) {
+      fastData = null;
+    }
+  }
+
+  if (fastData && fastData.noticias.length > 0) {
+    // Enriquecimento assíncrono: se o Firebase trouxer algo diferente do que
+    // já foi mostrado, emite um evento para a página se atualizar sem reload.
+    firebasePromise
+      .then((firebaseData) => {
+        const merged = mergeNoticiasSources(
+          firebaseData && firebaseData.noticias,
+          fastRawNoticias
+        );
+        const normalizedMerged = normalizeNoticiasResponse({ noticias: merged });
+
+        if (normalizedMerged.noticias.length > 0) {
+          writeNoticiasCache(normalizedMerged.noticias);
+        }
+
+        if (noticiasDiferem(normalizedMerged.noticias, fastData.noticias)) {
+          if (typeof document !== 'undefined') {
+            document.dispatchEvent(new CustomEvent('vc:noticias-updated', {
+              detail: normalizedMerged
+            }));
+          }
+        }
+      })
+      .catch(() => { /* Firebase indisponível: manter o conteúdo já mostrado. */ });
+
+    return fastData;
+  }
+
+  // Sem cache nem JSON local: recorrer ao Firebase (fallback bloqueante).
+  try {
+    const firebaseData = await firebasePromise;
+    const normalized = normalizeNoticiasResponse(firebaseData);
+    if (normalized.noticias.length > 0) {
+      writeNoticiasCache(normalized.noticias);
+    }
+    return normalized;
+  } catch (firebaseError) {
+    const cachedData = readNoticiasCache();
+    if (cachedData) {
+      return normalizeNoticiasResponse(cachedData);
+    }
+    throw firebaseError;
+  }
 }
 
 // Exporta para uso global

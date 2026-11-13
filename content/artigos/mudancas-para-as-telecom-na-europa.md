@@ -1,6 +1,6 @@
 ---
 id: '6'
-titulo: 'O Digital Networks Act e as mudanças que trazem às telecom na Europa'
+titulo: O Digital Networks Act e as mudanças que trazem às telecom na Europa
 slug: mudancas-para-as-telecom-na-europa
 data: 07/02/2026
 dataPublicacao: '07/02/2026 19:00'

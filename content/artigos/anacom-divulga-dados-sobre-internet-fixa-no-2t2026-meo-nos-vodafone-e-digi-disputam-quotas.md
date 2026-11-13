@@ -1,6 +1,8 @@
 ---
 id: '73'
-titulo: 'ANACOM divulga dados da internet fixa no 2.º trimestre: MEO, NOS, Vodafone e DIGI disputam quotas'
+titulo: >-
+  ANACOM divulga dados da internet fixa no 2.º trimestre: MEO, NOS, Vodafone e
+  DIGI disputam quotas
 slug: >-
   anacom-divulga-dados-sobre-internet-fixa-no-2t2026-meo-nos-vodafone-e-digi-disputam-quotas
 data: 07/09/2026

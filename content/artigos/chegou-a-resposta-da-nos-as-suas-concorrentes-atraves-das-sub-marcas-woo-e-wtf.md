@@ -1,6 +1,6 @@
 ---
 id: '15'
-titulo: 'NOS responde à concorrência com as sub-marcas WOO e WTF'
+titulo: NOS responde à concorrência com as sub-marcas WOO e WTF
 slug: chegou-a-resposta-da-nos-as-suas-concorrentes-atraves-das-sub-marcas-woo-e-wtf
 data: 01/03/2026
 dataPublicacao: '01/03/2026 19:00'

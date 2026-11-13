@@ -1,6 +1,6 @@
 ---
 id: '80'
-titulo: 'Magentta Portugal passa a designar-se Livercom'
+titulo: Magentta Portugal passa a designar-se Livercom
 slug: magentta-portugal-agora-e-livercom
 data: 08/10/2026
 categoria: Telecom
