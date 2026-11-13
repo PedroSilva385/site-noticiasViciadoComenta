@@ -1,6 +1,6 @@
 ---
 id: '25'
-titulo: 'A falha da regulação que travou as MVNO nas telecom em Portugal'
+titulo: A falha da regulação que travou as MVNO nas telecom em Portugal
 slug: falha-brutal-de-regulacao-nas-telecom-em-portugal
 data: 24/03/2026
 categoria: Telecom

@@ -1,6 +1,6 @@
 ---
 id: '65'
-titulo: 'ANACOM aprova 80 MHz contíguos à DIGI e o 5G já passa de 1 Gbps'
+titulo: ANACOM aprova 80 MHz contíguos à DIGI e o 5G já passa de 1 Gbps
 slug: >-
   anacom-aprova-80mhz-contiguos-na-faixa-3-6ghz-a-digi-e-debitos-passam-dos-1gbps-no-5g
 data: 23/07/2026

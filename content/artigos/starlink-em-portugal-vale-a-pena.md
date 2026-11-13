@@ -1,6 +1,6 @@
 ---
 id: '13'
-titulo: 'Starlink em Portugal vale a pena?'
+titulo: Starlink em Portugal vale a pena?
 slug: starlink-em-portugal-vale-a-pena
 data: 26/02/2026
 dataPublicacao: '26/02/2026 19:00'

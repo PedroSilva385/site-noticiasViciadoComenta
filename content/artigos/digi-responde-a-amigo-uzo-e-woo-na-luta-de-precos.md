@@ -1,6 +1,6 @@
 ---
 id: '35'
-titulo: 'DIGI volta a descer os preços móveis e responde às marcas brancas'
+titulo: DIGI volta a descer os preços móveis e responde às marcas brancas
 slug: digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos
 data: 09/04/2026
 categoria: DIGI

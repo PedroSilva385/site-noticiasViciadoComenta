@@ -1,6 +1,8 @@
 ---
 id: '63'
-titulo: 'CNMC discute fim da regulação do MARCo em Espanha com subidas de preços até 110%'
+titulo: >-
+  CNMC discute fim da regulação do MARCo em Espanha com subidas de preços até
+  110%
 slug: cnmc-abre-discussao-sobre-fim-do-marco-precos-podem-subir-110
 data: 10/07/2026
 categoria: Telecom

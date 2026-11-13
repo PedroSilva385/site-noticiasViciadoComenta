@@ -1,6 +1,6 @@
 ---
 id: '39'
-titulo: 'As low-cost causam uma avalanche de reclamações em Portugal?'
+titulo: As low-cost causam uma avalanche de reclamações em Portugal?
 slug: low-cost-causam-uma-avalanche-de-reclamacoes-em-portugal
 data: 16/04/2026
 categoria: Telecom

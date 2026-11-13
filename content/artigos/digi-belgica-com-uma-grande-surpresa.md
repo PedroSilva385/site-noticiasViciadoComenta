@@ -1,6 +1,6 @@
 ---
 id: '11'
-titulo: 'DIGI Bélgica surpreende com internet fixa através do 5G a 7 €'
+titulo: DIGI Bélgica surpreende com internet fixa através do 5G a 7 €
 slug: digi-belgica-com-uma-grande-surpresa
 data: 21/02/2026
 dataPublicacao: '21/02/2026 19:00'

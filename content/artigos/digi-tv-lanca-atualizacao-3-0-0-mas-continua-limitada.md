@@ -1,6 +1,6 @@
 ---
 id: '84'
-titulo: 'DIGI TV lança atualização 3.0.0 mas continua limitada'
+titulo: DIGI TV lança atualização 3.0.0 mas continua limitada
 slug: digi-tv-lanca-atualizacao-3-0-0-mas-continua-limitada
 data: 22/10/2026
 dataPublicacao: '23/10/2026 10:00'

@@ -1,6 +1,8 @@
 ---
 id: '72'
-titulo: 'DIGI reduz 53% as reclamações, mas continua com a pior taxa entre os operadores'
+titulo: >-
+  DIGI reduz 53% as reclamações, mas continua com a pior taxa entre os
+  operadores
 slug: digi-reduz-53-as-reclamacoes-mas-continua-a-ser-a-pior-no-ranking
 data: 02/09/2026
 categoria: DIGI

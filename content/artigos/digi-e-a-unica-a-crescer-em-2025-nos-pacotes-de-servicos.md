@@ -1,6 +1,6 @@
 ---
 id: '14'
-titulo: 'DIGI é o único operador a crescer nos pacotes de serviços em 2025'
+titulo: DIGI é o único operador a crescer nos pacotes de serviços em 2025
 slug: digi-e-a-unica-a-crescer-em-2025-nos-pacotes-de-servicos
 data: 27/02/2026
 dataPublicacao: '27/02/2026 19:00'

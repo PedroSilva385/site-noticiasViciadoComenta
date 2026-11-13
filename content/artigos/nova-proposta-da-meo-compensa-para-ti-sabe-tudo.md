@@ -1,6 +1,6 @@
 ---
 id: '33'
-titulo: 'Vale a pena combinar telecomunicações e energia na nova proposta da MEO?'
+titulo: Vale a pena combinar telecomunicações e energia na nova proposta da MEO?
 slug: nova-proposta-da-meo-compensa-para-ti-sabe-tudo
 data: 06/04/2026
 categoria: Telecom

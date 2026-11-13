@@ -5,7 +5,10 @@ slug: deco-lanca-o-caos-sobre-os-servicos-da-digi-em-portugal
 data: 28/01/2026
 categoria: DIGI
 autor: Pedro Silva
-resumo: A DECO expôs um conjunto de problemas no apoio ao cliente e na qualidade de serviço da DIGI. Analisamos o comunicado, o que já melhorou e o que continua por resolver.
+resumo: >-
+  A DECO expôs um conjunto de problemas no apoio ao cliente e na qualidade de
+  serviço da DIGI. Analisamos o comunicado, o que já melhorou e o que continua
+  por resolver.
 video: 'https://youtu.be/DOjc__NhtJo'
 ---
 A DECO decidiu lançar um alerta sobre os problemas que têm marcado o apoio ao cliente da DIGI e o impacto direto que estas falhas estão a ter na qualidade do serviço prestado pela operadora.

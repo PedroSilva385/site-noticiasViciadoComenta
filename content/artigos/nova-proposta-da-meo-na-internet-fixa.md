@@ -1,6 +1,6 @@
 ---
 id: '44'
-titulo: 'MEO lança nova proposta na internet fixa'
+titulo: MEO lança nova proposta na internet fixa
 slug: nova-proposta-da-meo-na-internet-fixa
 data: 23/04/2026
 categoria: Telecom

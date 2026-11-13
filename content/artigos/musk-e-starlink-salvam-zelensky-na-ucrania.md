@@ -1,6 +1,8 @@
 ---
 id: '10'
-titulo: 'Starlink bloqueia terminais russos e muda o equilíbrio tecnológico na guerra da Ucrânia'
+titulo: >-
+  Starlink bloqueia terminais russos e muda o equilíbrio tecnológico na guerra
+  da Ucrânia
 slug: musk-e-starlink-salvam-zelensky-na-ucrania
 data: 19/02/2026
 dataPublicacao: '19/02/2026 19:00'
