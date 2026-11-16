@@ -13,6 +13,7 @@ resumo: >-
   disponibilização de IP público e na melhoria da aplicação de TV. Com a
   operação a amadurecer, a entrada no pódio das telecomunicações em Portugal
   parece ser apenas uma questão de tempo.
+video: 'https://www.youtube.com/watch?v=pE0mueaZSDU&t=1182s'
 ---
 Como vem sendo habitual aqui no **Viciado Comenta**, estamos sempre atentos aos resultados trimestrais apresentados pela **DIGI Portugal**. Hoje, dia 13 de Novembro, chegaram-nos os mais recentes dados, através dos quais a DIGI quebrou oficialmente uma barreira muito relevante: **1 milhão de serviços ativos em Portugal!**
 
