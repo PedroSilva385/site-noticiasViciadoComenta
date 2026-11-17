@@ -234,6 +234,14 @@
           "timestamp": {
             ".validate": "!newData.exists() || (newData.isNumber() && newData.val() > 0 && newData.val() <= now + 300000)"
           },
+          "fechado": {
+            ".write": "root.child('admins').child(auth.uid).val() === true",
+            ".validate": "!newData.exists() || newData.isBoolean()"
+          },
+          "fixado": {
+            ".write": "root.child('admins').child(auth.uid).val() === true",
+            ".validate": "!newData.exists() || newData.isBoolean()"
+          },
           "respostas": {
             ".read": true,
             "$respostaId": {

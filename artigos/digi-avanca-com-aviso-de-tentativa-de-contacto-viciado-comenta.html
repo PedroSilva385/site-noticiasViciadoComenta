@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/digi-avanca-com-aviso-de-tentativa-de-contacto-viciado-comenta.html">
 <meta name="description" content="Ap&#243;s meses de espera a DIGI resolveu um dos problemas mais chatos da sua rede m&#243;vel: SMS de aviso de tentativa de chamada finalmente ativos!">
 <meta property="og:type" content="article">
@@ -2820,7 +2820,7 @@ footer {
           <div class="artigo-conteudo">
             <p><strong>Após meses de espera a DIGI resolveu um dos problemas mais chatos da sua rede móvel: SMS de aviso de tentativa de chamada finalmente ativos!</strong></p>
                         <p>A espera parece ter terminado. Mais de um ano e meio após o lançamento do serviço móvel, a operadora romena resolveu finalmente um problema que afetava os seus clientes: agora, recebes um SMS a informar que tentaram contactar-te enquanto estiveste indisponível.</p>
-<p><img src="/assets/imagens/AvisoDIGI.jpg" alt="2"></p>
+<p><img decoding="async" height="563" width="1079" src="/assets/imagens/AvisoDIGI.jpg" alt="DIGI ativa o aviso de tentativa de contacto na rede m&#243;vel - imagem de destaque"></p>
                         
                     <div class="artigo-video" data-video-id="GJ2ID-S6v4k" data-video-title="DIGI ativa o aviso de tentativa de contacto na rede m&#243;vel">
                         <iframe src="https://www.youtube-nocookie.com/embed/GJ2ID-S6v4k?modestbranding=1&amp;rel=0" title="DIGI ativa o aviso de tentativa de contacto na rede m&#243;vel" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
@@ -2833,7 +2833,7 @@ footer {
 <p>O serviço de aviso de tentativa de contacto parece ainda não ter chegado a todos os clientes. A funcionalidade está a ser implementada gradualmente, pelo que é esperado que, ao longo das próximas semanas, todos já a tenham disponível.</p>
 <p>No entanto, existe algo que podes fazer para a ativar imediatamente.</p>
 <p><strong>Solução</strong></p>
-<p><img src="/assets/imagens/DIGISMS.jpg" alt="1"></p>
+<p><img decoding="async" loading="lazy" height="955" width="1078" src="/assets/imagens/DIGISMS.jpg" alt="DIGI ativa o aviso de tentativa de contacto na rede m&#243;vel - imagem 2"></p>
 <p>Configura manualmente o reencaminhamento de chamadas para o número 923300760. Para alguns clientes, este número já aparece automaticamente, mas, se não for esse o teu caso, basta defini-lo nas opções:</p>
 <p>“Quando Ocupado”</p>
 <p>“Quando Não Atende”</p>
@@ -2858,7 +2858,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2895,7 +2895,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3480,7 +3480,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4577,7 +4577,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

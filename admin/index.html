@@ -536,6 +536,117 @@ body {
   background: #e0e7ff;
 }
 
+/* ===== FÓRUM (moderação) ===== */
+
+.forum-admin-topic-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.forum-admin-title {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  color: #111827;
+  overflow-wrap: anywhere;
+}
+
+.forum-admin-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.forum-admin-badge {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.forum-admin-badge--pinned {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.forum-admin-badge--closed {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.forum-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-forum-action {
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  color: #4338ca;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-forum-action:hover {
+  background: #e0e7ff;
+}
+
+.btn-forum-action[disabled] {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.forum-admin-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.forum-admin-reply {
+  border-left: 3px solid #c7d2fe;
+  background: #f8fafc;
+  border-radius: 0 8px 8px 0;
+  padding: 8px 10px;
+}
+
+.forum-admin-reply-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.forum-admin-reply-head strong {
+  color: #111827;
+  font-size: 0.86rem;
+}
+
+.forum-admin-reply-text {
+  margin: 4px 0 0;
+  color: #374151;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .comment-reply-form {
   display: none;
   flex-direction: column;
@@ -1253,6 +1364,7 @@ button {
         <button type="button" class="admin-tab-btn" id="adminTabEstatisticas" role="tab" aria-selected="false" aria-controls="statsView">📊 Estatísticas</button>
         <button type="button" class="admin-tab-btn" id="adminTabPushSubscriptions" role="tab" aria-selected="false" aria-controls="pushView">🔔 Subscrições Push</button>
         <button type="button" class="admin-tab-btn" id="adminTabComments" role="tab" aria-selected="false" aria-controls="commentsView">💬 Comentários</button>
+<button type="button" class="admin-tab-btn" id="adminTabForum" role="tab" aria-selected="false" aria-controls="forumView">🧩 Fórum</button>
       </div>
       <button type="button" class="btn-publish-site" id="btnPublishSite" title="Executa o deploy manual via servidor local">🚀 Publicar site</button>
       <span class="user-info">Utilizador: <strong id="userEmail"></strong></span>
@@ -1514,6 +1626,56 @@ button {
     </div>
   </div>
 
+  <div class="panel-view" id="forumView" aria-hidden="true">
+    <div class="container" style="padding-top: 0;">
+      <div class="stats-shell">
+        <section class="push-stats-panel" aria-labelledby="forumAdminHeading">
+          <div class="push-stats-header">
+            <div>
+              <h3 id="forumAdminHeading">Moderação do Fórum</h3>
+              <p>Tópicos e respostas da comunidade na página do podcast. Fixa os temas importantes, fecha discussões que já terminaram e apaga conteúdo impróprio. As alterações são imediatas e não podem ser revertidas.</p>
+            </div>
+            <button type="button" class="btn-inline" id="btnReloadForum">Atualizar fórum</button>
+          </div>
+          <div class="push-stats-grid">
+            <article class="push-stat-card">
+              <div class="label">Tópicos</div>
+              <div class="value" id="forumAdminTotalCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Abertos</div>
+              <div class="value" id="forumAdminOpenCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Fechados</div>
+              <div class="value" id="forumAdminClosedCount">0</div>
+            </article>
+            <article class="push-stat-card">
+              <div class="label">Respostas</div>
+              <div class="value" id="forumAdminRepliesCount">0</div>
+            </article>
+          </div>
+          <div class="comments-toolbar">
+            <input type="search" id="forumAdminSearch" placeholder="Pesquisar por título, autor ou texto..." aria-label="Pesquisar tópicos do fórum">
+            <select id="forumAdminFilter" aria-label="Filtrar tópicos do fórum">
+              <option value="">Todos os tópicos</option>
+              <option value="open">Apenas abertos</option>
+              <option value="closed">Apenas fechados</option>
+              <option value="pinned">Apenas fixados</option>
+            </select>
+            <select id="forumAdminSort" aria-label="Ordenação dos tópicos do fórum">
+              <option value="recent">Mais recentes primeiro</option>
+              <option value="old">Mais antigos primeiro</option>
+              <option value="replies">Mais respostas primeiro</option>
+            </select>
+          </div>
+          <div class="push-stats-status" id="forumAdminStatus">A carregar fórum...</div>
+          <div class="comments-list" id="forumAdminList"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <div class="panel-view" id="videosView" aria-hidden="true">
     <div class="container" style="padding-top: 0;">
       <div class="stats-shell">
@@ -1674,11 +1836,23 @@ const adminTabVideos = document.getElementById('adminTabVideos');
 const adminTabEstatisticas = document.getElementById('adminTabEstatisticas');
 const adminTabPushSubscriptions = document.getElementById('adminTabPushSubscriptions');
 const adminTabComments = document.getElementById('adminTabComments');
+const adminTabForum = document.getElementById('adminTabForum');
 const newsView = document.getElementById('newsView');
 const videosView = document.getElementById('videosView');
 const statsView = document.getElementById('statsView');
 const pushView = document.getElementById('pushView');
 const commentsView = document.getElementById('commentsView');
+const forumView = document.getElementById('forumView');
+const forumAdminTotalCount = document.getElementById('forumAdminTotalCount');
+const forumAdminOpenCount = document.getElementById('forumAdminOpenCount');
+const forumAdminClosedCount = document.getElementById('forumAdminClosedCount');
+const forumAdminRepliesCount = document.getElementById('forumAdminRepliesCount');
+const forumAdminSearch = document.getElementById('forumAdminSearch');
+const forumAdminFilter = document.getElementById('forumAdminFilter');
+const forumAdminSort = document.getElementById('forumAdminSort');
+const forumAdminStatus = document.getElementById('forumAdminStatus');
+const forumAdminList = document.getElementById('forumAdminList');
+const btnReloadForum = document.getElementById('btnReloadForum');
 const commentsTotalCount = document.getElementById('commentsTotalCount');
 const commentsRepliesCount = document.getElementById('commentsRepliesCount');
 const commentsArticlesCount = document.getElementById('commentsArticlesCount');
@@ -1841,27 +2015,32 @@ function setAdminView(viewName) {
   const showStats = viewName === 'estatisticas';
   const showPushSubscriptions = viewName === 'push-subscriptions';
   const showComments = viewName === 'comentarios';
+  const showForum = viewName === 'forum';
 
   adminTabNoticias.classList.toggle('active', showNoticias);
   adminTabVideos.classList.toggle('active', showVideos);
   adminTabEstatisticas.classList.toggle('active', showStats);
   adminTabPushSubscriptions.classList.toggle('active', showPushSubscriptions);
   adminTabComments.classList.toggle('active', showComments);
+  adminTabForum.classList.toggle('active', showForum);
   adminTabNoticias.setAttribute('aria-selected', showNoticias ? 'true' : 'false');
   adminTabVideos.setAttribute('aria-selected', showVideos ? 'true' : 'false');
   adminTabEstatisticas.setAttribute('aria-selected', showStats ? 'true' : 'false');
   adminTabPushSubscriptions.setAttribute('aria-selected', showPushSubscriptions ? 'true' : 'false');
   adminTabComments.setAttribute('aria-selected', showComments ? 'true' : 'false');
+  adminTabForum.setAttribute('aria-selected', showForum ? 'true' : 'false');
 
   newsView.classList.toggle('active', showNoticias);
   videosView.classList.toggle('active', showVideos);
   statsView.classList.toggle('active', showStats);
   pushView.classList.toggle('active', showPushSubscriptions);
   commentsView.classList.toggle('active', showComments);
+  forumView.classList.toggle('active', showForum);
   videosView.setAttribute('aria-hidden', showVideos ? 'false' : 'true');
   statsView.setAttribute('aria-hidden', showStats ? 'false' : 'true');
   pushView.setAttribute('aria-hidden', showPushSubscriptions ? 'false' : 'true');
   commentsView.setAttribute('aria-hidden', showComments ? 'false' : 'true');
+  forumView.setAttribute('aria-hidden', showForum ? 'false' : 'true');
 
   if (showPushSubscriptions) {
     loadPushSubscriptionsStats();
@@ -1869,6 +2048,10 @@ function setAdminView(viewName) {
 
   if (showComments) {
     void loadCommentsModeration();
+  }
+
+  if (showForum) {
+    void loadForumAdmin();
   }
 }
 
@@ -1892,8 +2075,16 @@ adminTabComments.addEventListener('click', () => {
   setAdminView('comentarios');
 });
 
+adminTabForum.addEventListener('click', () => {
+  setAdminView('forum');
+});
+
 btnReloadComments.addEventListener('click', () => {
   void loadCommentsModeration();
+});
+
+btnReloadForum.addEventListener('click', () => {
+  void loadForumAdmin();
 });
 
 btnReloadVideosStudio.addEventListener('click', () => {
@@ -2090,6 +2281,8 @@ function flattenCommentsForModeration(comentariosPorArtigo) {
         id: commentId,
         path: `${COMMENTS_DB_PATH}/${articleId}/${commentId}`,
         nome: comentario.nome || '',
+        // Os tópicos do fórum do podcast guardam o título num campo extra.
+        titulo: comentario.titulo || '',
         texto: comentario.texto || '',
         data: comentario.data || '',
         timestamp: Number(comentario.timestamp || 0),
@@ -2135,6 +2328,8 @@ function setCommentsStatus(message, tone) {
 }
 
 function commentsArticleLabel(articleId) {
+  // O fórum do podcast grava em /comentarios/podcast (ver assets/forum.js).
+  if (String(articleId) === 'podcast') return 'Fórum do podcast';
   const info = commentsModerationArticles && commentsModerationArticles[String(articleId)];
   const titulo = info && info.titulo ? info.titulo : '';
   return titulo || `Artigo #${articleId}`;
@@ -2292,7 +2487,7 @@ function getCommentsModerationView() {
   const items = commentsModerationItems.filter((item) => {
     if (articleId && String(item.articleId) !== String(articleId)) return false;
     if (!search) return true;
-    const haystack = normalizeCommentsSearchText(`${item.nome} ${decodeCommentEntitiesAdmin(item.texto)}`);
+    const haystack = normalizeCommentsSearchText(`${item.nome} ${item.titulo || ''} ${decodeCommentEntitiesAdmin(item.texto)}`);
     return haystack.includes(search);
   });
 
@@ -2316,10 +2511,15 @@ function renderCommentsModeration() {
   commentsList.innerHTML = items.map((item) => {
     const nome = escapeHtml(item.nome || 'Anónimo');
     const data = escapeHtml(formatCommentTimestamp(item));
-    const texto = escapeHtml(decodeCommentEntitiesAdmin(item.texto));
+    const texto = item.titulo
+      // Tópicos do fórum: mostrar o título antes do corpo da mensagem.
+      ? `<strong>${escapeHtml(decodeCommentEntitiesAdmin(item.titulo))}</strong><br>${escapeHtml(decodeCommentEntitiesAdmin(item.texto))}`
+      : escapeHtml(decodeCommentEntitiesAdmin(item.texto));
     const artigoTitulo = escapeHtml(commentsArticleLabel(item.articleId));
     const totalRespostas = countCommentTree(item.respostas);
-    const linkArtigo = `../artigos.html?id=${encodeURIComponent(item.articleId)}`;
+    const linkArtigo = String(item.articleId) === 'podcast'
+      ? '../podcast.html#forum'
+      : `../artigos.html?id=${encodeURIComponent(item.articleId)}`;
     const contextoRespostas = { articleId: item.articleId, commentId: item.id };
     const respostasHtml = renderCommentRepliesHtml(item.respostas, item.path, contextoRespostas);
     const replyFormHtml = renderCommentReplyForm({
@@ -2460,6 +2660,363 @@ async function deleteCommentFromModeration(path, label) {
       : (error && error.message ? error.message : 'Erro ao apagar o comentário.');
     setCommentsStatus(message, 'error');
   }
+}
+
+// ===== MODERACAO DO FORUM (podcast) =====
+// O forum publico grava em /comentarios/podcast (ver assets/forum.js): cada
+// topico e um comentario com nome/texto/uid/timestamp + titulo, e os campos de
+// moderacao fechado/fixado. As respostas ficam em respostas/{id}.
+const FORUM_DB_PATH = 'comentarios/podcast';
+let forumAdminItems = [];
+let forumAdminRequestId = 0;
+const forumAdminState = { search: '', estado: '', sort: 'recent' };
+
+function setForumAdminStatus(message, tone) {
+  if (!forumAdminStatus) return;
+  forumAdminStatus.textContent = message;
+  forumAdminStatus.className = 'push-stats-status';
+  if (tone) forumAdminStatus.classList.add(tone);
+}
+
+function normalizarTextoForum(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function achatarRespostasForum(respostas) {
+  const lista = [];
+
+  const visitar = (no, profundidade) => {
+    if (!no || typeof no !== 'object') return;
+    for (const [id, resposta] of Object.entries(no)) {
+      if (!resposta || typeof resposta !== 'object') continue;
+      lista.push({
+        id,
+        nome: resposta.nome || '',
+        texto: resposta.texto || '',
+        data: resposta.data || '',
+        timestamp: Number(resposta.timestamp || 0),
+        parentId: resposta.parentId || '',
+        profundidade
+      });
+      if (resposta.respostas) visitar(resposta.respostas, profundidade + 1);
+    }
+  };
+
+  visitar(respostas, 1);
+  return lista.sort((a, b) => a.timestamp - b.timestamp);
+}
+
+function flattenForumTopics(valor) {
+  return Object.keys(valor || {}).map((chave) => {
+    const item = valor[chave] || {};
+    const respostas = item.respostas && typeof item.respostas === 'object' ? item.respostas : {};
+    return {
+      id: chave,
+      path: `${FORUM_DB_PATH}/${chave}`,
+      titulo: String(item.titulo || item.nome || 'Tópico sem título'),
+      autor: String(item.nome || 'Anónimo'),
+      texto: String(item.texto || ''),
+      data: String(item.data || ''),
+      timestamp: Number(item.timestamp || 0),
+      fechado: item.fechado === true,
+      fixado: item.fixado === true,
+      respostas,
+      totalRespostas: achatarRespostasForum(respostas)
+    };
+  });
+}
+
+function updateForumAdminStats() {
+  const total = forumAdminItems.length;
+  const fechados = forumAdminItems.filter((item) => item.fechado).length;
+
+  if (forumAdminTotalCount) forumAdminTotalCount.textContent = String(total);
+  if (forumAdminOpenCount) forumAdminOpenCount.textContent = String(total - fechados);
+  if (forumAdminClosedCount) forumAdminClosedCount.textContent = String(fechados);
+  if (forumAdminRepliesCount) {
+    forumAdminRepliesCount.textContent = String(
+      forumAdminItems.reduce((acc, item) => acc + item.totalRespostas.length, 0)
+    );
+  }
+}
+
+function getForumAdminView() {
+  const search = normalizarTextoForum(forumAdminState.search.trim());
+  let items = forumAdminItems.filter((item) => {
+    if (forumAdminState.estado === 'open' && item.fechado) return false;
+    if (forumAdminState.estado === 'closed' && !item.fechado) return false;
+    if (forumAdminState.estado === 'pinned' && !item.fixado) return false;
+    if (!search) return true;
+    const haystack = normalizarTextoForum(`${item.titulo} ${item.autor} ${decodeCommentEntitiesAdmin(item.texto)}`);
+    return haystack.includes(search);
+  });
+
+  items = [...items].sort((a, b) => {
+    if (a.fixado !== b.fixado) return a.fixado ? -1 : 1;
+    if (forumAdminState.sort === 'old') return a.timestamp - b.timestamp;
+    if (forumAdminState.sort === 'replies') {
+      const diff = b.totalRespostas.length - a.totalRespostas.length;
+      return diff !== 0 ? diff : b.timestamp - a.timestamp;
+    }
+    return b.timestamp - a.timestamp;
+  });
+
+  return items;
+}
+
+function renderForumAdmin() {
+  if (!forumAdminList) return;
+
+  const items = getForumAdminView();
+  forumAdminList.innerHTML = '';
+
+  if (!forumAdminItems.length) {
+    forumAdminList.innerHTML = '<div class="comments-empty">Ainda não existem tópicos no fórum do podcast.</div>';
+    return;
+  }
+
+  if (!items.length) {
+    forumAdminList.innerHTML = '<div class="comments-empty">Nenhum tópico corresponde aos filtros escolhidos.</div>';
+    return;
+  }
+
+  forumAdminList.innerHTML = items.map((item) => {
+    const titulo = escapeHtml(item.titulo);
+    const autor = escapeHtml(item.autor || 'Anónimo');
+    const data = escapeHtml(formatCommentTimestamp(item));
+    const texto = escapeHtml(decodeCommentEntitiesAdmin(item.texto));
+    const badges = [
+      item.fixado ? '<span class="forum-admin-badge forum-admin-badge--pinned">Fixado</span>' : '',
+      item.fechado ? '<span class="forum-admin-badge forum-admin-badge--closed">Fechado</span>' : ''
+    ].filter(Boolean).join('');
+
+    const respostasHtml = item.totalRespostas.length
+      ? `<div class="forum-admin-replies">${item.totalRespostas.map((resposta) => {
+          const nomeResposta = escapeHtml(resposta.nome || 'Anónimo');
+          const dataResposta = escapeHtml(formatCommentTimestamp(resposta));
+          const textoResposta = escapeHtml(decodeCommentEntitiesAdmin(resposta.texto));
+          const caminhoResposta = escapeHtml(`${item.path}/respostas/${resposta.id}`);
+          const aninhada = resposta.profundidade > 1 ? '<span>resposta aninhada</span>' : '';
+          return `
+            <div class="forum-admin-reply">
+              <div class="forum-admin-reply-head">
+                <strong>${nomeResposta}</strong>
+                <span>${dataResposta}</span>
+                ${aninhada}
+              </div>
+              <p class="forum-admin-reply-text">${textoResposta}</p>
+              <div class="forum-admin-actions">
+                <button type="button" class="btn-delete-comment" data-forum-action="delete-reply" data-forum-path="${caminhoResposta}" data-forum-label="${nomeResposta}">🗑️ Apagar resposta</button>
+              </div>
+            </div>`;
+        }).join('')}</div>`
+      : '';
+
+    return `
+      <article class="comment-card" data-forum-topic="${escapeHtml(item.id)}">
+        <div class="forum-admin-topic-head">
+          <h4 class="forum-admin-title">${titulo}</h4>
+          <div class="forum-admin-badges">${badges}</div>
+        </div>
+        <div class="comment-head">
+          <span class="comment-author">${autor}</span>
+          <span class="comment-date">${data}</span>
+          <a class="comment-article-link" href="../podcast.html#forum" target="_blank" rel="noopener noreferrer">Ver no site ↗</a>
+        </div>
+        <div class="comment-text">${texto}</div>
+        <div class="comment-actions-row">
+          <span class="comment-replies-badge">${item.totalRespostas.length} resposta${item.totalRespostas.length === 1 ? '' : 's'}</span>
+          <div class="forum-admin-actions">
+            <button type="button" class="btn-forum-action" data-forum-action="toggle-pin" data-forum-id="${escapeHtml(item.id)}">${item.fixado ? '📌 Desafixar' : '📌 Fixar'}</button>
+            <button type="button" class="btn-forum-action" data-forum-action="toggle-close" data-forum-id="${escapeHtml(item.id)}">${item.fechado ? '🔓 Reabrir' : '🔒 Fechar'}</button>
+            <button type="button" class="btn-delete-comment" data-forum-action="delete-topic" data-forum-id="${escapeHtml(item.id)}" data-forum-label="${titulo}">🗑️ Apagar tópico</button>
+          </div>
+        </div>
+        ${respostasHtml}
+      </article>`;
+  }).join('');
+}
+
+async function loadForumAdmin() {
+  if (!forumAdminList || !forumAdminStatus) return false;
+
+  if (isLocalStudioSession()) {
+    setForumAdminStatus('A moderação do fórum só está disponível no painel autenticado com Firebase.', 'error');
+    return false;
+  }
+
+  if (!db) {
+    setForumAdminStatus('Base de dados indisponível.', 'error');
+    return false;
+  }
+
+  const requestId = ++forumAdminRequestId;
+  setForumAdminStatus('A carregar fórum...', null);
+
+  try {
+    const snapshot = await db.ref(FORUM_DB_PATH).once('value');
+    if (forumAdminRequestId !== requestId) return false;
+
+    forumAdminItems = flattenForumTopics(snapshot.val() || {});
+    updateForumAdminStats();
+    renderForumAdmin();
+
+    const totalFechados = forumAdminItems.filter((item) => item.fechado).length;
+    const totalRespostas = forumAdminItems.reduce((acc, item) => acc + item.totalRespostas.length, 0);
+    setForumAdminStatus(
+      `Fórum carregado: ${forumAdminItems.length} tópico(s), ${totalFechados} fechado(s) e ${totalRespostas} resposta(s).`,
+      'success'
+    );
+    return true;
+  } catch (error) {
+    if (forumAdminRequestId !== requestId) return false;
+
+    forumAdminItems = [];
+    updateForumAdminStats();
+    renderForumAdmin();
+
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para ler o fórum. Confirma que esta conta está na lista de administradores (admins) do Realtime Database.'
+      : (error && error.message ? error.message : 'Erro ao carregar o fórum.');
+    setForumAdminStatus(message, 'error');
+    return false;
+  }
+}
+
+async function atualizarTopicoForum(topicoId, alteracoes, mensagemSucesso) {
+  if (!db || !topicoId) return;
+
+  setForumAdminStatus('A guardar alteração...', null);
+
+  try {
+    await db.ref(`${FORUM_DB_PATH}/${topicoId}`).update(alteracoes);
+    const recarregou = await loadForumAdmin();
+    setForumAdminStatus(
+      recarregou ? mensagemSucesso : 'Alteração guardada, mas a lista não pôde ser atualizada.',
+      recarregou ? 'success' : 'error'
+    );
+  } catch (error) {
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para alterar este tópico. Confirma que a conta está na lista de administradores (admins).'
+      : (error && error.message ? error.message : 'Erro ao guardar a alteração.');
+    setForumAdminStatus(message, 'error');
+  }
+}
+
+function toggleForumPinned(topicoId) {
+  const item = forumAdminItems.find((topico) => topico.id === topicoId);
+  if (!item) return;
+  void atualizarTopicoForum(
+    topicoId,
+    { fixado: !item.fixado },
+    item.fixado ? 'Tópico desafixado.' : 'Tópico fixado no topo do fórum.'
+  );
+}
+
+function toggleForumClosed(topicoId) {
+  const item = forumAdminItems.find((topico) => topico.id === topicoId);
+  if (!item) return;
+
+  const confirmado = window.confirm(
+    item.fechado
+      ? 'Reabrir este tópico? A comunidade volta a poder responder.'
+      : 'Fechar este tópico? Ninguém poderá responder enquanto estiver fechado.'
+  );
+  if (!confirmado) return;
+
+  void atualizarTopicoForum(
+    topicoId,
+    { fechado: !item.fechado },
+    item.fechado ? 'Tópico reaberto.' : 'Tópico fechado.'
+  );
+}
+
+async function apagarDoForum(path, mensagemSucesso) {
+  if (!db || !path) return;
+
+  setForumAdminStatus('A apagar...', null);
+
+  try {
+    await db.ref(path).remove();
+    const recarregou = await loadForumAdmin();
+    setForumAdminStatus(
+      recarregou ? mensagemSucesso : 'Conteúdo apagado, mas a lista não pôde ser atualizada.',
+      recarregou ? 'success' : 'error'
+    );
+  } catch (error) {
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para apagar este conteúdo. Confirma que a conta está na lista de administradores (admins).'
+      : (error && error.message ? error.message : 'Erro ao apagar o conteúdo.');
+    setForumAdminStatus(message, 'error');
+  }
+}
+
+function deleteForumTopic(topicoId, label) {
+  const item = forumAdminItems.find((topico) => topico.id === topicoId);
+  const total = item ? item.totalRespostas.length : 0;
+  const aviso = total
+    ? `Apagar o tópico "${label}" e as ${total} resposta(s)? Esta ação é imediata e não pode ser revertida.`
+    : `Apagar o tópico "${label}"? Esta ação é imediata e não pode ser revertida.`;
+  if (!window.confirm(aviso)) return;
+  void apagarDoForum(`${FORUM_DB_PATH}/${topicoId}`, 'Tópico apagado.');
+}
+
+function deleteForumReply(path, label) {
+  if (!path) return;
+  if (!window.confirm(`Apagar a resposta de "${label}"? Esta ação é imediata e não pode ser revertida.`)) return;
+  void apagarDoForum(path, 'Resposta apagada.');
+}
+
+if (forumAdminSearch) {
+  forumAdminSearch.addEventListener('input', () => {
+    forumAdminState.search = forumAdminSearch.value;
+    renderForumAdmin();
+  });
+}
+
+if (forumAdminFilter) {
+  forumAdminFilter.addEventListener('change', () => {
+    const valor = forumAdminFilter.value;
+    forumAdminState.estado = ['open', 'closed', 'pinned'].includes(valor) ? valor : '';
+    renderForumAdmin();
+  });
+}
+
+if (forumAdminSort) {
+  forumAdminSort.addEventListener('change', () => {
+    forumAdminState.sort = ['old', 'replies'].includes(forumAdminSort.value) ? forumAdminSort.value : 'recent';
+    renderForumAdmin();
+  });
+}
+
+if (forumAdminList) {
+  forumAdminList.addEventListener('click', (event) => {
+    const botao = event.target.closest('[data-forum-action]');
+    if (!botao) return;
+
+    const acao = botao.getAttribute('data-forum-action');
+    const topicoId = botao.getAttribute('data-forum-id') || '';
+    const label = botao.getAttribute('data-forum-label') || 'este conteúdo';
+
+    if (acao === 'toggle-pin') {
+      toggleForumPinned(topicoId);
+      return;
+    }
+    if (acao === 'toggle-close') {
+      toggleForumClosed(topicoId);
+      return;
+    }
+    if (acao === 'delete-topic') {
+      deleteForumTopic(topicoId, label);
+      return;
+    }
+    if (acao === 'delete-reply') {
+      deleteForumReply(botao.getAttribute('data-forum-path') || '', label);
+    }
+  });
 }
 
 async function submitCommentReply(sendBtn) {

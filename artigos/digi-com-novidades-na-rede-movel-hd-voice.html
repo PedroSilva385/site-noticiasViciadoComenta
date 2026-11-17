@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/digi-com-novidades-na-rede-movel-hd-voice.html">
 <meta name="description" content="A DIGI est&#225; a refor&#231;ar a rede 2G nos 1800 MHz e a introduzir o HD Voice+ nas chamadas LTE e 5G, sinais de uma nova fase de investimento na sua rede m&#243;vel.">
 <meta property="og:type" content="article">
@@ -2831,7 +2831,7 @@ footer {
 <p>Ainda no âmbito do 2G, não foi identificado o uso do codec AMR-WB, que permitiria oferecer HD Voice em chamadas GSM — uma funcionalidade já comum noutras operadoras, mas que continua ausente na DIGI.</p>
 <p>Por outro lado, uma das novidades mais interessantes é a introdução do HD Voice+ nas chamadas LTE e 5G. Com esta atualização, as chamadas realizadas através de VoLTE passam a beneficiar de uma qualidade de áudio superior, proporcionando uma experiência mais clara e natural aos clientes DIGI.</p>
 <p>Exemplo de chamada NOS -» DIGI com HD+:</p>
-<p><img src="assets/imagens/digi-com-novidades-na-rede-movel-hd-voice-hd-plus.jpg" alt="Chamada NOS -» DIGI com HD+"></p>
+<p><img decoding="async" height="1024" width="461" src="assets/imagens/digi-com-novidades-na-rede-movel-hd-voice-hd-plus.jpg" alt="Chamada NOS -» DIGI com HD+"></p>
 <p><strong>Resta agora aguardar pelas próximas novidades.</strong></p>
 <h2>O Comentário do Viciado</h2>
 <p>Há aqui duas notícias e a mais interessante nem é a que o título destaca. O HD Voice+ é bem-vindo, mas é quase uma reparação histórica: qualidade de voz em LTE já era o mínimo em qualquer operador europeu. O que me diz mais sobre a DIGI em 2026 é o reforço da banda 2G nos 1800 MHz, porque é a humildade de preparar a rede para quando o VoLTE falha, o Wi-Fi Calling não pega e o elevador não tem sinal. Resiliência é o que separa um operador novo de um operador fiável.</p>
@@ -2846,7 +2846,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2883,7 +2883,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3468,7 +3468,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4565,7 +4565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

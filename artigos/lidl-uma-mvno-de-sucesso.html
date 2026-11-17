@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/lidl-uma-mvno-de-sucesso.html">
 <meta name="description" content="Sabias que o Lidl det&#233;m opera&#231;&#227;o de telecomunica&#231;&#245;es MVNO em v&#225;rios pa&#237;ses? Vamos analisar este assunto!">
 <meta property="og:type" content="article">
@@ -2821,7 +2821,7 @@ footer {
             <p><strong>Sabias que o Lidl detém operação de telecomunicações MVNO em vários países? Vamos analisar este assunto!</strong></p>
                         <p>Em Portugal, a cadeia de distribuição Lidl tem registado um crescimento substancial nas últimas décadas. Com mais de 280 lojas no país, é hoje, indiscutivelmente, uma das empresas mais relevantes do setor. Mas e se o Lidl entrasse no mercado das telecomunicações?</p>
 <h2>Lidl Connect</h2>
-<p><img src="assets/imagens/Lidl.png" alt="Lidl Connect"></p>
+<p><img decoding="async" height="900" width="1600" src="assets/imagens/Lidl.png" alt="Lidl Connect"></p>
                         
                     <div class="artigo-video" data-video-id="IgGWY7yXJic" data-video-title="Lidl Connect: uma MVNO de sucesso que pode chegar a Portugal">
                         <iframe src="https://www.youtube-nocookie.com/embed/IgGWY7yXJic?modestbranding=1&amp;rel=0" title="Lidl Connect: uma MVNO de sucesso que pode chegar a Portugal" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
@@ -2833,7 +2833,7 @@ footer {
 <li>Suíça - Salt Mobile</li>
 </ul>
 <p>Nestes mercados, o processo de aquisição é simples: os cartões estão disponíveis nas lojas Lidl, geralmente nas linhas de caixa. A adesão e gestão do serviço são feitas através da app Lidl Connect, onde os utilizadores podem controlar consumos, carregar saldo e gerir subscrições.</p>
-<p><img src="assets/imagens/lidllinhas.png" alt="1"></p>
+<p><img decoding="async" loading="lazy" height="810" width="1080" src="assets/imagens/lidllinhas.png" alt="Lidl Connect: uma MVNO de sucesso que pode chegar a Portugal - imagem 2"></p>
 <p><strong>Sem fidelização</strong>, estes cartões funcionam numa lógica pré-paga, baseada em carregamentos. Atualmente, o Lidl Connect conta com cerca de 2 milhões de clientes apenas no mercado alemão, o que demonstra a escala que uma operação deste tipo pode atingir. Esta dimensão revela também o potencial de sinergias com o ecossistema do Lidl.</p>
 <p>Mais recentemente, o Schwarz Group (detentor do Lidl) <strong>adquiriu uma participação de 9,9% na 1GLOBAL</strong>, por cerca de 68 milhões de euros, sinalizando claramente que pretende continuar a investir e a explorar este segmento de negócio.</p>
 <p>A 1GLOBAL é uma plataforma tecnológica, com acesso a infraestruturas, licenças e com know-how em vários países, capaz de impulsionar o Lidl para outros mercados, de uma forma mais robusta e sustentada.</p>
@@ -2862,7 +2862,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2899,7 +2899,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3484,7 +3484,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4581,7 +4581,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

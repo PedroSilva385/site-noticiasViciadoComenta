@@ -1195,8 +1195,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
 </head>
 
 <body>
@@ -1482,7 +1482,12 @@ fetchNoticiasAgendadas()
 
     // Construir filtros de categoria dinâmicos + renderizar por categoria
     construirFiltrosCategoria(todasAsNoticias);
-    renderizarNoticias(todasAsNoticias, true);
+
+    // Respeitar ?c= (categorias partilháveis); caso contrário, mostrar tudo
+    if (!aplicarCategoriaDaUrl()) {
+      renderizarNoticias(todasAsNoticias, true);
+      atualizarUrlCategoria();
+    }
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
       window.NewArticleNotification.init(todasAsNoticias);
@@ -1509,6 +1514,58 @@ function selecionarCategoria(btn) {
   btn.classList.add('active');
   aplicarFiltros();
 }
+
+// Ler ?c= e ativar o filtro de categoria correspondente
+function aplicarCategoriaDaUrl() {
+  let categoria;
+  try {
+    categoria = new URLSearchParams(window.location.search).get('c');
+  } catch (err) {
+    return false;
+  }
+  if (!categoria) return false;
+
+  const alvo = categoria.trim().toLowerCase();
+  let botao = null;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (botao) return;
+    const valor = (btn.getAttribute('data-categoria') || '').trim().toLowerCase();
+    if (valor && valor === alvo) botao = btn;
+  });
+
+  if (!botao) return false;
+
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  botao.classList.add('active');
+  aplicarFiltros();
+  return true;
+}
+
+// Manter ?c= na URL para permitir partilhar a categoria ativa
+function atualizarUrlCategoria() {
+  let params;
+  try {
+    params = new URLSearchParams(window.location.search);
+  } catch (err) {
+    return;
+  }
+
+  if (categoriaAtiva && categoriaAtiva !== 'todas') {
+    params.set('c', categoriaAtiva);
+  } else {
+    params.delete('c');
+  }
+
+  const query = params.toString();
+  const proximaUrl = window.location.pathname + (query ? '?' + query : '') + window.location.hash;
+  window.history.replaceState(null, '', proximaUrl);
+}
+
+window.addEventListener('popstate', () => {
+  if (aplicarCategoriaDaUrl()) return;
+  const todasBtn = document.querySelector('.filter-btn[data-categoria="todas"]');
+  if (todasBtn) selecionarCategoria(todasBtn);
+});
 
 // Gerar botões de categoria a partir dos dados reais
 function construirFiltrosCategoria(noticias) {
@@ -1547,6 +1604,7 @@ function aplicarFiltros() {
     lista = lista.filter(n => ((n.categoria && String(n.categoria).trim()) || 'Outros') === categoriaAtiva);
   }
 
+  atualizarUrlCategoria();
   renderizarNoticias(lista, true);
 }
 

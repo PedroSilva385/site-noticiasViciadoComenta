@@ -6,6 +6,29 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
+// Pass-through de pedidos same-origin: mantem o conteudo sempre fresco mas
+// permite que o site seja instalavel como app (requisito de fetch handler).
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
+
+  if (request.method !== 'GET') {
+    return;
+  }
+
+  let url;
+  try {
+    url = new URL(request.url);
+  } catch (error) {
+    return;
+  }
+
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  event.respondWith(fetch(request));
+});
+
 self.addEventListener('push', (event) => {
   let payload = {};
 

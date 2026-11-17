@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/woo-ilimitado-tem-pua-aos-200-gb-diarios-motivo-de-alarme.html">
 <meta name="description" content="O tarif&#225;rio ilimitado da WOO aplica uma restri&#231;&#227;o tempor&#225;ria de velocidade ao atingir 200 GB de consumo di&#225;rio, estando em conformidade com as regras da ANACOM. Ao contr&#225;rio do...">
 <meta property="og:type" content="article">
@@ -2828,7 +2828,7 @@ footer {
                         <div id="artigoConteudoBody"><p><strong>Então há motivo para alarme?</strong></p>
 <p>Diria que não. A PUA existe, é pública, e <a href="https://www.woo.pt/content/dam/nos/assets/pdfs/PUA/PUA.pdf">está expressamente documentada no próprio PDF disponível no site da WOO</a> — não é letra pequena escondida. O gatilho dispara aos 200 GB em 24 horas, um valor que, convenhamos, está bem fora dos padrões de consumo de qualquer utilizador móvel comum, mesmo de alto volume.</p>
 <p>O facto da WOO publicar no seu site a informação &quot;Dados móveis ilimitados sem restrição de velocidade&quot;, é que poderá ser considerado publicidade enganosa. Ao contrário da sua rival, a UZO, que removeu essa informação dos seus banners, a empresa liderada por Miguel Almeida optou por deixar visível essa promessa...</p>
-<p><img src="/assets/imagens/TarifarioWOO.png" alt="1"></p>
+<p><img decoding="async" height="416" width="1262" src="/assets/imagens/TarifarioWOO.png" alt="WOO Ilimitado tem PUA aos 200 GB di&#225;rios — motivo de alarme? - imagem de destaque"></p>
 <p><strong>É igual ao caso DIGI?</strong></p>
 <p>Não, e a distinção é importante. No caso da DIGI — <a href="https://youtu.be/AHqvYAwZkLw">exposto pelo utilizador Ricardo José Saraiva</a> — a operadora aplicava uma restrição permanente ao atingir os 3 TB, mantendo-a até ao próximo período de faturação. Isso não é uma PUA: é um limite disfarçado de ilimitado, e a ANACOM é clara a proibi-lo em tarifários com essa denominação.</p>
 <p>Ainda assim, tratando-se de um valor de 3 TB mensais, a fasquia está colocada num nível onde a percentagem de utilizadores que lá chega é muitíssimo reduzida — e quem lá chegar deve considerar optar por outro serviço para satisfazer os seus consumos.</p>
@@ -2851,7 +2851,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2888,7 +2888,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3473,7 +3473,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4570,7 +4570,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

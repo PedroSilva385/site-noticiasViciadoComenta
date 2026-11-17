@@ -240,3 +240,58 @@ body.dark .theme-toggle--fixed {
     font-size: 0.95em;
   }
 }
+
+/* --------------------------------------------------------------------------
+   4. Logo do cabeçalho clicável (volta à página inicial)
+   O site-shell.js envolve o <h1> do <header> num <a class="logo-link">.
+   -------------------------------------------------------------------------- */
+.logo-link {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo-link:hover,
+.logo-link:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+.logo-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Acessibilidade: atalho para o conteúdo e estado do menu
+   -------------------------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -64px;
+  left: 8px;
+  z-index: 99999;
+  padding: 10px 16px;
+  border-radius: 0 0 8px 8px;
+  background: #0066cc;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+  color: #ffffff;
+  outline: 2px solid #ffffff;
+  outline-offset: -4px;
+}
+
+.shell-nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
