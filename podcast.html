@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sentido Improvável de Decisão - VICIADO COMENTA</title>
-<meta name="description" content="Sentido Improvável de Decisão: episódios em vídeo sobre telecomunicações, tecnologia e atualidade.">
+<meta name="description" content="Sentido Improvável de Decisão: episódios em vídeo sobre telecomunicações, tecnologia e atualidade, com fórum da comunidade para discutir cada tema.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="canonical" href="https://www.viciadocomenta.pt/podcast.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="VICIADO COMENTA">
 <meta property="og:title" content="Sentido Improvável de Decisão - VICIADO COMENTA">
-<meta property="og:description" content="Episódios em vídeo do podcast Sentido Improvável de Decisão.">
+<meta property="og:description" content="Episódios em vídeo do podcast Sentido Improvável de Decisão e fórum da comunidade para discutir cada tema.">
 <meta property="og:url" content="https://www.viciadocomenta.pt/podcast.html">
 <meta property="og:image" content="https://www.viciadocomenta.pt/assets/perfil.png">
 <meta property="og:locale" content="pt_PT">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sentido Improvável de Decisão - VICIADO COMENTA">
-<meta name="twitter:description" content="Episódios em vídeo do podcast Sentido Improvável de Decisão.">
+<meta name="twitter:description" content="Episódios em vídeo do podcast Sentido Improvável de Decisão e fórum da comunidade.">
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
@@ -114,8 +114,11 @@ body.dark footer *{color:#e5e7eb;}
 @media(max-width:480px){header{padding:15px 10px;}header h1{font-size:1.6em;padding:0 92px 0 86px;}.podcast-logo{left:10px;width:90px;height:90px;}.social-media{gap:8px;}}
 </style>
   <link rel="stylesheet" href="assets/consent-banner.css">
+  <link rel="stylesheet" href="assets/forum.css?v=20261117">
   <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
   <script src="assets/site-shell.js?v=20261116" defer></script>
+  <script src="assets/security.js" defer></script>
+  <script src="assets/forum.js?v=20261117" defer></script>
 </head>
 <body>
 <header>
@@ -148,6 +151,60 @@ body.dark footer *{color:#e5e7eb;}
     </div>
     <div class="episode-list" id="episode-list">
       <p class="episode-state">A carregar episódios...</p>
+    </div>
+  </section>
+  <section class="forum-section" id="forum" aria-labelledby="forumTitle">
+    <div class="forum-head">
+      <h2 id="forumTitle">Fórum da comunidade</h2>
+      <p>Discute os episódios, sugere temas para os próximos programas e troca ideias com outros ouvintes. Todo o conteúdo passa por moderação.</p>
+    </div>
+
+    <div class="forum-toolbar">
+      <button type="button" class="forum-btn forum-btn--primary" id="forumNewBtn" disabled>
+        <i class="fas fa-plus" aria-hidden="true"></i> Novo tópico
+      </button>
+      <div class="forum-filters" role="group" aria-label="Ordenar tópicos">
+        <button type="button" class="forum-filter" data-sort="recent" aria-pressed="true">Mais recentes</button>
+        <button type="button" class="forum-filter" data-sort="active" aria-pressed="false">Mais ativos</button>
+        <button type="button" class="forum-filter" data-sort="replies" aria-pressed="false">Mais respondidos</button>
+      </div>
+    </div>
+
+    <div class="forum-field forum-search">
+      <label for="forumSearch">Pesquisar tópicos</label>
+      <input type="search" id="forumSearch" maxlength="100" autocomplete="off" placeholder="Título, autor ou mensagem">
+    </div>
+
+    <form class="forum-form" id="forumForm" novalidate hidden>
+      <h3>Novo tópico</h3>
+      <div class="forum-field">
+        <label for="forumTitulo">Título</label>
+        <input type="text" id="forumTitulo" maxlength="100" autocomplete="off" placeholder="Resume o assunto em poucas palavras" required>
+      </div>
+      <div class="forum-field">
+        <label for="forumAutor">Nome</label>
+        <input type="text" id="forumAutor" maxlength="50" autocomplete="nickname" placeholder="Como queres aparecer" required>
+      </div>
+      <div class="forum-field">
+        <label for="forumTexto">Mensagem</label>
+        <textarea id="forumTexto" rows="5" maxlength="1000" placeholder="Desenvolve o tema que queres discutir" required></textarea>
+        <span class="forum-counter">Máximo 1000 caracteres</span>
+      </div>
+      <div class="forum-honeypot" aria-hidden="true">
+        <label for="forumWebsite">Não preencher</label>
+        <input type="text" id="forumWebsite" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="forum-form-actions">
+        <button type="submit" class="forum-btn forum-btn--primary">Publicar tópico</button>
+        <button type="button" class="forum-btn" id="forumCancelBtn">Cancelar</button>
+      </div>
+      <p class="forum-status" id="forumFormStatus" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="forum-status" id="forumStatus" role="status" aria-live="polite"></p>
+    <div class="forum-topicos" id="forumTopicos"></div>
+    <div class="forum-more" id="forumMoreWrap" hidden>
+      <button type="button" class="forum-btn" id="forumMoreBtn">Mostrar mais tópicos</button>
     </div>
   </section>
 </main>
