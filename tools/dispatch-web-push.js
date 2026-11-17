@@ -45,6 +45,13 @@ function normalizeSubscription(rawSubscription) {
     return null;
   }
 
+  // O endpoint vem de uma base de dados escrevível por qualquer sessão
+  // anónima autenticada: sem esta verificação um atacante podia apontar o
+  // Web Push para HTTP simples ou para alvos internos (SSRF).
+  if (!endpointSeguro(endpoint)) {
+    return null;
+  }
+
   return {
     endpoint,
     expirationTime: Number.isFinite(expirationTime) ? expirationTime : null,
@@ -53,6 +60,29 @@ function normalizeSubscription(rawSubscription) {
       auth
     }
   };
+}
+
+function endpointSeguro(endpoint) {
+  let url;
+  try {
+    url = new URL(endpoint);
+  } catch (error) {
+    return false;
+  }
+
+  if (url.protocol !== 'https:') return false;
+  if (url.username || url.password) return false;
+
+  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (!host || host === 'localhost' || host.endsWith('.localhost')) return false;
+  if (host.endsWith('.local') || host.endsWith('.internal')) return false;
+  if (host === 'metadata.google.internal' || host === 'metadata') return false;
+  if (/^127\./.test(host) || /^10\./.test(host) || /^169\.254\./.test(host)) return false;
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(host)) return false;
+  if (/^192\.168\./.test(host)) return false;
+  if (host === '::1' || /^f[cd][0-9a-f]{2}:/.test(host) || /^fe80:/.test(host)) return false;
+
+  return true;
 }
 
 function buildPushPayload(body) {
