@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/digi-reforca-grelha-de-canais-canal-11-esta-a-chegar-viciado-comenta.html">
 <meta name="description" content="A DIGI soma os canais CineMundo e Can&#231;&#227;o Nova a uma grelha de 89 canais, mantendo o pre&#231;o da DIGI TV, e o Canal 11 pode ser o pr&#243;ximo passo.">
 <meta property="og:type" content="article">
@@ -2831,7 +2831,7 @@ footer {
 <p><strong>O QUE FALTA?</strong></p>
 <p>É sabido que uma das principais atrações televisivas em Portugal prende-se com o futebol; por esse motivo, há um canal em destaque nos pedidos dos clientes da DIGI: o Canal 11!</p>
 <p>Nas redes sociais, a DIGI lançou a possibilidade de que as negociações com o Canal 11 possam estar quase a chegar a bom porto.</p>
-<p><img src="/assets/imagens/instadigi.png" alt="1"></p>
+<p><img decoding="async" height="244" width="480" src="/assets/imagens/instadigi.png" alt="DIGI refor&#231;a a grelha de canais e aproxima-se do Canal 11 - imagem de destaque"></p>
 <p>Este pode ser mais um avanço qualitativo na oferta de TV da DIGI, que, ao longo da sua existência, tem batalhado para a reforçar, apesar de todas as dificuldades de percurso sentidas.</p>
 <p><strong>SPORTING TV, PORTO CANAL, SPORTTV+...</strong></p>
 <p>Estes são canais que têm forte controlo das operadoras históricas; por esse motivo, as negociações podem ser substancialmente mais complicadas. É de relembrar que a DIGI representa uma verdadeira concorrência em Portugal, pelo que reforçar a sua oferta é também reforçar a concorrência que esta pode fazer.</p>
@@ -2851,7 +2851,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2888,7 +2888,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3473,7 +3473,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4570,7 +4570,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

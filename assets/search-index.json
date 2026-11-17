@@ -1,0 +1,761 @@
+{
+    "total":  84,
+    "itens":  [
+                  {
+                      "id":  "1",
+                      "titulo":  "Lycamobile vence o Escolha do Consumidor 2026 nos tarifários sem fidelização",
+                      "resumo":  "Analisamos a vitória da Lycamobile na categoria de tarifários móveis sem fidelização e o que este resultado pode significar para o mercado em 2026.",
+                      "categoria":  "Telecom",
+                      "data":  "27/01/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=1\u0026slug=melhor-tarifario-sem-fidelizacao-de-2026-e-da"
+                  },
+                  {
+                      "id":  "2",
+                      "titulo":  "DECO alerta para falhas no apoio ao cliente da DIGI em Portugal",
+                      "resumo":  "A DECO expôs um conjunto de problemas no apoio ao cliente e na qualidade de serviço da DIGI. Analisamos o comunicado, o que já melhorou e o que continua por resolver.",
+                      "categoria":  "DIGI",
+                      "data":  "28/01/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=2\u0026slug=deco-lanca-o-caos-sobre-os-servicos-da-digi-em-portugal"
+                  },
+                  {
+                      "id":  "3",
+                      "titulo":  "DIGI eleita melhor internet fixa de 2025 no barómetro da nPerf",
+                      "resumo":  "Analisamos o prémio da nPerf para a DIGI, explicando o que os dados indicam e quais os limites de comparação com os restantes operadores.",
+                      "categoria":  "DIGI",
+                      "data":  "29/01/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=3\u0026slug=digi-recebe-premio-de-melhor-internet-fixa-em-2025-pela-nperf"
+                  },
+                  {
+                      "id":  "4",
+                      "titulo":  "A operação da DIGI em Itália: 16 anos depois, ainda sem tração",
+                      "resumo":  "Anteriormente tivemos oportunidade de analisar a operação da DIGI na casa mãe, a Roménia. Hoje vamos olhar para a subsidiária da digi em itália, onde após 16 anos, não convence.",
+                      "categoria":  "DIGI",
+                      "data":  "03/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=4\u0026slug=digi-italia-uma-desilusao-apos-16-anos"
+                  },
+                  {
+                      "id":  "6",
+                      "titulo":  "O Digital Networks Act e as mudanças que trazem às telecom na Europa",
+                      "resumo":  "Analisamos o Digital Networks Act (DNA), apresentado pela Comissão Europeia, com vista a modernizar e aumentar a competitividade do setor na Europa!",
+                      "categoria":  "Telecom",
+                      "data":  "07/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=6\u0026slug=mudancas-para-as-telecom-na-europa"
+                  },
+                  {
+                      "id":  "7",
+                      "titulo":  "Operadoras respondem às críticas do Presidente sobre a atuação na depressão Kristin",
+                      "resumo":  "Analisamos as reações de MEO, NOS e APRITEL às declarações do Presidente da República sobre a resposta das operadoras durante a depressão Kristin.",
+                      "categoria":  "Telecom",
+                      "data":  "09/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=7\u0026slug=operadoras-atacam-marcelo-sem-piedade"
+                  },
+                  {
+                      "id":  "8",
+                      "titulo":  "Internet por satélite em 2026: as opções disponíveis em Portugal",
+                      "resumo":  "Analisamos algumas das opções de internet por satélite, disponíveis em Portugal, em 2026.",
+                      "categoria":  "Telecom",
+                      "data":  "13/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=8\u0026slug=internet-por-satelite-em-2026"
+                  },
+                  {
+                      "id":  "9",
+                      "titulo":  "Tarifários da UZO com limitações levantam polémica entre clientes",
+                      "resumo":  "Comentamos a nova polémica a envolver os tarifários da UZO.",
+                      "categoria":  "Telecom",
+                      "data":  "15/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=9\u0026slug=polemica-com-os-tarifarios-da-uzo"
+                  },
+                  {
+                      "id":  "10",
+                      "titulo":  "Starlink bloqueia terminais russos e muda o equilíbrio tecnológico na guerra da Ucrânia",
+                      "resumo":  "Analisamos a rápida ação de Elon Musk e da Starlink, ao bloquear o acesso ao russos, não permitindo o uso pelos mesmos desta tecnologia!",
+                      "categoria":  "Telecom",
+                      "data":  "19/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=10\u0026slug=musk-e-starlink-salvam-zelensky-na-ucrania"
+                  },
+                  {
+                      "id":  "11",
+                      "titulo":  "DIGI Bélgica surpreende com internet fixa através do 5G a 7 €",
+                      "resumo":  "Analisamos a operação da DIGI no mercado belga!",
+                      "categoria":  "DIGI",
+                      "data":  "21/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=11\u0026slug=digi-belgica-com-uma-grande-surpresa"
+                  },
+                  {
+                      "id":  "12",
+                      "titulo":  "UZO e AMIGO igualam temporariamente os preços de referência da DIGI",
+                      "resumo":  "UZO e Amigo igualaram temporariamente os preços da DIGI. Explicamos o impacto comercial desta decisão e o que deves comparar antes de mudar.",
+                      "categoria":  "Telecom",
+                      "data":  "22/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=12\u0026slug=uzo-e-amigo-igualam-precos-da-digi"
+                  },
+                  {
+                      "id":  "13",
+                      "titulo":  "Starlink em Portugal vale a pena?",
+                      "resumo":  "Conversamos com Eduardo Gomes, cliente Starlink, que nos dá conta da sua opinião em contexto real do uso deste serviço.",
+                      "categoria":  "Telecom",
+                      "data":  "26/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=13\u0026slug=starlink-em-portugal-vale-a-pena"
+                  },
+                  {
+                      "id":  "14",
+                      "titulo":  "DIGI é o único operador a crescer nos pacotes de serviços em 2025",
+                      "resumo":  "Analisamos o relatório da ANACOM, referente ao 4T2025, sobre a evolução dos pacotes de serviços",
+                      "categoria":  "Telecom",
+                      "data":  "27/02/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=14\u0026slug=digi-e-a-unica-a-crescer-em-2025-nos-pacotes-de-servicos"
+                  },
+                  {
+                      "id":  "15",
+                      "titulo":  "NOS responde à concorrência com as sub-marcas WOO e WTF",
+                      "resumo":  "A NOS, liderada por Miguel Almeida, não perdeu mais tempo e respondeu à concorrência em toda a linha!",
+                      "categoria":  "Telecom",
+                      "data":  "01/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=15\u0026slug=chegou-a-resposta-da-nos-as-suas-concorrentes-atraves-das-sub-marcas-woo-e-wtf"
+                  },
+                  {
+                      "id":  "16",
+                      "titulo":  "DIGI global com 33 milhões de prejuízo e operação em Portugal no vermelho",
+                      "resumo":  "Avaliamos os resultados financeiros preliminares do grupo DIGI, referentes ao ano de 2025.",
+                      "categoria":  "DIGI",
+                      "data":  "03/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=16\u0026slug=digi-global-com-33m-de-prejuizo-e-operacao-em-portugal-no-vermelho"
+                  },
+                  {
+                      "id":  "17",
+                      "titulo":  "Caso do Metro de Lisboa chega ao Governo através de perguntas de deputados do CHEGA",
+                      "resumo":  "O caso do Metro de Lisboa que evolve a DIGI",
+                      "categoria":  "DIGI",
+                      "data":  "05/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=17\u0026slug=caso-do-metro-chega-ao-governo-via-chega-e-desta"
+                  },
+                  {
+                      "id":  "18",
+                      "titulo":  "DIGI anuncia redução do investimento na expansão em Portugal",
+                      "resumo":  "O anúncio da redução dos custos de investimento em PORTUGAL",
+                      "categoria":  "DIGI",
+                      "data":  "09/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=18\u0026slug=digi-anuncia-reducao-na-expansao-em-portugal"
+                  },
+                  {
+                      "id":  "19",
+                      "titulo":  "Mercado das telecom em Portugal (2025)",
+                      "resumo":  "Análise do mercado das telecom em Portugal, no ano de 2025",
+                      "categoria":  "Telecom",
+                      "data":  "11/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=19\u0026slug=mercado-das-telecom-em-portugal-2025"
+                  },
+                  {
+                      "id":  "20",
+                      "titulo":  "As novas propostas das marcas jovens YORN, MOCHE e WTF",
+                      "resumo":  "Marcas jovens WTF, MOCHE e YORN entram na guerra dos pacotes de serviços!",
+                      "categoria":  "Telecom",
+                      "data":  "12/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=20\u0026slug=conhece-as-novas-propostas-da-yorn-moche-wtf"
+                  },
+                  {
+                      "id":  "21",
+                      "titulo":  "Entrevista a Luís Filipe Tavares, CEO da LigaT, sobre a operadora e o mercado português",
+                      "resumo":  "Uma conversa de 1h30 com o CEO da LigaT, Luís Filipe Tavares, sobre o modelo disruptivo da operadora, o contrato vitalício de preço fixo e o estado das telecomunicações em Portugal.",
+                      "categoria":  "Telecom",
+                      "data":  "13/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=21\u0026slug=entrevista-com-luis-filipe-tavares-ceo-da-ligat"
+                  },
+                  {
+                      "id":  "22",
+                      "titulo":  "Venda da DSTelecom pode tornar-se num dos negócios mais sensíveis das telecom em Portugal",
+                      "resumo":  "A possível venda da DSTelecom pode tornar-se num dos negócios mais delicados das telecomunicações em Portugal",
+                      "categoria":  "DIGI",
+                      "data":  "14/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=22\u0026slug=bomba-no-mercado-das-telecom-em-portugal"
+                  },
+                  {
+                      "id":  "23",
+                      "titulo":  "UZO nega as acusações e estala a polémica",
+                      "resumo":  "UZO nega todas as acusações e estala a polémica contra a sub-marca da MEO.",
+                      "categoria":  "Telecom",
+                      "data":  "19/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=23\u0026slug=uzo-nega-tudo-e-estala-polemica"
+                  },
+                  {
+                      "id":  "24",
+                      "titulo":  "Efeito DIGI: queda das receitas médias por utilizador em Portugal e Espanha",
+                      "resumo":  "Os gastos médios por utilizador estão a reduzir em 2 países, Portugal e Espanha. É o resultado do crescimento da operadora low-cost DIGI?",
+                      "categoria":  "DIGI",
+                      "data":  "20/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=24\u0026slug=efeitos-da-digi-queda-brutal-nas-receitas"
+                  },
+                  {
+                      "id":  "25",
+                      "titulo":  "A falha da regulação que travou as MVNO nas telecom em Portugal",
+                      "resumo":  "Falha regulatória brutal no nosso mercado. A decisão que poderia mudar tudo.",
+                      "categoria":  "Telecom",
+                      "data":  "24/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=25\u0026slug=falha-brutal-de-regulacao-nas-telecom-em-portugal"
+                  },
+                  {
+                      "id":  "26",
+                      "titulo":  "DIGI entra no Reino Unido com a aquisição de 51% da WhyFiber",
+                      "resumo":  "DIGI expande a operação e entra no Reino Unido ao comprar 51% da empresa de fibra WhyFiber, através da subsidiária Fiber One Limited.",
+                      "categoria":  "DIGI",
+                      "data":  "25/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=26\u0026slug=digi-avanca-para-o-reino-unido"
+                  },
+                  {
+                      "id":  "27",
+                      "titulo":  "DIGI traz novidades à rede móvel com HD Voice+",
+                      "resumo":  "A DIGI está a reforçar a rede 2G nos 1800 MHz e a introduzir o HD Voice+ nas chamadas LTE e 5G, sinais de uma nova fase de investimento na sua rede móvel.",
+                      "categoria":  "DIGI",
+                      "data":  "25/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=27\u0026slug=digi-com-novidades-na-rede-movel-hd-voice"
+                  },
+                  {
+                      "id":  "28",
+                      "titulo":  "Pode a DIGI importar novidades de Espanha para Portugal?",
+                      "resumo":  "Comparação DIGI Portugal vs Espanha: análise aos preços, internet, canais de TV e limitações como CGNAT. Vale a pena aderir em 2026?",
+                      "categoria":  "DIGI",
+                      "data":  "26/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=28\u0026slug=pode-a-digi-importar-novidades-de-espanha-para-portugal"
+                  },
+                  {
+                      "id":  "29",
+                      "titulo":  "Starlink corta velocidade e dispara nos preços",
+                      "resumo":  "A Starlink ganha relevância em Portugal, mas preços mais altos e menor velocidade afastam-na da fibra, mantendo valor como backup ou em zonas sem cobertura.",
+                      "categoria":  "Telecom",
+                      "data":  "30/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=29\u0026slug=starlink-corta-velocidade-e-dispara-precos"
+                  },
+                  {
+                      "id":  "30",
+                      "titulo":  "DIGI, UZO, WOO e Amigo: o que deves comparar antes de mudar de operadora",
+                      "resumo":  "Guerra das telecom em Portugal: compara DIGI, UZO, WOO e Amigo, incluindo preços, dados, velocidade, roaming e limitações dos tarifários.",
+                      "categoria":  "DIGI",
+                      "data":  "31/03/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=30\u0026slug=antes-de-mudares-de-operadora-tens-de-ver-isto"
+                  },
+                  {
+                      "id":  "31",
+                      "titulo":  "DIGI investigada na Roménia por alegado abuso de posição dominante",
+                      "resumo":  "Uma bomba parece estar a chegar contra a operadora low-cost DIGI, e isso poderá mudar muita coisa na operação global!",
+                      "categoria":  "DIGI",
+                      "data":  "01/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=31\u0026slug=digi-enfrenta-processo-grave-multa-de-milhoes"
+                  },
+                  {
+                      "id":  "32",
+                      "titulo":  "DIGI pede alteração na faixa 3,6GHz à ANACOM",
+                      "resumo":  "A ANACOM aceita a reorganização do espectro 3,6 GHz solicitada pela DIGI, permitindo blocos contíguos e melhor desempenho e eficiência da rede móvel.",
+                      "categoria":  "DIGI",
+                      "data":  "04/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=32\u0026slug=digi-pede-alteracao-na-faixa-3-6ghz-a-anacom"
+                  },
+                  {
+                      "id":  "33",
+                      "titulo":  "Vale a pena combinar telecomunicações e energia na nova proposta da MEO?",
+                      "resumo":  "A MEO lançou uma nova oferta que combina telecomunicações com energia através da MEO Energia, prometendo vantagens como dados móveis ilimitados e duplicação de MEOS para clientes com pacotes M4e.",
+                      "categoria":  "Telecom",
+                      "data":  "06/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=33\u0026slug=nova-proposta-da-meo-compensa-para-ti-sabe-tudo"
+                  },
+                  {
+                      "id":  "34",
+                      "titulo":  "Comissão Europeia dá luz verde à ANCOM para regular a DIGI em zonas sem concorrência na Roménia",
+                      "resumo":  "Regulador Romeno com luz verde para avançar, para a regulação de zonas sem concorrência dominadas pela DIGI. Acesso à rede DIGI em 6300 localidades, em cima da mesa!",
+                      "categoria":  "DIGI",
+                      "data":  "07/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=34\u0026slug=comissao-europeia-da-luz-verde-a-ancom-para-regular-digi-na-romenia"
+                  },
+                  {
+                      "id":  "35",
+                      "titulo":  "DIGI volta a descer os preços móveis e responde às marcas brancas",
+                      "resumo":  "A DIGI respondeu às pressões das marcas brancas das operadoras incumbentes, com uma melhoria dos tarifários móveis! +GB e -preço, é a fórmula de sucesso da operadora romena.",
+                      "categoria":  "DIGI",
+                      "data":  "09/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=35\u0026slug=digi-responde-a-amigo-uzo-e-woo-na-luta-de-precos"
+                  },
+                  {
+                      "id":  "36",
+                      "titulo":  "Caso UN2: sete meses depois, o silêncio de ANACOM, EVOMEDIA e NOS",
+                      "resumo":  "A operadora UN2 desapareceu após denúncias de revenda irregular de serviços. Sete meses depois, clientes continuam sem respostas e o caso arrasta-se em silêncio.",
+                      "categoria":  "Telecom",
+                      "data":  "12/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=36\u0026slug=anacom-evomedia-un2-quem-fala-sobre-este-escandalo"
+                  },
+                  {
+                      "id":  "37",
+                      "titulo":  "Rede móvel da DIGI a evoluir a todo o valor",
+                      "resumo":  "A DIGI está ativamente a trabalhar para melhorar a sua rede móvel em Portugal!",
+                      "categoria":  "DIGI",
+                      "data":  "12/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=37\u0026slug=rede-movel-digi-a-evoluir-a-todo-o-valor"
+                  },
+                  {
+                      "id":  "38",
+                      "titulo":  "Lidl Connect: uma MVNO de sucesso que pode chegar a Portugal",
+                      "resumo":  "Sabias que o Lidl detém operação de telecomunicações MVNO em vários países? Vamos analisar este assunto!",
+                      "categoria":  "Telecom",
+                      "data":  "14/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=38\u0026slug=lidl-uma-mvno-de-sucesso"
+                  },
+                  {
+                      "id":  "39",
+                      "titulo":  "As low-cost causam uma avalanche de reclamações em Portugal?",
+                      "resumo":  "A entrada da DIGI transformou o mercado das telecomunicações em Portugal, levando à aposta no low-cost. Preços desceram, mas as reclamações aumentaram, revelando falhas no serviço e no apoio ao cliente.",
+                      "categoria":  "Telecom",
+                      "data":  "16/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=39\u0026slug=low-cost-causam-uma-avalanche-de-reclamacoes-em-portugal"
+                  },
+                  {
+                      "id":  "40",
+                      "titulo":  "Marcas brancas não acompanham a nova descida de preços da DIGI",
+                      "resumo":  "Amigo, UZO e WOO mantém preços, apesar da decisão da DIGI em baixar ainda mais os seus tarifários móveis!",
+                      "categoria":  "Telecom",
+                      "data":  "17/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=40\u0026slug=marcas-brancas-ja-responderam-ao-ataque-da-digi"
+                  },
+                  {
+                      "id":  "41",
+                      "titulo":  "Vodafone lança campanha Member Get Member para travar a fuga para as low-cost",
+                      "resumo":  "Vodafone responde à saída massiva para o mercado Low-Cost, com campanha agressiva na marca \"premium\".",
+                      "categoria":  "Telecom",
+                      "data":  "17/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=41\u0026slug=vodafone-perde-a-cabeca-e-aposta-tudo"
+                  },
+                  {
+                      "id":  "42",
+                      "titulo":  "AdC investiga MEO, NOS e Vodafone por alegado cartel na internet das escolas",
+                      "resumo":  "MEO, NOS e Vodafone acusadas de cartel pela AdC, numa investigação que dura há 1 ano!",
+                      "categoria":  "DIGI",
+                      "data":  "20/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=42\u0026slug=meo-nos-e-vodafone-acusadas-de-cartel"
+                  },
+                  {
+                      "id":  "43",
+                      "titulo":  "DIGI avança no Metro de Lisboa, mas a Linha Azul continua sem sinal",
+                      "resumo":  "A DIGI continua a avançar no Metro de Lisboa. Será que finalmente vamos ver esta novela terminar?",
+                      "categoria":  "DIGI",
+                      "data":  "21/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=43\u0026slug=digi-no-metro-de-lisboa-uma-novela-antiga"
+                  },
+                  {
+                      "id":  "44",
+                      "titulo":  "MEO lança nova proposta na internet fixa",
+                      "resumo":  "MEO avança com nova oferta comercial, na sua internet fixa. Faz todo o sentido!",
+                      "categoria":  "Telecom",
+                      "data":  "23/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=44\u0026slug=nova-proposta-da-meo-na-internet-fixa"
+                  },
+                  {
+                      "id":  "45",
+                      "titulo":  "DIGI Espanha sob pressão: preços baixos, falhas na rede e concorrência agressiva",
+                      "resumo":  "A DIGI Espanha continua a destacar-se como uma das operações mais valiosas do grupo romeno, tendo já ultrapassado os 10% de quota de mercado. O crescimento parecia sólido e consistente — mas os últimos meses trouxeram...",
+                      "categoria":  "DIGI",
+                      "data":  "28/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=45\u0026slug=digi-espanha-sob-pressao-precos-baixos-falhas-na-rede-e-concorrencia-agressiva"
+                  },
+                  {
+                      "id":  "46",
+                      "titulo":  "Altice Portugal pode ser a próxima venda de Patrick Drahi",
+                      "resumo":  "Numa situação complexa, Patrick Drahi luta pela sobrevivência do grupo. A venda de ativos parece ser a única solução, e a Altice Portugal posiciona-se como um dos ativos que mais podem trazer liquidez imediata, num ce...",
+                      "categoria":  "Telecom",
+                      "data":  "29/04/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=46\u0026slug=altice-portugal-pode-ser-a-proxima-venda-de-patrick-drahi"
+                  },
+                  {
+                      "id":  "47",
+                      "titulo":  "Rede Móvel DIGI continua a avançar em Portugal",
+                      "resumo":  "Desde Novembro de 2024 que o serviço móvel da DIGI tem estado debaixo de fogo. Num mercado amadurecido, uma nova entrante MNO enfrenta um desafio gigante: garantir uma rede móvel estável em tempo recorde!",
+                      "categoria":  "DIGI",
+                      "data":  "01/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=47\u0026slug=rede-movel-digi-continua-a-avancar-em-portugal"
+                  },
+                  {
+                      "id":  "48",
+                      "titulo":  "NOS passa o plano de 1 Gbps a velocidade simétrica para alguns clientes",
+                      "resumo":  "A NOS está a fazer alterações ao seu plano de 1Gbps, passando a disponibilizar velocidade simétrica a alguns dos seus clientes residenciais!",
+                      "categoria":  "Telecom",
+                      "data":  "04/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=48\u0026slug=nos-faz-alteracoes-ao-plano-de-1gbps"
+                  },
+                  {
+                      "id":  "49",
+                      "titulo":  "Tarifa Social de Internet coloca Starlink na fila da frente",
+                      "resumo":  "Starlink garante dados ilimitados na sua proposta de Tarifa Social de Internet.",
+                      "categoria":  "Telecom",
+                      "data":  "06/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=49\u0026slug=tarifa-social-de-internet-starlink-na-fila-da-frente"
+                  },
+                  {
+                      "id":  "50",
+                      "titulo":  "Fiz upgrade para o DIGI Pro de 10 Gbps — valeu a pena?",
+                      "resumo":  "Decidi fazer um upgrade à minha rede fibra doméstica, para a Digi PRO! Valeu a pena?",
+                      "categoria":  "DIGI",
+                      "data":  "11/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=50\u0026slug=fiz-upgrade-para-o-servico-digi-pro-10gbps"
+                  },
+                  {
+                      "id":  "51",
+                      "titulo":  "DIGI condenada em Bruxelas a pagar até 1,5M€ por fibra sem licenças",
+                      "resumo":  "DIGI multada em até 1,5M€, por instalação de fibra ótica em Bruxelas sem as devidas autorizações legalmente exigidas.",
+                      "categoria":  "DIGI",
+                      "data":  "12/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=51\u0026slug=digi-multada-em-1-5m-por-colocacao-de-fibra-otica-sem-licencas"
+                  },
+                  {
+                      "id":  "52",
+                      "titulo":  "DIGI Reino Unido lança perfil intermédio de 2,5 Gbps",
+                      "resumo":  "DIGI avança com perfis de 1Gbps, 2,5Gbps e 10Gbps no Reino Unido, criando assim o plano intermédio que se adequa às necessidades atuais da maioria dos consumidores!",
+                      "categoria":  "DIGI",
+                      "data":  "12/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=52\u0026slug=digi-uk-avanca-com-perfil-2-5gbps-faz-todo-o-sentido"
+                  },
+                  {
+                      "id":  "53",
+                      "titulo":  "DIGI apresenta resultados financeiros do 1.º trimestre de 2026",
+                      "resumo":  "A DIGI apresentou hoje os seus resultados relativos ao Q1 2026, e decidimos avançar com uma comparação face ao período homólogo, de forma a perceber o verdadeiro estado da operadora romena!",
+                      "categoria":  "DIGI",
+                      "data":  "15/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=53\u0026slug=digi-apresenta-resultados-financeiros-q1-2026"
+                  },
+                  {
+                      "id":  "54",
+                      "titulo":  "DIGI ativa o aviso de tentativa de contacto na rede móvel",
+                      "resumo":  "Após meses de espera a DIGI resolveu um dos problemas mais chatos da sua rede móvel: SMS de aviso de tentativa de chamada finalmente ativos!",
+                      "categoria":  "DIGI",
+                      "data":  "18/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=54\u0026slug=digi-avanca-com-aviso-de-tentativa-de-contacto-viciado-comenta"
+                  },
+                  {
+                      "id":  "55",
+                      "titulo":  "NOS avança com novo tarifário de internet fixa em resposta à MEO",
+                      "resumo":  "A NOS acaba de lançar um novo tarifário de internet fixa, em resposta ao mais recente lançamento da sua rival MEO.",
+                      "categoria":  "Telecom",
+                      "data":  "23/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=55\u0026slug=nos-avanca-com-novo-tarifario-de-internet-fixa-em-resposta-a-meo"
+                  },
+                  {
+                      "id":  "56",
+                      "titulo":  "WOO Ilimitado tem PUA aos 200 GB diários — motivo de alarme?",
+                      "resumo":  "O tarifário ilimitado da WOO aplica uma restrição temporária de velocidade ao atingir 200 GB de consumo diário, estando em conformidade com as regras da ANACOM. Ao contrário do caso DIGI, não se trata de um limite per...",
+                      "categoria":  "Telecom",
+                      "data":  "29/05/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=56\u0026slug=woo-ilimitado-tem-pua-aos-200-gb-diarios-motivo-de-alarme"
+                  },
+                  {
+                      "id":  "57",
+                      "titulo":  "AdC aplica coima de 13,35 milhões de euros a MEO, NOS, Vodafone e Accenture",
+                      "resumo":  "A AdC acaba de aplicar uma coima no valor de 13,35 milhões de euros às empresas MEO, NOS, Vodafone e Accenture, pela prática de acordos anticoncorrenciais no serviço de televisão por subscrição e na publicidade nas gr...",
+                      "categoria":  "Telecom",
+                      "data":  "06/06/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=57\u0026slug=a-adc-acaba-de-aplicar-uma-coima-no-valor-de-13-35-milhoes-de-euros-as-empresas-meo-nos-vodafone-e-accenture"
+                  },
+                  {
+                      "id":  "58",
+                      "titulo":  "WOO aumenta limite dos 200GB para 361GB diários.",
+                      "resumo":  "A WOO/NOS aumentou o limite diário de dados dos 200GB para os 361GB, mas a política de limitação mantém-se. Analisamos o enquadramento regulatório da ANACOM, o uso abusivo da PUR pelas operadoras, e porque é que a con...",
+                      "categoria":  "Telecom",
+                      "data":  "10/06/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=58\u0026slug=woo-aumenta-limite-dos-200gb-para-361gb-diarios"
+                  },
+                  {
+                      "id":  "59",
+                      "titulo":  "VODAFONE finta ANACOM em pleno 2026",
+                      "resumo":  "Vodafone continua a comercializar tarifários “ilimitados” com redução de velocidade após 200 GB",
+                      "categoria":  "Telecom",
+                      "data":  "17/06/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=59\u0026slug=vodafone-finta-anacom-em-pleno-2026"
+                  },
+                  {
+                      "id":  "60",
+                      "titulo":  "DIGI prepara lançamento da nova NET FIXA 5G",
+                      "resumo":  "Depois de vários meses de espera, a DIGI está prestes a avançar com uma das novidades mais aguardadas pelos clientes: o lançamento da sua NET FIXA 5G.",
+                      "categoria":  "DIGI",
+                      "data":  "18/06/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=60\u0026slug=digi-prepara-lancamento-da-nova-net-fixa-5g"
+                  },
+                  {
+                      "id":  "61",
+                      "titulo":  "Starlink a 6,15€ com a Tarifa Social de Internet para zonas elegíveis",
+                      "resumo":  "Starlink por 6,15€ mês, sem portes de envio, sem mensalidade e com velocidade Residencial Max? Sim, é possível!",
+                      "categoria":  "Telecom",
+                      "data":  "23/06/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=61\u0026slug=starlink-com-tsi-a-oferta-imbativel-de-baixo-custo"
+                  },
+                  {
+                      "id":  "62",
+                      "titulo":  "DIGI elimina o limite dos tarifários móveis ilimitados",
+                      "resumo":  "A DIGI resolveu uma das principais polémicas de 2025, e deixou de limitar os seus tarifários ilimitados!",
+                      "categoria":  "DIGI",
+                      "data":  "29/06/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=62\u0026slug=digi-resolveu-polemica-com-o-tarifario-ilimitado"
+                  },
+                  {
+                      "id":  "63",
+                      "titulo":  "CNMC discute fim da regulação do MARCo em Espanha com subidas de preços até 110%",
+                      "resumo":  "A CNMC pondera acabar com a regulação da oferta MARCo — que há quase 20 anos permite às rivais da Telefónica usar a sua rede de postes e condutas em Espanha — substituindo-a por um compromisso voluntário com uma subid...",
+                      "categoria":  "Telecom",
+                      "data":  "10/07/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=63\u0026slug=cnmc-abre-discussao-sobre-fim-do-marco-precos-podem-subir-110"
+                  },
+                  {
+                      "id":  "64",
+                      "titulo":  "DIGI reforça a rede móvel 4G e melhora a experiência",
+                      "resumo":  "A DIGI está a reforçar a rede 4G, com destaque para o aumento de capacidade e agregação da banda dos 900 MHz (melhor para cobertura indoor) com os 1800 e 2600 MHz, aumentando as velocidades disponíveis para os cliente...",
+                      "categoria":  "DIGI",
+                      "data":  "13/07/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=64\u0026slug=digi-reforca-rede-movel-e-melhora-experiencia"
+                  },
+                  {
+                      "id":  "65",
+                      "titulo":  "ANACOM aprova 80 MHz contíguos à DIGI e o 5G já passa de 1 Gbps",
+                      "resumo":  "DIGI recebe luz verde da ANACOM para espectro contíguo na faixa dos 3,6Ghz e débitos já superam 1Gbps no 5G!",
+                      "categoria":  "DIGI",
+                      "data":  "23/07/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=65\u0026slug=anacom-aprova-80mhz-contiguos-na-faixa-3-6ghz-a-digi-e-debitos-passam-dos-1gbps-no-5g"
+                  },
+                  {
+                      "id":  "66",
+                      "titulo":  "ANACOM multa DIGI em 228 mil euros por utilização ineficiente do espectro",
+                      "resumo":  "A ANACOM aplicou à DIGI uma contraordenação de 228.000€, suspensa por 24 meses, por violação da obrigação de utilização eficiente do espectro. A empresa recorreu para o tribunal da concorrência.",
+                      "categoria":  "DIGI",
+                      "data":  "06/08/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=66\u0026slug=digi-com-multa-pesada-da-anacom-por-violacao-da-lce"
+                  },
+                  {
+                      "id":  "67",
+                      "titulo":  "A proposta de 5€/mês da Vodafone a clientes atuais face aos 100GB da AMIGO pelo mesmo preço",
+                      "resumo":  "Uma proposta \"exclusiva\" da Vodafone enviada a clientes atuais oferece 15GB por 5€/mês com 24 meses de fidelização — menos de um sétimo do que a marca AMIGO dá pelo mesmo valor.",
+                      "categoria":  "Telecom",
+                      "data":  "14/08/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=67\u0026slug=vodafone-lanca-tarifario-de-5-mes-ridiculo-para-atuais-clientes"
+                  },
+                  {
+                      "id":  "68",
+                      "titulo":  "DIGI aproxima-se de 1.000.000 de serviços ativos em Portugal",
+                      "resumo":  "A DIGI acaba de divulgar os resultados do H1 2026. São quase 1.000.000 os serviços ativos da marca romena em território nacional!",
+                      "categoria":  "DIGI",
+                      "data":  "14/08/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=68\u0026slug=digi-a-beira-de-1-000-000-de-servicos-em-portugal"
+                  },
+                  {
+                      "id":  "69",
+                      "titulo":  "ARPU da DIGI cai com a migração dos clientes da NOWO",
+                      "resumo":  "A migração de clientes da NOWO para a DIGI está a pressionar as contas da operadora, algo que continuará a ter impacto nos próximos trimestres.",
+                      "categoria":  "DIGI",
+                      "data":  "29/08/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=69\u0026slug=digi-ve-arpu-baixar-devido-a-nowo"
+                  },
+                  {
+                      "id":  "70",
+                      "titulo":  "MEO, NOS e Vodafone baixam preços de forma agressiva nas marcas premium",
+                      "resumo":  "MEO, NOS e Vodafone em forte redução de preços nas marcas premium!",
+                      "categoria":  "Telecom",
+                      "data":  "31/08/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=70\u0026slug=meo-nos-e-vodafone-baixam-precos-brutalmente"
+                  },
+                  {
+                      "id":  "71",
+                      "titulo":  "ANACOM divulga dados do 2.º trimestre de 2026 sobre redes móveis",
+                      "resumo":  "Relatório 2T2026 sobre serviços móveis é divulgado e DIGI à beira dos 4% de quota de mercado!",
+                      "categoria":  "Telecom",
+                      "data":  "01/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=71\u0026slug=anacom-divulga-dados-do-2t2026-sobre-redes-moveis"
+                  },
+                  {
+                      "id":  "72",
+                      "titulo":  "DIGI reduz 53% as reclamações, mas continua com a pior taxa entre os operadores",
+                      "resumo":  "ANACOM divulga dados sobre reclamações contra os operadores de comunicações. Como estão MEO, NOS, Vodafone e DIGI/NOWO?",
+                      "categoria":  "DIGI",
+                      "data":  "02/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=72\u0026slug=digi-reduz-53-as-reclamacoes-mas-continua-a-ser-a-pior-no-ranking"
+                  },
+                  {
+                      "id":  "73",
+                      "titulo":  "ANACOM divulga dados da internet fixa no 2.º trimestre: MEO, NOS, Vodafone e DIGI disputam quotas",
+                      "resumo":  "A ANACOM divulgou os mais recentes dados sobre utilização de internet em local fixo.",
+                      "categoria":  "Telecom",
+                      "data":  "07/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=73\u0026slug=anacom-divulga-dados-sobre-internet-fixa-no-2t2026-meo-nos-vodafone-e-digi-disputam-quotas"
+                  },
+                  {
+                      "id":  "74",
+                      "titulo":  "DIGI testa antenas Massive MIMO da Ericsson na rede 4G em Portugal",
+                      "resumo":  "DIGI avança com nova solução, para reforçar a rede móvel em PORTUGAL. Massive MIMO´s chegam ao 4G!",
+                      "categoria":  "DIGI",
+                      "data":  "12/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=74\u0026slug=digi-testa-nova-solucao-nas-redes-moveis-que-promete-melhorar-experiencia-do-cliente"
+                  },
+                  {
+                      "id":  "75",
+                      "titulo":  "OniWay, o quarto operador que nunca chegou a existir",
+                      "resumo":  "Conhece a história da Oniway, a quarta operadora em Portugal que nunca chegou a existir.",
+                      "categoria":  "Telecom",
+                      "data":  "12/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=75\u0026slug=oniway-o-quarto-operador-que-nunca-chegou-a-existir"
+                  },
+                  {
+                      "id":  "76",
+                      "titulo":  "Apagão da MEO a 14 de setembro afetou milhares de clientes",
+                      "resumo":  "Uma falha generalizada na rede da MEO deixou milhares de clientes sem internet fixa e móvel na madrugada de 14 de setembro de 2026. A operadora acabou por admitir um ataque em massa.",
+                      "categoria":  "Telecom",
+                      "data":  "14/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=76\u0026slug=es-cliente-meo-e-ficaste-sem-internet-ontem-nao-foste-o-unico"
+                  },
+                  {
+                      "id":  "77",
+                      "titulo":  "Magentta Portugal chega em janeiro de 2027",
+                      "resumo":  "Magentta Portugal chega no próximo dia 25 de Janeiro de 2027. O que já se sabe sobre esta nova operadora?",
+                      "categoria":  "Telecom",
+                      "data":  "25/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=77\u0026slug=nova-operadora-chega-a-portugal-em-janeiro-de-2027"
+                  },
+                  {
+                      "id":  "78",
+                      "titulo":  "DIGI reforça a grelha de canais e aproxima-se do Canal 11",
+                      "resumo":  "A DIGI soma os canais CineMundo e Canção Nova a uma grelha de 89 canais, mantendo o preço da DIGI TV, e o Canal 11 pode ser o próximo passo.",
+                      "categoria":  "DIGI",
+                      "data":  "28/09/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=78\u0026slug=digi-reforca-grelha-de-canais-canal-11-esta-a-chegar-viciado-comenta"
+                  },
+                  {
+                      "id":  "79",
+                      "titulo":  "Magentta Portugal: Detalhes sobre o Fibra Air, Amazon LEO e Magentta TV",
+                      "resumo":  "Em entrevista ao TheViciado, o CEO da Bialant esclarece o funcionamento da Magentta Portugal, os canais de TV garantidos e os testes do Fibra Air em novembro.",
+                      "categoria":  "Telecom",
+                      "data":  "03/10/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=79\u0026slug=magentta-portugal-detalhes-sobre-o-fibra-air-amazon-leo-e-magentta-tv"
+                  },
+                  {
+                      "id":  "80",
+                      "titulo":  "Magentta Portugal passa a designar-se Livercom",
+                      "resumo":  "A Magentta Portugal alterou a sua designação e passou agora a chamar-se Livercom. Sabe tudo!",
+                      "categoria":  "Telecom",
+                      "data":  "08/10/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=80\u0026slug=magentta-portugal-agora-e-livercom"
+                  },
+                  {
+                      "id":  "81",
+                      "titulo":  "Lazer Telecom - Uma Operadora Regional a Sul do País",
+                      "resumo":  "A Lazer Telecom destaca-se na oferta de internet fibra e FWA (AirFiber) no Algarve, cobrindo zonas ignoradas pelas grandes operadoras. Apesar de ter preços mais elevados e sem escala nacional, desempenha um papel esse...",
+                      "categoria":  "Telecom",
+                      "data":  "18/10/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=81\u0026slug=lazer-telecom-uma-operadora-regional-a-sul-do-pais"
+                  },
+                  {
+                      "id":  "82",
+                      "titulo":  "DIGI Espanha passa a cobrar a Box Android e o telefone fixo",
+                      "resumo":  "A DIGI Espanha começou a cobrar uma taxa mensal pela Box 4K e pelo telefone fixo para aumentar receitas sem mexer nas mensalidades base. Esta mudança pode afetar a imagem de marca low-cost da operadora, gerando dúvida...",
+                      "categoria":  "DIGI",
+                      "data":  "19/10/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=82\u0026slug=digi-espanha-passa-a-cobrar-box-android-e-telefone-fixo"
+                  },
+                  {
+                      "id":  "83",
+                      "titulo":  "Ministro Pinto Luz critica a ANACOM e a entrada da DIGI em Portugal",
+                      "resumo":  "O Viciado Comenta analisa as críticas do ministro Miguel Pinto Luz à ANACOM, defendendo que a entrada da DIGI e a regulação de espectro foram cruciais para quebrar o oligopólio das telecomunicações em Portugal. Cabe a...",
+                      "categoria":  "Telecom",
+                      "data":  "22/10/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=83\u0026slug=ministro-pinto-luz-arrasa-anacom-e-critica-entrada-da-digi-em-portugal-viciado-comenta"
+                  },
+                  {
+                      "id":  "84",
+                      "titulo":  "DIGI TV lança atualização 3.0.0 mas continua limitada",
+                      "resumo":  "A atualização 3.0.0 da app DIGI TV desilude ao falhar na resolução de instabilidades críticas e na otimização da navegação.",
+                      "categoria":  "DIGI",
+                      "data":  "22/10/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=84\u0026slug=digi-tv-lanca-atualizacao-3-0-0-mas-continua-limitada"
+                  },
+                  {
+                      "id":  "85",
+                      "titulo":  "A guerra do espectro: a resposta afiada da DIGI à APRITEL e os riscos que a ANACOM não pode ignorar",
+                      "resumo":  "A DIGI desmontou a carta aberta da APRITEL sobre a renovação dos DUER, escancarando a falta de espectro sub-1GHz e a urgência de uma intervenção da ANACOM contra o bloqueio das operadoras históricas.",
+                      "categoria":  "DIGI",
+                      "data":  "03/11/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=85\u0026slug=a-guerra-do-espectro-a-resposta-afiada-da-digi-a-apritel-e-os-riscos-que-a-anacom-nao-pode-ignorar"
+                  }
+              ]
+}

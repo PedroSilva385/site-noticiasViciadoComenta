@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/digi-resolveu-polemica-com-o-tarifario-ilimitado.html">
 <meta name="description" content="A DIGI resolveu uma das principais pol&#233;micas de 2025, e deixou de limitar os seus tarif&#225;rios ilimitados!">
 <meta property="og:type" content="article">
@@ -2829,7 +2829,7 @@ footer {
 <p><strong>O caso:</strong></p>
 <p>Num teste que durou 10 dias, Ricardo José Saraiva esteve a utilizar a rede móvel da DIGI através do seu tarifário ilimitado, em busca dos 3 TB de consumo, de modo a compreender o que iria acontecer daí em diante. Com uma média superior a 400 GB de consumo diário, foi possível atingir e superar os 3 TB, tendo o teste sido dado como terminado aos 4,22 TB de tráfego.</p>
 <p>Neste teste é possível concluir que a DIGI alterou efetivamente a sua política, sendo agora possível consumir dados livremente, sem a preocupação de ser bloqueado. Para além desta limitação &quot;mensal&quot;, podemos também perceber que, ao contrário do que acontece na NOS, não está a ser aplicada nenhuma limitação ao nível de PURs, pelo menos aos níveis que a concorrente em questão pratica.</p>
-<p><img src="/assets/imagens/DIGI4TB.png" alt="1"></p>
+<p><img decoding="async" height="1920" width="1200" src="/assets/imagens/DIGI4TB.png" alt="DIGI elimina o limite dos tarif&#225;rios m&#243;veis ilimitados - imagem de destaque"></p>
 <p><strong>Conclusão:</strong></p>
 <p>O teste foi dado como terminado aos 4,22 TB, não sendo possível afirmar com 100% de certeza se existe algum limite para além disso. Na prática, com 3 TB esta era uma limitação que poderia ter impacto num número reduzido de clientes — os 4,22 TB sobem ainda mais essa fasquia. No entanto, a questão de fundo era o respeito pelas normas regulatórias.</p>
 <p>Em suma, até que seja descoberto um limite real, podemos concluir que a DIGI se encontra a cumprir de forma integral as normas regulatórias impostas em Portugal quanto aos tarifários móveis ilimitados.</p>
@@ -2846,7 +2846,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2883,7 +2883,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3468,7 +3468,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4565,7 +4565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

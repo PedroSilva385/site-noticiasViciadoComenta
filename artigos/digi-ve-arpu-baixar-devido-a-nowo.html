@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/digi-ve-arpu-baixar-devido-a-nowo.html">
 <meta name="description" content="A migra&#231;&#227;o de clientes da NOWO para a DIGI est&#225; a pressionar as contas da operadora, algo que continuar&#225; a ter impacto nos pr&#243;ximos trimestres.">
 <meta property="og:type" content="article">
@@ -2830,9 +2830,9 @@ footer {
 <p><strong>Comparação:</strong></p>
 <p>Fui procurar as minhas últimas faturas na operadora NOWO, para ter como comparação.</p>
 <p>Conforme podem perceber, pagava à época 33€ para ter Internet (500/50), TV, Fixo + Móvel 1GB (sim, 1!).</p>
-<p><img src="/assets/imagens/NOWO.png" alt="1"></p>
+<p><img decoding="async" height="415" width="672" src="/assets/imagens/NOWO.png" alt="ARPU da DIGI cai com a migra&#231;&#227;o dos clientes da NOWO - imagem de destaque"></p>
 <p>Hoje em dia, na DIGI, se eu quisesse optar por uma oferta similar, com Internet (500/500) + TV, Fixo + Móvel (compensa mais a opção ilimitada aqui, por fazer desconto na DIGI TV), pagaria 23€.</p>
-<p><img src="/assets/imagens/DIGII.png" alt="2"></p>
+<p><img decoding="async" loading="lazy" height="683" width="303" src="/assets/imagens/DIGII.png" alt="ARPU da DIGI cai com a migra&#231;&#227;o dos clientes da NOWO - imagem 2"></p>
 <p>Ou seja, a DIGI, ao fazer a minha migração, perderia 10€.</p>
 <p><strong>Conclusão:</strong></p>
 <p>Ao longo dos próximos meses, a DIGI confirmou não estar focada em continuar a expandir a fibra para novas localidades, mas sim em concluir todas as zonas NOWO, de modo a migrar de forma massiva estes clientes para a fibra FTTH DIGI.</p>
@@ -2850,7 +2850,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2887,7 +2887,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3472,7 +3472,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4569,7 +4569,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>

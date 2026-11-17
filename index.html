@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
@@ -98,8 +98,8 @@
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
 </head>
 
 <body>
@@ -224,7 +224,7 @@
       <div class="highlight-video-card">
         <div class="highlight-video-player" id="videoDestaquePlayer">
           <a id="videoDestaqueCover" class="highlight-video-cover" href="https://www.youtube.com/@TheViciado" target="_blank" rel="noopener noreferrer" aria-label="Abrir vídeo em destaque no YouTube">
-            <img id="videoDestaqueThumbnail" alt="Miniatura do vídeo em destaque" loading="lazy">
+            <img id="videoDestaqueThumbnail" alt="Miniatura do vídeo em destaque" width="1280" height="720" decoding="async" loading="lazy">
             <span class="highlight-video-play" aria-hidden="true"><i class="fas fa-play"></i></span>
           </a>
         </div>
@@ -241,7 +241,7 @@
 
     <section class="podcast-promo" aria-labelledby="podcastPromoTitle">
       <a id="podcastPromoMedia" class="podcast-promo-media" href="podcast.html" aria-label="Abrir o podcast Sentido Improvável de Decisão">
-        <img id="podcastPromoThumbnail" src="https://i.ytimg.com/vi/hyPvkcWm1uM/maxresdefault.jpg" alt="Miniatura do podcast Sentido Improvável de Decisão" loading="lazy">
+        <img id="podcastPromoThumbnail" src="https://i.ytimg.com/vi/hyPvkcWm1uM/maxresdefault.jpg" alt="Miniatura do podcast Sentido Improvável de Decisão" width="1280" height="720" decoding="async" loading="lazy">
       </a>
       <div class="podcast-promo-copy">
         <p class="podcast-promo-kicker">Podcast</p>
@@ -893,7 +893,7 @@ fetchNoticiasAgendadas("data/noticias.json", { fastPaint: true })
         ? `
             <a href="${buildArticleUrl(noticia)}" class="noticia-thumb-link" aria-label="Abrir artigo: ${noticia.titulo}">
               <div class="noticia-thumb">
-                <img src="${thumbnailUrl}" alt="Miniatura do vídeo ${noticia.titulo}" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}">
+                <img src="${thumbnailUrl}" alt="Miniatura do vídeo ${noticia.titulo}" width="1280" height="720" decoding="async" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg';}">
                 <span class="noticia-thumb-play"><i class="fas fa-play"></i></span>
               </div>
             </a>
@@ -1150,7 +1150,7 @@ fetchNoticiasAgendadas("data/noticias.json", { fastPaint: true })
           <div class="featured-content">
             <a href="${featuredHref}" class="featured-video-link" aria-label="Abrir artigo: ${featured.titulo}">
               <div class="featured-video" id="videoContainer">
-                <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" alt="Miniatura do vídeo ${featured.titulo}" id="thumbnail" loading="lazy" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg';}">
+                <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" alt="Miniatura do vídeo ${featured.titulo}" id="thumbnail" width="1280" height="720" decoding="async" fetchpriority="high" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg';}">
                 <span class="featured-video-play" aria-hidden="true"><i class="fas fa-play"></i></span>
               </div>
             </a>

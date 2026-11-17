@@ -1,5 +1,20 @@
 ﻿$ErrorActionPreference = 'Stop'
 
+# Dimensoes das imagens de conteudo (geradas por .tmp/optimize-images.js), usadas
+# para reservar espaco no HTML e evitar deslocamentos de layout (CLS).
+$script:ImageDimensions = @{}
+$imageDimensionsPath = Join-Path (Join-Path $PSScriptRoot '..') 'data/image-dimensions.json'
+if (Test-Path $imageDimensionsPath) {
+    try {
+        $dimensionData = Get-Content -Path $imageDimensionsPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        foreach ($property in $dimensionData.PSObject.Properties) {
+            $script:ImageDimensions[[string]$property.Name] = $property.Value
+        }
+    } catch {
+        $script:ImageDimensions = @{}
+    }
+}
+
 function Remove-Diacritics {
     param([string]$Text)
 
@@ -163,6 +178,66 @@ function Format-PlainTextArticleContent {
     }
 
     return ($blocks -join "`n").Trim()
+}
+
+function Add-ArticleImageAttributes {
+    param([string]$Html, [string]$RawTitle)
+
+    if ([string]::IsNullOrWhiteSpace($Html)) {
+        return $Html
+    }
+
+    $safeTitle = ConvertTo-HtmlEntities -Text $RawTitle
+    $state = @{ index = 0 }
+
+    return [regex]::Replace($Html, '<img\b[^>]*>', {
+        param($match)
+
+        $tag = $match.Value
+        $position = $state.index
+        $state.index++
+
+        # alt descritivo quando o original esta vazio ou e apenas numerico
+        $altMatch = [regex]::Match($tag, 'alt="([^"]*)"')
+        $altValue = if ($altMatch.Success) { $altMatch.Groups[1].Value } else { '' }
+        if ([string]::IsNullOrWhiteSpace($altValue) -or $altValue -match '^\d+$') {
+            $suffix = if ($position -eq 0) { 'imagem de destaque' } else { "imagem $($position + 1)" }
+            $newAlt = "$safeTitle - $suffix"
+            if ($altMatch.Success) {
+                $tag = $tag.Replace($altMatch.Value, ('alt="' + $newAlt + '"'))
+            } else {
+                $tag = $tag.Replace('<img', ('<img alt="' + $newAlt + '"'))
+            }
+        }
+
+        # dimensoes para reservar espaco antes do carregamento
+        $srcMatch = [regex]::Match($tag, 'src="([^"]+)"')
+        if ($srcMatch.Success) {
+            $srcPath = ($srcMatch.Groups[1].Value -split '\?')[0]
+            $fileName = [System.IO.Path]::GetFileName($srcPath)
+            # nomes com acentos ou espacos chegam codificados (ex.: servi%C3%A7os.png)
+            try { $fileName = [System.Uri]::UnescapeDataString($fileName) } catch { }
+            if ($script:ImageDimensions.ContainsKey($fileName)) {
+                $dimension = $script:ImageDimensions[$fileName]
+                if ($tag -notmatch '\bwidth=') {
+                    $tag = $tag.Replace('<img', ('<img width="' + $dimension.w + '"'))
+                }
+                if ($tag -notmatch '\bheight=') {
+                    $tag = $tag.Replace('<img', ('<img height="' + $dimension.h + '"'))
+                }
+            }
+        }
+
+        # a primeira imagem do artigo e o candidato a LCP: carrega de imediato
+        if ($position -gt 0 -and $tag -notmatch '\bloading=') {
+            $tag = $tag.Replace('<img', '<img loading="lazy"')
+        }
+        if ($tag -notmatch '\bdecoding=') {
+            $tag = $tag.Replace('<img', '<img decoding="async"')
+        }
+
+        return $tag
+    })
 }
 
 function Format-StaticArticleContent {
@@ -452,6 +527,7 @@ function Get-StaticArticleHtml {
     $resumo    = if ($Noticia.PSObject.Properties.Name -contains 'resumo')   { [string]$Noticia.resumo }   else { '' }
     $conteudoRaw = if ($Noticia.PSObject.Properties.Name -contains 'conteudo') { [string]$Noticia.conteudo } else { '' }
     $conteudo  = Format-StaticArticleContent -Text $conteudoRaw
+    $conteudo  = Add-ArticleImageAttributes -Html $conteudo -RawTitle ([string]$Noticia.titulo)
     $contentParts = Split-ArticleLeadContent -Html $conteudo
     $videoUrl  = if ($Noticia.PSObject.Properties.Name -contains 'video')    { [string]$Noticia.video }    else { '' }
 
@@ -479,7 +555,7 @@ function Get-StaticArticleHtml {
         $authorBioSection = @"
 
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
 "@
@@ -884,7 +960,8 @@ $baseUrls = @(
     'https://www.viciadocomenta.pt/contacto.html',
     'https://www.viciadocomenta.pt/autor/pedro-silva.html',
     'https://www.viciadocomenta.pt/politica-privacidade.html',
-    'https://www.viciadocomenta.pt/termos-servico.html'
+    'https://www.viciadocomenta.pt/termos-servico.html',
+    'https://www.viciadocomenta.pt/pesquisa.html'
 )
 
 $sitemapLines = @('<?xml version="1.0" encoding="UTF-8"?>')
@@ -906,6 +983,38 @@ foreach ($article in $generatedArticles) {
 
 $sitemapLines += '</urlset>'
 [System.IO.File]::WriteAllText($sitemapPath, ($sitemapLines -join "`n"), [System.Text.UTF8Encoding]::new($false))
+
+# Indice de pesquisa (consumido por pesquisa.html). Sem timestamp volatil para
+# evitar commits automaticos em cada execucao do workflow.
+$searchIndexPath = Join-Path $root 'assets/search-index.json'
+$searchItems = New-Object System.Collections.Generic.List[object]
+foreach ($noticia in $noticias) {
+    $itemId = [string]$noticia.id
+    $itemSlug = if ($noticia.PSObject.Properties.Name -contains 'slug' -and -not [string]::IsNullOrWhiteSpace([string]$noticia.slug)) {
+        [string]$noticia.slug
+    } else {
+        Get-Slug -InputText ([string]$noticia.titulo)
+    }
+    $itemResumo = Get-PlainTextFromHtml -Text ([string]$noticia.resumo)
+    if ($itemResumo.Length -gt 220) {
+        $itemResumo = $itemResumo.Substring(0, 217).Trim() + '...'
+    }
+    $searchItems.Add([ordered]@{
+        id        = $itemId
+        titulo    = [string]$noticia.titulo
+        resumo    = $itemResumo
+        categoria = [string]$noticia.categoria
+        data      = [string]$noticia.data
+        autor     = [string]$noticia.autor
+        url       = 'artigos.html?id=' + [uri]::EscapeDataString($itemId) + '&slug=' + [uri]::EscapeDataString($itemSlug)
+    })
+}
+$searchIndex = [ordered]@{
+    total = $searchItems.Count
+    itens = $searchItems
+}
+[System.IO.File]::WriteAllText($searchIndexPath, ($searchIndex | ConvertTo-Json -Depth 5), [System.Text.UTF8Encoding]::new($false))
+Write-Output "Indice de pesquisa atualizado: $searchIndexPath ($($searchItems.Count) itens)"
 
 $rssItems = New-Object System.Collections.Generic.List[string]
 foreach ($noticia in $noticias) {

@@ -2708,8 +2708,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20260926">
-  <script src="assets/site-shell.js?v=20260926" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
+  <script src="assets/site-shell.js?v=20261116" defer></script>
     <link rel="canonical" id="canonicalLink" href="https://www.viciadocomenta.pt/artigos/cnmc-abre-discussao-sobre-fim-do-marco-precos-podem-subir-110.html">
 <meta name="description" content="A CNMC pondera acabar com a regula&#231;&#227;o da oferta MARCo — que h&#225; quase 20 anos permite &#224;s rivais da Telef&#243;nica usar a sua rede de postes e condutas em Espanha — substituindo-a por...">
 <meta property="og:type" content="article">
@@ -2828,7 +2828,7 @@ footer {
                         <div id="artigoConteudoBody"><p><strong>O que está em causa em 2026?</strong></p>
 <p>Durante os últimos anos, as operadoras usaram massivamente as infraestruturas da Telefónica para se consolidarem no território espanhol, fruto da conveniência e dos baixos custos que a oferta MARCo lhes conferia. Mas isso aparentemente pode estar para terminar.</p>
 <p>A CNMC deu início à discussão que promete avaliar a possibilidade de pôr fim ao MARCo, substituindo-o por um compromisso voluntário da Telefónica, válido por 5 anos com mais 1 prorrogável.</p>
-<p><img src="/assets/imagens/MARCo.jpg" alt="1"></p>
+<p><img decoding="async" height="978" width="1600" src="/assets/imagens/MARCo.jpg" alt="CNMC discute fim da regula&#231;&#227;o do MARCo em Espanha com subidas de pre&#231;os at&#233; 110% - imagem de destaque"></p>
 <p>Após quase 20 anos, este poderá ser um enorme revés para as operadoras rivais da gigante das telecom. Juntamente com o fim desta oferta, está o aumento brutal dos preços de acesso à infraestrutura, com uma subida acumulada prevista de 110% ao longo dos 5 anos do acordo voluntário: um aumento de 30% logo no 1º ano, seguido de aumentos de 16,96% nos 3 anos seguintes, e de aumentos equivalentes ao IPC previsto no 4º e 5º ano.</p>
 <p>O impacto destes aumentos traduzir-se-ia numa subida dos atuais 130 milhões/ano que a Telefónica fatura com o aluguer das suas redes, para uns expressivos 273 milhões/ano no 5º ano do acordo voluntário.</p>
 <p><strong>O alerta geral:</strong></p>
@@ -2854,7 +2854,7 @@ footer {
                     </aside>
                         
                     <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-                        <img src="../assets/perfil.png" alt="Pedro Silva" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                        <img src="../assets/perfil.png" alt="Pedro Silva" width="56" height="56" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                         <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="../autor/pedro-silva.html">Pedro Silva</a></strong> - Sou um grande apaixonado pelo mundo das telecomunica&ccedil;&otilde;es e analiso, junto da comunidade, as novidades e mudan&ccedil;as deste setor.</p>
                     </aside>
           </div>
@@ -2891,7 +2891,7 @@ footer {
       <div class="sidebar-card" id="sidebarAuthorCard" hidden>
         <h4 class="sidebar-card-title">Sobre o autor</h4>
         <div class="sidebar-author-head">
-          <img src="assets/perfil.png" alt="Pedro Silva" loading="lazy">
+          <img src="assets/perfil.png" alt="Pedro Silva" width="48" height="48" loading="lazy" decoding="async">
           <div class="sidebar-author-name"><a href="autor/pedro-silva.html">Pedro Silva</a></div>
         </div>
         <p class="sidebar-author-bio">Analiso, junto da comunidade, as novidades e mudanças das telecomunicações, tecnologia e gaming.</p>
@@ -3476,7 +3476,7 @@ function getRelatedCardMedia(item) {
   const tituloRelacionado = item && item.titulo ? escapeHtmlText(String(item.titulo).trim()) : 'Artigo relacionado';
 
   if (videoId) {
-    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" loading="lazy"></div>`;
+    return `<div class="relacionado-media"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Miniatura do artigo ${tituloRelacionado}" width="480" height="360" loading="lazy" decoding="async"></div>`;
   }
 
   const fallbackLetter = (item && item.categoria ? String(item.categoria) : 'Atualidade').trim().charAt(0).toUpperCase() || 'A';
@@ -4573,7 +4573,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trustBoxHtml = buildArticleTrustBox(noticia);
         const authorBioHtml = `
           <aside class="author-bio" style="margin-top:24px;padding:14px;border:1px solid rgba(0,102,204,0.18);border-radius:12px;display:flex;align-items:center;gap:12px;background:rgba(0,102,204,0.05);">
-            <img src="assets/perfil.png" alt="${autorHtml}" loading="lazy" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <img src="assets/perfil.png" alt="${autorHtml}" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;">
             <div style="display:flex;flex-direction:column;gap:4px;">
               <p style="margin:0;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;color:#0052a3;font-weight:700;">Sobre o autor</p>
               <p style="margin:0;font-size:0.95em;line-height:1.5;"><strong><a href="autor/pedro-silva.html">${autorHtml}</a></strong> - Sou um grande apaixonado pelo mundo das telecomunicações e analiso, junto da comunidade, as novidades e mudanças deste setor.</p>
