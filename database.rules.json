@@ -206,16 +206,101 @@
       ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
       "$subscriptionId": {
         ".write": "auth != null",
-        ".validate": "root.child('admins').child(auth.uid).val() === true || !newData.exists() || ($subscriptionId.matches(/^[a-f0-9]{64}$/) && newData.hasChildren(['subscription', 'topic', 'status', 'createdAt', 'updatedAt', 'lastSeenAt', 'userAgent', 'language', 'origin']) && newData.child('subscription').hasChildren(['endpoint', 'keys']) && newData.child('subscription/endpoint').isString() && newData.child('subscription/endpoint').val().matches(/^https:\\/\\/.+/) && newData.child('subscription/endpoint').val().length <= 1000 && (!newData.child('subscription/expirationTime').exists() || newData.child('subscription/expirationTime').isNumber() || newData.child('subscription/expirationTime').val() == null) && newData.child('subscription/keys').hasChildren(['p256dh', 'auth']) && newData.child('subscription/keys/p256dh').isString() && newData.child('subscription/keys/p256dh').val().length >= 16 && newData.child('subscription/keys/p256dh').val().length <= 512 && newData.child('subscription/keys/auth').isString() && newData.child('subscription/keys/auth').val().length >= 8 && newData.child('subscription/keys/auth').val().length <= 256 && newData.child('topic').isString() && newData.child('topic').val() == 'all' && newData.child('status').isString() && (newData.child('status').val() == 'active' || newData.child('status').val() == 'error' || newData.child('status').val() == 'invalid') && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && newData.child('lastSeenAt').isNumber() && newData.child('lastSeenAt').val() > 0 && newData.child('userAgent').isString() && newData.child('userAgent').val().length <= 300 && newData.child('language').isString() && newData.child('language').val().length <= 32 && newData.child('origin').isString() && newData.child('origin').val().matches(/^https:\\/\\/.+/) && newData.child('origin').val().length <= 120)"
+        ".validate": "root.child('admins').child(auth.uid).val() === true || !newData.exists() || newData.hasChildren(['subscription', 'topic', 'status', 'createdAt', 'updatedAt', 'lastSeenAt', 'userAgent', 'language', 'origin'])",
+        "subscription": {
+          ".validate": "!newData.exists() || newData.hasChildren(['endpoint', 'keys'])",
+          "endpoint": {
+            ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 1000)"
+          },
+          "expirationTime": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "keys": {
+            ".validate": "!newData.exists() || newData.hasChildren(['p256dh', 'auth'])",
+            "p256dh": {
+              ".validate": "!newData.exists() || (newData.isString() && newData.val().length >= 16 && newData.val().length <= 512)"
+            },
+            "auth": {
+              ".validate": "!newData.exists() || (newData.isString() && newData.val().length >= 8 && newData.val().length <= 256)"
+            }
+          }
+        },
+        "topic": {
+          ".validate": "!newData.exists() || newData.val() === 'all'"
+        },
+        "status": {
+          ".validate": "!newData.exists() || newData.val() === 'active' || newData.val() === 'error' || newData.val() === 'invalid'"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() > 0)"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() > 0)"
+        },
+        "lastSeenAt": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() > 0)"
+        },
+        "userAgent": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 300)"
+        },
+        "language": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 32)"
+        },
+        "origin": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 120)"
+        }
       }
     },
     "push_meta": {
       ".read": false,
       ".write": false
     },
-    "comentarios": {
+    "forum_index": {
       ".read": true,
+      ".indexOn": [
+        "criado",
+        "fixado"
+      ],
+      "$topicoId": {
+        ".write": "root.child('admins').child(auth.uid).val() === true || (auth != null && !data.exists() && newData.child('uid').val() === auth.uid)",
+        ".validate": "!newData.exists() || newData.hasChildren(['titulo', 'autor', 'uid', 'criado', 'total'])",
+        "titulo": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0 && newData.val().length <= 100)"
+        },
+        "autor": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0 && newData.val().length <= 100)"
+        },
+        "preview": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 200)"
+        },
+        "uid": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 128)"
+        },
+        "criado": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "ultima": {
+          ".write": "auth != null",
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "total": {
+          ".write": "auth != null",
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+        },
+        "fechado": {
+          ".write": "root.child('admins').child(auth.uid).val() === true",
+          ".validate": "!newData.exists() || newData.isBoolean()"
+        },
+        "fixado": {
+          ".write": "root.child('admins').child(auth.uid).val() === true",
+          ".validate": "!newData.exists() || newData.isBoolean()"
+        }
+      }
+    },
+    "comentarios": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
       "$noticiaId": {
+        ".read": true,
         "$comentarioId": {
           ".write": "root.child('admins').child(auth.uid).val() === true || (auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid) || (data.exists() && data.child('uid').val() === auth.uid)))",
           ".validate": "!newData.exists() || newData.hasChildren(['nome', 'texto', 'uid', 'timestamp'])",

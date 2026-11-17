@@ -1,20 +1,33 @@
 /* ==========================================================================
    VICIADO COMENTA — Fórum do podcast
-   Tópicos + respostas guardados em /comentarios/podcast no Firebase Realtime
-   Database. Usar este nó (em vez de uma raiz nova) mantém as regras de
-   segurança já publicadas e faz com que a moderação do painel admin cubra
-   automaticamente o fórum.
+
+   Arquitetura leve (plano Spark):
+   - /forum_index  → índice mínimo de cada tópico (título, autor, preview,
+     contadores). É o ÚNICO nó lido ao abrir a página.
+   - /comentarios/podcast → dados completos (texto integral e respostas).
+     Só é lido quando alguém abre uma discussão.
+
+   Antes, um único listener em /comentarios/podcast reenviava o fórum inteiro
+   a todos os visitantes a cada resposta publicada. Agora cada alteração custa
+   apenas o tópico alterado (~400 bytes) e o texto completo é carregado sob
+   demanda. O painel admin continua a moderação a partir de /comentarios.
    ========================================================================== */
 (function () {
   'use strict';
 
   var FORUM_PATH = 'comentarios/podcast';
+  var INDEX_PATH = 'forum_index';
   var PAGE_SIZE = 8;
+  // Quantos tópicos recentes são mantidos em memória. Com 60 muito dificilmente
+  // se chega ao limite; o listener passa a receber apenas eventos incrementais.
+  var LIMITE_TOPICOS = 60;
   var MAX_TITULO = 100;
   var MAX_AUTOR = 50;
   // SecurityUtils.sanitizeComment corta em 1000 caracteres; manter o limite
   // do formulário igual ao da sanitização evita texto cortado em silêncio.
   var MAX_TEXTO = 1000;
+  // Pré-visualização guardada no índice para a listagem não precisar do texto todo.
+  var MAX_PREVIEW = 180;
   var NAME_STORAGE_KEY = 'vc-forum-name';
   var MAX_PROFUNDIDADE = 4;
 
@@ -42,6 +55,13 @@
   var ordenacao = 'recent';
   var visiveis = PAGE_SIZE;
   var ligado = false;
+  var arranqueConcluido = false;
+  var arranqueTimer = null;
+  // Chaves presentes na janela de tópicos recentes. Necessário para saber se
+  // um tópico desafixado continua visível ou deve sair da lista.
+  var recentesIds = {};
+  // Verdadeiro quando /forum_index ainda não existe nas regras publicadas.
+  var modoCompativel = false;
 
   /* ---------- utilidades ---------- */
 
@@ -95,27 +115,22 @@
       agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
   }
 
+  // O índice guarda apenas timestamps; a data legível é formatada aqui.
+  function formatarData(timestamp) {
+    var valor = Number(timestamp || 0);
+    if (!valor) return '';
+    var data = new Date(valor);
+    if (isNaN(data.getTime())) return '';
+    return data.toLocaleDateString('pt-PT') + ' às ' +
+      data.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+  }
+
   function setStatus(element, message, tone) {
     if (!element) return;
     element.textContent = message || '';
     element.classList.remove('forum-status--error', 'forum-status--ok');
     if (tone === 'error') element.classList.add('forum-status--error');
     if (tone === 'ok') element.classList.add('forum-status--ok');
-  }
-
-  function contarRespostas(respostas) {
-    if (!respostas || typeof respostas !== 'object') return 0;
-    return Object.keys(respostas).length;
-  }
-
-  function ultimaAtividade(topico) {
-    var maior = Number(topico.timestamp || 0);
-    var respostas = topico.respostas || {};
-    Object.keys(respostas).forEach(function (chave) {
-      var valor = Number((respostas[chave] || {}).timestamp || 0);
-      if (valor > maior) maior = valor;
-    });
-    return maior;
   }
 
   /* ---------- Firebase ---------- */
@@ -182,10 +197,11 @@
       authReady = true;
     }
 
-    ligarTópicos();
+    ligarTopicos();
   }
 
   function falharLigacao(mensagem) {
+    arranqueConcluido = true;
     setStatus(statusEl, mensagem, 'error');
     if (newBtn) newBtn.disabled = true;
   }
@@ -197,32 +213,172 @@
     newBtn.title = disponivel ? '' : 'A preparar a ligação ao fórum…';
   }
 
-  function ligarTópicos() {
+  /* ---------- índice (leve) ---------- */
+
+  function mapearIndice(chave, item) {
+    item = item || {};
+    var criado = Number(item.criado || 0);
+    return {
+      id: chave,
+      titulo: String(item.titulo || 'Tópico sem título'),
+      autor: String(item.autor || 'Anónimo'),
+      preview: decodeEntities(item.preview || ''),
+      timestamp: criado,
+      ultima: Number(item.ultima || criado || 0),
+      totalRespostas: Math.max(0, Number(item.total || 0)),
+      data: formatarData(criado),
+      fechado: item.fechado === true,
+      fixado: item.fixado === true
+    };
+  }
+
+  function indicePorId(chave) {
+    for (var i = 0; i < topicos.length; i += 1) {
+      if (topicos[i].id === chave) return topicos[i];
+    }
+    return null;
+  }
+
+  function absorverTopico(chave, item, renderizarAgora) {
+    if (!chave) return;
+    var mapeado = mapearIndice(chave, item);
+    var existente = indicePorId(chave);
+    if (existente) {
+      // Preserva estado local de leitura já resolvido no painel.
+      existente.titulo = mapeado.titulo;
+      existente.autor = mapeado.autor;
+      existente.preview = mapeado.preview;
+      existente.timestamp = mapeado.timestamp;
+      existente.ultima = mapeado.ultima;
+      existente.totalRespostas = mapeado.totalRespostas;
+      existente.data = mapeado.data;
+      existente.fechado = mapeado.fechado;
+      existente.fixado = mapeado.fixado;
+    } else {
+      topicos.push(mapeado);
+    }
+    if (renderizarAgora !== false) renderizar();
+  }
+
+  function removerTopico(chave) {
+    var antes = topicos.length;
+    topicos = topicos.filter(function (topico) { return topico.id !== chave; });
+    if (topicos.length !== antes) renderizar();
+  }
+
+  function concluirArranque() {
+    if (arranqueConcluido) return;
+    arranqueConcluido = true;
+    if (arranqueTimer) {
+      window.clearTimeout(arranqueTimer);
+      arranqueTimer = null;
+    }
+    renderizar();
+  }
+
+  function ligarTopicos() {
     if (ligado || !db) return;
     ligado = true;
 
     setStatus(statusEl, 'A carregar tópicos…');
+    // O child_added só dispara quando existe pelo menos um tópico; se nada
+    // chegar neste intervalo, assume-se fórum vazio em vez de ficar a carregar.
+    arranqueTimer = window.setTimeout(concluirArranque, 1500);
 
-    db.ref(FORUM_PATH).on('value', function (snapshot) {
+    var falha = function (error) {
+      if (modoCompativel) return;
+      // As regras do Firebase são aplicadas manualmente. Se /forum_index ainda
+      // não estiver publicado, o fórum recua para o modelo antigo em vez de
+      // ficar vazio para todos os visitantes.
+      console.warn('Índice do fórum indisponível; a usar o modo compatível.', error && error.message);
+      ligarTopicosCompativel();
+    };
+
+    var recentes = db.ref(INDEX_PATH)
+      .orderByChild('criado')
+      .limitToLast(LIMITE_TOPICOS);
+
+    // Tópicos recentes: apenas os mais recentes, com eventos incrementais.
+    recentes.on('child_added', function (snapshot) {
+      recentesIds[snapshot.key] = true;
+      absorverTopico(snapshot.key, snapshot.val(), true);
+      concluirArranque();
+    }, falha);
+
+    recentes.on('child_changed', function (snapshot) {
+      absorverTopico(snapshot.key, snapshot.val(), true);
+    }, falha);
+
+    recentes.on('child_removed', function (snapshot) {
+      delete recentesIds[snapshot.key];
+      // Se continua fixado, mantém-se visível através da consulta de fixados.
+      var item = indicePorId(snapshot.key);
+      if (item && item.fixado) return;
+      removerTopico(snapshot.key);
+    }, falha);
+
+    // Fixados podem ser mais antigos do que a janela recente; são carregados
+    // numa consulta própria (normalmente zero ou poucos nós).
+    var fixados = db.ref(INDEX_PATH)
+      .orderByChild('fixado')
+      .equalTo(true);
+
+    fixados.on('child_added', function (snapshot) {
+      absorverTopico(snapshot.key, snapshot.val(), true);
+    }, falha);
+
+    fixados.on('child_changed', function (snapshot) {
+      absorverTopico(snapshot.key, snapshot.val(), true);
+    }, falha);
+
+    fixados.on('child_removed', function (snapshot) {
+      // Um tópico desafixado continua visível se ainda estiver na janela recente.
+      if (recentesIds[snapshot.key]) return;
+      removerTopico(snapshot.key);
+    }, falha);
+  }
+
+  /* ---------- modo compatível (regras antigas) ---------- */
+
+  // Leitura única de /comentarios/podcast, usada apenas enquanto as regras do
+  // Firebase não incluírem /forum_index. Mantém o fórum operacional durante a
+  // janela entre publicar o site e aplicar as regras.
+  function ligarTopicosCompativel() {
+    if (!db || modoCompativel && topicos.length) return;
+    modoCompativel = true;
+    setStatus(statusEl, 'A carregar tópicos…');
+
+    db.ref(FORUM_PATH).once('value').then(function (snapshot) {
       var valor = snapshot.val() || {};
       topicos = Object.keys(valor).map(function (chave) {
         var item = valor[chave] || {};
+        var respostas = item.respostas && typeof item.respostas === 'object' ? item.respostas : {};
+        var ultima = Number(item.timestamp || 0);
+        Object.keys(respostas).forEach(function (respKey) {
+          var ts = Number((respostas[respKey] || {}).timestamp || 0);
+          if (ts > ultima) ultima = ts;
+        });
         return {
           id: chave,
           titulo: String(item.titulo || item.nome || 'Tópico sem título'),
           autor: String(item.nome || 'Anónimo'),
-          texto: decodeEntities(item.texto || ''),
+          preview: decodeEntities(item.texto || ''),
           timestamp: Number(item.timestamp || 0),
+          ultima: ultima,
+          totalRespostas: contarRespostas(respostas),
           data: String(item.data || ''),
-          // Campos de moderação escritos pelo painel admin.
           fechado: item.fechado === true,
-          fixado: item.fixado === true,
-          respostas: item.respostas || {}
+          fixado: item.fixado === true
         };
       });
-      visiveis = PAGE_SIZE;
+      arranqueConcluido = true;
+      if (arranqueTimer) {
+        window.clearTimeout(arranqueTimer);
+        arranqueTimer = null;
+      }
       renderizar();
-    }, function () {
+    }).catch(function () {
+      arranqueConcluido = true;
       setStatus(statusEl, 'Não foi possível carregar os tópicos. Tenta novamente mais tarde.', 'error');
     });
   }
@@ -244,15 +400,15 @@
       if (!termo) return true;
       return normalizar(topico.titulo).indexOf(termo) !== -1 ||
         normalizar(topico.autor).indexOf(termo) !== -1 ||
-        normalizar(topico.texto).indexOf(termo) !== -1;
+        normalizar(topico.preview).indexOf(termo) !== -1;
     });
 
     var comparador;
     if (ordenacao === 'active') {
-      comparador = function (a, b) { return ultimaAtividade(b) - ultimaAtividade(a); };
+      comparador = function (a, b) { return b.ultima - a.ultima; };
     } else if (ordenacao === 'replies') {
       comparador = function (a, b) {
-        var diff = contarRespostas(b.respostas) - contarRespostas(a.respostas);
+        var diff = b.totalRespostas - a.totalRespostas;
         return diff !== 0 ? diff : b.timestamp - a.timestamp;
       };
     } else {
@@ -275,6 +431,7 @@
     listEl.innerHTML = '';
 
     if (!topicos.length) {
+      if (!arranqueConcluido) return;
       listEl.innerHTML = '<p class="forum-empty">Ainda não existem tópicos. Sê o primeiro a abrir a discussão.</p>';
       setStatus(statusEl, '');
       if (moreWrap) moreWrap.hidden = true;
@@ -294,7 +451,8 @@
     });
 
     var total = lista.length;
-    setStatus(statusEl, total === 1 ? '1 tópico.' : total + ' tópicos.');
+    var sufixo = topicos.length >= LIMITE_TOPICOS ? ' A mostrar os mais recentes.' : '';
+    setStatus(statusEl, (total === 1 ? '1 tópico.' : total + ' tópicos.') + sufixo);
 
     if (moreWrap && moreBtn) {
       moreWrap.hidden = visiveis >= total;
@@ -313,8 +471,6 @@
     var artigo = document.createElement('article');
     artigo.className = 'forum-topico';
     artigo.dataset.topicoId = topico.id;
-
-    var totalRespostas = contarRespostas(topico.respostas);
 
     var head = document.createElement('div');
     head.className = 'forum-topico-head';
@@ -346,14 +502,14 @@
       meta.appendChild(dataEl);
     }
     var respostasEl = document.createElement('span');
-    respostasEl.textContent = totalRespostas === 1 ? '1 resposta' : totalRespostas + ' respostas';
+    respostasEl.textContent = topico.totalRespostas === 1 ? '1 resposta' : topico.totalRespostas + ' respostas';
     meta.appendChild(respostasEl);
     head.appendChild(meta);
     artigo.appendChild(head);
 
     var texto = document.createElement('p');
     texto.className = 'forum-topico-texto';
-    texto.textContent = topico.texto;
+    texto.textContent = topico.preview;
     artigo.appendChild(texto);
 
     var actions = document.createElement('div');
@@ -362,7 +518,7 @@
     toggle.type = 'button';
     toggle.className = 'forum-action forum-toggle';
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = 'Ver discussão (' + totalRespostas + ')';
+    toggle.textContent = 'Ver discussão (' + topico.totalRespostas + ')';
     actions.appendChild(toggle);
     artigo.appendChild(actions);
 
@@ -372,7 +528,114 @@
 
     var listaRespostas = document.createElement('div');
     listaRespostas.className = 'forum-respostas-lista';
-    var arvore = normalizarRespostas(topico.respostas);
+    painel.appendChild(listaRespostas);
+
+    artigo.appendChild(painel);
+
+    toggle.addEventListener('click', function () {
+      var vaiAbrir = painel.hidden;
+      painel.hidden = !vaiAbrir;
+      toggle.setAttribute('aria-expanded', vaiAbrir ? 'true' : 'false');
+      if (vaiAbrir) {
+        abrirDiscussao(topico, painel, listaRespostas, toggle);
+      } else {
+        fecharDiscussao(topico);
+      }
+    });
+
+    return artigo;
+  }
+
+  /* ---------- discussão (carregada sob demanda) ---------- */
+
+  // Lê o tópico completo apenas quando é aberto. Antes, o texto integral e
+  // todas as respostas vinham no snapshot da listagem.
+  function abrirDiscussao(topico, painel, listaRespostas, toggle) {
+    if (!db) return;
+    if (topico.aCarregar) return;
+    topico.aCarregar = true;
+
+    listaRespostas.innerHTML = '<p class="forum-respostas-vazio">A carregar discussão…</p>';
+
+    db.ref(FORUM_PATH + '/' + topico.id).once('value').then(function (snapshot) {
+      topico.aCarregar = false;
+
+      var valor = snapshot.val();
+      if (!valor) {
+        listaRespostas.innerHTML = '<p class="forum-respostas-vazio">Este tópico já não existe.</p>';
+        return;
+      }
+
+      topico.respostasCache = valor.respostas || {};
+      topico.fechado = valor.fechado === true;
+      topico.textoIntegral = decodeEntities(valor.texto || '');
+      if (!topico.preview) {
+        textoPreview(topico);
+      }
+
+      desenharDiscussao(topico, painel, listaRespostas, toggle);
+      // Se entretanto o painel foi fechado, não vale a pena subscrever.
+      if (!painel.hidden) ligarRespostas(topico, painel, listaRespostas, toggle);
+    }).catch(function (error) {
+      topico.aCarregar = false;
+      console.error('Erro ao abrir discussão do fórum:', error);
+      listaRespostas.innerHTML = '<p class="forum-respostas-vazio">Não foi possível carregar a discussão.</p>';
+    });
+  }
+
+  function textoPreview(topico) {
+    var elemento = listEl ? listEl.querySelector('[data-topico-id="' + topico.id + '"] .forum-topico-texto') : null;
+    if (!elemento) return;
+    var valor = String(topico.textoIntegral || topico.preview || '').slice(0, MAX_PREVIEW);
+    if (!valor) return;
+    topico.preview = valor;
+    elemento.textContent = valor;
+  }
+
+  // Mantém o painel aberto sincronizado recebendo apenas as respostas novas.
+  function ligarRespostas(topico, painel, listaRespostas, toggle) {
+    if (!db || topico.respostasRef) return;
+
+    topico.respostasRef = db.ref(FORUM_PATH + '/' + topico.id + '/respostas');
+    topico.respostasRef.on('child_added', function (snapshot) {
+      if (!topico.respostasCache) topico.respostasCache = {};
+      if (topico.respostasCache[snapshot.key]) return;
+      topico.respostasCache[snapshot.key] = snapshot.val();
+      desenharListaRespostas(topico, listaRespostas, toggle);
+    });
+    topico.respostasRef.on('child_removed', function (snapshot) {
+      if (!topico.respostasCache) return;
+      delete topico.respostasCache[snapshot.key];
+      desenharListaRespostas(topico, listaRespostas, toggle);
+    });
+  }
+
+  function fecharDiscussao(topico) {
+    if (!topico.respostasRef) return;
+    topico.respostasRef.off();
+    topico.respostasRef = null;
+  }
+
+  function desenharDiscussao(topico, painel, listaRespostas, toggle) {
+    desenharListaRespostas(topico, listaRespostas, toggle);
+
+    var antigo = painel.querySelector('.forum-resposta-form, .forum-closed-note');
+    if (antigo) antigo.remove();
+
+    if (topico.fechado) {
+      var nota = document.createElement('p');
+      nota.className = 'forum-closed-note';
+      nota.textContent = 'Tópico fechado pela moderação. Já não aceita novas respostas.';
+      painel.appendChild(nota);
+    } else {
+      painel.appendChild(criarFormResposta(topico.id, ''));
+    }
+  }
+
+  function desenharListaRespostas(topico, listaRespostas, toggle) {
+    var arvore = normalizarRespostas(topico.respostasCache);
+    listaRespostas.innerHTML = '';
+
     if (!arvore.length) {
       var vazio = document.createElement('p');
       vazio.className = 'forum-respostas-vazio';
@@ -383,25 +646,15 @@
         listaRespostas.appendChild(criarResposta(no, topico.id, 1, topico.fechado));
       });
     }
-    painel.appendChild(listaRespostas);
 
-    if (topico.fechado) {
-      var nota = document.createElement('p');
-      nota.className = 'forum-closed-note';
-      nota.textContent = 'Tópico fechado pela moderação. Já não aceita novas respostas.';
-      painel.appendChild(nota);
-    } else {
-      painel.appendChild(criarFormResposta(topico.id, ''));
+    if (toggle) {
+      toggle.textContent = 'Ver discussão (' + contarRespostas(topico.respostasCache) + ')';
     }
-    artigo.appendChild(painel);
+  }
 
-    toggle.addEventListener('click', function () {
-      var aberto = painel.hidden;
-      painel.hidden = !aberto;
-      toggle.setAttribute('aria-expanded', aberto ? 'true' : 'false');
-    });
-
-    return artigo;
+  function contarRespostas(respostas) {
+    if (!respostas || typeof respostas !== 'object') return 0;
+    return Object.keys(respostas).length;
   }
 
   function normalizarRespostas(respostas) {
@@ -553,10 +806,7 @@
     if (!validarLigacao(status)) return;
 
     // O tópico pode ter sido fechado ou apagado pela moderação entretanto.
-    var topicoAtual = null;
-    topicos.forEach(function (topico) {
-      if (topico.id === topicoId) topicoAtual = topico;
-    });
+    var topicoAtual = indicePorId(topicoId);
     if (!topicoAtual) {
       setStatus(status, 'Este tópico já não existe.', 'error');
       return;
@@ -605,7 +855,35 @@
     };
     if (parentId) payload.parentId = parentId;
 
-    db.ref(FORUM_PATH + '/' + topicoId + '/respostas').push(payload)
+    var respostaId = db.ref(FORUM_PATH + '/' + topicoId + '/respostas').push().key;
+
+    if (modoCompativel) {
+      // Sem índice publicado: grava só no nó antigo, como antes.
+      db.ref(FORUM_PATH + '/' + topicoId + '/respostas/' + respostaId).set(payload)
+        .then(function () {
+          setStatus(status, 'Resposta publicada.', 'ok');
+          if (textoInput) textoInput.value = '';
+          if (wrapper) wrapper.hidden = true;
+        })
+        .catch(function (error) {
+          console.error('Erro ao publicar resposta do fórum:', error);
+          setStatus(status, 'Não foi possível publicar. Tenta novamente.', 'error');
+        });
+      return;
+    }
+
+    var updates = {};
+    updates[FORUM_PATH + '/' + topicoId + '/respostas/' + respostaId] = payload;
+    // Marca a atividade no índice para a listagem reordenar sem ler o tópico.
+    updates[INDEX_PATH + '/' + topicoId + '/ultima'] = firebase.database.ServerValue.TIMESTAMP;
+
+    db.ref().update(updates)
+      .then(function () {
+        // Transação evita perder contagens se duas pessoas responderem juntas.
+        return db.ref(INDEX_PATH + '/' + topicoId + '/total').transaction(function (atual) {
+          return (Math.max(0, Number(atual) || 0)) + 1;
+        });
+      })
       .then(function () {
         setStatus(status, 'Resposta publicada.', 'ok');
         if (textoInput) textoInput.value = '';
@@ -656,7 +934,39 @@
     guardarNome(nomeLimpo);
     setStatus(formStatus, 'A publicar…');
 
-    db.ref(FORUM_PATH).push({
+    if (modoCompativel) {
+      // Sem índice publicado: grava só no nó antigo, como antes.
+      db.ref(FORUM_PATH).push({
+        nome: nomeLimpo,
+        titulo: tituloLimpo,
+        texto: textoLimpo,
+        uid: currentUserId,
+        data: dataLegivel(),
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      })
+        .then(function () {
+          setStatus(formStatus, 'Tópico publicado.');
+          if (formTitulo) formTitulo.value = '';
+          if (formTexto) formTexto.value = '';
+          if (form) form.hidden = true;
+          if (newBtn) newBtn.setAttribute('aria-expanded', 'false');
+          visiveis = PAGE_SIZE;
+          topicos = [];
+          ligarTopicosCompativel();
+        })
+        .catch(function (error) {
+          console.error('Erro ao publicar tópico no fórum:', error);
+          setStatus(formStatus, 'Não foi possível publicar o tópico. Tenta novamente.', 'error');
+        });
+      return;
+    }
+
+    var agora = firebase.database.ServerValue.TIMESTAMP;
+    var topicoId = db.ref(FORUM_PATH).push().key;
+
+    // Escrita única (multi-path): conteúdo completo + índice leve.
+    var updates = {};
+    updates[FORUM_PATH + '/' + topicoId] = {
       // "nome" e "texto" são exigidos pelas regras já publicadas; o título
       // segue num campo próprio lido apenas pelo fórum.
       nome: nomeLimpo,
@@ -664,8 +974,19 @@
       texto: textoLimpo,
       uid: currentUserId,
       data: dataLegivel(),
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    })
+      timestamp: agora
+    };
+    updates[INDEX_PATH + '/' + topicoId] = {
+      titulo: tituloLimpo,
+      autor: nomeLimpo,
+      preview: textoLimpo.slice(0, MAX_PREVIEW),
+      uid: currentUserId,
+      criado: agora,
+      ultima: agora,
+      total: 0
+    };
+
+    db.ref().update(updates)
       .then(function () {
         setStatus(formStatus, 'Tópico publicado.');
         if (formTitulo) formTitulo.value = '';
@@ -673,7 +994,6 @@
         if (form) form.hidden = true;
         if (newBtn) newBtn.setAttribute('aria-expanded', 'false');
         visiveis = PAGE_SIZE;
-        renderizar();
       })
       .catch(function (error) {
         console.error('Erro ao publicar tópico no fórum:', error);

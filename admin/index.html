@@ -1636,6 +1636,7 @@ button {
               <p>Tópicos e respostas da comunidade na página do podcast. Fixa os temas importantes, fecha discussões que já terminaram e apaga conteúdo impróprio. As alterações são imediatas e não podem ser revertidas.</p>
             </div>
             <button type="button" class="btn-inline" id="btnReloadForum">Atualizar fórum</button>
+            <button type="button" class="btn-inline" id="btnRebuildForumIndex" title="Regera /forum_index a partir de /comentarios/podcast. Usar depois de importar tópicos antigos.">Reconstruir índice</button>
           </div>
           <div class="push-stats-grid">
             <article class="push-stat-card">
@@ -1853,6 +1854,7 @@ const forumAdminSort = document.getElementById('forumAdminSort');
 const forumAdminStatus = document.getElementById('forumAdminStatus');
 const forumAdminList = document.getElementById('forumAdminList');
 const btnReloadForum = document.getElementById('btnReloadForum');
+const btnRebuildForumIndex = document.getElementById('btnRebuildForumIndex');
 const commentsTotalCount = document.getElementById('commentsTotalCount');
 const commentsRepliesCount = document.getElementById('commentsRepliesCount');
 const commentsArticlesCount = document.getElementById('commentsArticlesCount');
@@ -2086,6 +2088,12 @@ btnReloadComments.addEventListener('click', () => {
 btnReloadForum.addEventListener('click', () => {
   void loadForumAdmin();
 });
+
+if (btnRebuildForumIndex) {
+  btnRebuildForumIndex.addEventListener('click', () => {
+    void reconstruirIndiceForum();
+  });
+}
 
 btnReloadVideosStudio.addEventListener('click', () => {
   const src = videosStudioFrame.getAttribute('src') || '../tools/videos-studio.html';
@@ -2667,6 +2675,9 @@ async function deleteCommentFromModeration(path, label) {
 // topico e um comentario com nome/texto/uid/timestamp + titulo, e os campos de
 // moderacao fechado/fixado. As respostas ficam em respostas/{id}.
 const FORUM_DB_PATH = 'comentarios/podcast';
+// Índice leve lido pela página pública. Tem de acompanhar todas as alterações
+// feitas em /comentarios/podcast (criar, fechar, fixar, apagar, responder).
+const FORUM_INDEX_PATH = 'forum_index';
 let forumAdminItems = [];
 let forumAdminRequestId = 0;
 const forumAdminState = { search: '', estado: '', sort: 'recent' };
@@ -2720,6 +2731,7 @@ function flattenForumTopics(valor) {
       autor: String(item.nome || 'Anónimo'),
       texto: String(item.texto || ''),
       data: String(item.data || ''),
+      uid: String(item.uid || ''),
       timestamp: Number(item.timestamp || 0),
       fechado: item.fechado === true,
       fixado: item.fixado === true,
@@ -2886,13 +2898,69 @@ async function loadForumAdmin() {
   }
 }
 
+// Constrói a entrada leve de /forum_index a partir de um item do fórum.
+// Usado ao reconstruir o índice e ao fechar/fixar tópicos antigos.
+function construirIndiceForum(item) {
+  const criado = Number(item.timestamp || 0) || Date.now();
+  return {
+    titulo: item.titulo || 'Tópico sem título',
+    autor: item.autor || 'Anónimo',
+    preview: String(item.texto || '').slice(0, 180),
+    uid: item.uid || 'admin',
+    criado,
+    ultima: criado,
+    total: Array.isArray(item.totalRespostas) ? item.totalRespostas.length : 0,
+    fechado: item.fechado === true,
+    fixado: item.fixado === true
+  };
+}
+
+async function reconstruirIndiceTopico(topicoId) {
+  if (!db || !topicoId) return false;
+
+  try {
+    const snapshot = await db.ref(`${FORUM_DB_PATH}/${topicoId}`).once('value');
+    const valor = snapshot.val();
+    if (!valor) {
+      await db.ref(`${FORUM_INDEX_PATH}/${topicoId}`).remove();
+      return true;
+    }
+
+    const item = flattenForumTopics({ [topicoId]: valor })[0];
+    await db.ref(`${FORUM_INDEX_PATH}/${topicoId}`).set(construirIndiceForum(item));
+    return true;
+  } catch (error) {
+    console.warn('Falha ao reconstruir o índice do tópico:', error);
+    return false;
+  }
+}
+
 async function atualizarTopicoForum(topicoId, alteracoes, mensagemSucesso) {
   if (!db || !topicoId) return;
 
   setForumAdminStatus('A guardar alteração...', null);
 
   try {
-    await db.ref(`${FORUM_DB_PATH}/${topicoId}`).update(alteracoes);
+    const updates = {};
+    Object.keys(alteracoes).forEach((campo) => {
+      updates[`${FORUM_DB_PATH}/${topicoId}/${campo}`] = alteracoes[campo];
+    });
+
+    // O índice público tem de refletir fechado/fixado. Se ainda não existir
+    // (tópico criado antes do índice), é criado por inteiro.
+    const indiceSnapshot = await db.ref(`${FORUM_INDEX_PATH}/${topicoId}`).once('value');
+    if (indiceSnapshot.exists()) {
+      Object.keys(alteracoes).forEach((campo) => {
+        if (campo === 'fechado' || campo === 'fixado') {
+          updates[`${FORUM_INDEX_PATH}/${topicoId}/${campo}`] = alteracoes[campo];
+        }
+      });
+    } else {
+      const item = forumAdminItems.find((topico) => topico.id === topicoId);
+      if (item) updates[`${FORUM_INDEX_PATH}/${topicoId}`] = construirIndiceForum(item);
+    }
+
+    await db.ref().update(updates);
     const recarregou = await loadForumAdmin();
     setForumAdminStatus(
       recarregou ? mensagemSucesso : 'Alteração guardada, mas a lista não pôde ser atualizada.',
@@ -2934,13 +3002,19 @@ function toggleForumClosed(topicoId) {
   );
 }
 
-async function apagarDoForum(path, mensagemSucesso) {
-  if (!db || !path) return;
+async function apagarDoForum(paths, mensagemSucesso) {
+  if (!db) return;
+
+  const lista = (Array.isArray(paths) ? paths : [paths]).filter(Boolean);
+  if (!lista.length) return;
 
   setForumAdminStatus('A apagar...', null);
 
   try {
-    await db.ref(path).remove();
+    // Escrita multi-path: conteúdo e índice desaparecem na mesma operação.
+    const updates = {};
+    lista.forEach((path) => { updates[path] = null; });
+    await db.ref().update(updates);
     const recarregou = await loadForumAdmin();
     setForumAdminStatus(
       recarregou ? mensagemSucesso : 'Conteúdo apagado, mas a lista não pôde ser atualizada.',
@@ -2961,13 +3035,71 @@ function deleteForumTopic(topicoId, label) {
     ? `Apagar o tópico "${label}" e as ${total} resposta(s)? Esta ação é imediata e não pode ser revertida.`
     : `Apagar o tópico "${label}"? Esta ação é imediata e não pode ser revertida.`;
   if (!window.confirm(aviso)) return;
-  void apagarDoForum(`${FORUM_DB_PATH}/${topicoId}`, 'Tópico apagado.');
+  void apagarDoForum(
+    [`${FORUM_DB_PATH}/${topicoId}`, `${FORUM_INDEX_PATH}/${topicoId}`],
+    'Tópico apagado.'
+  );
+}
+
+// comentarios/podcast/{topicoId}/respostas/... -> topicoId
+function topicoIdDoPathResposta(path) {
+  const partes = String(path || '').split('/');
+  if (partes.length > 2 && partes[0] === 'comentarios' && partes[1] === 'podcast') {
+    return partes[2];
+  }
+  return '';
 }
 
 function deleteForumReply(path, label) {
   if (!path) return;
   if (!window.confirm(`Apagar a resposta de "${label}"? Esta ação é imediata e não pode ser revertida.`)) return;
-  void apagarDoForum(path, 'Resposta apagada.');
+
+  const topicoId = topicoIdDoPathResposta(path);
+  void (async () => {
+    await apagarDoForum([path], 'Resposta apagada.');
+    // O contador vive no índice: é recalculado a partir do tópico.
+    if (topicoId) await reconstruirIndiceTopico(topicoId);
+  })();
+}
+
+async function reconstruirIndiceForum() {
+  if (!db) {
+    setForumAdminStatus('Base de dados indisponível.', 'error');
+    return;
+  }
+
+  setForumAdminStatus('A reconstruir o índice do fórum...', null);
+
+  try {
+    const snapshot = await db.ref(FORUM_DB_PATH).once('value');
+    const itens = flattenForumTopics(snapshot.val() || {});
+    const indiceSnapshot = await db.ref(FORUM_INDEX_PATH).once('value');
+    const indiceAtual = indiceSnapshot.val() || {};
+
+    const updates = {};
+    const idsAtuais = new Set(itens.map((item) => item.id));
+    itens.forEach((item) => {
+      updates[`${FORUM_INDEX_PATH}/${item.id}`] = construirIndiceForum(item);
+    });
+    // Remove entradas órfãs de tópicos que já não existem.
+    Object.keys(indiceAtual).forEach((chave) => {
+      if (!idsAtuais.has(chave)) updates[`${FORUM_INDEX_PATH}/${chave}`] = null;
+    });
+
+    if (!Object.keys(updates).length) {
+      setForumAdminStatus('Nada para reconstruir: o fórum está vazio.', 'success');
+      return;
+    }
+
+    await db.ref().update(updates);
+    await loadForumAdmin();
+    setForumAdminStatus(`Índice reconstruído: ${itens.length} tópico(s) sincronizado(s).`, 'success');
+  } catch (error) {
+    const message = error && error.code === 'PERMISSION_DENIED'
+      ? 'Sem permissão para reconstruir o índice. Confirma que a conta está na lista de administradores (admins).'
+      : (error && error.message ? error.message : 'Erro ao reconstruir o índice.');
+    setForumAdminStatus(message, 'error');
+  }
 }
 
 if (forumAdminSearch) {
