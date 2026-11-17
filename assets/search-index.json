@@ -1,5 +1,5 @@
 {
-    "total":  84,
+    "total":  85,
     "itens":  [
                   {
                       "id":  "1",
@@ -756,6 +756,15 @@
                       "data":  "03/11/2026",
                       "autor":  "Pedro Silva",
                       "url":  "artigos.html?id=85\u0026slug=a-guerra-do-espectro-a-resposta-afiada-da-digi-a-apritel-e-os-riscos-que-a-anacom-nao-pode-ignorar"
+                  },
+                  {
+                      "id":  "86",
+                      "titulo":  "Dois anos depois, DIGI atinge 1 milhão de serviços ativos em Portugal",
+                      "resumo":  "A DIGI Portugal atingiu a marca histórica de 1 milhão de serviços ativos no país, impulsionada por um forte crescimento homólogo de 23% e pela rápida expansão da sua fibra ótica. Apesar de já abalar o mercado nacional...",
+                      "categoria":  "DIGI",
+                      "data":  "13/11/2026",
+                      "autor":  "Pedro Silva",
+                      "url":  "artigos.html?id=86\u0026slug=dois-anos-depois-digi-atinge-1-milhao-de-servicos-ativos-em-portugal"
                   }
               ]
 }
