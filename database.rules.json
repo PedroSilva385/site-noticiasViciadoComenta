@@ -206,7 +206,7 @@
       ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
       "$subscriptionId": {
         ".write": "auth != null",
-        ".validate": "root.child('admins').child(auth.uid).val() === true || !newData.exists() || newData.hasChildren(['subscription', 'topic', 'status', 'createdAt', 'updatedAt', 'lastSeenAt', 'userAgent', 'language', 'origin'])",
+        ".validate": "root.child('admins').child(auth.uid).val() === true || !newData.exists() || ($subscriptionId.length === 64 && newData.hasChildren(['subscription', 'topic', 'status', 'createdAt', 'updatedAt', 'lastSeenAt', 'userAgent', 'language', 'origin']))",
         "subscription": {
           ".validate": "!newData.exists() || newData.hasChildren(['endpoint', 'keys'])",
           "endpoint": {
@@ -281,11 +281,11 @@
         },
         "ultima": {
           ".write": "auth != null",
-          ".validate": "!newData.exists() || newData.isNumber()"
+          ".validate": "!newData.exists() || (newData.isNumber() && (root.child('admins').child(auth.uid).val() === true || (newData.val() <= now + 300000 && (!data.exists() || newData.val() >= data.val()))))"
         },
         "total": {
           ".write": "auth != null",
-          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0 && (root.child('admins').child(auth.uid).val() === true || (data.exists() ? (newData.val() === data.val() || newData.val() === data.val() + 1) : newData.val() <= 1)))"
         },
         "fechado": {
           ".write": "root.child('admins').child(auth.uid).val() === true",

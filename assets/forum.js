@@ -228,7 +228,11 @@
       totalRespostas: Math.max(0, Number(item.total || 0)),
       data: formatarData(criado),
       fechado: item.fechado === true,
-      fixado: item.fixado === true
+      fixado: item.fixado === true,
+      // Falso para tópicos que só existem em /comentarios/podcast: nesse caso
+      // a resposta não pode tocar em /forum_index (o nó não existe e as regras
+      // exigem a ficha completa para o criar).
+      doIndice: true
     };
   }
 
@@ -254,6 +258,7 @@
       existente.data = mapeado.data;
       existente.fechado = mapeado.fechado;
       existente.fixado = mapeado.fixado;
+      existente.doIndice = mapeado.doIndice;
     } else {
       topicos.push(mapeado);
     }
@@ -272,6 +277,12 @@
     if (arranqueTimer) {
       window.clearTimeout(arranqueTimer);
       arranqueTimer = null;
+    }
+    // Índice publicado mas vazio (tópicos antigos, criados antes da migração)
+    // não gera erro: sem este recuo a lista apareceria vazia a todos.
+    if (!topicos.length && !modoCompativel) {
+      ligarTopicosCompativel();
+      return;
     }
     renderizar();
   }
@@ -343,8 +354,8 @@
   // Leitura única de /comentarios/podcast, usada apenas enquanto as regras do
   // Firebase não incluírem /forum_index. Mantém o fórum operacional durante a
   // janela entre publicar o site e aplicar as regras.
-  function ligarTopicosCompativel() {
-    if (!db || modoCompativel && topicos.length) return;
+  function ligarTopicosCompativel(recarregar) {
+    if (!db || (modoCompativel && !recarregar)) return;
     modoCompativel = true;
     setStatus(statusEl, 'A carregar tópicos…');
 
@@ -368,7 +379,9 @@
           totalRespostas: contarRespostas(respostas),
           data: String(item.data || ''),
           fechado: item.fechado === true,
-          fixado: item.fixado === true
+          fixado: item.fixado === true,
+          // Sem ficha em /forum_index: as respostas ficam só no nó antigo.
+          doIndice: false
         };
       });
       arranqueConcluido = true;
@@ -856,8 +869,12 @@
     if (parentId) payload.parentId = parentId;
 
     var respostaId = db.ref(FORUM_PATH + '/' + topicoId + '/respostas').push().key;
+    var topico = indicePorId(topicoId);
 
-    if (modoCompativel) {
+    // Tópicos sem ficha no índice (criados antes da migração) não aceitam
+    // escrita parcial em /forum_index: as regras exigem a ficha completa.
+    // Nesse caso grava-se apenas no nó antigo, como no modo compatível.
+    if (modoCompativel || !topico || !topico.doIndice) {
       // Sem índice publicado: grava só no nó antigo, como antes.
       db.ref(FORUM_PATH + '/' + topicoId + '/respostas/' + respostaId).set(payload)
         .then(function () {
@@ -934,39 +951,9 @@
     guardarNome(nomeLimpo);
     setStatus(formStatus, 'A publicar…');
 
-    if (modoCompativel) {
-      // Sem índice publicado: grava só no nó antigo, como antes.
-      db.ref(FORUM_PATH).push({
-        nome: nomeLimpo,
-        titulo: tituloLimpo,
-        texto: textoLimpo,
-        uid: currentUserId,
-        data: dataLegivel(),
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      })
-        .then(function () {
-          setStatus(formStatus, 'Tópico publicado.');
-          if (formTitulo) formTitulo.value = '';
-          if (formTexto) formTexto.value = '';
-          if (form) form.hidden = true;
-          if (newBtn) newBtn.setAttribute('aria-expanded', 'false');
-          visiveis = PAGE_SIZE;
-          topicos = [];
-          ligarTopicosCompativel();
-        })
-        .catch(function (error) {
-          console.error('Erro ao publicar tópico no fórum:', error);
-          setStatus(formStatus, 'Não foi possível publicar o tópico. Tenta novamente.', 'error');
-        });
-      return;
-    }
-
     var agora = firebase.database.ServerValue.TIMESTAMP;
     var topicoId = db.ref(FORUM_PATH).push().key;
-
-    // Escrita única (multi-path): conteúdo completo + índice leve.
-    var updates = {};
-    updates[FORUM_PATH + '/' + topicoId] = {
+    var fichaBruta = {
       // "nome" e "texto" são exigidos pelas regras já publicadas; o título
       // segue num campo próprio lido apenas pelo fórum.
       nome: nomeLimpo,
@@ -976,7 +963,7 @@
       data: dataLegivel(),
       timestamp: agora
     };
-    updates[INDEX_PATH + '/' + topicoId] = {
+    var fichaIndice = {
       titulo: tituloLimpo,
       autor: nomeLimpo,
       preview: textoLimpo.slice(0, MAX_PREVIEW),
@@ -986,18 +973,47 @@
       total: 0
     };
 
+    var aoPublicar = function () {
+      setStatus(formStatus, 'Tópico publicado.');
+      if (formTitulo) formTitulo.value = '';
+      if (formTexto) formTexto.value = '';
+      if (form) form.hidden = true;
+      if (newBtn) newBtn.setAttribute('aria-expanded', 'false');
+      visiveis = PAGE_SIZE;
+      if (modoCompativel) {
+        topicos = [];
+        ligarTopicosCompativel(true);
+      }
+    };
+
+    var aoFalhar = function (error) {
+      console.error('Erro ao publicar tópico no fórum:', error);
+      setStatus(formStatus, 'Não foi possível publicar o tópico. Tenta novamente.', 'error');
+    };
+
+    // Sem índice publicado (regras antigas) grava-se só no nó antigo.
+    if (modoCompativel) {
+      db.ref(FORUM_PATH + '/' + topicoId).set(fichaBruta).then(aoPublicar).catch(aoFalhar);
+      return;
+    }
+
+    // Escrita única (multi-path): conteúdo completo + índice leve.
+    var updates = {};
+    updates[FORUM_PATH + '/' + topicoId] = fichaBruta;
+    updates[INDEX_PATH + '/' + topicoId] = fichaIndice;
+
     db.ref().update(updates)
-      .then(function () {
-        setStatus(formStatus, 'Tópico publicado.');
-        if (formTitulo) formTitulo.value = '';
-        if (formTexto) formTexto.value = '';
-        if (form) form.hidden = true;
-        if (newBtn) newBtn.setAttribute('aria-expanded', 'false');
-        visiveis = PAGE_SIZE;
-      })
+      .then(aoPublicar)
       .catch(function (error) {
-        console.error('Erro ao publicar tópico no fórum:', error);
-        setStatus(formStatus, 'Não foi possível publicar o tópico. Tenta novamente.', 'error');
+        // O índice pode não existir nas regras publicadas: nesse caso o tópico
+        // é gravado só no nó antigo para não se perder a publicação.
+        if (!error || error.code !== 'PERMISSION_DENIED') {
+          aoFalhar(error);
+          return;
+        }
+        console.warn('Índice recusou a escrita; a publicar só em /comentarios.', error.message);
+        modoCompativel = true;
+        db.ref(FORUM_PATH + '/' + topicoId).set(fichaBruta).then(aoPublicar).catch(aoFalhar);
       });
   }
 
