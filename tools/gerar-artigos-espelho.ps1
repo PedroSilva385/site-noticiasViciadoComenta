@@ -960,8 +960,7 @@ $baseUrls = @(
     'https://www.viciadocomenta.pt/contacto.html',
     'https://www.viciadocomenta.pt/autor/pedro-silva.html',
     'https://www.viciadocomenta.pt/politica-privacidade.html',
-    'https://www.viciadocomenta.pt/termos-servico.html',
-    'https://www.viciadocomenta.pt/pesquisa.html'
+    'https://www.viciadocomenta.pt/termos-servico.html'
 )
 
 $sitemapLines = @('<?xml version="1.0" encoding="UTF-8"?>')
@@ -983,38 +982,6 @@ foreach ($article in $generatedArticles) {
 
 $sitemapLines += '</urlset>'
 [System.IO.File]::WriteAllText($sitemapPath, ($sitemapLines -join "`n"), [System.Text.UTF8Encoding]::new($false))
-
-# Indice de pesquisa (consumido por pesquisa.html). Sem timestamp volatil para
-# evitar commits automaticos em cada execucao do workflow.
-$searchIndexPath = Join-Path $root 'assets/search-index.json'
-$searchItems = New-Object System.Collections.Generic.List[object]
-foreach ($noticia in $noticias) {
-    $itemId = [string]$noticia.id
-    $itemSlug = if ($noticia.PSObject.Properties.Name -contains 'slug' -and -not [string]::IsNullOrWhiteSpace([string]$noticia.slug)) {
-        [string]$noticia.slug
-    } else {
-        Get-Slug -InputText ([string]$noticia.titulo)
-    }
-    $itemResumo = Get-PlainTextFromHtml -Text ([string]$noticia.resumo)
-    if ($itemResumo.Length -gt 220) {
-        $itemResumo = $itemResumo.Substring(0, 217).Trim() + '...'
-    }
-    $searchItems.Add([ordered]@{
-        id        = $itemId
-        titulo    = [string]$noticia.titulo
-        resumo    = $itemResumo
-        categoria = [string]$noticia.categoria
-        data      = [string]$noticia.data
-        autor     = [string]$noticia.autor
-        url       = 'artigos.html?id=' + [uri]::EscapeDataString($itemId) + '&slug=' + [uri]::EscapeDataString($itemSlug)
-    })
-}
-$searchIndex = [ordered]@{
-    total = $searchItems.Count
-    itens = $searchItems
-}
-[System.IO.File]::WriteAllText($searchIndexPath, ($searchIndex | ConvertTo-Json -Depth 5), [System.Text.UTF8Encoding]::new($false))
-Write-Output "Indice de pesquisa atualizado: $searchIndexPath ($($searchItems.Count) itens)"
 
 $rssItems = New-Object System.Collections.Generic.List[string]
 foreach ($noticia in $noticias) {

@@ -482,6 +482,168 @@ body.dark .noticia-conteudo figcaption {
   margin: 30px 0;
 }
 
+/* PESQUISA DE ARTIGOS */
+.search-section {
+  max-width: 640px;
+  margin: 0 auto 30px;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 50px 16px 20px;
+  border: 2px solid #e0e8f5;
+  border-radius: 12px;
+  font-size: 1em;
+  font-family: 'Sora', sans-serif;
+  background: #ffffff;
+  color: #1a1f3a;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
+}
+
+.search-input::placeholder {
+  color: #5a6b7f;
+}
+
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #0066cc;
+  font-size: 1.2em;
+  pointer-events: none;
+}
+
+.search-results {
+  margin-top: 14px;
+  min-height: 1.2em;
+  text-align: center;
+  font-size: 0.95em;
+  color: #5a6b7f;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 2px solid #e0e8f5;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  z-index: 1000;
+  display: none;
+}
+
+.search-dropdown.active {
+  display: block;
+}
+
+.search-result-item {
+  display: block;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e8f5;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: #e3f2fd;
+}
+
+.search-result-title {
+  margin-bottom: 5px;
+  color: #1a1f3a;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+.search-result-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 5px;
+  color: #5a6b7f;
+  font-size: 0.8em;
+}
+
+.search-result-category {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #0066cc;
+  color: #ffffff;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.search-result-excerpt {
+  color: #5a6b7f;
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+
+.search-no-results {
+  padding: 20px;
+  text-align: center;
+  color: #5a6b7f;
+}
+
+body.dark .search-input {
+  background: #0b1220;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark .search-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+}
+
+body.dark .search-input::placeholder {
+  color: #9ca3af;
+}
+
+body.dark .search-icon {
+  color: #0ea5e9;
+}
+
+body.dark .search-dropdown {
+  background: #0b1220;
+  border-color: #1f2937;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .search-result-item {
+  border-bottom-color: #1f2937;
+}
+
+body.dark .search-result-item:hover {
+  background: #1f2937;
+}
+
+body.dark .search-result-category {
+  background: #0ea5e9;
+}
+
 /* FILTRO DE CATEGORIAS */
 .filter-section {
   display: flex;
@@ -956,6 +1118,19 @@ footer {
     margin-bottom: 25px;
   }
 
+  .search-section {
+    margin-bottom: 20px;
+  }
+
+  .search-input {
+    padding: 14px 46px 14px 16px;
+    font-size: 0.95em;
+  }
+
+  .search-results {
+    margin-top: 10px;
+  }
+
   .filter-section {
     padding: 15px;
     margin-bottom: 20px;
@@ -1195,8 +1370,8 @@ footer {
 
     gtag('config', 'G-XJ3P1K6694');
   </script>
-  <link rel="stylesheet" href="assets/site-shell.css?v=20261116">
-  <script src="assets/site-shell.js?v=20261116" defer></script>
+  <link rel="stylesheet" href="assets/site-shell.css?v=20261118">
+  <script src="assets/site-shell.js?v=20261118" defer></script>
 </head>
 
 <body>
@@ -1287,6 +1462,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <main>
   <h2 class="page-title">Artigos</h2>
+
+  <div class="search-section" role="search">
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar artigos por título, categoria ou conteúdo..." aria-label="Pesquisar artigos por título, categoria ou conteúdo" autocomplete="off">
+      <i class="fas fa-search search-icon" aria-hidden="true"></i>
+      <div class="search-dropdown" id="searchDropdown"></div>
+    </div>
+    <div class="search-results" id="searchResults" role="status" aria-live="polite"></div>
+  </div>
   
   <div class="filter-section">
     <div class="filter-row">
@@ -1405,6 +1589,11 @@ const CATEGORY_STEP = 6;
 let noticiasFiltradasAtuais = [];
 let categoriaAtiva = 'todas';
 const categoriaVisiveis = {};
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const searchDropdown = document.getElementById('searchDropdown');
+let termoPesquisaAtual = '';
+let pontuacoesPesquisa = new Map();
 
 function slugifyTitulo(titulo) {
   if (!titulo || typeof titulo !== 'string') return '';
@@ -1485,8 +1674,12 @@ fetchNoticiasAgendadas()
 
     // Respeitar ?c= (categorias partilháveis); caso contrário, mostrar tudo
     if (!aplicarCategoriaDaUrl()) {
-      renderizarNoticias(todasAsNoticias, true);
-      atualizarUrlCategoria();
+      if (searchInput && searchInput.value.trim()) {
+        aplicarFiltros({ mostrarDropdown: true });
+      } else {
+        renderizarNoticias(todasAsNoticias, true);
+        atualizarUrlCategoria();
+      }
     }
 
     if (window.NewArticleNotification && typeof window.NewArticleNotification.init === 'function') {
@@ -1512,6 +1705,7 @@ fetchNoticiasAgendadas()
 function selecionarCategoria(btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  if (searchDropdown) searchDropdown.classList.remove('active');
   aplicarFiltros();
 }
 
@@ -1594,14 +1788,136 @@ function construirFiltrosCategoria(noticias) {
   if (todasBtn) todasBtn.addEventListener('click', () => selecionarCategoria(todasBtn));
 }
 
-// Função para aplicar filtros de categoria e ordenação
-function aplicarFiltros() {
+// Normaliza texto para pesquisa sem distinguir maiúsculas ou acentos
+function normalizarTexto(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+// Pontua a relevância de um artigo face ao termo de pesquisa
+function calcularRelevanciaPesquisa(noticia, termo) {
+  const titulo = normalizarTexto(noticia.titulo);
+  const categoria = normalizarTexto(noticia.categoria);
+  const resumo = normalizarTexto(stripHtml(noticia.resumo));
+  const conteudo = normalizarTexto(stripHtml(noticia.conteudo));
+  const termoNorm = normalizarTexto(termo);
+  const tokens = termoNorm.split(/\s+/).filter(Boolean);
+
+  const titleMatch = titulo.includes(termoNorm);
+  const categoriaExata = categoria === termoNorm;
+  const categoriaMatch = categoria.includes(termoNorm);
+  const resumoMatch = resumo.includes(termoNorm);
+  const conteudoMatch = conteudo.includes(termoNorm);
+
+  const allTokensInTitulo = tokens.length > 0 && tokens.every(t => titulo.includes(t));
+  const allTokensInResumo = tokens.length > 0 && tokens.every(t => resumo.includes(t));
+
+  const primaryMatch = categoriaMatch || titleMatch || resumoMatch || allTokensInTitulo;
+  const allowContentOnly = termoNorm.length >= 5;
+  const include = primaryMatch || (allowContentOnly && conteudoMatch);
+
+  if (!include) {
+    return { include: false, score: 0 };
+  }
+
+  let score = 0;
+
+  if (categoriaExata) score += 120;
+  else if (categoriaMatch) score += 90;
+
+  if (titleMatch) score += 80;
+  if (allTokensInTitulo) score += 45;
+
+  if (resumoMatch) score += 35;
+  if (allTokensInResumo) score += 18;
+
+  if (conteudoMatch) score += primaryMatch ? 8 : 3;
+
+  return { include: true, score };
+}
+
+function atualizarResumoPesquisa(total) {
+  if (!searchResults) return;
+
+  if (total === null) {
+    searchResults.textContent = '';
+    return;
+  }
+
+  if (total === 0) {
+    searchResults.innerHTML = '<span style="color: #cc0000;">Nenhum artigo encontrado</span>';
+    return;
+  }
+
+  const plural = total === 1 ? 'artigo encontrado' : 'artigos encontrados';
+  searchResults.innerHTML = `<span style="color: #0066cc;">${total} ${plural}</span>`;
+}
+
+function atualizarDropdownPesquisa(lista) {
+  if (!searchDropdown) return;
+
+  if (!lista.length) {
+    searchDropdown.innerHTML = '<div class="search-no-results">Nenhum artigo encontrado</div>';
+    searchDropdown.classList.add('active');
+    return;
+  }
+
+  searchDropdown.innerHTML = lista.map(noticia => {
+    const resumo = stripHtml(noticia.resumo || '');
+    const excerto = resumo.length > 100 ? resumo.slice(0, 100) + '...' : resumo;
+    return `
+      <a href="${buildArticleUrl(noticia)}" class="search-result-item">
+        <div class="search-result-title">${escapeHtml(noticia.titulo || '')}</div>
+        <div class="search-result-meta">
+          <span class="search-result-category">${escapeHtml(noticia.categoria || '')}</span>
+          <span>${escapeHtml(noticia.data || '')}</span>
+        </div>
+        <div class="search-result-excerpt">${escapeHtml(excerto)}</div>
+      </a>
+    `;
+  }).join('');
+
+  searchDropdown.classList.add('active');
+}
+
+// Função para aplicar filtros de categoria, pesquisa e ordenação
+function aplicarFiltros(opcoes) {
+  const mostrarDropdown = !!(opcoes && opcoes.mostrarDropdown);
   const active = document.querySelector('.filter-btn.active');
   categoriaAtiva = active ? active.getAttribute('data-categoria') : 'todas';
 
   let lista = todasAsNoticias;
   if (categoriaAtiva !== 'todas') {
     lista = lista.filter(n => ((n.categoria && String(n.categoria).trim()) || 'Outros') === categoriaAtiva);
+  }
+
+  termoPesquisaAtual = searchInput ? searchInput.value.trim() : '';
+  pontuacoesPesquisa = new Map();
+
+  if (termoPesquisaAtual) {
+    const resultados = lista
+      .map(noticia => {
+        const relevancia = calcularRelevanciaPesquisa(noticia, termoPesquisaAtual);
+        return { noticia, score: relevancia.score, include: relevancia.include };
+      })
+      .filter(item => item.include)
+      .sort((a, b) => b.score - a.score || parseDataArtigo(b.noticia.data) - parseDataArtigo(a.noticia.data));
+
+    resultados.forEach(item => {
+      pontuacoesPesquisa.set(String(item.noticia.id), item.score);
+    });
+
+    lista = resultados.map(item => item.noticia);
+    atualizarResumoPesquisa(lista.length);
+
+    if (mostrarDropdown) {
+      atualizarDropdownPesquisa(lista);
+    }
+  } else {
+    atualizarResumoPesquisa(null);
+    if (searchDropdown) searchDropdown.classList.remove('active');
   }
 
   atualizarUrlCategoria();
@@ -1685,7 +2001,20 @@ function latestDateOf(items) {
   return items.reduce((max, n) => Math.max(max, parseDataArtigo(n.data)), 0);
 }
 
+function maiorPontuacaoPesquisa(items) {
+  return items.reduce((max, n) => Math.max(max, pontuacoesPesquisa.get(String(n.id)) || 0), 0);
+}
+
 function sortWithinCategory(items) {
+  if (termoPesquisaAtual) {
+    return [...items].sort((a, b) => {
+      const scoreA = pontuacoesPesquisa.get(String(a.id)) || 0;
+      const scoreB = pontuacoesPesquisa.get(String(b.id)) || 0;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return parseDataArtigo(b.data) - parseDataArtigo(a.data);
+    });
+  }
+
   const dateSort = document.getElementById('dateSort');
   const dir = dateSort ? dateSort.value : 'desc';
   return [...items].sort((a, b) => dir === 'asc'
@@ -1701,7 +2030,10 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
   noticiasFiltradasAtuais = Array.isArray(noticias) ? [...noticias] : [];
 
   if (noticiasFiltradasAtuais.length === 0) {
-    container.innerHTML = '<p style="text-align: center; padding: 40px; color: #5a6b7f;">Nenhum artigo encontrado nesta categoria.</p>';
+    const mensagem = termoPesquisaAtual
+      ? 'Nenhum artigo corresponde à sua pesquisa.'
+      : 'Nenhum artigo encontrado nesta categoria.';
+    container.innerHTML = `<p style="text-align: center; padding: 40px; color: #5a6b7f;">${mensagem}</p>`;
     return;
   }
 
@@ -1716,14 +2048,20 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
     (grupos[cat] = grupos[cat] || []).push(n);
   });
 
-  // Ordenar categorias: na vista "Todas" pela mais recente; senão alfabeticamente
-  const cats = Object.keys(grupos).sort((a, b) => categoriaAtiva === 'todas'
-    ? latestDateOf(grupos[b]) - latestDateOf(grupos[a])
-    : a.localeCompare(b, 'pt'));
+  // Ordenar categorias: na pesquisa pela maior relevância; na vista "Todas"
+  // pela mais recente; senão alfabeticamente
+  const cats = Object.keys(grupos).sort((a, b) => {
+    if (termoPesquisaAtual) {
+      return maiorPontuacaoPesquisa(grupos[b]) - maiorPontuacaoPesquisa(grupos[a]);
+    }
+    return categoriaAtiva === 'todas'
+      ? latestDateOf(grupos[b]) - latestDateOf(grupos[a])
+      : a.localeCompare(b, 'pt');
+  });
 
   cats.forEach(cat => {
     const itensOrd = sortWithinCategory(grupos[cat]);
-    const visiveis = categoriaVisiveis[cat] || CATEGORY_INITIAL;
+    const visiveis = termoPesquisaAtual ? itensOrd.length : (categoriaVisiveis[cat] || CATEGORY_INITIAL);
     const mostrar = itensOrd.slice(0, visiveis);
 
     const section = document.createElement('section');
@@ -1735,7 +2073,7 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
       </div>
       <div class="cat-grid">${mostrar.map(construirCardArtigo).join('')}</div>
       <div class="cat-section-more-wrap">
-        <button type="button" class="cat-section-more" data-cat="${escapeHtml(cat)}"${mostrar.length >= itensOrd.length ? ' hidden' : ''}>Ver mais artigos</button>
+        <button type="button" class="cat-section-more" data-cat="${escapeHtml(cat)}"${mostrar.length >= itensOrd.length || termoPesquisaAtual ? ' hidden' : ''}>Ver mais artigos</button>
       </div>
     `;
     container.appendChild(section);
@@ -1747,6 +2085,32 @@ function renderizarNoticias(noticias, resetVisiveis = true) {
       categoriaVisiveis[cat] = (categoriaVisiveis[cat] || CATEGORY_INITIAL) + CATEGORY_STEP;
       renderizarNoticias(noticiasFiltradasAtuais, false);
     });
+  });
+}
+
+// Pesquisa de artigos: filtra e sugere resultados à medida que se escreve
+if (searchInput && searchDropdown) {
+  searchInput.addEventListener('input', () => {
+    if (!todasAsNoticias.length) return;
+    aplicarFiltros({ mostrarDropdown: true });
+  });
+
+  searchInput.addEventListener('focus', () => {
+    if (searchInput.value.trim().length > 0) {
+      searchDropdown.classList.add('active');
+    }
+  });
+
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      searchDropdown.classList.remove('active');
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) {
+      searchDropdown.classList.remove('active');
+    }
   });
 }
 </script>

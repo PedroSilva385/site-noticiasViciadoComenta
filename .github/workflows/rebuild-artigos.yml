@@ -110,13 +110,13 @@ jobs:
     - name: Commit e push se houver alteracoes
       shell: bash
       run: |
-        if [ -z "$(git status --porcelain -- data/noticias.json content/artigos rss.xml sitemap.xml artigos assets/search-index.json)" ]; then
+        if [ -z "$(git status --porcelain -- data/noticias.json content/artigos rss.xml sitemap.xml artigos)" ]; then
           echo "Sem alteracoes para publicar."
           exit 0
         fi
 
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add data/noticias.json content/artigos rss.xml sitemap.xml artigos assets/search-index.json
+        git add data/noticias.json content/artigos rss.xml sitemap.xml artigos
         git commit -m "chore: regenerar artigos espelho"
         git push
