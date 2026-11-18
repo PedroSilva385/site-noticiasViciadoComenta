@@ -10,7 +10,6 @@
       service worker existente (push-notifications.js continua a funcionar).
    5. Acessibilidade: skip-link, aria-current no menu e aria-label nos ícones
       sociais.
-   6. Pesquisa: acrescenta a entrada "Pesquisar" ao menu de todas as páginas.
    Carregado com defer em todas as páginas públicas + template dos artigos.
    ========================================================================== */
 (function () {
@@ -158,18 +157,6 @@
     document.body.insertBefore(link, document.body.firstChild);
   }
 
-  function initNavSearch() {
-    var nav = document.querySelector('nav');
-    if (!nav || nav.querySelector('.shell-nav-search')) return;
-
-    var link = document.createElement('a');
-    link.className = 'shell-nav-search';
-    link.href = getSiteRoot() + 'pesquisa.html';
-    link.textContent = 'Pesquisar';
-
-    nav.appendChild(link);
-  }
-
   function initNavState() {
     var nav = document.querySelector('nav');
     if (!nav) return;
@@ -276,7 +263,6 @@
     initTheme();
     initSkipLink();
     initLogoLink();
-    initNavSearch();
     initNavState();
     initSocialLabels();
     initBurger();
