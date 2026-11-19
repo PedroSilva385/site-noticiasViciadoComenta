@@ -14,6 +14,7 @@ resumo: >-
   posterior ao serviço de voz fixa da DIGI chegou finalmente ao fim. Descobre
   como tudo se desenrolou na prática e como foi feita a ativação técnica do
   serviço.
+video: 'https://www.youtube.com/watch?v=rSCIcsdY-Ew&t=817s'
 ---
 Conforme tenho vindo a falar aqui no Viciado Comenta, ao longo dos últimos meses tenho tentado junto da DIGI aderir ao serviço de Voz Fixa. Vários meses, muitas chatices, alguma incompetência do suporte e limitações de numeração depois, o problema está resolvido.
 
